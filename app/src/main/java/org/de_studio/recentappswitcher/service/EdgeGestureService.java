@@ -1,8 +1,11 @@
 package org.de_studio.recentappswitcher.service;
 
 import android.app.Service;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
@@ -14,6 +17,10 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.R;
+
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Created by hai on 12/15/2015.
@@ -46,7 +53,25 @@ public class EdgeGestureService extends Service {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN: Toast.makeText(getApplicationContext(), "Hello, I'm gesture service", Toast.LENGTH_SHORT).show();
+                    case MotionEvent.ACTION_DOWN:
+                        String topPackageName ;
+                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            UsageStatsManager mUsageStatsManager = (UsageStatsManager)getSystemService(USAGE_STATS_SERVICE);
+                            long time = System.currentTimeMillis();
+                            // We get usage stats for the last 10 seconds
+                            List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000*10, time);
+                            // Sort the stats by the last time used
+                            if(stats != null) {
+                                SortedMap<Long,UsageStats> mySortedMap = new TreeMap<Long,UsageStats>();
+                                for (UsageStats usageStats : stats) {
+                                    mySortedMap.put(usageStats.getLastTimeUsed(),usageStats);
+                                }
+                                if(mySortedMap != null && !mySortedMap.isEmpty()) {
+                                    topPackageName =  mySortedMap.get(mySortedMap.lastKey()).getPackageName();
+                                    Toast.makeText(getApplicationContext(),topPackageName, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
                         break;
                 }
 
