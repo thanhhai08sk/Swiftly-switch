@@ -10,7 +10,6 @@ import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -42,19 +41,16 @@ public class EdgeGestureService extends Service {
     public int icon_height = 48;
     public int icon_width = 48;
     public int icon_distance = 150;
-    public float icon_distance_pxl;
+    public float icon_distance_pxl,icon_24dp_in_pxls;
     public int edge_height = 150;
     public int edge_height_pxl;
     public int edge_width_pxl;
-    public int edge_width = 12;
+    public int edge_width = 18;
     public int edge_y;
     public int edge_centre_y;
-    private ImageView icon0;
-    private ImageView icon1;
-    private ImageView icon2;
-    private ImageView icon3;
-    private ImageView icon4;
-    private ImageView icon5;
+    public int x_init_cord, y_init_cord;
+    private ImageView icon0, icon1, icon2,icon3,icon4,icon5;
+
 
     @Nullable
     @Override
@@ -76,29 +72,28 @@ public class EdgeGestureService extends Service {
         edge_y = (int)edgeImage.getY();
         edge_centre_y = edge_y + edge_height_pxl/2;
         icon_distance_pxl = (float) Utility.dpiToPixels(icon_distance,windowManager);
-        Log.e(LOG_TAG, "icon_distance_pxl = "+ icon_distance_pxl);
+        icon_24dp_in_pxls = (float) Utility.dpiToPixels(24,windowManager);
         edgeImage.setLayoutParams(lp);
-        itemView =(LinearLayout)layoutInflater.inflate(R.layout.item,null);
+        itemView =(LinearLayout)layoutInflater.inflate(R.layout.item, null);
         icon0 = (ImageView) itemView.findViewById(R.id.item_0);
         icon0.setX(0);
         icon0.setY(300);
-        Log.e(LOG_TAG, "setX = " + (float) (0.26) * icon_distance_pxl);
 //        icon0.setY((float) (edge_centre_y - 0.97 * icon_distance_pxl));
         icon1 = (ImageView) itemView.findViewById(R.id.item_1);
-        icon1.setX((float)0.71*icon_distance_pxl);
-        icon1.setY((float) (edge_centre_y - 0.71 * icon_distance_pxl));
+//        icon1.setX((float)0.71*icon_distance_pxl);
+//        icon1.setY((float) (edge_centre_y - 0.71 * icon_distance_pxl));
         icon2 = (ImageView) itemView.findViewById(R.id.item_2);
-        icon2.setX((float)0.97*icon_distance_pxl);
-        icon2.setY((float) (edge_centre_y - 0.26 * icon_distance_pxl));
+//        icon2.setX((float)0.97*icon_distance_pxl);
+//        icon2.setY((float) (edge_centre_y - 0.26 * icon_distance_pxl));
         icon3 = (ImageView) itemView.findViewById(R.id.item_3);
-        icon3.setX((float)0.97*icon_distance_pxl);
-        icon3.setY((float) (edge_centre_y + 0.26 * icon_distance_pxl));
+//        icon3.setX((float)0.97*icon_distance_pxl);
+//        icon3.setY((float) (edge_centre_y + 0.26 * icon_distance_pxl));
         icon4 = (ImageView) itemView.findViewById(R.id.item_4);
-        icon4.setX((float)0.71*icon_distance_pxl);
-        icon4.setY((float) (edge_centre_y + 0.71 * icon_distance_pxl));
+//        icon4.setX((float)0.71*icon_distance_pxl);
+//        icon4.setY((float) (edge_centre_y + 0.71 * icon_distance_pxl));
         icon5 = (ImageView) itemView.findViewById(R.id.item_5);
-        icon5.setX((float)0.26*icon_distance_pxl);
-        icon5.setY((float) (edge_centre_y + 0.97 * icon_distance_pxl));
+//        icon5.setX((float)0.26*icon_distance_pxl);
+//        icon5.setY((float) (edge_centre_y + 0.97 * icon_distance_pxl));
         WindowManager.LayoutParams paramEdge = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -110,8 +105,24 @@ public class EdgeGestureService extends Service {
         edgeImage.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                int x_cord =(int) event.getRawX();
+                int y_cord = (int) event.getRawY();
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        x_init_cord = x_cord;
+                        y_init_cord = y_cord;
+                        icon0.setX((float)(x_init_cord + 0.26*icon_distance_pxl)-icon_24dp_in_pxls);
+                        icon0.setY(y_init_cord- (float)0.96*icon_distance_pxl - icon_24dp_in_pxls);
+                        icon1.setX((float)(x_init_cord + 0.71*icon_distance_pxl) - icon_24dp_in_pxls);
+                        icon1.setY(y_init_cord- (float)0.71*icon_distance_pxl - icon_24dp_in_pxls);
+                        icon2.setX((float)(x_init_cord + 0.97*icon_distance_pxl) - icon_24dp_in_pxls);
+                        icon2.setY(y_init_cord- (float)0.26*icon_distance_pxl - icon_24dp_in_pxls);
+                        icon3.setX((float)(x_init_cord + 0.97*icon_distance_pxl) - icon_24dp_in_pxls);
+                        icon3.setY(y_init_cord + (float)0.26*icon_distance_pxl - icon_24dp_in_pxls);
+                        icon4.setX((float)(x_init_cord + 0.71*icon_distance_pxl) - icon_24dp_in_pxls);
+                        icon4.setY(y_init_cord + (float)0.71*icon_distance_pxl - icon_24dp_in_pxls);
+                        icon5.setX((float)(x_init_cord + 0.26*icon_distance_pxl) - icon_24dp_in_pxls);
+                        icon5.setY(y_init_cord + (float)0.97*icon_distance_pxl - icon_24dp_in_pxls);
                         WindowManager.LayoutParams paraItem = new WindowManager.LayoutParams(
                                 WindowManager.LayoutParams.MATCH_PARENT,
                                 WindowManager.LayoutParams.MATCH_PARENT,
