@@ -1,8 +1,10 @@
 package org.de_studio.recentappswitcher.service;
 
+import android.app.ActivityManager;
 import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
@@ -54,21 +56,37 @@ public class EdgeGestureService extends Service {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        String topPackageName ;
-                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            UsageStatsManager mUsageStatsManager = (UsageStatsManager)getSystemService(USAGE_STATS_SERVICE);
+                        String topPackageName;
+                        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                            ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+                            int numOfTask = 6;
+                            List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
+                            if (list != null) {
+                                ActivityManager.RunningTaskInfo taskInfo = list.get(1);
+                                ComponentName componentName = taskInfo.baseActivity;
+                                String packageName = componentName.getPackageName();
+                                Intent extApp= getPackageManager().getLaunchIntentForPackage(packageName);
+                                String className = componentName.getClassName();
+                                Toast.makeText(getApplicationContext(),"The no2 task is " + packageName, Toast.LENGTH_SHORT).show();
+//                                startActivity(new Intent().setClassName(packageName, className).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                startActivity(extApp);
+
+                            }
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
                             long time = System.currentTimeMillis();
                             // We get usage stats for the last 10 seconds
-                            List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000*10, time);
+                            List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 10, time);
                             // Sort the stats by the last time used
-                            if(stats != null) {
-                                SortedMap<Long,UsageStats> mySortedMap = new TreeMap<Long,UsageStats>();
+                            if (stats != null) {
+                                SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>();
                                 for (UsageStats usageStats : stats) {
-                                    mySortedMap.put(usageStats.getLastTimeUsed(),usageStats);
+                                    mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
                                 }
-                                if(mySortedMap != null && !mySortedMap.isEmpty()) {
-                                    topPackageName =  mySortedMap.get(mySortedMap.lastKey()).getPackageName();
-                                    Toast.makeText(getApplicationContext(),topPackageName, Toast.LENGTH_SHORT).show();
+                                if (mySortedMap != null && !mySortedMap.isEmpty()) {
+                                    topPackageName = mySortedMap.get(mySortedMap.lastKey()).getPackageName();
+                                    Toast.makeText(getApplicationContext(), topPackageName, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }
