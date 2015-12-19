@@ -10,6 +10,7 @@ import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -32,6 +33,7 @@ import java.util.TreeMap;
  * Created by hai on 12/15/2015.
  */
 public class EdgeGestureService extends Service {
+    static final String LOG_TAG = EdgeGestureService.class.getSimpleName();
     static final int EDGE_GESTURE_NOTIFICAION_ID = 10;
     private WindowManager windowManager;
     private RelativeLayout edgeView;
@@ -40,8 +42,13 @@ public class EdgeGestureService extends Service {
     public int icon_height = 48;
     public int icon_width = 48;
     public int icon_distance = 150;
+    public float icon_distance_pxl;
     public int edge_height = 150;
+    public int edge_height_pxl;
+    public int edge_width_pxl;
     public int edge_width = 12;
+    public int edge_y;
+    public int edge_centre_y;
     private ImageView icon0;
     private ImageView icon1;
     private ImageView icon2;
@@ -62,16 +69,36 @@ public class EdgeGestureService extends Service {
         edgeView =(RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edgeImage = (ImageView) edgeView.findViewById(R.id.edge_image);
         ViewGroup.LayoutParams lp = edgeImage.getLayoutParams();
-        lp.height = Utility.dpiToPixels(edge_height,windowManager);
-        lp.width =  Utility.dpiToPixels(edge_width,windowManager);
+        edge_height_pxl = Utility.dpiToPixels(edge_height,windowManager);
+        edge_width_pxl = Utility.dpiToPixels(edge_width,windowManager);
+        lp.height = edge_height_pxl;
+        lp.width =  edge_width_pxl;
+        edge_y = (int)edgeImage.getY();
+        edge_centre_y = edge_y + edge_height_pxl/2;
+        icon_distance_pxl = (float) Utility.dpiToPixels(icon_distance,windowManager);
+        Log.e(LOG_TAG, "icon_distance_pxl = "+ icon_distance_pxl);
         edgeImage.setLayoutParams(lp);
-        itemView =(LinearLayout) edgeView.findViewById(R.id.item_view);
-        icon0 = (ImageView) edgeView.findViewById(R.id.item_0);
-        icon1 = (ImageView) edgeView.findViewById(R.id.item_1);
-        icon2 = (ImageView) edgeView.findViewById(R.id.item_2);
-        icon3 = (ImageView) edgeView.findViewById(R.id.item_3);
-        icon4 = (ImageView) edgeView.findViewById(R.id.item_4);
-        icon5 = (ImageView) edgeView.findViewById(R.id.item_5);
+        itemView =(LinearLayout)layoutInflater.inflate(R.layout.item,null);
+        icon0 = (ImageView) itemView.findViewById(R.id.item_0);
+        icon0.setX(0);
+        icon0.setY(300);
+        Log.e(LOG_TAG, "setX = " + (float) (0.26) * icon_distance_pxl);
+//        icon0.setY((float) (edge_centre_y - 0.97 * icon_distance_pxl));
+        icon1 = (ImageView) itemView.findViewById(R.id.item_1);
+        icon1.setX((float)0.71*icon_distance_pxl);
+        icon1.setY((float) (edge_centre_y - 0.71 * icon_distance_pxl));
+        icon2 = (ImageView) itemView.findViewById(R.id.item_2);
+        icon2.setX((float)0.97*icon_distance_pxl);
+        icon2.setY((float) (edge_centre_y - 0.26 * icon_distance_pxl));
+        icon3 = (ImageView) itemView.findViewById(R.id.item_3);
+        icon3.setX((float)0.97*icon_distance_pxl);
+        icon3.setY((float) (edge_centre_y + 0.26 * icon_distance_pxl));
+        icon4 = (ImageView) itemView.findViewById(R.id.item_4);
+        icon4.setX((float)0.71*icon_distance_pxl);
+        icon4.setY((float) (edge_centre_y + 0.71 * icon_distance_pxl));
+        icon5 = (ImageView) itemView.findViewById(R.id.item_5);
+        icon5.setX((float)0.26*icon_distance_pxl);
+        icon5.setY((float) (edge_centre_y + 0.97 * icon_distance_pxl));
         WindowManager.LayoutParams paramEdge = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -85,7 +112,14 @@ public class EdgeGestureService extends Service {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        itemView.setVisibility(View.VISIBLE);
+                        WindowManager.LayoutParams paraItem = new WindowManager.LayoutParams(
+                                WindowManager.LayoutParams.MATCH_PARENT,
+                                WindowManager.LayoutParams.MATCH_PARENT,
+                                WindowManager.LayoutParams.TYPE_PHONE,
+                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                                PixelFormat.TRANSLUCENT);
+                        paraItem.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                        windowManager.addView(itemView,paraItem);
                         String topPackageName;
                         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
                             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -122,7 +156,7 @@ public class EdgeGestureService extends Service {
                         }
                         break;
                     case MotionEvent.ACTION_UP:
-                        itemView.setVisibility(View.GONE);
+                        windowManager.removeView(itemView);
                 }
 
                 return true;
