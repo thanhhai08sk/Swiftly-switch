@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -31,6 +33,8 @@ public class EdgeGestureService extends Service {
     static final int EDGE_GESTURE_NOTIFICAION_ID = 10;
     private WindowManager windowManager;
     private RelativeLayout edgeView;
+    private ImageView edgeImage;
+    private LinearLayout itemView;
 
     @Nullable
     @Override
@@ -42,7 +46,9 @@ public class EdgeGestureService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        edgeView =(RelativeLayout) layoutInflater.inflate(R.layout.edge_view,null);
+        edgeView =(RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
+        edgeImage = (ImageView) edgeView.findViewById(R.id.edge_image);
+        itemView =(LinearLayout) edgeView.findViewById(R.id.item_view);
         WindowManager.LayoutParams paramEdge = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -51,11 +57,12 @@ public class EdgeGestureService extends Service {
                 PixelFormat.TRANSLUCENT);
         paramEdge.gravity = Gravity.TOP | Gravity.LEFT;
         windowManager.addView(edgeView,paramEdge);
-        edgeView.setOnTouchListener(new View.OnTouchListener() {
+        edgeImage.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        itemView.setVisibility(View.VISIBLE);
                         String topPackageName;
                         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
                             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -91,6 +98,8 @@ public class EdgeGestureService extends Service {
                             }
                         }
                         break;
+                    case MotionEvent.ACTION_UP:
+                        itemView.setVisibility(View.GONE);
                 }
 
                 return true;

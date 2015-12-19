@@ -6,9 +6,37 @@
 
     <ImageView android:layout_width="80dp"
         android:layout_height="80dp"
-        android:id="@+id/remove_img"
+        android:id="@+id/edge_image"
         android:src="@drawable/add_contact"
         android:scaleType="fitCenter"
         />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/edge_image"
+        android:visibility="gone"
+        android:id="@+id/item_view"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_0"
+            android:src="@drawable/add_contact"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_1"
+            android:src="@drawable/add_contact"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_2"
+            android:src="@drawable/add_contact"
+            />
+
+    </LinearLayout>
 
 </RelativeLayout>
