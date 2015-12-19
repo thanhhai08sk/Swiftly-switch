@@ -55,7 +55,7 @@ public class EdgeGestureService extends Service {
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 PixelFormat.TRANSLUCENT);
-        paramEdge.gravity = Gravity.TOP | Gravity.LEFT;
+        paramEdge.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
         windowManager.addView(edgeView,paramEdge);
         edgeImage.setOnTouchListener(new View.OnTouchListener() {
             @Override
