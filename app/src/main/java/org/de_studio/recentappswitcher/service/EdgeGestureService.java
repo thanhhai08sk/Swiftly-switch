@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 
 import java.util.List;
 import java.util.SortedMap;
@@ -35,6 +37,17 @@ public class EdgeGestureService extends Service {
     private RelativeLayout edgeView;
     private ImageView edgeImage;
     private LinearLayout itemView;
+    public int icon_height = 48;
+    public int icon_width = 48;
+    public int icon_distance = 150;
+    public int edge_height = 150;
+    public int edge_width = 12;
+    private ImageView icon0;
+    private ImageView icon1;
+    private ImageView icon2;
+    private ImageView icon3;
+    private ImageView icon4;
+    private ImageView icon5;
 
     @Nullable
     @Override
@@ -48,7 +61,17 @@ public class EdgeGestureService extends Service {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         edgeView =(RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edgeImage = (ImageView) edgeView.findViewById(R.id.edge_image);
+        ViewGroup.LayoutParams lp = edgeImage.getLayoutParams();
+        lp.height = Utility.dpiToPixels(edge_height,windowManager);
+        lp.width =  Utility.dpiToPixels(edge_width,windowManager);
+        edgeImage.setLayoutParams(lp);
         itemView =(LinearLayout) edgeView.findViewById(R.id.item_view);
+        icon0 = (ImageView) edgeView.findViewById(R.id.item_0);
+        icon1 = (ImageView) edgeView.findViewById(R.id.item_1);
+        icon2 = (ImageView) edgeView.findViewById(R.id.item_2);
+        icon3 = (ImageView) edgeView.findViewById(R.id.item_3);
+        icon4 = (ImageView) edgeView.findViewById(R.id.item_4);
+        icon5 = (ImageView) edgeView.findViewById(R.id.item_5);
         WindowManager.LayoutParams paramEdge = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -76,7 +99,7 @@ public class EdgeGestureService extends Service {
                                 String className = componentName.getClassName();
                                 Toast.makeText(getApplicationContext(),"The no2 task is " + packageName, Toast.LENGTH_SHORT).show();
 //                                startActivity(new Intent().setClassName(packageName, className).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                                startActivity(extApp);
+//                                startActivity(extApp);
 
                             }
                         }

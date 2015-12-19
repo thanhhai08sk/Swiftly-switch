@@ -12,30 +12,55 @@
         android:background="@color/black"
         />
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignBottom="@id/edge_image"
         android:visibility="gone"
         android:id="@+id/item_view"
         android:orientation="horizontal"
         >
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:id="@+id/item_0"
             android:src="@drawable/add_contact"
+            android:scaleType="fitCenter"
+
             />
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:id="@+id/item_1"
             android:src="@drawable/add_contact"
+            android:scaleType="fitCenter"
             />
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:id="@+id/item_2"
             android:src="@drawable/add_contact"
+            android:scaleType="fitCenter"
+            />
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+id/item_3"
+            android:src="@drawable/add_contact"
+            android:scaleType="fitCenter"
+            />
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+id/item_4"
+            android:src="@drawable/add_contact"
+            android:scaleType="fitCenter"
+            />
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+id/item_5"
+            android:src="@drawable/add_contact"
+            android:scaleType="fitCenter"
             />
 
     </LinearLayout>
