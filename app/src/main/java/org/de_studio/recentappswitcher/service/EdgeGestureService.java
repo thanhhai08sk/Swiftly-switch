@@ -29,6 +29,7 @@ import org.de_studio.recentappswitcher.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -139,43 +140,57 @@ public class EdgeGestureService extends Service {
                             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
                             int numOfTask = 7;
                             List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
-                            packagename = new String[list.size()-1];
+                            String[] tempPackagename = new String[list.size() - 1];
+                            int numOfException = 0;
                             if (list != null) {
                                 for (int i = 1; i < list.size(); i++) {
                                     ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                                     ComponentName componentName = taskInfo.baseActivity;
-                                    packagename[i-1] = componentName.getPackageName();
-                                    final String packageName = componentName.getPackageName();
-                                    try {
-                                        Drawable icon = getPackageManager().getApplicationIcon(packageName);
-                                        ImageView iconi = list_icon.get(i-1);
-                                        iconi.setImageDrawable(icon);
-                                        iconi.setOnTouchListener(new View.OnTouchListener() {
-                                            @Override
-                                            public boolean onTouch(View v, MotionEvent event) {
-                                                Log.e(LOG_TAG, "icon touch");
-                                                switch (event.getAction()) {
-                                                    case MotionEvent.ACTION_UP:
-                                                        Log.e(LOG_TAG, "icon touch action UP");
-                                                        Intent extApp = getPackageManager().getLaunchIntentForPackage(packageName);
-                                                        startActivity(extApp);
-                                                        break;
-                                                }
-                                                return true;
-                                            }
-                                        });
+                                    String packName = componentName.getPackageName();
+                                    if (packName.equals("org.de_studio.phonetools")) {
+                                        Log.e(LOG_TAG, "package mobai");
+                                        tempPackagename[i - 1] = null;
+                                        numOfException++;
+                                    }
+                                    Set<String> setCategoty = getPackageManager().getLaunchIntentForPackage(packName).getCategories();
+                                    if (setCategoty.contains(Intent.CATEGORY_HOME)) {
+                                        Log.e(LOG_TAG, "category = home");
+                                        tempPackagename[i - 1] = null;
+                                        numOfException++;
+                                    } else tempPackagename[i - 1] = componentName.getPackageName();
+//                                    final String packageName = componentName.getPackageName();
+//                                    try {
+//                                        Drawable icon = getPackageManager().getApplicationIcon(packageName);
+//                                        ImageView iconi = list_icon.get(i - 1);
+//                                        iconi.setImageDrawable(icon);
+//                                    } catch (PackageManager.NameNotFoundException e) {
+//                                        Log.e(LOG_TAG, "NameNotFound" + e);
+//                                    }
+                                }
+                                packagename = new String[tempPackagename.length - numOfException];
+                                int j = 0;
+                                for (int i = 0; i < packagename.length; i++) {
+                                    while (packagename[i] == null) {
+                                        if (tempPackagename[i + j] != null) {
+                                            packagename[i] = tempPackagename[i + j];
 
-                                    } catch (PackageManager.NameNotFoundException e) {
-                                        Log.e(LOG_TAG, "NameNotFound" + e);
+                                        } else j++;
+                                    }
+                                }
+                                for (int i = 0; i < 6; i++) {
+                                    if (i>= packagename.length) {
+                                        list_icon.get(i).setImageDrawable(null);
+                                    } else {
+                                        try {
+                                            Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
+                                            ImageView iconi = list_icon.get(i);
+                                            iconi.setImageDrawable(icon);
+                                        } catch (PackageManager.NameNotFoundException e) {
+                                            Log.e(LOG_TAG, "NameNotFound" + e);
+                                        }
                                     }
 
-                                    String className = componentName.getClassName();
-
                                 }
-
-//                                Toast.makeText(getApplicationContext(), "The no2 task is " + packageName, Toast.LENGTH_SHORT).show();
-//                                startActivity(new Intent().setClassName(packageName, className).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-//                                startActivity(extApp);
 
                             }
                         }
