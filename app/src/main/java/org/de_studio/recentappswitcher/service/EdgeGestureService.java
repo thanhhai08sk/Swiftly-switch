@@ -137,18 +137,18 @@ public class EdgeGestureService extends Service {
                         String topPackageName;
                         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
                             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-                            int numOfTask = 6;
+                            int numOfTask = 7;
                             List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
-                            packagename = new String[list.size()];
+                            packagename = new String[list.size()-1];
                             if (list != null) {
-                                for (int i = 0; i < list.size(); i++) {
+                                for (int i = 1; i < list.size(); i++) {
                                     ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                                     ComponentName componentName = taskInfo.baseActivity;
-                                    packagename[i] = componentName.getPackageName();
+                                    packagename[i-1] = componentName.getPackageName();
                                     final String packageName = componentName.getPackageName();
                                     try {
                                         Drawable icon = getPackageManager().getApplicationIcon(packageName);
-                                        ImageView iconi = list_icon.get(i);
+                                        ImageView iconi = list_icon.get(i-1);
                                         iconi.setImageDrawable(icon);
                                         iconi.setOnTouchListener(new View.OnTouchListener() {
                                             @Override
