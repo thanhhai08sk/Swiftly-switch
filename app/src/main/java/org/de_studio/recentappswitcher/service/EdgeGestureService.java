@@ -55,6 +55,7 @@ public class EdgeGestureService extends Service {
     public int x_init_cord, y_init_cord;
     private ImageView icon0, icon1, icon2,icon3,icon4,icon5;
     private List<ImageView> list_icon;
+    private String[] packagename;
 
 
     @Nullable
@@ -76,7 +77,7 @@ public class EdgeGestureService extends Service {
         lp.width =  edge_width_pxl;
         edge_y = (int)edgeImage.getY();
         edge_centre_y = edge_y + edge_height_pxl/2;
-        icon_distance_pxl = (float) Utility.dpiToPixels(icon_distance,windowManager);
+        icon_distance_pxl = (float) Utility.dpiToPixels(icon_distance, windowManager);
         icon_24dp_in_pxls = (float) Utility.dpiToPixels(24,windowManager);
         edgeImage.setLayoutParams(lp);
         itemView =(LinearLayout)layoutInflater.inflate(R.layout.item, null);
@@ -138,21 +139,38 @@ public class EdgeGestureService extends Service {
                             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
                             int numOfTask = 6;
                             List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
+                            packagename = new String[list.size()];
                             if (list != null) {
-                                for (int i =0; i< list.size();i++) {
+                                for (int i = 0; i < list.size(); i++) {
                                     ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                                     ComponentName componentName = taskInfo.baseActivity;
-                                    String packageName = componentName.getPackageName();
+                                    packagename[i] = componentName.getPackageName();
+                                    final String packageName = componentName.getPackageName();
                                     try {
                                         Drawable icon = getPackageManager().getApplicationIcon(packageName);
-                                        list_icon.get(i).setImageDrawable(icon);
+                                        ImageView iconi = list_icon.get(i);
+                                        iconi.setImageDrawable(icon);
+                                        iconi.setOnTouchListener(new View.OnTouchListener() {
+                                            @Override
+                                            public boolean onTouch(View v, MotionEvent event) {
+                                                Log.e(LOG_TAG, "icon touch");
+                                                switch (event.getAction()) {
+                                                    case MotionEvent.ACTION_UP:
+                                                        Log.e(LOG_TAG, "icon touch action UP");
+                                                        Intent extApp = getPackageManager().getLaunchIntentForPackage(packageName);
+                                                        startActivity(extApp);
+                                                        break;
+                                                }
+                                                return true;
+                                            }
+                                        });
 
                                     } catch (PackageManager.NameNotFoundException e) {
-                                        Log.e(LOG_TAG,"NameNotFound" + e);
+                                        Log.e(LOG_TAG, "NameNotFound" + e);
                                     }
 
-                                    Intent extApp = getPackageManager().getLaunchIntentForPackage(packageName);
                                     String className = componentName.getClassName();
+
                                 }
 
 //                                Toast.makeText(getApplicationContext(), "The no2 task is " + packageName, Toast.LENGTH_SHORT).show();
@@ -181,6 +199,20 @@ public class EdgeGestureService extends Service {
                         break;
                     case MotionEvent.ACTION_UP:
                         windowManager.removeView(itemView);
+                        int x1 = (int) icon1.getX();
+                        int y1 = (int) icon1.getY();
+                        if (x_cord >= x1 & x_cord <= (x1 + icon_24dp_in_pxls * 2) & y_cord >= y1 & y_cord <= (y1 + icon_24dp_in_pxls * 2)) {
+                            if (packagename != null) {
+                                Intent extApp = getPackageManager().getLaunchIntentForPackage(packagename[1]);
+                                startActivity(extApp);
+                                Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_SHORT).show();
+                                packagename= null;
+                            }
+
+
+                        }
+
+
                 }
 
                 return true;
