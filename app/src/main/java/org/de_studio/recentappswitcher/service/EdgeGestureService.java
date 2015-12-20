@@ -6,10 +6,13 @@ import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,6 +27,7 @@ import android.widget.Toast;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -50,6 +54,7 @@ public class EdgeGestureService extends Service {
     public int edge_centre_y;
     public int x_init_cord, y_init_cord;
     private ImageView icon0, icon1, icon2,icon3,icon4,icon5;
+    private List<ImageView> list_icon;
 
 
     @Nullable
@@ -78,22 +83,18 @@ public class EdgeGestureService extends Service {
         icon0 = (ImageView) itemView.findViewById(R.id.item_0);
         icon0.setX(0);
         icon0.setY(300);
-//        icon0.setY((float) (edge_centre_y - 0.97 * icon_distance_pxl));
         icon1 = (ImageView) itemView.findViewById(R.id.item_1);
-//        icon1.setX((float)0.71*icon_distance_pxl);
-//        icon1.setY((float) (edge_centre_y - 0.71 * icon_distance_pxl));
         icon2 = (ImageView) itemView.findViewById(R.id.item_2);
-//        icon2.setX((float)0.97*icon_distance_pxl);
-//        icon2.setY((float) (edge_centre_y - 0.26 * icon_distance_pxl));
         icon3 = (ImageView) itemView.findViewById(R.id.item_3);
-//        icon3.setX((float)0.97*icon_distance_pxl);
-//        icon3.setY((float) (edge_centre_y + 0.26 * icon_distance_pxl));
         icon4 = (ImageView) itemView.findViewById(R.id.item_4);
-//        icon4.setX((float)0.71*icon_distance_pxl);
-//        icon4.setY((float) (edge_centre_y + 0.71 * icon_distance_pxl));
         icon5 = (ImageView) itemView.findViewById(R.id.item_5);
-//        icon5.setX((float)0.26*icon_distance_pxl);
-//        icon5.setY((float) (edge_centre_y + 0.97 * icon_distance_pxl));
+        list_icon = new ArrayList<ImageView>();
+        list_icon.add(icon0);
+        list_icon.add(icon1);
+        list_icon.add(icon2);
+        list_icon.add(icon3);
+        list_icon.add(icon4);
+        list_icon.add(icon5);
         WindowManager.LayoutParams paramEdge = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -101,28 +102,17 @@ public class EdgeGestureService extends Service {
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 PixelFormat.TRANSLUCENT);
         paramEdge.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-        windowManager.addView(edgeView,paramEdge);
+        windowManager.addView(edgeView, paramEdge);
         edgeImage.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                int x_cord =(int) event.getRawX();
+                int x_cord = (int) event.getRawX();
                 int y_cord = (int) event.getRawY();
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         x_init_cord = x_cord;
                         y_init_cord = y_cord;
-                        icon0.setX((float)(x_init_cord + 0.26*icon_distance_pxl)-icon_24dp_in_pxls);
-                        icon0.setY(y_init_cord- (float)0.96*icon_distance_pxl - icon_24dp_in_pxls);
-                        icon1.setX((float)(x_init_cord + 0.71*icon_distance_pxl) - icon_24dp_in_pxls);
-                        icon1.setY(y_init_cord- (float)0.71*icon_distance_pxl - icon_24dp_in_pxls);
-                        icon2.setX((float)(x_init_cord + 0.97*icon_distance_pxl) - icon_24dp_in_pxls);
-                        icon2.setY(y_init_cord- (float)0.26*icon_distance_pxl - icon_24dp_in_pxls);
-                        icon3.setX((float)(x_init_cord + 0.97*icon_distance_pxl) - icon_24dp_in_pxls);
-                        icon3.setY(y_init_cord + (float)0.26*icon_distance_pxl - icon_24dp_in_pxls);
-                        icon4.setX((float)(x_init_cord + 0.71*icon_distance_pxl) - icon_24dp_in_pxls);
-                        icon4.setY(y_init_cord + (float)0.71*icon_distance_pxl - icon_24dp_in_pxls);
-                        icon5.setX((float)(x_init_cord + 0.26*icon_distance_pxl) - icon_24dp_in_pxls);
-                        icon5.setY(y_init_cord + (float)0.97*icon_distance_pxl - icon_24dp_in_pxls);
+
                         WindowManager.LayoutParams paraItem = new WindowManager.LayoutParams(
                                 WindowManager.LayoutParams.MATCH_PARENT,
                                 WindowManager.LayoutParams.MATCH_PARENT,
@@ -130,19 +120,42 @@ public class EdgeGestureService extends Service {
                                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                                 PixelFormat.TRANSLUCENT);
                         paraItem.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-                        windowManager.addView(itemView,paraItem);
+                        windowManager.addView(itemView, paraItem);
+                        icon0.setX((float) (x_init_cord + 0.26 * icon_distance_pxl) - icon_24dp_in_pxls);
+                        icon0.setY(y_init_cord - (float) 0.96 * icon_distance_pxl - icon_24dp_in_pxls);
+                        icon1.setX((float) (x_init_cord + 0.71 * icon_distance_pxl) - icon_24dp_in_pxls);
+                        icon1.setY(y_init_cord - (float) 0.71 * icon_distance_pxl - icon_24dp_in_pxls);
+                        icon2.setX((float) (x_init_cord + 0.97 * icon_distance_pxl) - icon_24dp_in_pxls);
+                        icon2.setY(y_init_cord - (float) 0.26 * icon_distance_pxl - icon_24dp_in_pxls);
+                        icon3.setX((float) (x_init_cord + 0.97 * icon_distance_pxl) - icon_24dp_in_pxls);
+                        icon3.setY(y_init_cord + (float) 0.26 * icon_distance_pxl - icon_24dp_in_pxls);
+                        icon4.setX((float) (x_init_cord + 0.71 * icon_distance_pxl) - icon_24dp_in_pxls);
+                        icon4.setY(y_init_cord + (float) 0.71 * icon_distance_pxl - icon_24dp_in_pxls);
+                        icon5.setX((float) (x_init_cord + 0.26 * icon_distance_pxl) - icon_24dp_in_pxls);
+                        icon5.setY(y_init_cord + (float) 0.97 * icon_distance_pxl - icon_24dp_in_pxls);
                         String topPackageName;
                         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
                             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
                             int numOfTask = 6;
                             List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
                             if (list != null) {
-                                ActivityManager.RunningTaskInfo taskInfo = list.get(1);
-                                ComponentName componentName = taskInfo.baseActivity;
-                                String packageName = componentName.getPackageName();
-                                Intent extApp= getPackageManager().getLaunchIntentForPackage(packageName);
-                                String className = componentName.getClassName();
-                                Toast.makeText(getApplicationContext(),"The no2 task is " + packageName, Toast.LENGTH_SHORT).show();
+                                for (int i =0; i< list.size();i++) {
+                                    ActivityManager.RunningTaskInfo taskInfo = list.get(i);
+                                    ComponentName componentName = taskInfo.baseActivity;
+                                    String packageName = componentName.getPackageName();
+                                    try {
+                                        Drawable icon = getPackageManager().getApplicationIcon(packageName);
+                                        list_icon.get(i).setImageDrawable(icon);
+
+                                    } catch (PackageManager.NameNotFoundException e) {
+                                        Log.e(LOG_TAG,"NameNotFound" + e);
+                                    }
+
+                                    Intent extApp = getPackageManager().getLaunchIntentForPackage(packageName);
+                                    String className = componentName.getClassName();
+                                }
+
+//                                Toast.makeText(getApplicationContext(), "The no2 task is " + packageName, Toast.LENGTH_SHORT).show();
 //                                startActivity(new Intent().setClassName(packageName, className).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 //                                startActivity(extApp);
 
