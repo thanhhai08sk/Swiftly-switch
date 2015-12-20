@@ -199,18 +199,33 @@ public class EdgeGestureService extends Service {
                         break;
                     case MotionEvent.ACTION_UP:
                         windowManager.removeView(itemView);
-                        int x1 = (int) icon1.getX();
-                        int y1 = (int) icon1.getY();
-                        if (x_cord >= x1 & x_cord <= (x1 + icon_24dp_in_pxls * 2) & y_cord >= y1 & y_cord <= (y1 + icon_24dp_in_pxls * 2)) {
-                            if (packagename != null) {
-                                Intent extApp = getPackageManager().getLaunchIntentForPackage(packagename[1]);
-                                startActivity(extApp);
-                                Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_SHORT).show();
-                                packagename= null;
-                            }
-
-
+                        int[] x = new int[packagename.length];
+                        int[] y = new int[packagename.length];
+                        for (int i = 0; i < packagename.length; i++) {
+                            x[i] = (int) list_icon.get(i).getX();
+                            y[i] = (int) list_icon.get(i).getY();
                         }
+                        if (x_cord >= x[0] & x_cord <= (x[0] + icon_24dp_in_pxls * 2) & y_cord >= y[0] & y_cord <= (y[0] + icon_24dp_in_pxls * 2)) {
+                            Intent extApp = getPackageManager().getLaunchIntentForPackage(packagename[0]);
+                            startActivity(extApp);
+                        } else if (x_cord >= x[1] & x_cord <= (x[1] + icon_24dp_in_pxls * 2) & y_cord >= y[1] & y_cord <= (y[1] + icon_24dp_in_pxls * 2)) {
+                            Intent extApp = getPackageManager().getLaunchIntentForPackage(packagename[1]);
+                            startActivity(extApp);
+                        }else if (x_cord >= x[2] & x_cord <= (x[2] + icon_24dp_in_pxls * 2) & y_cord >= y[2] & y_cord <= (y[2] + icon_24dp_in_pxls * 2)) {
+                            Intent extApp = getPackageManager().getLaunchIntentForPackage(packagename[2]);
+                            startActivity(extApp);
+                        }else if (x_cord >= x[3] & x_cord <= (x[3] + icon_24dp_in_pxls * 2) & y_cord >= y[3] & y_cord <= (y[3] + icon_24dp_in_pxls * 2)) {
+                            Intent extApp = getPackageManager().getLaunchIntentForPackage(packagename[3]);
+                            startActivity(extApp);
+                        }else if (x_cord >= x[4] & x_cord <= (x[4] + icon_24dp_in_pxls * 2) & y_cord >= y[4] & y_cord <= (y[4] + icon_24dp_in_pxls * 2)) {
+                            Intent extApp = getPackageManager().getLaunchIntentForPackage(packagename[4]);
+                            startActivity(extApp);
+                        }else if (x_cord >= x[5] & x_cord <= (x[5] + icon_24dp_in_pxls * 2) & y_cord >= y[5] & y_cord <= (y[5] + icon_24dp_in_pxls * 2)) {
+                            Intent extApp = getPackageManager().getLaunchIntentForPackage(packagename[5]);
+                            startActivity(extApp);
+                        }
+
+                        packagename = null;
 
 
                 }
