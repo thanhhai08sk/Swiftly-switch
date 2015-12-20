@@ -206,10 +206,9 @@ public class EdgeGestureService extends Service {
                             x[i] = (int) list_icon.get(i).getX();
                             y[i] = (int) list_icon.get(i).getY();
                         }
-                        Intent extApp = null;
                         int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
                         if (packageToSwitch != -1) {
-                            extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
+                            Intent extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
                             extApp.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(extApp);
                         }
