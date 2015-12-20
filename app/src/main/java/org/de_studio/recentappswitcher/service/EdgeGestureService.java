@@ -43,7 +43,7 @@ public class EdgeGestureService extends Service {
     private ImageView edgeImage;
     private LinearLayout itemView;
     public int icon_height = 48;
-    public int icon_width = 48;
+    public int icon_width = 48, icon_rad = 24;
     public int icon_distance = 150;
     public float icon_distance_pxl,icon_24dp_in_pxls;
     public int edge_height = 150;
@@ -207,48 +207,13 @@ public class EdgeGestureService extends Service {
                             y[i] = (int) list_icon.get(i).getY();
                         }
                         Intent extApp = null;
-
-
-                        if (numOfIcon >= 1) {
-                            if (x_cord >= x[0] & x_cord <= (x[0] + icon_24dp_in_pxls * 2) & y_cord >= y[0] & y_cord <= (y[0] + icon_24dp_in_pxls * 2)) {
-                                extApp = getPackageManager().getLaunchIntentForPackage(packagename[0]);
-                            }
-                        }
-                        if (numOfIcon >= 2) {
-                            if (x_cord >= x[1] & x_cord <= (x[1] + icon_24dp_in_pxls * 2) & y_cord >= y[1] & y_cord <= (y[1] + icon_24dp_in_pxls * 2)) {
-                                extApp = getPackageManager().getLaunchIntentForPackage(packagename[1]);
-                            }
-                        }
-                        if (numOfIcon >= 3) {
-                            if (x_cord >= x[2] & x_cord <= (x[2] + icon_24dp_in_pxls * 2) & y_cord >= y[2] & y_cord <= (y[2] + icon_24dp_in_pxls * 2)) {
-                                extApp = getPackageManager().getLaunchIntentForPackage(packagename[2]);
-                            }
-                        }
-                        if (numOfIcon >= 4) {
-                            if (x_cord >= x[3] & x_cord <= (x[3] + icon_24dp_in_pxls * 2) & y_cord >= y[3] & y_cord <= (y[3] + icon_24dp_in_pxls * 2)) {
-                                extApp = getPackageManager().getLaunchIntentForPackage(packagename[3]);
-                            }
-                        }
-                        if (numOfIcon >= 5) {
-                            if (x_cord >= x[4] & x_cord <= (x[4] + icon_24dp_in_pxls * 2) & y_cord >= y[4] & y_cord <= (y[4] + icon_24dp_in_pxls * 2)) {
-                                extApp = getPackageManager().getLaunchIntentForPackage(packagename[4]);
-                            }
-                        }
-                        if (numOfIcon >= 6) {
-                            if (x_cord >= x[5] & x_cord <= (x[5] + icon_24dp_in_pxls * 2) & y_cord >= y[5] & y_cord <= (y[5] + icon_24dp_in_pxls * 2)) {
-                                extApp = getPackageManager().getLaunchIntentForPackage(packagename[5]);
-
-                            }
-                        }
-                        if (extApp != null) {
+                        int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
+                        if (packageToSwitch != -1) {
+                            extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
                             extApp.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(extApp);
                         }
-
-
                         packagename = null;
-
-
                 }
 
                 return true;
