@@ -147,7 +147,10 @@ public class EdgeGestureService extends Service {
                         String topPackageName;
                         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
                             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-                            int numOfTask = 7;
+                            int numOfTask;
+                            if (launcherPackagename != null) {
+                                numOfTask = 8;
+                            } else numOfTask = 7;
                             List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
                             String[] tempPackagename = new String[list.size() - 1];
                             int numOfException = 0;
@@ -157,7 +160,7 @@ public class EdgeGestureService extends Service {
                                     ComponentName componentName = taskInfo.baseActivity;
                                     String packName = componentName.getPackageName();
                                     Set<String> setCategoty = getPackageManager().getLaunchIntentForPackage(packName).getCategories();
-                                    if (launcherPackagename!=null & packName.equals(launcherPackagename)) {
+                                    if (launcherPackagename != null & packName.equals(launcherPackagename)) {
                                         Log.e(LOG_TAG, "category = home");
                                         tempPackagename[i - 1] = null;
                                         numOfException++;
@@ -222,7 +225,8 @@ public class EdgeGestureService extends Service {
                         break;
                     case MotionEvent.ACTION_UP:
                         windowManager.removeView(itemView);
-                        int numOfIcon = packagename.length;
+//                        int numOfIcon = packagename.length;
+                        int numOfIcon = list_icon.size();
                         int[] x = new int[numOfIcon];
                         int[] y = new int[numOfIcon];
                         for (int i = 0; i < numOfIcon; i++) {
