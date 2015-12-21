@@ -23,12 +23,12 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
@@ -38,6 +38,17 @@ import java.util.TreeMap;
  * Created by hai on 12/15/2015.
  */
 public class EdgeGestureService extends Service {
+
+    public static final Comparator<Long> DATE_DECENDING_COMPARATOR = new Comparator<Long>() {
+        @Override
+        public int compare(Long lhs, Long rhs) {
+            if (rhs > lhs){
+                return 1;
+            }else if (rhs == lhs){
+                return 0;
+            }else return -1;
+        }
+    };
     static final String LOG_TAG = EdgeGestureService.class.getSimpleName();
     static final int EDGE_GESTURE_NOTIFICAION_ID = 10;
     private WindowManager windowManager;
@@ -69,6 +80,7 @@ public class EdgeGestureService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
 
         Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
         launcherIntent.addCategory(Intent.CATEGORY_HOME);
@@ -119,6 +131,7 @@ public class EdgeGestureService extends Service {
             public boolean onTouch(View v, MotionEvent event) {
                 int x_cord = (int) event.getRawX();
                 int y_cord = (int) event.getRawY();
+
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         x_init_cord = x_cord;
@@ -144,8 +157,7 @@ public class EdgeGestureService extends Service {
                         icon4.setY(y_init_cord + (float) 0.71 * icon_distance_pxl - icon_24dp_in_pxls);
                         icon5.setX((float) (x_init_cord + 0.26 * icon_distance_pxl) - icon_24dp_in_pxls);
                         icon5.setY(y_init_cord + (float) 0.97 * icon_distance_pxl - icon_24dp_in_pxls);
-                        String topPackageName;
-                        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
                             int numOfTask;
                             if (launcherPackagename != null) {
@@ -187,25 +199,44 @@ public class EdgeGestureService extends Service {
                                             Log.e(LOG_TAG, "NameNotFound" + e);
                                         }
                                     }
-
                                 }
-
                             }
                         }
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
                             long time = System.currentTimeMillis();
-                            // We get usage stats for the last 10 seconds
                             List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 10, time);
-                            // Sort the stats by the last time used
+                            int numOfTask = 6;
+                            packagename = new String[6];
+                            int j = 0;
                             if (stats != null) {
-                                SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>();
+                                SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
                                 for (UsageStats usageStats : stats) {
                                     mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
                                 }
                                 if (mySortedMap != null && !mySortedMap.isEmpty()) {
-                                    topPackageName = mySortedMap.get(mySortedMap.lastKey()).getPackageName();
-                                    Toast.makeText(getApplicationContext(), topPackageName, Toast.LENGTH_SHORT).show();
+                                    Set<Long> setKey = mySortedMap.keySet();
+                                    for (Long key : setKey) {
+                                        if (j < packagename.length) {
+                                            packagename[j] = mySortedMap.get(key).getPackageName();
+                                            j++;
+                                        }
+
+                                        Log.e(LOG_TAG, mySortedMap.get(key).getPackageName());
+                                    }
+                                }
+                            }
+                            for (int i = 0; i < 6; i++) {
+                                if (i >= packagename.length) {
+                                    list_icon.get(i).setImageDrawable(null);
+                                } else {
+                                    try {
+                                        Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
+                                        ImageView iconi = list_icon.get(i);
+                                        iconi.setImageDrawable(icon);
+                                    } catch (PackageManager.NameNotFoundException e) {
+                                        Log.e(LOG_TAG, "NameNotFound" + e);
+                                    }
                                 }
                             }
                         }
