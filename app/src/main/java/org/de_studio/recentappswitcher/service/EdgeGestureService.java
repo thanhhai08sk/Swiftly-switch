@@ -7,6 +7,7 @@ import android.app.usage.UsageStatsManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -57,6 +58,7 @@ public class EdgeGestureService extends Service {
     private ImageView icon0, icon1, icon2,icon3,icon4,icon5;
     private List<ImageView> list_icon;
     private String[] packagename;
+    private String launcherPackagename;
 
 
     @Nullable
@@ -67,6 +69,13 @@ public class EdgeGestureService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
+        launcherIntent.addCategory(Intent.CATEGORY_HOME);
+        ResolveInfo res = getPackageManager().resolveActivity(launcherIntent,0);
+        if (res.activityInfo != null){
+            launcherPackagename = res.activityInfo.packageName;
+        }
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         edgeView =(RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
@@ -147,14 +156,13 @@ public class EdgeGestureService extends Service {
                                     ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                                     ComponentName componentName = taskInfo.baseActivity;
                                     String packName = componentName.getPackageName();
-                                    if (packName.equals("org.de_studio.phonetools")) {
-                                        Log.e(LOG_TAG, "package mobai");
+                                    Set<String> setCategoty = getPackageManager().getLaunchIntentForPackage(packName).getCategories();
+                                    if (launcherPackagename!=null & packName.equals(launcherPackagename)) {
+                                        Log.e(LOG_TAG, "category = home");
                                         tempPackagename[i - 1] = null;
                                         numOfException++;
-                                    }
-                                    Set<String> setCategoty = getPackageManager().getLaunchIntentForPackage(packName).getCategories();
-                                    if (setCategoty.contains(Intent.CATEGORY_HOME)) {
-                                        Log.e(LOG_TAG, "category = home");
+                                    } else if (packName.equals("org.de_studio.phonetools")) {
+                                        Log.e(LOG_TAG, "package mobai");
                                         tempPackagename[i - 1] = null;
                                         numOfException++;
                                     } else tempPackagename[i - 1] = componentName.getPackageName();
@@ -178,7 +186,7 @@ public class EdgeGestureService extends Service {
                                     }
                                 }
                                 for (int i = 0; i < 6; i++) {
-                                    if (i>= packagename.length) {
+                                    if (i >= packagename.length) {
                                         list_icon.get(i).setImageDrawable(null);
                                     } else {
                                         try {
