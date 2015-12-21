@@ -205,7 +205,7 @@ public class EdgeGestureService extends Service {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
                             long time = System.currentTimeMillis();
-                            List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 10, time);
+                            List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 1000, time);
                             int numOfTask = 6;
                             packagename = new String[6];
                             int j = 0;
@@ -224,7 +224,7 @@ public class EdgeGestureService extends Service {
 
                                         Log.e(LOG_TAG, mySortedMap.get(key).getPackageName());
                                     }
-                                }
+                                }else Log.e(LOG_TAG, " error in mySortedMap");
                             }
                             for (int i = 0; i < 6; i++) {
                                 if (i >= packagename.length) {
