@@ -159,24 +159,11 @@ public class EdgeGestureService extends Service {
                                     ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                                     ComponentName componentName = taskInfo.baseActivity;
                                     String packName = componentName.getPackageName();
-                                    Set<String> setCategoty = getPackageManager().getLaunchIntentForPackage(packName).getCategories();
                                     if (launcherPackagename != null & packName.equals(launcherPackagename)) {
                                         Log.e(LOG_TAG, "category = home");
                                         tempPackagename[i - 1] = null;
                                         numOfException++;
-                                    } else if (packName.equals("org.de_studio.phonetools")) {
-                                        Log.e(LOG_TAG, "package mobai");
-                                        tempPackagename[i - 1] = null;
-                                        numOfException++;
                                     } else tempPackagename[i - 1] = componentName.getPackageName();
-//                                    final String packageName = componentName.getPackageName();
-//                                    try {
-//                                        Drawable icon = getPackageManager().getApplicationIcon(packageName);
-//                                        ImageView iconi = list_icon.get(i - 1);
-//                                        iconi.setImageDrawable(icon);
-//                                    } catch (PackageManager.NameNotFoundException e) {
-//                                        Log.e(LOG_TAG, "NameNotFound" + e);
-//                                    }
                                 }
                                 packagename = new String[tempPackagename.length - numOfException];
                                 int j = 0;
@@ -225,7 +212,6 @@ public class EdgeGestureService extends Service {
                         break;
                     case MotionEvent.ACTION_UP:
                         windowManager.removeView(itemView);
-//                        int numOfIcon = packagename.length;
                         int numOfIcon = list_icon.size();
                         int[] x = new int[numOfIcon];
                         int[] y = new int[numOfIcon];
