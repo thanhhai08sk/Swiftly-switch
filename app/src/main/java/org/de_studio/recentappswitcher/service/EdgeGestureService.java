@@ -219,7 +219,7 @@ public class EdgeGestureService extends Service {
                                 if (!mySortedMap.isEmpty()) {
                                     Set<Long> setKey = mySortedMap.keySet();
                                     for (Long key : setKey) {
-                                        if (j  < tempPackagename.length) {
+                                        if (j < tempPackagename.length) {
                                             UsageStats usageStats = mySortedMap.get(key);
                                             String packa = usageStats.getPackageName();
                                             try {
@@ -227,6 +227,11 @@ public class EdgeGestureService extends Service {
                                                     tempPackagename[j] = null;
                                                     numbOfException++;
 
+                                                } else if (packa.contains("systemui")
+                                                        | packa.contains("googlequicksearchbox")
+                                                        | key == mySortedMap.firstKey()) {
+                                                    tempPackagename[j] = null;
+                                                    numbOfException++;
                                                 } else {
                                                     tempPackagename[j] = packa;
                                                 }
@@ -240,12 +245,12 @@ public class EdgeGestureService extends Service {
                                     }
                                     int k = 0;
                                     int l = 0;
-                                    while (packagename[5]==null & l < tempPackagename.length){
-                                        if (tempPackagename[l]!=null){
+                                    while (packagename[5] == null & l < tempPackagename.length) {
+                                        if (tempPackagename[l] != null) {
                                             packagename[k] = tempPackagename[l];
                                             k++;
                                             l++;
-                                        }else {
+                                        } else {
                                             l++;
                                         }
                                     }
@@ -280,6 +285,7 @@ public class EdgeGestureService extends Service {
                             Intent extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
                             extApp.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(extApp);
+                            Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
                         }
                         packagename = null;
                 }
