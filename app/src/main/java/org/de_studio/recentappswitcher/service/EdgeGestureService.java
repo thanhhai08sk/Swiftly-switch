@@ -257,7 +257,7 @@ public class EdgeGestureService extends Service {
                                 } else Log.e(LOG_TAG, " error in mySortedMap");
                             }
                             for (int i = 0; i < 6; i++) {
-                                if (i >= packagename.length) {
+                                if (i >= packagename.length | packagename[i]==null) {
                                     list_icon.get(i).setImageDrawable(null);
                                 } else {
                                     try {
