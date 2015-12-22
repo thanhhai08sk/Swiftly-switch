@@ -208,23 +208,48 @@ public class EdgeGestureService extends Service {
                             List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 1000, time);
                             int numOfTask = 6;
                             packagename = new String[6];
+                            String[] tempPackagename = new String[15];
                             int j = 0;
+                            int numbOfException = 0;
                             if (stats != null) {
                                 SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
                                 for (UsageStats usageStats : stats) {
                                     mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
                                 }
-                                if (mySortedMap != null && !mySortedMap.isEmpty()) {
+                                if (!mySortedMap.isEmpty()) {
                                     Set<Long> setKey = mySortedMap.keySet();
                                     for (Long key : setKey) {
-                                        if (j < packagename.length) {
-                                            packagename[j] = mySortedMap.get(key).getPackageName();
+                                        if (j  < tempPackagename.length) {
+                                            UsageStats usageStats = mySortedMap.get(key);
+                                            String packa = usageStats.getPackageName();
+                                            try {
+                                                if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
+                                                    tempPackagename[j] = null;
+                                                    numbOfException++;
+
+                                                } else {
+                                                    tempPackagename[j] = packa;
+                                                }
+                                            } catch (PackageManager.NameNotFoundException e) {
+                                                Log.e(LOG_TAG, "packageName not found" + e);
+                                            }
                                             j++;
                                         }
 
                                         Log.e(LOG_TAG, mySortedMap.get(key).getPackageName());
                                     }
-                                }else Log.e(LOG_TAG, " error in mySortedMap");
+                                    int k = 0;
+                                    int l = 0;
+                                    while (packagename[5]==null & l < tempPackagename.length){
+                                        if (tempPackagename[l]!=null){
+                                            packagename[k] = tempPackagename[l];
+                                            k++;
+                                            l++;
+                                        }else {
+                                            l++;
+                                        }
+                                    }
+                                } else Log.e(LOG_TAG, " error in mySortedMap");
                             }
                             for (int i = 0; i < 6; i++) {
                                 if (i >= packagename.length) {
