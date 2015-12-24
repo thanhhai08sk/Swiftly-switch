@@ -8,12 +8,15 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -100,7 +103,7 @@ public class EdgeGestureService extends Service {
         edge_y = (int)edgeImage.getY();
         edge_centre_y = edge_y + edge_height_pxl/2;
         icon_distance_pxl = (float) Utility.dpiToPixels(icon_distance, windowManager);
-        icon_24dp_in_pxls = (float) Utility.dpiToPixels(24,windowManager);
+        icon_24dp_in_pxls = (float) Utility.dpiToPixels(24, windowManager);
         edgeImage.setLayoutParams(lp);
         itemView =(LinearLayout)layoutInflater.inflate(R.layout.item, null);
         icon0 = (ImageView) itemView.findViewById(R.id.item_0);
@@ -122,16 +125,21 @@ public class EdgeGestureService extends Service {
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE| WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 PixelFormat.TRANSLUCENT);
+        // | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
         paramEdge.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
         windowManager.addView(edgeView, paramEdge);
+        isThereStatusBar();
         edgeImage.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 int x_cord = (int) event.getRawX();
                 int y_cord = (int) event.getRawY();
-
+                if (isThereStatusBar()){
+                    y_cord = y_cord - getStatusBarHeight();
+                    Log.e(LOG_TAG, "there is a statusBar");
+                }
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         x_init_cord = x_cord;
@@ -141,7 +149,7 @@ public class EdgeGestureService extends Service {
                                 WindowManager.LayoutParams.MATCH_PARENT,
                                 WindowManager.LayoutParams.MATCH_PARENT,
                                 WindowManager.LayoutParams.TYPE_PHONE,
-                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE  | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS  | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                                 PixelFormat.TRANSLUCENT);
                         paraItem.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
                         windowManager.addView(itemView, paraItem);
@@ -295,4 +303,38 @@ public class EdgeGestureService extends Service {
         });
         return START_STICKY;
     }
+    public int getStatusBarHeight(){
+        int result=0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if(resourceId >0)
+            result = getResources().getDimensionPixelSize(resourceId);
+        return result;
+    }
+    public boolean isThereStatusBar(){
+        Display mdisp = windowManager.getDefaultDisplay();
+        Point mdispSize = new Point();
+        Point realSize = new Point();
+        mdisp.getSize(mdispSize);
+        mdisp.getRealSize(realSize);
+        int maxY = mdispSize.y;
+        int realY = realSize.y;
+        int statusHeight = getStatusBarHeight();
+        int navigationHeight = getNavigationHeight();
+        Log.e(LOG_TAG,"maxY =" + maxY  + " realY = "+ realY+ " navi = "+ navigationHeight);
+        if (maxY == realY  ){
+            return false;
+        }else if (maxY+ navigationHeight == realY){
+            return false;
+        }else return true;
+
+    }
+    public int getNavigationHeight(){
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            return resources.getDimensionPixelSize(resourceId);
+        }
+        return 0;
+    }
+
 }
