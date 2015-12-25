@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -72,6 +73,7 @@ public class EdgeGestureService extends Service {
     private String launcherPackagename;
     private int[] x,y;
     private int numOfIcon;
+    private boolean hasOneActive = false;
 
 
     @Nullable
@@ -142,7 +144,7 @@ public class EdgeGestureService extends Service {
                                 WindowManager.LayoutParams.MATCH_PARENT,
                                 WindowManager.LayoutParams.MATCH_PARENT,
                                 WindowManager.LayoutParams.TYPE_PHONE,
-                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE  | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS  | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                                 PixelFormat.TRANSLUCENT);
                         paraItem.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
                         windowManager.addView(itemView, paraItem);
@@ -170,8 +172,6 @@ public class EdgeGestureService extends Service {
 //                                int tid = recent.get(2).id;
 //                                activityManager.moveTaskToFront(tid, 0);
 //                            }
-
-
 
 
                             List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
@@ -268,7 +268,7 @@ public class EdgeGestureService extends Service {
                                 } else Log.e(LOG_TAG, " error in mySortedMap");
                             }
                             for (int i = 0; i < 6; i++) {
-                                if (i >= packagename.length | packagename[i]==null) {
+                                if (i >= packagename.length | packagename[i] == null) {
                                     list_icon.get(i).setImageDrawable(null);
                                 } else {
                                     try {
@@ -312,7 +312,25 @@ public class EdgeGestureService extends Service {
                         packagename = null;
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        Log.e(LOG_TAG,"action_move");
+                        int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
+                        if (iconToSwitch != -1) {
+                            for (int i = 0; i < list_icon.size(); i++) {
+                                hasOneActive = true;
+                                if (i == iconToSwitch) {
+                                    list_icon.get(i).setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
+                                } else list_icon.get(i).setBackground(null);
+
+                            }
+
+                        }
+                        if (iconToSwitch == -1) {
+                            if (hasOneActive) {
+                                for (ImageView imageView: list_icon){
+                                    imageView.setBackground(null);
+                                }
+                            }
+                            hasOneActive = false;
+                        }
 
 
                 }
