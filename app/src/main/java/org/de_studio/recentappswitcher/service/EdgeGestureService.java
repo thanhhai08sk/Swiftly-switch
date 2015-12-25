@@ -23,8 +23,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import org.de_studio.recentappswitcher.R;
@@ -57,7 +57,7 @@ public class EdgeGestureService extends Service {
     private WindowManager windowManager;
     private RelativeLayout edgeView;
     private ImageView edgeImage;
-    private LinearLayout itemView;
+    private FrameLayout itemView;
     public int icon_height = 48;
     public int icon_width = 48, icon_rad = 24;
     public int icon_distance = 130;
@@ -108,7 +108,7 @@ public class EdgeGestureService extends Service {
         icon_distance_pxl = (float) Utility.dpiToPixels(icon_distance, windowManager);
         icon_24dp_in_pxls = (float) Utility.dpiToPixels(24, windowManager);
         edgeImage.setLayoutParams(lp);
-        itemView =(LinearLayout)layoutInflater.inflate(R.layout.item, null);
+        itemView =(FrameLayout)layoutInflater.inflate(R.layout.item, null);
         icon0 = (ImageView) itemView.findViewById(R.id.item_0);
         icon0.setX(0);
         icon0.setY(300);
