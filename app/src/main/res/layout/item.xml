@@ -8,45 +8,45 @@
 
     <ImageView
         android:id="@+id/item_0"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:scaleType="fitCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
         android:src="@drawable/action_call_icon"
 
         />
 
     <ImageView
         android:id="@+id/item_1"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:scaleType="fitCenter"
         android:src="@drawable/action_sms_icon_2" />
 
     <ImageView
         android:id="@+id/item_2"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:scaleType="fitCenter"
         android:src="@drawable/add_contact" />
 
     <ImageView
         android:id="@+id/item_3"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:scaleType="fitCenter"
         android:src="@drawable/add_contact" />
 
     <ImageView
         android:id="@+id/item_4"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:scaleType="fitCenter"
         android:src="@drawable/add_contact" />
 
     <ImageView
         android:id="@+id/item_5"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:scaleType="fitCenter"
         android:src="@drawable/add_contact" />
 

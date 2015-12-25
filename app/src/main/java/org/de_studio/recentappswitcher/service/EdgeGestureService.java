@@ -5,19 +5,15 @@ import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.Resources;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -74,7 +70,8 @@ public class EdgeGestureService extends Service {
     private List<ImageView> list_icon;
     private String[] packagename;
     private String launcherPackagename;
-    private Context context;
+    private int[] x,y;
+    private int numOfIcon;
 
 
     @Nullable
@@ -284,16 +281,17 @@ public class EdgeGestureService extends Service {
                                 }
                             }
                         }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        windowManager.removeView(itemView);
-                        int numOfIcon = list_icon.size();
-                        int[] x = new int[numOfIcon];
-                        int[] y = new int[numOfIcon];
+                        numOfIcon = list_icon.size();
+                        x = new int[numOfIcon];
+                        y = new int[numOfIcon];
                         for (int i = 0; i < numOfIcon; i++) {
                             x[i] = (int) list_icon.get(i).getX();
                             y[i] = (int) list_icon.get(i).getY();
                         }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        windowManager.removeView(itemView);
+
                         int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
                         if (packageToSwitch != -1) {
 
@@ -307,10 +305,16 @@ public class EdgeGestureService extends Service {
                             startApp.setComponent(componentName);
                             startApp.addCategory(Intent.CATEGORY_LAUNCHER);
                             startApp.addFlags(launchFlags);
+                            startApp.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(startApp);
                             Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
                         }
                         packagename = null;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        Log.e(LOG_TAG,"action_move");
+
+
                 }
 
                 return true;
@@ -318,38 +322,6 @@ public class EdgeGestureService extends Service {
         });
         return START_STICKY;
     }
-    public int getStatusBarHeight(){
-        int result=0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if(resourceId >0)
-            result = getResources().getDimensionPixelSize(resourceId);
-        return result;
-    }
-    public boolean isThereStatusBar(){
-        Display mdisp = windowManager.getDefaultDisplay();
-        Point mdispSize = new Point();
-        Point realSize = new Point();
-        mdisp.getSize(mdispSize);
-        mdisp.getRealSize(realSize);
-        int maxY = mdispSize.y;
-        int realY = realSize.y;
-        int statusHeight = getStatusBarHeight();
-        int navigationHeight = getNavigationHeight();
-        Log.e(LOG_TAG,"maxY =" + maxY  + " realY = "+ realY+ " navi = "+ navigationHeight);
-        if (maxY == realY  ){
-            return false;
-        }else if (maxY+ navigationHeight == realY){
-            return false;
-        }else return true;
 
-    }
-    public int getNavigationHeight(){
-        Resources resources = getResources();
-        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            return resources.getDimensionPixelSize(resourceId);
-        }
-        return 0;
-    }
 
 }
