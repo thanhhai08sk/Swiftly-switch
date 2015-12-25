@@ -5,6 +5,7 @@ import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -60,7 +61,7 @@ public class EdgeGestureService extends Service {
     private LinearLayout itemView;
     public int icon_height = 48;
     public int icon_width = 48, icon_rad = 24;
-    public int icon_distance = 150;
+    public int icon_distance = 130;
     public float icon_distance_pxl,icon_24dp_in_pxls;
     public int edge_height = 150;
     public int edge_height_pxl;
@@ -73,6 +74,7 @@ public class EdgeGestureService extends Service {
     private List<ImageView> list_icon;
     private String[] packagename;
     private String launcherPackagename;
+    private Context context;
 
 
     @Nullable
@@ -83,7 +85,6 @@ public class EdgeGestureService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
 
         Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
         launcherIntent.addCategory(Intent.CATEGORY_HOME);
@@ -130,16 +131,11 @@ public class EdgeGestureService extends Service {
         // | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
         paramEdge.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
         windowManager.addView(edgeView, paramEdge);
-        isThereStatusBar();
         edgeImage.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 int x_cord = (int) event.getRawX();
                 int y_cord = (int) event.getRawY();
-                if (isThereStatusBar()){
-                    y_cord = y_cord - getStatusBarHeight();
-                    Log.e(LOG_TAG, "there is a statusBar");
-                }
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         x_init_cord = x_cord;
@@ -171,6 +167,16 @@ public class EdgeGestureService extends Service {
                             if (launcherPackagename != null) {
                                 numOfTask = 8;
                             } else numOfTask = 7;
+
+//                            List<ActivityManager.RecentTaskInfo> recent = activityManager.getRecentTasks(5,ActivityManager.RECENT_IGNORE_UNAVAILABLE);
+//                            if(recent.size() >= 3) {
+//                                int tid = recent.get(2).id;
+//                                activityManager.moveTaskToFront(tid, 0);
+//                            }
+
+
+
+
                             List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
                             String[] tempPackagename = new String[list.size() - 1];
                             int numOfException = 0;
@@ -290,9 +296,18 @@ public class EdgeGestureService extends Service {
                         }
                         int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
                         if (packageToSwitch != -1) {
+
+                            int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK |
+                                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
                             Intent extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
-                            extApp.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(extApp);
+                            extApp.addCategory(Intent.CATEGORY_LAUNCHER);
+                            extApp.setAction(Intent.ACTION_MAIN);
+                            ComponentName componentName = extApp.getComponent();
+                            Intent startApp = new Intent();
+                            startApp.setComponent(componentName);
+                            startApp.addCategory(Intent.CATEGORY_LAUNCHER);
+                            startApp.addFlags(launchFlags);
+                            startActivity(startApp);
                             Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
                         }
                         packagename = null;

@@ -5,10 +5,10 @@
     android:id="@+id/edge_relativelayout"
     >
 
-    <ImageView android:layout_width="15dp"
+    <ImageView android:layout_width="12dp"
         android:layout_height="150dp"
         android:id="@+id/edge_image"
         android:scaleType="fitCenter"
-        android:background="@color/black"
+        android:background="@color/transparent"
         />
 </RelativeLayout>
