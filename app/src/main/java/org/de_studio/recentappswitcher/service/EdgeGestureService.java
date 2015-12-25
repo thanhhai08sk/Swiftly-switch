@@ -5,6 +5,7 @@ import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -12,6 +13,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -74,6 +76,7 @@ public class EdgeGestureService extends Service {
     private int[] x,y;
     private int numOfIcon;
     private boolean hasOneActive = false;
+    private boolean hasVibrate = false;
 
 
     @Nullable
@@ -314,6 +317,11 @@ public class EdgeGestureService extends Service {
                     case MotionEvent.ACTION_MOVE:
                         int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
                         if (iconToSwitch != -1) {
+                            if (!hasVibrate){
+                                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                                vibrator.vibrate(15);
+                                hasVibrate = true;
+                            }
                             for (int i = 0; i < list_icon.size(); i++) {
                                 hasOneActive = true;
                                 if (i == iconToSwitch) {
@@ -324,6 +332,7 @@ public class EdgeGestureService extends Service {
 
                         }
                         if (iconToSwitch == -1) {
+                            hasVibrate = false;
                             if (hasOneActive) {
                                 for (ImageView imageView: list_icon){
                                     imageView.setBackground(null);
