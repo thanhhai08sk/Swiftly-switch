@@ -71,9 +71,7 @@ public class EdgeGestureService extends Service {
     public int edge_width = 18;
     public int edge_y;
     public int edge_centre_y;
-    public int x_init_cord, y_init_cord;
-    private ImageView icon0, icon1, icon2,icon3,icon4,icon5;
-    private List<ImageView> list_icon;
+    private List<ImageView> list_icon_1,list_icon_2;
     private String[] packagename;
     private String launcherPackagename;
     private int[] x,y;
@@ -100,7 +98,7 @@ public class EdgeGestureService extends Service {
         if (res.activityInfo != null){
             launcherPackagename = res.activityInfo.packageName;
         }
-        numOfEdge = defaultShared.getInt("numOfEdge",1);
+        numOfEdge = defaultShared.getInt("numOfEdge",2);
         edge1Position = defaultShared.getInt("edge1Position",11);
         edge2Position = defaultShared.getInt("edge2Position",21);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -125,13 +123,13 @@ public class EdgeGestureService extends Service {
         icons1Image[3] = (ImageView) item1View.findViewById(R.id.item_3);
         icons1Image[4] = (ImageView) item1View.findViewById(R.id.item_4);
         icons1Image[5] = (ImageView) item1View.findViewById(R.id.item_5);
-        list_icon = new ArrayList<ImageView>();
-        list_icon.add(icons1Image[0]);
-        list_icon.add(icons1Image[1]);
-        list_icon.add(icons1Image[2]);
-        list_icon.add(icons1Image[3]);
-        list_icon.add(icons1Image[4]);
-        list_icon.add(icons1Image[5]);
+        list_icon_1 = new ArrayList<ImageView>();
+        list_icon_1.add(icons1Image[0]);
+        list_icon_1.add(icons1Image[1]);
+        list_icon_1.add(icons1Image[2]);
+        list_icon_1.add(icons1Image[3]);
+        list_icon_1.add(icons1Image[4]);
+        list_icon_1.add(icons1Image[5]);
         WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -188,151 +186,90 @@ public class EdgeGestureService extends Service {
             icons2Image[3] = (ImageView) item2View.findViewById(R.id.item_3);
             icons2Image[4] = (ImageView) item2View.findViewById(R.id.item_4);
             icons2Image[5] = (ImageView) item2View.findViewById(R.id.item_5);
+            list_icon_2 = new ArrayList<ImageView>();
+            list_icon_2.add(icons2Image[0]);
+            list_icon_2.add(icons2Image[1]);
+            list_icon_2.add(icons2Image[2]);
+            list_icon_2.add(icons2Image[3]);
+            list_icon_2.add(icons2Image[4]);
+            list_icon_2.add(icons2Image[5]);
         }
-        View.OnTouchListener onTouchListener = new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int x_cord = (int) event.getRawX();
-                int y_cord = (int) event.getRawY();
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        x_init_cord = x_cord;
-                        y_init_cord = y_cord;
+        OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position,icons1Image,item1View,list_icon_1);
+        edge1Image.setOnTouchListener(onTouchListener1);
+        if (numOfEdge==2){
+            OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position,icons2Image, item2View,list_icon_2);
+            edge2Image.setOnTouchListener(onTouchListener2);
+        }
+        return START_STICKY;
+    }
 
-                        WindowManager.LayoutParams paraItem = new WindowManager.LayoutParams(
-                                WindowManager.LayoutParams.MATCH_PARENT,
-                                WindowManager.LayoutParams.MATCH_PARENT,
-                                WindowManager.LayoutParams.TYPE_PHONE,
-                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                                PixelFormat.TRANSLUCENT);
-                        paraItem.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-                        windowManager.addView(item1View, paraItem);
-                        icon0.setX((float) (x_init_cord + 0.26 * icon_distance_pxl) - icon_24dp_in_pxls);
-                        icon0.setY(y_init_cord - (float) 0.96 * icon_distance_pxl - icon_24dp_in_pxls);
-                        icon1.setX((float) (x_init_cord + 0.71 * icon_distance_pxl) - icon_24dp_in_pxls);
-                        icon1.setY(y_init_cord - (float) 0.71 * icon_distance_pxl - icon_24dp_in_pxls);
-                        icon2.setX((float) (x_init_cord + 0.97 * icon_distance_pxl) - icon_24dp_in_pxls);
-                        icon2.setY(y_init_cord - (float) 0.26 * icon_distance_pxl - icon_24dp_in_pxls);
-                        icon3.setX((float) (x_init_cord + 0.97 * icon_distance_pxl) - icon_24dp_in_pxls);
-                        icon3.setY(y_init_cord + (float) 0.26 * icon_distance_pxl - icon_24dp_in_pxls);
-                        icon4.setX((float) (x_init_cord + 0.71 * icon_distance_pxl) - icon_24dp_in_pxls);
-                        icon4.setY(y_init_cord + (float) 0.71 * icon_distance_pxl - icon_24dp_in_pxls);
-                        icon5.setX((float) (x_init_cord + 0.26 * icon_distance_pxl) - icon_24dp_in_pxls);
-                        icon5.setY(y_init_cord + (float) 0.97 * icon_distance_pxl - icon_24dp_in_pxls);
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                            ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-                            int numOfTask;
-                            if (launcherPackagename != null) {
-                                numOfTask = 8;
-                            } else numOfTask = 7;
+    public class OnTouchListener implements View.OnTouchListener {
+        private int x_init_cord, y_init_cord;
+        private int position;
+        private FrameLayout itemView;
+        private ImageView[] iconImage;
+        private List<ImageView> listIcon;
+        public  OnTouchListener(int position,ImageView[] iconImage, FrameLayout itemView, List<ImageView> listIcon){
+            this.position = position;
+            this.iconImage = iconImage;
+            this.itemView = itemView;
+            this.listIcon = listIcon;
+        }
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            int x_cord = (int) event.getRawX();
+            int y_cord = (int) event.getRawY();
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    x_init_cord = x_cord;
+                    y_init_cord = y_cord;
 
-//                            List<ActivityManager.RecentTaskInfo> recent = activityManager.getRecentTasks(5,ActivityManager.RECENT_IGNORE_UNAVAILABLE);
-//                            if(recent.size() >= 3) {
-//                                int tid = recent.get(2).id;
-//                                activityManager.moveTaskToFront(tid, 0);
-//                            }
-
-
-                            List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
-                            String[] tempPackagename = new String[list.size() - 1];
-                            int numOfException = 0;
-                            if (list != null) {
-                                for (int i = 1; i < list.size(); i++) {
-                                    ActivityManager.RunningTaskInfo taskInfo = list.get(i);
-                                    ComponentName componentName = taskInfo.baseActivity;
-                                    String packName = componentName.getPackageName();
-                                    if (launcherPackagename != null & packName.equals(launcherPackagename)) {
-                                        Log.e(LOG_TAG, "category = home");
-                                        tempPackagename[i - 1] = null;
-                                        numOfException++;
-                                    } else tempPackagename[i - 1] = componentName.getPackageName();
-                                }
-                                packagename = new String[tempPackagename.length - numOfException];
-                                int j = 0;
-                                for (int i = 0; i < packagename.length; i++) {
-                                    while (packagename[i] == null) {
-                                        if (tempPackagename[i + j] != null) {
-                                            packagename[i] = tempPackagename[i + j];
-
-                                        } else j++;
-                                    }
-                                }
-                                for (int i = 0; i < 6; i++) {
-                                    if (i >= packagename.length) {
-                                        list_icon.get(i).setImageDrawable(null);
-                                    } else {
-                                        try {
-                                            Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
-                                            ImageView iconi = list_icon.get(i);
-                                            iconi.setImageDrawable(icon);
-                                        } catch (PackageManager.NameNotFoundException e) {
-                                            Log.e(LOG_TAG, "NameNotFound" + e);
-                                        }
-                                    }
-                                }
+                    WindowManager.LayoutParams paraItem = new WindowManager.LayoutParams(
+                            WindowManager.LayoutParams.MATCH_PARENT,
+                            WindowManager.LayoutParams.MATCH_PARENT,
+                            WindowManager.LayoutParams.TYPE_PHONE,
+                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                            PixelFormat.TRANSLUCENT);
+                    paraItem.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                    windowManager.addView(itemView, paraItem);
+                    Utility.setIconsPosition(iconImage,x_init_cord,y_init_cord,icon_distance_pxl,icon_24dp_in_pxls,position);
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+                        int numOfTask;
+                        if (launcherPackagename != null) {
+                            numOfTask = 8;
+                        } else numOfTask = 7;
+                        List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
+                        String[] tempPackagename = new String[list.size() - 1];
+                        int numOfException = 0;
+                        if (list != null) {
+                            for (int i = 1; i < list.size(); i++) {
+                                ActivityManager.RunningTaskInfo taskInfo = list.get(i);
+                                ComponentName componentName = taskInfo.baseActivity;
+                                String packName = componentName.getPackageName();
+                                if (launcherPackagename != null & packName.equals(launcherPackagename)) {
+                                    Log.e(LOG_TAG, "category = home");
+                                    tempPackagename[i - 1] = null;
+                                    numOfException++;
+                                } else tempPackagename[i - 1] = componentName.getPackageName();
                             }
-                        }
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-                            long time = System.currentTimeMillis();
-                            List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 1000, time);
-                            int numOfTask = 6;
-                            packagename = new String[6];
-                            String[] tempPackagename = new String[15];
+                            packagename = new String[tempPackagename.length - numOfException];
                             int j = 0;
-                            int numbOfException = 0;
-                            if (stats != null) {
-                                SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
-                                for (UsageStats usageStats : stats) {
-                                    mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
+                            for (int i = 0; i < packagename.length; i++) {
+                                while (packagename[i] == null) {
+                                    if (tempPackagename[i + j] != null) {
+                                        packagename[i] = tempPackagename[i + j];
+
+                                    } else j++;
                                 }
-                                if (!mySortedMap.isEmpty()) {
-                                    Set<Long> setKey = mySortedMap.keySet();
-                                    for (Long key : setKey) {
-                                        if (j < tempPackagename.length) {
-                                            UsageStats usageStats = mySortedMap.get(key);
-                                            String packa = usageStats.getPackageName();
-                                            try {
-                                                if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
-                                                    tempPackagename[j] = null;
-                                                    numbOfException++;
-
-                                                } else if (packa.contains("systemui")
-                                                        | packa.contains("googlequicksearchbox")
-                                                        | key == mySortedMap.firstKey()) {
-                                                    tempPackagename[j] = null;
-                                                    numbOfException++;
-                                                } else {
-                                                    tempPackagename[j] = packa;
-                                                }
-                                            } catch (PackageManager.NameNotFoundException e) {
-                                                Log.e(LOG_TAG, "packageName not found" + e);
-                                            }
-                                            j++;
-                                        }
-
-                                        Log.e(LOG_TAG, mySortedMap.get(key).getPackageName());
-                                    }
-                                    int k = 0;
-                                    int l = 0;
-                                    while (packagename[5] == null & l < tempPackagename.length) {
-                                        if (tempPackagename[l] != null) {
-                                            packagename[k] = tempPackagename[l];
-                                            k++;
-                                            l++;
-                                        } else {
-                                            l++;
-                                        }
-                                    }
-                                } else Log.e(LOG_TAG, " error in mySortedMap");
                             }
                             for (int i = 0; i < 6; i++) {
-                                if (i >= packagename.length | packagename[i] == null) {
-                                    list_icon.get(i).setImageDrawable(null);
+                                if (i >= packagename.length) {
+                                    listIcon.get(i).setImageDrawable(null);
                                 } else {
                                     try {
                                         Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
-                                        ImageView iconi = list_icon.get(i);
+                                        ImageView iconi = listIcon.get(i);
                                         iconi.setImageDrawable(icon);
                                     } catch (PackageManager.NameNotFoundException e) {
                                         Log.e(LOG_TAG, "NameNotFound" + e);
@@ -340,78 +277,136 @@ public class EdgeGestureService extends Service {
                                 }
                             }
                         }
-                        numOfIcon = list_icon.size();
-                        x = new int[numOfIcon];
-                        y = new int[numOfIcon];
-                        for (int i = 0; i < numOfIcon; i++) {
-                            x[i] = (int) list_icon.get(i).getX();
-                            y[i] = (int) list_icon.get(i).getY();
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        windowManager.removeView(item1View);
-
-                        int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
-                        if (packageToSwitch != -1) {
-
-                            int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK |
-                                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
-                            Intent extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
-                            extApp.addCategory(Intent.CATEGORY_LAUNCHER);
-                            extApp.setAction(Intent.ACTION_MAIN);
-                            ComponentName componentName = extApp.getComponent();
-                            Intent startApp = new Intent();
-                            startApp.setComponent(componentName);
-                            startApp.addCategory(Intent.CATEGORY_LAUNCHER);
-                            startApp.addFlags(launchFlags);
-                            startApp.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(startApp);
-                            Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
-                        }
-                        packagename = null;
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
-                        if (iconToSwitch != -1) {
-                            if (!hasVibrate) {
-                                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                                vibrator.vibrate(15);
-                                hasVibrate = true;
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
+                        long time = System.currentTimeMillis();
+                        List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 1000, time);
+                        int numOfTask = 6;
+                        packagename = new String[6];
+                        String[] tempPackagename = new String[15];
+                        int j = 0;
+                        int numbOfException = 0;
+                        if (stats != null) {
+                            SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
+                            for (UsageStats usageStats : stats) {
+                                mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
                             }
-                            for (int i = 0; i < list_icon.size(); i++) {
-                                hasOneActive = true;
-                                if (i == iconToSwitch) {
-                                    list_icon.get(i).setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
-                                } else list_icon.get(i).setBackground(null);
+                            if (!mySortedMap.isEmpty()) {
+                                Set<Long> setKey = mySortedMap.keySet();
+                                for (Long key : setKey) {
+                                    if (j < tempPackagename.length) {
+                                        UsageStats usageStats = mySortedMap.get(key);
+                                        String packa = usageStats.getPackageName();
+                                        try {
+                                            if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
+                                                tempPackagename[j] = null;
+                                                numbOfException++;
 
-                            }
+                                            } else if (packa.contains("systemui")
+                                                    | packa.contains("googlequicksearchbox")
+                                                    | key == mySortedMap.firstKey()) {
+                                                tempPackagename[j] = null;
+                                                numbOfException++;
+                                            } else {
+                                                tempPackagename[j] = packa;
+                                            }
+                                        } catch (PackageManager.NameNotFoundException e) {
+                                            Log.e(LOG_TAG, "packageName not found" + e);
+                                        }
+                                        j++;
+                                    }
 
+                                    Log.e(LOG_TAG, mySortedMap.get(key).getPackageName());
+                                }
+                                int k = 0;
+                                int l = 0;
+                                while (packagename[5] == null & l < tempPackagename.length) {
+                                    if (tempPackagename[l] != null) {
+                                        packagename[k] = tempPackagename[l];
+                                        k++;
+                                        l++;
+                                    } else {
+                                        l++;
+                                    }
+                                }
+                            } else Log.e(LOG_TAG, " error in mySortedMap");
                         }
-                        if (iconToSwitch == -1) {
-                            hasVibrate = false;
-                            if (hasOneActive) {
-                                for (ImageView imageView : list_icon) {
-                                    imageView.setBackground(null);
+                        for (int i = 0; i < 6; i++) {
+                            if (i >= packagename.length | packagename[i] == null) {
+                                listIcon.get(i).setImageDrawable(null);
+                            } else {
+                                try {
+                                    Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
+                                    ImageView iconi = listIcon.get(i);
+                                    iconi.setImageDrawable(icon);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    Log.e(LOG_TAG, "NameNotFound" + e);
                                 }
                             }
-                            hasOneActive = false;
+                        }
+                    }
+                    numOfIcon = listIcon.size();
+                    x = new int[numOfIcon];
+                    y = new int[numOfIcon];
+                    for (int i = 0; i < numOfIcon; i++) {
+                        x[i] = (int) listIcon.get(i).getX();
+                        y[i] = (int) listIcon.get(i).getY();
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    windowManager.removeView(itemView);
+
+                    int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
+                    if (packageToSwitch != -1) {
+
+                        int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK |
+                                Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
+                        Intent extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
+                        extApp.addCategory(Intent.CATEGORY_LAUNCHER);
+                        extApp.setAction(Intent.ACTION_MAIN);
+                        ComponentName componentName = extApp.getComponent();
+                        Intent startApp = new Intent();
+                        startApp.setComponent(componentName);
+                        startApp.addCategory(Intent.CATEGORY_LAUNCHER);
+                        startApp.addFlags(launchFlags);
+                        startApp.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(startApp);
+                        Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
+                    }
+                    packagename = null;
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
+                    if (iconToSwitch != -1) {
+                        if (!hasVibrate) {
+                            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                            vibrator.vibrate(15);
+                            hasVibrate = true;
+                        }
+                        for (int i = 0; i < listIcon.size(); i++) {
+                            hasOneActive = true;
+                            if (i == iconToSwitch) {
+                                listIcon.get(i).setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
+                            } else listIcon.get(i).setBackground(null);
+
                         }
 
+                    }
+                    if (iconToSwitch == -1) {
+                        hasVibrate = false;
+                        if (hasOneActive) {
+                            for (ImageView imageView : listIcon) {
+                                imageView.setBackground(null);
+                            }
+                        }
+                        hasOneActive = false;
+                    }
 
-                }
 
-                return true;
             }
-        };
-        edge1Image.setOnTouchListener(onTouchListener);
-        edge2Image.setOnTouchListener(onTouchListener);
-        return START_STICKY;
-    }
 
-    public class onTouchListener implements View.OnTouchListener {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            return false;
+            return true;
         }
     }
 

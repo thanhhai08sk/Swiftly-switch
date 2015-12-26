@@ -50,7 +50,7 @@ public  class Utility {
         return -1;
     }
 
-    public static void setIconsPosition(ImageView[] icon, int x_init_cord, int y_init_cord, int icon_distance_pxl, int icon_24_dp_pxl, int edgePosition){
+    public static void setIconsPosition(ImageView[] icon, int x_init_cord, int y_init_cord, float icon_distance_pxl, float icon_24_dp_pxl, int edgePosition){
 
         switch (edgePosition){
             case 10:
