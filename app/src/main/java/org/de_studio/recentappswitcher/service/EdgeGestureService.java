@@ -60,7 +60,7 @@ public class EdgeGestureService extends Service {
     private RelativeLayout edge2View;
     private ImageView edge1Image;
     private ImageView edge2Image;
-    private FrameLayout itemView;
+    private FrameLayout item1View, item2View;
     public int icon_height = 48;
     public int icon_width = 48, icon_rad = 24;
     public int icon_distance = 130;
@@ -82,6 +82,7 @@ public class EdgeGestureService extends Service {
     private boolean hasVibrate = false;
     public int numOfEdge,edge1Position,edge2Position;
     private SharedPreferences defaultShared;
+    private ImageView[] icons1Image, icons2Image;
 
 
     @Nullable
@@ -116,22 +117,21 @@ public class EdgeGestureService extends Service {
         icon_distance_pxl = (float) Utility.dpiToPixels(icon_distance, windowManager);
         icon_24dp_in_pxls = (float) Utility.dpiToPixels(24, windowManager);
         edge1Image.setLayoutParams(lp);
-        itemView =(FrameLayout)layoutInflater.inflate(R.layout.item, null);
-        icon0 = (ImageView) itemView.findViewById(R.id.item_0);
-        icon0.setX(0);
-        icon0.setY(300);
-        icon1 = (ImageView) itemView.findViewById(R.id.item_1);
-        icon2 = (ImageView) itemView.findViewById(R.id.item_2);
-        icon3 = (ImageView) itemView.findViewById(R.id.item_3);
-        icon4 = (ImageView) itemView.findViewById(R.id.item_4);
-        icon5 = (ImageView) itemView.findViewById(R.id.item_5);
+        item1View =(FrameLayout)layoutInflater.inflate(R.layout.item, null);
+        icons1Image = new ImageView[6];
+        icons1Image[0] = (ImageView) item1View.findViewById(R.id.item_0);
+        icons1Image[1] = (ImageView) item1View.findViewById(R.id.item_1);
+        icons1Image[2] = (ImageView) item1View.findViewById(R.id.item_2);
+        icons1Image[3] = (ImageView) item1View.findViewById(R.id.item_3);
+        icons1Image[4] = (ImageView) item1View.findViewById(R.id.item_4);
+        icons1Image[5] = (ImageView) item1View.findViewById(R.id.item_5);
         list_icon = new ArrayList<ImageView>();
-        list_icon.add(icon0);
-        list_icon.add(icon1);
-        list_icon.add(icon2);
-        list_icon.add(icon3);
-        list_icon.add(icon4);
-        list_icon.add(icon5);
+        list_icon.add(icons1Image[0]);
+        list_icon.add(icons1Image[1]);
+        list_icon.add(icons1Image[2]);
+        list_icon.add(icons1Image[3]);
+        list_icon.add(icons1Image[4]);
+        list_icon.add(icons1Image[5]);
         WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -178,8 +178,18 @@ public class EdgeGestureService extends Service {
                     break;
                 case 22: paramsEdge2.gravity = Gravity.BOTTOM | Gravity.LEFT;
             }
+            windowManager.addView(edge2View, paramsEdge2);
+
+            item2View =(FrameLayout)layoutInflater.inflate(R.layout.item, null);
+            icons2Image = new ImageView[6];
+            icons2Image[0] = (ImageView) item2View.findViewById(R.id.item_0);
+            icons2Image[1] = (ImageView) item2View.findViewById(R.id.item_1);
+            icons2Image[2] = (ImageView) item2View.findViewById(R.id.item_2);
+            icons2Image[3] = (ImageView) item2View.findViewById(R.id.item_3);
+            icons2Image[4] = (ImageView) item2View.findViewById(R.id.item_4);
+            icons2Image[5] = (ImageView) item2View.findViewById(R.id.item_5);
         }
-        edge1Image.setOnTouchListener(new View.OnTouchListener() {
+        View.OnTouchListener onTouchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 int x_cord = (int) event.getRawX();
@@ -196,7 +206,7 @@ public class EdgeGestureService extends Service {
                                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                                 PixelFormat.TRANSLUCENT);
                         paraItem.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-                        windowManager.addView(itemView, paraItem);
+                        windowManager.addView(item1View, paraItem);
                         icon0.setX((float) (x_init_cord + 0.26 * icon_distance_pxl) - icon_24dp_in_pxls);
                         icon0.setY(y_init_cord - (float) 0.96 * icon_distance_pxl - icon_24dp_in_pxls);
                         icon1.setX((float) (x_init_cord + 0.71 * icon_distance_pxl) - icon_24dp_in_pxls);
@@ -339,7 +349,7 @@ public class EdgeGestureService extends Service {
                         }
                         break;
                     case MotionEvent.ACTION_UP:
-                        windowManager.removeView(itemView);
+                        windowManager.removeView(item1View);
 
                         int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
                         if (packageToSwitch != -1) {
@@ -392,9 +402,19 @@ public class EdgeGestureService extends Service {
 
                 return true;
             }
-        });
+        };
+        edge1Image.setOnTouchListener(onTouchListener);
+        edge2Image.setOnTouchListener(onTouchListener);
         return START_STICKY;
     }
+
+    public class onTouchListener implements View.OnTouchListener {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return false;
+        }
+    }
+
 
 
 
