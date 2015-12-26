@@ -7,6 +7,7 @@ import android.app.usage.UsageStatsManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.PixelFormat;
@@ -55,8 +56,10 @@ public class EdgeGestureService extends Service {
     static final String LOG_TAG = EdgeGestureService.class.getSimpleName();
     static final int EDGE_GESTURE_NOTIFICAION_ID = 10;
     private WindowManager windowManager;
-    private RelativeLayout edgeView;
-    private ImageView edgeImage;
+    private RelativeLayout edge1View;
+    private RelativeLayout edge2View;
+    private ImageView edge1Image;
+    private ImageView edge2Image;
     private FrameLayout itemView;
     public int icon_height = 48;
     public int icon_width = 48, icon_rad = 24;
@@ -77,6 +80,8 @@ public class EdgeGestureService extends Service {
     private int numOfIcon;
     private boolean hasOneActive = false;
     private boolean hasVibrate = false;
+    public int numOfEdge,edge1Position,edge2Position;
+    private SharedPreferences defaultShared;
 
 
     @Nullable
@@ -87,27 +92,30 @@ public class EdgeGestureService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
+        defaultShared = getApplicationContext().getSharedPreferences(getPackageName()+ "_preferences",0);
         Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
         launcherIntent.addCategory(Intent.CATEGORY_HOME);
         ResolveInfo res = getPackageManager().resolveActivity(launcherIntent,0);
         if (res.activityInfo != null){
             launcherPackagename = res.activityInfo.packageName;
         }
+        numOfEdge = defaultShared.getInt("numOfEdge",1);
+        edge1Position = defaultShared.getInt("edge1Position",11);
+        edge2Position = defaultShared.getInt("edge2Position",21);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        edgeView =(RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
-        edgeImage = (ImageView) edgeView.findViewById(R.id.edge_image);
-        ViewGroup.LayoutParams lp = edgeImage.getLayoutParams();
+        edge1View =(RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
+        edge1Image = (ImageView) edge1View.findViewById(R.id.edge_image);
+        ViewGroup.LayoutParams lp = edge1Image.getLayoutParams();
         edge_height_pxl = Utility.dpiToPixels(edge_height,windowManager);
         edge_width_pxl = Utility.dpiToPixels(edge_width,windowManager);
         lp.height = edge_height_pxl;
         lp.width =  edge_width_pxl;
-        edge_y = (int)edgeImage.getY();
+        edge_y = (int) edge1Image.getY();
         edge_centre_y = edge_y + edge_height_pxl/2;
         icon_distance_pxl = (float) Utility.dpiToPixels(icon_distance, windowManager);
         icon_24dp_in_pxls = (float) Utility.dpiToPixels(24, windowManager);
-        edgeImage.setLayoutParams(lp);
+        edge1Image.setLayoutParams(lp);
         itemView =(FrameLayout)layoutInflater.inflate(R.layout.item, null);
         icon0 = (ImageView) itemView.findViewById(R.id.item_0);
         icon0.setX(0);
@@ -124,16 +132,54 @@ public class EdgeGestureService extends Service {
         list_icon.add(icon3);
         list_icon.add(icon4);
         list_icon.add(icon5);
-        WindowManager.LayoutParams paramEdge = new WindowManager.LayoutParams(
+        WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE| WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 PixelFormat.TRANSLUCENT);
+
         // | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-        paramEdge.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-        windowManager.addView(edgeView, paramEdge);
-        edgeImage.setOnTouchListener(new View.OnTouchListener() {
+        switch (edge1Position){
+            case 10: paramsEdge1.gravity = Gravity.TOP | Gravity.RIGHT;
+                break;
+            case 11: paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+                break;
+            case 12: paramsEdge1.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                break;
+            case 20: paramsEdge1.gravity = Gravity.TOP | Gravity.LEFT;
+                break;
+            case 21: paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                break;
+            case 22: paramsEdge1.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                break;
+        }
+
+        windowManager.addView(edge1View, paramsEdge1);
+        if (numOfEdge ==2){
+            edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
+            edge2Image =(ImageView) edge2View.findViewById(R.id.edge_image);
+            WindowManager.LayoutParams paramsEdge2 = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.TYPE_PHONE,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE| WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    PixelFormat.TRANSLUCENT);
+            switch (edge2Position){
+                case 10: paramsEdge2.gravity = Gravity.TOP | Gravity.RIGHT;
+                    break;
+                case 11: paramsEdge2.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+                    break;
+                case 12: paramsEdge2.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                    break;
+                case 20: paramsEdge2.gravity = Gravity.TOP | Gravity.LEFT;
+                    break;
+                case 21: paramsEdge2.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                    break;
+                case 22: paramsEdge2.gravity = Gravity.BOTTOM | Gravity.LEFT;
+            }
+        }
+        edge1Image.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 int x_cord = (int) event.getRawX();
@@ -317,7 +363,7 @@ public class EdgeGestureService extends Service {
                     case MotionEvent.ACTION_MOVE:
                         int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
                         if (iconToSwitch != -1) {
-                            if (!hasVibrate){
+                            if (!hasVibrate) {
                                 Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                                 vibrator.vibrate(15);
                                 hasVibrate = true;
@@ -334,7 +380,7 @@ public class EdgeGestureService extends Service {
                         if (iconToSwitch == -1) {
                             hasVibrate = false;
                             if (hasOneActive) {
-                                for (ImageView imageView: list_icon){
+                                for (ImageView imageView : list_icon) {
                                     imageView.setBackground(null);
                                 }
                             }
@@ -349,6 +395,7 @@ public class EdgeGestureService extends Service {
         });
         return START_STICKY;
     }
+
 
 
 }
