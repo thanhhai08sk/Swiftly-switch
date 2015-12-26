@@ -98,9 +98,9 @@ public class EdgeGestureService extends Service {
         if (res.activityInfo != null){
             launcherPackagename = res.activityInfo.packageName;
         }
-        numOfEdge = defaultShared.getInt("numOfEdge",2);
-        edge1Position = defaultShared.getInt("edge1Position",12);
-        edge2Position = defaultShared.getInt("edge2Position",20);
+        numOfEdge = defaultShared.getInt("numOfEdge",1);
+        edge1Position = defaultShared.getInt("edge1Position",21);
+        edge2Position = defaultShared.getInt("edge2Position",11);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         edge1View =(RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
