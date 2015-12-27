@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher;
 
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -139,6 +140,17 @@ public  class Utility {
                 break;
         }
 
+    }
+
+    public static boolean isExpandStatusBar(int x_init, int y_init, int x, int y, int radius, WindowManager win){
+        double distance = Math.sqrt(Math.pow((double)x - (double)x_init,2) + Math.pow((double)y - (double) y_init,2));
+        double distanceNeeded_pxl = (double) dpiToPixels(35+ radius,win);
+        boolean isPositiveAng = y < y_init;
+        double oriAng = Math.acos((double)(x - x_init)/distance);
+        double maxAng = 0.4166*Math.PI;
+        double minAng = 0.0833*Math.PI;
+        Log.e("isExpandStatusBar","oriAng = " + oriAng + " max = "+ maxAng + " min = "+ minAng+ "distance = " + distance + "need = " + distanceNeeded_pxl );
+        return !isPositiveAng & oriAng>minAng & oriAng < maxAng & distance >= distanceNeeded_pxl;
     }
 
 }

@@ -31,6 +31,8 @@ import android.widget.RelativeLayout;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -375,6 +377,9 @@ public class EdgeGestureService extends Service {
                         Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
                     }
                     packagename = null;
+                    if (Utility.isExpandStatusBar(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, windowManager)) {
+                        expandStatusBar();
+                    }
                     break;
                 case MotionEvent.ACTION_MOVE:
                     int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
@@ -407,6 +412,29 @@ public class EdgeGestureService extends Service {
             }
 
             return true;
+        }
+    }
+
+    public void expandStatusBar(){
+        Object sbservice = getSystemService( "statusbar" );
+        try {
+            Class<?> statusbarManager = Class.forName( "android.app.StatusBarManager" );
+            Method showsb;
+            if (Build.VERSION.SDK_INT >= 17) {
+                showsb = statusbarManager.getMethod("expandNotificationsPanel");
+            }
+            else {
+                showsb = statusbarManager.getMethod("expand");
+            }
+            showsb.invoke( sbservice );
+        }catch (ClassNotFoundException e){
+            Log.e(LOG_TAG,"ClassNotFound " + e);
+        }catch (NoSuchMethodException e){
+            Log.e(LOG_TAG,"NosuchMethod " + e);
+        }catch (IllegalAccessException e){
+            Log.e(LOG_TAG,"IllegalAccessException " + e);
+        }catch (InvocationTargetException e){
+            Log.e(LOG_TAG,"InvocationTargetException " + e);
         }
     }
 
