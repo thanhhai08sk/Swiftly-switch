@@ -69,7 +69,7 @@ public class EdgeGestureService extends Service {
     private FrameLayout item1View, item2View;
     public int icon_height = 48;
     public int icon_width = 48, icon_rad = 24;
-    public int icon_distance = 130;
+    public int icon_distance = 115;
     public float icon_distance_pxl, icon_24dp_in_pxls;
     public int edge_height = 150;
     public int edge_height_pxl;
@@ -401,21 +401,21 @@ public class EdgeGestureService extends Service {
                     }
                     packagename = null;
                     if (Utility.isExpandStatusBar(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, windowManager)) {
-
-                        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                        event1.setClassName(getClass().getName());
-                        event1.getText().add("this is text");
-                        event1.setPackageName(getPackageName());
-                        event1.setEnabled(true);
-                        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                        recordCompat.setSource(v);
-                        if (manager.isEnabled()){
-                            manager.sendAccessibilityEvent(event1);
+                        if (y_cord < y_init_cord){
+                            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+                            event1.setClassName(getClass().getName());
+                            event1.getText().add("this is text");
+                            event1.setPackageName(getPackageName());
+                            event1.setEnabled(true);
+                            AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+                            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+                            recordCompat.setSource(v);
+                            if (manager.isEnabled()){
+                                manager.sendAccessibilityEvent(event1);
+                            }
+                        }else{
+                            expandStatusBar();
                         }
-                        Log.e("myaccessibility", "sended");
-//                        expandStatusBar();
-
                     }
                     break;
                 case MotionEvent.ACTION_MOVE:

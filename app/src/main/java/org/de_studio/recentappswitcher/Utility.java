@@ -150,7 +150,7 @@ public  class Utility {
         double maxAng = 0.4166*Math.PI;
         double minAng = 0.0833*Math.PI;
         Log.e("isExpandStatusBar","oriAng = " + oriAng + " max = "+ maxAng + " min = "+ minAng+ "distance = " + distance + "need = " + distanceNeeded_pxl );
-        return !isPositiveAng & oriAng>minAng & oriAng < maxAng & distance >= distanceNeeded_pxl;
+        return oriAng>minAng & oriAng < maxAng & distance >= distanceNeeded_pxl;
     }
 
 }

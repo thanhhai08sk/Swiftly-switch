@@ -14,7 +14,7 @@ public class MyAccessibilityService extends AccessibilityService {
         Log.e("MyAccessibilityService", "get event");
         if (event.getEventType() == AccessibilityEvent.TYPE_TOUCH_INTERACTION_END){
             Log.e("MyAccessibilityService", "home");
-            performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME);
+            performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
         }
     }
 
@@ -33,7 +33,7 @@ public class MyAccessibilityService extends AccessibilityService {
         super.onServiceConnected();
         Log.e("myaccess", "onServiceConnected");
         AccessibilityServiceInfo info = new AccessibilityServiceInfo();
-        info.eventTypes = AccessibilityEvent.TYPES_ALL_MASK;
+        info.eventTypes = AccessibilityEvent.TYPE_TOUCH_INTERACTION_END;
         info.feedbackType= AccessibilityServiceInfo.FEEDBACK_ALL_MASK;
         info.notificationTimeout= 100;
         info.packageNames = new  String[]{"org.de_studio.recentappswitcher"};
