@@ -1,16 +1,19 @@
 package org.de_studio.recentappswitcher;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.accessibility.AccessibilityEventCompat;
+import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
 
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
@@ -32,18 +35,14 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK |
-                        Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
-                Intent extApp = getPackageManager().getLaunchIntentForPackage("com.mikiapp");
-                ComponentName componentName = extApp.getComponent();
-                Intent startApp = new Intent();
-                startApp.setComponent(componentName);
-                startApp.addCategory(Intent.CATEGORY_LAUNCHER);
-                startApp.addFlags(launchFlags);
-//                extApp.addCategory(Intent.CATEGORY_LAUNCHER);
-//                extApp.setAction(Intent.ACTION_MAIN);
-//                extApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(startApp);
+                AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_ANNOUNCEMENT);
+                event1.setClassName(getClass().getName());
+                event1.setPackageName(getPackageName());
+                event1.setEnabled(true);
+                AccessibilityManager manager =(AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+                AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+                recordCompat.setSource(view);
+                manager.sendAccessibilityEvent(event1);
             }
         });
         startService(new Intent(this, EdgeGestureService.class));
