@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -59,6 +60,7 @@ public class EdgeGestureService extends Service {
             } else return -1;
         }
     };
+    private int configuration = 0;
     static final String LOG_TAG = EdgeGestureService.class.getSimpleName();
     static final int EDGE_GESTURE_NOTIFICAION_ID = 10;
     private WindowManager windowManager;
@@ -504,5 +506,19 @@ public class EdgeGestureService extends Service {
         }
     }
 
-
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation != configuration){
+            try {
+                windowManager.removeView(item1View);
+                windowManager.removeView(item2View);
+            }catch (NullPointerException e){
+                Log.e("onConfiguration","Null");
+            }catch (IllegalArgumentException e){
+                Log.e("onConfiguration","Illegal");
+            }
+            configuration = newConfig.orientation;
+        }
+    }
 }
