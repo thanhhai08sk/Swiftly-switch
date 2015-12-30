@@ -69,7 +69,7 @@ public class EdgeGestureService extends Service {
     private FrameLayout item1View, item2View;
     public int icon_height = 48;
     public int icon_width = 48, icon_rad = 24;
-    public int icon_distance = 115;
+    public int icon_distance = 115, distance_to_arc = 35, distance_to_arc_pxl;
     public float icon_distance_pxl, icon_24dp_in_pxls;
     public int edge_height = 150;
     public int edge_height_pxl;
@@ -87,6 +87,7 @@ public class EdgeGestureService extends Service {
     public int numOfEdge, edge1Position, edge2Position;
     private SharedPreferences defaultShared;
     private ImageView[] icons1Image, icons2Image;
+    private ExpandStatusBarView expandView, homeView, backView;
 
 
     @Nullable
@@ -121,6 +122,7 @@ public class EdgeGestureService extends Service {
         edge_centre_y = edge_y + edge_height_pxl / 2;
         icon_distance_pxl = (float) Utility.dpiToPixels(icon_distance, windowManager);
         icon_24dp_in_pxls = (float) Utility.dpiToPixels(24, windowManager);
+        distance_to_arc_pxl = Utility.dpiToPixels(distance_to_arc,windowManager);
         edge1Image.setLayoutParams(lp);
         item1View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
         icons1Image = new ImageView[6];
@@ -238,13 +240,39 @@ public class EdgeGestureService extends Service {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            v.onTouchEvent(event);
             int x_cord = (int) event.getRawX();
             int y_cord = (int) event.getRawY();
+            int x1,y1,top,left,bottom,right;
+            int[] expandSpec;// left, top, right, bottom
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     x_init_cord = x_cord;
                     y_init_cord = y_cord;
+                    expandSpec = Utility.getExpandSpec(x_init_cord,y_init_cord,icon_distance,35,windowManager);
+                    int expandWidth = expandSpec[2] - expandSpec[0];
+                    int expandHeight = expandSpec[3] - expandSpec[1];
+                    expandView = new ExpandStatusBarView(getApplicationContext());
+                    expandView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl);
+                    expandView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl);
+                    expandView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl);
+                    expandView.setPosition(position);
+                    itemView.addView(expandView);
+
+                    homeView = new ExpandStatusBarView(getApplicationContext());
+                    homeView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl);
+                    homeView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl);
+                    homeView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl);
+                    homeView.setPosition(position);
+                    homeView.setText("_________home_________");
+                    itemView.addView(homeView);
+
+                    backView = new ExpandStatusBarView(getApplicationContext());
+                    backView.setX(x_init_cord - icon_distance_pxl - 2*distance_to_arc_pxl );
+                    backView.setY(y_init_cord - icon_distance_pxl - 2 * distance_to_arc_pxl);
+                    backView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl +  distance_to_arc_pxl);
+                    backView.setPosition(position);
+                    backView.setText("____________back____________");
+                    itemView.addView(backView);
 
                     WindowManager.LayoutParams paraItem = new WindowManager.LayoutParams(
                             WindowManager.LayoutParams.MATCH_PARENT,
@@ -378,7 +406,9 @@ public class EdgeGestureService extends Service {
                     break;
                 case MotionEvent.ACTION_UP:
                     windowManager.removeView(itemView);
-
+                    itemView.removeView(expandView);
+                    itemView.removeView(homeView);
+                    itemView.removeView(backView);
                     int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
                     if (packageToSwitch != -1) {
 

@@ -152,5 +152,22 @@ public  class Utility {
         Log.e("isExpandStatusBar","oriAng = " + oriAng + " max = "+ maxAng + " min = "+ minAng+ "distance = " + distance + "need = " + distanceNeeded_pxl );
         return oriAng>minAng & oriAng < maxAng & distance >= distanceNeeded_pxl;
     }
+    public static int[] getExpandSpec(int x_init,int y_init,int rad, int distanceFromIcon,WindowManager win){
+        int[] result = new int[4];
+        int rad_pxl = dpiToPixels(rad,win);
+        int distance_pxl = dpiToPixels(distanceFromIcon,win);
+        double radian30 = 0.16667* Math.PI;
+        double sin30 = Math.sin(radian30);
+        double cos30 = Math.cos(radian30);
+        int a = 2* (int)((rad_pxl+ distance_pxl)*sin30);
+        int b = rad_pxl + distance_pxl - (int)((rad_pxl+distance_pxl)*cos30);
+        result[0] = x_init -(int)( (rad_pxl + distance_pxl)*sin30);
+        result[1] = y_init - (int)(rad_pxl*cos30) -(int)( distance_pxl*cos30) - b;
+        result[2] = result[0] + a;
+        result[3] = result[1] + b;
+        Log.e("expand", "left = " + result[0]+ "\ntop =" + result[1] + "\nright = "+ result[2] + "\nbottom = "+ result[3] +"\na = "+ a + "\nb = "+ b +"\nsin30= "
+        + sin30+ "\ncos30 = "+ cos30 + "\ndistance = " +distance_pxl + "\nradpx; = "+rad_pxl);
+        return result;
+    }
 
 }
