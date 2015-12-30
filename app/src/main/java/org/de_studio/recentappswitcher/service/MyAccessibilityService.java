@@ -13,8 +13,14 @@ public class MyAccessibilityService extends AccessibilityService {
     public void onAccessibilityEvent(AccessibilityEvent event) {
         Log.e("MyAccessibilityService", "get event");
         if (event.getEventType() == AccessibilityEvent.TYPE_TOUCH_INTERACTION_END){
-            Log.e("MyAccessibilityService", "home");
-            performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
+            if (event.getAction()==1){
+                Log.e("MyAccessibilityService", "home");
+                performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME);
+            }else if (event.getAction()==2){
+                Log.e("MyAccessibilityService", "back");
+                performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
+            }
+
         }
     }
 

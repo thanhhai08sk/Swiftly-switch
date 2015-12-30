@@ -142,15 +142,26 @@ public  class Utility {
 
     }
 
-    public static boolean isExpandStatusBar(int x_init, int y_init, int x, int y, int radius, WindowManager win){
+    public static int isHomeOrBackOrNoti(int x_init, int y_init, int x, int y, int radius, WindowManager win){
         double distance = Math.sqrt(Math.pow((double)x - (double)x_init,2) + Math.pow((double)y - (double) y_init,2));
         double distanceNeeded_pxl = (double) dpiToPixels(35+ radius,win);
-        boolean isPositiveAng = y < y_init;
+        double distanceNeededToBack_pxl = (double) dpiToPixels(70+ radius,win);
+        boolean isTop = y < y_init;
         double oriAng = Math.acos((double)(Math.abs(x - x_init))/distance);
         double maxAng = 0.4166*Math.PI;
         double minAng = 0.0833*Math.PI;
         Log.e("isExpandStatusBar","oriAng = " + oriAng + " max = "+ maxAng + " min = "+ minAng+ "distance = " + distance + "need = " + distanceNeeded_pxl );
-        return oriAng>minAng & oriAng < maxAng & distance >= distanceNeeded_pxl;
+        if (isTop){
+            if (oriAng>minAng & oriAng < maxAng & distance >= distanceNeededToBack_pxl){
+                return 2;
+            }else if (oriAng>minAng & oriAng < maxAng & distance >= distanceNeeded_pxl){
+                return 1;
+            }else return 0;
+        }else {
+            if (oriAng>minAng & oriAng < maxAng & distance >= distanceNeeded_pxl){
+                return 3;
+            }else return 0;
+        }
     }
     public static int[] getExpandSpec(int x_init,int y_init,int rad, int distanceFromIcon,WindowManager win){
         int[] result = new int[4];

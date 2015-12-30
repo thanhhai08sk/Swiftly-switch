@@ -432,22 +432,36 @@ public class EdgeGestureService extends Service {
 
                     }
                     packagename = null;
-                    if (Utility.isExpandStatusBar(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, windowManager)) {
-                        if (y_cord < y_init_cord){
-                            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                            event1.setClassName(getClass().getName());
-                            event1.getText().add("this is text");
-                            event1.setPackageName(getPackageName());
-                            event1.setEnabled(true);
-                            AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                            recordCompat.setSource(v);
-                            if (manager.isEnabled()){
-                                manager.sendAccessibilityEvent(event1);
-                            }
-                        }else{
-                            expandStatusBar();
+                    int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, windowManager);
+                    Log.e(LOG_TAG, "homeBackNoti = " + homeBackNoti);
+                    if (homeBackNoti ==1){
+                        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+                        event1.setClassName(getClass().getName());
+                        event1.getText().add("home");
+                        event1.setAction(1);
+                        event1.setPackageName(getPackageName());
+                        event1.setEnabled(true);
+                        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+                        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+                        recordCompat.setSource(v);
+                        if (manager.isEnabled()){
+                            manager.sendAccessibilityEvent(event1);
                         }
+                    }else if (homeBackNoti ==2){
+                        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+                        event1.setClassName(getClass().getName());
+                        event1.getText().add("back");
+                        event1.setAction(2);
+                        event1.setPackageName(getPackageName());
+                        event1.setEnabled(true);
+                        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+                        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+                        recordCompat.setSource(v);
+                        if (manager.isEnabled()){
+                            manager.sendAccessibilityEvent(event1);
+                        }
+                    }else if (homeBackNoti ==3){
+                        expandStatusBar();
                     }
                     break;
                 case MotionEvent.ACTION_MOVE:
