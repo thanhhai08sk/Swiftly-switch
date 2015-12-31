@@ -85,7 +85,7 @@ public class EdgeGestureService extends Service {
     private int[] x, y;
     private int numOfIcon;
     private boolean hasOneActive = false;
-    private boolean hasVibrate = false;
+    private boolean hasVibrate = false,hasHomwBackNotiVisible=false;
     public int numOfEdge, edge1Position, edge2Position;
     private SharedPreferences defaultShared;
     private ImageView[] icons1Image, icons2Image;
@@ -258,6 +258,7 @@ public class EdgeGestureService extends Service {
                     expandView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl);
                     expandView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl);
                     expandView.setPosition(position);
+                    expandView.setVisibility(View.INVISIBLE);
                     itemView.addView(expandView);
 
                     homeView = new ExpandStatusBarView(getApplicationContext());
@@ -266,14 +267,16 @@ public class EdgeGestureService extends Service {
                     homeView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl);
                     homeView.setPosition(position);
                     homeView.setText("_________home_________");
+                    homeView.setVisibility(View.INVISIBLE);
                     itemView.addView(homeView);
 
                     backView = new ExpandStatusBarView(getApplicationContext());
                     backView.setX(x_init_cord - icon_distance_pxl - 2*distance_to_arc_pxl );
                     backView.setY(y_init_cord - icon_distance_pxl - 2 * distance_to_arc_pxl);
-                    backView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl +  distance_to_arc_pxl);
+                    backView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl + distance_to_arc_pxl);
                     backView.setPosition(position);
                     backView.setText("____________back____________");
+                    backView.setVisibility(View.INVISIBLE);
                     itemView.addView(backView);
 
                     WindowManager.LayoutParams paraItem = new WindowManager.LayoutParams(
@@ -490,6 +493,27 @@ public class EdgeGestureService extends Service {
                         }
                         hasOneActive = false;
                     }
+                    int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord,y_init_cord,x_cord,y_cord,icon_distance,windowManager);
+                    Log.e(LOG_TAG,"movetoHomeBackNoti = " + moveToHomeBackNoti);
+                    switch (moveToHomeBackNoti){
+                        case 0: homeView.setVisibility(View.INVISIBLE);
+                            backView.setVisibility(View.INVISIBLE);
+                            expandView.setVisibility(View.INVISIBLE);
+                            break;
+                        case 1: homeView.setVisibility(View.VISIBLE);
+                            backView.setVisibility(View.INVISIBLE);
+                            expandView.setVisibility(View.INVISIBLE);
+                            break;
+                        case 2: homeView.setVisibility(View.INVISIBLE);
+                            backView.setVisibility(View.VISIBLE);
+                            expandView.setVisibility(View.INVISIBLE);
+                            break;
+                        case 3: homeView.setVisibility(View.INVISIBLE);
+                            backView.setVisibility(View.INVISIBLE);
+                            expandView.setVisibility(View.VISIBLE);
+                            break;
+                    }
+
 
 
             }

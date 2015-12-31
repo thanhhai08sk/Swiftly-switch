@@ -150,7 +150,6 @@ public  class Utility {
         double oriAng = Math.acos((double)(Math.abs(x - x_init))/distance);
         double maxAng = 0.4166*Math.PI;
         double minAng = 0.0833*Math.PI;
-        Log.e("isExpandStatusBar","oriAng = " + oriAng + " max = "+ maxAng + " min = "+ minAng+ "distance = " + distance + "need = " + distanceNeeded_pxl );
         if (isTop){
             if (oriAng>minAng & oriAng < maxAng & distance >= distanceNeededToBack_pxl){
                 return 2;
