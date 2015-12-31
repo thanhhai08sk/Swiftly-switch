@@ -90,6 +90,7 @@ public class EdgeGestureService extends Service {
     private SharedPreferences defaultShared;
     private ImageView[] icons1Image, icons2Image;
     private ExpandStatusBarView expandView, homeView, backView;
+    private Vibrator vibrator;
 
 
     @Nullable
@@ -112,6 +113,7 @@ public class EdgeGestureService extends Service {
         edge1Position = defaultShared.getInt("edge1Position", 11);
         edge2Position = defaultShared.getInt("edge2Position", 11);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edge1Image = (MyImageView) edge1View.findViewById(R.id.edge_image);
@@ -469,9 +471,10 @@ public class EdgeGestureService extends Service {
                     break;
                 case MotionEvent.ACTION_MOVE:
                     int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
-                    if (iconToSwitch != -1) {
+                    int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, windowManager);
+
+                    if (iconToSwitch != -1 |moveToHomeBackNoti>0 ) {
                         if (!hasVibrate) {
-                            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                             vibrator.vibrate(15);
                             hasVibrate = true;
                         }
@@ -484,7 +487,7 @@ public class EdgeGestureService extends Service {
                         }
 
                     }
-                    if (iconToSwitch == -1) {
+                    if (iconToSwitch == -1 & moveToHomeBackNoti ==0) {
                         hasVibrate = false;
                         if (hasOneActive) {
                             for (ImageView imageView : listIcon) {
@@ -493,7 +496,6 @@ public class EdgeGestureService extends Service {
                         }
                         hasOneActive = false;
                     }
-                    int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord,y_init_cord,x_cord,y_cord,icon_distance,windowManager);
                     Log.e(LOG_TAG,"movetoHomeBackNoti = " + moveToHomeBackNoti);
                     switch (moveToHomeBackNoti){
                         case 0: homeView.setVisibility(View.INVISIBLE);

@@ -145,15 +145,15 @@ public  class Utility {
     public static int isHomeOrBackOrNoti(int x_init, int y_init, int x, int y, int radius, WindowManager win){
         double distance = Math.sqrt(Math.pow((double)x - (double)x_init,2) + Math.pow((double)y - (double) y_init,2));
         double distanceNeeded_pxl = (double) dpiToPixels(35+ radius,win);
-        double distanceNeededToBack_pxl = (double) dpiToPixels(70+ radius,win);
+        double distanceNeededToBack_pxl = (double) dpiToPixels(71+ radius,win);
         boolean isTop = y < y_init;
         double oriAng = Math.acos((double)(Math.abs(x - x_init))/distance);
         double maxAng = 0.4166*Math.PI;
         double minAng = 0.0833*Math.PI;
         if (isTop){
-            if (oriAng>minAng & oriAng < maxAng & distance >= distanceNeededToBack_pxl){
+            if (oriAng>minAng & oriAng < maxAng & distance > distanceNeededToBack_pxl){
                 return 2;
-            }else if (oriAng>minAng & oriAng < maxAng & distance >= distanceNeeded_pxl){
+            }else if (oriAng>minAng & oriAng < maxAng & distance >= distanceNeeded_pxl &distance < distanceNeededToBack_pxl-5){
                 return 1;
             }else return 0;
         }else {
