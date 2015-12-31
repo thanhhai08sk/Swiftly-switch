@@ -268,16 +268,16 @@ public class EdgeGestureService extends Service {
                     homeView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl);
                     homeView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl);
                     homeView.setPosition(position);
-                    homeView.setText("_________home_________");
+                    homeView.setText("__home__");
                     homeView.setVisibility(View.INVISIBLE);
                     itemView.addView(homeView);
 
                     backView = new ExpandStatusBarView(getApplicationContext());
-                    backView.setX(x_init_cord - icon_distance_pxl - 2*distance_to_arc_pxl );
-                    backView.setY(y_init_cord - icon_distance_pxl - 2 * distance_to_arc_pxl);
-                    backView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl + distance_to_arc_pxl);
+                    backView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl );
+                    backView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl);
+                    backView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl);
                     backView.setPosition(position);
-                    backView.setText("____________back____________");
+                    backView.setText("____back____");
                     backView.setVisibility(View.INVISIBLE);
                     itemView.addView(backView);
 

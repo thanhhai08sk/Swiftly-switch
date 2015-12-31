@@ -24,7 +24,7 @@ public class ExpandStatusBarView extends View {
     private int width,height,x_init,y_init;
     private RectF oval;
     private int radius;
-    private boolean isNoti = true;
+    private int homwBackNoti = 3;
 
     public ExpandStatusBarView(Context context){
         super(context);
@@ -39,7 +39,12 @@ public class ExpandStatusBarView extends View {
     }
     public void setText(String text){
         this.text = text;
-        isNoti = false;
+        if (text.contains("home")){
+            homwBackNoti = 1;
+        }
+        if (text.contains("back")){
+            homwBackNoti = 2;
+        }
     }
     public void setPosition(int position){
         this.position = position;
@@ -57,7 +62,7 @@ public class ExpandStatusBarView extends View {
     protected void onDraw(Canvas canvas) {
         Log.e("expand", "onDraw");
         oval.set(0, 0, radius * 2, radius * 2);
-        if (isNoti){
+        if (homwBackNoti ==3){
             switch (position){
                 case 10: path.addArc(oval, -270, 90);
                     break;
@@ -72,24 +77,39 @@ public class ExpandStatusBarView extends View {
                 case 22: path.addArc(oval, 0, 90);
                     break;
             }
-        }else {
+        }else if (homwBackNoti==1){
             switch (position){
-                case 10: path.addArc(oval, -180, 90);
+                case 10: path.addArc(oval, -120, 30);
                     break;
-                case 11: path.addArc(oval, -180, 90);
+                case 11: path.addArc(oval, -120, 30);
                     break;
-                case 12: path.addArc(oval, -180, 90);
+                case 12: path.addArc(oval, -120, 30);
                     break;
-                case 20: path.addArc(oval, 90, 90);
+                case 20: path.addArc(oval, -90, 30);
                     break;
-                case 21: path.addArc(oval, 90, 90);
+                case 21: path.addArc(oval, -90, 30);
                     break;
-                case 22: path.addArc(oval, 90, 90);
+                case 22: path.addArc(oval, -90, 30);
+                    break;
+            }
+        }else if (homwBackNoti ==2){
+            switch (position){
+                case 10: path.addArc(oval, -165, 45);
+                    break;
+                case 11: path.addArc(oval, -165, 45);
+                    break;
+                case 12: path.addArc(oval, -165, 45);
+                    break;
+                case 20: path.addArc(oval, -60, 45);
+                    break;
+                case 21: path.addArc(oval, -60, 45);
+                    break;
+                case 22: path.addArc(oval, -60, 45);
                     break;
             }
         }
 
-        canvas.drawTextOnPath(text, path, 0, 0, textPaint);
+        canvas.drawTextOnPath(text, path, 0, 20, textPaint);
     }
     private void init(){
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
