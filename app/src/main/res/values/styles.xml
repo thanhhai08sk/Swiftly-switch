@@ -13,5 +13,12 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="edge_setting_text_style">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="edge_setting_button_style">
+        <item name="android:layout_weight">0</item>
+
+    </style>
 
 </resources>

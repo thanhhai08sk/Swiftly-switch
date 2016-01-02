@@ -9,9 +9,16 @@
     <string name="main_step2_information">Step 2: Activate ACCESSIBILITY service.\nIn order to use the BACK and HOME function, you need to activate the accessibility service setting for this app</string>
     <string name="main_go_to_setting">Go to setting</string>
     <string name="main_set_the_edge">Set the edge</string>
-    <string name="main_edge1_button_not_activated">Edge 1\n(not activate)</string>
+    <string name="main_edge1_section_text">Edge 1</string>
+    <string name="main_edge2_section_text">Edge 2</string>
     <string name="main_edge1_button_activated">Edge 1\n(activate)</string>
     <string name="main_edge2_button_not_activated">Edge 2\n(not activate)</string>
     <string name="main_edge2_button_activated">Edge 2\n(activate)</string>
     <string name="main_step1_text_for_kitkat_and_below">Step 1: Active USAGE STAT permission \nIf your software version is kitkat or below, you done need to care about this setting</string>
+    <string name="main_step1_text_success">You have completed this setting</string>
+    <string name="main_step2_text_success">You have completed this setting</string>
+    <string name="main_edge_setting_set_position_text">Position</string>
+    <string name="main_edge_setting_set_sensitive_text">Sensitive</string>
+    <string name="main_edge_setting_set_length_text">Length of the edge</string>
+    <string name="main_edge_setting_show_me_button_text">Show me</string>
 </resources>

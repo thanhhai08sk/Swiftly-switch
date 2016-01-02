@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher;
 
+import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,9 +12,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -21,9 +24,8 @@ import android.widget.TextView;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
     public static final String DEFAULT_SHAREDPREFERENCE = "org.de-studio.recentappswitcher_sharedpreference";
-    public static final String IS_STEP1_OK_PREFERENCE = "isStep1Ok";
-    public static final String IS_STEP2_OK_PREFERENCE = "isStep2Ok";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,23 +42,34 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(DEFAULT_SHAREDPREFERENCE, 0);
         boolean isStep1Ok;
         boolean isStep2Ok;
-        isStep2Ok = sharedPreferences.getBoolean(IS_STEP2_OK_PREFERENCE,false);
+        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+        isStep2Ok = manager.isEnabled();
+        Log.e(LOG_TAG,"isStep2OK = " + isStep2Ok);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
-            isStep1Ok = sharedPreferences.getBoolean(IS_STEP1_OK_PREFERENCE,true);
+            isStep1Ok = true;
             step1Text.setText(R.string.main_step1_text_for_kitkat_and_below);
             step1Text.setPadding(0,0,0,0);
             step1GoToSettingButton.setVisibility(View.GONE);
 
         }else {
-            isStep1Ok = sharedPreferences.getBoolean(IS_STEP1_OK_PREFERENCE,false);
+            AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+            int mode = appOps.checkOpNoThrow("android:get_usage_stats",
+                    android.os.Process.myUid(), getPackageName());
+            isStep1Ok = mode == AppOpsManager.MODE_ALLOWED;
         }
         if (isStep1Ok){
             step1Button.setBackground(ContextCompat. getDrawable(getApplicationContext(), R.drawable.arrow_button_green));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                step1Text.setText(R.string.main_step1_text_success);
+            }
 
         }else step1Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_red));
         if (isStep2Ok){
             step2Button.setBackground(ContextCompat. getDrawable(getApplicationContext(), R.drawable.arrow_button_green));
-        }else step2Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_red));
+            step2Text.setText(R.string.main_step2_text_success);
+        }else {
+            step2Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_red));
+        }
 
 
         step1Button.setOnClickListener(new View.OnClickListener() {
