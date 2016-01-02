@@ -3,4 +3,15 @@
     <string name="action_settings">Settings</string>
     <string name="edge_gesture_notification_title">Recent App Switcher</string>
     <string name="edge_gesture_notification_content_text">App running</string>
+    <string name="main_step1_text">Step 1: \nUsage stat</string>
+    <string name="main_step2_text">Step 2: \nAccessibility</string>
+    <string name="main_step1_information">Step 1: Activate USAGE STAT permission.\n In order to collect information about your recent app, you need to set usage stat permission for this app </string>
+    <string name="main_step2_information">Step 2: Activate ACCESSIBILITY service.\nIn order to use the BACK and HOME function, you need to activate the accessibility service setting for this app</string>
+    <string name="main_go_to_setting">Go to setting</string>
+    <string name="main_set_the_edge">Set the edge</string>
+    <string name="main_edge1_button_not_activated">Edge 1\n(not activate)</string>
+    <string name="main_edge1_button_activated">Edge 1\n(activate)</string>
+    <string name="main_edge2_button_not_activated">Edge 2\n(not activate)</string>
+    <string name="main_edge2_button_activated">Edge 2\n(activate)</string>
+    <string name="main_step1_text_for_kitkat_and_below">Step 1: Active USAGE STAT permission \nIf your software version is kitkat or below, you done need to care about this setting</string>
 </resources>
