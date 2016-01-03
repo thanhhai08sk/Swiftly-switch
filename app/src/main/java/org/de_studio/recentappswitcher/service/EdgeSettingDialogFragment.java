@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.AppCompatSpinner;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +22,14 @@ import org.de_studio.recentappswitcher.R;
  * Created by hai on 1/2/2016.
  */
 public class EdgeSettingDialogFragment extends DialogFragment {
+    private static final String LOG_TAG = EdgeSettingDialogFragment.class.getSimpleName();
     public static final String EDGE_POSITION_KEY = "position";
     public static final String EDGE_SENSIIVE_KEY = "sensitive";
     public static final String EDGE_LENGTH_KEY = "length";
     public static final String EDGE_NUMBER_KEY = "number_of_edge";
-    private int edgeNumber;
-    private float mScale;
-    private SharedPreferences sharedPreferences;
+    private static int edgeNumber;
+    private  float mScale;
+    private static SharedPreferences sharedPreferences;
 
     @Override
     public void setArguments(Bundle args) {
@@ -38,6 +40,16 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (edgeNumber ==1){
+            sharedPreferences = getContext().getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE,0);
+        }else if (edgeNumber ==2){
+            sharedPreferences = getContext().getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE,0);
+        }
+        Log.e(LOG_TAG,"edge number = " + edgeNumber);
+        if (sharedPreferences == null){
+            Log.e(LOG_TAG, "sharedPreference == null at onCreateview");
+        }
+
         View rootView = inflater.inflate(R.layout.edge_setting_dialog, container, false);
         final ImageView edgeImage = (ImageView) rootView.findViewById(R.id.edge_dialog_edge_image_view);
         final TextView sensitiveNumberTextView = (TextView) rootView.findViewById(R.id.edge_dialog_sensitive_number_text);
@@ -45,6 +57,10 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         positionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.e(LOG_TAG,"edge number = " +edgeNumber);
+                if (sharedPreferences == null){
+                    Log.e(LOG_TAG, "sharedpreference = null");
+                }else Log.e(LOG_TAG, "sharedpreference not null");
                 sharedPreferences.edit().putString(EDGE_POSITION_KEY,(String) parent.getItemAtPosition(position)).commit();
             }
 
@@ -114,11 +130,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (edgeNumber ==1){
-            sharedPreferences = getContext().getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE,0);
-        }else if (edgeNumber ==2){
-            sharedPreferences = getContext().getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE,0);
-        }
+
         mScale = getResources().getDisplayMetrics().density;
     }
 }
