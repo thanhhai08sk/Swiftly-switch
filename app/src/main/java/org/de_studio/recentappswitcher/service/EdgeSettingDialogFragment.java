@@ -32,6 +32,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     private static int edgeNumber;
     private  float mScale;
     private static SharedPreferences sharedPreferences;
+    private ViewGroup.LayoutParams mEdgeParas;
 
     @Override
     public void setArguments(Bundle args) {
@@ -54,34 +55,47 @@ public class EdgeSettingDialogFragment extends DialogFragment {
 
         View rootView = inflater.inflate(R.layout.edge_setting_dialog, container, false);
         final ImageView edgeImage = (ImageView) rootView.findViewById(R.id.edge_dialog_edge_image_view);
+        int currentLength = sharedPreferences.getInt(EDGE_LENGTH_KEY ,150);
+        int currentSensitive = sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 12);
+        mEdgeParas = edgeImage.getLayoutParams();
+        mEdgeParas.height = (int) (currentLength *mScale);
+        mEdgeParas.width = (int) (currentSensitive * mScale);
+        edgeImage.setLayoutParams(mEdgeParas);
         final TextView sensitiveNumberTextView = (TextView) rootView.findViewById(R.id.edge_dialog_sensitive_number_text);
         AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
         String[] spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
         int spinnerCurrentPosition =1;
-        for (int i =0; i<spinnerEntries.length; i++){
-            if (spinnerEntries[i].equals(sharedPreferences.getString(EDGE_POSITION_KEY,spinnerEntries[1]))){
+        for (int i =0; i<spinnerEntries.length; i++) {
+            if (spinnerEntries[i].equals(sharedPreferences.getString(EDGE_POSITION_KEY, spinnerEntries[1]))) {
                 spinnerCurrentPosition = i;
             }
         }
-        positionSpinner.setSelection(spinnerCurrentPosition,true);
+        positionSpinner.setSelection(spinnerCurrentPosition, true);
         positionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(edgeImage.getLayoutParams());
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) parent.getItemAtPosition(position);
-                sharedPreferences.edit().putString(EDGE_POSITION_KEY,item).commit();
-                switch (position){
-                    case 0: lp.gravity = Gravity.TOP|Gravity.RIGHT;
+                sharedPreferences.edit().putString(EDGE_POSITION_KEY, item).commit();
+                switch (position) {
+                    case 0:
+                        lp.gravity = Gravity.TOP | Gravity.RIGHT;
                         break;
-                    case 1: lp.gravity = Gravity.CENTER_VERTICAL|Gravity.RIGHT;
+                    case 1:
+                        lp.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
                         break;
-                    case 2: lp.gravity = Gravity.BOTTOM|Gravity.RIGHT;
+                    case 2:
+                        lp.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                         break;
-                    case 3: lp.gravity = Gravity.TOP|Gravity.LEFT;
+                    case 3:
+                        lp.gravity = Gravity.TOP | Gravity.LEFT;
                         break;
-                    case 4: lp.gravity = Gravity.CENTER_VERTICAL|Gravity.LEFT;
+                    case 4:
+                        lp.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
                         break;
-                    case 5: lp.gravity = Gravity.BOTTOM|Gravity.LEFT;
+                    case 5:
+                        lp.gravity = Gravity.BOTTOM | Gravity.LEFT;
                         break;
                 }
                 edgeImage.setLayoutParams(lp);
@@ -93,14 +107,17 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             }
         });
         AppCompatSeekBar sensitiveSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.sensitive_seek_bar);
+        sensitiveSeekBar.setProgress(currentSensitive - 5);
+        sensitiveNumberTextView.setText(currentSensitive + "dp");
         sensitiveSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChanged;  //5 to 25
             ViewGroup.LayoutParams edgeParas;
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progressChanged = progress +5;
+                progressChanged = progress + 5;
                 edgeParas = edgeImage.getLayoutParams();
-                edgeParas.width =(int)(progressChanged * mScale);
+                edgeParas.width = (int) (progressChanged * mScale);
                 edgeImage.setLayoutParams(edgeParas);
                 sensitiveNumberTextView.setText(progressChanged + "dp");
             }
@@ -112,13 +129,15 @@ public class EdgeSettingDialogFragment extends DialogFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                sharedPreferences.edit().putInt(EDGE_SENSIIVE_KEY,progressChanged).commit();
+                sharedPreferences.edit().putInt(EDGE_SENSIIVE_KEY, progressChanged).commit();
             }
         });
 
 
         AppCompatSeekBar lengthSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.length_seek_bar);
+        lengthSeekBar.setProgress(currentLength - 75);
         final TextView edgeLengthNumberText = (TextView) rootView.findViewById(R.id.edge_dialog_length_number_view);
+        edgeLengthNumberText.setText(currentLength+ "dp");
         lengthSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChanged; // 75 to 200
             ViewGroup.LayoutParams edgeParas;
