@@ -16,6 +16,6 @@
         android:layout_height="150dp"
         android:id="@+id/edge_image"
         android:scaleType="fitCenter"
-        android:background="@color/transparent"
+        android:background="@color/colorPrimary"
         />
 </RelativeLayout>

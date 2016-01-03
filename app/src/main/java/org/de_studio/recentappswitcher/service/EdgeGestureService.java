@@ -33,6 +33,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 
@@ -75,9 +76,10 @@ public class EdgeGestureService extends Service {
     public int icon_distance = 115, distance_to_arc = 35, distance_to_arc_pxl;
     public float icon_distance_pxl, icon_24dp_in_pxls;
     public int edge_height = 150;
-    public int edge_height_pxl;
-    public int edge_width_pxl;
-    public int edge_width = 18;
+    public int edge_1_height, edge_2_height;
+    public int edge1HeightPxl,edge2HeightPxl;
+    public int edge1WidthPxl, edge2WidthPxl;
+    public int edge1Width,edge2Width;
     public int edge_y;
     public int edge_centre_y;
     private List<ImageView> list_icon_1, list_icon_2;
@@ -88,7 +90,7 @@ public class EdgeGestureService extends Service {
     private boolean hasOneActive = false;
     private boolean hasVibrate = false,hasHomwBackNotiVisible=false;
     public int numOfEdge, edge1Position, edge2Position;
-    private SharedPreferences defaultShared;
+    private SharedPreferences defaultShared, sharedPreferences1,sharedPreferences2;
     private ImageView[] icons1Image, icons2Image;
     private ExpandStatusBarView expandView, homeView, backView;
     private Vibrator vibrator;
@@ -103,7 +105,7 @@ public class EdgeGestureService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        defaultShared = getApplicationContext().getSharedPreferences(getPackageName() + "_preferences", 0);
+        defaultShared = getApplicationContext().getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
         launcherIntent.addCategory(Intent.CATEGORY_HOME);
         ResolveInfo res = getPackageManager().resolveActivity(launcherIntent, 0);
@@ -119,16 +121,16 @@ public class EdgeGestureService extends Service {
         edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edge1Image = (MyImageView) edge1View.findViewById(R.id.edge_image);
         ViewGroup.LayoutParams lp = edge1Image.getLayoutParams();
-        edge_height_pxl =(int) (edge_height *mScale);
-        edge_width_pxl = (int)(edge_width * mScale);
-        lp.height = edge_height_pxl;
-        lp.width = edge_width_pxl;
+        edge1HeightPxl =(int) (edge_1_height *mScale);
+        edge1WidthPxl = (int)(edge1Width * mScale);
+        lp.height = edge1HeightPxl;
+        lp.width = edge1WidthPxl;
+        edge1Image.setLayoutParams(lp);
         edge_y = (int) edge1Image.getY();
-        edge_centre_y = edge_y + edge_height_pxl / 2;
+        edge_centre_y = edge_y + edge1HeightPxl / 2;
         icon_distance_pxl = icon_distance * mScale;
         icon_24dp_in_pxls = 24 * mScale;
         distance_to_arc_pxl = (int)(distance_to_arc * mScale);
-        edge1Image.setLayoutParams(lp);
         item1View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
         icons1Image = new ImageView[6];
         icons1Image[0] = (ImageView) item1View.findViewById(R.id.item_0);
@@ -177,6 +179,12 @@ public class EdgeGestureService extends Service {
         if (numOfEdge == 2) {
             edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
             edge2Image = (MyImageView) edge2View.findViewById(R.id.edge_image);
+            ViewGroup.LayoutParams lp2 = edge2Image.getLayoutParams();
+            edge2HeightPxl =(int) (edge_2_height *mScale);
+            edge2WidthPxl = (int)(edge2Width * mScale);
+            lp2.height = edge2HeightPxl;
+            lp2.width = edge2WidthPxl;
+            edge2Image.setLayoutParams(lp2);
             WindowManager.LayoutParams paramsEdge2 = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
@@ -567,6 +575,12 @@ public class EdgeGestureService extends Service {
     public void onCreate() {
         super.onCreate();
         mScale = getResources().getDisplayMetrics().density;
+        sharedPreferences1 = getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE,0);
+        sharedPreferences2 = getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE,0);
+        edge_1_height = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
+        edge_2_height = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
+        edge1Width = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY,12);
+        edge2Width = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY,12);
         Log.e(LOG_TAG,"onCreate service");
     }
 
