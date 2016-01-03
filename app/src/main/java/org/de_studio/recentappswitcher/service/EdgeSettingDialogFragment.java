@@ -56,6 +56,14 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         final ImageView edgeImage = (ImageView) rootView.findViewById(R.id.edge_dialog_edge_image_view);
         final TextView sensitiveNumberTextView = (TextView) rootView.findViewById(R.id.edge_dialog_sensitive_number_text);
         AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
+        String[] spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
+        int spinnerCurrentPosition =1;
+        for (int i =0; i<spinnerEntries.length; i++){
+            if (spinnerEntries[i].equals(sharedPreferences.getString(EDGE_POSITION_KEY,spinnerEntries[1]))){
+                spinnerCurrentPosition = i;
+            }
+        }
+        positionSpinner.setSelection(spinnerCurrentPosition,true);
         positionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(edgeImage.getLayoutParams());
             @Override
@@ -147,5 +155,11 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         mScale = getResources().getDisplayMetrics().density;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.e(LOG_TAG, sharedPreferences.getString(EDGE_POSITION_KEY,"null")+"\n" + sharedPreferences.getInt(EDGE_SENSIIVE_KEY,0) +"\n"+ sharedPreferences.getInt(EDGE_LENGTH_KEY,0));
     }
 }
