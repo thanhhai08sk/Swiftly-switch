@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/edgeSettingBackground"
@@ -43,7 +43,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edge_dialog_position_linear_layout"
             android:layout_marginLeft="52dp"
             android:layout_marginRight="52dp"
             android:layout_marginTop="30dp"
@@ -70,7 +69,6 @@
         <android.support.v7.widget.AppCompatSeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edge_dialog_sensitive_linear_layout"
             android:progress="12"
             android:id="@+id/sensitive_seek_bar"
             android:layout_marginLeft="40dp"
@@ -83,7 +81,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/sensitive_seek_bar"
             android:layout_marginLeft="52dp"
             android:layout_marginRight="52dp"
             android:layout_marginTop="30dp"
@@ -117,14 +114,12 @@
             android:layout_marginTop="10dp"
             android:max="150"
             android:secondaryProgress="0"
-            android:layout_below="@id/edge_dialog_length_linear_layout"
             />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/length_seek_bar"
             android:layout_marginLeft="52dp"
             android:layout_marginRight="52dp"
             android:layout_marginTop="30dp"
@@ -152,7 +147,6 @@
         <android.support.v7.widget.AppCompatSeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edge_dialog_offset_linear_layout"
             android:progress="350"
             android:id="@+id/offset_seek_bar"
             android:layout_marginLeft="40dp"
@@ -207,4 +201,4 @@
 
 
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>
