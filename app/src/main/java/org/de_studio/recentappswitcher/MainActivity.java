@@ -3,7 +3,6 @@ package org.de_studio.recentappswitcher;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -21,6 +20,7 @@ import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
@@ -28,7 +28,9 @@ import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    public static final String DEFAULT_SHAREDPREFERENCE = "org.de-studio.recentappswitcher_sharedpreference";
+    public static final String EDGE_1_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_1_shared_preference";
+    public static final String EDGE_2_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_2_shared_preference";
+    public static final String DEFAULT_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_sharedpreferences";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,22 @@ public class MainActivity extends AppCompatActivity {
         final Button step1GoToSettingButton = (Button) findViewById(R.id.step1_go_to_setting_button);
         final Button step2GoToSettingButton = (Button) findViewById(R.id.step2_go_to_setting_button);
         final FrameLayout stepTextFrame = (FrameLayout) findViewById(R.id.step_text_frame_layout);
-        SharedPreferences sharedPreferences = getSharedPreferences(DEFAULT_SHAREDPREFERENCE, 0);
+        ImageButton edge1SettingButton = (ImageButton) findViewById(R.id.edge_1_setting_image_button);
+        edge1SettingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                EdgeSettingDialogFragment newFragment = new EdgeSettingDialogFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(EdgeSettingDialogFragment.EDGE_NUMBER_KEY,1);
+                newFragment.setArguments(bundle);
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                transaction.add(android.R.id.content, newFragment)
+                        .addToBackStack(null).commit();
+
+            }
+        });
         boolean isStep1Ok;
         boolean isStep2Ok;
         AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
@@ -158,5 +175,6 @@ public class MainActivity extends AppCompatActivity {
             transaction.add(android.R.id.content, newFragment)
                     .addToBackStack(null).commit();
         }
+
 
 }

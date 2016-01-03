@@ -63,18 +63,19 @@
                 android:layout_weight="0"
                 android:textColor="@color/white"
                 android:text="12dp"
+                android:id="@+id/edge_dialog_sensitive_number_text"
                 />
 
         </LinearLayout>
         <android.support.v7.widget.AppCompatSeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="12"
+            android:progress="7"
             android:id="@+id/sensitive_seek_bar"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
-            android:max="25"
+            android:max="20"
             android:secondaryProgress="0"
             />
 
@@ -165,6 +166,7 @@
         android:layout_height="150dp"
         android:background="@color/colorAccent"
         android:layout_gravity="center_vertical|right"
+        android:id="@+id/edge_dialog_edge_image_view"
         />
 
     <android.support.v7.widget.ButtonBarLayout
@@ -180,13 +182,7 @@
             android:id="@+id/edge_dialog_default_button"
             style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
             />
-        <android.support.v7.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/edge_dialog_cancel_button"
-            android:id="@+id/edge_dialog_cancel_button"
-            style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-            />
+
         <android.support.v7.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
