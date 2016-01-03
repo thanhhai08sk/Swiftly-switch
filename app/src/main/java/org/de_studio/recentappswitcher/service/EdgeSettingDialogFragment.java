@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.service;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -179,6 +180,8 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.e(LOG_TAG, sharedPreferences.getString(EDGE_POSITION_KEY,"null")+"\n" + sharedPreferences.getInt(EDGE_SENSIIVE_KEY,0) +"\n"+ sharedPreferences.getInt(EDGE_LENGTH_KEY,0));
+        Log.e(LOG_TAG, sharedPreferences.getString(EDGE_POSITION_KEY, "null") + "\n" + sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 0) + "\n" + sharedPreferences.getInt(EDGE_LENGTH_KEY, 0));
+        getContext().stopService(new Intent(getContext(), EdgeGestureService.class));
+        getContext().startService(new Intent(getContext(),EdgeGestureService.class));
     }
 }

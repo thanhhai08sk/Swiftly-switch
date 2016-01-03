@@ -561,4 +561,16 @@ public class EdgeGestureService extends Service {
             configuration = newConfig.orientation;
         }
     }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.e(LOG_TAG,"onCreate service");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e(LOG_TAG,"onDestroy service");
+    }
 }
