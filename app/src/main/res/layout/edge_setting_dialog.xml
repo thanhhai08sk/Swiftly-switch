@@ -101,7 +101,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:textColor="@color/white"
-                android:text="75dp"
+                android:text="150dp"
+                android:id="@+id/edge_dialog_length_number_view"
                 />
 
         </LinearLayout>
@@ -113,7 +114,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
-            android:max="150"
+            android:max="225"
             android:secondaryProgress="0"
             />
 

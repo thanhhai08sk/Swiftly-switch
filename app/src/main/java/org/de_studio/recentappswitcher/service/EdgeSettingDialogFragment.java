@@ -41,7 +41,6 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.edge_setting_dialog, container, false);
         final ImageView edgeImage = (ImageView) rootView.findViewById(R.id.edge_dialog_edge_image_view);
-        final ViewGroup.LayoutParams edgeParas = edgeImage.getLayoutParams();
         final TextView sensitiveNumberTextView = (TextView) rootView.findViewById(R.id.edge_dialog_sensitive_number_text);
         AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
         positionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -58,10 +57,12 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         AppCompatSeekBar sensitiveSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.sensitive_seek_bar);
         sensitiveSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChanged;  //5 to 25
+            ViewGroup.LayoutParams edgeParas;
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChanged = progress +5;
-                 edgeParas.width =(int)(progressChanged * mScale);
+                edgeParas = edgeImage.getLayoutParams();
+                edgeParas.width =(int)(progressChanged * mScale);
                 edgeImage.setLayoutParams(edgeParas);
                 sensitiveNumberTextView.setText(progressChanged + "dp");
             }
@@ -74,6 +75,32 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 sharedPreferences.edit().putInt(EDGE_SENSIIVE_KEY,progressChanged).commit();
+            }
+        });
+
+
+        AppCompatSeekBar lengthSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.length_seek_bar);
+        final TextView edgeLengthNumberText = (TextView) rootView.findViewById(R.id.edge_dialog_length_number_view);
+        lengthSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChanged; // 75 to 200
+            ViewGroup.LayoutParams edgeParas;
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChanged = progress + 75;
+                edgeParas = edgeImage.getLayoutParams();
+                edgeParas.height = (int) (progressChanged * mScale);
+                edgeImage.setLayoutParams(edgeParas);
+                edgeLengthNumberText.setText(progressChanged + "dp");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                sharedPreferences.edit().putInt(EDGE_LENGTH_KEY,progressChanged).commit();
             }
         });
 
