@@ -60,6 +60,7 @@ public class EdgeGestureService extends Service {
             } else return -1;
         }
     };
+    float mScale;
     private int configuration = 0;
     static final String LOG_TAG = EdgeGestureService.class.getSimpleName();
     static final int EDGE_GESTURE_NOTIFICAION_ID = 10;
@@ -118,15 +119,15 @@ public class EdgeGestureService extends Service {
         edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edge1Image = (MyImageView) edge1View.findViewById(R.id.edge_image);
         ViewGroup.LayoutParams lp = edge1Image.getLayoutParams();
-        edge_height_pxl = Utility.dpiToPixels(edge_height, windowManager);
-        edge_width_pxl = Utility.dpiToPixels(edge_width, windowManager);
+        edge_height_pxl =(int) (edge_height *mScale);
+        edge_width_pxl = (int)(edge_width * mScale);
         lp.height = edge_height_pxl;
         lp.width = edge_width_pxl;
         edge_y = (int) edge1Image.getY();
         edge_centre_y = edge_y + edge_height_pxl / 2;
-        icon_distance_pxl = (float) Utility.dpiToPixels(icon_distance, windowManager);
-        icon_24dp_in_pxls = (float) Utility.dpiToPixels(24, windowManager);
-        distance_to_arc_pxl = Utility.dpiToPixels(distance_to_arc,windowManager);
+        icon_distance_pxl = icon_distance * mScale;
+        icon_24dp_in_pxls = 24 * mScale;
+        distance_to_arc_pxl = (int)(distance_to_arc * mScale);
         edge1Image.setLayoutParams(lp);
         item1View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
         icons1Image = new ImageView[6];
@@ -565,6 +566,7 @@ public class EdgeGestureService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        mScale = getResources().getDisplayMetrics().density;
         Log.e(LOG_TAG,"onCreate service");
     }
 
