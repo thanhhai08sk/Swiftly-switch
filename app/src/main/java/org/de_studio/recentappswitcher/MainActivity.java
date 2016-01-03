@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
+import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -118,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                showDialog();
 
             }
         });
@@ -145,4 +149,14 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void showDialog() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        EdgeSettingDialogFragment newFragment = new EdgeSettingDialogFragment();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            transaction.add(android.R.id.content, newFragment)
+                    .addToBackStack(null).commit();
+        }
+
 }

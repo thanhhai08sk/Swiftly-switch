@@ -17,8 +17,13 @@
     <string name="main_step1_text_for_kitkat_and_below">Step 1: Active USAGE STAT permission \nIf your software version is kitkat or below, you done need to care about this setting</string>
     <string name="main_step1_text_success">You have completed this setting</string>
     <string name="main_step2_text_success">You have completed this setting</string>
-    <string name="main_edge_setting_set_position_text">Position</string>
-    <string name="main_edge_setting_set_sensitive_text">Sensitive</string>
-    <string name="main_edge_setting_set_length_text">Length of the edge</string>
-    <string name="main_edge_setting_show_me_button_text">Show me</string>
+    <string name="edge_dialog_set_position_text">Position</string>
+    <string name="edge_dialog_set_sensitive_text">Sensitive</string>
+    <string name="edge_dialog_set_length_text">Length</string>
+    <string name="edge_dialog_array_left">Left</string>
+    <string name="edge_dialog_array_right">Right</string>
+    <string name="edge_dialog_set_offset_text">Offset</string>
+    <string name="edge_dialog_default_button">Default</string>
+    <string name="edge_dialog_cancel_button">Cancel</string>
+    <string name="edge_dialog_ok_button">Ok</string>
 </resources>

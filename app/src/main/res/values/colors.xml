@@ -9,4 +9,5 @@
     <color name="white">#ffffff</color>
     <color name="redButton">#ffff7c61</color>
     <color name="greenButton">#ff69f0ae</color>
+    <color name="edgeSettingBackground">#e2000000</color>
 </resources>
