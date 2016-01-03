@@ -117,50 +117,7 @@
             android:max="225"
             android:secondaryProgress="0"
             />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="52dp"
-            android:layout_marginRight="52dp"
-            android:layout_marginTop="30dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:id="@+id/edge_dialog_offset_linear_layout"
-            >
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/edge_dialog_set_offset_text"
-                android:layout_weight="1"
-                android:textColor="@color/white"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/edge_dialog_offset_number_text"
-                android:layout_weight="0"
-                android:textColor="@color/white"
-                android:text="0dp"
-                />
-
-        </LinearLayout>
-        <android.support.v7.widget.AppCompatSeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:progress="400"
-            android:id="@+id/offset_seek_bar"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="10dp"
-            android:max="800"
-            android:secondaryProgress="0"
-            />
-
     </LinearLayout>
-
-
 
     <ImageView
         android:layout_width="12dp"

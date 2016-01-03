@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="edge_dialog_spinner_array">
-        <item>@string/edge_dialog_array_right</item>
-        <item>@string/edge_dialog_array_left</item>
+        <item>@string/edge_dialog_array_right_top</item>
+        <item>@string/edge_dialog_array_right_centre</item>
+        <item>@string/edge_dialog_array_right_bottom</item>
+        <item>@string/edge_dialog_array_left_top</item>
+        <item>@string/edge_dialog_array_left_centre</item>
+        <item>@string/edge_dialog_array_left_bottom</item>
     </string-array>
 </resources>

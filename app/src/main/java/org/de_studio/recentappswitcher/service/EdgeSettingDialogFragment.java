@@ -3,11 +3,9 @@ package org.de_studio.recentappswitcher.service;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.AppCompatSpinner;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +24,6 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String EDGE_POSITION_KEY = "position";
     public static final String EDGE_SENSIIVE_KEY = "sensitive";
     public static final String EDGE_LENGTH_KEY = "length";
-    public static final String EDGE_OFFSET_KEY = "offset";
     public static final String EDGE_NUMBER_KEY = "number_of_edge";
     private int edgeNumber;
     private float mScale;
@@ -107,32 +104,6 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         });
 
 
-        AppCompatSeekBar offsetSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.offset_seek_bar);
-        final TextView edgeOffsetNumberText = (TextView) rootView.findViewById(R.id.edge_dialog_offset_number_text);
-        offsetSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int progressChanged; // -400 to 400
-            ViewGroup.LayoutParams edgeParas;
-            CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(edgeImage.getLayoutParams());
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progressChanged = progress - 400;
-                edgeOffsetNumberText.setText(progressChanged + "dp");
-                lp.setMargins(0, progressChanged, 0, 0);
-                lp.gravity= Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-                edgeImage.setLayoutParams(lp);
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                sharedPreferences.edit().putInt(EDGE_OFFSET_KEY,progressChanged).commit();
-            }
-        });
 
 
 

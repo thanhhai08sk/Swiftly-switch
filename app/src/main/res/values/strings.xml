@@ -20,8 +20,12 @@
     <string name="edge_dialog_set_position_text">Position</string>
     <string name="edge_dialog_set_sensitive_text">Sensitive</string>
     <string name="edge_dialog_set_length_text">Length</string>
-    <string name="edge_dialog_array_left">Left</string>
-    <string name="edge_dialog_array_right">Right</string>
+    <string name="edge_dialog_array_right_top">Right top</string>
+    <string name="edge_dialog_array_right_centre">Right centre</string>
+    <string name="edge_dialog_array_right_bottom">Right bottom</string>
+    <string name="edge_dialog_array_left_top">Left top</string>
+    <string name="edge_dialog_array_left_centre">Left centre</string>
+    <string name="edge_dialog_array_left_bottom">Left bottom</string>
     <string name="edge_dialog_set_offset_text">Offset</string>
     <string name="edge_dialog_default_button">Default</string>
     <string name="edge_dialog_cancel_button">Cancel</string>
