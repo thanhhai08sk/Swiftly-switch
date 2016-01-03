@@ -3,10 +3,12 @@ package org.de_studio.recentappswitcher.service;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.AppCompatSpinner;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,13 +57,26 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         final TextView sensitiveNumberTextView = (TextView) rootView.findViewById(R.id.edge_dialog_sensitive_number_text);
         AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
         positionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(edgeImage.getLayoutParams());
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.e(LOG_TAG,"edge number = " +edgeNumber);
-                if (sharedPreferences == null){
-                    Log.e(LOG_TAG, "sharedpreference = null");
-                }else Log.e(LOG_TAG, "sharedpreference not null");
-                sharedPreferences.edit().putString(EDGE_POSITION_KEY,(String) parent.getItemAtPosition(position)).commit();
+                String item = (String) parent.getItemAtPosition(position);
+                sharedPreferences.edit().putString(EDGE_POSITION_KEY,item).commit();
+                switch (position){
+                    case 0: lp.gravity = Gravity.TOP|Gravity.RIGHT;
+                        break;
+                    case 1: lp.gravity = Gravity.CENTER_VERTICAL|Gravity.RIGHT;
+                        break;
+                    case 2: lp.gravity = Gravity.BOTTOM|Gravity.RIGHT;
+                        break;
+                    case 3: lp.gravity = Gravity.TOP|Gravity.LEFT;
+                        break;
+                    case 4: lp.gravity = Gravity.CENTER_VERTICAL|Gravity.LEFT;
+                        break;
+                    case 5: lp.gravity = Gravity.BOTTOM|Gravity.LEFT;
+                        break;
+                }
+                edgeImage.setLayoutParams(lp);
             }
 
             @Override
