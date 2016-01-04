@@ -77,9 +77,9 @@ public class EdgeGestureService extends Service {
     public float icon_distance_pxl, icon_24dp_in_pxls;
     public int edge_height = 150;
     public int edge_1_height, edge_2_height;
-    public int edge1HeightPxl,edge2HeightPxl;
+    public int edge1HeightPxl, edge2HeightPxl;
     public int edge1WidthPxl, edge2WidthPxl;
-    public int edge1Width,edge2Width;
+    public int edge1Width, edge2Width;
     public int edge_y;
     public int edge_centre_y;
     private List<ImageView> list_icon_1, list_icon_2;
@@ -88,10 +88,10 @@ public class EdgeGestureService extends Service {
     private int[] x, y;
     private int numOfIcon;
     private boolean hasOneActive = false;
-    private boolean hasVibrate = false,hasHomwBackNotiVisible=false;
+    private boolean hasVibrate = false, hasHomwBackNotiVisible = false;
     private boolean isEdge1On, isEdge2On;
     public int numOfEdge, edge1Position, edge2Position;
-    private SharedPreferences defaultShared, sharedPreferences1,sharedPreferences2;
+    private SharedPreferences defaultShared, sharedPreferences1, sharedPreferences2;
     private ImageView[] icons1Image, icons2Image;
     private ExpandStatusBarView expandView, homeView, backView;
     private Vibrator vibrator;
@@ -115,15 +115,15 @@ public class EdgeGestureService extends Service {
         }
         numOfEdge = defaultShared.getInt("numOfEdge", 1);
         edge1Position = defaultShared.getInt("edge1Position", 11);
-        edge2Position = defaultShared.getInt("edge2Position", 11);
+        edge2Position = defaultShared.getInt("edge2Position", 21);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edge1Image = (MyImageView) edge1View.findViewById(R.id.edge_image);
         ViewGroup.LayoutParams lp = edge1Image.getLayoutParams();
-        edge1HeightPxl =(int) (edge_1_height *mScale);
-        edge1WidthPxl = (int)(edge1Width * mScale);
+        edge1HeightPxl = (int) (edge_1_height * mScale);
+        edge1WidthPxl = (int) (edge1Width * mScale);
         lp.height = edge1HeightPxl;
         lp.width = edge1WidthPxl;
         edge1Image.setLayoutParams(lp);
@@ -131,7 +131,7 @@ public class EdgeGestureService extends Service {
         edge_centre_y = edge_y + edge1HeightPxl / 2;
         icon_distance_pxl = icon_distance * mScale;
         icon_24dp_in_pxls = 24 * mScale;
-        distance_to_arc_pxl = (int)(distance_to_arc * mScale);
+        distance_to_arc_pxl = (int) (distance_to_arc * mScale);
         item1View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
         icons1Image = new ImageView[6];
         icons1Image[0] = (ImageView) item1View.findViewById(R.id.item_0);
@@ -175,66 +175,68 @@ public class EdgeGestureService extends Service {
                 paramsEdge1.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 break;
         }
-
-        windowManager.addView(edge1View, paramsEdge1);
-        if (numOfEdge == 2) {
-            edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
-            edge2Image = (MyImageView) edge2View.findViewById(R.id.edge_image);
-            ViewGroup.LayoutParams lp2 = edge2Image.getLayoutParams();
-            edge2HeightPxl =(int) (edge_2_height *mScale);
-            edge2WidthPxl = (int)(edge2Width * mScale);
-            lp2.height = edge2HeightPxl;
-            lp2.width = edge2WidthPxl;
-            edge2Image.setLayoutParams(lp2);
-            WindowManager.LayoutParams paramsEdge2 = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.TYPE_PHONE,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    PixelFormat.TRANSLUCENT);
-            switch (edge2Position) {
-                case 10:
-                    paramsEdge2.gravity = Gravity.TOP | Gravity.RIGHT;
-                    break;
-                case 11:
-                    paramsEdge2.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-                    break;
-                case 12:
-                    paramsEdge2.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                    break;
-                case 20:
-                    paramsEdge2.gravity = Gravity.TOP | Gravity.LEFT;
-                    break;
-                case 21:
-                    paramsEdge2.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-                    break;
-                case 22:
-                    paramsEdge2.gravity = Gravity.BOTTOM | Gravity.LEFT;
-            }
+        if (isEdge1On){
+            windowManager.addView(edge1View, paramsEdge1);
+        }
+        edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
+        edge2Image = (MyImageView) edge2View.findViewById(R.id.edge_image);
+        ViewGroup.LayoutParams lp2 = edge2Image.getLayoutParams();
+        edge2HeightPxl = (int) (edge_2_height * mScale);
+        edge2WidthPxl = (int) (edge2Width * mScale);
+        lp2.height = edge2HeightPxl;
+        lp2.width = edge2WidthPxl;
+        edge2Image.setLayoutParams(lp2);
+        WindowManager.LayoutParams paramsEdge2 = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                PixelFormat.TRANSLUCENT);
+        switch (edge2Position) {
+            case 10:
+                paramsEdge2.gravity = Gravity.TOP | Gravity.RIGHT;
+                break;
+            case 11:
+                paramsEdge2.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+                break;
+            case 12:
+                paramsEdge2.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                break;
+            case 20:
+                paramsEdge2.gravity = Gravity.TOP | Gravity.LEFT;
+                break;
+            case 21:
+                paramsEdge2.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                break;
+            case 22:
+                paramsEdge2.gravity = Gravity.BOTTOM | Gravity.LEFT;
+        }
+        if (isEdge2On){
             windowManager.addView(edge2View, paramsEdge2);
 
-            item2View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
-            icons2Image = new ImageView[6];
-            icons2Image[0] = (ImageView) item2View.findViewById(R.id.item_0);
-            icons2Image[1] = (ImageView) item2View.findViewById(R.id.item_1);
-            icons2Image[2] = (ImageView) item2View.findViewById(R.id.item_2);
-            icons2Image[3] = (ImageView) item2View.findViewById(R.id.item_3);
-            icons2Image[4] = (ImageView) item2View.findViewById(R.id.item_4);
-            icons2Image[5] = (ImageView) item2View.findViewById(R.id.item_5);
-            list_icon_2 = new ArrayList<ImageView>();
-            list_icon_2.add(icons2Image[0]);
-            list_icon_2.add(icons2Image[1]);
-            list_icon_2.add(icons2Image[2]);
-            list_icon_2.add(icons2Image[3]);
-            list_icon_2.add(icons2Image[4]);
-            list_icon_2.add(icons2Image[5]);
         }
+
+        item2View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
+        icons2Image = new ImageView[6];
+        icons2Image[0] = (ImageView) item2View.findViewById(R.id.item_0);
+        icons2Image[1] = (ImageView) item2View.findViewById(R.id.item_1);
+        icons2Image[2] = (ImageView) item2View.findViewById(R.id.item_2);
+        icons2Image[3] = (ImageView) item2View.findViewById(R.id.item_3);
+        icons2Image[4] = (ImageView) item2View.findViewById(R.id.item_4);
+        icons2Image[5] = (ImageView) item2View.findViewById(R.id.item_5);
+        list_icon_2 = new ArrayList<ImageView>();
+        list_icon_2.add(icons2Image[0]);
+        list_icon_2.add(icons2Image[1]);
+        list_icon_2.add(icons2Image[2]);
+        list_icon_2.add(icons2Image[3]);
+        list_icon_2.add(icons2Image[4]);
+        list_icon_2.add(icons2Image[5]);
         OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, icons1Image, item1View, list_icon_1);
         edge1Image.setOnTouchListener(onTouchListener1);
-        if (numOfEdge == 2) {
-            OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position, icons2Image, item2View, list_icon_2);
-            edge2Image.setOnTouchListener(onTouchListener2);
-        }
+
+        OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position, icons2Image, item2View, list_icon_2);
+        edge2Image.setOnTouchListener(onTouchListener2);
+
         return START_STICKY;
     }
 
@@ -256,13 +258,13 @@ public class EdgeGestureService extends Service {
         public boolean onTouch(View v, MotionEvent event) {
             int x_cord = (int) event.getRawX();
             int y_cord = (int) event.getRawY();
-            int x1,y1,top,left,bottom,right;
+            int x1, y1, top, left, bottom, right;
             int[] expandSpec;// left, top, right, bottom
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     x_init_cord = x_cord;
                     y_init_cord = y_cord;
-                    expandSpec = Utility.getExpandSpec(x_init_cord,y_init_cord,icon_distance,35,windowManager);
+                    expandSpec = Utility.getExpandSpec(x_init_cord, y_init_cord, icon_distance, 35, windowManager);
                     int expandWidth = expandSpec[2] - expandSpec[0];
                     int expandHeight = expandSpec[3] - expandSpec[1];
                     expandView = new ExpandStatusBarView(getApplicationContext());
@@ -283,7 +285,7 @@ public class EdgeGestureService extends Service {
                     itemView.addView(homeView);
 
                     backView = new ExpandStatusBarView(getApplicationContext());
-                    backView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl );
+                    backView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl);
                     backView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl);
                     backView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl);
                     backView.setPosition(position);
@@ -449,7 +451,7 @@ public class EdgeGestureService extends Service {
                     packagename = null;
                     int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, windowManager);
                     Log.e(LOG_TAG, "homeBackNoti = " + homeBackNoti);
-                    if (homeBackNoti ==1){
+                    if (homeBackNoti == 1) {
                         AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
                         event1.setClassName(getClass().getName());
                         event1.getText().add("home");
@@ -459,10 +461,10 @@ public class EdgeGestureService extends Service {
                         AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
                         AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
                         recordCompat.setSource(v);
-                        if (manager.isEnabled()){
+                        if (manager.isEnabled()) {
                             manager.sendAccessibilityEvent(event1);
                         }
-                    }else if (homeBackNoti ==2){
+                    } else if (homeBackNoti == 2) {
                         AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
                         event1.setClassName(getClass().getName());
                         event1.getText().add("back");
@@ -472,10 +474,10 @@ public class EdgeGestureService extends Service {
                         AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
                         AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
                         recordCompat.setSource(v);
-                        if (manager.isEnabled()){
+                        if (manager.isEnabled()) {
                             manager.sendAccessibilityEvent(event1);
                         }
-                    }else if (homeBackNoti ==3){
+                    } else if (homeBackNoti == 3) {
                         expandStatusBar();
                     }
                     break;
@@ -483,7 +485,7 @@ public class EdgeGestureService extends Service {
                     int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
                     int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, windowManager);
 
-                    if (iconToSwitch != -1 |moveToHomeBackNoti>0 ) {
+                    if (iconToSwitch != -1 | moveToHomeBackNoti > 0) {
                         if (!hasVibrate) {
                             vibrator.vibrate(15);
                             hasVibrate = true;
@@ -497,7 +499,7 @@ public class EdgeGestureService extends Service {
                         }
 
                     }
-                    if (iconToSwitch == -1 & moveToHomeBackNoti ==0) {
+                    if (iconToSwitch == -1 & moveToHomeBackNoti == 0) {
                         hasVibrate = false;
                         if (hasOneActive) {
                             for (ImageView imageView : listIcon) {
@@ -506,26 +508,29 @@ public class EdgeGestureService extends Service {
                         }
                         hasOneActive = false;
                     }
-                    Log.e(LOG_TAG,"movetoHomeBackNoti = " + moveToHomeBackNoti);
-                    switch (moveToHomeBackNoti){
-                        case 0: homeView.setVisibility(View.INVISIBLE);
+                    Log.e(LOG_TAG, "movetoHomeBackNoti = " + moveToHomeBackNoti);
+                    switch (moveToHomeBackNoti) {
+                        case 0:
+                            homeView.setVisibility(View.INVISIBLE);
                             backView.setVisibility(View.INVISIBLE);
                             expandView.setVisibility(View.INVISIBLE);
                             break;
-                        case 1: homeView.setVisibility(View.VISIBLE);
+                        case 1:
+                            homeView.setVisibility(View.VISIBLE);
                             backView.setVisibility(View.INVISIBLE);
                             expandView.setVisibility(View.INVISIBLE);
                             break;
-                        case 2: homeView.setVisibility(View.INVISIBLE);
+                        case 2:
+                            homeView.setVisibility(View.INVISIBLE);
                             backView.setVisibility(View.VISIBLE);
                             expandView.setVisibility(View.INVISIBLE);
                             break;
-                        case 3: homeView.setVisibility(View.INVISIBLE);
+                        case 3:
+                            homeView.setVisibility(View.INVISIBLE);
                             backView.setVisibility(View.INVISIBLE);
                             expandView.setVisibility(View.VISIBLE);
                             break;
                     }
-
 
 
             }
@@ -559,14 +564,14 @@ public class EdgeGestureService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation != configuration){
+        if (newConfig.orientation != configuration) {
             try {
                 windowManager.removeView(item1View);
                 windowManager.removeView(item2View);
-            }catch (NullPointerException e){
-                Log.e("onConfiguration","Null");
-            }catch (IllegalArgumentException e){
-                Log.e("onConfiguration","Illegal");
+            } catch (NullPointerException e) {
+                Log.e("onConfiguration", "Null");
+            } catch (IllegalArgumentException e) {
+                Log.e("onConfiguration", "Illegal");
             }
             configuration = newConfig.orientation;
         }
@@ -576,20 +581,20 @@ public class EdgeGestureService extends Service {
     public void onCreate() {
         super.onCreate();
         mScale = getResources().getDisplayMetrics().density;
-        sharedPreferences1 = getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE,0);
-        sharedPreferences2 = getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE,0);
+        sharedPreferences1 = getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE, 0);
+        sharedPreferences2 = getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
         edge_1_height = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
         edge_2_height = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
-        edge1Width = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY,12);
-        edge2Width = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY,12);
+        edge1Width = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY, 12);
+        edge2Width = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY, 12);
         isEdge1On = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true);
-        isEdge2On = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY,false);
-        Log.e(LOG_TAG,"onCreate service");
+        isEdge2On = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, false);
+        Log.e(LOG_TAG, "onCreate service");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e(LOG_TAG,"onDestroy service");
+        Log.e(LOG_TAG, "onDestroy service");
     }
 }
