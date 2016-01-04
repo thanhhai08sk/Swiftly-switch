@@ -114,8 +114,6 @@ public class EdgeGestureService extends Service {
             launcherPackagename = res.activityInfo.packageName;
         }
         numOfEdge = defaultShared.getInt("numOfEdge", 1);
-        edge1Position = defaultShared.getInt("edge1Position", 11);
-        edge2Position = defaultShared.getInt("edge2Position", 21);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -589,6 +587,8 @@ public class EdgeGestureService extends Service {
         edge2Width = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY, 12);
         isEdge1On = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true);
         isEdge2On = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, false);
+        edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, "Right centre"), getApplicationContext());
+        edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY,"Left centre"),getApplicationContext());
         Log.e(LOG_TAG, "onCreate service");
     }
 

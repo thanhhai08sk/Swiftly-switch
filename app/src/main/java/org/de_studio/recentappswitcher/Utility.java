@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher;
 
+import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
@@ -180,5 +181,24 @@ public  class Utility {
         + sin30+ "\ncos30 = "+ cos30 + "\ndistance = " +distance_pxl + "\nradpx; = "+rad_pxl);
         return result;
     }
+
+    public static int getPositionIntFromString(String position, Context context){
+        String[] array = context.getResources().getStringArray(R.array.edge_dialog_spinner_array);
+        if (position.equals(array[0])){
+            return 10;
+        }else if (position.equals(array[1])){
+            return 11;
+        }else if (position.equals(array[2])){
+            return 12;
+        }else if (position.equals(array[3])){
+            return 20;
+        }else if (position.equals(array[4])){
+            return 21;
+        }else if (position.equals(array[5])){
+            return 22;
+        }
+        return 11;
+    }
+
 
 }
