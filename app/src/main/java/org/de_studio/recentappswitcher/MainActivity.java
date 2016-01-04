@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         final Button step2GoToSettingButton = (Button) findViewById(R.id.step2_go_to_setting_button);
         final FrameLayout stepTextFrame = (FrameLayout) findViewById(R.id.step_text_frame_layout);
         ImageButton edge1SettingButton = (ImageButton) findViewById(R.id.edge_1_setting_image_button);
+        ImageButton edge2SettingButton = (ImageButton) findViewById(R.id.edge_2_setting_image_button);
         edge1SettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,6 +82,20 @@ public class MainActivity extends AppCompatActivity {
                 transaction.add(android.R.id.content, newFragment)
                         .addToBackStack(null).commit();
 
+            }
+        });
+        edge2SettingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                EdgeSettingDialogFragment newFragment = new EdgeSettingDialogFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(EdgeSettingDialogFragment.EDGE_NUMBER_KEY,2);
+                newFragment.setArguments(bundle);
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                transaction.add(android.R.id.content, newFragment)
+                        .addToBackStack(null).commit();
             }
         });
         boolean isStep1Ok;
