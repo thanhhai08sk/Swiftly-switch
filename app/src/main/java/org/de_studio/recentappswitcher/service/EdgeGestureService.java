@@ -562,17 +562,23 @@ public class EdgeGestureService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation != configuration) {
-            try {
-                windowManager.removeView(item1View);
-                windowManager.removeView(item2View);
-            } catch (NullPointerException e) {
-                Log.e("onConfiguration", "Null");
-            } catch (IllegalArgumentException e) {
-                Log.e("onConfiguration", "Illegal");
-            }
-            configuration = newConfig.orientation;
+//        if (newConfig.orientation != configuration) {
+        if (item1View.isAttachedToWindow()){
+            windowManager.removeView(item1View);
         }
+        if (item2View.isAttachedToWindow()){
+            windowManager.removeView(item2View);
+        }
+//            try {
+//                windowManager.removeView(item1View);
+//                windowManager.removeView(item2View);
+//            } catch (NullPointerException e) {
+//                Log.e("onConfiguration", "Null");
+//            } catch (IllegalArgumentException e) {
+//                Log.e("onConfiguration", "Illegal");
+//            }
+//            configuration = newConfig.orientation;
+//        }
     }
 
     @Override
