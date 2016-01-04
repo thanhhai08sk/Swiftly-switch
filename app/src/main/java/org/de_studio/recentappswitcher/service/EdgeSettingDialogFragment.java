@@ -174,6 +174,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getContext().stopService(new Intent(getContext(), EdgeGestureService.class));
 
         mScale = getResources().getDisplayMetrics().density;
     }
@@ -182,7 +183,6 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public void onDestroyView() {
         super.onDestroyView();
         Log.e(LOG_TAG, sharedPreferences.getString(EDGE_POSITION_KEY, "null") + "\n" + sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 0) + "\n" + sharedPreferences.getInt(EDGE_LENGTH_KEY, 0));
-        getContext().stopService(new Intent(getContext(), EdgeGestureService.class));
         getContext().startService(new Intent(getContext(),EdgeGestureService.class));
     }
 }

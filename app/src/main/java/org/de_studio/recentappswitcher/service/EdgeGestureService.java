@@ -236,7 +236,7 @@ public class EdgeGestureService extends Service {
         OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position, icons2Image, item2View, list_icon_2);
         edge2Image.setOnTouchListener(onTouchListener2);
 
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
     public class OnTouchListener implements View.OnTouchListener {
@@ -608,6 +608,13 @@ public class EdgeGestureService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (edge1View.isAttachedToWindow()){
+            windowManager.removeView(edge1View);
+        }
+        if (edge2View.isAttachedToWindow()){
+            windowManager.removeView(edge2View);
+        }
         Log.e(LOG_TAG, "onDestroy service");
     }
+
 }
