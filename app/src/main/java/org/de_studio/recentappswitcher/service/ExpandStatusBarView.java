@@ -70,17 +70,17 @@ public class ExpandStatusBarView extends View {
         oval.set(ovalOffset, ovalOffset,ovalOffset + radius * 2,ovalOffset+ radius * 2);
         if (homwBackNoti ==3){
             switch (position){
-                case 10: path.addArc(oval, -270, 90);
+                case 10: path.addArc(oval, -270, 75);
                     break;
-                case 11: path.addArc(oval, -270, 90);
+                case 11: path.addArc(oval, -270, 75);
                     break;
-                case 12: path.addArc(oval, -270, 90);
+                case 12: path.addArc(oval, -270, 75);
                     break;
-                case 20: path.addArc(oval, 0, 90);
+                case 20: path.addArc(oval, 15, 75);
                     break;
-                case 21: path.addArc(oval, 0, 90);
+                case 21: path.addArc(oval, 15, 75);
                     break;
-                case 22: path.addArc(oval, 0, 90);
+                case 22: path.addArc(oval, 15, 75);
                     break;
             }
         }else if (homwBackNoti==1){
@@ -132,7 +132,6 @@ public class ExpandStatusBarView extends View {
         backgroundPaint.setStyle(Paint.Style.STROKE);
         backgroundPaint.setStrokeWidth(strokeWidth * mScale);
         backgroundPaint.setStrokeCap(Paint.Cap.ROUND);
-
         oval = new RectF();
 
         path = new Path();
