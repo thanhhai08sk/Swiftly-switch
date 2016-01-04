@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.IBinder;
@@ -262,7 +263,7 @@ public class EdgeGestureService extends Service {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     x_init_cord = x_cord;
-                    y_init_cord = y_cord;
+                    y_init_cord = y_cord - getYOffset(y_cord);
                     expandSpec = Utility.getExpandSpec(x_init_cord, y_init_cord, icon_distance, 35, windowManager);
                     int expandWidth = expandSpec[2] - expandSpec[0];
                     int expandHeight = expandSpec[3] - expandSpec[1];
@@ -615,6 +616,18 @@ public class EdgeGestureService extends Service {
             windowManager.removeView(edge2View);
         }
         Log.e(LOG_TAG, "onDestroy service");
+    }
+
+    private int getYOffset(int y_init){
+        Point point= new Point();
+        windowManager.getDefaultDisplay().getSize(point);
+        int distanceNeeded =(int) (mScale* (icon_distance + icon_rad));
+        int distanceWeHave = point.y - y_init;
+        if (distanceWeHave < distanceNeeded){
+            return distanceNeeded - distanceWeHave;
+        }else if (y_init < distanceNeeded){
+            return y_init - distanceNeeded;
+        }else return 0;
     }
 
 }
