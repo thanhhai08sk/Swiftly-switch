@@ -10,4 +10,5 @@
     <color name="redButton">#ffff7c61</color>
     <color name="greenButton">#ff69f0ae</color>
     <color name="edgeSettingBackground">#e2000000</color>
+    <color name="icon_tint">#94ff4081</color>
 </resources>

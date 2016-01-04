@@ -1,10 +1,10 @@
 package org.de_studio.recentappswitcher;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 /**
  * Created by hai on 12/19/2015.
@@ -53,7 +53,7 @@ public  class Utility {
         return -1;
     }
 
-    public static void setIconsPosition(ImageView[] icon, int x_init_cord, int y_init_cord, float icon_distance_pxl, float icon_24_dp_pxl, int edgePosition){
+    public static void setIconsPosition(AppCompatImageView[] icon, int x_init_cord, int y_init_cord, float icon_distance_pxl, float icon_24_dp_pxl, int edgePosition){
 
         switch (edgePosition){
             case 10:

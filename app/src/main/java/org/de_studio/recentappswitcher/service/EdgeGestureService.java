@@ -20,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -92,7 +93,7 @@ public class EdgeGestureService extends Service {
     private boolean isEdge1On, isEdge2On;
     public int numOfEdge, edge1Position, edge2Position;
     private SharedPreferences defaultShared, sharedPreferences1, sharedPreferences2;
-    private ImageView[] icons1Image, icons2Image;
+    private AppCompatImageView[] icons1Image, icons2Image;
     private ExpandStatusBarView expandView, homeView, backView;
     private Vibrator vibrator;
 
@@ -131,13 +132,13 @@ public class EdgeGestureService extends Service {
         icon_24dp_in_pxls = 24 * mScale;
         distance_to_arc_pxl = (int) (distance_to_arc * mScale);
         item1View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
-        icons1Image = new ImageView[6];
-        icons1Image[0] = (ImageView) item1View.findViewById(R.id.item_0);
-        icons1Image[1] = (ImageView) item1View.findViewById(R.id.item_1);
-        icons1Image[2] = (ImageView) item1View.findViewById(R.id.item_2);
-        icons1Image[3] = (ImageView) item1View.findViewById(R.id.item_3);
-        icons1Image[4] = (ImageView) item1View.findViewById(R.id.item_4);
-        icons1Image[5] = (ImageView) item1View.findViewById(R.id.item_5);
+        icons1Image = new AppCompatImageView[6];
+        icons1Image[0] = (AppCompatImageView) item1View.findViewById(R.id.item_0);
+        icons1Image[1] = (AppCompatImageView) item1View.findViewById(R.id.item_1);
+        icons1Image[2] = (AppCompatImageView) item1View.findViewById(R.id.item_2);
+        icons1Image[3] = (AppCompatImageView) item1View.findViewById(R.id.item_3);
+        icons1Image[4] = (AppCompatImageView) item1View.findViewById(R.id.item_4);
+        icons1Image[5] = (AppCompatImageView) item1View.findViewById(R.id.item_5);
         list_icon_1 = new ArrayList<ImageView>();
         list_icon_1.add(icons1Image[0]);
         list_icon_1.add(icons1Image[1]);
@@ -215,13 +216,13 @@ public class EdgeGestureService extends Service {
         }
 
         item2View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
-        icons2Image = new ImageView[6];
-        icons2Image[0] = (ImageView) item2View.findViewById(R.id.item_0);
-        icons2Image[1] = (ImageView) item2View.findViewById(R.id.item_1);
-        icons2Image[2] = (ImageView) item2View.findViewById(R.id.item_2);
-        icons2Image[3] = (ImageView) item2View.findViewById(R.id.item_3);
-        icons2Image[4] = (ImageView) item2View.findViewById(R.id.item_4);
-        icons2Image[5] = (ImageView) item2View.findViewById(R.id.item_5);
+        icons2Image = new AppCompatImageView[6];
+        icons2Image[0] = (AppCompatImageView) item2View.findViewById(R.id.item_0);
+        icons2Image[1] = (AppCompatImageView) item2View.findViewById(R.id.item_1);
+        icons2Image[2] = (AppCompatImageView) item2View.findViewById(R.id.item_2);
+        icons2Image[3] = (AppCompatImageView) item2View.findViewById(R.id.item_3);
+        icons2Image[4] = (AppCompatImageView) item2View.findViewById(R.id.item_4);
+        icons2Image[5] = (AppCompatImageView) item2View.findViewById(R.id.item_5);
         list_icon_2 = new ArrayList<ImageView>();
         list_icon_2.add(icons2Image[0]);
         list_icon_2.add(icons2Image[1]);
@@ -242,10 +243,10 @@ public class EdgeGestureService extends Service {
         private int x_init_cord, y_init_cord;
         private int position;
         private FrameLayout itemView;
-        private ImageView[] iconImage;
+        private AppCompatImageView[] iconImage;
         private List<ImageView> listIcon;
 
-        public OnTouchListener(int position, ImageView[] iconImage, FrameLayout itemView, List<ImageView> listIcon) {
+        public OnTouchListener(int position, AppCompatImageView[] iconImage, FrameLayout itemView, List<ImageView> listIcon) {
             this.position = position;
             this.iconImage = iconImage;
             this.itemView = itemView;
