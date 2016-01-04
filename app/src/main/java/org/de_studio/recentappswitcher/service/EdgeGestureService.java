@@ -83,7 +83,7 @@ public class EdgeGestureService extends Service {
     public int edge1Width, edge2Width;
     public int edge_y;
     public int edge_centre_y;
-    private List<ImageView> list_icon_1, list_icon_2;
+    private List<AppCompatImageView> list_icon_1, list_icon_2;
     private String[] packagename;
     private String launcherPackagename;
     private int[] x, y;
@@ -139,7 +139,7 @@ public class EdgeGestureService extends Service {
         icons1Image[3] = (AppCompatImageView) item1View.findViewById(R.id.item_3);
         icons1Image[4] = (AppCompatImageView) item1View.findViewById(R.id.item_4);
         icons1Image[5] = (AppCompatImageView) item1View.findViewById(R.id.item_5);
-        list_icon_1 = new ArrayList<ImageView>();
+        list_icon_1 = new ArrayList<AppCompatImageView>();
         list_icon_1.add(icons1Image[0]);
         list_icon_1.add(icons1Image[1]);
         list_icon_1.add(icons1Image[2]);
@@ -223,7 +223,7 @@ public class EdgeGestureService extends Service {
         icons2Image[3] = (AppCompatImageView) item2View.findViewById(R.id.item_3);
         icons2Image[4] = (AppCompatImageView) item2View.findViewById(R.id.item_4);
         icons2Image[5] = (AppCompatImageView) item2View.findViewById(R.id.item_5);
-        list_icon_2 = new ArrayList<ImageView>();
+        list_icon_2 = new ArrayList<AppCompatImageView>();
         list_icon_2.add(icons2Image[0]);
         list_icon_2.add(icons2Image[1]);
         list_icon_2.add(icons2Image[2]);
@@ -244,9 +244,9 @@ public class EdgeGestureService extends Service {
         private int position;
         private FrameLayout itemView;
         private AppCompatImageView[] iconImage;
-        private List<ImageView> listIcon;
+        private List<AppCompatImageView> listIcon;
 
-        public OnTouchListener(int position, AppCompatImageView[] iconImage, FrameLayout itemView, List<ImageView> listIcon) {
+        public OnTouchListener(int position, AppCompatImageView[] iconImage, FrameLayout itemView, List<AppCompatImageView> listIcon) {
             this.position = position;
             this.iconImage = iconImage;
             this.itemView = itemView;
@@ -492,8 +492,10 @@ public class EdgeGestureService extends Service {
                         for (int i = 0; i < listIcon.size(); i++) {
                             hasOneActive = true;
                             if (i == iconToSwitch) {
-                                listIcon.get(i).setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
-                            } else listIcon.get(i).setBackground(null);
+//                                listIcon.get(i).setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
+                                listIcon.get(i).setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.icon_tint));
+
+                            } else listIcon.get(i).setColorFilter(null);;
 
                         }
 
@@ -502,7 +504,11 @@ public class EdgeGestureService extends Service {
                         hasVibrate = false;
                         if (hasOneActive) {
                             for (ImageView imageView : listIcon) {
-                                imageView.setBackground(null);
+//                                imageView.setBackground(null);
+                                if (imageView.getColorFilter()!= null){
+                                    imageView.setColorFilter(null);
+                                }
+
                             }
                         }
                         hasOneActive = false;

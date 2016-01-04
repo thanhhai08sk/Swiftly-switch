@@ -13,7 +13,7 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/item_0"
-        android:layout_width="75dp"
+        android:layout_width="48dp"
         android:layout_height="48dp"
         android:scaleType="centerInside"
         android:src="@drawable/action_call_icon"
@@ -21,7 +21,7 @@
         />
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/item_1"
-        android:layout_width="75dp"
+        android:layout_width="48dp"
         android:layout_height="48dp"
         android:scaleType="centerInside"
         android:src="@drawable/action_sms_icon_2"
@@ -31,28 +31,28 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/item_2"
-        android:layout_width="75dp"
+        android:layout_width="48dp"
         android:layout_height="48dp"
         android:scaleType="centerInside"
         android:src="@drawable/add_contact" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/item_3"
-        android:layout_width="75dp"
+        android:layout_width="48dp"
         android:layout_height="48dp"
         android:scaleType="centerInside"
         android:src="@drawable/add_contact" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/item_4"
-        android:layout_width="75dp"
+        android:layout_width="48dp"
         android:layout_height="48dp"
         android:scaleType="centerInside"
         android:src="@drawable/add_contact" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/item_5"
-        android:layout_width="75dp"
+        android:layout_width="48dp"
         android:layout_height="48dp"
         android:scaleType="centerInside"
         android:src="@drawable/add_contact" />
