@@ -7,8 +7,11 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+
+import org.de_studio.recentappswitcher.R;
 
 /**
  * Created by hai on 12/29/2015.
@@ -70,52 +73,52 @@ public class ExpandStatusBarView extends View {
         oval.set(ovalOffset, ovalOffset,ovalOffset + radius * 2,ovalOffset+ radius * 2);
         if (homwBackNoti ==3){
             switch (position){
-                case 10: path.addArc(oval, -270, 75);
+                case 10: path.addArc(oval, -270, 70);
                     break;
-                case 11: path.addArc(oval, -270, 75);
+                case 11: path.addArc(oval, -270, 70);
                     break;
-                case 12: path.addArc(oval, -270, 75);
+                case 12: path.addArc(oval, -270, 70);
                     break;
-                case 20: path.addArc(oval, 15, 75);
+                case 20: path.addArc(oval, 20, 70);
                     break;
-                case 21: path.addArc(oval, 15, 75);
+                case 21: path.addArc(oval, 20, 70);
                     break;
-                case 22: path.addArc(oval, 15, 75);
+                case 22: path.addArc(oval, 20, 70);
                     break;
             }
         }else if (homwBackNoti==1){
             switch (position){
-                case 10: path.addArc(oval, -120, 30);
+                case 10: path.addArc(oval, -115, 25);
                     break;
-                case 11: path.addArc(oval, -120, 30);
+                case 11: path.addArc(oval, -115, 25);
                     break;
-                case 12: path.addArc(oval, -120, 30);
+                case 12: path.addArc(oval, -115, 25);
                     break;
-                case 20: path.addArc(oval, -90, 30);
+                case 20: path.addArc(oval, -90, 25);
                     break;
-                case 21: path.addArc(oval, -90, 30);
+                case 21: path.addArc(oval, -90, 25);
                     break;
-                case 22: path.addArc(oval, -90, 30);
+                case 22: path.addArc(oval, -90, 25);
                     break;
             }
         }else if (homwBackNoti ==2){
             switch (position){
-                case 10: path.addArc(oval, -165, 45);
+                case 10: path.addArc(oval, -160, 40);
                     break;
-                case 11: path.addArc(oval, -165, 45);
+                case 11: path.addArc(oval, -160, 40);
                     break;
-                case 12: path.addArc(oval, -165, 45);
+                case 12: path.addArc(oval, -160, 40);
                     break;
-                case 20: path.addArc(oval, -60, 45);
+                case 20: path.addArc(oval, -60, 40);
                     break;
-                case 21: path.addArc(oval, -60, 45);
+                case 21: path.addArc(oval, -60, 40);
                     break;
-                case 22: path.addArc(oval, -60, 45);
+                case 22: path.addArc(oval, -60, 40);
                     break;
             }
         }
         canvas.drawPath(path,backgroundPaint);
-        canvas.drawTextOnPath(text.toUpperCase(), path, 0, (textSize/3)*mScale, textPaint);
+        canvas.drawTextOnPath(text.toUpperCase(), path, 0, ((float)(textSize/2.5))*mScale, textPaint);
 
     }
     private void init(){
@@ -123,12 +126,12 @@ public class ExpandStatusBarView extends View {
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         textPaint.setColor(Color.WHITE);
-        textPaint.setTextSize(textSize*mScale);
+        textPaint.setTextSize(textSize * mScale);
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTypeface(Typeface.DEFAULT_BOLD);
 
         backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        backgroundPaint.setColor(Color.GRAY);
+        backgroundPaint.setColor(ContextCompat. getColor(getContext(), R.color.colorPrimary));
         backgroundPaint.setStyle(Paint.Style.STROKE);
         backgroundPaint.setStrokeWidth(strokeWidth * mScale);
         backgroundPaint.setStrokeCap(Paint.Cap.ROUND);
