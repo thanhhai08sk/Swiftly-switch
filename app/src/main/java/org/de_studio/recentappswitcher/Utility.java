@@ -10,6 +10,7 @@ import android.widget.ImageView;
  * Created by hai on 12/19/2015.
  */
 public  class Utility {
+    private static final String LOG_TAG = Utility.class.getSimpleName();
     public static int dpiToPixels (int dp, WindowManager windowManager){
         DisplayMetrics metrics =new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(metrics);
@@ -82,6 +83,8 @@ public  class Utility {
                 icon[4].setY(y_init_cord + (float) 0.71 * icon_distance_pxl - icon_24_dp_pxl);
                 icon[5].setX((float) (x_init_cord - 0.26 * icon_distance_pxl) - icon_24_dp_pxl);
                 icon[5].setY(y_init_cord + (float) 0.97 * icon_distance_pxl - icon_24_dp_pxl);
+                int distance = x_init_cord - (int)icon[0].getX();
+                Log.e(LOG_TAG,"x_init - x0 = "+distance + "\nx_init = "+ x_init_cord );
                 break;
             case 12:
                 icon[0].setX((float) (x_init_cord - 0.26 * icon_distance_pxl) - icon_24_dp_pxl);
@@ -124,6 +127,8 @@ public  class Utility {
                 icon[4].setY(y_init_cord + (float) 0.71 * icon_distance_pxl - icon_24_dp_pxl);
                 icon[5].setX((float) (x_init_cord + 0.26 * icon_distance_pxl) - icon_24_dp_pxl);
                 icon[5].setY(y_init_cord + (float) 0.97 * icon_distance_pxl - icon_24_dp_pxl);
+                int distance2 = x_init_cord - (int)icon[0].getX();
+                Log.e(LOG_TAG, "x_init - x0 = " + distance2 + "\nx_init = "+ x_init_cord);
                 break;
             case 22:
                 icon[0].setX((float) (x_init_cord + 0.26 * icon_distance_pxl) - icon_24_dp_pxl);

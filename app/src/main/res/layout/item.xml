@@ -19,7 +19,6 @@
         android:src="@drawable/action_call_icon"
 
         />
-
     <ImageView
         android:id="@+id/item_1"
         android:layout_width="75dp"
