@@ -155,7 +155,7 @@ public  class Utility {
         boolean isTop = y < y_init;
         double oriAng = Math.acos((double)(Math.abs(x - x_init))/distance);
         double maxAng = 0.4166*Math.PI;
-        double midAng = 0.25* Math.PI;
+        double midAng = 0.3333* Math.PI;
         double minAng = 0.0833*Math.PI;
         if (isTop){
             if (oriAng>minAng & oriAng < midAng & distance > distanceNeededToBack_pxl){
