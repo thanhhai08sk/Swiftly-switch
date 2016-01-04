@@ -14,7 +14,7 @@ import android.view.View;
  * Created by hai on 12/29/2015.
  */
 public class ExpandStatusBarView extends View {
-    private String text = "____show notification____";
+    private String text = "show notification";
     private int position;
     private Color backgroundColor;
     private Color textColor;
@@ -25,6 +25,9 @@ public class ExpandStatusBarView extends View {
     private RectF oval;
     private int radius;
     private int homwBackNoti = 3;
+    private int ovalOffset =0;
+    private float mScale;
+    private int textSize = 16, strokeWidth = 30; // in dp
 
     public ExpandStatusBarView(Context context){
         super(context);
@@ -33,6 +36,9 @@ public class ExpandStatusBarView extends View {
 
     public void setRadius(int radius){
         this.radius = radius;
+    }
+    public void setOvalOffset(int ovalOffset){
+        this.ovalOffset = ovalOffset;
     }
     public String getText(){
         return text;
@@ -61,7 +67,7 @@ public class ExpandStatusBarView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         Log.e("expand", "onDraw");
-        oval.set(0, 0, radius * 2, radius * 2);
+        oval.set(ovalOffset, ovalOffset,ovalOffset + radius * 2,ovalOffset+ radius * 2);
         if (homwBackNoti ==3){
             switch (position){
                 case 10: path.addArc(oval, -270, 90);
@@ -108,20 +114,24 @@ public class ExpandStatusBarView extends View {
                     break;
             }
         }
+        canvas.drawPath(path,backgroundPaint);
+        canvas.drawTextOnPath(text.toUpperCase(), path, 0, (textSize/3)*mScale, textPaint);
 
-        canvas.drawTextOnPath(text, path, 0, 20, textPaint);
     }
     private void init(){
+        mScale = getResources().getDisplayMetrics().density;
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        textPaint.setColor(Color.CYAN);
-        textPaint.setTextSize(50f);
+        textPaint.setColor(Color.WHITE);
+        textPaint.setTextSize(textSize*mScale);
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTypeface(Typeface.DEFAULT_BOLD);
 
         backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        backgroundPaint.setColor(Color.CYAN);
+        backgroundPaint.setColor(Color.GRAY);
         backgroundPaint.setStyle(Paint.Style.STROKE);
+        backgroundPaint.setStrokeWidth(strokeWidth * mScale);
+        backgroundPaint.setStrokeCap(Paint.Cap.ROUND);
 
         oval = new RectF();
 

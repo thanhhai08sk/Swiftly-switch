@@ -97,6 +97,7 @@ public class EdgeGestureService extends Service {
     private AppCompatImageView[] icons1Image, icons2Image;
     private ExpandStatusBarView expandView, homeView, backView;
     private Vibrator vibrator;
+    private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl;
 
 
     @Nullable
@@ -268,28 +269,31 @@ public class EdgeGestureService extends Service {
                     int expandWidth = expandSpec[2] - expandSpec[0];
                     int expandHeight = expandSpec[3] - expandSpec[1];
                     expandView = new ExpandStatusBarView(getApplicationContext());
-                    expandView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl);
-                    expandView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl);
-                    expandView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl);
+                    expandView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet -ovalRadiusPlusPxl);
+                    expandView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet -ovalRadiusPlusPxl);
+                    expandView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl);
+                    expandView.setOvalOffset(ovalOffSet);
                     expandView.setPosition(position);
                     expandView.setVisibility(View.INVISIBLE);
                     itemView.addView(expandView);
 
                     homeView = new ExpandStatusBarView(getApplicationContext());
-                    homeView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl);
-                    homeView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl);
-                    homeView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl);
+                    homeView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl);
+                    homeView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl);
+                    homeView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl);
+                    homeView.setOvalOffset(ovalOffSet);
                     homeView.setPosition(position);
-                    homeView.setText("__home__");
+                    homeView.setText("home");
                     homeView.setVisibility(View.INVISIBLE);
                     itemView.addView(homeView);
 
                     backView = new ExpandStatusBarView(getApplicationContext());
-                    backView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl);
-                    backView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl);
-                    backView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl);
+                    backView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl);
+                    backView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl);
+                    backView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl);
+                    backView.setOvalOffset(ovalOffSet);
                     backView.setPosition(position);
-                    backView.setText("____back____");
+                    backView.setText("back");
                     backView.setVisibility(View.INVISIBLE);
                     itemView.addView(backView);
 
@@ -602,7 +606,9 @@ public class EdgeGestureService extends Service {
         isEdge1On = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true);
         isEdge2On = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, false);
         edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, "Right centre"), getApplicationContext());
-        edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY,"Left centre"),getApplicationContext());
+        edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, "Left centre"), getApplicationContext());
+        ovalOffSet = (int) (25 * mScale);
+        ovalRadiusPlusPxl = (int)(ovalRadiusPlus *mScale);
         Log.e(LOG_TAG, "onCreate service");
     }
 
