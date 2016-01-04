@@ -89,6 +89,7 @@ public class EdgeGestureService extends Service {
     private int numOfIcon;
     private boolean hasOneActive = false;
     private boolean hasVibrate = false,hasHomwBackNotiVisible=false;
+    private boolean isEdge1On, isEdge2On;
     public int numOfEdge, edge1Position, edge2Position;
     private SharedPreferences defaultShared, sharedPreferences1,sharedPreferences2;
     private ImageView[] icons1Image, icons2Image;
@@ -581,6 +582,8 @@ public class EdgeGestureService extends Service {
         edge_2_height = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
         edge1Width = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY,12);
         edge2Width = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY,12);
+        isEdge1On = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true);
+        isEdge2On = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY,false);
         Log.e(LOG_TAG,"onCreate service");
     }
 
