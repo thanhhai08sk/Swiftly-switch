@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -19,8 +20,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
@@ -31,13 +34,33 @@ public class MainActivity extends AppCompatActivity {
     public static final String EDGE_1_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_2_shared_preference";
     public static final String DEFAULT_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_sharedpreferences";
+    private SharedPreferences sharedPreferences1, sharedPreferences2, sharedPreferencesDefautl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedPreferences1 = getSharedPreferences(EDGE_1_SHAREDPREFERENCE,0);
+        sharedPreferences2 = getSharedPreferences(EDGE_2_SHAREDPREFERENCE,0);
+        sharedPreferencesDefautl = getSharedPreferences(DEFAULT_SHAREDPREFERENCE,0);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Button step1Button = (Button) findViewById(R.id.step1_button);
+        Switch edge1Switch = (Switch) findViewById(R.id.edge_1_switch);
+        Switch edge2Switch = (Switch) findViewById(R.id.edge_2_switch);
+        edge1Switch.setChecked(sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY,true));
+        edge2Switch.setChecked(sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY,false));
+        edge1Switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sharedPreferences1.edit().putBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, isChecked).commit();
+            }
+        });
+        edge2Switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sharedPreferences2.edit().putBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, isChecked).commit();
+            }
+        });
         final Button step2Button = (Button) findViewById(R.id.step2_button);
         final TextView step1Text = (TextView) findViewById(R.id.step_1_text);
         final TextView step2Text = (TextView) findViewById(R.id.step_2_text);
