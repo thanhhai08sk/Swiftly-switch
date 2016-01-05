@@ -26,6 +26,8 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -34,6 +36,7 @@ import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -212,6 +215,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        setFavoriteView();
+
+
     }
 
     @Override
@@ -243,6 +249,48 @@ public class MainActivity extends AppCompatActivity {
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.add(android.R.id.content, newFragment)
                 .addToBackStack(null).commit();
+    }
+
+    public void setFavoriteView(){
+        PackageManager packageManager = getPackageManager();
+        LinearLayout[] linearLayouts = new LinearLayout[6];
+        linearLayouts[0] = (LinearLayout) findViewById(R.id.favorite_app_0_linear_layout);
+        linearLayouts[1] = (LinearLayout) findViewById(R.id.favorite_app_1_linear_layout);
+        linearLayouts[2] = (LinearLayout) findViewById(R.id.favorite_app_2_linear_layout);
+        linearLayouts[3] = (LinearLayout) findViewById(R.id.favorite_app_3_linear_layout);
+        linearLayouts[4] = (LinearLayout) findViewById(R.id.favorite_app_4_linear_layout);
+        linearLayouts[5] = (LinearLayout) findViewById(R.id.favorite_app_5_linear_layout);
+        ImageView[] icons = new ImageView[6];
+        icons[0] = (ImageView) findViewById(R.id.favorite_app_0_item_image_view);
+        icons[1] = (ImageView) findViewById(R.id.favorite_app_1_item_image_view);
+        icons[2] = (ImageView) findViewById(R.id.favorite_app_2_item_image_view);
+        icons[3] = (ImageView) findViewById(R.id.favorite_app_3_item_image_view);
+        icons[4] = (ImageView) findViewById(R.id.favorite_app_4_item_image_view);
+        icons[5] = (ImageView) findViewById(R.id.favorite_app_5_item_image_view);
+        TextView[] labels = new TextView[6];
+        labels[0] = (TextView) findViewById(R.id.favorite_app_0_item_label_text_view);
+        labels[1] = (TextView) findViewById(R.id.favorite_app_1_item_label_text_view);
+        labels[2] = (TextView) findViewById(R.id.favorite_app_2_item_label_text_view);
+        labels[3] = (TextView) findViewById(R.id.favorite_app_3_item_label_text_view);
+        labels[4] = (TextView) findViewById(R.id.favorite_app_4_item_label_text_view);
+        labels[5] = (TextView) findViewById(R.id.favorite_app_5_item_label_text_view);
+        Set<String> set = sharedPreferencesDefautl.getStringSet(EdgeSettingDialogFragment.DEFAULT_FAVORITE_KEY,new HashSet<String>());
+        String[] favoritePackageName = new String[set.size()];
+        set.toArray(favoritePackageName);
+        for (int i = 0; i< 6; i++){
+            if (i< favoritePackageName.length){
+                try {
+                    labels[i].setText(packageManager.getApplicationLabel(packageManager.getApplicationInfo(favoritePackageName[i],0)));
+                    icons[i].setImageDrawable(packageManager.getApplicationIcon(favoritePackageName[i]));
+                    linearLayouts[i].setVisibility(View.VISIBLE);
+                }catch (PackageManager.NameNotFoundException e){
+                    Log.e(LOG_TAG,"name not found");
+                }
+
+            }else {
+                linearLayouts[i].setVisibility(View.GONE);
+            }
+        }
     }
 
     private class LoadInstalledApp extends AsyncTask<Void, Void, ArrayList<AppInfors>> {
