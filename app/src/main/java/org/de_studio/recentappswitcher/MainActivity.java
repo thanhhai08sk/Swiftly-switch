@@ -4,6 +4,9 @@ import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -29,12 +32,17 @@ import android.widget.TextView;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Set;
+
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     public static final String EDGE_1_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_2_shared_preference";
     public static final String DEFAULT_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_sharedpreferences";
     private SharedPreferences sharedPreferences1, sharedPreferences2, sharedPreferencesDefautl;
+    private ArrayList<AppInfors> mAppInforsArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,6 +197,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         startService(new Intent(this, EdgeGestureService.class));
+
+        ImageButton addFavoriteButton = (ImageButton) findViewById(R.id.main_favorite_add_app_image_button);
+        addFavoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                AddFavoriteAppsDialogFragment newFragment = new AddFavoriteAppsDialogFragment();
+                newFragment.show(fragmentManager,"addAppDialog");
+            }
+        });
     }
 
     @Override
@@ -220,6 +238,34 @@ public class MainActivity extends AppCompatActivity {
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.add(android.R.id.content, newFragment)
                 .addToBackStack(null).commit();
+    }
+
+    private class LoadInstalledApp extends AsyncTask<Void, Void, ArrayList<AppInfors>> {
+        protected ArrayList<AppInfors> doInBackground(Void... voids) {
+            PackageManager packageManager = getPackageManager();
+            ArrayList<AppInfors> arrayList = new ArrayList<AppInfors>();
+            Set<PackageInfo> set = Utility.getInstalledApps(getApplicationContext());
+            PackageInfo[] array = set.toArray(new PackageInfo[set.size()]);
+            for (PackageInfo pack : array){
+
+                try {
+                    AppInfors appInfors = new AppInfors();
+                    appInfors.label =(String) packageManager.getApplicationLabel(pack.applicationInfo);
+                    appInfors.packageName = pack.packageName;
+                    appInfors.iconDrawable = packageManager.getApplicationIcon(pack.packageName);
+                    appInfors.launchIntent = packageManager.getLaunchIntentForPackage(pack.packageName);
+                    arrayList.add(appInfors);
+                }catch (PackageManager.NameNotFoundException e){
+                    Log.e(LOG_TAG, "name not found " + e);
+                }
+                Collections.sort(arrayList);
+
+            }
+            return arrayList;
+        }
+        protected void onPostExecute(ArrayList<AppInfors> result) {
+            mAppInforsArrayList = result;
+        }
     }
 
 

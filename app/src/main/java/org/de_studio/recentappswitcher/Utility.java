@@ -1,10 +1,18 @@
 package org.de_studio.recentappswitcher;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by hai on 12/19/2015.
@@ -205,5 +213,38 @@ public  class Utility {
         return 11;
     }
 
+
+
+    // get installed apps but skip the system apps
+    public static Set<PackageInfo> getInstalledApps(Context ctx) {
+        final PackageManager packageManager = ctx.getPackageManager();
+
+        final List<PackageInfo> allInstalledPackages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA);
+        final Set<PackageInfo> filteredPackages = new HashSet();
+
+        Drawable defaultActivityIcon = packageManager.getDefaultActivityIcon();
+
+        for(PackageInfo each : allInstalledPackages) {
+            if(ctx.getPackageName().equals(each.packageName)) {
+                continue;  // skip own app
+            }
+
+            try {
+                // add only apps with application icon
+                Intent intentOfStartActivity = packageManager.getLaunchIntentForPackage(each.packageName);
+                if(intentOfStartActivity == null)
+                    continue;
+
+                Drawable applicationIcon = packageManager.getActivityIcon(intentOfStartActivity);
+                if(applicationIcon != null && !defaultActivityIcon.equals(applicationIcon)) {
+                    filteredPackages.add(each);
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                Log.i("MyTag", "Unknown package name " + each.packageName);
+            }
+        }
+
+        return filteredPackages;
+    }
 
 }

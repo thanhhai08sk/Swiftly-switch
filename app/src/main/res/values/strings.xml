@@ -30,4 +30,5 @@
     <string name="edge_dialog_default_button">Default</string>
     <string name="edge_dialog_cancel_button">Cancel</string>
     <string name="edge_dialog_ok_button">Ok</string>
+    <string name="main_favorite_app_title">Favorite apps</string>
 </resources>
