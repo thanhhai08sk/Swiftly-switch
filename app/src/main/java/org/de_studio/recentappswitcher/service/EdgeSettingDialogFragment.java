@@ -31,6 +31,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String EDGE_LENGTH_KEY = "length";
     public static final String EDGE_NUMBER_KEY = "number_of_edge";
     public static final String EDGE_ON_KEY = "is_on";
+    public static final String DEFAULT_FAVORITE_KEY = "favorite";
     private static int edgeNumber;
     private  float mScale;
     private static SharedPreferences sharedPreferences;
