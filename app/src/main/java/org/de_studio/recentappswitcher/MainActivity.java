@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        new LoadInstalledApp().execute();
         sharedPreferences1 = getSharedPreferences(EDGE_1_SHAREDPREFERENCE, 0);
         sharedPreferences2 = getSharedPreferences(EDGE_2_SHAREDPREFERENCE, 0);
         sharedPreferencesDefautl = getSharedPreferences(DEFAULT_SHAREDPREFERENCE, 0);
@@ -204,7 +205,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 AddFavoriteAppsDialogFragment newFragment = new AddFavoriteAppsDialogFragment();
-                newFragment.show(fragmentManager,"addAppDialog");
+                if (mAppInforsArrayList!= null){
+                    newFragment.setAppInforsArrayList(mAppInforsArrayList);
+                    newFragment.show(fragmentManager,"addAppDialog");
+                }
+
             }
         });
     }
