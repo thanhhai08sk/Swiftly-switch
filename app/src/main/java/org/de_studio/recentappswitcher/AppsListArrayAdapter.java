@@ -19,7 +19,7 @@ public class AppsListArrayAdapter extends BaseAdapter {
     private static final String LOG_TAG = AppsListArrayAdapter.class.getSimpleName();
     private Context context;
     private PackageManager packageManager;
-    private ArrayList<AppInfors> mAppInfosArrayList;
+    static private ArrayList<AppInfors> mAppInfosArrayList;
     public AppsListArrayAdapter(Context context, ArrayList<AppInfors> inforsArrayList){
         super();
         this.context = context;

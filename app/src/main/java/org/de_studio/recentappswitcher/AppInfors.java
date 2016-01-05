@@ -15,6 +15,6 @@ public class AppInfors implements Comparable<AppInfors> {
     @Override
     public int compareTo(AppInfors another) {
 
-        return label.compareTo(another.label);
+        return label.toLowerCase().compareTo(another.label.toLowerCase());
     }
 }

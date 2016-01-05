@@ -17,10 +17,10 @@ import java.util.Set;
  */
 public class AddFavoriteAppsDialogFragment extends DialogFragment {
     public static final String APP_INFORS_KEY = "app_infors";
-    ListView mListView;
-    Set<PackageInfo> mInfos;
-    AppsListArrayAdapter adapter;
-    private ArrayList<AppInfors> appInforsArrayList;
+    static ListView mListView;
+    static Set<PackageInfo> mInfos;
+    static AppsListArrayAdapter adapter;
+    static private ArrayList<AppInfors> appInforsArrayList;
 
     public void setAppInforsArrayList(ArrayList<AppInfors> set){
         appInforsArrayList = set;
