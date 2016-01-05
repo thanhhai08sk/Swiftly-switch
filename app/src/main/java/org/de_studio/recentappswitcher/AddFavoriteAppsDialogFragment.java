@@ -1,12 +1,15 @@
 package org.de_studio.recentappswitcher;
 
+import android.app.Dialog;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -35,6 +38,14 @@ public class AddFavoriteAppsDialogFragment extends DialogFragment {
         mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
         mListView.setAdapter(adapter);
         return rootView;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        return dialog;
     }
 
     @Override
