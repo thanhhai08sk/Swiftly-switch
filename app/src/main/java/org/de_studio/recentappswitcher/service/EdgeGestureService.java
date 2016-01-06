@@ -121,7 +121,7 @@ public class EdgeGestureService extends Service {
         ResolveInfo res = getPackageManager().resolveActivity(launcherIntent, 0);
         if (res.activityInfo != null) {
             launcherPackagename = res.activityInfo.packageName;
-        }else launcherPackagename = "";
+        } else launcherPackagename = "";
         numOfEdge = defaultShared.getInt("numOfEdge", 1);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -182,7 +182,7 @@ public class EdgeGestureService extends Service {
                 paramsEdge1.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 break;
         }
-        if (isEdge1On){
+        if (isEdge1On) {
             windowManager.addView(edge1View, paramsEdge1);
         }
         edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
@@ -218,7 +218,7 @@ public class EdgeGestureService extends Service {
             case 22:
                 paramsEdge2.gravity = Gravity.BOTTOM | Gravity.LEFT;
         }
-        if (isEdge2On){
+        if (isEdge2On) {
             windowManager.addView(edge2View, paramsEdge2);
 
         }
@@ -269,7 +269,7 @@ public class EdgeGestureService extends Service {
             int[] expandSpec;// left, top, right, bottom
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    Set<String> excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,new HashSet<String>());
+                    Set<String> excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
                     switched = false;
                     itemSwitched = false;
                     x_init_cord = x_cord;
@@ -278,8 +278,8 @@ public class EdgeGestureService extends Service {
                     int expandWidth = expandSpec[2] - expandSpec[0];
                     int expandHeight = expandSpec[3] - expandSpec[1];
                     expandView = new ExpandStatusBarView(getApplicationContext());
-                    expandView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet -ovalRadiusPlusPxl);
-                    expandView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet -ovalRadiusPlusPxl);
+                    expandView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl);
+                    expandView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl);
                     expandView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl);
                     expandView.setOvalOffset(ovalOffSet);
                     expandView.setPosition(position);
@@ -324,11 +324,11 @@ public class EdgeGestureService extends Service {
                         List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
 
                         ArrayList<String> tempPackageName = new ArrayList<String>();
-                        for (int i = 0; i< list.size(); i++){
+                        for (int i = 0; i < list.size(); i++) {
                             ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                             ComponentName componentName = taskInfo.baseActivity;
                             String packName = componentName.getPackageName();
-                            if (i!= 0 & !packName.equals(launcherPackagename) & !excludeSet.contains(packName)){
+                            if (i != 0 & !packName.equals(launcherPackagename) & !excludeSet.contains(packName)) {
                                 tempPackageName.add(packName);
                             }
                         }
@@ -336,44 +336,44 @@ public class EdgeGestureService extends Service {
                         tempPackageName.toArray(packagename);
 
                         for (int i = 0; i < 6; i++) {
-                                if (i >= packagename.length) {
-                                    listIcon.get(i).setImageDrawable(null);
-                                } else {
-                                    try {
-                                        Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
-                                        ImageView iconi = listIcon.get(i);
-                                        iconi.setImageDrawable(icon);
-                                    } catch (PackageManager.NameNotFoundException e) {
-                                        Log.e(LOG_TAG, "NameNotFound" + e);
-                                    }
+                            if (i >= packagename.length) {
+                                listIcon.get(i).setImageDrawable(null);
+                            } else {
+                                try {
+                                    Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
+                                    ImageView iconi = listIcon.get(i);
+                                    iconi.setImageDrawable(icon);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    Log.e(LOG_TAG, "NameNotFound" + e);
                                 }
                             }
+                        }
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
                         long time = System.currentTimeMillis();
                         List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 1000, time);
                         ArrayList<String> tempPackageName = new ArrayList<String>();
-                        if (stats != null){
+                        if (stats != null) {
                             SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
                             for (UsageStats usageStats : stats) {
                                 mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
                             }
                             Set<Long> setKey = mySortedMap.keySet();
-                            for (Long key : setKey){
+                            for (Long key : setKey) {
                                 UsageStats usageStats = mySortedMap.get(key);
                                 String packa = usageStats.getPackageName();
                                 try {
-                                    if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")){
+                                    if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
                                         //do nothing
-                                    }else if (packa.contains("systemui") |
+                                    } else if (packa.contains("systemui") |
                                             packa.contains("googlequicksearchbox") |
                                             key == mySortedMap.firstKey() |
-                                            excludeSet.contains(packa)){
+                                            excludeSet.contains(packa)) {
                                         // do nothing
-                                    }else tempPackageName.add(packa);
-                                }catch (PackageManager.NameNotFoundException e){
-                                    Log.e(LOG_TAG,"name not found" + e);
+                                    } else tempPackageName.add(packa);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    Log.e(LOG_TAG, "name not found" + e);
                                 }
 
                             }
@@ -381,61 +381,11 @@ public class EdgeGestureService extends Service {
                             tempPackageName.toArray(packagename);
 
 
-                        }else Log.e(LOG_TAG, "erros in mySortedMap");
+                        } else Log.e(LOG_TAG, "erros in mySortedMap");
 
-//                        int numOfTask = 6;
-//                        packagename = new String[6];
-//                        String[] tempPackagename = new String[15];
-//                        int j = 0;
-//                        int numbOfException = 0;
-//                        if (stats != null) {
-//                            SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
-//                            for (UsageStats usageStats : stats) {
-//                                mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
-//                            }
-//                            if (!mySortedMap.isEmpty()) {
-//                                Set<Long> setKey = mySortedMap.keySet();
-//                                for (Long key : setKey) {
-//                                    if (j < tempPackagename.length) {
-//                                        UsageStats usageStats = mySortedMap.get(key);
-//                                        String packa = usageStats.getPackageName();
-//                                        try {
-//                                            if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
-//                                                tempPackagename[j] = null;
-//                                                numbOfException++;
-//
-//                                            } else if (packa.contains("systemui")
-//                                                    | packa.contains("googlequicksearchbox")
-//                                                    | key == mySortedMap.firstKey()) {
-//                                                tempPackagename[j] = null;
-//                                                numbOfException++;
-//                                            } else {
-//                                                tempPackagename[j] = packa;
-//                                            }
-//                                        } catch (PackageManager.NameNotFoundException e) {
-//                                            Log.e(LOG_TAG, "packageName not found" + e);
-//                                        }
-//                                        j++;
-//                                    }
-//
-//                                    Log.e(LOG_TAG, mySortedMap.get(key).getPackageName());
-//                                }
-//                                int k = 0;
-//                                int l = 0;
-//                                while (packagename[5] == null & l < tempPackagename.length) {
-//                                    if (tempPackagename[l] != null) {
-//                                        packagename[k] = tempPackagename[l];
-//                                        k++;
-//                                        l++;
-//                                    } else {
-//                                        l++;
-//                                    }
-//                                }
-//                            } else Log.e(LOG_TAG, " error in mySortedMap");
-//                        }
+
                         for (int i = 0; i < 6; i++) {
                             if (i >= packagename.length) {
-//                                if (packagename[i]==null)
                                 listIcon.get(i).setImageDrawable(null);
                             } else {
                                 try {
@@ -466,9 +416,9 @@ public class EdgeGestureService extends Service {
                         int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK |
                                 Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
                         Intent extApp = null;
-                        if (!switched & packageToSwitch < packagename.length){
+                        if (!switched & packageToSwitch < packagename.length) {
                             extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
-                        }else if (switched & packageToSwitch < favoritePackageName.length){
+                        } else if (switched & packageToSwitch < favoritePackageName.length) {
                             extApp = getPackageManager().getLaunchIntentForPackage(favoritePackageName[packageToSwitch]);
                         }
 
@@ -520,7 +470,7 @@ public class EdgeGestureService extends Service {
                     }
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    if (switched & !itemSwitched){
+                    if (switched & !itemSwitched) {
                         for (int i = 0; i < 6; i++) {
                             if (i >= favoritePackageName.length) {
                                 listIcon.get(i).setImageDrawable(null);
@@ -538,26 +488,24 @@ public class EdgeGestureService extends Service {
                     }
                     int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
                     int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, windowManager);
-                    if (iconToSwitch!= -1){
-                        if (!touched){
+                    if (iconToSwitch != -1) {
+                        if (!touched) {
                             firstTouchTime = System.currentTimeMillis();
                             touched = true;
-                        }else {
-                            if (!switched){
+                        } else {
+                            if (!switched) {
                                 long currentTime = System.currentTimeMillis();
                                 long eslapeTime = currentTime - firstTouchTime;
-                                if (eslapeTime  > holdTime){
+                                if (eslapeTime > holdTime) {
                                     switched = true;
-                                    Toast.makeText(getApplicationContext(),"switch to favorite apps",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "switch to favorite apps", Toast.LENGTH_SHORT).show();
                                 }
                             }
 
                         }
-                    }else {
+                    } else {
                         touched = false;
                     }
-
-
 
 
                     if (iconToSwitch != -1 | moveToHomeBackNoti > 0) {
@@ -569,9 +517,10 @@ public class EdgeGestureService extends Service {
                             hasOneActive = true;
                             if (i == iconToSwitch) {
 //                                listIcon.get(i).setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
-                                listIcon.get(i).setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.icon_tint));
+                                listIcon.get(i).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.icon_tint));
 
-                            } else listIcon.get(i).setColorFilter(null);;
+                            } else listIcon.get(i).setColorFilter(null);
+                            ;
 
                         }
 
@@ -581,7 +530,7 @@ public class EdgeGestureService extends Service {
                         if (hasOneActive) {
                             for (ImageView imageView : listIcon) {
 //                                imageView.setBackground(null);
-                                if (imageView.getColorFilter()!= null){
+                                if (imageView.getColorFilter() != null) {
                                     imageView.setColorFilter(null);
                                 }
 
@@ -646,10 +595,10 @@ public class EdgeGestureService extends Service {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 //        if (newConfig.orientation != configuration) {
-        if (item1View.isAttachedToWindow()){
+        if (item1View.isAttachedToWindow()) {
             windowManager.removeView(item1View);
         }
-        if (item2View.isAttachedToWindow()){
+        if (item2View.isAttachedToWindow()) {
             windowManager.removeView(item2View);
         }
 //            try {
@@ -669,8 +618,8 @@ public class EdgeGestureService extends Service {
         super.onCreate();
         mScale = getResources().getDisplayMetrics().density;
         defaultShared = getApplicationContext().getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
-        sharedPreferences_favorite = getApplicationContext().getSharedPreferences(MainActivity.FAVORITE_SHAREDPREFERENCE,0);
-        sharedPreferences_exclude = getApplicationContext().getSharedPreferences(MainActivity.EXCLUDE_SHAREDPREFERENCE,0);
+        sharedPreferences_favorite = getApplicationContext().getSharedPreferences(MainActivity.FAVORITE_SHAREDPREFERENCE, 0);
+        sharedPreferences_exclude = getApplicationContext().getSharedPreferences(MainActivity.EXCLUDE_SHAREDPREFERENCE, 0);
         sharedPreferences1 = getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE, 0);
         sharedPreferences2 = getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
         edge_1_height = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
@@ -682,7 +631,7 @@ public class EdgeGestureService extends Service {
         edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, "Right centre"), getApplicationContext());
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, "Left centre"), getApplicationContext());
         ovalOffSet = (int) (25 * mScale);
-        ovalRadiusPlusPxl = (int)(ovalRadiusPlus *mScale);
+        ovalRadiusPlusPxl = (int) (ovalRadiusPlus * mScale);
 
         Set<String> set = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, new HashSet<String>());
         favoritePackageName = new String[set.size()];
@@ -693,25 +642,25 @@ public class EdgeGestureService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (edge1View.isAttachedToWindow()){
+        if (edge1View.isAttachedToWindow()) {
             windowManager.removeView(edge1View);
         }
-        if (edge2View.isAttachedToWindow()){
+        if (edge2View.isAttachedToWindow()) {
             windowManager.removeView(edge2View);
         }
         Log.e(LOG_TAG, "onDestroy service");
     }
 
-    private int getYOffset(int y_init){
-        Point point= new Point();
+    private int getYOffset(int y_init) {
+        Point point = new Point();
         windowManager.getDefaultDisplay().getSize(point);
-        int distanceNeeded =(int) (mScale* (icon_distance + icon_rad));
+        int distanceNeeded = (int) (mScale * (icon_distance + icon_rad));
         int distanceWeHave = point.y - y_init;
-        if (distanceWeHave < distanceNeeded){
+        if (distanceWeHave < distanceNeeded) {
             return distanceNeeded - distanceWeHave;
-        }else if (y_init < distanceNeeded){
+        } else if (y_init < distanceNeeded) {
             return y_init - distanceNeeded;
-        }else return 0;
+        } else return 0;
     }
 
 }
