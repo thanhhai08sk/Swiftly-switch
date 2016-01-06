@@ -101,7 +101,7 @@ public class EdgeGestureService extends Service {
     private Vibrator vibrator;
     private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl;
     private long holdTime = 1300, firstTouchTime;
-    private boolean touched = false, switched = false;
+    private boolean touched = false, switched = false, itemSwitched = false;
 
 
     @Nullable
@@ -113,10 +113,10 @@ public class EdgeGestureService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        defaultShared = getApplicationContext().getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         Set<String> set = defaultShared.getStringSet(EdgeSettingDialogFragment.DEFAULT_FAVORITE_KEY, new HashSet<String>());
         favoritePackageName = new String[set.size()];
         set.toArray(favoritePackageName);
-        defaultShared = getApplicationContext().getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
         launcherIntent.addCategory(Intent.CATEGORY_HOME);
         ResolveInfo res = getPackageManager().resolveActivity(launcherIntent, 0);
@@ -271,6 +271,7 @@ public class EdgeGestureService extends Service {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     switched = false;
+                    itemSwitched = false;
                     x_init_cord = x_cord;
                     y_init_cord = y_cord - getYOffset(y_cord);
                     expandSpec = Utility.getExpandSpec(x_init_cord, y_init_cord, icon_distance, 35, windowManager);
@@ -494,6 +495,22 @@ public class EdgeGestureService extends Service {
                     }
                     break;
                 case MotionEvent.ACTION_MOVE:
+                    if (switched & !itemSwitched){
+                        for (int i = 0; i < 6; i++) {
+                            if (i >= favoritePackageName.length) {
+                                listIcon.get(i).setImageDrawable(null);
+                            } else {
+                                try {
+                                    Drawable icon = getPackageManager().getApplicationIcon(favoritePackageName[i]);
+                                    ImageView iconi = listIcon.get(i);
+                                    iconi.setImageDrawable(icon);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    Log.e(LOG_TAG, "NameNotFound" + e);
+                                }
+                            }
+                        }
+                        itemSwitched = false;
+                    }
                     int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
                     int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, windowManager);
                     if (iconToSwitch!= -1){
