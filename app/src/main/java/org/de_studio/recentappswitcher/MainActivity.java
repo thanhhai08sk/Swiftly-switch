@@ -19,7 +19,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
@@ -44,7 +43,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String EDGE_1_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_2_shared_preference";
     public static final String DEFAULT_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_sharedpreferences";
-    private SharedPreferences sharedPreferences1, sharedPreferences2, sharedPreferencesDefautl;
+    public static final String FAVORITE_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_favorite_shared_preferences";
+    public static final String EXCLUDE_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_exclude_shared_preferences";
+    private SharedPreferences sharedPreferences1, sharedPreferences2, sharedPreferencesDefautl,sharedPreferences_favorite, sharedPreferences_exclude;
     private ArrayList<AppInfors> mAppInforsArrayList;
     Button step1Button;
     TextView step1Text;
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences1 = getSharedPreferences(EDGE_1_SHAREDPREFERENCE, 0);
         sharedPreferences2 = getSharedPreferences(EDGE_2_SHAREDPREFERENCE, 0);
         sharedPreferencesDefautl = getSharedPreferences(DEFAULT_SHAREDPREFERENCE, 0);
+        sharedPreferences_favorite = getSharedPreferences(FAVORITE_SHAREDPREFERENCE,0);
+        sharedPreferences_exclude = getSharedPreferences(EXCLUDE_SHAREDPREFERENCE,0);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         step1Button = (Button) findViewById(R.id.step1_button);
         Switch edge1Switch = (Switch) findViewById(R.id.edge_1_switch);
@@ -184,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 AddFavoriteAppsDialogFragment newFragment = new AddFavoriteAppsDialogFragment();
                 if (mAppInforsArrayList!= null){
-                    newFragment.setAppInforsArrayList(mAppInforsArrayList);
+                    newFragment.setAppInforsArrayList(mAppInforsArrayList, AddFavoriteAppsDialogFragment.FAVORITE_MODE);
                     newFragment.show(fragmentManager,"addAppDialog");
                 }
 
@@ -198,26 +201,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onResume() {
@@ -257,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
         labels[3] = (TextView) findViewById(R.id.favorite_app_3_item_label_text_view);
         labels[4] = (TextView) findViewById(R.id.favorite_app_4_item_label_text_view);
         labels[5] = (TextView) findViewById(R.id.favorite_app_5_item_label_text_view);
-        Set<String> set = sharedPreferencesDefautl.getStringSet(EdgeSettingDialogFragment.DEFAULT_FAVORITE_KEY,new HashSet<String>());
+        Set<String> set = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY,new HashSet<String>());
         String[] favoritePackageName = new String[set.size()];
         set.toArray(favoritePackageName);
         for (int i = 0; i< 6; i++){

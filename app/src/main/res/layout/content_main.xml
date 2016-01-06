@@ -191,7 +191,7 @@
                     android:layout_weight="0"
                     android:id="@+id/main_favorite_add_app_image_button"
                     android:background="@color/transparent"
-                    android:src="@drawable/ic_add_white_36dp"
+                    android:src="@drawable/ic_edit_white_24dp"
                     android:paddingRight="16dp"
                     />
 
@@ -358,6 +358,31 @@
 
             </LinearLayout>
 
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/round_button_4pt"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/main_exclude_app_title"
+                android:textColor="@color/white" />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:id="@+id/main_exclude_edit_image_button"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_edit_white_24dp"
+                android:paddingRight="16dp"
+                />
 
         </LinearLayout>
 

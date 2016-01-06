@@ -95,7 +95,7 @@ public class EdgeGestureService extends Service {
     private boolean hasVibrate = false, hasHomwBackNotiVisible = false;
     private boolean isEdge1On, isEdge2On;
     public int numOfEdge, edge1Position, edge2Position;
-    private SharedPreferences defaultShared, sharedPreferences1, sharedPreferences2;
+    private SharedPreferences defaultShared, sharedPreferences1, sharedPreferences2, sharedPreferences_favorite;
     private AppCompatImageView[] icons1Image, icons2Image;
     private ExpandStatusBarView expandView, homeView, backView;
     private Vibrator vibrator;
@@ -113,7 +113,7 @@ public class EdgeGestureService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Set<String> set = defaultShared.getStringSet(EdgeSettingDialogFragment.DEFAULT_FAVORITE_KEY, new HashSet<String>());
+        Set<String> set = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, new HashSet<String>());
         favoritePackageName = new String[set.size()];
         set.toArray(favoritePackageName);
         Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
@@ -648,6 +648,7 @@ public class EdgeGestureService extends Service {
         super.onCreate();
         mScale = getResources().getDisplayMetrics().density;
         defaultShared = getApplicationContext().getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
+        sharedPreferences_favorite = getApplicationContext().getSharedPreferences(MainActivity.FAVORITE_SHAREDPREFERENCE,0);
         sharedPreferences1 = getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE, 0);
         sharedPreferences2 = getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
         edge_1_height = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
@@ -661,7 +662,7 @@ public class EdgeGestureService extends Service {
         ovalOffSet = (int) (25 * mScale);
         ovalRadiusPlusPxl = (int)(ovalRadiusPlus *mScale);
 
-        Set<String> set = defaultShared.getStringSet(EdgeSettingDialogFragment.DEFAULT_FAVORITE_KEY, new HashSet<String>());
+        Set<String> set = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, new HashSet<String>());
         favoritePackageName = new String[set.size()];
         set.toArray(favoritePackageName);
         Log.e(LOG_TAG, "onCreate service");
