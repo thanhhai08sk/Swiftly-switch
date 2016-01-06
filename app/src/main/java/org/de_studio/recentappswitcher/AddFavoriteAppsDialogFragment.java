@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -62,6 +63,10 @@ public class AddFavoriteAppsDialogFragment extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        getContext().startService(new Intent(getContext(),EdgeGestureService.class));
+        getContext().startService(new Intent(getContext(), EdgeGestureService.class));
+        Activity mainActivity = getActivity();
+        if (mainActivity instanceof MainActivity){
+            ((MainActivity) mainActivity).setFavoriteView();
+        }
     }
 }
