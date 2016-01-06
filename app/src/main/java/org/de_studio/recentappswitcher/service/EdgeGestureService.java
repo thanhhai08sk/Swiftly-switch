@@ -100,7 +100,7 @@ public class EdgeGestureService extends Service {
     private ExpandStatusBarView expandView, homeView, backView;
     private Vibrator vibrator;
     private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl;
-    private long holdTime = 1300, firstTouchTime;
+    private long holdTime = 1000, firstTouchTime;
     private boolean touched = false, switched = false, itemSwitched = false;
 
 
@@ -444,10 +444,10 @@ public class EdgeGestureService extends Service {
                     if (packageToSwitch != -1) {
                         int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK |
                                 Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
-                        Intent extApp;
-                        if (!switched){
+                        Intent extApp = null;
+                        if (!switched & packageToSwitch < packagename.length){
                             extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
-                        }else {
+                        }else if (switched & packageToSwitch < favoritePackageName.length){
                             extApp = getPackageManager().getLaunchIntentForPackage(favoritePackageName[packageToSwitch]);
                         }
 
