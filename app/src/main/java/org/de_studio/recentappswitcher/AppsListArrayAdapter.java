@@ -29,14 +29,15 @@ public class AppsListArrayAdapter extends BaseAdapter {
     private PackageManager packageManager;
     static private ArrayList<AppInfors> mAppInfosArrayList;
     static int mMode;
-    private static SharedPreferences sharedPreferenceFavorite;
+    private static SharedPreferences sharedPreferenceFavorite, sharedPreferenceExclude;
     public AppsListArrayAdapter(Context context, ArrayList<AppInfors> inforsArrayList, int mode){
         super();
         this.context = context;
         mMode = mode;
         mAppInfosArrayList = inforsArrayList;
         packageManager = context.getPackageManager();
-        sharedPreferenceFavorite = context.getSharedPreferences(MainActivity.FAVORITE_SHAREDPREFERENCE,0);
+        sharedPreferenceFavorite = context.getSharedPreferences(MainActivity.FAVORITE_SHAREDPREFERENCE, 0);
+        sharedPreferenceExclude = context.getSharedPreferences(MainActivity.EXCLUDE_SHAREDPREFERENCE,0);
     }
 
     @Override
@@ -51,7 +52,35 @@ public class AppsListArrayAdapter extends BaseAdapter {
         ImageView icon = (ImageView) returnView.findViewById(R.id.add_favorite_list_item_image_view);
         TextView label = (TextView) returnView.findViewById(R.id.add_favorite_list_item_label_text_view);
         CheckBox checkBox = (CheckBox) returnView.findViewById(R.id.add_favorite_list_item_check_box);
-        if (mMode == AddFavoriteAppsDialogFragment.FAVORITE_MODE){
+        if (mMode == AddFavoriteAppsDialogFragment.EXCLUDE_MODE){
+            if (sharedPreferenceExclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,new HashSet<String>()).contains(appInfors.packageName)){
+                checkBox.setChecked(true);
+            }
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    String packageName = appInfors.packageName;
+                    Set<String> set = sharedPreferenceExclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,null);
+                    if (set == null){
+                        set = new HashSet<String>();
+                    }
+                    if (isChecked & packageName !=null){
+                            set.add(packageName);
+                            sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,set).commit();
+
+
+
+                    }else if (!isChecked & packageName!= null){
+                        if (set.contains(packageName)){
+                            set.remove(packageName);
+                            sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,set).commit();
+                        }
+                    }
+                    Log.e(LOG_TAG,"size of set = " + set.size());
+
+                }
+            });
+        }else if (mMode == AddFavoriteAppsDialogFragment.FAVORITE_MODE){
             if (sharedPreferenceFavorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY,new HashSet<String>()).contains(appInfors.packageName)){
                 checkBox.setChecked(true);
             }

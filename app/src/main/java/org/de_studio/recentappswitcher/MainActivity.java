@@ -186,14 +186,27 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 AddFavoriteAppsDialogFragment newFragment = new AddFavoriteAppsDialogFragment();
-                if (mAppInforsArrayList!= null){
+                if (mAppInforsArrayList != null) {
                     newFragment.setAppInforsArrayList(mAppInforsArrayList, AddFavoriteAppsDialogFragment.FAVORITE_MODE);
-                    newFragment.show(fragmentManager,"addAppDialog");
+                    newFragment.show(fragmentManager, "addAppDialog");
                 }
 
             }
         });
         setFavoriteView();
+
+        ImageButton editExcludeButton = (ImageButton) findViewById(R.id.main_exclude_edit_image_button);
+        editExcludeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                AddFavoriteAppsDialogFragment newFragment = new AddFavoriteAppsDialogFragment();
+                if (mAppInforsArrayList != null) {
+                    newFragment.setAppInforsArrayList(mAppInforsArrayList, AddFavoriteAppsDialogFragment.EXCLUDE_MODE);
+                    newFragment.show(fragmentManager, "excludeDialogFragment");
+                }
+            }
+        });
 
 
     }
