@@ -34,6 +34,7 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
@@ -98,6 +99,8 @@ public class EdgeGestureService extends Service {
     private ExpandStatusBarView expandView, homeView, backView;
     private Vibrator vibrator;
     private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl;
+    private long holdTime = 1300, firstTouchTime;
+    private boolean touched = false, switched = false;
 
 
     @Nullable
@@ -263,6 +266,7 @@ public class EdgeGestureService extends Service {
             int[] expandSpec;// left, top, right, bottom
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    switched = false;
                     x_init_cord = x_cord;
                     y_init_cord = y_cord - getYOffset(y_cord);
                     expandSpec = Utility.getExpandSpec(x_init_cord, y_init_cord, icon_distance, 35, windowManager);
@@ -488,6 +492,27 @@ public class EdgeGestureService extends Service {
                 case MotionEvent.ACTION_MOVE:
                     int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
                     int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, windowManager);
+                    if (iconToSwitch!= -1){
+                        if (!touched){
+                            firstTouchTime = System.currentTimeMillis();
+                            touched = true;
+                        }else {
+                            if (!switched){
+                                long currentTime = System.currentTimeMillis();
+                                long eslapeTime = currentTime - firstTouchTime;
+                                if (eslapeTime  > holdTime){
+                                    switched = true;
+                                    Toast.makeText(getApplicationContext(),"switch to favorite apps",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                        }
+                    }else {
+                        touched = false;
+                    }
+
+
+
 
                     if (iconToSwitch != -1 | moveToHomeBackNoti > 0) {
                         if (!hasVibrate) {
@@ -518,7 +543,7 @@ public class EdgeGestureService extends Service {
                         }
                         hasOneActive = false;
                     }
-                    Log.e(LOG_TAG, "movetoHomeBackNoti = " + moveToHomeBackNoti);
+//                    Log.e(LOG_TAG, "movetoHomeBackNoti = " + moveToHomeBackNoti);
                     switch (moveToHomeBackNoti) {
                         case 0:
                             homeView.setVisibility(View.INVISIBLE);
