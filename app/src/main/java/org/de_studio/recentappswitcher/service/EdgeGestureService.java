@@ -328,7 +328,7 @@ public class EdgeGestureService extends Service {
                             ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                             ComponentName componentName = taskInfo.baseActivity;
                             String packName = componentName.getPackageName();
-                            if (i!= 0 & !packName.equals(launcherPackagename)){
+                            if (i!= 0 & !packName.equals(launcherPackagename) & !excludeSet.contains(packName)){
                                 tempPackageName.add(packName);
                             }
                         }
@@ -368,7 +368,8 @@ public class EdgeGestureService extends Service {
                                         //do nothing
                                     }else if (packa.contains("systemui") |
                                             packa.contains("googlequicksearchbox") |
-                                            key == mySortedMap.firstKey()){
+                                            key == mySortedMap.firstKey() |
+                                            excludeSet.contains(packa)){
                                         // do nothing
                                     }else tempPackageName.add(packa);
                                 }catch (PackageManager.NameNotFoundException e){
@@ -433,7 +434,8 @@ public class EdgeGestureService extends Service {
 //                            } else Log.e(LOG_TAG, " error in mySortedMap");
 //                        }
                         for (int i = 0; i < 6; i++) {
-                            if (i >= packagename.length | packagename[i] == null) {
+                            if (i >= packagename.length) {
+//                                if (packagename[i]==null)
                                 listIcon.get(i).setImageDrawable(null);
                             } else {
                                 try {
