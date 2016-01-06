@@ -443,10 +443,15 @@ public class EdgeGestureService extends Service {
                     itemView.removeView(backView);
                     int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
                     if (packageToSwitch != -1) {
-
                         int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK |
                                 Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
-                        Intent extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
+                        Intent extApp;
+                        if (!switched){
+                            extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
+                        }else {
+                            extApp = getPackageManager().getLaunchIntentForPackage(favoritePackageName[packageToSwitch]);
+                        }
+
                         if (extApp != null) {
                             extApp.addCategory(Intent.CATEGORY_LAUNCHER);
                             extApp.setAction(Intent.ACTION_MAIN);
