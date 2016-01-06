@@ -324,7 +324,6 @@ public class EdgeGestureService extends Service {
                         List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
 
                         ArrayList<String> tempPackageName = new ArrayList<String>();
-                        int numberOfNullTemp = 0;
                         for (int i = 0; i< list.size(); i++){
                             ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                             ComponentName componentName = taskInfo.baseActivity;
@@ -349,99 +348,90 @@ public class EdgeGestureService extends Service {
                                     }
                                 }
                             }
-
-//                        String[] tempPackagename = new String[list.size() - 1];
-//                        int numOfException = 0;
-//                        if (list != null) {
-//                            for (int i = 1; i < list.size(); i++) {
-//                                ActivityManager.RunningTaskInfo taskInfo = list.get(i);
-//                                ComponentName componentName = taskInfo.baseActivity;
-//                                String packName = componentName.getPackageName();
-//                                if (launcherPackagename != null & packName.equals(launcherPackagename)) {
-//                                    Log.e(LOG_TAG, "category = home");
-//                                    tempPackagename[i - 1] = null;
-//                                    numOfException++;
-//                                } else tempPackagename[i - 1] = componentName.getPackageName();
-//                            }
-//                            packagename = new String[tempPackagename.length - numOfException];
-//                            int j = 0;
-//                            for (int i = 0; i < packagename.length; i++) {
-//                                while (packagename[i] == null) {
-//                                    if (tempPackagename[i + j] != null) {
-//                                        packagename[i] = tempPackagename[i + j];
-//
-//                                    } else j++;
-//                                }
-//                            }
-//                            for (int i = 0; i < 6; i++) {
-//                                if (i >= packagename.length) {
-//                                    listIcon.get(i).setImageDrawable(null);
-//                                } else {
-//                                    try {
-//                                        Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
-//                                        ImageView iconi = listIcon.get(i);
-//                                        iconi.setImageDrawable(icon);
-//                                    } catch (PackageManager.NameNotFoundException e) {
-//                                        Log.e(LOG_TAG, "NameNotFound" + e);
-//                                    }
-//                                }
-//                            }
-//                        }
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
                         long time = System.currentTimeMillis();
                         List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 1000, time);
-                        int numOfTask = 6;
-                        packagename = new String[6];
-                        String[] tempPackagename = new String[15];
-                        int j = 0;
-                        int numbOfException = 0;
-                        if (stats != null) {
+                        ArrayList<String> tempPackageName = new ArrayList<String>();
+                        if (stats != null){
                             SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
                             for (UsageStats usageStats : stats) {
                                 mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
                             }
-                            if (!mySortedMap.isEmpty()) {
-                                Set<Long> setKey = mySortedMap.keySet();
-                                for (Long key : setKey) {
-                                    if (j < tempPackagename.length) {
-                                        UsageStats usageStats = mySortedMap.get(key);
-                                        String packa = usageStats.getPackageName();
-                                        try {
-                                            if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
-                                                tempPackagename[j] = null;
-                                                numbOfException++;
-
-                                            } else if (packa.contains("systemui")
-                                                    | packa.contains("googlequicksearchbox")
-                                                    | key == mySortedMap.firstKey()) {
-                                                tempPackagename[j] = null;
-                                                numbOfException++;
-                                            } else {
-                                                tempPackagename[j] = packa;
-                                            }
-                                        } catch (PackageManager.NameNotFoundException e) {
-                                            Log.e(LOG_TAG, "packageName not found" + e);
-                                        }
-                                        j++;
-                                    }
-
-                                    Log.e(LOG_TAG, mySortedMap.get(key).getPackageName());
+                            Set<Long> setKey = mySortedMap.keySet();
+                            for (Long key : setKey){
+                                UsageStats usageStats = mySortedMap.get(key);
+                                String packa = usageStats.getPackageName();
+                                try {
+                                    if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")){
+                                        //do nothing
+                                    }else if (packa.contains("systemui") |
+                                            packa.contains("googlequicksearchbox") |
+                                            key == mySortedMap.firstKey()){
+                                        // do nothing
+                                    }else tempPackageName.add(packa);
+                                }catch (PackageManager.NameNotFoundException e){
+                                    Log.e(LOG_TAG,"name not found" + e);
                                 }
-                                int k = 0;
-                                int l = 0;
-                                while (packagename[5] == null & l < tempPackagename.length) {
-                                    if (tempPackagename[l] != null) {
-                                        packagename[k] = tempPackagename[l];
-                                        k++;
-                                        l++;
-                                    } else {
-                                        l++;
-                                    }
-                                }
-                            } else Log.e(LOG_TAG, " error in mySortedMap");
-                        }
+
+                            }
+                            packagename = new String[tempPackageName.size()];
+                            tempPackageName.toArray(packagename);
+
+
+                        }else Log.e(LOG_TAG, "erros in mySortedMap");
+
+//                        int numOfTask = 6;
+//                        packagename = new String[6];
+//                        String[] tempPackagename = new String[15];
+//                        int j = 0;
+//                        int numbOfException = 0;
+//                        if (stats != null) {
+//                            SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
+//                            for (UsageStats usageStats : stats) {
+//                                mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
+//                            }
+//                            if (!mySortedMap.isEmpty()) {
+//                                Set<Long> setKey = mySortedMap.keySet();
+//                                for (Long key : setKey) {
+//                                    if (j < tempPackagename.length) {
+//                                        UsageStats usageStats = mySortedMap.get(key);
+//                                        String packa = usageStats.getPackageName();
+//                                        try {
+//                                            if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
+//                                                tempPackagename[j] = null;
+//                                                numbOfException++;
+//
+//                                            } else if (packa.contains("systemui")
+//                                                    | packa.contains("googlequicksearchbox")
+//                                                    | key == mySortedMap.firstKey()) {
+//                                                tempPackagename[j] = null;
+//                                                numbOfException++;
+//                                            } else {
+//                                                tempPackagename[j] = packa;
+//                                            }
+//                                        } catch (PackageManager.NameNotFoundException e) {
+//                                            Log.e(LOG_TAG, "packageName not found" + e);
+//                                        }
+//                                        j++;
+//                                    }
+//
+//                                    Log.e(LOG_TAG, mySortedMap.get(key).getPackageName());
+//                                }
+//                                int k = 0;
+//                                int l = 0;
+//                                while (packagename[5] == null & l < tempPackagename.length) {
+//                                    if (tempPackagename[l] != null) {
+//                                        packagename[k] = tempPackagename[l];
+//                                        k++;
+//                                        l++;
+//                                    } else {
+//                                        l++;
+//                                    }
+//                                }
+//                            } else Log.e(LOG_TAG, " error in mySortedMap");
+//                        }
                         for (int i = 0; i < 6; i++) {
                             if (i >= packagename.length | packagename[i] == null) {
                                 listIcon.get(i).setImageDrawable(null);
