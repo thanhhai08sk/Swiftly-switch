@@ -44,6 +44,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
@@ -86,7 +87,7 @@ public class EdgeGestureService extends Service {
     public int edge_y;
     public int edge_centre_y;
     private List<AppCompatImageView> list_icon_1, list_icon_2;
-    private String[] packagename;
+    private String[] packagename, favoritePackageName;
     private String launcherPackagename;
     private int[] x, y;
     private int numOfIcon;
@@ -112,6 +113,9 @@ public class EdgeGestureService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Set<String> set = defaultShared.getStringSet(EdgeSettingDialogFragment.DEFAULT_FAVORITE_KEY, new HashSet<String>());
+        favoritePackageName = new String[set.size()];
+        set.toArray(favoritePackageName);
         defaultShared = getApplicationContext().getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
         launcherIntent.addCategory(Intent.CATEGORY_HOME);
