@@ -23,7 +23,7 @@ import java.util.Set;
 /**
  * Created by hai on 1/5/2016.
  */
-public class AddFavoriteAppsDialogFragment extends DialogFragment {
+public class FavoriteOrExcludeDialogFragment extends DialogFragment {
     public static final String APP_INFORS_KEY = "app_infors";
     public static final int FAVORITE_MODE = 1;
     public static final int EXCLUDE_MODE = 2;

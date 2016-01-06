@@ -185,9 +185,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                AddFavoriteAppsDialogFragment newFragment = new AddFavoriteAppsDialogFragment();
+                FavoriteOrExcludeDialogFragment newFragment = new FavoriteOrExcludeDialogFragment();
                 if (mAppInforsArrayList != null) {
-                    newFragment.setAppInforsArrayList(mAppInforsArrayList, AddFavoriteAppsDialogFragment.FAVORITE_MODE);
+                    newFragment.setAppInforsArrayList(mAppInforsArrayList, FavoriteOrExcludeDialogFragment.FAVORITE_MODE);
                     newFragment.show(fragmentManager, "addAppDialog");
                 }
 
@@ -200,9 +200,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                AddFavoriteAppsDialogFragment newFragment = new AddFavoriteAppsDialogFragment();
+                FavoriteOrExcludeDialogFragment newFragment = new FavoriteOrExcludeDialogFragment();
                 if (mAppInforsArrayList != null) {
-                    newFragment.setAppInforsArrayList(mAppInforsArrayList, AddFavoriteAppsDialogFragment.EXCLUDE_MODE);
+                    newFragment.setAppInforsArrayList(mAppInforsArrayList, FavoriteOrExcludeDialogFragment.EXCLUDE_MODE);
                     newFragment.show(fragmentManager, "excludeDialogFragment");
                 }
             }

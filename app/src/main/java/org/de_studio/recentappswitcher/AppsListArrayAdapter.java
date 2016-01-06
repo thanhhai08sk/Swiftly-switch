@@ -52,7 +52,7 @@ public class AppsListArrayAdapter extends BaseAdapter {
         ImageView icon = (ImageView) returnView.findViewById(R.id.add_favorite_list_item_image_view);
         TextView label = (TextView) returnView.findViewById(R.id.add_favorite_list_item_label_text_view);
         CheckBox checkBox = (CheckBox) returnView.findViewById(R.id.add_favorite_list_item_check_box);
-        if (mMode == AddFavoriteAppsDialogFragment.EXCLUDE_MODE){
+        if (mMode == FavoriteOrExcludeDialogFragment.EXCLUDE_MODE){
             if (sharedPreferenceExclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,new HashSet<String>()).contains(appInfors.packageName)){
                 checkBox.setChecked(true);
             }
@@ -80,7 +80,7 @@ public class AppsListArrayAdapter extends BaseAdapter {
 
                 }
             });
-        }else if (mMode == AddFavoriteAppsDialogFragment.FAVORITE_MODE){
+        }else if (mMode == FavoriteOrExcludeDialogFragment.FAVORITE_MODE){
             if (sharedPreferenceFavorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY,new HashSet<String>()).contains(appInfors.packageName)){
                 checkBox.setChecked(true);
             }
