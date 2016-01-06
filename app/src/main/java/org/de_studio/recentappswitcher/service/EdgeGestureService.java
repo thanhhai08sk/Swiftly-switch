@@ -113,7 +113,6 @@ public class EdgeGestureService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        defaultShared = getApplicationContext().getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         Set<String> set = defaultShared.getStringSet(EdgeSettingDialogFragment.DEFAULT_FAVORITE_KEY, new HashSet<String>());
         favoritePackageName = new String[set.size()];
         set.toArray(favoritePackageName);
@@ -648,6 +647,7 @@ public class EdgeGestureService extends Service {
     public void onCreate() {
         super.onCreate();
         mScale = getResources().getDisplayMetrics().density;
+        defaultShared = getApplicationContext().getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         sharedPreferences1 = getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE, 0);
         sharedPreferences2 = getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
         edge_1_height = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
@@ -660,6 +660,10 @@ public class EdgeGestureService extends Service {
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, "Left centre"), getApplicationContext());
         ovalOffSet = (int) (25 * mScale);
         ovalRadiusPlusPxl = (int)(ovalRadiusPlus *mScale);
+
+        Set<String> set = defaultShared.getStringSet(EdgeSettingDialogFragment.DEFAULT_FAVORITE_KEY, new HashSet<String>());
+        favoritePackageName = new String[set.size()];
+        set.toArray(favoritePackageName);
         Log.e(LOG_TAG, "onCreate service");
     }
 

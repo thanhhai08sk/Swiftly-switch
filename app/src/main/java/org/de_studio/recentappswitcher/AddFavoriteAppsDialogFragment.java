@@ -1,6 +1,8 @@
 package org.de_studio.recentappswitcher;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ListView;
+
+import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -51,6 +55,13 @@ public class AddFavoriteAppsDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getContext().stopService(new Intent(getContext(), EdgeGestureService.class));
 
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        getContext().startService(new Intent(getContext(),EdgeGestureService.class));
     }
 }
