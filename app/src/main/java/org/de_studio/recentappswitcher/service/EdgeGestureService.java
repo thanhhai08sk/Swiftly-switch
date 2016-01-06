@@ -77,7 +77,7 @@ public class EdgeGestureService extends Service {
     private FrameLayout item1View, item2View;
     public int icon_height = 48;
     public int icon_width = 48, icon_rad = 24;
-    public int icon_distance = 115, distance_to_arc = 35, distance_to_arc_pxl;
+    public int icon_distance = 110, distance_to_arc = 35, distance_to_arc_pxl;
     public float icon_distance_pxl, icon_24dp_in_pxls;
     public int edge_height = 150;
     public int edge_1_height, edge_2_height;
