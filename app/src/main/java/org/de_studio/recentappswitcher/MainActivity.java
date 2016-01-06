@@ -46,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
     public static final String DEFAULT_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_sharedpreferences";
     private SharedPreferences sharedPreferences1, sharedPreferences2, sharedPreferencesDefautl;
     private ArrayList<AppInfors> mAppInforsArrayList;
+    Button step1Button;
+    TextView step1Text;
+    TextView step2Text;
+    Button step2Button;
+    Button step1GoToSettingButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences2 = getSharedPreferences(EDGE_2_SHAREDPREFERENCE, 0);
         sharedPreferencesDefautl = getSharedPreferences(DEFAULT_SHAREDPREFERENCE, 0);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        Button step1Button = (Button) findViewById(R.id.step1_button);
+        step1Button = (Button) findViewById(R.id.step1_button);
         Switch edge1Switch = (Switch) findViewById(R.id.edge_1_switch);
         Switch edge2Switch = (Switch) findViewById(R.id.edge_2_switch);
         edge1Switch.setChecked(sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true));
@@ -81,10 +86,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        final Button step2Button = (Button) findViewById(R.id.step2_button);
-        final TextView step1Text = (TextView) findViewById(R.id.step_1_text);
-        final TextView step2Text = (TextView) findViewById(R.id.step_2_text);
-        final Button step1GoToSettingButton = (Button) findViewById(R.id.step1_go_to_setting_button);
+        step2Button = (Button) findViewById(R.id.step2_button);
+        step1Text = (TextView) findViewById(R.id.step_1_text);
+        step2Text = (TextView) findViewById(R.id.step_2_text);
+        step1GoToSettingButton = (Button) findViewById(R.id.step1_go_to_setting_button);
         final Button step2GoToSettingButton = (Button) findViewById(R.id.step2_go_to_setting_button);
         final FrameLayout stepTextFrame = (FrameLayout) findViewById(R.id.step_text_frame_layout);
         ImageButton edge1SettingButton = (ImageButton) findViewById(R.id.edge_1_setting_image_button);
@@ -118,37 +123,7 @@ public class MainActivity extends AppCompatActivity {
                         .addToBackStack(null).commit();
             }
         });
-        boolean isStep1Ok;
-        boolean isStep2Ok;
-        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-        isStep2Ok = manager.isEnabled();
-        Log.e(LOG_TAG, "isStep2OK = " + isStep2Ok);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            isStep1Ok = true;
-            step1Text.setText(R.string.main_step1_text_for_kitkat_and_below);
-            step1Text.setPadding(0, 0, 0, 0);
-            step1GoToSettingButton.setVisibility(View.GONE);
-
-        } else {
-            AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-            int mode = appOps.checkOpNoThrow("android:get_usage_stats",
-                    android.os.Process.myUid(), getPackageName());
-            isStep1Ok = mode == AppOpsManager.MODE_ALLOWED;
-        }
-        if (isStep1Ok) {
-            step1Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_green));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                step1Text.setText(R.string.main_step1_text_success);
-            }
-
-        } else
-            step1Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_red));
-        if (isStep2Ok) {
-            step2Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_green));
-            step2Text.setText(R.string.main_step2_text_success);
-        } else {
-            step2Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_red));
-        }
+        setStepButtons();
 
 
         step1Button.setOnClickListener(new View.OnClickListener() {
@@ -244,6 +219,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setStepButtons();
+    }
+
     public void showDialog() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         EdgeSettingDialogFragment newFragment = new EdgeSettingDialogFragment();
@@ -294,6 +275,45 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void setStepButtons(){
+        boolean isStep1Ok;
+        boolean isStep2Ok;
+        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+        isStep2Ok = manager.isEnabled();
+        Log.e(LOG_TAG, "isStep2OK = " + isStep2Ok);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            isStep1Ok = true;
+            step1Text.setText(R.string.main_step1_text_for_kitkat_and_below);
+            step1Text.setPadding(0, 0, 0, 0);
+            step1GoToSettingButton.setVisibility(View.GONE);
+
+        } else {
+            AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+            int mode = appOps.checkOpNoThrow("android:get_usage_stats",
+                    android.os.Process.myUid(), getPackageName());
+            isStep1Ok = mode == AppOpsManager.MODE_ALLOWED;
+        }
+        if (isStep1Ok) {
+            step1Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_green));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                step1Text.setText(R.string.main_step1_text_success);
+            }
+
+        } else {
+            step1Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_red));
+            step1Text.setText(R.string.main_step1_text);
+        }
+
+        if (isStep2Ok) {
+            step2Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_green));
+            step2Text.setText(R.string.main_step2_text_success);
+        } else {
+            step2Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_red));
+            step2Text.setText(R.string.main_step2_text);
+        }
+    }
+
 
     private class LoadInstalledApp extends AsyncTask<Void, Void, ArrayList<AppInfors>> {
         protected ArrayList<AppInfors> doInBackground(Void... voids) {
