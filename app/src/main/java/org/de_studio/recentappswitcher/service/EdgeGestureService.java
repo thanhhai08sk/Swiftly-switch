@@ -95,7 +95,7 @@ public class EdgeGestureService extends Service {
     private boolean hasVibrate = false, hasHomwBackNotiVisible = false;
     private boolean isEdge1On, isEdge2On;
     public int numOfEdge, edge1Position, edge2Position;
-    private SharedPreferences defaultShared, sharedPreferences1, sharedPreferences2, sharedPreferences_favorite;
+    private SharedPreferences defaultShared, sharedPreferences1, sharedPreferences2, sharedPreferences_favorite, sharedPreferences_exclude;
     private AppCompatImageView[] icons1Image, icons2Image;
     private ExpandStatusBarView expandView, homeView, backView;
     private Vibrator vibrator;
@@ -121,7 +121,7 @@ public class EdgeGestureService extends Service {
         ResolveInfo res = getPackageManager().resolveActivity(launcherIntent, 0);
         if (res.activityInfo != null) {
             launcherPackagename = res.activityInfo.packageName;
-        }
+        }else launcherPackagename = "";
         numOfEdge = defaultShared.getInt("numOfEdge", 1);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -269,6 +269,7 @@ public class EdgeGestureService extends Service {
             int[] expandSpec;// left, top, right, bottom
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    Set<String> excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,new HashSet<String>());
                     switched = false;
                     itemSwitched = false;
                     x_init_cord = x_cord;
@@ -321,30 +322,21 @@ public class EdgeGestureService extends Service {
                             numOfTask = 8;
                         } else numOfTask = 7;
                         List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
-                        String[] tempPackagename = new String[list.size() - 1];
-                        int numOfException = 0;
-                        if (list != null) {
-                            for (int i = 1; i < list.size(); i++) {
-                                ActivityManager.RunningTaskInfo taskInfo = list.get(i);
-                                ComponentName componentName = taskInfo.baseActivity;
-                                String packName = componentName.getPackageName();
-                                if (launcherPackagename != null & packName.equals(launcherPackagename)) {
-                                    Log.e(LOG_TAG, "category = home");
-                                    tempPackagename[i - 1] = null;
-                                    numOfException++;
-                                } else tempPackagename[i - 1] = componentName.getPackageName();
-                            }
-                            packagename = new String[tempPackagename.length - numOfException];
-                            int j = 0;
-                            for (int i = 0; i < packagename.length; i++) {
-                                while (packagename[i] == null) {
-                                    if (tempPackagename[i + j] != null) {
-                                        packagename[i] = tempPackagename[i + j];
 
-                                    } else j++;
-                                }
+                        ArrayList<String> tempPackageName = new ArrayList<String>();
+                        int numberOfNullTemp = 0;
+                        for (int i = 0; i< list.size(); i++){
+                            ActivityManager.RunningTaskInfo taskInfo = list.get(i);
+                            ComponentName componentName = taskInfo.baseActivity;
+                            String packName = componentName.getPackageName();
+                            if (i!= 0 & !packName.equals(launcherPackagename)){
+                                tempPackageName.add(packName);
                             }
-                            for (int i = 0; i < 6; i++) {
+                        }
+                        packagename = new String[tempPackageName.size()];
+                        tempPackageName.toArray(packagename);
+
+                        for (int i = 0; i < 6; i++) {
                                 if (i >= packagename.length) {
                                     listIcon.get(i).setImageDrawable(null);
                                 } else {
@@ -357,7 +349,44 @@ public class EdgeGestureService extends Service {
                                     }
                                 }
                             }
-                        }
+
+//                        String[] tempPackagename = new String[list.size() - 1];
+//                        int numOfException = 0;
+//                        if (list != null) {
+//                            for (int i = 1; i < list.size(); i++) {
+//                                ActivityManager.RunningTaskInfo taskInfo = list.get(i);
+//                                ComponentName componentName = taskInfo.baseActivity;
+//                                String packName = componentName.getPackageName();
+//                                if (launcherPackagename != null & packName.equals(launcherPackagename)) {
+//                                    Log.e(LOG_TAG, "category = home");
+//                                    tempPackagename[i - 1] = null;
+//                                    numOfException++;
+//                                } else tempPackagename[i - 1] = componentName.getPackageName();
+//                            }
+//                            packagename = new String[tempPackagename.length - numOfException];
+//                            int j = 0;
+//                            for (int i = 0; i < packagename.length; i++) {
+//                                while (packagename[i] == null) {
+//                                    if (tempPackagename[i + j] != null) {
+//                                        packagename[i] = tempPackagename[i + j];
+//
+//                                    } else j++;
+//                                }
+//                            }
+//                            for (int i = 0; i < 6; i++) {
+//                                if (i >= packagename.length) {
+//                                    listIcon.get(i).setImageDrawable(null);
+//                                } else {
+//                                    try {
+//                                        Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
+//                                        ImageView iconi = listIcon.get(i);
+//                                        iconi.setImageDrawable(icon);
+//                                    } catch (PackageManager.NameNotFoundException e) {
+//                                        Log.e(LOG_TAG, "NameNotFound" + e);
+//                                    }
+//                                }
+//                            }
+//                        }
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
@@ -649,6 +678,7 @@ public class EdgeGestureService extends Service {
         mScale = getResources().getDisplayMetrics().density;
         defaultShared = getApplicationContext().getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         sharedPreferences_favorite = getApplicationContext().getSharedPreferences(MainActivity.FAVORITE_SHAREDPREFERENCE,0);
+        sharedPreferences_exclude = getApplicationContext().getSharedPreferences(MainActivity.EXCLUDE_SHAREDPREFERENCE,0);
         sharedPreferences1 = getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE, 0);
         sharedPreferences2 = getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
         edge_1_height = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
