@@ -33,4 +33,5 @@
     <string name="main_favorite_app_title">Favorite apps</string>
     <string name="limit_for_favorite_app_is_6">The limit for favorite app is 6!</string>
     <string name="main_exclude_app_title">Exclude apps</string>
+    <string name="please_add_favorite_item">Please add your favorite apps in the FAVORITE APP section</string>
 </resources>

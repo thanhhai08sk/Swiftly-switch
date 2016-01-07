@@ -338,7 +338,7 @@ public class EdgeGestureService extends Service {
                         tempPackageName.toArray(packagename);
                         for (int i = 0; i < 6; i++) {
                             if (i >= packagename.length) {
-                                listIcon.get(i).setImageDrawable(ContextCompat. getDrawable(getApplicationContext() , R.drawable.ic_add_circle_outline_white_48dp));
+                                listIcon.get(i).setImageDrawable(null);
                             } else {
                                 try {
                                     Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
@@ -385,7 +385,7 @@ public class EdgeGestureService extends Service {
                         } else Log.e(LOG_TAG, "erros in mySortedMap");
                         for (int i = 0; i < 6; i++) {
                             if (i >= packagename.length) {
-                                listIcon.get(i).setImageDrawable(ContextCompat. getDrawable(getApplicationContext() , R.drawable.ic_add_circle_outline_white_48dp));
+                                listIcon.get(i).setImageDrawable(null);
                             } else {
                                 try {
                                     Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
@@ -415,10 +415,18 @@ public class EdgeGestureService extends Service {
                         int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK |
                                 Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
                         Intent extApp = null;
-                        if (!switched & packageToSwitch < packagename.length) {
-                            extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
-                        } else if (switched & packageToSwitch < favoritePackageName.length) {
-                            extApp = getPackageManager().getLaunchIntentForPackage(favoritePackageName[packageToSwitch]);
+                        if (!switched) {
+                            if (packageToSwitch < packagename.length){
+                                extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
+                            }
+
+                        } else {
+                            if (packageToSwitch < favoritePackageName.length){
+                                extApp = getPackageManager().getLaunchIntentForPackage(favoritePackageName[packageToSwitch]);
+                            }else {
+                                Toast.makeText(getApplicationContext(),getString(R.string.please_add_favorite_item),Toast.LENGTH_LONG).show();
+                                showAddFavoriteDialog();
+                            }
                         }
 
                         if (extApp != null) {
@@ -497,7 +505,7 @@ public class EdgeGestureService extends Service {
                                 long eslapeTime = currentTime - firstTouchTime;
                                 if (eslapeTime > holdTime) {
                                     switched = true;
-                                    Toast.makeText(getApplicationContext(), "switch to favorite apps", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getApplicationContext(), "switch to favorite apps", Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -660,6 +668,10 @@ public class EdgeGestureService extends Service {
         } else if (y_init < distanceNeeded) {
             return y_init - distanceNeeded;
         } else return 0;
+    }
+
+    public void showAddFavoriteDialog(){
+        startActivity(new Intent(getApplicationContext(),MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
 }
