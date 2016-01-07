@@ -412,8 +412,9 @@ public class EdgeGestureService extends Service {
                     itemView.removeView(backView);
                     int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
                     if (packageToSwitch != -1) {
-                        int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK |
-                                Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
+//                        int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK |
+//                                Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
+                        int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK;
                         Intent extApp = null;
                         if (!switched) {
                             if (packageToSwitch < packagename.length){
