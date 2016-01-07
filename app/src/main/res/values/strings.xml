@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Recent App Switcher</string>
+    <string name="app_name">Swiftly switch</string>
     <string name="action_settings">Settings</string>
     <string name="edge_gesture_notification_title">Recent App Switcher</string>
     <string name="edge_gesture_notification_content_text">App running</string>
