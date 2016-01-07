@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -682,6 +683,13 @@ public class EdgeGestureService extends Service {
 
     public void showAddFavoriteDialog(){
         startActivity(new Intent(getApplicationContext(),MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+
+    public static class BootCompleteReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            context.startService(new Intent(context,EdgeGestureService.class));
+        }
     }
 
 }
