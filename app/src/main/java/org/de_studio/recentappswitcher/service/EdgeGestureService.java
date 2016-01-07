@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.service;
 
 import android.app.ActivityManager;
+import android.app.Notification;
 import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
@@ -18,6 +19,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
@@ -65,6 +67,7 @@ public class EdgeGestureService extends Service {
             } else return -1;
         }
     };
+    private static final int NOTIFICATION_ID = 111;
     float mScale;
     private int configuration = 0;
     static final String LOG_TAG = EdgeGestureService.class.getSimpleName();
@@ -243,6 +246,12 @@ public class EdgeGestureService extends Service {
 
         OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position, icons2Image, item2View, list_icon_2);
         edge2Image.setOnTouchListener(onTouchListener2);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(R.drawable.ic_stat_ic_looks_white_48dp1)
+                .setContentText(getString(R.string.notification_text));
+        Notification notificationCompat = builder.build();
+        startForeground(NOTIFICATION_ID,notificationCompat);
 
         return START_NOT_STICKY;
     }

@@ -35,4 +35,5 @@
     <string name="main_exclude_app_title">Exclude apps</string>
     <string name="please_add_favorite_item">Please add your favorite apps in the FAVORITE APP section</string>
     <string name="waite_a_secend_app_loading">Wait a second, app loading ...</string>
+    <string name="notification_text">Get annoying of this notification? Just long click at this notification -> app info -> turn off Show notification</string>
 </resources>
