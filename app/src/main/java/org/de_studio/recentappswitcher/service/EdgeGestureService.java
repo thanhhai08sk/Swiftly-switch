@@ -252,7 +252,7 @@ public class EdgeGestureService extends Service {
         builder.setSmallIcon(R.drawable.ic_stat_ic_looks_white_48dp1)
                 .setContentText(getString(R.string.notification_text));
         Notification notificationCompat = builder.build();
-        startForeground(NOTIFICATION_ID,notificationCompat);
+//        startForeground(NOTIFICATION_ID,notificationCompat);
 
         return START_NOT_STICKY;
     }
@@ -426,7 +426,7 @@ public class EdgeGestureService extends Service {
                     if (packageToSwitch != -1) {
 //                        int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK |
 //                                Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
-                        int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK;
+                        int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK ;
                         Intent extApp = null;
                         if (!switched) {
                             if (packageToSwitch < packagename.length){
