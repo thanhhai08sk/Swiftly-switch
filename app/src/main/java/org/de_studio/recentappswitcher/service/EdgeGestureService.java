@@ -359,6 +359,7 @@ public class EdgeGestureService extends Service {
                                 }
                             }
                         }
+                        if (packagename.length ==0) switched = true;
                     }
 
 
@@ -406,6 +407,7 @@ public class EdgeGestureService extends Service {
                                 }
                             }
                         }
+                        if (packagename.length ==0) switched = true;
                     }
                     numOfIcon = listIcon.size();
                     x = new int[numOfIcon];
