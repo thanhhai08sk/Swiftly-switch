@@ -315,6 +315,9 @@ public class EdgeGestureService extends Service {
                     paraItem.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
                     windowManager.addView(itemView, paraItem);
                     Utility.setIconsPosition(iconImage, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
+
+
+
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
                         int numOfTask;
@@ -322,7 +325,6 @@ public class EdgeGestureService extends Service {
                             numOfTask = 8;
                         } else numOfTask = 7;
                         List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
-
                         ArrayList<String> tempPackageName = new ArrayList<String>();
                         for (int i = 0; i < list.size(); i++) {
                             ActivityManager.RunningTaskInfo taskInfo = list.get(i);
@@ -334,10 +336,9 @@ public class EdgeGestureService extends Service {
                         }
                         packagename = new String[tempPackageName.size()];
                         tempPackageName.toArray(packagename);
-
                         for (int i = 0; i < 6; i++) {
                             if (i >= packagename.length) {
-                                listIcon.get(i).setImageDrawable(null);
+                                listIcon.get(i).setImageDrawable(ContextCompat. getDrawable(getApplicationContext() , R.drawable.ic_add_circle_outline_white_48dp));
                             } else {
                                 try {
                                     Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
@@ -349,6 +350,9 @@ public class EdgeGestureService extends Service {
                             }
                         }
                     }
+
+
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
                         long time = System.currentTimeMillis();
@@ -375,18 +379,13 @@ public class EdgeGestureService extends Service {
                                 } catch (PackageManager.NameNotFoundException e) {
                                     Log.e(LOG_TAG, "name not found" + e);
                                 }
-
                             }
                             packagename = new String[tempPackageName.size()];
                             tempPackageName.toArray(packagename);
-
-
                         } else Log.e(LOG_TAG, "erros in mySortedMap");
-
-
                         for (int i = 0; i < 6; i++) {
                             if (i >= packagename.length) {
-                                listIcon.get(i).setImageDrawable(null);
+                                listIcon.get(i).setImageDrawable(ContextCompat. getDrawable(getApplicationContext() , R.drawable.ic_add_circle_outline_white_48dp));
                             } else {
                                 try {
                                     Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
@@ -473,7 +472,7 @@ public class EdgeGestureService extends Service {
                     if (switched & !itemSwitched) {
                         for (int i = 0; i < 6; i++) {
                             if (i >= favoritePackageName.length) {
-                                listIcon.get(i).setImageDrawable(null);
+                                listIcon.get(i).setImageDrawable(ContextCompat. getDrawable(getApplicationContext() , R.drawable.ic_add_circle_outline_white_48dp));
                             } else {
                                 try {
                                     Drawable icon = getPackageManager().getApplicationIcon(favoritePackageName[i]);
