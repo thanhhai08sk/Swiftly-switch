@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
@@ -189,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                 if (mAppInforsArrayList != null) {
                     newFragment.setAppInforsArrayList(mAppInforsArrayList, FavoriteOrExcludeDialogFragment.FAVORITE_MODE);
                     newFragment.show(fragmentManager, "addAppDialog");
-                }
+                }else Toast.makeText(getApplicationContext(),R.string.waite_a_secend_app_loading,Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -204,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
                 if (mAppInforsArrayList != null) {
                     newFragment.setAppInforsArrayList(mAppInforsArrayList, FavoriteOrExcludeDialogFragment.EXCLUDE_MODE);
                     newFragment.show(fragmentManager, "excludeDialogFragment");
-                }
+                }else Toast.makeText(getApplicationContext(),R.string.waite_a_secend_app_loading,Toast.LENGTH_SHORT).show();
             }
         });
 
