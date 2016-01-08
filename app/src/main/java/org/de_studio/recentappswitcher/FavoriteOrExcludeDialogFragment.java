@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -32,18 +33,20 @@ public class FavoriteOrExcludeDialogFragment extends DialogFragment {
     static Set<PackageInfo> mInfos;
     static AppsListArrayAdapter adapter;
     static private ArrayList<AppInfors> appInforsArrayList;
+    static private Context mContext;
 
 
-    public void setAppInforsArrayList(ArrayList<AppInfors> set, int mode){
+    public void setAppInforsArrayList(ArrayList<AppInfors> set, int mode, Context context){
         appInforsArrayList = set;
         mMode = mode;
+        mContext = context;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mInfos = Utility.getInstalledApps(getContext());
-        adapter = new AppsListArrayAdapter(getContext(),appInforsArrayList, mMode);
+        mInfos = Utility.getInstalledApps(mContext);
+        adapter = new AppsListArrayAdapter(mContext,appInforsArrayList, mMode);
         View rootView = inflater.inflate(R.layout.add_favorite_app_fragment_list_view,container);
         mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
         mListView.setAdapter(adapter);
@@ -61,14 +64,16 @@ public class FavoriteOrExcludeDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getContext().stopService(new Intent(getContext(), EdgeGestureService.class));
+//        getContext().stopService(new Intent(getContext(), EdgeGestureService.class));
+        mContext.stopService(new Intent(mContext,EdgeGestureService.class));
+
 
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        getContext().startService(new Intent(getContext(), EdgeGestureService.class));
+        mContext.startService(new Intent(mContext, EdgeGestureService.class));
         Activity mainActivity = getActivity();
         if (mainActivity instanceof MainActivity){
             ((MainActivity) mainActivity).setFavoriteView();

@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,8 +13,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -178,17 +177,6 @@ public class MainActivity extends Activity {
                 startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
             }
         });
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                showDialog();
-
-            }
-        });
         startService(new Intent(this, EdgeGestureService.class));
 
         ImageButton addFavoriteButton = (ImageButton) findViewById(R.id.main_favorite_add_app_image_button);
@@ -199,7 +187,7 @@ public class MainActivity extends Activity {
                 android.app.FragmentManager fragmentManager = getFragmentManager();
                 FavoriteOrExcludeDialogFragment newFragment = new FavoriteOrExcludeDialogFragment();
                 if (mAppInforsArrayList != null) {
-                    newFragment.setAppInforsArrayList(mAppInforsArrayList, FavoriteOrExcludeDialogFragment.FAVORITE_MODE);
+                    newFragment.setAppInforsArrayList(mAppInforsArrayList, FavoriteOrExcludeDialogFragment.FAVORITE_MODE,getApplicationContext());
                     newFragment.show(fragmentManager, "addAppDialog");
                 }else Toast.makeText(getApplicationContext(),R.string.waite_a_secend_app_loading,Toast.LENGTH_SHORT).show();
 
@@ -215,7 +203,7 @@ public class MainActivity extends Activity {
                 android.app.FragmentManager fragmentManager = getFragmentManager();
                 FavoriteOrExcludeDialogFragment newFragment = new FavoriteOrExcludeDialogFragment();
                 if (mAppInforsArrayList != null) {
-                    newFragment.setAppInforsArrayList(mAppInforsArrayList, FavoriteOrExcludeDialogFragment.EXCLUDE_MODE);
+                    newFragment.setAppInforsArrayList(mAppInforsArrayList, FavoriteOrExcludeDialogFragment.EXCLUDE_MODE,getApplicationContext());
                     newFragment.show(fragmentManager, "excludeDialogFragment");
                 } else
                     Toast.makeText(getApplicationContext(), R.string.waite_a_secend_app_loading, Toast.LENGTH_SHORT).show();
@@ -235,6 +223,21 @@ public class MainActivity extends Activity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // do nothing
+                            }
+                        });
+                builder.show();
+            }
+        });
+        excludeInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(getString(R.string.main_exclude_info_title))
+                        .setMessage(R.string.main_exclude_app_info)
+                        .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //do nothing
                             }
                         });
                 builder.show();

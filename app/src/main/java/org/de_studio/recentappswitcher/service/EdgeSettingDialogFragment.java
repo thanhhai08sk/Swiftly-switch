@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.service;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -37,20 +38,23 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     private  float mScale;
     private static SharedPreferences sharedPreferences;
     private ViewGroup.LayoutParams mEdgeParas;
+    private Context mContext;
 
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);
         edgeNumber = args.getInt(EDGE_NUMBER_KEY,1);
+
     }
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (edgeNumber ==1){
-            sharedPreferences = getContext().getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE,0);
+            sharedPreferences = mContext.getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE, 0);
         }else if (edgeNumber ==2){
-            sharedPreferences = getContext().getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE,0);
+            sharedPreferences = mContext.getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
         }
         Log.e(LOG_TAG,"edge number = " + edgeNumber);
         if (sharedPreferences == null){
@@ -176,7 +180,8 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getContext().stopService(new Intent(getContext(), EdgeGestureService.class));
+        mContext =  getActivity();
+        mContext.stopService(new Intent(mContext, EdgeGestureService.class));
 
         mScale = getResources().getDisplayMetrics().density;
     }
@@ -185,6 +190,6 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public void onDestroyView() {
         super.onDestroyView();
         Log.e(LOG_TAG, sharedPreferences.getString(EDGE_POSITION_KEY, "null") + "\n" + sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 0) + "\n" + sharedPreferences.getInt(EDGE_LENGTH_KEY, 0));
-        getContext().startService(new Intent(getContext(),EdgeGestureService.class));
+        mContext.startService(new Intent(mContext, EdgeGestureService.class));
     }
 }
