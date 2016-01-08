@@ -20,6 +20,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_configuration"
+            android:textSize="20sp"
+            android:paddingTop="16dp"
+            android:paddingBottom="5dp"
+            android:textColor="@color/white" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,7 +64,8 @@
                 android:id="@+id/step_1_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="65dp"
+                android:paddingBottom="60dp"
+                android:minHeight="110dp"
                 android:text="@string/main_step1_information"
                 android:textColor="@color/white" />
 
@@ -63,7 +73,8 @@
                 android:id="@+id/step_2_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="65dp"
+                android:paddingBottom="60dp"
+                android:minHeight="110dp"
                 android:text="@string/main_step2_information"
                 android:textColor="@color/white"
                 android:visibility="gone" />
@@ -73,8 +84,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/round_button_4pt"
                 android:text="@string/main_go_to_setting"
                 android:textAllCaps="false"
@@ -85,8 +96,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/round_button_4pt"
                 android:text="@string/main_go_to_setting"
                 android:textAllCaps="false"
@@ -98,6 +109,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/main_set_the_edge"
+            android:textSize="20sp"
+            android:paddingTop="16dp"
+            android:paddingBottom="5dp"
             android:textColor="@color/white" />
 
         <LinearLayout
@@ -189,10 +203,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
+                    android:id="@+id/main_favorite_info_image_button"
+                    android:background="@color/transparent"
+                    android:src="@drawable/ic_info_outline_white_24dp"
+                    android:paddingRight="16dp"
+                    />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
                     android:id="@+id/main_favorite_add_app_image_button"
                     android:background="@color/transparent"
                     android:src="@drawable/ic_edit_white_24dp"
-                    android:paddingRight="16dp"
+                    android:paddingRight="5dp"
                     />
 
             </LinearLayout>
@@ -365,6 +388,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:background="@drawable/round_button_4pt"
             >
 
@@ -378,10 +404,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
+                android:id="@+id/main_exclude_info_image_button"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_info_outline_white_24dp"
+                android:paddingRight="16dp"
+                />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
                 android:id="@+id/main_exclude_edit_image_button"
                 android:background="@color/transparent"
                 android:src="@drawable/ic_edit_white_24dp"
-                android:paddingRight="16dp"
+                android:paddingRight="5dp"
                 />
 
         </LinearLayout>

@@ -1,7 +1,9 @@
 package org.de_studio.recentappswitcher;
 
+import android.app.Activity;
 import android.app.AppOpsManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -12,10 +14,8 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -38,7 +38,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     public static final String EDGE_1_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_2_shared_preference";
@@ -51,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
     TextView step1Text;
     TextView step2Text;
     Button step2Button;
-    Button step1GoToSettingButton;
+    Button step1GoToSettingButton, step2GoToSettingButton;
+    TextView descriptionText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferencesDefautl = getSharedPreferences(DEFAULT_SHAREDPREFERENCE, 0);
         sharedPreferences_favorite = getSharedPreferences(FAVORITE_SHAREDPREFERENCE,0);
         sharedPreferences_exclude = getSharedPreferences(EXCLUDE_SHAREDPREFERENCE,0);
+        descriptionText = (TextView) findViewById(R.id.main_description_text_view);
         step1Button = (Button) findViewById(R.id.step1_button);
         Switch edge1Switch = (Switch) findViewById(R.id.edge_1_switch);
         Switch edge2Switch = (Switch) findViewById(R.id.edge_2_switch);
@@ -92,19 +94,23 @@ public class MainActivity extends AppCompatActivity {
         step1Text = (TextView) findViewById(R.id.step_1_text);
         step2Text = (TextView) findViewById(R.id.step_2_text);
         step1GoToSettingButton = (Button) findViewById(R.id.step1_go_to_setting_button);
-        final Button step2GoToSettingButton = (Button) findViewById(R.id.step2_go_to_setting_button);
+        step2GoToSettingButton = (Button) findViewById(R.id.step2_go_to_setting_button);
+        ImageButton favoriteInfoButton = (ImageButton) findViewById(R.id.main_favorite_info_image_button);
+        ImageButton excludeInfoButton = (ImageButton) findViewById(R.id.main_exclude_info_image_button);
         final FrameLayout stepTextFrame = (FrameLayout) findViewById(R.id.step_text_frame_layout);
         ImageButton edge1SettingButton = (ImageButton) findViewById(R.id.edge_1_setting_image_button);
         ImageButton edge2SettingButton = (ImageButton) findViewById(R.id.edge_2_setting_image_button);
         edge1SettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+                android.app.FragmentManager fragmentManager = getFragmentManager();
                 EdgeSettingDialogFragment newFragment = new EdgeSettingDialogFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt(EdgeSettingDialogFragment.EDGE_NUMBER_KEY, 1);
                 newFragment.setArguments(bundle);
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
+//                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 transaction.add(android.R.id.content, newFragment)
                         .addToBackStack(null).commit();
@@ -114,18 +120,21 @@ public class MainActivity extends AppCompatActivity {
         edge2SettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+                android.app.FragmentManager fragmentManager = getFragmentManager();
                 EdgeSettingDialogFragment newFragment = new EdgeSettingDialogFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt(EdgeSettingDialogFragment.EDGE_NUMBER_KEY, 2);
                 newFragment.setArguments(bundle);
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
+//                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 transaction.add(android.R.id.content, newFragment)
                         .addToBackStack(null).commit();
+
             }
         });
-        setStepButtons();
+        setStepButtonAndDescription();
 
 
         step1Button.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +142,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 step1Text.setVisibility(View.VISIBLE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    step1GoToSettingButton.setVisibility(View.VISIBLE);
+                    if (isStep1Ok()){
+                        step2GoToSettingButton.setVisibility(View.GONE);
+                    }else step1GoToSettingButton.setVisibility(View.VISIBLE);
+
                 }
                 step2Text.setVisibility(View.GONE);
                 step2GoToSettingButton.setVisibility(View.GONE);
@@ -146,7 +158,10 @@ public class MainActivity extends AppCompatActivity {
                 step1Text.setVisibility(View.GONE);
                 step1GoToSettingButton.setVisibility(View.GONE);
                 step2Text.setVisibility(View.VISIBLE);
-                step2GoToSettingButton.setVisibility(View.VISIBLE);
+                if (isStep2Ok()) {
+                    step2GoToSettingButton.setVisibility(View.GONE);
+                } else step2GoToSettingButton.setVisibility(View.VISIBLE);
+
                 stepTextFrame.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.text_board_2_));
             }
         });
@@ -180,7 +195,8 @@ public class MainActivity extends AppCompatActivity {
         addFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+                android.app.FragmentManager fragmentManager = getFragmentManager();
                 FavoriteOrExcludeDialogFragment newFragment = new FavoriteOrExcludeDialogFragment();
                 if (mAppInforsArrayList != null) {
                     newFragment.setAppInforsArrayList(mAppInforsArrayList, FavoriteOrExcludeDialogFragment.FAVORITE_MODE);
@@ -195,15 +211,35 @@ public class MainActivity extends AppCompatActivity {
         editExcludeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+                android.app.FragmentManager fragmentManager = getFragmentManager();
                 FavoriteOrExcludeDialogFragment newFragment = new FavoriteOrExcludeDialogFragment();
                 if (mAppInforsArrayList != null) {
                     newFragment.setAppInforsArrayList(mAppInforsArrayList, FavoriteOrExcludeDialogFragment.EXCLUDE_MODE);
                     newFragment.show(fragmentManager, "excludeDialogFragment");
-                }else Toast.makeText(getApplicationContext(),R.string.waite_a_secend_app_loading,Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(getApplicationContext(), R.string.waite_a_secend_app_loading, Toast.LENGTH_SHORT).show();
             }
         });
+        step2GoToSettingButton.setVisibility(View.GONE);
 
+
+        favoriteInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                builder.setTitle(getString(R.string.main_favorite_info_title))
+                        .setMessage(R.string.main_favorite_app_info_text)
+                        .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        });
+                builder.show();
+            }
+        });
 
     }
 
@@ -219,16 +255,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setStepButtons();
+        setStepButtonAndDescription();
+        step2GoToSettingButton.setVisibility(View.GONE);
     }
 
     public void showDialog() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
         EdgeSettingDialogFragment newFragment = new EdgeSettingDialogFragment();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        transaction.add(android.R.id.content, newFragment)
-                .addToBackStack(null).commit();
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//        transaction.add(android.R.id.content, newFragment)
+//                .addToBackStack(null).commit();
+
+        android.app.FragmentManager fragmentManager1 = getFragmentManager();
+        android.app.FragmentTransaction transaction1 = fragmentManager1.beginTransaction();
+        transaction1.setTransition(android.app.FragmentTransaction.TRANSIT_ENTER_MASK);
+        transaction1.add(android.R.id.content,newFragment).addToBackStack(null).commit();
     }
 
     public void setFavoriteView(){
@@ -273,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setStepButtons(){
+    public void setStepButtonAndDescription(){
         boolean isStep1Ok;
         boolean isStep2Ok;
         AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
@@ -293,21 +335,33 @@ public class MainActivity extends AppCompatActivity {
         }
         if (isStep1Ok) {
             step1Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_green));
+            step1GoToSettingButton.setVisibility(View.GONE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 step1Text.setText(R.string.main_step1_text_success);
             }
 
         } else {
             step1Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_red));
-            step1Text.setText(R.string.main_step1_text);
+            step1Text.setText(R.string.main_step1_information);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                step1GoToSettingButton.setVisibility(View.VISIBLE);
+            }
         }
 
         if (isStep2Ok) {
             step2Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_green));
             step2Text.setText(R.string.main_step2_text_success);
+            step2GoToSettingButton.setVisibility(View.GONE);
+
         } else {
             step2Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_red));
-            step2Text.setText(R.string.main_step2_text);
+            step2Text.setText(R.string.main_step2_information);
+            step2GoToSettingButton.setVisibility(View.VISIBLE);
+        }
+
+        if (isStep1Ok & isStep2Ok){
+            descriptionText.setText("");
+            descriptionText.setVisibility(View.GONE);
         }
     }
 
@@ -339,6 +393,19 @@ public class MainActivity extends AppCompatActivity {
             mAppInforsArrayList = result;
         }
     }
+
+    private boolean isStep1Ok(){
+        AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+        int mode = appOps.checkOpNoThrow("android:get_usage_stats",
+                android.os.Process.myUid(), getPackageName());
+        return  mode == AppOpsManager.MODE_ALLOWED;
+
+    }
+    private boolean isStep2Ok(){
+        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+        return  manager.isEnabled();
+    }
+
 
 
 }

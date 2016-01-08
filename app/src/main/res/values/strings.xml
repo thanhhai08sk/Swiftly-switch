@@ -5,8 +5,8 @@
     <string name="edge_gesture_notification_content_text">App running</string>
     <string name="main_step1_text">Step 1: \nUsage stat</string>
     <string name="main_step2_text">Step 2: \nAccessibility</string>
-    <string name="main_step1_information">Step 1: Activate USAGE STAT permission.\n In order to collect information about your recent app, you need to set usage stat permission for this app </string>
-    <string name="main_step2_information">Step 2: Activate ACCESSIBILITY service.\nIn order to use the BACK and HOME function, you need to activate the accessibility service setting for this app</string>
+    <string name="main_step1_information">Step 1: Activate USAGE STAT permission.\nIn order for Swiftly switch to get your recent app, you need to turn on the USAGE STAT permission for this app.</string>
+    <string name="main_step2_information">Step 2: Activate ACCESSIBILITY service.\nTo use the navigation function(HOME, BACK) you need to turn on the Accessibility service for this app.</string>
     <string name="main_go_to_setting">Go to setting</string>
     <string name="main_set_the_edge">Set the edge</string>
     <string name="main_edge1_section_text">Edge 1</string>
@@ -30,12 +30,17 @@
     <string name="edge_dialog_default_button">Default</string>
     <string name="edge_dialog_cancel_button">Cancel</string>
     <string name="edge_dialog_ok_button">Ok</string>
-    <string name="main_favorite_app_title">Favorite apps</string>
+    <string name="main_favorite_app_title">Favorite apps:</string>
+    <string name="main_favorite_info_title">Favorite apps</string>
+    <string name="main_favorite_app_info_text">Apps that will be listed when you hold on the one of the recent apps icon for 1 second or when there are no recent app</string>
     <string name="limit_for_favorite_app_is_6">The limit for favorite app is 6!</string>
-    <string name="main_exclude_app_title">Exclude apps</string>
+    <string name="main_exclude_info_title">Exclude apps</string>
+    <string name="main_exclude_app_title">Exclude apps:</string>
+    <string name="main_exclude_app_info">Apps that will not be listed in the recent apps</string>
     <string name="please_add_favorite_item">Please add your favorite apps in the FAVORITE APP section</string>
     <string name="waite_a_secend_app_loading">Wait a second, app loading ...</string>
     <string name="notification_text">Get annoying? Just long click at this notification -> app info -> turn off Show notification</string>
     <string name="notification_title">Swiftly switch is running ...</string>
-    <string name="main_description_text">You need to complete 2 setting below before you can use this app!</string>
+    <string name="main_description_text">You need to complete 2 STEP setting below before you can use this app!</string>
+    <string name="main_configuration">Configuration</string>
 </resources>
