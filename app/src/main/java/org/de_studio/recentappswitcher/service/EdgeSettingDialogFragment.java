@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.app.DialogFragment;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.AppCompatSpinner;
 import android.util.Log;
@@ -62,7 +63,11 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         }
 
         View rootView = inflater.inflate(R.layout.edge_setting_dialog, container, false);
+
+        AppCompatButton defaultButton = (AppCompatButton) rootView.findViewById(R.id.edge_dialog_default_button);
+        AppCompatButton okButton = (AppCompatButton) rootView.findViewById(R.id.edge_dialog_ok_button);
         final ImageView edgeImage = (ImageView) rootView.findViewById(R.id.edge_dialog_edge_image_view);
+
         int currentLength = sharedPreferences.getInt(EDGE_LENGTH_KEY ,150);
         int currentSensitive = sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 12);
         mEdgeParas = edgeImage.getLayoutParams();
@@ -70,7 +75,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         mEdgeParas.width = (int) (currentSensitive * mScale);
         edgeImage.setLayoutParams(mEdgeParas);
         final TextView sensitiveNumberTextView = (TextView) rootView.findViewById(R.id.edge_dialog_sensitive_number_text);
-        AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
+        final AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
         String[] spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
         int spinnerCurrentPosition =1;
         for (int i =0; i<spinnerEntries.length; i++) {
@@ -114,7 +119,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
 
             }
         });
-        AppCompatSeekBar sensitiveSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.sensitive_seek_bar);
+        final AppCompatSeekBar sensitiveSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.sensitive_seek_bar);
         sensitiveSeekBar.setProgress(currentSensitive - 5);
         sensitiveNumberTextView.setText(currentSensitive + "dp");
         sensitiveSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -142,13 +147,14 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         });
 
 
-        AppCompatSeekBar lengthSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.length_seek_bar);
+        final AppCompatSeekBar lengthSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.length_seek_bar);
         lengthSeekBar.setProgress(currentLength - 75);
         final TextView edgeLengthNumberText = (TextView) rootView.findViewById(R.id.edge_dialog_length_number_view);
         edgeLengthNumberText.setText(currentLength+ "dp");
         lengthSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChanged; // 75 to 200
             ViewGroup.LayoutParams edgeParas;
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChanged = progress + 75;
@@ -165,7 +171,26 @@ public class EdgeSettingDialogFragment extends DialogFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                sharedPreferences.edit().putInt(EDGE_LENGTH_KEY,progressChanged).commit();
+                sharedPreferences.edit().putInt(EDGE_LENGTH_KEY, progressChanged).commit();
+            }
+        });
+
+        defaultButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (edgeNumber==1){
+                    positionSpinner.setSelection(1);
+                    sharedPreferences.edit().putString(EDGE_POSITION_KEY,(String) positionSpinner.getItemAtPosition(1)).commit();
+
+                }else if (edgeNumber ==2){
+                    positionSpinner.setSelection(5);
+                    sharedPreferences.edit().putString(EDGE_POSITION_KEY, (String) positionSpinner.getItemAtPosition(5)).commit();
+                }
+                sensitiveSeekBar.setProgress(7);
+                sharedPreferences.edit().putInt(EDGE_SENSIIVE_KEY, 12).commit();
+                lengthSeekBar.setProgress(75);
+                sharedPreferences.edit().putInt(EDGE_LENGTH_KEY, 150).commit();
+
             }
         });
 
