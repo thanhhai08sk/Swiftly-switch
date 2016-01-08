@@ -178,11 +178,11 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         defaultButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (edgeNumber==1){
+                if (edgeNumber == 1) {
                     positionSpinner.setSelection(1);
-                    sharedPreferences.edit().putString(EDGE_POSITION_KEY,(String) positionSpinner.getItemAtPosition(1)).commit();
+                    sharedPreferences.edit().putString(EDGE_POSITION_KEY, (String) positionSpinner.getItemAtPosition(1)).commit();
 
-                }else if (edgeNumber ==2){
+                } else if (edgeNumber == 2) {
                     positionSpinner.setSelection(5);
                     sharedPreferences.edit().putString(EDGE_POSITION_KEY, (String) positionSpinner.getItemAtPosition(5)).commit();
                 }
@@ -191,6 +191,12 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 lengthSeekBar.setProgress(75);
                 sharedPreferences.edit().putInt(EDGE_LENGTH_KEY, 150).commit();
 
+            }
+        });
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
             }
         });
 
