@@ -250,9 +250,9 @@ public class EdgeGestureService extends Service {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.drawable.ic_stat_ic_looks_white_48dp1)
-                .setContentText(getString(R.string.notification_text));
+                .setContentText(getString(R.string.notification_text)).setContentTitle(getString(R.string.notification_title));
         Notification notificationCompat = builder.build();
-//        startForeground(NOTIFICATION_ID,notificationCompat);
+        startForeground(NOTIFICATION_ID,notificationCompat);
 
         return START_NOT_STICKY;
     }
