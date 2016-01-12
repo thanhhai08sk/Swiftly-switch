@@ -43,4 +43,6 @@
     <string name="notification_title">Swiftly switch is running ...</string>
     <string name="main_description_text">You need to complete 2 STEP setting below before you can use this app!</string>
     <string name="main_configuration">Configuration</string>
+    <string name="main_edge_switch_2_trial_dialog_message">The Edge 2 is only available in Pro version</string>
+    <string name="main_edge_switch_2_trial_buy_pro_button">Get Pro version</string>
 </resources>

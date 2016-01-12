@@ -3,12 +3,14 @@ package org.de_studio.recentappswitcher;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -73,9 +75,13 @@ public class MainActivity extends Activity {
         Switch edge2Switch = (Switch) findViewById(R.id.edge_2_switch);
         edge1Switch.setChecked(sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true));
         edge2Switch.setChecked(sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, false));
+        if (isTrial){
+            edge2Switch.setChecked(false);
+        }
         edge1Switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 sharedPreferences1.edit().putBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, isChecked).commit();
 
                 stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
@@ -86,10 +92,40 @@ public class MainActivity extends Activity {
         edge2Switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferences2.edit().putBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, isChecked).commit();
+                if (isTrial){
+                    buttonView.setChecked(false);
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
+                    builder.setMessage(R.string.main_edge_switch_2_trial_dialog_message)
+                            .setPositiveButton(R.string.main_edge_switch_2_trial_buy_pro_button, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Uri uri = Uri.parse("mbarket://details?id=" + PRO_VERSION_PACKAGE_NAME);
+                                    Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+                                    gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                                            Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                                    try {
+                                        startActivity(gotoMarket);
+                                    } catch (ActivityNotFoundException e) {
+                                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                                Uri.parse("http://play.google.com/store/apps/details?id=" + PRO_VERSION_PACKAGE_NAME)));
+                                    }
+                                }
+                            })
+                            .setNegativeButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            });
+                    builder.show();
 
-                stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+
+                }else {
+                    sharedPreferences2.edit().putBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, isChecked).commit();
+                    stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                    startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                }
+
 
             }
         });

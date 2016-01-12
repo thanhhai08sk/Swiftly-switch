@@ -11,4 +11,5 @@
     <color name="greenButton">#ff69f0ae</color>
     <color name="edgeSettingBackground">#e2000000</color>
     <color name="icon_tint">#94ff4081</color>
+    <color name="edge_2_switch_trial_tint">#a2000000</color>
 </resources>
