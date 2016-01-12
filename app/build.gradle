@@ -3,6 +3,19 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
+    flavorDimensions "version"
+
+    productFlavors {
+        trial{
+            applicationId "org.de_studio.recentappswitcher.trial"
+            flavorDimension "version"
+        }
+        pro{
+            applicationId "org.de_studio.recentappswitcher.pro"
+            flavorDimension "version"
+        }
+
+    }
 
     defaultConfig {
         applicationId "org.de_studio.recentappswitcher"

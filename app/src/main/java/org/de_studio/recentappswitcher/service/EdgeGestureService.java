@@ -104,7 +104,7 @@ public class EdgeGestureService extends Service {
     private ExpandStatusBarView expandView, homeView, backView;
     private Vibrator vibrator;
     private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl;
-    private long holdTime = 1000, firstTouchTime;
+    private long holdTime = 750, firstTouchTime;
     private boolean touched = false, switched = false, itemSwitched = false;
 
 
