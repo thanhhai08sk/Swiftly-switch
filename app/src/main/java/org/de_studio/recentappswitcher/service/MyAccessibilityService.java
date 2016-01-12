@@ -42,7 +42,7 @@ public class MyAccessibilityService extends AccessibilityService {
         info.eventTypes = AccessibilityEvent.TYPE_TOUCH_INTERACTION_END;
         info.feedbackType= AccessibilityServiceInfo.FEEDBACK_ALL_MASK;
         info.notificationTimeout= 100;
-        info.packageNames = new  String[]{"org.de_studio.recentappswitcher"};
+        info.packageNames = new  String[]{getPackageName()};
         this.setServiceInfo(info);
 
     }

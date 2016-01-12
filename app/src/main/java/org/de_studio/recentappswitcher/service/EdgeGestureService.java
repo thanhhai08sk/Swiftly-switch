@@ -105,8 +105,7 @@ public class EdgeGestureService extends Service {
     private Vibrator vibrator;
     private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl;
     private long holdTime = 750, firstTouchTime;
-    private boolean touched = false, switched = false, itemSwitched = false;
-
+    private boolean touched = false, switched = false, itemSwitched = false, isTrial = false;
 
     @Nullable
     @Override
@@ -117,6 +116,7 @@ public class EdgeGestureService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME) ) isTrial = true;
         Set<String> set = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, new HashSet<String>());
         favoritePackageName = new String[set.size()];
         set.toArray(favoritePackageName);
