@@ -72,13 +72,13 @@ public class EdgeSettingDialogFragment extends DialogFragment {
 
         int currentLength = sharedPreferences.getInt(EDGE_LENGTH_KEY ,150);
         int currentSensitive = sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 12);
-        mEdgeParas = edgeImage.getLayoutParams();
-        mEdgeParas.height = (int) (currentLength *mScale);
-        mEdgeParas.width = (int) (currentSensitive * mScale);
-        edgeImage.setLayoutParams(mEdgeParas);
+        String[] spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
+//        mEdgeParas = edgeImage.getLayoutParams();
+//        mEdgeParas.height = (int) (currentLength *mScale);
+//        mEdgeParas.width = (int) (currentSensitive * mScale);
+//        edgeImage.setLayoutParams(mEdgeParas);
         final TextView sensitiveNumberTextView = (TextView) rootView.findViewById(R.id.edge_dialog_sensitive_number_text);
         final AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
-        String[] spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
         int spinnerCurrentPosition =1;
         if (edgeNumber == 2) spinnerCurrentPosition = 5;
         for (int i =0; i<spinnerEntries.length; i++) {
@@ -86,6 +86,30 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 spinnerCurrentPosition = i;
             }
         }
+        CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(edgeImage.getLayoutParams());
+        lp.width = (int) (currentSensitive * mScale);
+        lp.height = (int) (currentLength *mScale);
+        switch (spinnerCurrentPosition){
+            case 0:
+                lp.gravity = Gravity.TOP | Gravity.RIGHT;
+                break;
+            case 1:
+                lp.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+                break;
+            case 2:
+                lp.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                break;
+            case 3:
+                lp.gravity = Gravity.TOP | Gravity.LEFT;
+                break;
+            case 4:
+                lp.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                break;
+            case 5:
+                lp.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                break;
+        }
+        edgeImage.setLayoutParams(lp);
         positionSpinner.setSelection(spinnerCurrentPosition, true);
         positionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(edgeImage.getLayoutParams());
