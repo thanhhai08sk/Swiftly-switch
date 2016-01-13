@@ -530,7 +530,7 @@ public class EdgeGestureService extends Service {
                             expandStatusBar();
                         }
                     }else if (isOutOfTrial & homeBackNoti >0){
-                        Toast.makeText(getApplicationContext(),getString(R.string.edge_service_out_of_trial_text_when_homebacknoti),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),getString(R.string.edge_service_out_of_trial_text_when_homebacknoti),Toast.LENGTH_LONG).show();
                     }
 
                     break;

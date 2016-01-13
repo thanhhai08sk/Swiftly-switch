@@ -77,6 +77,23 @@ public class MainActivity extends Activity {
             trialBeginTime = System.currentTimeMillis();
         }
         if (System.currentTimeMillis() - trialBeginTime > trialTime) isOutOfTrial = true;
+        Button buyProButton = (Button) findViewById(R.id.main_buy_pro_button);
+        if (isTrial) buyProButton.setVisibility(View.VISIBLE);
+        buyProButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("mbarket://details?id=" + PRO_VERSION_PACKAGE_NAME);
+                Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+                gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                try {
+                    startActivity(gotoMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("http://play.google.com/store/apps/details?id=" + PRO_VERSION_PACKAGE_NAME)));
+                }
+            }
+        });
         descriptionText = (TextView) findViewById(R.id.main_description_text_view);
         step1Button = (Button) findViewById(R.id.step1_button);
         Switch edge1Switch = (Switch) findViewById(R.id.edge_1_switch);

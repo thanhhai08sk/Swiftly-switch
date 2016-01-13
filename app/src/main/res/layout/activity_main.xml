@@ -23,10 +23,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/redButton"
-            android:padding="16dp"
+            android:paddingTop="16dp"
             android:id="@+id/main_description_text_view"
             android:text="@string/main_description_text"
             />
+        <Button
+            android:id="@+id/main_buy_pro_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_button_4pt"
+            android:text="@string/main_buy_pro_button_text"
+            android:textAllCaps="false"
+            android:visibility="gone"
+            android:textColor="@color/white" />
 
     </android.support.design.widget.AppBarLayout>
 
