@@ -105,7 +105,7 @@ public class EdgeGestureService extends Service {
     private Vibrator vibrator;
     private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl;
     private long holdTime = 750, firstTouchTime;
-    private boolean touched = false, switched = false, itemSwitched = false, isTrial = false;
+    private boolean touched = false, switched = false, itemSwitched = false, isOutOfTrial = false;
 
     @Nullable
     @Override
@@ -116,7 +116,7 @@ public class EdgeGestureService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME) ) isTrial = true;
+        if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME) ) isOutOfTrial = true;
         Set<String> set = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, new HashSet<String>());
         favoritePackageName = new String[set.size()];
         set.toArray(favoritePackageName);
@@ -279,6 +279,11 @@ public class EdgeGestureService extends Service {
             int[] expandSpec;// left, top, right, bottom
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.TRIAL_BEGIN_DAY_KEY,System.currentTimeMillis())
+                            > MainActivity.trialTime;
+                    Log.e(LOG_TAG, "current = " + System.currentTimeMillis()+ "\nBegin = "
+                            + defaultShared.getLong(EdgeSettingDialogFragment.TRIAL_BEGIN_DAY_KEY,System.currentTimeMillis())
+                            + "\nTrial time = " + MainActivity.trialTime + "\nisOutOfTrial = " + isOutOfTrial);
                     Set<String> excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
                     switched = false;
                     itemSwitched = false;
@@ -464,35 +469,40 @@ public class EdgeGestureService extends Service {
                     packagename = null;
                     int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, windowManager);
                     Log.e(LOG_TAG, "homeBackNoti = " + homeBackNoti);
-                    if (homeBackNoti == 1) {
-                        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                        event1.setClassName(getClass().getName());
-                        event1.getText().add("home");
-                        event1.setAction(1);
-                        event1.setPackageName(getPackageName());
-                        event1.setEnabled(true);
-                        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                        recordCompat.setSource(v);
-                        if (manager.isEnabled()) {
-                            manager.sendAccessibilityEvent(event1);
+                    if (!isOutOfTrial & homeBackNoti >0){
+                        if (homeBackNoti == 1) {
+                            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+                            event1.setClassName(getClass().getName());
+                            event1.getText().add("home");
+                            event1.setAction(1);
+                            event1.setPackageName(getPackageName());
+                            event1.setEnabled(true);
+                            AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+                            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+                            recordCompat.setSource(v);
+                            if (manager.isEnabled()) {
+                                manager.sendAccessibilityEvent(event1);
+                            }
+                        } else if (homeBackNoti == 2) {
+                            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+                            event1.setClassName(getClass().getName());
+                            event1.getText().add("back");
+                            event1.setAction(2);
+                            event1.setPackageName(getPackageName());
+                            event1.setEnabled(true);
+                            AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+                            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+                            recordCompat.setSource(v);
+                            if (manager.isEnabled()) {
+                                manager.sendAccessibilityEvent(event1);
+                            }
+                        } else if (homeBackNoti == 3) {
+                            expandStatusBar();
                         }
-                    } else if (homeBackNoti == 2) {
-                        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                        event1.setClassName(getClass().getName());
-                        event1.getText().add("back");
-                        event1.setAction(2);
-                        event1.setPackageName(getPackageName());
-                        event1.setEnabled(true);
-                        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                        recordCompat.setSource(v);
-                        if (manager.isEnabled()) {
-                            manager.sendAccessibilityEvent(event1);
-                        }
-                    } else if (homeBackNoti == 3) {
-                        expandStatusBar();
+                    }else if (isOutOfTrial & homeBackNoti >0){
+                        Toast.makeText(getApplicationContext(),getString(R.string.edge_service_out_of_trial_text_when_homebacknoti),Toast.LENGTH_SHORT).show();
                     }
+
                     break;
                 case MotionEvent.ACTION_MOVE:
                     if (switched & !itemSwitched) {
@@ -545,7 +555,7 @@ public class EdgeGestureService extends Service {
                                 listIcon.get(i).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.icon_tint));
 
                             } else listIcon.get(i).setColorFilter(null);
-                            ;
+
 
                         }
 

@@ -45,4 +45,5 @@
     <string name="main_configuration">Configuration</string>
     <string name="main_edge_switch_2_trial_dialog_message">The Edge 2 is only available in Pro version</string>
     <string name="main_edge_switch_2_trial_buy_pro_button">Get Pro version</string>
+    <string name="edge_service_out_of_trial_text_when_homebacknoti">You are out of 7 day trial time of this application. Upgrade to Pro version to use this function</string>
 </resources>

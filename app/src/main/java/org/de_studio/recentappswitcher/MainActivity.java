@@ -48,6 +48,7 @@ public class MainActivity extends Activity {
     public static final String EXCLUDE_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_exclude_shared_preferences";
     public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher";
     public static final String FREE_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.trial";
+    public static final long trialTime = 1000*60*60*24*7;
     private SharedPreferences sharedPreferences1, sharedPreferences2, sharedPreferencesDefautl,sharedPreferences_favorite, sharedPreferences_exclude;
     private ArrayList<AppInfors> mAppInforsArrayList;
     Button step1Button;
@@ -56,7 +57,8 @@ public class MainActivity extends Activity {
     Button step2Button;
     Button step1GoToSettingButton, step2GoToSettingButton;
     TextView descriptionText;
-    private boolean isTrial = false;
+    private boolean isTrial = false, isOutOfTrial = false;
+    private long trialTimePass, trialBeginTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,12 @@ public class MainActivity extends Activity {
         sharedPreferencesDefautl = getSharedPreferences(DEFAULT_SHAREDPREFERENCE, 0);
         sharedPreferences_favorite = getSharedPreferences(FAVORITE_SHAREDPREFERENCE,0);
         sharedPreferences_exclude = getSharedPreferences(EXCLUDE_SHAREDPREFERENCE,0);
+        trialBeginTime = sharedPreferencesDefautl.getLong(EdgeSettingDialogFragment.TRIAL_BEGIN_DAY_KEY,0);
+        if (trialBeginTime ==0){
+            sharedPreferencesDefautl.edit().putLong(EdgeSettingDialogFragment.TRIAL_BEGIN_DAY_KEY,System.currentTimeMillis()).commit();
+            trialBeginTime = System.currentTimeMillis();
+        }
+        if (System.currentTimeMillis() - trialBeginTime > trialTime) isOutOfTrial = true;
         descriptionText = (TextView) findViewById(R.id.main_description_text_view);
         step1Button = (Button) findViewById(R.id.step1_button);
         Switch edge1Switch = (Switch) findViewById(R.id.edge_1_switch);

@@ -35,6 +35,8 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String EDGE_ON_KEY = "is_on";
     public static final String FAVORITE_KEY = "favorite";
     public static final String EXCLUDE_KEY = "exclude";
+    public static final String TRIAL_TIME_PASS_KEY = "trial_time_pass";
+    public static final String TRIAL_BEGIN_DAY_KEY = "begin_trial_time";
     private static int edgeNumber;
     private  float mScale;
     private static SharedPreferences sharedPreferences;
