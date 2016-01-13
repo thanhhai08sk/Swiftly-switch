@@ -48,6 +48,7 @@ public class MainActivity extends Activity {
     public static final String EXCLUDE_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_exclude_shared_preferences";
     public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher";
     public static final String FREE_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.trial";
+    public static final int REQUEST_CODE = 3243;
     public static final long trialTime = 1000*60*60*24*7;
     private SharedPreferences sharedPreferences1, sharedPreferences2, sharedPreferencesDefautl,sharedPreferences_favorite, sharedPreferences_exclude;
     private ArrayList<AppInfors> mAppInforsArrayList;
@@ -59,6 +60,7 @@ public class MainActivity extends Activity {
     TextView descriptionText;
     private boolean isTrial = false, isOutOfTrial = false;
     private long trialTimePass, trialBeginTime;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,7 +244,11 @@ public class MainActivity extends Activity {
                 startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
             }
         });
-        startService(new Intent(this, EdgeGestureService.class));
+        if  (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1){
+            startService(new Intent(this, EdgeGestureService.class));
+
+        }else checkDrawOverlayPermission();
+
 
         ImageButton addFavoriteButton = (ImageButton) findViewById(R.id.main_favorite_add_app_image_button);
         addFavoriteButton.setOnClickListener(new View.OnClickListener() {
@@ -472,6 +478,25 @@ public class MainActivity extends Activity {
     private boolean isStep2Ok(){
         AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
         return  manager.isEnabled();
+    }
+
+    public void checkDrawOverlayPermission() {
+        if (!Settings.canDrawOverlays(this)) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, REQUEST_CODE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
+        if (requestCode == REQUEST_CODE) {
+            if (Settings.canDrawOverlays(this)) {
+                // continue here - permission was granted
+                startService(new Intent(this, EdgeGestureService.class));
+
+            }
+        }
     }
 
 

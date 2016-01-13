@@ -104,7 +104,7 @@ public class EdgeGestureService extends Service {
     private ExpandStatusBarView expandView, homeView, backView;
     private Vibrator vibrator;
     private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl;
-    private long holdTime = 750, firstTouchTime;
+    private long holdTime = 650, firstTouchTime;
     private boolean touched = false, switched = false, itemSwitched = false, isOutOfTrial = false, isFreeVersion = false;
 
     @Nullable
@@ -380,21 +380,28 @@ public class EdgeGestureService extends Service {
                                 mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
                             }
                             Set<Long> setKey = mySortedMap.keySet();
+                            Log.e(LOG_TAG,"mySortedMap size = " + mySortedMap.size());
                             for (Long key : setKey) {
                                 UsageStats usageStats = mySortedMap.get(key);
-                                String packa = usageStats.getPackageName();
-                                try {
-                                    if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
-                                        //do nothing
-                                    } else if (packa.contains("systemui") |
-                                            packa.contains("googlequicksearchbox") |
-                                            key == mySortedMap.firstKey() |
-                                            excludeSet.contains(packa)) {
-                                        // do nothing
-                                    } else tempPackageName.add(packa);
-                                } catch (PackageManager.NameNotFoundException e) {
-                                    Log.e(LOG_TAG, "name not found" + e);
+                                if (usageStats == null){
+                                    Log.e(LOG_TAG," usageStats is null");
                                 }
+                                if (usageStats != null){
+                                    String packa = usageStats.getPackageName();
+                                    try {
+                                        if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
+                                            //do nothing
+                                        } else if (packa.contains("systemui") |
+                                                packa.contains("googlequicksearchbox") |
+                                                key == mySortedMap.firstKey() |
+                                                excludeSet.contains(packa)) {
+                                            // do nothing
+                                        } else tempPackageName.add(packa);
+                                    } catch (PackageManager.NameNotFoundException e) {
+                                        Log.e(LOG_TAG, "name not found" + e);
+                                    }
+                                }
+
                             }
                             packagename = new String[tempPackageName.size()];
                             tempPackageName.toArray(packagename);
