@@ -80,8 +80,9 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         final AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
         String[] spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
         int spinnerCurrentPosition =1;
+        if (edgeNumber == 2) spinnerCurrentPosition = 5;
         for (int i =0; i<spinnerEntries.length; i++) {
-            if (spinnerEntries[i].equals(sharedPreferences.getString(EDGE_POSITION_KEY, spinnerEntries[1]))) {
+            if (spinnerEntries[i].equals(sharedPreferences.getString(EDGE_POSITION_KEY, spinnerEntries[spinnerCurrentPosition]))) {
                 spinnerCurrentPosition = i;
             }
         }
