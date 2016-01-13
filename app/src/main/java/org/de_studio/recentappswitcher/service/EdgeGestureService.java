@@ -345,7 +345,7 @@ public class EdgeGestureService extends Service {
                             ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                             ComponentName componentName = taskInfo.baseActivity;
                             String packName = componentName.getPackageName();
-                            if (i != 0 & !packName.equals(launcherPackagename) & !excludeSet.contains(packName)) {
+                            if (i != 0 & !packName.equals(launcherPackagename) & !excludeSet.contains(packName) & !packName.contains("launcher")) {
                                 tempPackageName.add(packName);
                             }
                         }
@@ -394,7 +394,8 @@ public class EdgeGestureService extends Service {
                                         } else if (packa.contains("systemui") |
                                                 packa.contains("googlequicksearchbox") |
                                                 key == mySortedMap.firstKey() |
-                                                excludeSet.contains(packa)) {
+                                                excludeSet.contains(packa)|
+                                                packa.contains("launcher")) {
                                             // do nothing
                                         } else tempPackageName.add(packa);
                                     } catch (PackageManager.NameNotFoundException e) {
