@@ -64,19 +64,21 @@ public class AppsListArrayAdapter extends BaseAdapter {
                     if (set == null){
                         set = new HashSet<String>();
                     }
+                    Set<String> setClone = new HashSet<String>();
+                    setClone.addAll(set);
                     if (isChecked & packageName !=null){
-                            set.add(packageName);
-                            sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,set).commit();
+                            setClone.add(packageName);
+                            sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,setClone).commit();
 
 
 
                     }else if (!isChecked & packageName!= null){
-                        if (set.contains(packageName)){
-                            set.remove(packageName);
-                            sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,set).commit();
+                        if (setClone.contains(packageName)){
+                            setClone.remove(packageName);
+                            sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,setClone).commit();
                         }
                     }
-                    Log.e(LOG_TAG,"size of set = " + set.size());
+                    Log.e(LOG_TAG,"size of set = " + setClone.size());
 
                 }
             });
