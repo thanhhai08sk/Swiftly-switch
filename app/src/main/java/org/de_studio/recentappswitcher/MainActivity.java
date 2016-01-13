@@ -247,7 +247,13 @@ public class MainActivity extends Activity {
         if  (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1){
             startService(new Intent(this, EdgeGestureService.class));
 
-        }else checkDrawOverlayPermission();
+        }else {
+            checkDrawOverlayPermission();
+            if (Settings.canDrawOverlays(this)){
+                startService(new Intent(this, EdgeGestureService.class));
+
+            }
+        }
 
 
         ImageButton addFavoriteButton = (ImageButton) findViewById(R.id.main_favorite_add_app_image_button);
