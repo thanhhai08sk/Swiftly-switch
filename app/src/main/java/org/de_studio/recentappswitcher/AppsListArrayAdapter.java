@@ -88,27 +88,29 @@ public class AppsListArrayAdapter extends BaseAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     String packageName = appInfors.packageName;
-                    Set<String> set = sharedPreferenceFavorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY,null);
+                    Set<String> set = sharedPreferenceFavorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, null);
                     if (set == null){
                         set = new HashSet<String>();
                     }
+                    Set<String> setClone = new HashSet<String>();
+                    setClone.addAll(set);
                     if (isChecked & packageName !=null){
-                        if (set.size()==6){
+                        if (setClone.size()==6){
                             Toast.makeText(context,context.getString(R.string.limit_for_favorite_app_is_6),Toast.LENGTH_SHORT).show();
                             buttonView.setChecked(false);
                         }else {
-                            set.add(packageName);
-                            sharedPreferenceFavorite.edit().putStringSet(EdgeSettingDialogFragment.FAVORITE_KEY,set).commit();
+                            setClone.add(packageName);
+                            sharedPreferenceFavorite.edit().putStringSet(EdgeSettingDialogFragment.FAVORITE_KEY,setClone).commit();
                         }
 
 
                     }else if (!isChecked & packageName!= null){
-                        if (set.contains(packageName)){
-                            set.remove(packageName);
-                            sharedPreferenceFavorite.edit().putStringSet(EdgeSettingDialogFragment.FAVORITE_KEY,set).commit();
+                        if (setClone.contains(packageName)){
+                            setClone.remove(packageName);
+                            sharedPreferenceFavorite.edit().putStringSet(EdgeSettingDialogFragment.FAVORITE_KEY,setClone).commit();
                         }
                     }
-                    Log.e(LOG_TAG,"size of set = " + set.size());
+                    Log.e(LOG_TAG,"size of set = " + setClone.size());
 
                 }
             });
