@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Swiftly switch</string>
-    <string name="action_settings">Settings</string>
     <string name="edge_gesture_notification_title">Recent App Switcher</string>
     <string name="edge_gesture_notification_content_text">App running</string>
     <string name="main_step1_text">Step 1: \nUsage stat</string>
@@ -29,7 +28,7 @@
     <string name="edge_dialog_set_offset_text">Offset</string>
     <string name="edge_dialog_default_button">Default</string>
     <string name="edge_dialog_cancel_button">Cancel</string>
-    <string name="edge_dialog_ok_button">Ok</string>
+    <string name="edge_dialog_ok_button" translatable="false">Ok</string>
     <string name="main_favorite_app_title">Favorite apps:</string>
     <string name="main_favorite_info_title">Favorite apps</string>
     <string name="main_favorite_app_info_text">Apps that will be listed when you hold on the one of the recent apps icon for 1 second or when there are no recent app</string>
@@ -47,4 +46,5 @@
     <string name="main_edge_switch_2_trial_buy_pro_button">Get Pro version</string>
     <string name="main_buy_pro_button_text">Upgrade to Pro</string>
     <string name="edge_service_out_of_trial_text_when_homebacknoti">You are out of 7 day trial time of this application. Upgrade to Pro version to use this function</string>
+    <string name="action_settings">Setting</string>
 </resources>
