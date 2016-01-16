@@ -98,7 +98,7 @@ public class EdgeGestureService extends Service {
     private boolean hasOneActive = false;
     private boolean hasVibrate = false, hasHomwBackNotiVisible = false;
     private boolean isEdge1On, isEdge2On;
-    public int numOfEdge, edge1Position, edge2Position;
+    public int edge1Position, edge2Position;
     private SharedPreferences defaultShared, sharedPreferences1, sharedPreferences2, sharedPreferences_favorite, sharedPreferences_exclude;
     private AppCompatImageView[] icons1Image, icons2Image;
     private ExpandStatusBarView expandView, homeView, backView;
@@ -126,7 +126,6 @@ public class EdgeGestureService extends Service {
         if (res.activityInfo != null) {
             launcherPackagename = res.activityInfo.packageName;
         } else launcherPackagename = "";
-        numOfEdge = defaultShared.getInt("numOfEdge", 1);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -706,11 +705,11 @@ public class EdgeGestureService extends Service {
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
         ovalOffSet = (int) (25 * mScale);
         ovalRadiusPlusPxl = (int) (ovalRadiusPlus * mScale);
-
         Set<String> set = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, new HashSet<String>());
         favoritePackageName = new String[set.size()];
         set.toArray(favoritePackageName);
-        Log.e(LOG_TAG, "onCreate service");
+        Log.e(LOG_TAG, "onCreate service"+ "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
+        "\nEdge1 position = " + edge1Position + "\nEdge2 positon = "+ edge2Position);
     }
 
     @Override
