@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher;
 
+import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
@@ -33,6 +34,7 @@ import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.service.MyAccessibilityService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +48,7 @@ public class MainActivity extends Activity {
     public static final String DEFAULT_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_sharedpreferences";
     public static final String FAVORITE_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_favorite_shared_preferences";
     public static final String EXCLUDE_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_exclude_shared_preferences";
-    public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher";
+    public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.pro";
     public static final String FREE_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.trial";
     public static final int REQUEST_CODE = 3243;
     public static final long trialTime = 1000*60*60*24*7;

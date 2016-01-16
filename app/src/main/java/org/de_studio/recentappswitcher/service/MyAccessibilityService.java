@@ -1,7 +1,6 @@
 package org.de_studio.recentappswitcher.service;
 
 import android.accessibilityservice.AccessibilityService;
-import android.accessibilityservice.AccessibilityServiceInfo;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
@@ -34,16 +33,16 @@ public class MyAccessibilityService extends AccessibilityService {
         return super.onGesture(gestureId);
     }
 
-    @Override
-    protected void onServiceConnected() {
-        super.onServiceConnected();
-        Log.e("myaccess", "onServiceConnected");
-        AccessibilityServiceInfo info = new AccessibilityServiceInfo();
-        info.eventTypes = AccessibilityEvent.TYPE_TOUCH_INTERACTION_END;
-        info.feedbackType= AccessibilityServiceInfo.FEEDBACK_ALL_MASK;
-        info.notificationTimeout= 100;
-        info.packageNames = new  String[]{getPackageName()};
-        this.setServiceInfo(info);
-
-    }
+//    @Override
+//    protected void onServiceConnected() {
+//        super.onServiceConnected();
+//        Log.e("myaccess", "onServiceConnected");
+//        AccessibilityServiceInfo info = new AccessibilityServiceInfo();
+//        info.eventTypes = AccessibilityEvent.TYPE_TOUCH_INTERACTION_END;
+//        info.feedbackType= AccessibilityServiceInfo.FEEDBACK_ALL_MASK;
+//        info.notificationTimeout= 100;
+//        info.packageNames = new  String[]{getPackageName()};
+//        this.setServiceInfo(info);
+//
+//    }
 }
