@@ -488,9 +488,9 @@ public class EdgeGestureService extends Service {
                             AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
                             AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
                             recordCompat.setSource(v);
-                            if (manager.isEnabled()) {
+                            if (Utility.isAccessibilityEnable(getApplicationContext())) {
                                 manager.sendAccessibilityEvent(event1);
-                            }
+                            }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
                         } else if (homeBackNoti == 2) {
                             AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
                             event1.setClassName(getClass().getName());
@@ -501,9 +501,9 @@ public class EdgeGestureService extends Service {
                             AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
                             AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
                             recordCompat.setSource(v);
-                            if (manager.isEnabled()) {
+                            if (Utility.isAccessibilityEnable(getApplicationContext())) {
                                 manager.sendAccessibilityEvent(event1);
-                            }
+                            }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
                         } else if (homeBackNoti == 3) {
                             expandStatusBar();
                         }
@@ -518,9 +518,9 @@ public class EdgeGestureService extends Service {
                             AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
                             AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
                             recordCompat.setSource(v);
-                            if (manager.isEnabled()) {
+                            if (Utility.isAccessibilityEnable(getApplicationContext())) {
                                 manager.sendAccessibilityEvent(event1);
-                            }
+                            }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
                         } else if (homeBackNoti == 2) {
                             AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
                             event1.setClassName(getClass().getName());
@@ -531,9 +531,9 @@ public class EdgeGestureService extends Service {
                             AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
                             AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
                             recordCompat.setSource(v);
-                            if (manager.isEnabled()) {
+                            if (Utility.isAccessibilityEnable(getApplicationContext())) {
                                 manager.sendAccessibilityEvent(event1);
-                            }
+                            }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
                         } else if (homeBackNoti == 3) {
                             expandStatusBar();
                         }
