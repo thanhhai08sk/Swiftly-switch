@@ -100,6 +100,8 @@ public class MainActivity extends Activity {
         step1Button = (Button) findViewById(R.id.step1_button);
         Switch edge1Switch = (Switch) findViewById(R.id.edge_1_switch);
         Switch edge2Switch = (Switch) findViewById(R.id.edge_2_switch);
+        Switch disableHapticSwitch = (Switch) findViewById(R.id.main_disable_haptic_feedback_switch);
+        disableHapticSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY,false));
         edge1Switch.setChecked(sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true));
         edge2Switch.setChecked(sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, false));
         if (isTrial){
@@ -119,7 +121,7 @@ public class MainActivity extends Activity {
         edge2Switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isTrial){
+                if (isTrial) {
                     buttonView.setChecked(false);
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
                     builder.setMessage(R.string.main_edge_switch_2_trial_dialog_message)
@@ -147,13 +149,19 @@ public class MainActivity extends Activity {
                     builder.show();
 
 
-                }else {
+                } else {
                     sharedPreferences2.edit().putBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, isChecked).commit();
                     stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
                     startService(new Intent(getApplicationContext(), EdgeGestureService.class));
                 }
 
 
+            }
+        });
+        disableHapticSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY,isChecked).commit();
             }
         });
         step2Button = (Button) findViewById(R.id.step2_button);

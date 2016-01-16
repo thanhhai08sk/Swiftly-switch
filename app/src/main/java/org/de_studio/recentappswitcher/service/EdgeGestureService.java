@@ -582,7 +582,10 @@ public class EdgeGestureService extends Service {
 
                     if (iconToSwitch != -1 | moveToHomeBackNoti > 0) {
                         if (!hasVibrate) {
-                            vibrator.vibrate(15);
+                            if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY,false)){
+                                vibrator.vibrate(15);
+                            }
+
                             hasVibrate = true;
                         }
                         for (int i = 0; i < listIcon.size(); i++) {

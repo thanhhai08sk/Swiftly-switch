@@ -37,6 +37,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String EXCLUDE_KEY = "exclude";
     public static final String TRIAL_TIME_PASS_KEY = "trial_time_pass";
     public static final String TRIAL_BEGIN_DAY_KEY = "begin_trial_time";
+    public static final String DISABLE_HAPTIC_FEEDBACK_KEY = "disable_haptic";
     private static int edgeNumber;
     private  float mScale;
     private static SharedPreferences sharedPreferences;
