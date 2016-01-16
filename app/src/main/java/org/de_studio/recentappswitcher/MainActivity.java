@@ -1,6 +1,5 @@
 package org.de_studio.recentappswitcher;
 
-import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
@@ -34,7 +33,6 @@ import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
-import org.de_studio.recentappswitcher.service.MyAccessibilityService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -226,7 +224,7 @@ public class MainActivity extends Activity {
                 step1Text.setVisibility(View.GONE);
                 step1GoToSettingButton.setVisibility(View.GONE);
                 step2Text.setVisibility(View.VISIBLE);
-                if (isStep2Ok()) {
+                if (Utility.isAccessibilityEnable(getApplicationContext())) {
                     step2GoToSettingButton.setVisibility(View.GONE);
                 } else step2GoToSettingButton.setVisibility(View.VISIBLE);
 
@@ -399,9 +397,7 @@ public class MainActivity extends Activity {
 
     public void setStepButtonAndDescription(){
         boolean isStep1Ok;
-        boolean isStep2Ok;
-        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-        isStep2Ok = manager.isEnabled();
+        boolean isStep2Ok = Utility.isAccessibilityEnable(this);
         Log.e(LOG_TAG, "isStep2OK = " + isStep2Ok);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             isStep1Ok = true;

@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher;
 
+import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -9,6 +10,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityManager;
 
 import java.util.HashSet;
 import java.util.List;
@@ -245,6 +247,20 @@ public  class Utility {
         }
 
         return filteredPackages;
+    }
+
+    public static boolean isAccessibilityEnable(Context context){
+        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        List <AccessibilityServiceInfo> info = manager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK);
+        for (AccessibilityServiceInfo info1 : info){
+            String description = info1.loadDescription(context.getPackageManager());
+            if (description!= null){
+                if (description.equals(context.getString(R.string.accessibility_service_description))){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }
