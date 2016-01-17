@@ -661,6 +661,7 @@ public class EdgeGestureService extends Service {
             Log.e(LOG_TAG, "ClassNotFound " + e);
         } catch (NoSuchMethodException e) {
             Log.e(LOG_TAG, "NosuchMethod " + e);
+
         } catch (IllegalAccessException e) {
             Log.e(LOG_TAG, "IllegalAccessException " + e);
         } catch (InvocationTargetException e) {

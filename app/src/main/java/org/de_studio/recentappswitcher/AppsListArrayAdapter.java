@@ -48,7 +48,7 @@ public class AppsListArrayAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final AppInfors appInfors = mAppInfosArrayList.get(position);
-        View returnView = LayoutInflater.from(context).inflate(R.layout.dialog_favorite_app_item,parent,false);
+        View returnView = LayoutInflater.from(context).inflate(R.layout.dialog_favorite_app_item, parent, false);
         ImageView icon = (ImageView) returnView.findViewById(R.id.add_favorite_list_item_image_view);
         TextView label = (TextView) returnView.findViewById(R.id.add_favorite_list_item_label_text_view);
         CheckBox checkBox = (CheckBox) returnView.findViewById(R.id.add_favorite_list_item_check_box);
@@ -118,7 +118,8 @@ public class AppsListArrayAdapter extends BaseAdapter {
             });
         }
 
-        icon.setImageDrawable(appInfors.iconDrawable);
+//        icon.setImageDrawable(appInfors.iconDrawable);
+        icon.setImageBitmap(appInfors.iconBitmap);
         label.setText(appInfors.label);
 
         return returnView;

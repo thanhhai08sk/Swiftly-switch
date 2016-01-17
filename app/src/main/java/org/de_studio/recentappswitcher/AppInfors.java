@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
 /**
@@ -9,6 +10,7 @@ import android.graphics.drawable.Drawable;
 public class AppInfors implements Comparable<AppInfors> {
     public String label;
     public Drawable iconDrawable;
+    public Bitmap iconBitmap;
     public String packageName;
     public Intent launchIntent;
 

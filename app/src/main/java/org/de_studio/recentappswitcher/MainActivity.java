@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -58,6 +59,7 @@ public class MainActivity extends Activity {
     Button step2Button;
     Button step1GoToSettingButton, step2GoToSettingButton;
     TextView descriptionText;
+    float mScale;
     private boolean isTrial = false, isOutOfTrial = false;
     private long trialTimePass, trialBeginTime;
 
@@ -68,6 +70,7 @@ public class MainActivity extends Activity {
         if (getPackageName().equals(FREE_VERSION_PACKAGE_NAME)) isTrial = true;
         setContentView(R.layout.activity_main);
         new LoadInstalledApp().execute();
+        mScale = getResources().getDisplayMetrics().density;
         sharedPreferences1 = getSharedPreferences(EDGE_1_SHAREDPREFERENCE, 0);
         sharedPreferences2 = getSharedPreferences(EDGE_2_SHAREDPREFERENCE, 0);
         sharedPreferencesDefautl = getSharedPreferences(DEFAULT_SHAREDPREFERENCE, 0);
@@ -464,8 +467,10 @@ public class MainActivity extends Activity {
                     AppInfors appInfors = new AppInfors();
                     appInfors.label =(String) packageManager.getApplicationLabel(pack.applicationInfo);
                     appInfors.packageName = pack.packageName;
-                    appInfors.iconDrawable = packageManager.getApplicationIcon(pack.packageName);
+//                    appInfors.iconDrawable = packageManager.getApplicationIcon(pack.packageName);
                     appInfors.launchIntent = packageManager.getLaunchIntentForPackage(pack.packageName);
+                    Bitmap iconBitmap = Utility.drawableToBitmap(packageManager.getApplicationIcon(pack.packageName));
+                    appInfors.iconBitmap = Bitmap.createScaledBitmap(iconBitmap,(int)(24*mScale),(int)(24*mScale),false);
                     arrayList.add(appInfors);
                 }catch (PackageManager.NameNotFoundException e){
                     Log.e(LOG_TAG, "name not found " + e);
