@@ -109,6 +109,16 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             case 5:
                 lp.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 break;
+            case 6:
+                lp.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                break;
+            case 7:
+                lp.gravity = Gravity.BOTTOM | Gravity.CENTER;
+                break;
+            case 8:
+                lp.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                break;
+
         }
         edgeImage.setLayoutParams(lp);
         positionSpinner.setSelection(spinnerCurrentPosition, true);
@@ -146,6 +156,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                         break;
                     case 8:
                         lp.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                        break;
                 }
                 edgeImage.setLayoutParams(lp);
             }
