@@ -47,4 +47,10 @@
     <string name="notification_title">Swiftly đang hoạt động</string>
     <string name="please_add_favorite_item">Vui lòng thêm ứng dụng yêu thích của bạn vào Danh Sách Ứng Dụng Yêu Thích</string>
     <string name="waite_a_secend_app_loading">Vui lòng thử lại trong giây lát, đang tải danh sách ứng dụng</string>
+    <string name="edge_dialog_array_bottom_centre">Dưới giữa</string>
+    <string name="ask_user_to_turn_on_accessibility_toast">Vui lòng bật thiết lập Khả Năng Truy Cập cho Swiftly switch</string>
+    <string name="accessibility_service_description"></string>
+    <string name="main_disable_haptic_feedback_text">Tắt phản hồi rung</string>
+    <string name="edge_dialog_array_bottom_left">Dưới trái</string>
+    <string name="edge_dialog_array_bottom_right">Dưới phải</string>
 </resources>

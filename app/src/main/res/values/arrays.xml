@@ -7,5 +7,8 @@
         <item>@string/edge_dialog_array_left_top</item>
         <item>@string/edge_dialog_array_left_centre</item>
         <item>@string/edge_dialog_array_left_bottom</item>
+        <item>@string/edge_dialog_array_bottom_left</item>
+        <item>@string/edge_dialog_array_bottom_centre</item>
+        <item>@string/edge_dialog_array_bottom_right</item>
     </string-array>
 </resources>

@@ -25,6 +25,9 @@
     <string name="edge_dialog_array_left_top">Left top</string>
     <string name="edge_dialog_array_left_centre">Left centre</string>
     <string name="edge_dialog_array_left_bottom">Left bottom</string>
+    <string name="edge_dialog_array_bottom_left">Bottom left</string>
+    <string name="edge_dialog_array_bottom_centre">Bottom centre</string>
+    <string name="edge_dialog_array_bottom_right">Bottom right</string>
     <string name="edge_dialog_set_offset_text">Offset</string>
     <string name="edge_dialog_default_button">Default</string>
     <string name="edge_dialog_cancel_button">Cancel</string>

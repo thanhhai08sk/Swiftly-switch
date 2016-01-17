@@ -184,6 +184,9 @@ public class EdgeGestureService extends Service {
             case 22:
                 paramsEdge1.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 break;
+            case 31:
+                paramsEdge1.gravity = Gravity.BOTTOM | Gravity.CENTER;
+                break;
         }
         if (isEdge1On) {
             windowManager.addView(edge1View, paramsEdge1);
@@ -287,7 +290,9 @@ public class EdgeGestureService extends Service {
                     switched = false;
                     itemSwitched = false;
                     x_init_cord = x_cord;
-                    y_init_cord = y_cord - getYOffset(y_cord);
+                    if (position >= 30){
+                        y_init_cord = y_cord;
+                    }else y_init_cord = y_cord - getYOffset(y_cord);
                     expandSpec = Utility.getExpandSpec(x_init_cord, y_init_cord, icon_distance, 35, windowManager);
                     int expandWidth = expandSpec[2] - expandSpec[0];
                     int expandHeight = expandSpec[3] - expandSpec[1];
@@ -700,14 +705,16 @@ public class EdgeGestureService extends Service {
         sharedPreferences_exclude = getApplicationContext().getSharedPreferences(MainActivity.EXCLUDE_SHAREDPREFERENCE, 0);
         sharedPreferences1 = getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE, 0);
         sharedPreferences2 = getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
-        edge_1_height = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
+//        edge_1_height = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
+        edge_1_height = 12;
         edge_2_height = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
-        edge1Width = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY, 12);
+//        edge1Width = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY, 12);
+        edge1Width = 150;
         edge2Width = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY, 12);
         isEdge1On = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true);
         isEdge2On = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, false);
         String[] spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
-        edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext());
+        edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[6]), getApplicationContext()); // default =1
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
         ovalOffSet = (int) (25 * mScale);
         ovalRadiusPlusPxl = (int) (ovalRadiusPlus * mScale);
