@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 
 /**
  * Created by hai on 1/2/2016.
@@ -54,7 +55,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (edgeNumber ==1){
             sharedPreferences = mContext.getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE, 0);
         }else if (edgeNumber ==2){
@@ -201,12 +202,17 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         lengthSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChanged; // 75 to 200
             ViewGroup.LayoutParams edgeParas;
+            String[] spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChanged = progress + 75;
                 edgeParas = edgeImage.getLayoutParams();
-                edgeParas.height = (int) (progressChanged * mScale);
+
+                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
+                    edgeParas.width = (int) (progressChanged * mScale);
+                }else  edgeParas.height = (int) (progressChanged * mScale);
+
                 edgeImage.setLayoutParams(edgeParas);
                 edgeLengthNumberText.setText(progressChanged + "dp");
             }
