@@ -1,12 +1,12 @@
 package org.de_studio.recentappswitcher.service;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.app.DialogFragment;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.AppCompatSpinner;
@@ -138,6 +138,14 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                     case 5:
                         lp.gravity = Gravity.BOTTOM | Gravity.LEFT;
                         break;
+                    case 6:
+                        lp.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                        break;
+                    case 7:
+                        lp.gravity = Gravity.BOTTOM | Gravity.CENTER;
+                        break;
+                    case 8:
+                        lp.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 }
                 edgeImage.setLayoutParams(lp);
             }
