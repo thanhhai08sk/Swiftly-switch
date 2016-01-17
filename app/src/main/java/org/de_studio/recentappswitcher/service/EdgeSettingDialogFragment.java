@@ -164,7 +164,6 @@ public class EdgeSettingDialogFragment extends DialogFragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
         final AppCompatSeekBar sensitiveSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.sensitive_seek_bar);
@@ -173,12 +172,15 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         sensitiveSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChanged;  //5 to 25
             ViewGroup.LayoutParams edgeParas;
+            String[] spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChanged = progress + 5;
                 edgeParas = edgeImage.getLayoutParams();
-                edgeParas.width = (int) (progressChanged * mScale);
+                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
+                    edgeParas.height = (int) (progressChanged * mScale);
+                }else edgeParas.width = (int) (progressChanged * mScale);
                 edgeImage.setLayoutParams(edgeParas);
                 sensitiveNumberTextView.setText(progressChanged + "dp");
             }
