@@ -86,8 +86,6 @@ public class EdgeGestureService extends Service {
     public int edge1HeightPxl, edge2HeightPxl;
     public int edge1WidthPxl, edge2WidthPxl;
     public int edge1Sensivite, edge2Sensitive;
-    public int edge_y;
-    public int edge_centre_y;
     private List<AppCompatImageView> list_icon_1, list_icon_2;
     private String[] packagename, favoritePackageName;
     private String launcherPackagename;
@@ -116,9 +114,9 @@ public class EdgeGestureService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME) ) isFreeVersion = true;
-        Set<String> set = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, new HashSet<String>());
-        favoritePackageName = new String[set.size()];
-        set.toArray(favoritePackageName);
+        Set<String> favoriteSet = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, new HashSet<String>());
+        favoritePackageName = new String[favoriteSet.size()];
+        favoriteSet.toArray(favoritePackageName);
         Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
         launcherIntent.addCategory(Intent.CATEGORY_HOME);
         ResolveInfo res = getPackageManager().resolveActivity(launcherIntent, 0);
@@ -130,7 +128,7 @@ public class EdgeGestureService extends Service {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edge1Image = (MyImageView) edge1View.findViewById(R.id.edge_image);
-        ViewGroup.LayoutParams lp = edge1Image.getLayoutParams();
+        ViewGroup.LayoutParams edge1ImageLayoutParams = edge1Image.getLayoutParams();
         if (Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()) >= 30){
             edge1HeightPxl = (int) (edge1Sensivite * mScale);
             edge1WidthPxl = (int) (edge1Length * mScale);
@@ -138,11 +136,9 @@ public class EdgeGestureService extends Service {
             edge1HeightPxl = (int) (edge1Length * mScale);
             edge1WidthPxl = (int) (edge1Sensivite * mScale);
         }
-        lp.height = edge1HeightPxl;
-        lp.width = edge1WidthPxl;
-        edge1Image.setLayoutParams(lp);
-        edge_y = (int) edge1Image.getY();
-        edge_centre_y = edge_y + edge1HeightPxl / 2;
+        edge1ImageLayoutParams.height = edge1HeightPxl;
+        edge1ImageLayoutParams.width = edge1WidthPxl;
+        edge1Image.setLayoutParams(edge1ImageLayoutParams);
         icon_distance_pxl = icon_distance * mScale;
         icon_24dp_in_pxls = 24 * mScale;
         distance_to_arc_pxl = (int) (distance_to_arc * mScale);
@@ -381,9 +377,6 @@ public class EdgeGestureService extends Service {
                         }
                         if (packagename.length ==0) switched = true;
                     }
-
-
-
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
                         long time = System.currentTimeMillis();
@@ -452,7 +445,6 @@ public class EdgeGestureService extends Service {
                     itemView.removeView(backView);
                     int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
                     if (packageToSwitch != -1) {
-                        int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK ;
                         Intent extApp = null;
                         if (!switched) {
                             if (packageToSwitch < packagename.length){
