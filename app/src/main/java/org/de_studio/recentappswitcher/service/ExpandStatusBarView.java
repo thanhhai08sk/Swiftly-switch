@@ -8,7 +8,6 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 
 import org.de_studio.recentappswitcher.R;
@@ -69,7 +68,7 @@ public class ExpandStatusBarView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.e("expand", "onDraw");
+//        Log.e("expand", "onDraw");
         oval.set(ovalOffset, ovalOffset,ovalOffset + radius * 2,ovalOffset+ radius * 2);
         if (homwBackNoti ==3){
             switch (position){

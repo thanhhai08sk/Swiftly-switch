@@ -86,7 +86,7 @@ public class EdgeGestureService extends Service {
     public int edge1HeightPxl, edge2HeightPxl;
     public int edge1WidthPxl, edge2WidthPxl;
     public int edge1Sensivite, edge2Sensitive;
-    private List<AppCompatImageView> list_icon_1, list_icon_2;
+    private List<AppCompatImageView> iconImageArrayList1, iconImageArrayList2;
     private String[] packagename, favoritePackageName;
     private String launcherPackagename;
     private int[] x, y;
@@ -96,7 +96,7 @@ public class EdgeGestureService extends Service {
     private boolean isEdge1On, isEdge2On;
     public int edge1Position, edge2Position;
     private SharedPreferences defaultShared, sharedPreferences1, sharedPreferences2, sharedPreferences_favorite, sharedPreferences_exclude;
-    private AppCompatImageView[] icons1Image, icons2Image;
+    private AppCompatImageView[] iconImageList1, iconImageList2;
     private ExpandStatusBarView expandView, homeView, backView;
     private Vibrator vibrator;
     private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl;
@@ -143,20 +143,20 @@ public class EdgeGestureService extends Service {
         icon_24dp_in_pxls = 24 * mScale;
         distance_to_arc_pxl = (int) (distance_to_arc * mScale);
         item1View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
-        icons1Image = new AppCompatImageView[6];
-        icons1Image[0] = (AppCompatImageView) item1View.findViewById(R.id.item_0);
-        icons1Image[1] = (AppCompatImageView) item1View.findViewById(R.id.item_1);
-        icons1Image[2] = (AppCompatImageView) item1View.findViewById(R.id.item_2);
-        icons1Image[3] = (AppCompatImageView) item1View.findViewById(R.id.item_3);
-        icons1Image[4] = (AppCompatImageView) item1View.findViewById(R.id.item_4);
-        icons1Image[5] = (AppCompatImageView) item1View.findViewById(R.id.item_5);
-        list_icon_1 = new ArrayList<AppCompatImageView>();
-        list_icon_1.add(icons1Image[0]);
-        list_icon_1.add(icons1Image[1]);
-        list_icon_1.add(icons1Image[2]);
-        list_icon_1.add(icons1Image[3]);
-        list_icon_1.add(icons1Image[4]);
-        list_icon_1.add(icons1Image[5]);
+        iconImageList1 = new AppCompatImageView[6];
+        iconImageList1[0] = (AppCompatImageView) item1View.findViewById(R.id.item_0);
+        iconImageList1[1] = (AppCompatImageView) item1View.findViewById(R.id.item_1);
+        iconImageList1[2] = (AppCompatImageView) item1View.findViewById(R.id.item_2);
+        iconImageList1[3] = (AppCompatImageView) item1View.findViewById(R.id.item_3);
+        iconImageList1[4] = (AppCompatImageView) item1View.findViewById(R.id.item_4);
+        iconImageList1[5] = (AppCompatImageView) item1View.findViewById(R.id.item_5);
+        iconImageArrayList1 = new ArrayList<AppCompatImageView>();
+        iconImageArrayList1.add(iconImageList1[0]);
+        iconImageArrayList1.add(iconImageList1[1]);
+        iconImageArrayList1.add(iconImageList1[2]);
+        iconImageArrayList1.add(iconImageList1[3]);
+        iconImageArrayList1.add(iconImageList1[4]);
+        iconImageArrayList1.add(iconImageList1[5]);
         WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -191,16 +191,16 @@ public class EdgeGestureService extends Service {
         }
         edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edge2Image = (MyImageView) edge2View.findViewById(R.id.edge_image);
-        ViewGroup.LayoutParams lp2 = edge2Image.getLayoutParams();
+        ViewGroup.LayoutParams edge2ImageLayoutParams = edge2Image.getLayoutParams();
         if (Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext()) >= 30){
             edge2HeightPxl = (int) (edge2Sensitive * mScale);
             edge2WidthPxl = (int) (edge2Length * mScale);
         }
         edge2HeightPxl = (int) (edge2Length * mScale);
         edge2WidthPxl = (int) (edge2Sensitive * mScale);
-        lp2.height = edge2HeightPxl;
-        lp2.width = edge2WidthPxl;
-        edge2Image.setLayoutParams(lp2);
+        edge2ImageLayoutParams.height = edge2HeightPxl;
+        edge2ImageLayoutParams.width = edge2WidthPxl;
+        edge2Image.setLayoutParams(edge2ImageLayoutParams);
         WindowManager.LayoutParams paramsEdge2 = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -236,24 +236,24 @@ public class EdgeGestureService extends Service {
         }
 
         item2View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
-        icons2Image = new AppCompatImageView[6];
-        icons2Image[0] = (AppCompatImageView) item2View.findViewById(R.id.item_0);
-        icons2Image[1] = (AppCompatImageView) item2View.findViewById(R.id.item_1);
-        icons2Image[2] = (AppCompatImageView) item2View.findViewById(R.id.item_2);
-        icons2Image[3] = (AppCompatImageView) item2View.findViewById(R.id.item_3);
-        icons2Image[4] = (AppCompatImageView) item2View.findViewById(R.id.item_4);
-        icons2Image[5] = (AppCompatImageView) item2View.findViewById(R.id.item_5);
-        list_icon_2 = new ArrayList<AppCompatImageView>();
-        list_icon_2.add(icons2Image[0]);
-        list_icon_2.add(icons2Image[1]);
-        list_icon_2.add(icons2Image[2]);
-        list_icon_2.add(icons2Image[3]);
-        list_icon_2.add(icons2Image[4]);
-        list_icon_2.add(icons2Image[5]);
-        OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, icons1Image, item1View, list_icon_1);
+        iconImageList2 = new AppCompatImageView[6];
+        iconImageList2[0] = (AppCompatImageView) item2View.findViewById(R.id.item_0);
+        iconImageList2[1] = (AppCompatImageView) item2View.findViewById(R.id.item_1);
+        iconImageList2[2] = (AppCompatImageView) item2View.findViewById(R.id.item_2);
+        iconImageList2[3] = (AppCompatImageView) item2View.findViewById(R.id.item_3);
+        iconImageList2[4] = (AppCompatImageView) item2View.findViewById(R.id.item_4);
+        iconImageList2[5] = (AppCompatImageView) item2View.findViewById(R.id.item_5);
+        iconImageArrayList2 = new ArrayList<AppCompatImageView>();
+        iconImageArrayList2.add(iconImageList2[0]);
+        iconImageArrayList2.add(iconImageList2[1]);
+        iconImageArrayList2.add(iconImageList2[2]);
+        iconImageArrayList2.add(iconImageList2[3]);
+        iconImageArrayList2.add(iconImageList2[4]);
+        iconImageArrayList2.add(iconImageList2[5]);
+        OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, iconImageList1, item1View, iconImageArrayList1);
         edge1Image.setOnTouchListener(onTouchListener1);
 
-        OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position, icons2Image, item2View, list_icon_2);
+        OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position, iconImageList2, item2View, iconImageArrayList2);
         edge2Image.setOnTouchListener(onTouchListener2);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
@@ -269,14 +269,14 @@ public class EdgeGestureService extends Service {
         private int x_init_cord, y_init_cord;
         private int position;
         private FrameLayout itemView;
-        private AppCompatImageView[] iconImage;
-        private List<AppCompatImageView> listIcon;
+        private AppCompatImageView[] iconImageList;
+        private List<AppCompatImageView> iconImageArrayList;
 
-        public OnTouchListener(int position, AppCompatImageView[] iconImage, FrameLayout itemView, List<AppCompatImageView> listIcon) {
+        public OnTouchListener(int position, AppCompatImageView[] iconImageList, FrameLayout itemView, List<AppCompatImageView> iconImageArrayList) {
             this.position = position;
-            this.iconImage = iconImage;
+            this.iconImageList = iconImageList;
             this.itemView = itemView;
-            this.listIcon = listIcon;
+            this.iconImageArrayList = iconImageArrayList;
         }
 
         @Override
@@ -285,11 +285,11 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.TRIAL_BEGIN_DAY_KEY,System.currentTimeMillis())
-                            > MainActivity.trialTime;
-                    Log.e(LOG_TAG, "current = " + System.currentTimeMillis()+ "\nBegin = "
-                            + defaultShared.getLong(EdgeSettingDialogFragment.TRIAL_BEGIN_DAY_KEY,System.currentTimeMillis())
-                            + "\nTrial time = " + MainActivity.trialTime + "\nisOutOfTrial = " + isOutOfTrial);
+                    if (isFreeVersion){
+                        isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.TRIAL_BEGIN_DAY_KEY,System.currentTimeMillis())
+                                > MainActivity.trialTime;
+                    }else isOutOfTrial = false;
+
                     Set<String> excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
                     switched = false;
                     itemSwitched = false;
@@ -301,19 +301,22 @@ public class EdgeGestureService extends Service {
                     if (position >= 30){
                         y_init_cord = y_cord;
                     }else y_init_cord = y_cord - getYOffset(y_cord);
+                    float xForHomeBackNotiView = x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
+                    float yForHomeBackNotiView = y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
+                    int radiusForHomeBackNotiView = (int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl;
                     expandView = new ExpandStatusBarView(getApplicationContext());
-                    expandView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl);
-                    expandView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl);
-                    expandView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl);
+                    expandView.setX(xForHomeBackNotiView);
+                    expandView.setY(yForHomeBackNotiView);
+                    expandView.setRadius(radiusForHomeBackNotiView);
                     expandView.setOvalOffset(ovalOffSet);
                     expandView.setPosition(position);
                     expandView.setVisibility(View.INVISIBLE);
                     itemView.addView(expandView);
 
                     homeView = new ExpandStatusBarView(getApplicationContext());
-                    homeView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl);
-                    homeView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl);
-                    homeView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl);
+                    homeView.setX(xForHomeBackNotiView);
+                    homeView.setY(yForHomeBackNotiView);
+                    homeView.setRadius(radiusForHomeBackNotiView);
                     homeView.setOvalOffset(ovalOffSet);
                     homeView.setPosition(position);
                     homeView.setText("home");
@@ -321,16 +324,16 @@ public class EdgeGestureService extends Service {
                     itemView.addView(homeView);
 
                     backView = new ExpandStatusBarView(getApplicationContext());
-                    backView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl);
-                    backView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl);
-                    backView.setRadius((int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl);
+                    backView.setX(xForHomeBackNotiView);
+                    backView.setY(yForHomeBackNotiView);
+                    backView.setRadius(radiusForHomeBackNotiView);
                     backView.setOvalOffset(ovalOffSet);
                     backView.setPosition(position);
                     backView.setText("back");
                     backView.setVisibility(View.INVISIBLE);
                     itemView.addView(backView);
 
-                    WindowManager.LayoutParams paraItem = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams itemViewParameter = new WindowManager.LayoutParams(
                             WindowManager.LayoutParams.MATCH_PARENT,
                             WindowManager.LayoutParams.MATCH_PARENT,
                             WindowManager.LayoutParams.TYPE_PHONE,
@@ -338,11 +341,9 @@ public class EdgeGestureService extends Service {
                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE| WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
                                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                             PixelFormat.TRANSLUCENT);
-                    paraItem.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-                    windowManager.addView(itemView, paraItem);
-                    Utility.setIconsPosition(iconImage, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
-
-
+                    itemViewParameter.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                    windowManager.addView(itemView, itemViewParameter);
+                    Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
 
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -364,11 +365,11 @@ public class EdgeGestureService extends Service {
                         tempPackageName.toArray(packagename);
                         for (int i = 0; i < 6; i++) {
                             if (i >= packagename.length) {
-                                listIcon.get(i).setImageDrawable(null);
+                                iconImageArrayList.get(i).setImageDrawable(null);
                             } else {
                                 try {
                                     Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
-                                    ImageView iconi = listIcon.get(i);
+                                    ImageView iconi = iconImageArrayList.get(i);
                                     iconi.setImageDrawable(icon);
                                 } catch (PackageManager.NameNotFoundException e) {
                                     Log.e(LOG_TAG, "NameNotFound" + e);
@@ -417,11 +418,11 @@ public class EdgeGestureService extends Service {
                         } else Log.e(LOG_TAG, "erros in mySortedMap");
                         for (int i = 0; i < 6; i++) {
                             if (i >= packagename.length) {
-                                listIcon.get(i).setImageDrawable(null);
+                                iconImageArrayList.get(i).setImageDrawable(null);
                             } else {
                                 try {
                                     Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
-                                    ImageView iconi = listIcon.get(i);
+                                    ImageView iconi = iconImageArrayList.get(i);
                                     iconi.setImageDrawable(icon);
                                 } catch (PackageManager.NameNotFoundException e) {
                                     Log.e(LOG_TAG, "NameNotFound" + e);
@@ -430,12 +431,12 @@ public class EdgeGestureService extends Service {
                         }
                         if (packagename.length ==0) switched = true;
                     }
-                    numOfIcon = listIcon.size();
+                    numOfIcon = iconImageArrayList.size();
                     x = new int[numOfIcon];
                     y = new int[numOfIcon];
                     for (int i = 0; i < numOfIcon; i++) {
-                        x[i] = (int) listIcon.get(i).getX();
-                        y[i] = (int) listIcon.get(i).getY();
+                        x[i] = (int) iconImageArrayList.get(i).getX();
+                        y[i] = (int) iconImageArrayList.get(i).getY();
                     }
                     break;
                 case MotionEvent.ACTION_UP:
@@ -573,11 +574,11 @@ public class EdgeGestureService extends Service {
                     if (switched & !itemSwitched) {
                         for (int i = 0; i < 6; i++) {
                             if (i >= favoritePackageName.length) {
-                                listIcon.get(i).setImageDrawable(ContextCompat. getDrawable(getApplicationContext() , R.drawable.ic_add_circle_outline_white_48dp));
+                                iconImageArrayList.get(i).setImageDrawable(ContextCompat. getDrawable(getApplicationContext() , R.drawable.ic_add_circle_outline_white_48dp));
                             } else {
                                 try {
                                     Drawable icon = getPackageManager().getApplicationIcon(favoritePackageName[i]);
-                                    ImageView iconi = listIcon.get(i);
+                                    ImageView iconi = iconImageArrayList.get(i);
                                     iconi.setImageDrawable(icon);
                                 } catch (PackageManager.NameNotFoundException e) {
                                     Log.e(LOG_TAG, "NameNotFound" + e);
@@ -616,13 +617,13 @@ public class EdgeGestureService extends Service {
 
                             hasVibrate = true;
                         }
-                        for (int i = 0; i < listIcon.size(); i++) {
+                        for (int i = 0; i < iconImageArrayList.size(); i++) {
                             hasOneActive = true;
                             if (i == iconToSwitch) {
-//                                listIcon.get(i).setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
-                                listIcon.get(i).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.icon_tint));
+//                                iconImageArrayList.get(i).setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
+                                iconImageArrayList.get(i).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.icon_tint));
 
-                            } else listIcon.get(i).setColorFilter(null);
+                            } else iconImageArrayList.get(i).setColorFilter(null);
 
 
                         }
@@ -631,7 +632,7 @@ public class EdgeGestureService extends Service {
                     if (iconToSwitch == -1 & moveToHomeBackNoti == 0) {
                         hasVibrate = false;
                         if (hasOneActive) {
-                            for (ImageView imageView : listIcon) {
+                            for (ImageView imageView : iconImageArrayList) {
 //                                imageView.setBackground(null);
                                 if (imageView.getColorFilter() != null) {
                                     imageView.setColorFilter(null);
