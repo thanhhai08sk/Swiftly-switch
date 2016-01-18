@@ -380,8 +380,8 @@ public class EdgeGestureService extends Service {
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-                        long time = System.currentTimeMillis();
-                        List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 1000, time);
+                        long currentTimeMillis = System.currentTimeMillis();
+                        List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, currentTimeMillis - 1000 * 1000, currentTimeMillis);
                         ArrayList<String> tempPackageName = new ArrayList<String>();
                         if (stats != null) {
                             SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
@@ -404,7 +404,8 @@ public class EdgeGestureService extends Service {
                                                 packa.contains("googlequicksearchbox") |
                                                 key == mySortedMap.firstKey() |
                                                 excludeSet.contains(packa)|
-                                                packa.contains("launcher")) {
+                                                packa.contains("launcher") |
+                                                packa.contains("android.provider")) {
                                             // do nothing
                                         } else tempPackageName.add(packa);
                                     } catch (PackageManager.NameNotFoundException e) {
@@ -422,8 +423,8 @@ public class EdgeGestureService extends Service {
                             } else {
                                 try {
                                     Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
-                                    ImageView iconi = iconImageArrayList.get(i);
-                                    iconi.setImageDrawable(icon);
+                                    iconImageArrayList.get(i).setImageDrawable(icon);
+//                                    iconi.setImageDrawable(icon);
                                 } catch (PackageManager.NameNotFoundException e) {
                                     Log.e(LOG_TAG, "NameNotFound" + e);
                                 }
@@ -471,7 +472,7 @@ public class EdgeGestureService extends Service {
                             startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(startApp);
                             Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
-                        }
+                        }else Log.e(LOG_TAG, "extApp = null "+ packagename[packageToSwitch] );
 
                     }
                     packagename = null;
