@@ -315,7 +315,11 @@ public class EdgeGestureService extends Service {
                     Set<String> excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
                     switched = false;
                     itemSwitched = false;
-                    x_init_cord = x_cord;
+                    if (position < 30){
+                        x_init_cord = x_cord;
+                    }else {
+                        x_init_cord = x_cord - getXOffset(x_cord);
+                    }
                     if (position >= 30){
                         y_init_cord = y_cord;
                     }else y_init_cord = y_cord - getYOffset(y_cord);
@@ -769,6 +773,18 @@ public class EdgeGestureService extends Service {
         } else if (y_init < distanceNeeded) {
             return y_init - distanceNeeded;
         } else return 0;
+    }
+
+    private int getXOffset(int x_init){
+        Point point = new Point();
+        windowManager.getDefaultDisplay().getSize(point);
+        int distanceNeeded = (int) (mScale * (icon_distance + icon_rad));
+        int distanceWeHave = point.x - x_init;
+        if (distanceWeHave < distanceNeeded){
+            return distanceNeeded - distanceWeHave;
+        }else if (x_init < distanceNeeded){
+            return x_init - distanceNeeded;
+        }else return 0;
     }
 
     public void showAddFavoriteDialog(){
