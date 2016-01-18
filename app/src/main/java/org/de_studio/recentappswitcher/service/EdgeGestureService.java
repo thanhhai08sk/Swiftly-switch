@@ -84,10 +84,10 @@ public class EdgeGestureService extends Service {
     public int icon_distance = 110, distance_to_arc = 35, distance_to_arc_pxl;
     public float icon_distance_pxl, icon_24dp_in_pxls;
     public int edge_height = 150;
-    public int edge_1_height, edge_2_height;
+    public int edge1Length, edge2Length;
     public int edge1HeightPxl, edge2HeightPxl;
     public int edge1WidthPxl, edge2WidthPxl;
-    public int edge1Width, edge2Width;
+    public int edge1Sensivite, edge2Sensitive;
     public int edge_y;
     public int edge_centre_y;
     private List<AppCompatImageView> list_icon_1, list_icon_2;
@@ -106,6 +106,7 @@ public class EdgeGestureService extends Service {
     private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl;
     private long holdTime = 650, firstTouchTime;
     private boolean touched = false, switched = false, itemSwitched = false, isOutOfTrial = false, isFreeVersion = false;
+    private String[] spinnerEntries;
 
     @Nullable
     @Override
@@ -132,8 +133,13 @@ public class EdgeGestureService extends Service {
         edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edge1Image = (MyImageView) edge1View.findViewById(R.id.edge_image);
         ViewGroup.LayoutParams lp = edge1Image.getLayoutParams();
-        edge1HeightPxl = (int) (edge_1_height * mScale);
-        edge1WidthPxl = (int) (edge1Width * mScale);
+        if (Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()) >= 30){
+            edge1HeightPxl = (int) (edge1Sensivite * mScale);
+            edge1WidthPxl = (int) (edge1Length * mScale);
+        }else {
+            edge1HeightPxl = (int) (edge1Length * mScale);
+            edge1WidthPxl = (int) (edge1Sensivite * mScale);
+        }
         lp.height = edge1HeightPxl;
         lp.width = edge1WidthPxl;
         edge1Image.setLayoutParams(lp);
@@ -200,8 +206,12 @@ public class EdgeGestureService extends Service {
         edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edge2Image = (MyImageView) edge2View.findViewById(R.id.edge_image);
         ViewGroup.LayoutParams lp2 = edge2Image.getLayoutParams();
-        edge2HeightPxl = (int) (edge_2_height * mScale);
-        edge2WidthPxl = (int) (edge2Width * mScale);
+        if (Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext()) >= 30){
+            edge2HeightPxl = (int) (edge2Sensitive * mScale);
+            edge2WidthPxl = (int) (edge2Length * mScale);
+        }
+        edge2HeightPxl = (int) (edge2Length * mScale);
+        edge2WidthPxl = (int) (edge2Sensitive * mScale);
         lp2.height = edge2HeightPxl;
         lp2.width = edge2WidthPxl;
         edge2Image.setLayoutParams(lp2);
@@ -459,8 +469,6 @@ public class EdgeGestureService extends Service {
                     itemView.removeView(backView);
                     int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
                     if (packageToSwitch != -1) {
-//                        int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK |
-//                                Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
                         int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK ;
                         Intent extApp = null;
                         if (!switched) {
@@ -721,13 +729,13 @@ public class EdgeGestureService extends Service {
         sharedPreferences_exclude = getApplicationContext().getSharedPreferences(MainActivity.EXCLUDE_SHAREDPREFERENCE, 0);
         sharedPreferences1 = getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE, 0);
         sharedPreferences2 = getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
-        edge_1_height = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
-        edge_2_height = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
-        edge1Width = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY, 12);
-        edge2Width = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY, 12);
+        edge1Length = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
+        edge2Length = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
+        edge1Sensivite = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY, 12);
+        edge2Sensitive = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY, 12);
         isEdge1On = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true);
         isEdge2On = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, false);
-        String[] spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
+        spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
         edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
         ovalOffSet = (int) (25 * mScale);

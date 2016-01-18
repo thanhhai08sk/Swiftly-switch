@@ -161,8 +161,6 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 sharedPreferences.edit().putInt(EDGE_SENSIIVE_KEY, progressChanged).commit();
             }
         });
-
-
         final AppCompatSeekBar lengthSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.length_seek_bar);
         lengthSeekBar.setProgress(currentLength - 75);
         final TextView edgeLengthNumberText = (TextView) rootView.findViewById(R.id.edge_dialog_length_number_view);
@@ -221,12 +219,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             }
         });
 
-
-
-
-
         return rootView;
-
     }
 
     @Override
