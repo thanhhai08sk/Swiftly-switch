@@ -190,14 +190,8 @@ public class EdgeGestureService extends Service {
             case 22:
                 paramsEdge1.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 break;
-            case 30:
-                paramsEdge1.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                break;
             case 31:
                 paramsEdge1.gravity = Gravity.BOTTOM | Gravity.CENTER;
-                break;
-            case 32:
-                paramsEdge1.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 break;
         }
         if (isEdge1On) {
@@ -240,14 +234,8 @@ public class EdgeGestureService extends Service {
             case 22:
                 paramsEdge2.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 break;
-            case 30:
-                paramsEdge2.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                break;
             case 31:
                 paramsEdge2.gravity = Gravity.BOTTOM | Gravity.CENTER;
-                break;
-            case 32:
-                paramsEdge2.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 break;
         }
         if (isEdge2On) {
@@ -694,7 +682,20 @@ public class EdgeGestureService extends Service {
             Log.e(LOG_TAG, "ClassNotFound " + e);
         } catch (NoSuchMethodException e) {
             Log.e(LOG_TAG, "NosuchMethod " + e);
+            try {
+                Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
+                Method showsb =statusbarManager.getMethod("expand");
+                showsb.invoke(sbservice);
 
+            }catch (ClassNotFoundException e1) {
+                Log.e(LOG_TAG, "ClassNotFound 2 " + e1);
+            }catch (NoSuchMethodException e1){
+                Log.e(LOG_TAG, "NosuchMethod 2 " + e1);
+            }catch (InvocationTargetException e1) {
+            Log.e(LOG_TAG, "InvocationTargetException 2" + e1);
+            }catch (IllegalAccessException e1) {
+                Log.e(LOG_TAG, "IllegalAccessException 2 " + e1);
+            }
         } catch (IllegalAccessException e) {
             Log.e(LOG_TAG, "IllegalAccessException " + e);
         } catch (InvocationTargetException e) {
@@ -705,23 +706,13 @@ public class EdgeGestureService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-//        if (newConfig.orientation != configuration) {
         if (item1View.isAttachedToWindow()) {
             windowManager.removeView(item1View);
         }
         if (item2View.isAttachedToWindow()) {
             windowManager.removeView(item2View);
         }
-//            try {
-//                windowManager.removeView(item1View);
-//                windowManager.removeView(item2View);
-//            } catch (NullPointerException e) {
-//                Log.e("onConfiguration", "Null");
-//            } catch (IllegalArgumentException e) {
-//                Log.e("onConfiguration", "Illegal");
-//            }
-//            configuration = newConfig.orientation;
-//        }
+
     }
 
     @Override
@@ -797,5 +788,6 @@ public class EdgeGestureService extends Service {
             context.startService(new Intent(context,EdgeGestureService.class));
         }
     }
+
 
 }

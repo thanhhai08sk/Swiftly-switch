@@ -85,11 +85,7 @@ public class ExpandStatusBarView extends View {
                     break;
                 case 22: path.addArc(oval, 20, 70);
                     break;
-                case 30: path.addArc(oval,-70,70);
-                    break;
                 case 31: path.addArc(oval, -70,70);
-                    break;
-                case 32: path.addArc(oval, -70, 70);
                     break;
             }
         }else if (homwBackNoti==1){
@@ -106,11 +102,7 @@ public class ExpandStatusBarView extends View {
                     break;
                 case 22: path.addArc(oval, -90, 25);
                     break;
-                case 30: path.addArc(oval,-180, 25);
-                    break;
                 case 31: path.addArc(oval,-180,25);
-                    break;
-                case 32: path.addArc(oval,-180, 25);
                     break;
             }
         }else if (homwBackNoti ==2){
@@ -127,11 +119,7 @@ public class ExpandStatusBarView extends View {
                     break;
                 case 22: path.addArc(oval, -60, 40);
                     break;
-                case 30: path.addArc(oval,-150, 40);
-                    break;
                 case 31: path.addArc(oval,-150,40);
-                    break;
-                case 32: path.addArc(oval, -150, 40);
                     break;
             }
         }
