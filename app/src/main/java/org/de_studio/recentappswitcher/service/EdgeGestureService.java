@@ -70,7 +70,6 @@ public class EdgeGestureService extends Service {
     };
     private static final int NOTIFICATION_ID = 111;
     float mScale;
-    private int configuration = 0;
     static final String LOG_TAG = EdgeGestureService.class.getSimpleName();
     static final int EDGE_GESTURE_NOTIFICAION_ID = 10;
     private WindowManager windowManager;
@@ -83,7 +82,6 @@ public class EdgeGestureService extends Service {
     public int icon_width = 48, icon_rad = 24;
     public int icon_distance = 110, distance_to_arc = 35, distance_to_arc_pxl;
     public float icon_distance_pxl, icon_24dp_in_pxls;
-    public int edge_height = 150;
     public int edge1Length, edge2Length;
     public int edge1HeightPxl, edge2HeightPxl;
     public int edge1WidthPxl, edge2WidthPxl;
@@ -169,8 +167,6 @@ public class EdgeGestureService extends Service {
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 PixelFormat.TRANSLUCENT);
-
-        // | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
         switch (edge1Position) {
             case 10:
                 paramsEdge1.gravity = Gravity.TOP | Gravity.RIGHT;
@@ -291,8 +287,6 @@ public class EdgeGestureService extends Service {
         public boolean onTouch(View v, MotionEvent event) {
             int x_cord = (int) event.getRawX();
             int y_cord = (int) event.getRawY();
-            int x1, y1, top, left, bottom, right;
-            int[] expandSpec;// left, top, right, bottom
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.TRIAL_BEGIN_DAY_KEY,System.currentTimeMillis())
@@ -311,9 +305,6 @@ public class EdgeGestureService extends Service {
                     if (position >= 30){
                         y_init_cord = y_cord;
                     }else y_init_cord = y_cord - getYOffset(y_cord);
-                    expandSpec = Utility.getExpandSpec(x_init_cord, y_init_cord, icon_distance, 35, windowManager);
-                    int expandWidth = expandSpec[2] - expandSpec[0];
-                    int expandHeight = expandSpec[3] - expandSpec[1];
                     expandView = new ExpandStatusBarView(getApplicationContext());
                     expandView.setX(x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl);
                     expandView.setY(y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl);
@@ -481,17 +472,11 @@ public class EdgeGestureService extends Service {
                             extApp.addCategory(Intent.CATEGORY_LAUNCHER);
                             extApp.setAction(Intent.ACTION_MAIN);
                             ComponentName componentName = extApp.getComponent();
-//                            Intent startApp = new Intent();
-//                            startApp.setComponent(componentName);
-//                            startApp.addCategory(Intent.CATEGORY_LAUNCHER);
-//                            startApp.addFlags(launchFlags);
-//                            startApp.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             Intent startApp = new Intent(Intent.ACTION_MAIN,null);
                             startApp.addCategory(Intent.CATEGORY_LAUNCHER);
                             startApp.setComponent(componentName);
                             startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivity(startApp);
-//                            startActivity(startApp);
                             Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
                         }
 
@@ -659,14 +644,10 @@ public class EdgeGestureService extends Service {
                             expandView.setVisibility(View.VISIBLE);
                             break;
                     }
-
-
             }
-
             return true;
         }
     }
-
     public void expandStatusBar() {
         Object sbservice = getSystemService("statusbar");
         try {
