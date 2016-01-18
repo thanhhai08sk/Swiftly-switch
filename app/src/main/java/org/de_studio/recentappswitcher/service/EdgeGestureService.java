@@ -545,7 +545,35 @@ public class EdgeGestureService extends Service {
                             expandStatusBar();
                         }
                     }else if (isOutOfTrial & homeBackNoti >0){
-                        Toast.makeText(getApplicationContext(),getString(R.string.edge_service_out_of_trial_text_when_homebacknoti),Toast.LENGTH_LONG).show();
+                        if (homeBackNoti == 1) {
+                            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+                            event1.setClassName(getClass().getName());
+                            event1.getText().add("home");
+                            event1.setAction(1);
+                            event1.setPackageName(getPackageName());
+                            event1.setEnabled(true);
+                            AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+                            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+                            recordCompat.setSource(v);
+                            if (Utility.isAccessibilityEnable(getApplicationContext())) {
+                                manager.sendAccessibilityEvent(event1);
+                            }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+                        } else if (homeBackNoti == 2) {
+                            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+                            event1.setClassName(getClass().getName());
+                            event1.getText().add("back");
+                            event1.setAction(2);
+                            event1.setPackageName(getPackageName());
+                            event1.setEnabled(true);
+                            AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+                            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+                            recordCompat.setSource(v);
+                            if (Utility.isAccessibilityEnable(getApplicationContext())) {
+                                manager.sendAccessibilityEvent(event1);
+                            }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+                        } else if (homeBackNoti == 3) {
+                            Toast.makeText(getApplicationContext(),getString(R.string.edge_service_out_of_trial_text_when_homebacknoti),Toast.LENGTH_LONG).show();
+                        }
                     }
 
                     break;
