@@ -85,11 +85,11 @@ public class ExpandStatusBarView extends View {
                     break;
                 case 22: path.addArc(oval, 20, 70);
                     break;
-                case 30: path.addArc(oval,110,70);
+                case 30: path.addArc(oval,-70,70);
                     break;
-                case 31: path.addArc(oval, 110,70);
+                case 31: path.addArc(oval, -70,70);
                     break;
-                case 32: path.addArc(oval, 110, 70);
+                case 32: path.addArc(oval, -70, 70);
                     break;
             }
         }else if (homwBackNoti==1){
