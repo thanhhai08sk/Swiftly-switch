@@ -486,7 +486,7 @@ public class EdgeGestureService extends Service {
 
                     }
                     packagename = null;
-                    int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, windowManager, position);
+                    int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
                     Log.e(LOG_TAG, "homeBackNoti = " + homeBackNoti);
                     if (!isFreeVersion){
                         if (homeBackNoti == 1) {
@@ -599,7 +599,7 @@ public class EdgeGestureService extends Service {
                         itemSwitched = false;
                     }
                     int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
-                    int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, windowManager, position);
+                    int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
                     if (iconToSwitch != -1) {
                         if (!touched) {
                             firstTouchTime = System.currentTimeMillis();

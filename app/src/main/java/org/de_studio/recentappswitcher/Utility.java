@@ -10,9 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 
 import java.util.HashSet;
@@ -24,12 +22,12 @@ import java.util.Set;
  */
 public  class Utility {
     private static final String LOG_TAG = Utility.class.getSimpleName();
-    public static int dpiToPixels (int dp, WindowManager windowManager){
-        DisplayMetrics metrics =new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        float logicalDensity = metrics.density;
-        return (int) Math.ceil(dp*logicalDensity);
-    }
+//    public static int dpiToPixels (int dp, WindowManager windowManager){
+//        DisplayMetrics metrics =new DisplayMetrics();
+//        windowManager.getDefaultDisplay().getMetrics(metrics);
+//        float logicalDensity = metrics.density;
+//        return (int) Math.ceil(dp*logicalDensity);
+//    }
 
     public static int findIconToSwitch (int[] x, int[] y,int x_cord, int y_cord, int numOfIcon, int radOfIcon, float mScale) {
         int radOfIconPxl = (int) (radOfIcon * mScale);
@@ -176,11 +174,10 @@ public  class Utility {
 
     }
 
-    public static int isHomeOrBackOrNoti(int x_init, int y_init, int x, int y, int radius, WindowManager win, int position){
+    public static int isHomeOrBackOrNoti(int x_init, int y_init, int x, int y, int radius, float mScale, int position){
 
         double distance = Math.sqrt(Math.pow((double)x - (double)x_init,2) + Math.pow((double)y - (double) y_init, 2));
-        double distanceNeeded_pxl = (double) dpiToPixels(35+ radius,win);
-//        double distanceNeededToBack_pxl = (double) dpiToPixels(71+ radius,win);
+        double distanceNeeded_pxl = (double) ((35+ radius)* mScale);
         double maxAng = 0.4166*Math.PI;  // 75 degree
         double midAng = 0.3333* Math.PI; //60 degree
         double minAng = 0.0833*Math.PI; //15 degree
@@ -217,23 +214,23 @@ public  class Utility {
         }
 
     }
-    public static int[] getExpandSpec(int x_init,int y_init,int rad, int distanceFromIcon,WindowManager win){
-        int[] result = new int[4];
-        int rad_pxl = dpiToPixels(rad,win);
-        int distance_pxl = dpiToPixels(distanceFromIcon,win);
-        double radian30 = 0.16667* Math.PI;
-        double sin30 = Math.sin(radian30);
-        double cos30 = Math.cos(radian30);
-        int a = 2* (int)((rad_pxl+ distance_pxl)*sin30);
-        int b = rad_pxl + distance_pxl - (int)((rad_pxl+distance_pxl)*cos30);
-        result[0] = x_init -(int)( (rad_pxl + distance_pxl)*sin30);
-        result[1] = y_init - (int)(rad_pxl*cos30) -(int)( distance_pxl*cos30) - b;
-        result[2] = result[0] + a;
-        result[3] = result[1] + b;
-        Log.e("expand", "left = " + result[0]+ "\ntop =" + result[1] + "\nright = "+ result[2] + "\nbottom = "+ result[3] +"\na = "+ a + "\nb = "+ b +"\nsin30= "
-        + sin30+ "\ncos30 = "+ cos30 + "\ndistance = " +distance_pxl + "\nradpx; = "+rad_pxl);
-        return result;
-    }
+//    public static int[] getExpandSpec(int x_init,int y_init,int rad, int distanceFromIcon,WindowManager win){
+//        int[] result = new int[4];
+//        int rad_pxl = dpiToPixels(rad,win);
+//        int distance_pxl = dpiToPixels(distanceFromIcon,win);
+//        double radian30 = 0.16667* Math.PI;
+//        double sin30 = Math.sin(radian30);
+//        double cos30 = Math.cos(radian30);
+//        int a = 2* (int)((rad_pxl+ distance_pxl)*sin30);
+//        int b = rad_pxl + distance_pxl - (int)((rad_pxl+distance_pxl)*cos30);
+//        result[0] = x_init -(int)( (rad_pxl + distance_pxl)*sin30);
+//        result[1] = y_init - (int)(rad_pxl*cos30) -(int)( distance_pxl*cos30) - b;
+//        result[2] = result[0] + a;
+//        result[3] = result[1] + b;
+//        Log.e("expand", "left = " + result[0]+ "\ntop =" + result[1] + "\nright = "+ result[2] + "\nbottom = "+ result[3] +"\na = "+ a + "\nb = "+ b +"\nsin30= "
+//        + sin30+ "\ncos30 = "+ cos30 + "\ndistance = " +distance_pxl + "\nradpx; = "+rad_pxl);
+//        return result;
+//    }
 
     public static int getPositionIntFromString(String position, Context context){
         String[] array = context.getResources().getStringArray(R.array.edge_dialog_spinner_array);
