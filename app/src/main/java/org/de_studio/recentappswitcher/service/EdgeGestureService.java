@@ -373,9 +373,9 @@ public class EdgeGestureService extends Service {
                                 iconImageArrayList.get(i).setImageDrawable(null);
                             } else {
                                 try {
-                                    Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
-                                    ImageView iconi = iconImageArrayList.get(i);
-                                    iconi.setImageDrawable(icon);
+//                                    Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
+//                                    ImageView iconi = iconImageArrayList.get(i);
+                                    iconImageArrayList.get(i).setImageDrawable( getPackageManager().getApplicationIcon(packagename[i]));
                                 } catch (PackageManager.NameNotFoundException e) {
                                     Log.e(LOG_TAG, "NameNotFound" + e);
                                 }
@@ -427,8 +427,8 @@ public class EdgeGestureService extends Service {
                                 iconImageArrayList.get(i).setImageDrawable(null);
                             } else {
                                 try {
-                                    Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
-                                    iconImageArrayList.get(i).setImageDrawable(icon);
+//                                    Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
+                                    iconImageArrayList.get(i).setImageDrawable(getPackageManager().getApplicationIcon(packagename[i]));
 //                                    iconi.setImageDrawable(icon);
                                 } catch (PackageManager.NameNotFoundException e) {
                                     Log.e(LOG_TAG, "NameNotFound" + e);
