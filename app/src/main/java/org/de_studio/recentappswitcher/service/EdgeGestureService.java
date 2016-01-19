@@ -15,7 +15,6 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
@@ -375,7 +374,7 @@ public class EdgeGestureService extends Service {
                                 try {
 //                                    Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
 //                                    ImageView iconi = iconImageArrayList.get(i);
-                                    iconImageArrayList.get(i).setImageDrawable( getPackageManager().getApplicationIcon(packagename[i]));
+                                    iconImageArrayList.get(i).setImageDrawable(getPackageManager().getApplicationIcon(packagename[i]));
                                 } catch (PackageManager.NameNotFoundException e) {
                                     Log.e(LOG_TAG, "NameNotFound" + e);
                                 }
@@ -474,8 +473,8 @@ public class EdgeGestureService extends Service {
                         }
 
                         if (extApp != null) {
-                            extApp.addCategory(Intent.CATEGORY_LAUNCHER);
-                            extApp.setAction(Intent.ACTION_MAIN);
+//                            extApp.addCategory(Intent.CATEGORY_LAUNCHER);
+//                            extApp.setAction(Intent.ACTION_MAIN);
                             ComponentName componentName = extApp.getComponent();
                             Intent startApp = new Intent(Intent.ACTION_MAIN,null);
                             startApp.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -589,9 +588,9 @@ public class EdgeGestureService extends Service {
                                 iconImageArrayList.get(i).setImageDrawable(ContextCompat. getDrawable(getApplicationContext() , R.drawable.ic_add_circle_outline_white_48dp));
                             } else {
                                 try {
-                                    Drawable icon = getPackageManager().getApplicationIcon(favoritePackageName[i]);
-                                    ImageView iconi = iconImageArrayList.get(i);
-                                    iconi.setImageDrawable(icon);
+//                                    Drawable icon = getPackageManager().getApplicationIcon(favoritePackageName[i]);
+//                                    ImageView iconi = iconImageArrayList.get(i);
+                                    iconImageArrayList.get(i).setImageDrawable(getPackageManager().getApplicationIcon(favoritePackageName[i]));
                                 } catch (PackageManager.NameNotFoundException e) {
                                     Log.e(LOG_TAG, "NameNotFound" + e);
                                 }
@@ -611,16 +610,12 @@ public class EdgeGestureService extends Service {
                                 long eslapeTime = currentTime - firstTouchTime;
                                 if (eslapeTime > holdTime) {
                                     switched = true;
-//                                    Toast.makeText(getApplicationContext(), "switch to favorite apps", Toast.LENGTH_SHORT).show();
                                 }
                             }
-
                         }
                     } else {
                         touched = false;
                     }
-
-
                     if (iconToSwitch != -1 | moveToHomeBackNoti > 0) {
                         if (!hasVibrate) {
                             if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY,false)){
@@ -632,29 +627,21 @@ public class EdgeGestureService extends Service {
                         for (int i = 0; i < iconImageArrayList.size(); i++) {
                             hasOneActive = true;
                             if (i == iconToSwitch) {
-//                                iconImageArrayList.get(i).setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
                                 iconImageArrayList.get(i).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.icon_tint));
-
                             } else iconImageArrayList.get(i).setColorFilter(null);
-
-
                         }
-
                     }
                     if (iconToSwitch == -1 & moveToHomeBackNoti == 0) {
                         hasVibrate = false;
                         if (hasOneActive) {
                             for (ImageView imageView : iconImageArrayList) {
-//                                imageView.setBackground(null);
                                 if (imageView.getColorFilter() != null) {
                                     imageView.setColorFilter(null);
                                 }
-
                             }
                         }
                         hasOneActive = false;
                     }
-//                    Log.e(LOG_TAG, "movetoHomeBackNoti = " + moveToHomeBackNoti);
                     switch (moveToHomeBackNoti) {
                         case 0:
                             homeView.setVisibility(View.INVISIBLE);
