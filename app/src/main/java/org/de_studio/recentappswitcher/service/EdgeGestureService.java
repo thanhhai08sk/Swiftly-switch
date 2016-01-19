@@ -342,7 +342,12 @@ public class EdgeGestureService extends Service {
                                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                             PixelFormat.TRANSLUCENT);
                     itemViewParameter.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-                    windowManager.addView(itemView, itemViewParameter);
+//                    try {
+//                        windowManager.addView(itemView, itemViewParameter);
+//
+//                    }catch (IllegalStateException e){
+//                        Log.e(LOG_TAG," item_view has already been added to the window manager");
+//                    }
                     Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
 
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -438,6 +443,12 @@ public class EdgeGestureService extends Service {
                     for (int i = 0; i < numOfIcon; i++) {
                         x[i] = (int) iconImageArrayList.get(i).getX();
                         y[i] = (int) iconImageArrayList.get(i).getY();
+                    }
+                    try {
+                        windowManager.addView(itemView, itemViewParameter);
+
+                    }catch (IllegalStateException e){
+                        Log.e(LOG_TAG," item_view has already been added to the window manager");
                     }
                     break;
                 case MotionEvent.ACTION_UP:
