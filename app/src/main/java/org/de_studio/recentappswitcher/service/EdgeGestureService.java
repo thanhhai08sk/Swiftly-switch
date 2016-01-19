@@ -451,7 +451,12 @@ public class EdgeGestureService extends Service {
                     }
                     break;
                 case MotionEvent.ACTION_UP:
-                    windowManager.removeView(itemView);
+                    try {
+                        windowManager.removeView(itemView);
+                    }catch (IllegalArgumentException e){
+                        Log.e(LOG_TAG,"itemView not attacked to the windowManager");
+                    }
+
                     itemView.removeView(expandView);
                     itemView.removeView(homeView);
                     itemView.removeView(backView);
