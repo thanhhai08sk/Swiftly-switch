@@ -455,7 +455,7 @@ public class EdgeGestureService extends Service {
                     itemView.removeView(expandView);
                     itemView.removeView(homeView);
                     itemView.removeView(backView);
-                    int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
+                    int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
                     if (packageToSwitch != -1) {
                         Intent extApp = null;
                         if (!switched) {
@@ -598,7 +598,7 @@ public class EdgeGestureService extends Service {
                         }
                         itemSwitched = false;
                     }
-                    int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, windowManager);
+                    int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
                     int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, windowManager, position);
                     if (iconToSwitch != -1) {
                         if (!touched) {
