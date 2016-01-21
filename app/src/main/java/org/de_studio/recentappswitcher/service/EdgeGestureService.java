@@ -500,7 +500,7 @@ public class EdgeGestureService extends Service {
                             Intent startApp = new Intent(Intent.ACTION_MAIN,null);
                             startApp.addCategory(Intent.CATEGORY_LAUNCHER);
                             startApp.setComponent(componentName);
-                            startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_NO_ANIMATION );
                             startActivity(startApp);
                             Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
                         }else Log.e(LOG_TAG, "extApp = null " );
