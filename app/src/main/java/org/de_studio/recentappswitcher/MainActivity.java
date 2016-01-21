@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -61,7 +62,7 @@ public class MainActivity extends Activity {
     TextView descriptionText;
     float mScale;
     private boolean isTrial = false, isOutOfTrial = false;
-    private long trialTimePass, trialBeginTime;
+    private long trialTimePass, beginTime;
 
 
     @Override
@@ -76,12 +77,12 @@ public class MainActivity extends Activity {
         sharedPreferencesDefautl = getSharedPreferences(DEFAULT_SHAREDPREFERENCE, 0);
         sharedPreferences_favorite = getSharedPreferences(FAVORITE_SHAREDPREFERENCE,0);
         sharedPreferences_exclude = getSharedPreferences(EXCLUDE_SHAREDPREFERENCE,0);
-        trialBeginTime = sharedPreferencesDefautl.getLong(EdgeSettingDialogFragment.TRIAL_BEGIN_DAY_KEY,0);
-        if (trialBeginTime ==0){
-            sharedPreferencesDefautl.edit().putLong(EdgeSettingDialogFragment.TRIAL_BEGIN_DAY_KEY,System.currentTimeMillis()).commit();
-            trialBeginTime = System.currentTimeMillis();
+        beginTime = sharedPreferencesDefautl.getLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY,0);
+        if (beginTime ==0){
+            sharedPreferencesDefautl.edit().putLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY,System.currentTimeMillis()).commit();
+            beginTime = System.currentTimeMillis();
         }
-        if (System.currentTimeMillis() - trialBeginTime > trialTime) isOutOfTrial = true;
+        if (System.currentTimeMillis() - beginTime > trialTime) isOutOfTrial = true;
         Button buyProButton = (Button) findViewById(R.id.main_buy_pro_button);
         if (isTrial) buyProButton.setVisibility(View.VISIBLE);
         buyProButton.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +100,59 @@ public class MainActivity extends Activity {
                 }
             }
         });
+        final AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.main_app_bar_layout);
+        if (!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, false)){
+            int timeOpen = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.APP_OPEN_TIME_KEY,0);
+            sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.APP_OPEN_TIME_KEY, timeOpen +1).commit();
+            if (timeOpen >=8){
+
+                final LinearLayout doYouLoveLinearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.do_you_love_this_app, null);
+                appBarLayout.addView(doYouLoveLinearLayout);
+                Button yesButton = (Button) doYouLoveLinearLayout.findViewById(R.id.main_do_you_love_yes_button);
+                Button noButton = (Button) doYouLoveLinearLayout.findViewById(R.id.main_do_you_love_no_button);
+                noButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY,true).commit();
+                        appBarLayout.removeView(doYouLoveLinearLayout);
+                    }
+                });
+                yesButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
+                        builder.setMessage(R.string.please_vote_for_this_app)
+                                .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY,true).commit();
+                                        appBarLayout.removeView(doYouLoveLinearLayout);
+                                        Uri uri = Uri.parse("mbarket://details?id=" + getPackageName());
+                                        Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+                                        gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                                                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                                        try {
+                                            startActivity(gotoMarket);
+                                        } catch (ActivityNotFoundException e) {
+                                            startActivity(new Intent(Intent.ACTION_VIEW,
+                                                    Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+                                        }
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY,true).commit();
+                                        appBarLayout.removeView(doYouLoveLinearLayout);
+                                        // d
+                                    }
+                                });
+                        builder.show();
+                    }
+                });
+            }
+        }
+
         descriptionText = (TextView) findViewById(R.id.main_description_text_view);
         step1Button = (Button) findViewById(R.id.step1_button);
         Switch edge1Switch = (Switch) findViewById(R.id.edge_1_switch);

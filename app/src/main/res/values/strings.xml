@@ -53,4 +53,8 @@
     <string name="accessibility_service_description">Please turn on the setting</string>
     <string name="ask_user_to_turn_on_accessibility_toast">Please turn on the Accessibility setting for this app</string>
     <string name="main_disable_haptic_feedback_text">Disable haptic feedback</string>
+    <string name="main_do_you_love_this_app">Do you love this app?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="please_vote_for_this_app">Please consider vote for this app on Store</string>
 </resources>

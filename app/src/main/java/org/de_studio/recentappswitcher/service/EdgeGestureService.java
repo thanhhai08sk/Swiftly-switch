@@ -285,7 +285,7 @@ public class EdgeGestureService extends Service {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     if (isFreeVersion){
-                        isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.TRIAL_BEGIN_DAY_KEY,System.currentTimeMillis())
+                        isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY,System.currentTimeMillis())
                                 > MainActivity.trialTime;
                     }else isOutOfTrial = false;
 
