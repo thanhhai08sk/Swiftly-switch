@@ -282,6 +282,15 @@ public class EdgeGestureService extends Service {
         public boolean onTouch(View v, MotionEvent event) {
             int x_cord = (int) event.getRawX();
             int y_cord = (int) event.getRawY();
+            if (touched){
+                if (!switched) {
+                    long currentTime = System.currentTimeMillis();
+                    long eslapeTime = currentTime - firstTouchTime;
+                    if (eslapeTime > holdTime) {
+                        switched = true;
+                    }
+                }
+            }
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     if (isFreeVersion){
@@ -609,14 +618,6 @@ public class EdgeGestureService extends Service {
                         if (!touched) {
                             firstTouchTime = System.currentTimeMillis();
                             touched = true;
-                        } else {
-                            if (!switched) {
-                                long currentTime = System.currentTimeMillis();
-                                long eslapeTime = currentTime - firstTouchTime;
-                                if (eslapeTime > holdTime) {
-                                    switched = true;
-                                }
-                            }
                         }
                     } else {
                         touched = false;
