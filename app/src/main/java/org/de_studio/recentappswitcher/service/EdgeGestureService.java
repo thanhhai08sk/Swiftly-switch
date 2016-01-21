@@ -293,6 +293,13 @@ public class EdgeGestureService extends Service {
             }
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+//                    try {
+                        itemView.removeView(backView);
+                        itemView.removeView(homeView);
+                        itemView.removeView(expandView);
+//                    }catch (NullPointerException e ){
+//                        Log.e(LOG_TAG,"NullpointException " + e);
+//                    }
                     if (isFreeVersion){
                         isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY,System.currentTimeMillis())
                                 > MainActivity.trialTime;
@@ -593,6 +600,7 @@ public class EdgeGestureService extends Service {
                             Toast.makeText(getApplicationContext(),getString(R.string.edge_service_out_of_trial_text_when_homebacknoti),Toast.LENGTH_LONG).show();
                         }
                     }
+                    touched = false;
 
                     break;
                 case MotionEvent.ACTION_MOVE:
@@ -679,6 +687,15 @@ public class EdgeGestureService extends Service {
                     if (item2View.isAttachedToWindow()) {
                         windowManager.removeView(item2View);
                     }
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    if (item1View.isAttachedToWindow()) {
+                        windowManager.removeView(item1View);
+                    }
+                    if (item2View.isAttachedToWindow()) {
+                        windowManager.removeView(item2View);
+                    }
+                    break;
             }
             return true;
         }
