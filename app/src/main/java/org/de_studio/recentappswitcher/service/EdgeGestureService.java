@@ -669,6 +669,15 @@ public class EdgeGestureService extends Service {
                             expandView.setVisibility(View.VISIBLE);
                             break;
                     }
+                    break;
+
+                case MotionEvent.ACTION_OUTSIDE:
+                    if (item1View.isAttachedToWindow()) {
+                        windowManager.removeView(item1View);
+                    }
+                    if (item2View.isAttachedToWindow()) {
+                        windowManager.removeView(item2View);
+                    }
             }
             return true;
         }
