@@ -706,7 +706,7 @@ public class EdgeGestureService extends Service {
             Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
             Method showsb;
             if (Build.VERSION.SDK_INT >= 17) {
-                showsb = statusbarManager.getMethod("expandNotificationsPanel");
+                showsb = statusbarManager.getMethod("expandSettingsPanel");
             } else {
                 showsb = statusbarManager.getMethod("expand");
             }
@@ -717,7 +717,7 @@ public class EdgeGestureService extends Service {
             Log.e(LOG_TAG, "NosuchMethod " + e);
             try {
                 Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
-                Method showsb =statusbarManager.getMethod("expand");
+                Method showsb =statusbarManager.getMethod("expandSettingsPanel");
                 showsb.invoke(sbservice);
 
             }catch (ClassNotFoundException e1) {
