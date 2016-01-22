@@ -706,7 +706,7 @@ public class EdgeGestureService extends Service {
             Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
             Method showsb;
             if (Build.VERSION.SDK_INT >= 17) {
-                showsb = statusbarManager.getMethod("expandSettingsPanel");
+                showsb = statusbarManager.getMethod("expandNotificationsPanel");
             } else {
                 showsb = statusbarManager.getMethod("expand");
             }
