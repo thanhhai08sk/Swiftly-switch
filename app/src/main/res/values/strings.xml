@@ -57,4 +57,5 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="please_vote_for_this_app">Please consider vote for this app on Store</string>
+    <string name="edge_dialog_set_circle_size_text">Circle size</string>
 </resources>

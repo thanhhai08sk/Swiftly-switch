@@ -44,7 +44,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String ICON_DISTANCE_KEY = "icon_distance";
     private static int edgeNumber;
     private  float mScale;
-    private static SharedPreferences sharedPreferences;
+    private static SharedPreferences sharedPreferences,defaultSharedPreferences;
     private ViewGroup.LayoutParams mEdgeParas;
     private Context mContext;
     private String[] spinnerEntries;
@@ -66,6 +66,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         }else if (edgeNumber ==2){
             sharedPreferences = mContext.getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
         }
+        defaultSharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE,0);
         Log.e(LOG_TAG,"edge number = " + edgeNumber);
         if (sharedPreferences == null){
             Log.e(LOG_TAG, "sharedPreference == null at onCreateview");
@@ -79,6 +80,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
 
         int currentLength = sharedPreferences.getInt(EDGE_LENGTH_KEY ,150);
         int currentSensitive = sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 12);
+        int currentCircleSize = defaultSharedPreferences.getInt(ICON_DISTANCE_KEY,110);
         spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
         final TextView sensitiveNumberTextView = (TextView) rootView.findViewById(R.id.edge_dialog_sensitive_number_text);
         final AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
@@ -141,9 +143,9 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChanged = progress + 5;
                 edgeParas = edgeImage.getLayoutParams();
-                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
+                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30) {
                     edgeParas.height = (int) (progressChanged * mScale);
-                }else edgeParas.width = (int) (progressChanged * mScale);
+                } else edgeParas.width = (int) (progressChanged * mScale);
                 edgeImage.setLayoutParams(edgeParas);
                 sensitiveNumberTextView.setText(progressChanged + "dp");
             }
@@ -172,9 +174,9 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 progressChanged = progress + 75;
                 edgeParas = edgeImage.getLayoutParams();
 
-                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
+                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30) {
                     edgeParas.width = (int) (progressChanged * mScale);
-                }else  edgeParas.height = (int) (progressChanged * mScale);
+                } else edgeParas.height = (int) (progressChanged * mScale);
 
                 edgeImage.setLayoutParams(edgeParas);
                 edgeLengthNumberText.setText(progressChanged + "dp");
@@ -188,6 +190,29 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 sharedPreferences.edit().putInt(EDGE_LENGTH_KEY, progressChanged).commit();
+            }
+        });
+
+        final AppCompatSeekBar circleSizeSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.circle_size_seek_bar);
+        final TextView circleSizeNumberText = (TextView) rootView.findViewById(R.id.edge_dialog_circle_size_number_view);
+        circleSizeSeekBar.setProgress(currentCircleSize - 105);
+        circleSizeNumberText.setText(currentCircleSize + "dp");
+        circleSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChanged; //105 to 140
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChanged = progress + 105;
+                circleSizeNumberText.setText(progressChanged + "dp");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                defaultSharedPreferences.edit().putInt(ICON_DISTANCE_KEY,progressChanged).commit();
             }
         });
 
@@ -206,6 +231,8 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 sharedPreferences.edit().putInt(EDGE_SENSIIVE_KEY, 12).commit();
                 lengthSeekBar.setProgress(75);
                 sharedPreferences.edit().putInt(EDGE_LENGTH_KEY, 150).commit();
+                circleSizeSeekBar.setProgress(5);
+                defaultSharedPreferences.edit().putInt(ICON_DISTANCE_KEY,110).commit();
 
             }
         });
