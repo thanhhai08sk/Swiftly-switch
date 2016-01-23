@@ -772,6 +772,7 @@ public class EdgeGestureService extends Service {
         spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
         edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
+        icon_distance = defaultShared.getInt(EdgeSettingDialogFragment.ICON_DISTANCE_KEY,110);
         ovalOffSet = (int) (25 * mScale);
         ovalRadiusPlusPxl = (int) (ovalRadiusPlus * mScale);
         Set<String> set = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, new HashSet<String>());

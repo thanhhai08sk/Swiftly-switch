@@ -41,6 +41,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String DISABLE_HAPTIC_FEEDBACK_KEY = "disable_haptic";
     public static final String APP_OPEN_TIME_KEY = "app_open_time";
     public static final String HAS_REACT_FOR_VOTE_KEY = "has_react_for_vote";
+    public static final String ICON_DISTANCE_KEY = "icon_distance";
     private static int edgeNumber;
     private  float mScale;
     private static SharedPreferences sharedPreferences;
