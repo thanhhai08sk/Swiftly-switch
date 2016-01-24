@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -9,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.wifi.WifiManager;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.accessibility.AccessibilityManager;
@@ -322,4 +324,31 @@ public  class Utility {
         drawable.draw(canvas);
         return bitmap;
     }
+
+    public static void toggleWifi(Context context){
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        boolean currentState = wifiManager.isWifiEnabled();
+        wifiManager.setWifiEnabled(!currentState);
+    }
+    public static boolean getWifiState(Context context){
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        return wifiManager.isWifiEnabled();
+    }
+    public static void toggleBluetooth (Context context){
+        BluetoothAdapter bluetoothAdapter = (BluetoothAdapter) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        boolean bluetoothState = bluetoothAdapter.isEnabled();
+        if (bluetoothState){
+            bluetoothAdapter.disable();
+        }else {
+            bluetoothAdapter.enable();
+        }
+    }
+    public static boolean getBluetoothState (Context context){
+        BluetoothAdapter bluetoothAdapter = (BluetoothAdapter) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        return bluetoothAdapter.isEnabled();
+    }
+    public static boolean checkIsFlashLightAvailable (Context context){
+        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+    }
+
 }
