@@ -417,20 +417,22 @@ public class EdgeGestureService extends Service {
                                 }
                                 if (usageStats != null){
                                     String packa = usageStats.getPackageName();
-                                    try {
-                                        if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
-                                            //do nothing
-                                        } else if (packa.contains("systemui") |
+//                                    try {
+//                                        if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
+//                                            //do nothing
+//                                        } else
+                                    if (packa.contains("systemui") |
                                                 packa.contains("googlequicksearchbox") |
                                                 key == mySortedMap.firstKey() |
                                                 excludeSet.contains(packa)|
                                                 packa.contains("launcher") |
-                                                packa.contains("android.provider")) {
+//                                                packa.contains("android.provider") |
+                                                getPackageManager().getLaunchIntentForPackage(packa)== null) {
                                             // do nothing
                                         } else tempPackageName.add(packa);
-                                    } catch (PackageManager.NameNotFoundException e) {
-                                        Log.e(LOG_TAG, "name not found" + e);
-                                    }
+//                                    } catch (PackageManager.NameNotFoundException e) {
+//                                        Log.e(LOG_TAG, "name not found" + e);
+//                                    }
                                 }
 
                             }
