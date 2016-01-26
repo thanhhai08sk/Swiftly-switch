@@ -102,6 +102,8 @@ public class EdgeGestureService extends Service {
     private long holdTime = 650, firstTouchTime;
     private boolean touched = false, switched = false, itemSwitched = false, isOutOfTrial = false, isFreeVersion = false;
     private String[] spinnerEntries;
+    private int sizeOfStatusBarPlusActionBar = 80;
+    private int sizeOfStatusBarPlusActionBarInPxl;
 
     @Nullable
     @Override
@@ -293,21 +295,9 @@ public class EdgeGestureService extends Service {
             }
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-//                    try {
-                        itemView.removeView(backView);
-                        itemView.removeView(homeView);
-                        itemView.removeView(expandView);
-//                    }catch (NullPointerException e ){
-//                        Log.e(LOG_TAG,"NullpointException " + e);
-//                    }
-                    if (isFreeVersion){
-                        isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY,System.currentTimeMillis())
-                                > MainActivity.trialTime;
-                    }else isOutOfTrial = false;
-
-                    Set<String> excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
-                    switched = false;
-                    itemSwitched = false;
+                    if (y_cord <= sizeOfStatusBarPlusActionBarInPxl){
+                        return false;
+                    }
                     if (position < 30){
                         x_init_cord = x_cord;
                     }else {
@@ -316,6 +306,17 @@ public class EdgeGestureService extends Service {
                     if (position >= 30){
                         y_init_cord = y_cord;
                     }else y_init_cord = y_cord - getYOffset(y_cord);
+                        itemView.removeView(backView);
+                        itemView.removeView(homeView);
+                        itemView.removeView(expandView);
+                    if (isFreeVersion){
+                        isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY,System.currentTimeMillis())
+                                > MainActivity.trialTime;
+                    }else isOutOfTrial = false;
+
+                    Set<String> excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
+                    switched = false;
+                    itemSwitched = false;
                     float xForHomeBackNotiView = x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
                     float yForHomeBackNotiView = y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
                     int radiusForHomeBackNotiView = (int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl;
@@ -760,6 +761,7 @@ public class EdgeGestureService extends Service {
     public void onCreate() {
         super.onCreate();
         mScale = getResources().getDisplayMetrics().density;
+        sizeOfStatusBarPlusActionBarInPxl =(int) (mScale * sizeOfStatusBarPlusActionBar);
         defaultShared = getApplicationContext().getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         sharedPreferences_favorite = getApplicationContext().getSharedPreferences(MainActivity.FAVORITE_SHAREDPREFERENCE, 0);
         sharedPreferences_exclude = getApplicationContext().getSharedPreferences(MainActivity.EXCLUDE_SHAREDPREFERENCE, 0);
