@@ -11,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.wifi.WifiManager;
+import android.provider.Settings;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.accessibility.AccessibilityManager;
@@ -350,5 +351,21 @@ public  class Utility {
     public static boolean checkIsFlashLightAvailable (Context context){
         return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     }
+
+    public static boolean getIsRotationAuto(Context context){
+        int current = android.provider.Settings.System.getInt(context.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION,0);
+        return current ==1;
+    }
+
+    public static void setAutorotation(Context context){
+        if(android.provider.Settings.System.getInt(context.getContentResolver(),Settings.System.ACCELEROMETER_ROTATION, 0) == 1)
+        {
+            android.provider.Settings.System.putInt(context.getContentResolver(),Settings.System.ACCELEROMETER_ROTATION, 0);
+        }
+        else{
+            android.provider.Settings.System.putInt(context.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 1);
+        }
+    }
+
 
 }
