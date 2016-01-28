@@ -540,7 +540,7 @@ public class EdgeGestureService extends Service {
                                 manager.sendAccessibilityEvent(event1);
                             }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
                         } else if (homeBackNoti == 3) {
-                            expandStatusBar();
+                            expandStatusBar(v);
                         }
                     } else if(!isOutOfTrial & homeBackNoti >0){
                         if (homeBackNoti == 1) {
@@ -570,7 +570,7 @@ public class EdgeGestureService extends Service {
                                 manager.sendAccessibilityEvent(event1);
                             }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
                         } else if (homeBackNoti == 3) {
-                            expandStatusBar();
+                            expandStatusBar(v);
                         }
                     }else if (isOutOfTrial & homeBackNoti >0){
                         if (homeBackNoti == 1) {
@@ -703,7 +703,7 @@ public class EdgeGestureService extends Service {
             return true;
         }
     }
-    public void expandStatusBar() {
+    public void expandStatusBar(View v) {
         Object sbservice = getSystemService("statusbar");
         try {
             Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
@@ -716,27 +716,32 @@ public class EdgeGestureService extends Service {
             showsb.invoke(sbservice);
         } catch (ClassNotFoundException e) {
             Log.e(LOG_TAG, "ClassNotFound " + e);
+            showStatusBarByAccessibilityService(v);
         } catch (NoSuchMethodException e) {
             Log.e(LOG_TAG, "NosuchMethod " + e);
-            try {
-                Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
-                Method showsb =statusbarManager.getMethod("expandSettingsPanel");
-                showsb.invoke(sbservice);
-
-            }catch (ClassNotFoundException e1) {
-                Log.e(LOG_TAG, "ClassNotFound 2 " + e1);
-            }catch (NoSuchMethodException e1){
-                Log.e(LOG_TAG, "NosuchMethod 2 " + e1);
-            }catch (InvocationTargetException e1) {
-            Log.e(LOG_TAG, "InvocationTargetException 2" + e1);
-            }catch (IllegalAccessException e1) {
-                Log.e(LOG_TAG, "IllegalAccessException 2 " + e1);
-            }
+            showStatusBarByAccessibilityService(v);
         } catch (IllegalAccessException e) {
             Log.e(LOG_TAG, "IllegalAccessException " + e);
+            showStatusBarByAccessibilityService(v);
         } catch (InvocationTargetException e) {
             Log.e(LOG_TAG, "InvocationTargetException " + e);
+            showStatusBarByAccessibilityService(v);
         }
+    }
+
+    public void showStatusBarByAccessibilityService(View v){
+        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+        event1.setClassName(getClass().getName());
+        event1.getText().add("notification");
+        event1.setAction(3);
+        event1.setPackageName(getPackageName());
+        event1.setEnabled(true);
+        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+        recordCompat.setSource(v);
+        if (Utility.isAccessibilityEnable(getApplicationContext())) {
+            manager.sendAccessibilityEvent(event1);
+        }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
     }
 
     @Override

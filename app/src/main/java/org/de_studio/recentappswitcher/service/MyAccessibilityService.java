@@ -18,6 +18,9 @@ public class MyAccessibilityService extends AccessibilityService {
             }else if (event.getAction()==2){
                 Log.e("MyAccessibilityService", "back");
                 performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
+            }else if (event.getAction() ==3){
+                Log.e("MyAccessibilityService", "notification");
+                performGlobalAction(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS);
             }
 
         }
