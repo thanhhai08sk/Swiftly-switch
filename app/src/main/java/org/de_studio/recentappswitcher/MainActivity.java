@@ -104,7 +104,7 @@ public class MainActivity extends Activity {
         if (!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, false)){
             int timeOpen = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.APP_OPEN_TIME_KEY,0);
             sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.APP_OPEN_TIME_KEY, timeOpen +1).commit();
-            if (timeOpen >=8){
+            if (timeOpen >=6){
 
                 final LinearLayout doYouLoveLinearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.do_you_love_this_app, null);
                 appBarLayout.addView(doYouLoveLinearLayout);
