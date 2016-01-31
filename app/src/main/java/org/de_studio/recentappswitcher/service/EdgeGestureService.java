@@ -413,30 +413,26 @@ public class EdgeGestureService extends Service {
                             Log.e(LOG_TAG,"mySortedMap size = " + mySortedMap.size());
                             for (Long key : setKey) {
                                 UsageStats usageStats = mySortedMap.get(key);
-                                if (usageStats == null){
-                                    Log.e(LOG_TAG," usageStats is null");
-                                }
-                                if (usageStats != null){
+                                if (usageStats == null | key > System.currentTimeMillis()){
+                                    if (key> System.currentTimeMillis()){
+                                        Log.e(LOG_TAG,"key is in the future");
+                                    }else Log.e(LOG_TAG," usageStats is null");
+                                }else {
                                     String packa = usageStats.getPackageName();
-//                                    try {
-//                                        if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
-//                                            //do nothing
-//                                        } else
+//                                    Log.e(LOG_TAG,"packa = " +packa +"\nKey = " + key);
                                     if (packa.contains("systemui") |
-                                                packa.contains("googlequicksearchbox") |
-                                                key == mySortedMap.firstKey() |
-                                                excludeSet.contains(packa)|
-                                                packa.contains("launcher") |
-//                                                packa.contains("android.provider") |
-                                                getPackageManager().getLaunchIntentForPackage(packa)== null) {
-                                            // do nothing
-                                        } else tempPackageName.add(packa);
-//                                    } catch (PackageManager.NameNotFoundException e) {
-//                                        Log.e(LOG_TAG, "name not found" + e);
-//                                    }
+                                            packa.contains("googlequicksearchbox") |
+                                            key == mySortedMap.firstKey() |
+                                            excludeSet.contains(packa)|
+                                            packa.contains("launcher") |
+                                            getPackageManager().getLaunchIntentForPackage(packa)== null) {
+                                        // do nothing
+                                    } else tempPackageName.add(packa);
                                 }
 
+
                             }
+                            Log.e(LOG_TAG, "Size of tempPackageName = " + tempPackageName.size());
                             packagename = new String[tempPackageName.size()];
                             tempPackageName.toArray(packagename);
                         } else Log.e(LOG_TAG, "erros in mySortedMap");
