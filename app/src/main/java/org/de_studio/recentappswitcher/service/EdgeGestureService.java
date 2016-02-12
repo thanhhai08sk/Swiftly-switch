@@ -537,7 +537,8 @@ public class EdgeGestureService extends Service {
                                 manager.sendAccessibilityEvent(event1);
                             }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
                         } else if (homeBackNoti == 3) {
-                            expandStatusBar();
+                            Utility.showAudioDialog(getApplicationContext());
+//                            expandStatusBar();
                         }
                     } else if(!isOutOfTrial & homeBackNoti >0){
                         if (homeBackNoti == 1) {

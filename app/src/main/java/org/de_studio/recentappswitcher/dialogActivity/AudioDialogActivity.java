@@ -1,11 +1,11 @@
 package org.de_studio.recentappswitcher.dialogActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import org.de_studio.recentappswitcher.R;
 
-public class AudioDialogActivity extends AppCompatActivity {
+public class AudioDialogActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

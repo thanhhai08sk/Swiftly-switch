@@ -16,6 +16,8 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.accessibility.AccessibilityManager;
 
+import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -365,6 +367,12 @@ public  class Utility {
         else{
             android.provider.Settings.System.putInt(context.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 1);
         }
+    }
+
+    public static void showAudioDialog(Context context){
+        Intent intent = new Intent(context,AudioDialogActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
 

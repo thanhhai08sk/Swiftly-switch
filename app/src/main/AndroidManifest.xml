@@ -58,7 +58,7 @@
             android:launchMode="singleInstance"
             android:excludeFromRecents="true"
             android:taskAffinity=""
-            android:theme="@android:style/Theme.Dialog"
+            android:theme="@style/AudioDialogTheme"
             >
 
         </activity>
