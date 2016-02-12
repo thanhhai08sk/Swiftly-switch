@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Swiftly switch free</string>
+    <string name="accessibility_service_description">Please turn on the setting for Swiftly switch free</string>
 
 </resources>
