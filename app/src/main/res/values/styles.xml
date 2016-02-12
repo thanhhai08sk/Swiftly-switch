@@ -28,6 +28,7 @@
     <style name="AudioDialogTheme" parent="android:Theme.Dialog">
         <item name="android:windowNoTitle">true</item>
         <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@color/transparent</item>
     </style>
 
 </resources>
