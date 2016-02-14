@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import org.de_studio.recentappswitcher.R;
 
+import io.realm.Realm;
+
 /**
  * Created by hai on 2/14/2016.
  */
@@ -44,7 +46,9 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         } else {
             imageView = (ImageView) convertView;
         }
-        imageView.setImageDrawable();
+        Realm myRealm = Realm.getInstance(mContext);
+        Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",position).findFirst();
+        imageView.setImageDrawable(shortcut.getDrawable());
         return null;
     }
 }

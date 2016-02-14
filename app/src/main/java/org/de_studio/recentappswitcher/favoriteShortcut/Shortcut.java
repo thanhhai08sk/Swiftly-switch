@@ -2,12 +2,13 @@ package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.graphics.drawable.Drawable;
 
+import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by hai on 2/14/2016.
  */
-public class Shortcut {
+public class Shortcut extends RealmObject {
     public static final int TYPE_APP = 0;
     public static final int TYPE_SETTING = 1;
     public static final int ACTION_WIFI = 0;
