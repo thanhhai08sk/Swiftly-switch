@@ -54,13 +54,20 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".dialogActivity.AudioDialogActivity"
-            android:launchMode="singleInstance"
+        <activity
+            android:name=".dialogActivity.AudioDialogActivity"
             android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
             android:taskAffinity=""
-            android:theme="@style/AudioDialogTheme"
-            >
-
+            android:theme="@style/AudioDialogTheme"></activity>
+        <activity
+            android:name=".favoriteShortcut.SetFavoriteShortcutActivity"
+            android:label="@string/title_activity_set_favorite_shortcut"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.de_studio.recentappswitcher.MainActivity" />
         </activity>
     </application>
 
