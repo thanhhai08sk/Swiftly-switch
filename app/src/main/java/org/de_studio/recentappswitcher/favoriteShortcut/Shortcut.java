@@ -18,6 +18,7 @@ public class Shortcut extends RealmObject {
     private int type;
     private String packageName;
     private int action;
+    private String label;
 
     public Shortcut() {}
 
@@ -51,6 +52,14 @@ public class Shortcut extends RealmObject {
 
     public int getAction() {
         return action;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getLabel() {
+        return label;
     }
 
 }

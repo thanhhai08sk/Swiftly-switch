@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.de_studio.recentappswitcher.AppInfors;
@@ -47,6 +48,14 @@ public class AppTabFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_app_tab, container, false);
         mListView = (ListView) view.findViewById(R.id.fragment_app_tab_list_view);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                view.findViewById(R.id.choose_app_radio_button);
+                Log.e(LOG_TAG, "onItemClick");
+            }
+        });
         Log.e(LOG_TAG, "inflate mListView");
         return view;
     }
@@ -86,14 +95,17 @@ public class AppTabFragment extends Fragment{
         protected void onPostExecute(ArrayList<AppInfors> result) {
             mAdapter = new ChooseAppListViewAdapter(getContext(), result);
             mListView.setAdapter(mAdapter);
-//            synchronized(mListView){
-//                mListView.notify();
-//            }
             if (mListView == null) {
                 Log.e(LOG_TAG, "mListView = null");
             }
+//            synchronized(mListView){
+//                mListView.notify();
+//            }
+
             Log.e(LOG_TAG, "OnPostExecute, mListview size = " + mListView.getCount());
 
         }
     }
+
+
 }

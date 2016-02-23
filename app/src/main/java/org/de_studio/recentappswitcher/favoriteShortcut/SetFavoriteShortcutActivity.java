@@ -36,7 +36,9 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(getApplicationContext(),ChooseShortcutActivity.class));
+                Intent intent = new Intent(getApplicationContext(), ChooseShortcutActivity.class);
+                intent.addFlags(position);
+                startActivity(intent);
             }
         });
 

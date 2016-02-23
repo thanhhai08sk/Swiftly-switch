@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.R;
 
@@ -19,6 +20,7 @@ public class ChooseShortcutActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private static final String LOG_TAG = ChooseShortcutActivity.class.getSimpleName();
+    private int mPosition;
 
 
     private ViewPager mViewPager;
@@ -26,6 +28,8 @@ public class ChooseShortcutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPosition = getIntent().getFlags();
+        Toast.makeText(getApplicationContext(),"ChooseShortcutActivity position = "+ mPosition,Toast.LENGTH_SHORT).show();
         setContentView(R.layout.activity_choose_shortcut);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
