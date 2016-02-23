@@ -14,6 +14,9 @@ import org.de_studio.recentappswitcher.R;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 /**
  * Created by hai on 2/23/2016.
  */
@@ -22,12 +25,19 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
     static private ArrayList<AppInfors> mAppInfosArrayList;
     private static final String LOG_TAG = ChooseAppListViewAdapter.class.getSimpleName();
     private int mPosition;
+    private String mPackageSelected;
 
     public ChooseAppListViewAdapter(Context context, ArrayList<AppInfors> appInforses, int position) {
         super();
         mPosition = position;
         mContext = context;
         mAppInfosArrayList = appInforses;
+        Realm myRealm = Realm.getInstance(mContext);
+        Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
+        if (shortcut != null) {
+            mPackageSelected = shortcut.getPackageName();
+        }
+
     }
 
     @Override
@@ -46,22 +56,35 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.choose_shortcut_app_list_item, parent, false);
         }
-
         ImageView imageView = (ImageView) view.findViewById(R.id.choose_app_image_view);
         TextView textView = (TextView) view.findViewById(R.id.choose_app_title_text_view);
         RadioButton radioButton = (RadioButton) view.findViewById(R.id.choose_app_radio_button);
+        if (mPackageSelected !=null & mAppInfosArrayList.get(position).packageName.equalsIgnoreCase(mPackageSelected)){
+            radioButton.setChecked(true);
+        }else radioButton.setChecked(false);
         imageView.setImageDrawable(mAppInfosArrayList.get(position).iconDrawable);
         textView.setText(mAppInfosArrayList.get(position).label);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Realm myRealm = Realm.getInstance(mContext);
+                myRealm.beginTransaction();
+                RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findAll();
+                oldShortcut.clear();
+                Shortcut shortcut = myRealm.createObject(Shortcut.class);
+                shortcut.setType(Shortcut.TYPE_APP);
+                shortcut.setId(mPosition);
+                shortcut.setLabel(mAppInfosArrayList.get(position).label);
+                shortcut.setPackageName(mAppInfosArrayList.get(position).packageName);
+                myRealm.commitTransaction();
+                mPackageSelected = mAppInfosArrayList.get(position).packageName;
+                ChooseAppListViewAdapter.this.notifyDataSetChanged();
             }
         });
         return view;
