@@ -59,7 +59,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:taskAffinity=""
-            android:theme="@style/AudioDialogTheme"></activity>
+            android:theme="@style/AudioDialogTheme" />
         <activity
             android:name=".favoriteShortcut.SetFavoriteShortcutActivity"
             android:label="@string/title_activity_set_favorite_shortcut"
@@ -68,6 +68,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.de_studio.recentappswitcher.MainActivity" />
+        </activity>
+        <activity
+            android:name=".favoriteShortcut.ChooseShortcutActivity"
+            android:label="@string/title_activity_choose_shortcut"
+            android:parentActivityName=".favoriteShortcut.SetFavoriteShortcutActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity" />
         </activity>
     </application>
 

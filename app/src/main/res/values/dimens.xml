@@ -6,4 +6,5 @@
     <dimen name="icon_size">48dp</dimen>
     <dimen name="grid_view_column_space">10dp</dimen>
     <dimen name="grid_view_row_space">10dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 </resources>

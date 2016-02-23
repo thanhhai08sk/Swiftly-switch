@@ -59,4 +59,6 @@
     <string name="please_vote_for_this_app">Please consider vote for this app on Store</string>
     <string name="edge_dialog_set_circle_size_text">Circle size</string>
     <string name="title_activity_set_favorite_shortcut">SetFavoriteShortcutActivity</string>
+    <string name="title_activity_choose_shortcut">ChooseShortcutActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>
