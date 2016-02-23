@@ -325,7 +325,6 @@ public class MainActivity extends Activity {
         addFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                FragmentManager fragmentManager = getSupportFragmentManager();
                 android.app.FragmentManager fragmentManager = getFragmentManager();
                 FavoriteOrExcludeDialogFragment newFragment = new FavoriteOrExcludeDialogFragment();
                 if (mAppInforsArrayList != null) {

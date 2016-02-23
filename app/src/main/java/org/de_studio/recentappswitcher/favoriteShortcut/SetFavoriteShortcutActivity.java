@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.GridView;
 
 import org.de_studio.recentappswitcher.R;
 
@@ -27,6 +28,9 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        GridView gridView = (GridView) findViewById(R.id.favorite_shortcut_grid_view);
+        FavoriteShortcutAdapter adapter = new FavoriteShortcutAdapter(this);
+
     }
 
 }

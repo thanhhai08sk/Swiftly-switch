@@ -48,7 +48,12 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         }
         Realm myRealm = Realm.getInstance(mContext);
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",position).findFirst();
-        imageView.setImageDrawable(shortcut.getDrawable());
+        if (shortcut == null) {
+            imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+        } else {
+            imageView.setImageDrawable(shortcut.getDrawable());
+        }
+
         return null;
     }
 }
