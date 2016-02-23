@@ -1,5 +1,9 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -7,17 +11,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.de_studio.recentappswitcher.AppInfors;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Set;
 
 public class ChooseShortcutActivity extends AppCompatActivity {
 
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private static final String LOG_TAG = ChooseShortcutActivity.class.getSimpleName();
 
 
     private ViewPager mViewPager;
@@ -108,4 +120,6 @@ public class ChooseShortcutActivity extends AppCompatActivity {
             return null;
         }
     }
+
+
 }
