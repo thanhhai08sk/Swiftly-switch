@@ -9,19 +9,20 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/list_app_background"
+    android:gravity="center"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity"
     tools:showIn="@layout/activity_set_favorite_shortcut">
     <GridView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/favorite_shortcut_grid_view"
         android:columnWidth="48dp"
         android:numColumns="4"
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp"
         android:gravity="center"
-        android:stretchMode="columnWidth"
+        android:stretchMode="spacingWidth"
         >
 
     </GridView>
