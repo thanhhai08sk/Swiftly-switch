@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class ChooseAppListViewAdapter extends BaseAdapter {
     private Context mContext;
     static private ArrayList<AppInfors> mAppInfosArrayList;
+    private static final String LOG_TAG = ChooseAppListViewAdapter.class.getSimpleName();
 
     public ChooseAppListViewAdapter(Context context, ArrayList<AppInfors> appInforses) {
         super();
@@ -43,11 +44,10 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.choose_shortcut_app_list_item, parent,false);
+            view = inflater.inflate(R.layout.choose_shortcut_app_list_item, parent, false);
         }
 
         ImageView imageView = (ImageView) view.findViewById(R.id.choose_app_image_view);

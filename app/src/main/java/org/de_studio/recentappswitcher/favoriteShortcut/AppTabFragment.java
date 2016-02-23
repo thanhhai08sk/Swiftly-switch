@@ -31,6 +31,7 @@ public class AppTabFragment extends Fragment{
 
     private static final String LOG_TAG = AppTabFragment.class.getSimpleName();
     private ListView mListView;
+    private ChooseAppListViewAdapter mAdapter;
 
     public static AppTabFragment newInstance(int sectionNumber) {
         AppTabFragment fragment = new AppTabFragment();
@@ -45,7 +46,9 @@ public class AppTabFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_app_tab, container, false);
         mListView = (ListView) view.findViewById(R.id.fragment_app_tab_list_view);
-        return super.onCreateView(inflater, container, savedInstanceState);
+        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        Log.e(LOG_TAG, "inflate mListView");
+        return view;
     }
 
     @Override
@@ -81,8 +84,16 @@ public class AppTabFragment extends Fragment{
             return arrayList;
         }
         protected void onPostExecute(ArrayList<AppInfors> result) {
-            ChooseAppListViewAdapter adapter = new ChooseAppListViewAdapter(getContext(), result);
-            mListView.setAdapter(adapter);
+            mAdapter = new ChooseAppListViewAdapter(getContext(), result);
+            mListView.setAdapter(mAdapter);
+//            synchronized(mListView){
+//                mListView.notify();
+//            }
+            if (mListView == null) {
+                Log.e(LOG_TAG, "mListView = null");
+            }
+            Log.e(LOG_TAG, "OnPostExecute, mListview size = " + mListView.getCount());
+
         }
     }
 }

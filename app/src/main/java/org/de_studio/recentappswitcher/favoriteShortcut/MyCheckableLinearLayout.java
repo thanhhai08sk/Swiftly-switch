@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.widget.Checkable;
 import android.widget.LinearLayout;
 
@@ -9,8 +10,8 @@ import android.widget.LinearLayout;
  */
 public class MyCheckableLinearLayout extends LinearLayout implements Checkable {
 
-    public MyCheckableLinearLayout(Context context){
-        super(context);
+    public MyCheckableLinearLayout(Context context, AttributeSet attributeSet){
+        super(context,attributeSet);
     }
     private boolean isChecked = false;
     @Override
