@@ -1,7 +1,5 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
-import android.graphics.drawable.Drawable;
-
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -18,11 +16,18 @@ public class Shortcut extends RealmObject {
     @PrimaryKey
     private int id;
     private int type;
-    private Drawable drawable;
     private String packageName;
     private int action;
 
     public Shortcut() {}
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
 
     public void setType(int type) {
         this.type = type;
@@ -30,14 +35,6 @@ public class Shortcut extends RealmObject {
 
     public int getType() {
         return type;
-    }
-
-    public void setDrawable(Drawable drawable) {
-        this.drawable = drawable;
-    }
-
-    public Drawable getDrawable() {
-        return drawable;
     }
 
     public void setPackageName(String packageName) {

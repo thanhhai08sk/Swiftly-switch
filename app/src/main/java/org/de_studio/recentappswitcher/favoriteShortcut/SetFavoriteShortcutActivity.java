@@ -30,6 +30,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         GridView gridView = (GridView) findViewById(R.id.favorite_shortcut_grid_view);
         FavoriteShortcutAdapter adapter = new FavoriteShortcutAdapter(this);
+        gridView.setAdapter(adapter);
 
     }
 

@@ -33,6 +33,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
@@ -325,12 +326,13 @@ public class MainActivity extends Activity {
         addFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                android.app.FragmentManager fragmentManager = getFragmentManager();
-                FavoriteOrExcludeDialogFragment newFragment = new FavoriteOrExcludeDialogFragment();
-                if (mAppInforsArrayList != null) {
-                    newFragment.setAppInforsArrayList(mAppInforsArrayList, FavoriteOrExcludeDialogFragment.FAVORITE_MODE,getApplicationContext());
-                    newFragment.show(fragmentManager, "addAppDialog");
-                }else Toast.makeText(getApplicationContext(),R.string.waite_a_secend_app_loading,Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), SetFavoriteShortcutActivity.class));
+//                android.app.FragmentManager fragmentManager = getFragmentManager();
+//                FavoriteOrExcludeDialogFragment newFragment = new FavoriteOrExcludeDialogFragment();
+//                if (mAppInforsArrayList != null) {
+//                    newFragment.setAppInforsArrayList(mAppInforsArrayList, FavoriteOrExcludeDialogFragment.FAVORITE_MODE,getApplicationContext());
+//                    newFragment.show(fragmentManager, "addAppDialog");
+//                }else Toast.makeText(getApplicationContext(),R.string.waite_a_secend_app_loading,Toast.LENGTH_SHORT).show();
 
             }
         });

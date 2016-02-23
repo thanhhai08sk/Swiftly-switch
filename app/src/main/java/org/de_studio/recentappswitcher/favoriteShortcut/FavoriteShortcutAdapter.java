@@ -15,6 +15,7 @@ import io.realm.Realm;
  * Created by hai on 2/14/2016.
  */
 public class FavoriteShortcutAdapter extends BaseAdapter {
+    private static final String LOG_TAG = FavoriteShortcutAdapter.class.getSimpleName();
     private Context mContext;
 
     public FavoriteShortcutAdapter(Context context) {
@@ -41,7 +42,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         ImageView imageView;
         if (convertView == null) {
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(R.dimen.icon_size, R.dimen.icon_size));
+            imageView.setLayoutParams(new GridView.LayoutParams((int) mContext.getResources().getDimension(R.dimen.icon_size), (int) mContext.getResources().getDimension(R.dimen.icon_size)));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         } else {
             imageView = (ImageView) convertView;
@@ -51,9 +52,9 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         if (shortcut == null) {
             imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
         } else {
-            imageView.setImageDrawable(shortcut.getDrawable());
+            imageView.setImageResource(R.drawable.ic_edit_white_24dp);
         }
 
-        return null;
+        return imageView;
     }
 }
