@@ -12,8 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.AppInfors;
 import org.de_studio.recentappswitcher.R;
@@ -33,6 +33,7 @@ public class AppTabFragment extends Fragment{
     private static final String LOG_TAG = AppTabFragment.class.getSimpleName();
     private ListView mListView;
     private ChooseAppListViewAdapter mAdapter;
+    private int mPosition;
 
     public static AppTabFragment newInstance(int sectionNumber) {
         AppTabFragment fragment = new AppTabFragment();
@@ -42,21 +43,18 @@ public class AppTabFragment extends Fragment{
         return fragment;
     }
 
+    public void setmPosition(int mPosition) {
+        this.mPosition = mPosition;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_app_tab, container, false);
         mListView = (ListView) view.findViewById(R.id.fragment_app_tab_list_view);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                view.findViewById(R.id.choose_app_radio_button);
-                Log.e(LOG_TAG, "onItemClick");
-            }
-        });
         Log.e(LOG_TAG, "inflate mListView");
+        Toast.makeText(getContext(), "AppTabFragment mPosition = " + mPosition, Toast.LENGTH_SHORT).show();
         return view;
     }
 
@@ -93,7 +91,7 @@ public class AppTabFragment extends Fragment{
             return arrayList;
         }
         protected void onPostExecute(ArrayList<AppInfors> result) {
-            mAdapter = new ChooseAppListViewAdapter(getContext(), result);
+            mAdapter = new ChooseAppListViewAdapter(getContext(), result, mPosition);
             mListView.setAdapter(mAdapter);
             if (mListView == null) {
                 Log.e(LOG_TAG, "mListView = null");

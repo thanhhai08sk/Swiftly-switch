@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.AppInfors;
@@ -20,9 +21,11 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
     private Context mContext;
     static private ArrayList<AppInfors> mAppInfosArrayList;
     private static final String LOG_TAG = ChooseAppListViewAdapter.class.getSimpleName();
+    private int mPosition;
 
-    public ChooseAppListViewAdapter(Context context, ArrayList<AppInfors> appInforses) {
+    public ChooseAppListViewAdapter(Context context, ArrayList<AppInfors> appInforses, int position) {
         super();
+        mPosition = position;
         mContext = context;
         mAppInfosArrayList = appInforses;
     }
@@ -52,8 +55,15 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
 
         ImageView imageView = (ImageView) view.findViewById(R.id.choose_app_image_view);
         TextView textView = (TextView) view.findViewById(R.id.choose_app_title_text_view);
+        RadioButton radioButton = (RadioButton) view.findViewById(R.id.choose_app_radio_button);
         imageView.setImageDrawable(mAppInfosArrayList.get(position).iconDrawable);
         textView.setText(mAppInfosArrayList.get(position).label);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         return view;
     }
 }
