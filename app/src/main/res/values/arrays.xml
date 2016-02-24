@@ -9,4 +9,9 @@
         <item>@string/edge_dialog_array_left_bottom</item>
         <item>@string/edge_dialog_array_bottom_centre</item>
     </string-array>
+    <string-array name="setting_shortcut_array">
+        <item>@string/setting_shortcut_wifi</item>
+        <item>@string/setting_shortcut_bluetooth</item>
+        <item>@string/setting_shortcut_rotation</item>
+    </string-array>
 </resources>

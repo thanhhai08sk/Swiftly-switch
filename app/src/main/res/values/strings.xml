@@ -64,4 +64,9 @@
     <string name="app_tab_fragment_back_button">Back</string>
     <string name="app_tab_fragment_next_button">Next</string>
     <string name="app_tab_fragment_ok_button">OK</string>
+    <string name="setting_shortcut_wifi">On/off wifi</string>
+    <string name="setting_shortcut_bluetooth">On/off bluetooth</string>
+    <string name="setting_shortcut_rotation">Auto/lock rotation</string>
+    <string name="setting_shortcut_power_menu">Show power menu</string>
+
 </resources>
