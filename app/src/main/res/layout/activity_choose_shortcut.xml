@@ -33,19 +33,21 @@
 
     <android.support.v7.widget.ButtonBarLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="58dp"
         android:layout_gravity="bottom"
+        android:background="@color/colorPrimary"
         android:gravity="center_vertical|right"
         >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1."
+            android:textColor="@color/white"
             android:textSize="24dp"
             android:paddingLeft="10dp"
             android:paddingRight="5dp"
             android:id="@+id/app_tab_fragment_position_text_view"
-            android:layout_gravity="left"
+            android:layout_gravity="left|center_vertical"
             />
         <ImageView
             android:layout_width="48dp"
@@ -60,6 +62,7 @@
             android:text="@string/app_tab_fragment_back_button"
             android:id="@+id/app_tab_fragment_back_button"
             style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+            android:textColor="@color/white"
             />
 
         <android.support.v7.widget.AppCompatButton
@@ -68,6 +71,7 @@
             android:text="@string/app_tab_fragment_next_button"
             android:id="@+id/app_tab_fragment_next_button"
             style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+            android:textColor="@color/white"
             />
         <android.support.v7.widget.AppCompatButton
             android:layout_width="wrap_content"
@@ -75,6 +79,7 @@
             android:text="@string/app_tab_fragment_ok_button"
             android:id="@+id/app_tab_fragment_ok_button"
             style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+            android:textColor="@color/white"
             />
 
 
