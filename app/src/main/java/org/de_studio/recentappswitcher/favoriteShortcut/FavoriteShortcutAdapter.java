@@ -1,6 +1,8 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -52,7 +54,11 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         if (shortcut == null) {
             imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
         } else {
-            imageView.setImageResource(R.drawable.ic_edit_white_24dp);
+            try {
+                imageView.setImageDrawable(mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName()));
+            } catch (PackageManager.NameNotFoundException e) {
+                Log.e(LOG_TAG, "NameNotFound " + e);
+            }
         }
 
         return imageView;
