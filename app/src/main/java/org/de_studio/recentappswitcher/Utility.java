@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityManager;
 
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
+import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 
 import java.util.HashSet;
 import java.util.List;
@@ -373,6 +374,18 @@ public  class Utility {
         Intent intent = new Intent(context,AudioDialogActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    public static int getActionFromLabel(Context context, String label) {
+        if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_wifi))) {
+            return Shortcut.ACTION_WIFI;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_bluetooth))) {
+            return Shortcut.ACTION_BLUETOOTH;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_rotation))) {
+            return Shortcut.ACTION_ROTATION;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_power_menu))) {
+            return Shortcut.ACTION_POWER_MENU;
+        }else return -1;
     }
 
 
