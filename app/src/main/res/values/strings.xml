@@ -61,4 +61,7 @@
     <string name="title_activity_set_favorite_shortcut">SetFavoriteShortcutActivity</string>
     <string name="title_activity_choose_shortcut">ChooseShortcutActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="app_tab_fragment_back_button">Back</string>
+    <string name="app_tab_fragment_next_button">Next</string>
+    <string name="app_tab_fragment_ok_button">OK</string>
 </resources>

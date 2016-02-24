@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -10,10 +10,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/fragment_app_tab_list_view"
         android:choiceMode="singleChoice"
-        android:layout_weight="1"
+        android:layout_marginBottom="80dp"
 
         >
-
     </ListView>
 
-</LinearLayout>
+
+</FrameLayout>

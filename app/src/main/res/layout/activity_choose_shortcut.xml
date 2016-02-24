@@ -31,5 +31,35 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <android.support.v7.widget.ButtonBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom"
+        android:gravity="right"
+        >
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_tab_fragment_back_button"
+            android:id="@+id/app_tab_fragment_back_button"
+            style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+            />
 
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_tab_fragment_next_button"
+            android:id="@+id/app_tab_fragment_next_button"
+            style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+            />
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_tab_fragment_ok_button"
+            android:id="@+id/app_tab_fragment_ok_button"
+            style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+            />
+
+
+    </android.support.v7.widget.ButtonBarLayout>
 </android.support.design.widget.CoordinatorLayout>
