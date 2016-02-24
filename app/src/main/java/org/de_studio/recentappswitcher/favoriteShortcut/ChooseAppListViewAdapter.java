@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,7 +70,12 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
         if (mPackageSelected !=null & mAppInfosArrayList.get(position).packageName.equalsIgnoreCase(mPackageSelected)){
             radioButton.setChecked(true);
         }else radioButton.setChecked(false);
-        imageView.setImageDrawable(mAppInfosArrayList.get(position).iconDrawable);
+        try {
+            imageView.setImageDrawable(mContext.getPackageManager().getApplicationIcon(mAppInfosArrayList.get(position).packageName));
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(LOG_TAG, "NameNotFound " + e);
+        }
+
         textView.setText(mAppInfosArrayList.get(position).label);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
