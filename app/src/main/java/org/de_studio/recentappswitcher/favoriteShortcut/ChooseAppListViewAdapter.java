@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,12 +77,15 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
                 Realm myRealm = Realm.getInstance(mContext);
                 myRealm.beginTransaction();
                 RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findAll();
+                Log.e(LOG_TAG, "mPosition = " + mPosition);
                 oldShortcut.clear();
-                Shortcut shortcut = myRealm.createObject(Shortcut.class);
+//                Shortcut shortcut = myRealm.createObject(Shortcut.class);
+                Shortcut shortcut = new Shortcut();
                 shortcut.setType(Shortcut.TYPE_APP);
                 shortcut.setId(mPosition);
                 shortcut.setLabel(mAppInfosArrayList.get(position).label);
                 shortcut.setPackageName(mAppInfosArrayList.get(position).packageName);
+                myRealm.copyToRealm(shortcut);
                 myRealm.commitTransaction();
                 mPackageSelected = mAppInfosArrayList.get(position).packageName;
                 ChooseAppListViewAdapter.this.notifyDataSetChanged();
