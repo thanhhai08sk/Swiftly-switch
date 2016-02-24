@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -13,8 +14,8 @@ import android.widget.GridView;
 import org.de_studio.recentappswitcher.R;
 
 public class SetFavoriteShortcutActivity extends AppCompatActivity {
-
-    @Override
+    private FavoriteShortcutAdapter mAdapter;
+    private static final String LOG_TAG = SetFavoriteShortcutActivity.class.getSimpleName();
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_favorite_shortcut);
@@ -31,8 +32,8 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         GridView gridView = (GridView) findViewById(R.id.favorite_shortcut_grid_view);
-        FavoriteShortcutAdapter adapter = new FavoriteShortcutAdapter(this);
-        gridView.setAdapter(adapter);
+        mAdapter = new FavoriteShortcutAdapter(this);
+        gridView.setAdapter(mAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -44,4 +45,10 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(LOG_TAG, "onResume");
+        mAdapter.notifyDataSetChanged();
+    }
 }
