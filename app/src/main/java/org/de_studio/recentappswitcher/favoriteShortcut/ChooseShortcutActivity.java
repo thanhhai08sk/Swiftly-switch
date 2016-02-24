@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -8,13 +9,17 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.R;
+
+import io.realm.Realm;
 
 public class ChooseShortcutActivity extends AppCompatActivity {
 
@@ -43,15 +48,30 @@ public class ChooseShortcutActivity extends AppCompatActivity {
         AppCompatButton backButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_back_button);
         AppCompatButton nextButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_next_button);
         AppCompatButton okButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_ok_button);
+        final Realm myRealm = Realm.getInstance(getApplicationContext());
+        final TextView positionText = (TextView) findViewById(R.id.app_tab_fragment_position_text_view);
+        positionText.setText(mPosition+1 + ".");
+        final ImageView currentShortcut = (ImageView) findViewById(R.id.app_tab_fragment_current_shortcut_image_view);
+        setCurrentShortcutImageView(currentShortcut,myRealm);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mPosition < 15) {
+                    mPosition++;
+                    positionText.setText(mPosition+1 + ".");
+                    setCurrentShortcutImageView(currentShortcut,myRealm);
+                }
                 mAppTabFragment.setmPositioinToNext();
             }
         });
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mPosition > 0) {
+                    mPosition--;
+                    positionText.setText(mPosition+1 + ".");
+                    setCurrentShortcutImageView(currentShortcut,myRealm);
+                }
                 mAppTabFragment.setmPositionToBack();
             }
         });
@@ -123,6 +143,16 @@ public class ChooseShortcutActivity extends AppCompatActivity {
             }
             return null;
         }
+    }
+
+    private void setCurrentShortcutImageView(ImageView currentShortcut,Realm myRealm) {
+        try {
+            currentShortcut.setImageDrawable(getApplicationContext().getPackageManager().getApplicationIcon(myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst().getPackageName()));
+
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(LOG_TAG, "NameNotFound " + e);
+        }
+
     }
 
 
