@@ -58,8 +58,8 @@ public class ChooseShortcutActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mPosition < 15) {
                     mPosition++;
-                    positionText.setText(mPosition+1 + ".");
-                    setCurrentShortcutImageView(currentShortcut,myRealm);
+                    positionText.setText(mPosition + 1 + ".");
+                    setCurrentShortcutImageView(currentShortcut, myRealm);
                 }
                 mAppTabFragment.setmPositioinToNext();
             }
@@ -73,6 +73,13 @@ public class ChooseShortcutActivity extends AppCompatActivity {
                     setCurrentShortcutImageView(currentShortcut,myRealm);
                 }
                 mAppTabFragment.setmPositionToBack();
+            }
+        });
+
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
