@@ -47,6 +47,20 @@ public class AppTabFragment extends Fragment{
         this.mPosition = mPosition;
     }
 
+    public void setmPositioinToNext() {
+        if (mPosition < 15) {
+            mPosition++;
+            mAdapter.setmPosition(mPosition);
+        }
+    }
+
+    public void setmPositionToBack() {
+        if (mPosition > 0) {
+            mPosition--;
+            mAdapter.setmPosition(mPosition);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

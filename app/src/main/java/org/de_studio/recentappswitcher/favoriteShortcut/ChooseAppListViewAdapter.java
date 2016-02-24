@@ -45,6 +45,11 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
 
     }
 
+    public void setmPosition(int position) {
+        mPosition = position;
+        ChooseAppListViewAdapter.this.notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return mAppInfosArrayList.size();
