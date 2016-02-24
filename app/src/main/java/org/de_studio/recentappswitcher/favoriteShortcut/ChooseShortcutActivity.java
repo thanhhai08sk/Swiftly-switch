@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ public class ChooseShortcutActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private static final String LOG_TAG = ChooseShortcutActivity.class.getSimpleName();
     private int mPosition;
+    private AppTabFragment mAppTabFragment;
 
 
     private ViewPager mViewPager;
@@ -38,6 +40,21 @@ public class ChooseShortcutActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabbar);
         tabLayout.setupWithViewPager(mViewPager);
+        AppCompatButton backButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_back_button);
+        AppCompatButton nextButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_next_button);
+        AppCompatButton okButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_ok_button);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAppTabFragment.setmPositioinToNext();
+            }
+        });
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAppTabFragment.setmPositionToBack();
+            }
+        });
     }
 
     public static class PlaceholderFragment extends Fragment {
@@ -81,9 +98,9 @@ public class ChooseShortcutActivity extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    AppTabFragment tabFragment = AppTabFragment.newInstance(position + 1);
-                    tabFragment.setmPosition(mPosition);
-                    return tabFragment;
+                    mAppTabFragment = AppTabFragment.newInstance(position + 1);
+                    mAppTabFragment.setmPosition(mPosition);
+                    return mAppTabFragment;
                 case 1:
                     return PlaceholderFragment.newInstance(position + 1);
                 default: return PlaceholderFragment.newInstance(position + 1);

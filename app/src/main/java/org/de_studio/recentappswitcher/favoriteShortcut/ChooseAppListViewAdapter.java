@@ -47,6 +47,14 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
 
     public void setmPosition(int position) {
         mPosition = position;
+        Realm myRealm = Realm.getInstance(mContext);
+        Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
+        if (shortcut != null ) {
+            if (shortcut.getType() == Shortcut.TYPE_APP) {
+                mPackageSelected = shortcut.getPackageName();
+            }
+
+        }else mPackageSelected = null;
         ChooseAppListViewAdapter.this.notifyDataSetChanged();
     }
 
