@@ -63,6 +63,7 @@ public class ChooseShortcutActivity extends AppCompatActivity {
                     setCurrentShortcutImageView(currentShortcut, myRealm);
                 }
                 mAppTabFragment.setmPositioinToNext();
+                mSettingTabFragment.setmPositioinToNext();
             }
         });
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +75,7 @@ public class ChooseShortcutActivity extends AppCompatActivity {
                     setCurrentShortcutImageView(currentShortcut,myRealm);
                 }
                 mAppTabFragment.setmPositionToBack();
+                mSettingTabFragment.setmPositionToBack();
             }
         });
 
@@ -158,12 +160,31 @@ public class ChooseShortcutActivity extends AppCompatActivity {
     }
 
     private void setCurrentShortcutImageView(ImageView currentShortcut,Realm myRealm) {
-        try {
-            currentShortcut.setImageDrawable(getApplicationContext().getPackageManager().getApplicationIcon(myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst().getPackageName()));
+        Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst();
+        if (shortcut.getType() == Shortcut.TYPE_APP) {
+            try {
+                currentShortcut.setImageDrawable(getApplicationContext().getPackageManager().getApplicationIcon(myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst().getPackageName()));
 
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(LOG_TAG, "NameNotFound " + e);
+            } catch (PackageManager.NameNotFoundException e) {
+                Log.e(LOG_TAG, "NameNotFound " + e);
+            }
+        }else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+            switch (shortcut.getAction()) {
+                case Shortcut.ACTION_WIFI:
+                    currentShortcut.setImageResource(R.drawable.ic_action_wifi_on);
+                    break;
+                case Shortcut.ACTION_BLUETOOTH:
+                    currentShortcut.setImageResource(R.drawable.ic_action_bluetooth_on);
+                    break;
+                case Shortcut.ACTION_ROTATION:
+                    currentShortcut.setImageResource(R.drawable.ic_action_rotate_on);
+                    break;
+                case Shortcut.ACTION_POWER_MENU:
+                    currentShortcut.setImageResource(R.drawable.ic_action_power_menu);
+                    break;
+            }
         }
+
 
     }
 
