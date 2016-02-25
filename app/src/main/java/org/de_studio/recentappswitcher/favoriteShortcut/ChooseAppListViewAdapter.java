@@ -28,6 +28,7 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
     private static final String LOG_TAG = ChooseAppListViewAdapter.class.getSimpleName();
     private int mPosition;
     private String mPackageSelected;
+    private AppChangeListener listener = null;
 
     public ChooseAppListViewAdapter(Context context, ArrayList<AppInfors> appInforses, int position) {
         super();
@@ -111,8 +112,17 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
                 myRealm.commitTransaction();
                 mPackageSelected = mAppInfosArrayList.get(position).packageName;
                 ChooseAppListViewAdapter.this.notifyDataSetChanged();
+                listener.onAppChange();
             }
         });
         return view;
+    }
+
+    public interface AppChangeListener{
+        void onAppChange();
+    }
+
+    public void registerListener(AppChangeListener listener) {
+        this.listener = listener;
     }
 }

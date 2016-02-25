@@ -23,6 +23,7 @@ public class SettingTabFragment extends Fragment {
     private ChooseSettingShortcutListViewAdapter mAdapter;
     private int mPosition;
 
+
     public static SettingTabFragment newInstance(int sectionNumber) {
         SettingTabFragment fragment = new SettingTabFragment();
         Bundle agument = new Bundle();
@@ -58,9 +59,14 @@ public class SettingTabFragment extends Fragment {
 
         mAdapter = new ChooseSettingShortcutListViewAdapter(getContext(),mPosition);
         mListView.setAdapter(mAdapter);
+        ((ChooseShortcutActivity)getActivity()).setSettingAdapter(mAdapter);
         Log.e(LOG_TAG, "inflate mListView");
         Toast.makeText(getContext(), "AppTabFragment mPosition = " + mPosition, Toast.LENGTH_SHORT).show();
         return view;
+    }
+
+    public ChooseSettingShortcutListViewAdapter getAdapter() {
+        return mAdapter;
     }
 
 

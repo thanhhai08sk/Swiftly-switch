@@ -42,7 +42,6 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     @Override

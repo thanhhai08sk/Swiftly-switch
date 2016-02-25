@@ -20,8 +20,10 @@ import android.widget.Toast;
 import org.de_studio.recentappswitcher.R;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
-public class ChooseShortcutActivity extends AppCompatActivity {
+public class ChooseShortcutActivity extends AppCompatActivity implements ChooseAppListViewAdapter.AppChangeListener, ChooseSettingShortcutListViewAdapter.SettingChangeListener{
 
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -29,6 +31,8 @@ public class ChooseShortcutActivity extends AppCompatActivity {
     private int mPosition;
     private AppTabFragment mAppTabFragment;
     private SettingTabFragment mSettingTabFragment;
+    private ImageView currentShortcut;
+    private Realm myRealm;
 
 
     private ViewPager mViewPager;
@@ -49,18 +53,18 @@ public class ChooseShortcutActivity extends AppCompatActivity {
         AppCompatButton backButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_back_button);
         AppCompatButton nextButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_next_button);
         AppCompatButton okButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_ok_button);
-        final Realm myRealm = Realm.getInstance(getApplicationContext());
+        myRealm = Realm.getInstance(getApplicationContext());
         final TextView positionText = (TextView) findViewById(R.id.app_tab_fragment_position_text_view);
-        positionText.setText(mPosition+1 + ".");
-        final ImageView currentShortcut = (ImageView) findViewById(R.id.app_tab_fragment_current_shortcut_image_view);
-        setCurrentShortcutImageView(currentShortcut,myRealm);
+        positionText.setText(mPosition + 1 + ".");
+        currentShortcut = (ImageView) findViewById(R.id.app_tab_fragment_current_shortcut_image_view);
+        setCurrentShortcutImageView();
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mPosition < 15) {
                     mPosition++;
                     positionText.setText(mPosition + 1 + ".");
-                    setCurrentShortcutImageView(currentShortcut, myRealm);
+                    setCurrentShortcutImageView();
                 }
                 mAppTabFragment.setmPositioinToNext();
                 mSettingTabFragment.setmPositioinToNext();
@@ -71,8 +75,8 @@ public class ChooseShortcutActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mPosition > 0) {
                     mPosition--;
-                    positionText.setText(mPosition+1 + ".");
-                    setCurrentShortcutImageView(currentShortcut,myRealm);
+                    positionText.setText(mPosition + 1 + ".");
+                    setCurrentShortcutImageView();
                 }
                 mAppTabFragment.setmPositionToBack();
                 mSettingTabFragment.setmPositionToBack();
@@ -83,6 +87,14 @@ public class ChooseShortcutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).findAll();
+        results.addChangeListener(new RealmChangeListener() {
+            @Override
+            public void onChange() {
+                Log.e(LOG_TAG, "onChange");
+                setCurrentShortcutImageView();
             }
         });
     }
@@ -159,7 +171,8 @@ public class ChooseShortcutActivity extends AppCompatActivity {
         }
     }
 
-    private void setCurrentShortcutImageView(ImageView currentShortcut,Realm myRealm) {
+    private void setCurrentShortcutImageView() {
+        Log.e(LOG_TAG, "setCurrentShortcutImageView");
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst();
         if (shortcut.getType() == Shortcut.TYPE_APP) {
             try {
@@ -168,7 +181,7 @@ public class ChooseShortcutActivity extends AppCompatActivity {
             } catch (PackageManager.NameNotFoundException e) {
                 Log.e(LOG_TAG, "NameNotFound " + e);
             }
-        }else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+        } else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
             switch (shortcut.getAction()) {
                 case Shortcut.ACTION_WIFI:
                     currentShortcut.setImageResource(R.drawable.ic_action_wifi_on);
@@ -188,5 +201,21 @@ public class ChooseShortcutActivity extends AppCompatActivity {
 
     }
 
+    public void setAppAdapter(ChooseAppListViewAdapter adapter) {
+        adapter.registerListener(this);
+    }
 
+    public void setSettingAdapter(ChooseSettingShortcutListViewAdapter adapter) {
+        adapter.registerListener(this);
+    }
+
+    @Override
+    public void onAppChange() {
+        setCurrentShortcutImageView();
+    }
+
+    @Override
+    public void onSettingChange() {
+        setCurrentShortcutImageView();
+    }
 }

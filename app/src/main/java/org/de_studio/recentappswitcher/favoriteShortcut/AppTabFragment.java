@@ -107,6 +107,7 @@ public class AppTabFragment extends Fragment{
         protected void onPostExecute(ArrayList<AppInfors> result) {
             mAdapter = new ChooseAppListViewAdapter(getContext(), result, mPosition);
             mListView.setAdapter(mAdapter);
+            ((ChooseShortcutActivity) getActivity()).setAppAdapter(mAdapter);
             if (mListView == null) {
                 Log.e(LOG_TAG, "mListView = null");
             }

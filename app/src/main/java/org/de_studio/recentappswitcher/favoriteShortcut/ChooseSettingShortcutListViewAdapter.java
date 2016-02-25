@@ -25,6 +25,7 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
     private String[] stringArray;
     private int mPosition;
     private int mAction;
+    private SettingChangeListener listener = null;
 
     public ChooseSettingShortcutListViewAdapter(Context context, int position) {
         super();
@@ -113,9 +114,19 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
                 myRealm.commitTransaction();
                 mAction = Utility.getActionFromLabel(mContext,item);
                 ChooseSettingShortcutListViewAdapter.this.notifyDataSetChanged();
+                listener.onSettingChange();
             }
         });
 
         return view;
     }
+
+    public interface SettingChangeListener{
+        void onSettingChange();
+    }
+
+    public void registerListener(SettingChangeListener listener) {
+        this.listener = listener;
+    }
+
 }
