@@ -36,7 +36,7 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
         if (shortcut != null ) {
             if (shortcut.getType() == Shortcut.TYPE_SETTING) {
                 mAction = shortcut.getAction();
-            }
+            }else mAction = -1;
 
         }
 
