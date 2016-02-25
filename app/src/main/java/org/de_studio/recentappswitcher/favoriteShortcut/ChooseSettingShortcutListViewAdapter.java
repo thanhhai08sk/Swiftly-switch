@@ -28,6 +28,7 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
 
     public ChooseSettingShortcutListViewAdapter(Context context, int position) {
         super();
+        mContext = context;
         stringArray =context.getResources().getStringArray(R.array.setting_shortcut_array);
         mPosition = position;
         Realm myRealm = Realm.getInstance(mContext);

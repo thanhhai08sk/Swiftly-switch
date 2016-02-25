@@ -28,6 +28,7 @@ public class ChooseShortcutActivity extends AppCompatActivity {
     private static final String LOG_TAG = ChooseShortcutActivity.class.getSimpleName();
     private int mPosition;
     private AppTabFragment mAppTabFragment;
+    private SettingTabFragment mSettingTabFragment;
 
 
     private ViewPager mViewPager;
@@ -129,8 +130,12 @@ public class ChooseShortcutActivity extends AppCompatActivity {
                     mAppTabFragment.setmPosition(mPosition);
                     return mAppTabFragment;
                 case 1:
-                    return PlaceholderFragment.newInstance(position + 1);
-                default: return PlaceholderFragment.newInstance(position + 1);
+                    mSettingTabFragment = SettingTabFragment.newInstance(position + 1);
+                    mSettingTabFragment.setmPosition(mPosition);
+                    return mSettingTabFragment;
+                default: mAppTabFragment = AppTabFragment.newInstance(position + 1);
+                    mAppTabFragment.setmPosition(mPosition);
+                    return mAppTabFragment;
             }
 
         }
