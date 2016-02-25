@@ -14,13 +14,13 @@
     tools:context="org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity"
     tools:showIn="@layout/activity_set_favorite_shortcut">
     <GridView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="258dp"
+        android:layout_height="258dp"
         android:id="@+id/favorite_shortcut_grid_view"
         android:columnWidth="48dp"
         android:numColumns="4"
-        android:verticalSpacing="10dp"
-        android:horizontalSpacing="10dp"
+        android:verticalSpacing="22dp"
+        android:horizontalSpacing="22dp"
         android:gravity="center"
         android:stretchMode="spacingWidth"
         >

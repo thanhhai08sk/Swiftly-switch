@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+    <GridView
+        android:layout_width="258dp"
+        android:layout_height="258dp"
+        android:id="@+id/edge_shortcut_grid_view"
+        android:columnWidth="48dp"
+        android:numColumns="4"
+        android:verticalSpacing="22dp"
+        android:horizontalSpacing="22dp"
+        android:gravity="center"
+        android:stretchMode="spacingWidth"
+        >
+
+    </GridView>
+</FrameLayout>
