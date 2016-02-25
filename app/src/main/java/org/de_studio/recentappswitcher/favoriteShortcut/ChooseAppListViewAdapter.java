@@ -83,8 +83,10 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
         }
         ImageView imageView = (ImageView) view.findViewById(R.id.choose_app_image_view);
         TextView textView = (TextView) view.findViewById(R.id.choose_app_title_text_view);
+        Realm myRealm = Realm.getInstance(mContext);
+        Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         RadioButton radioButton = (RadioButton) view.findViewById(R.id.choose_app_radio_button);
-        if (mPackageSelected !=null & mAppInfosArrayList.get(position).packageName.equalsIgnoreCase(mPackageSelected)){
+        if (shortcut.getType()== Shortcut.TYPE_APP & mPackageSelected !=null & mAppInfosArrayList.get(position).packageName.equalsIgnoreCase(mPackageSelected)){
             radioButton.setChecked(true);
         }else radioButton.setChecked(false);
         try {

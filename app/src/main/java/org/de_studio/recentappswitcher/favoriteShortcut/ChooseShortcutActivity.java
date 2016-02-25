@@ -33,6 +33,8 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
     private SettingTabFragment mSettingTabFragment;
     private ImageView currentShortcut;
     private Realm myRealm;
+    private ChooseAppListViewAdapter mAppAdapter;
+    private ChooseSettingShortcutListViewAdapter mSettingAdapter;
 
 
     private ViewPager mViewPager;
@@ -48,6 +50,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabbar);
         tabLayout.setupWithViewPager(mViewPager);
         AppCompatButton backButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_back_button);
@@ -202,20 +205,29 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
     }
 
     public void setAppAdapter(ChooseAppListViewAdapter adapter) {
+        mAppAdapter = adapter;
         adapter.registerListener(this);
     }
 
     public void setSettingAdapter(ChooseSettingShortcutListViewAdapter adapter) {
+        mSettingAdapter = adapter;
         adapter.registerListener(this);
     }
 
     @Override
     public void onAppChange() {
+        Log.e(LOG_TAG, "onAppChange");
         setCurrentShortcutImageView();
+        if (mSettingAdapter != null) {
+            mSettingAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onSettingChange() {
         setCurrentShortcutImageView();
+        if (mAppAdapter != null) {
+            mAppAdapter.notifyDataSetChanged();
+        }
     }
 }

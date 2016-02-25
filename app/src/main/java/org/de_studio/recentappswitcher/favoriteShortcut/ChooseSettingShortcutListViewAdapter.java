@@ -82,7 +82,9 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
         final ImageView icon = (ImageView) view.findViewById(R.id.choose_app_image_view);
         TextView label = (TextView) view.findViewById(R.id.choose_app_title_text_view);
         RadioButton radioButton = (RadioButton) view.findViewById(R.id.choose_app_radio_button);
-        if (mAction != -1 & mAction == Utility.getActionFromLabel(mContext, item)) {
+        Realm myRealm = Realm.getInstance(mContext);
+        Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
+        if (shortcut.getType() == Shortcut.TYPE_SETTING & mAction != -1 & mAction == Utility.getActionFromLabel(mContext, item)) {
             radioButton.setChecked(true);
         }else radioButton.setChecked(false);
         label.setText(item);
