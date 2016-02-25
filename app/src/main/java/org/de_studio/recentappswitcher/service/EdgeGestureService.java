@@ -34,6 +34,7 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -76,7 +77,7 @@ public class EdgeGestureService extends Service {
     private RelativeLayout edge2View;
     private MyImageView edge1Image;
     private MyImageView edge2Image;
-    private FrameLayout item1View, item2View;
+    private FrameLayout item1View, item2View, shortcutView;
     public int icon_height = 48;
     public int icon_width = 48, icon_rad = 24;
     public int icon_distance = 110, distance_to_arc = 35, distance_to_arc_pxl;
@@ -102,6 +103,8 @@ public class EdgeGestureService extends Service {
     private long holdTime = 650, firstTouchTime;
     private boolean touched = false, switched = false, itemSwitched = false, isOutOfTrial = false, isFreeVersion = false;
     private String[] spinnerEntries;
+    private GridView shortcutGridView;
+    private FavoriteShortcutAdapter shortcutAdapter;
 
     @Nullable
     @Override
@@ -260,6 +263,11 @@ public class EdgeGestureService extends Service {
                 .setContentText(getString(R.string.notification_text)).setContentTitle(getString(R.string.notification_title));
         Notification notificationCompat = builder.build();
         startForeground(NOTIFICATION_ID,notificationCompat);
+
+
+        shortcutView = (FrameLayout) layoutInflater.inflate(R.layout.grid_shortcut, null);
+        shortcutGridView = (GridView) shortcutView.findViewById(R.id.edge_shortcut_grid_view);
+        shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
 
         return START_NOT_STICKY;
     }
@@ -466,11 +474,18 @@ public class EdgeGestureService extends Service {
                         Log.e(LOG_TAG," item_view has already been added to the window manager");
                     }
                     break;
+
+
                 case MotionEvent.ACTION_UP:
                     try {
                         windowManager.removeView(itemView);
                     }catch (IllegalArgumentException e){
-                        Log.e(LOG_TAG,"itemView not attacked to the windowManager");
+                        Log.e(LOG_TAG,"itemView is not attacked to the windowManager");
+                    }
+                    try {
+                        windowManager.removeView(shortcutView);
+                    } catch (IllegalArgumentException e) {
+                        Log.e(LOG_TAG, "shortcutView is not attacked to the windowManager");
                     }
 
                     itemView.removeView(expandView);
@@ -606,20 +621,33 @@ public class EdgeGestureService extends Service {
                     break;
                 case MotionEvent.ACTION_MOVE:
                     if (switched & !itemSwitched) {
-                        for (int i = 0; i < 6; i++) {
-                            if (i >= favoritePackageName.length) {
-                                iconImageArrayList.get(i).setImageDrawable(ContextCompat. getDrawable(getApplicationContext() , R.drawable.ic_add_circle_outline_white_48dp));
-                            } else {
-                                try {
-//                                    Drawable icon = getPackageManager().getApplicationIcon(favoritePackageName[i]);
-//                                    ImageView iconi = iconImageArrayList.get(i);
-                                    iconImageArrayList.get(i).setImageDrawable(getPackageManager().getApplicationIcon(favoritePackageName[i]));
-                                } catch (PackageManager.NameNotFoundException e) {
-                                    Log.e(LOG_TAG, "NameNotFound" + e);
-                                }
-                            }
-                        }
-                        itemSwitched = false;
+//                        for (int i = 0; i < 6; i++) {
+//                            if (i >= favoritePackageName.length) {
+//                                iconImageArrayList.get(i).setImageDrawable(ContextCompat. getDrawable(getApplicationContext() , R.drawable.ic_add_circle_outline_white_48dp));
+//                            } else {
+//                                try {
+//                                    iconImageArrayList.get(i).setImageDrawable(getPackageManager().getApplicationIcon(favoritePackageName[i]));
+//                                } catch (PackageManager.NameNotFoundException e) {
+//                                    Log.e(LOG_TAG, "NameNotFound" + e);
+//                                }
+//                            }
+//                        }
+//                        itemSwitched = false;
+
+                        shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
+                        shortcutGridView.setAdapter(shortcutAdapter);
+                        windowManager.removeView(itemView);
+                        WindowManager.LayoutParams shortcutViewParams = new WindowManager.LayoutParams(
+                                WindowManager.LayoutParams.MATCH_PARENT,
+                                WindowManager.LayoutParams.MATCH_PARENT,
+                                WindowManager.LayoutParams.TYPE_PHONE,
+                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE| WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                                PixelFormat.TRANSLUCENT);
+                        shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                        windowManager.addView(shortcutView,shortcutViewParams);
+                        itemSwitched = true;
                     }
                     int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
                     int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
