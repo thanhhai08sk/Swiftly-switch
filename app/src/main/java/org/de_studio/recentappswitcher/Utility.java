@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.accessibility.AccessibilityManager;
+import android.widget.GridView;
 
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
@@ -178,6 +179,41 @@ public  class Utility {
                 break;
         }
 
+    }
+
+    public static void setFavoriteShortcutGridViewPosition(GridView gridView, int x_init_cord, int y_init_cord, float mScale, int edgePosition) {
+        float distanceFromEdge = 70*mScale;
+        float halfOfGridWide = 129 * mScale;
+        switch (edgePosition) {
+            case 10:
+                gridView.setX(((float)x_init_cord)-distanceFromEdge - halfOfGridWide*2);
+                gridView.setY(((float)y_init_cord)- halfOfGridWide);
+                break;
+            case 11:
+                gridView.setX(((float)x_init_cord)-distanceFromEdge - halfOfGridWide*2);
+                gridView.setY(((float) y_init_cord) - halfOfGridWide);
+                break;
+            case 12:
+                gridView.setX(((float)x_init_cord)-distanceFromEdge - halfOfGridWide*2);
+                gridView.setY(((float) y_init_cord) - halfOfGridWide);
+                break;
+            case 20:
+                gridView.setX(((float)x_init_cord)+distanceFromEdge + halfOfGridWide*2);
+                gridView.setY(((float) y_init_cord) - halfOfGridWide);
+                break;
+            case 21:
+                gridView.setX(((float)x_init_cord)+distanceFromEdge + halfOfGridWide*2);
+                gridView.setY(((float) y_init_cord) - halfOfGridWide);
+                break;
+            case 22:
+                gridView.setX(((float)x_init_cord)+distanceFromEdge + halfOfGridWide*2);
+                gridView.setY(((float) y_init_cord) - halfOfGridWide);
+                break;
+            case 31:
+                gridView.setX(((float)x_init_cord)- halfOfGridWide);
+                gridView.setY(((float)y_init_cord)- distanceFromEdge- halfOfGridWide*2);
+                break;
+        }
     }
 
     public static int isHomeOrBackOrNoti(int x_init, int y_init, int x, int y, int radius, float mScale, int position){

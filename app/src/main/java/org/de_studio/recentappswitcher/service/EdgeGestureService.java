@@ -301,13 +301,9 @@ public class EdgeGestureService extends Service {
             }
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-//                    try {
                         itemView.removeView(backView);
                         itemView.removeView(homeView);
                         itemView.removeView(expandView);
-//                    }catch (NullPointerException e ){
-//                        Log.e(LOG_TAG,"NullpointException " + e);
-//                    }
                     if (isFreeVersion){
                         isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY,System.currentTimeMillis())
                                 > MainActivity.trialTime;
@@ -636,7 +632,6 @@ public class EdgeGestureService extends Service {
 
                         shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
                         shortcutGridView.setAdapter(shortcutAdapter);
-                        windowManager.removeView(itemView);
                         WindowManager.LayoutParams shortcutViewParams = new WindowManager.LayoutParams(
                                 WindowManager.LayoutParams.MATCH_PARENT,
                                 WindowManager.LayoutParams.MATCH_PARENT,
@@ -646,7 +641,9 @@ public class EdgeGestureService extends Service {
                                         WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                                 PixelFormat.TRANSLUCENT);
                         shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                        Utility.setFavoriteShortcutGridViewPosition(shortcutGridView,x_init_cord,y_init_cord,mScale,position);
                         windowManager.addView(shortcutView,shortcutViewParams);
+                        windowManager.removeView(itemView);
                         itemSwitched = true;
                     }
                     int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
