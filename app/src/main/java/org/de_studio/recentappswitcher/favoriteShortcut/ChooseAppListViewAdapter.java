@@ -52,7 +52,7 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
         if (shortcut != null ) {
             if (shortcut.getType() == Shortcut.TYPE_APP) {
                 mPackageSelected = shortcut.getPackageName();
-            }
+            }else mPackageSelected = null;
 
         }else mPackageSelected = null;
         ChooseAppListViewAdapter.this.notifyDataSetChanged();
