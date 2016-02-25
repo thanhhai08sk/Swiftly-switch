@@ -54,11 +54,29 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         if (shortcut == null) {
             imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
         } else {
-            try {
-                imageView.setImageDrawable(mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName()));
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e(LOG_TAG, "NameNotFound " + e);
+            if (shortcut.getType() == Shortcut.TYPE_APP) {
+                try {
+                    imageView.setImageDrawable(mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName()));
+                } catch (PackageManager.NameNotFoundException e) {
+                    Log.e(LOG_TAG, "NameNotFound " + e);
+                }
+            }else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+                switch (shortcut.getAction()) {
+                    case Shortcut.ACTION_WIFI:
+                        imageView.setImageResource(R.drawable.ic_action_wifi_on);
+                        break;
+                    case Shortcut.ACTION_BLUETOOTH:
+                        imageView.setImageResource(R.drawable.ic_action_bluetooth_on);
+                        break;
+                    case Shortcut.ACTION_ROTATION:
+                        imageView.setImageResource(R.drawable.ic_action_rotate_on);
+                        break;
+                    case Shortcut.ACTION_POWER_MENU:
+                        imageView.setImageResource(R.drawable.ic_action_power_menu);
+                        break;
+                }
             }
+
         }
 
         return imageView;
