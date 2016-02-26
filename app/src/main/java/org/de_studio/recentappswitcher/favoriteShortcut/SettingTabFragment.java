@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 
 /**
  * Created by hai on 2/25/2016.
@@ -37,7 +38,7 @@ public class SettingTabFragment extends Fragment {
     }
 
     public void setmPositioinToNext() {
-        if (mPosition < 15) {
+        if (mPosition < Utility.getSizeOfFavoriteGrid(getContext())-1) {
             mPosition++;
             mAdapter.setmPosition(mPosition);
         }

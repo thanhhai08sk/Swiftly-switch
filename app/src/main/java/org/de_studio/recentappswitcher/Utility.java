@@ -2,8 +2,10 @@ package org.de_studio.recentappswitcher;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -19,6 +21,7 @@ import android.widget.GridView;
 
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
+import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 import java.util.HashSet;
 import java.util.List;
@@ -211,7 +214,7 @@ public  class Utility {
                 break;
             case 31:
                 gridView.setX(((float)x_init_cord)- halfOfGridWide);
-                gridView.setY(((float)y_init_cord)- distanceFromEdge- halfOfGridWide*2);
+                gridView.setY(((float) y_init_cord) - distanceFromEdge - halfOfGridWide * 2);
                 break;
         }
     }
@@ -384,7 +387,8 @@ public  class Utility {
         }
     }
     public static boolean getBluetoothState (Context context){
-        BluetoothAdapter bluetoothAdapter = (BluetoothAdapter) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothManager bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
         return bluetoothAdapter.isEnabled();
     }
     public static boolean checkIsFlashLightAvailable (Context context){
@@ -422,6 +426,11 @@ public  class Utility {
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_power_menu))) {
             return Shortcut.ACTION_POWER_MENU;
         }else return -1;
+    }
+
+    public static int getSizeOfFavoriteGrid(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
+        return sharedPreferences.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5) * sharedPreferences.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
     }
 
 

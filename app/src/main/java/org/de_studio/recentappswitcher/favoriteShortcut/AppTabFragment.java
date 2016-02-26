@@ -48,7 +48,7 @@ public class AppTabFragment extends Fragment{
     }
 
     public void setmPositioinToNext() {
-        if (mPosition < 15) {
+        if (mPosition < Utility.getSizeOfFavoriteGrid(getContext())-1) {
             mPosition++;
             mAdapter.setmPosition(mPosition);
         }

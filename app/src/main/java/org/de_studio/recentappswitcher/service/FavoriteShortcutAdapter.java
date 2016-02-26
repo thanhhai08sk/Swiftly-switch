@@ -28,7 +28,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 16;
+        return Utility.getSizeOfFavoriteGrid(mContext);
     }
 
     @Override

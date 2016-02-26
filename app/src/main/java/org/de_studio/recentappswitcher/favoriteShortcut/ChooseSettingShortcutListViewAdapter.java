@@ -84,8 +84,10 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
         RadioButton radioButton = (RadioButton) view.findViewById(R.id.choose_app_radio_button);
         Realm myRealm = Realm.getInstance(mContext);
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
-        if (shortcut.getType() == Shortcut.TYPE_SETTING & mAction != -1 & mAction == Utility.getActionFromLabel(mContext, item)) {
-            radioButton.setChecked(true);
+        if (shortcut != null) {
+            if (shortcut.getType() == Shortcut.TYPE_SETTING & mAction != -1 & mAction == Utility.getActionFromLabel(mContext, item)) {
+                radioButton.setChecked(true);
+            }else radioButton.setChecked(false);
         }else radioButton.setChecked(false);
         label.setText(item);
         if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_wifi))) {

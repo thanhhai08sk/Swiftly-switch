@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -64,7 +65,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPosition < 15) {
+                if (mPosition < Utility.getSizeOfFavoriteGrid(getApplicationContext())-1) {
                     mPosition++;
                     positionText.setText(mPosition + 1 + ".");
                     setCurrentShortcutImageView();
@@ -177,28 +178,32 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
     private void setCurrentShortcutImageView() {
         Log.e(LOG_TAG, "setCurrentShortcutImageView");
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst();
-        if (shortcut.getType() == Shortcut.TYPE_APP) {
-            try {
-                currentShortcut.setImageDrawable(getApplicationContext().getPackageManager().getApplicationIcon(myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst().getPackageName()));
+        if (shortcut != null) {
+            if (shortcut.getType() == Shortcut.TYPE_APP) {
+                try {
+                    currentShortcut.setImageDrawable(getApplicationContext().getPackageManager().getApplicationIcon(myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst().getPackageName()));
 
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e(LOG_TAG, "NameNotFound " + e);
+                } catch (PackageManager.NameNotFoundException e) {
+                    Log.e(LOG_TAG, "NameNotFound " + e);
+                }
+            } else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+                switch (shortcut.getAction()) {
+                    case Shortcut.ACTION_WIFI:
+                        currentShortcut.setImageResource(R.drawable.ic_action_wifi_on);
+                        break;
+                    case Shortcut.ACTION_BLUETOOTH:
+                        currentShortcut.setImageResource(R.drawable.ic_action_bluetooth_on);
+                        break;
+                    case Shortcut.ACTION_ROTATION:
+                        currentShortcut.setImageResource(R.drawable.ic_action_rotate_on);
+                        break;
+                    case Shortcut.ACTION_POWER_MENU:
+                        currentShortcut.setImageResource(R.drawable.ic_action_power_menu);
+                        break;
+                }
             }
-        } else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
-            switch (shortcut.getAction()) {
-                case Shortcut.ACTION_WIFI:
-                    currentShortcut.setImageResource(R.drawable.ic_action_wifi_on);
-                    break;
-                case Shortcut.ACTION_BLUETOOTH:
-                    currentShortcut.setImageResource(R.drawable.ic_action_bluetooth_on);
-                    break;
-                case Shortcut.ACTION_ROTATION:
-                    currentShortcut.setImageResource(R.drawable.ic_action_rotate_on);
-                    break;
-                case Shortcut.ACTION_POWER_MENU:
-                    currentShortcut.setImageResource(R.drawable.ic_action_power_menu);
-                    break;
-            }
+        } else {
+            currentShortcut.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
         }
 
 

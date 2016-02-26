@@ -99,7 +99,7 @@ public class EdgeGestureService extends Service {
     private AppCompatImageView[] iconImageList1, iconImageList2;
     private ExpandStatusBarView expandView, homeView, backView;
     private Vibrator vibrator;
-    private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl;
+    private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl, gridRow,gridColumn;
     private long holdTime = 650, firstTouchTime;
     private boolean touched = false, switched = false, itemSwitched = false, isOutOfTrial = false, isFreeVersion = false;
     private String[] spinnerEntries;
@@ -631,6 +631,10 @@ public class EdgeGestureService extends Service {
 //                        itemSwitched = false;
 
                         shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
+                        ViewGroup.LayoutParams gridParams = shortcutGridView.getLayoutParams();
+                        gridParams.height = (int)(mScale* (float)(48 * gridRow + 22* (gridRow -1)));
+                        gridParams.width = (int)(mScale* (float)(48 * gridColumn + 22* (gridColumn -1)));
+                        shortcutGridView.setLayoutParams(gridParams);
                         shortcutGridView.setAdapter(shortcutAdapter);
                         WindowManager.LayoutParams shortcutViewParams = new WindowManager.LayoutParams(
                                 WindowManager.LayoutParams.MATCH_PARENT,
@@ -804,8 +808,10 @@ public class EdgeGestureService extends Service {
         Set<String> set = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, new HashSet<String>());
         favoritePackageName = new String[set.size()];
         set.toArray(favoritePackageName);
-        Log.e(LOG_TAG, "onCreate service"+ "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
-        "\nEdge1 position = " + edge1Position + "\nEdge2 positon = "+ edge2Position);
+        Log.e(LOG_TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
+                "\nEdge1 position = " + edge1Position + "\nEdge2 positon = " + edge2Position);
+        gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
+        gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
     }
 
     @Override

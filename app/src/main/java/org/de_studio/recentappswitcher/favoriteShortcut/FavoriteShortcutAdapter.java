@@ -10,6 +10,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 
 import io.realm.Realm;
 
@@ -26,7 +27,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 16;
+        return Utility.getSizeOfFavoriteGrid(mContext);
     }
 
     @Override
