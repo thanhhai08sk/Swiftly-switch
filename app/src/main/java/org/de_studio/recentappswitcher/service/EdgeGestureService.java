@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.service;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.Service;
@@ -520,7 +521,9 @@ public class EdgeGestureService extends Service {
                                         Utility.toggleBluetooth(getApplicationContext());
                                         break;
                                     case Shortcut.ACTION_ROTATION:
-                                        Utility.setAutorotation(getApplicationContext());
+                                        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
+                                            Utility.setAutorotation(getApplicationContext());
+                                        }
                                         break;
                                     case Shortcut.ACTION_POWER_MENU:
                                         AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
@@ -902,6 +905,7 @@ public class EdgeGestureService extends Service {
     public void showAddFavoriteDialog(){
         startActivity(new Intent(getApplicationContext(),MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
+
 
     public static class BootCompleteReceiver extends BroadcastReceiver{
         @Override

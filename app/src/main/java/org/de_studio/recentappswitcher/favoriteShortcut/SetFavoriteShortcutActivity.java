@@ -62,4 +62,5 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         Log.e(LOG_TAG, "onResume");
         mAdapter.notifyDataSetChanged();
     }
+
 }
