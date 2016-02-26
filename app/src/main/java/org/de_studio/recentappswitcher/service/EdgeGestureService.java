@@ -645,7 +645,7 @@ public class EdgeGestureService extends Service {
                                         WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                                 PixelFormat.TRANSLUCENT);
                         shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-                        Utility.setFavoriteShortcutGridViewPosition(shortcutGridView,x_init_cord,y_init_cord,mScale,position);
+                        Utility.setFavoriteShortcutGridViewPosition(shortcutGridView,x_init_cord,y_init_cord,mScale,position, windowManager, defaultShared);
                         windowManager.addView(shortcutView,shortcutViewParams);
                         windowManager.removeView(itemView);
                         itemSwitched = true;
