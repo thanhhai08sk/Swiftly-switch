@@ -378,7 +378,8 @@ public  class Utility {
         return wifiManager.isWifiEnabled();
     }
     public static void toggleBluetooth (Context context){
-        BluetoothAdapter bluetoothAdapter = (BluetoothAdapter) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothManager bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
         boolean bluetoothState = bluetoothAdapter.isEnabled();
         if (bluetoothState){
             bluetoothAdapter.disable();
