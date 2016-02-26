@@ -76,6 +76,21 @@ public  class Utility {
         return -1;
     }
 
+    public static int findShortcutToSwitch(int x_cord, int y_cord, int x_grid, int y_grid, int radOfIcon, float mScale,int gird_row, int grid_column) {
+        int item_x,item_y;
+        for (int i = 0; i < grid_column; i++) {
+            for (int j = 0; j < gird_row; j++) {
+                item_x = (int)(x_grid + radOfIcon*mScale +i*(radOfIcon + 22)*mScale);
+                item_y = (int) (y_grid + radOfIcon * mScale + j * (radOfIcon + 22) * mScale);
+                double distance = Math.sqrt(Math.pow((double)x_cord - (double)item_x,2) + Math.pow((double)y_cord - (double) item_y, 2));
+                if (distance <= 35 * mScale) {
+                    return j * grid_column + i;
+                }
+            }
+        }
+        return -1;
+    }
+
     public static void setIconsPosition(AppCompatImageView[] icon, int x_init_cord, int y_init_cord, float icon_distance_pxl, float icon_24_dp_pxl, int edgePosition){
         double sin10 = 0.1736, sin42 = 0.6691, sin74 = 0.9613, cos10 = 0.9848, cos42 = 0.7431, cos74 = 0.2756;
         switch (edgePosition){
