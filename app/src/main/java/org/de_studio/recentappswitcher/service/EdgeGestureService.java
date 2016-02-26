@@ -42,6 +42,7 @@ import android.widget.Toast;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -52,6 +53,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import io.realm.Realm;
 
 /**
  * Created by hai on 12/15/2015.
@@ -100,7 +103,7 @@ public class EdgeGestureService extends Service {
     private ExpandStatusBarView expandView, homeView, backView;
     private Vibrator vibrator;
     private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl, gridRow,gridColumn;
-    private long holdTime = 650, firstTouchTime;
+    private long holdTime = 450, firstTouchTime;
     private boolean touched = false, switched = false, itemSwitched = false, isOutOfTrial = false, isFreeVersion = false;
     private String[] spinnerEntries;
     private GridView shortcutGridView;
@@ -487,131 +490,177 @@ public class EdgeGestureService extends Service {
                     itemView.removeView(expandView);
                     itemView.removeView(homeView);
                     itemView.removeView(backView);
-                    int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
-                    if (packageToSwitch != -1) {
-                        Intent extApp = null;
-                        if (!switched) {
-                            if (packageToSwitch < packagename.length){
-                                extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
-                            }
 
-                        } else {
-                            if (packageToSwitch < favoritePackageName.length){
-                                extApp = getPackageManager().getLaunchIntentForPackage(favoritePackageName[packageToSwitch]);
-                            }else {
-                                Toast.makeText(getApplicationContext(),getString(R.string.please_add_favorite_item),Toast.LENGTH_LONG).show();
-                                showAddFavoriteDialog();
+                    if (switched) {
+                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), icon_rad, mScale, gridRow, gridColumn);
+                        Log.e(LOG_TAG, "shortcutToSwitch = " + shortcutToSwitch + "\ngrid_x =" + shortcutGridView.getX() + "\ngrid_y = " + shortcutGridView.getY()+
+                        "\nx_cord = "+ x_cord + "\ny_cord = " + y_cord);
+                        Realm myRealm = Realm.getInstance(getApplicationContext());
+                        Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
+                        if (shortcut != null) {
+                            if (shortcut.getType() == Shortcut.TYPE_APP) {
+                                Intent extApp = null;
+                                extApp = getPackageManager().getLaunchIntentForPackage(shortcut.getPackageName());
+                                if (extApp != null) {
+                                    ComponentName componentName = extApp.getComponent();
+                                    Intent startApp = new Intent(Intent.ACTION_MAIN, null);
+                                    startApp.addCategory(Intent.CATEGORY_LAUNCHER);
+                                    startApp.setComponent(componentName);
+                                    startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(startApp);
+                                } else {
+                                    Log.e(LOG_TAG, "extApp of shortcut = null ");
+                                }
+                            } else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+                                switch (shortcut.getAction()) {
+                                    case Shortcut.ACTION_WIFI:
+                                        Utility.toggleWifi(getApplicationContext());
+                                        break;
+                                    case Shortcut.ACTION_BLUETOOTH:
+                                        Utility.toggleBluetooth(getApplicationContext());
+                                        break;
+                                    case Shortcut.ACTION_ROTATION:
+                                        Utility.setAutorotation(getApplicationContext());
+                                        break;
+                                    case Shortcut.ACTION_POWER_MENU:
+                                        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+                                        event1.setClassName(getClass().getName());
+                                        event1.getText().add("power");
+                                        event1.setAction(3);
+                                        event1.setPackageName(getPackageName());
+                                        event1.setEnabled(true);
+                                        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+                                        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+                                        recordCompat.setSource(v);
+                                        if (Utility.isAccessibilityEnable(getApplicationContext())) {
+                                            manager.sendAccessibilityEvent(event1);
+                                        } else
+                                            Toast.makeText(getApplicationContext(), R.string.ask_user_to_turn_on_accessibility_toast, Toast.LENGTH_LONG).show();
+                                }
                             }
+                        } else if (shortcutToSwitch != -1){
+                            Toast.makeText(getApplicationContext(),getString(R.string.please_add_favorite_item),Toast.LENGTH_LONG).show();
+                            showAddFavoriteDialog();
                         }
+                    } else {
+                        int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
+                        if (packageToSwitch != -1) {
+                            Intent extApp = null;
+                                if (packageToSwitch < packagename.length){
+                                    extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
+                                }
 
-                        if (extApp != null) {
+                            if (extApp != null) {
 //                            extApp.addCategory(Intent.CATEGORY_LAUNCHER);
 //                            extApp.setAction(Intent.ACTION_MAIN);
-                            ComponentName componentName = extApp.getComponent();
-                            Intent startApp = new Intent(Intent.ACTION_MAIN,null);
-                            startApp.addCategory(Intent.CATEGORY_LAUNCHER);
-                            startApp.setComponent(componentName);
-                            startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_NO_ANIMATION );
-                            startActivity(startApp);
-                            Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
-                        }else Log.e(LOG_TAG, "extApp = null " );
+                                ComponentName componentName = extApp.getComponent();
+                                Intent startApp = new Intent(Intent.ACTION_MAIN,null);
+                                startApp.addCategory(Intent.CATEGORY_LAUNCHER);
+                                startApp.setComponent(componentName);
+                                startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_NO_ANIMATION );
+                                startActivity(startApp);
+                                Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
+                            }else Log.e(LOG_TAG, "extApp = null " );
 
+                        }
+                        packagename = null;
+                        int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
+                        Log.e(LOG_TAG, "homeBackNoti = " + homeBackNoti);
+                        if (!isFreeVersion){
+                            if (homeBackNoti == 1) {
+                                AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+                                event1.setClassName(getClass().getName());
+                                event1.getText().add("home");
+                                event1.setAction(1);
+                                event1.setPackageName(getPackageName());
+                                event1.setEnabled(true);
+                                AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+                                AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+                                recordCompat.setSource(v);
+                                if (Utility.isAccessibilityEnable(getApplicationContext())) {
+                                    manager.sendAccessibilityEvent(event1);
+                                }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+                            } else if (homeBackNoti == 2) {
+                                AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+                                event1.setClassName(getClass().getName());
+                                event1.getText().add("back");
+                                event1.setAction(2);
+                                event1.setPackageName(getPackageName());
+                                event1.setEnabled(true);
+                                AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+                                AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+                                recordCompat.setSource(v);
+                                if (Utility.isAccessibilityEnable(getApplicationContext())) {
+                                    manager.sendAccessibilityEvent(event1);
+                                }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+                            } else if (homeBackNoti == 3) {
+                                expandStatusBar();
+                            }
+                        } else if(!isOutOfTrial & homeBackNoti >0){
+                            if (homeBackNoti == 1) {
+                                AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+                                event1.setClassName(getClass().getName());
+                                event1.getText().add("home");
+                                event1.setAction(1);
+                                event1.setPackageName(getPackageName());
+                                event1.setEnabled(true);
+                                AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+                                AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+                                recordCompat.setSource(v);
+                                if (Utility.isAccessibilityEnable(getApplicationContext())) {
+                                    manager.sendAccessibilityEvent(event1);
+                                }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+                            } else if (homeBackNoti == 2) {
+                                AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+                                event1.setClassName(getClass().getName());
+                                event1.getText().add("back");
+                                event1.setAction(2);
+                                event1.setPackageName(getPackageName());
+                                event1.setEnabled(true);
+                                AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+                                AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+                                recordCompat.setSource(v);
+                                if (Utility.isAccessibilityEnable(getApplicationContext())) {
+                                    manager.sendAccessibilityEvent(event1);
+                                }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+                            } else if (homeBackNoti == 3) {
+                                expandStatusBar();
+                            }
+                        }else if (isOutOfTrial & homeBackNoti >0){
+                            if (homeBackNoti == 1) {
+                                AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+                                event1.setClassName(getClass().getName());
+                                event1.getText().add("home");
+                                event1.setAction(1);
+                                event1.setPackageName(getPackageName());
+                                event1.setEnabled(true);
+                                AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+                                AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+                                recordCompat.setSource(v);
+                                if (Utility.isAccessibilityEnable(getApplicationContext())) {
+                                    manager.sendAccessibilityEvent(event1);
+                                }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+                            } else if (homeBackNoti == 2) {
+                                AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+                                event1.setClassName(getClass().getName());
+                                event1.getText().add("back");
+                                event1.setAction(2);
+                                event1.setPackageName(getPackageName());
+                                event1.setEnabled(true);
+                                AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+                                AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+                                recordCompat.setSource(v);
+                                if (Utility.isAccessibilityEnable(getApplicationContext())) {
+                                    manager.sendAccessibilityEvent(event1);
+                                }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+                            } else if (homeBackNoti == 3) {
+                                Toast.makeText(getApplicationContext(),getString(R.string.edge_service_out_of_trial_text_when_homebacknoti),Toast.LENGTH_LONG).show();
+                            }
+                        }
                     }
-                    packagename = null;
-                    int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
-                    Log.e(LOG_TAG, "homeBackNoti = " + homeBackNoti);
-                    if (!isFreeVersion){
-                        if (homeBackNoti == 1) {
-                            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                            event1.setClassName(getClass().getName());
-                            event1.getText().add("home");
-                            event1.setAction(1);
-                            event1.setPackageName(getPackageName());
-                            event1.setEnabled(true);
-                            AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                            recordCompat.setSource(v);
-                            if (Utility.isAccessibilityEnable(getApplicationContext())) {
-                                manager.sendAccessibilityEvent(event1);
-                            }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-                        } else if (homeBackNoti == 2) {
-                            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                            event1.setClassName(getClass().getName());
-                            event1.getText().add("back");
-                            event1.setAction(2);
-                            event1.setPackageName(getPackageName());
-                            event1.setEnabled(true);
-                            AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                            recordCompat.setSource(v);
-                            if (Utility.isAccessibilityEnable(getApplicationContext())) {
-                                manager.sendAccessibilityEvent(event1);
-                            }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-                        } else if (homeBackNoti == 3) {
-                            Utility.showAudioDialog(getApplicationContext());
-//                            expandStatusBar();
-                        }
-                    } else if(!isOutOfTrial & homeBackNoti >0){
-                        if (homeBackNoti == 1) {
-                            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                            event1.setClassName(getClass().getName());
-                            event1.getText().add("home");
-                            event1.setAction(1);
-                            event1.setPackageName(getPackageName());
-                            event1.setEnabled(true);
-                            AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                            recordCompat.setSource(v);
-                            if (Utility.isAccessibilityEnable(getApplicationContext())) {
-                                manager.sendAccessibilityEvent(event1);
-                            }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-                        } else if (homeBackNoti == 2) {
-                            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                            event1.setClassName(getClass().getName());
-                            event1.getText().add("back");
-                            event1.setAction(2);
-                            event1.setPackageName(getPackageName());
-                            event1.setEnabled(true);
-                            AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                            recordCompat.setSource(v);
-                            if (Utility.isAccessibilityEnable(getApplicationContext())) {
-                                manager.sendAccessibilityEvent(event1);
-                            }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-                        } else if (homeBackNoti == 3) {
-                            expandStatusBar();
-                        }
-                    }else if (isOutOfTrial & homeBackNoti >0){
-                        if (homeBackNoti == 1) {
-                            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                            event1.setClassName(getClass().getName());
-                            event1.getText().add("home");
-                            event1.setAction(1);
-                            event1.setPackageName(getPackageName());
-                            event1.setEnabled(true);
-                            AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                            recordCompat.setSource(v);
-                            if (Utility.isAccessibilityEnable(getApplicationContext())) {
-                                manager.sendAccessibilityEvent(event1);
-                            }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-                        } else if (homeBackNoti == 2) {
-                            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                            event1.setClassName(getClass().getName());
-                            event1.getText().add("back");
-                            event1.setAction(2);
-                            event1.setPackageName(getPackageName());
-                            event1.setEnabled(true);
-                            AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                            recordCompat.setSource(v);
-                            if (Utility.isAccessibilityEnable(getApplicationContext())) {
-                                manager.sendAccessibilityEvent(event1);
-                            }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-                        } else if (homeBackNoti == 3) {
-                            Toast.makeText(getApplicationContext(),getString(R.string.edge_service_out_of_trial_text_when_homebacknoti),Toast.LENGTH_LONG).show();
-                        }
-                    }
+
+
+
                     touched = false;
 
                     break;

@@ -80,8 +80,8 @@ public  class Utility {
         int item_x,item_y;
         for (int i = 0; i < grid_column; i++) {
             for (int j = 0; j < gird_row; j++) {
-                item_x = (int)(x_grid + radOfIcon*mScale +i*(radOfIcon + 22)*mScale);
-                item_y = (int) (y_grid + radOfIcon * mScale + j * (radOfIcon + 22) * mScale);
+                item_x = (int)(x_grid + radOfIcon*mScale +i*(radOfIcon*2 + 22)*mScale);
+                item_y = (int) (y_grid + radOfIcon * mScale + j * (radOfIcon*2 + 22) * mScale);
                 double distance = Math.sqrt(Math.pow((double)x_cord - (double)item_x,2) + Math.pow((double)y_cord - (double) item_y, 2));
                 if (distance <= 35 * mScale) {
                     return j * grid_column + i;
