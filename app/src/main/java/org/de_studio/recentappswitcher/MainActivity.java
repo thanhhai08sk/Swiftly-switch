@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
@@ -315,6 +316,7 @@ public class MainActivity extends Activity {
 
         }else {
             checkDrawOverlayPermission();
+
             if (Settings.canDrawOverlays(this)){
                 startService(new Intent(this, EdgeGestureService.class));
 
@@ -571,6 +573,12 @@ public class MainActivity extends Activity {
         }
     }
 
-
-
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        if (requestCode == 1) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                //do nothing
+//            }
+//        }
+//    }
 }

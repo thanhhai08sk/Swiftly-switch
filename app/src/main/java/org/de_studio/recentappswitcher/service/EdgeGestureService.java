@@ -3,6 +3,8 @@ package org.de_studio.recentappswitcher.service;
 import android.Manifest;
 import android.app.ActivityManager;
 import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
@@ -19,6 +21,7 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -523,6 +526,18 @@ public class EdgeGestureService extends Service {
                                     case Shortcut.ACTION_ROTATION:
                                         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
                                             Utility.setAutorotation(getApplicationContext());
+                                        } else {
+                                            Intent notiIntent = new Intent();
+                                            notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                                            PendingIntent notiPending = PendingIntent.getActivity(getApplicationContext(),0,notiIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+                                            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+                                            builder.setContentTitle(getString(R.string.ask_for_write_setting_notification_title)).setContentText(getString(R.string.ask_for_write_setting_notification_text)).setSmallIcon(R.drawable.ic_settings_white_36px)
+                                                    .setContentIntent(notiPending)
+                                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                                    .setDefaults(NotificationCompat.DEFAULT_SOUND);
+                                            Notification notification = builder.build();
+                                            NotificationManager notificationManager = (NotificationManager) getSystemService(getApplicationContext().NOTIFICATION_SERVICE);
+                                            notificationManager.notify(22,notification);
                                         }
                                         break;
                                     case Shortcut.ACTION_POWER_MENU:

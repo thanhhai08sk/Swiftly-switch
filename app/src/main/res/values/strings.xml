@@ -68,5 +68,6 @@
     <string name="setting_shortcut_bluetooth">On/off bluetooth</string>
     <string name="setting_shortcut_rotation">Auto/lock rotation</string>
     <string name="setting_shortcut_power_menu">Show power menu</string>
-
+    <string name="ask_for_write_setting_notification_text">Click here and grant WRITE SETTING for Swiftly switch</string>
+    <string name="ask_for_write_setting_notification_title">Swiftly switch need Write Setting permission</string>
 </resources>
