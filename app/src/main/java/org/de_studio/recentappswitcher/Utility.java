@@ -416,16 +416,29 @@ public  class Utility {
     public static void toggleBluetooth (Context context){
         BluetoothManager bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
         BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
+        if (bluetoothAdapter == null) {
+            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        }
+        if (bluetoothAdapter == null) {
+            return;
+        }
         boolean bluetoothState = bluetoothAdapter.isEnabled();
         if (bluetoothState){
             bluetoothAdapter.disable();
         }else {
             bluetoothAdapter.enable();
         }
+
     }
     public static boolean getBluetoothState (Context context){
         BluetoothManager bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
         BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
+        if (bluetoothAdapter == null) {
+            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        }
+        if (bluetoothAdapter == null) {
+            return false;
+        }
         return bluetoothAdapter.isEnabled();
     }
     public static boolean checkIsFlashLightAvailable (Context context){

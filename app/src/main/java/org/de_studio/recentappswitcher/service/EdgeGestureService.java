@@ -435,7 +435,7 @@ public class EdgeGestureService extends Service {
                                                 key == mySortedMap.firstKey() |
                                                 excludeSet.contains(packa)|
                                                 packa.contains("launcher") |
-                                                packa.contains("android.provider")) {
+                                                getPackageManager().getLaunchIntentForPackage(packa)== null) {
                                             // do nothing
                                         } else tempPackageName.add(packa);
                                     } catch (PackageManager.NameNotFoundException e) {

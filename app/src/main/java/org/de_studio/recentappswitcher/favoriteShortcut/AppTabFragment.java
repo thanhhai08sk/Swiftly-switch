@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.AppInfors;
 import org.de_studio.recentappswitcher.R;
@@ -68,7 +67,7 @@ public class AppTabFragment extends Fragment{
         mListView = (ListView) view.findViewById(R.id.fragment_app_tab_list_view);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         Log.e(LOG_TAG, "inflate mListView");
-        Toast.makeText(getContext(), "AppTabFragment mPosition = " + mPosition, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "AppTabFragment mPosition = " + mPosition, Toast.LENGTH_SHORT).show();
         return view;
     }
 

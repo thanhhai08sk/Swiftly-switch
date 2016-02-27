@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
@@ -44,7 +43,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPosition = getIntent().getFlags();
-        Toast.makeText(getApplicationContext(),"ChooseShortcutActivity position = "+ mPosition,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(),"ChooseShortcutActivity position = "+ mPosition,Toast.LENGTH_SHORT).show();
         setContentView(R.layout.activity_choose_shortcut);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -167,9 +166,9 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return getString(R.string.choose_shortcut_apps_tab_title);
                 case 1:
-                    return "SECTION 2";
+                    return getString(R.string.choose_shortcut_actions_tab_title);
             }
             return null;
         }

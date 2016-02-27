@@ -70,4 +70,6 @@
     <string name="setting_shortcut_power_menu">Show power menu</string>
     <string name="ask_for_write_setting_notification_text">Click here and grant WRITE SETTING for Swiftly switch</string>
     <string name="ask_for_write_setting_notification_title">Swiftly switch need Write Setting permission</string>
+    <string name="choose_shortcut_apps_tab_title">Apps</string>
+    <string name="choose_shortcut_actions_tab_title">Actions</string>
 </resources>

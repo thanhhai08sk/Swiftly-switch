@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
@@ -62,7 +61,7 @@ public class SettingTabFragment extends Fragment {
         mListView.setAdapter(mAdapter);
         ((ChooseShortcutActivity)getActivity()).setSettingAdapter(mAdapter);
         Log.e(LOG_TAG, "inflate mListView");
-        Toast.makeText(getContext(), "AppTabFragment mPosition = " + mPosition, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "AppTabFragment mPosition = " + mPosition, Toast.LENGTH_SHORT).show();
         return view;
     }
 

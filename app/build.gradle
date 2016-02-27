@@ -21,8 +21,8 @@ android {
         applicationId "org.de_studio.recentappswitcher"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 9
-        versionName "1.08"
+        versionCode 13
+        versionName "1.12"
     }
     buildTypes {
         release {
