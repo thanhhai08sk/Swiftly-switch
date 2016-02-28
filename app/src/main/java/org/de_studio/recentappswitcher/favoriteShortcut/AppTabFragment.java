@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import org.de_studio.recentappswitcher.AppInfors;
 import org.de_studio.recentappswitcher.R;
@@ -33,6 +34,7 @@ public class AppTabFragment extends Fragment{
     private ListView mListView;
     private ChooseAppListViewAdapter mAdapter;
     private int mPosition;
+    private ProgressBar progressBar;
 
     public static AppTabFragment newInstance(int sectionNumber) {
         AppTabFragment fragment = new AppTabFragment();
@@ -66,6 +68,8 @@ public class AppTabFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_app_tab, container, false);
         mListView = (ListView) view.findViewById(R.id.fragment_app_tab_list_view);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
         Log.e(LOG_TAG, "inflate mListView");
 //        Toast.makeText(getContext(), "AppTabFragment mPosition = " + mPosition, Toast.LENGTH_SHORT).show();
         return view;
@@ -104,6 +108,7 @@ public class AppTabFragment extends Fragment{
             return arrayList;
         }
         protected void onPostExecute(ArrayList<AppInfors> result) {
+            progressBar.setVisibility(View.GONE);
             mAdapter = new ChooseAppListViewAdapter(getContext(), result, mPosition);
             mListView.setAdapter(mAdapter);
             ((ChooseShortcutActivity) getActivity()).setAppAdapter(mAdapter);
