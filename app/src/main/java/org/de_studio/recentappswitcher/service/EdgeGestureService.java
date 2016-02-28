@@ -17,6 +17,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
@@ -939,6 +940,34 @@ public class EdgeGestureService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             context.startService(new Intent(context,EdgeGestureService.class));
+        }
+    }
+
+    private class DelayToSwitchTask extends AsyncTask<Void, Void, Void> {
+        private boolean isSleepEnough = false;
+        @Override
+        protected Void doInBackground(Void... params) {
+            isSleepEnough = false;
+            try {
+                Thread.sleep(1000);
+                isSleepEnough = true;
+            } catch (InterruptedException e) {
+                Log.e(LOG_TAG,"interrupt sleeping");
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onCancelled(Void aVoid) {
+            super.onCancelled(aVoid);
+            isSleepEnough = false;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            switched = true;
+            super.onPostExecute(aVoid);
         }
     }
 
