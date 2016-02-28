@@ -518,18 +518,18 @@ public class MainActivity extends Activity {
             ArrayList<AppInfors> arrayList = new ArrayList<AppInfors>();
             Set<PackageInfo> set = Utility.getInstalledApps(getApplicationContext());
             PackageInfo[] array = set.toArray(new PackageInfo[set.size()]);
-            for (PackageInfo pack : array){
+            for (PackageInfo pack : array) {
 
                 try {
                     AppInfors appInfors = new AppInfors();
-                    appInfors.label =(String) packageManager.getApplicationLabel(pack.applicationInfo);
+                    appInfors.label = (String) packageManager.getApplicationLabel(pack.applicationInfo);
                     appInfors.packageName = pack.packageName;
 //                    appInfors.iconDrawable = packageManager.getApplicationIcon(pack.packageName);
                     appInfors.launchIntent = packageManager.getLaunchIntentForPackage(pack.packageName);
                     Bitmap iconBitmap = Utility.drawableToBitmap(packageManager.getApplicationIcon(pack.packageName));
-                    appInfors.iconBitmap = Bitmap.createScaledBitmap(iconBitmap,(int)(24*mScale),(int)(24*mScale),false);
+                    appInfors.iconBitmap = Bitmap.createScaledBitmap(iconBitmap, (int) (24 * mScale), (int) (24 * mScale), false);
                     arrayList.add(appInfors);
-                }catch (PackageManager.NameNotFoundException e){
+                } catch (PackageManager.NameNotFoundException e) {
                     Log.e(LOG_TAG, "name not found " + e);
                 }
                 Collections.sort(arrayList);

@@ -195,6 +195,9 @@ public class EdgeGestureService extends Service {
                 break;
         }
         if (isEdge1On) {
+            if (edge1View.isAttachedToWindow()) {
+                windowManager.removeView(edge1View);
+            }
             windowManager.addView(edge1View, paramsEdge1);
         }
         edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
@@ -239,6 +242,9 @@ public class EdgeGestureService extends Service {
                 break;
         }
         if (isEdge2On) {
+            if (edge2View.isAttachedToWindow()) {
+                windowManager.removeView(edge2View);
+            }
             windowManager.addView(edge2View, paramsEdge2);
 
         }
@@ -296,6 +302,7 @@ public class EdgeGestureService extends Service {
         public boolean onTouch(View v, MotionEvent event) {
             int x_cord = (int) event.getRawX();
             int y_cord = (int) event.getRawY();
+            Log.e(LOG_TAG, "onTouch");
             if (touched){
                 if (!switched) {
                     long currentTime = System.currentTimeMillis();
@@ -476,7 +483,6 @@ public class EdgeGestureService extends Service {
                         Log.e(LOG_TAG," item_view has already been added to the window manager");
                     }
                     break;
-
 
                 case MotionEvent.ACTION_UP:
                     try {
@@ -687,6 +693,7 @@ public class EdgeGestureService extends Service {
 
                     break;
                 case MotionEvent.ACTION_MOVE:
+                    Log.e(LOG_TAG, "onMove");
                     if (switched & !itemSwitched) {
 //                        for (int i = 0; i < 6; i++) {
 //                            if (i >= favoritePackageName.length) {
@@ -896,6 +903,8 @@ public class EdgeGestureService extends Service {
         }
         Log.e(LOG_TAG, "onDestroy service");
     }
+
+
 
     private int getYOffset(int y_init) {
         Point point = new Point();
