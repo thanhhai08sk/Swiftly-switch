@@ -8,10 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -30,14 +28,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -70,7 +66,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         if (getPackageName().equals(FREE_VERSION_PACKAGE_NAME)) isTrial = true;
         setContentView(R.layout.activity_main);
-        new LoadInstalledApp().execute();
         mScale = getResources().getDisplayMetrics().density;
         sharedPreferences1 = getSharedPreferences(EDGE_1_SHAREDPREFERENCE, 0);
         sharedPreferences2 = getSharedPreferences(EDGE_2_SHAREDPREFERENCE, 0);
@@ -345,11 +340,7 @@ public class MainActivity extends Activity {
 //                FragmentManager fragmentManager = getSupportFragmentManager();
                 android.app.FragmentManager fragmentManager = getFragmentManager();
                 FavoriteOrExcludeDialogFragment newFragment = new FavoriteOrExcludeDialogFragment();
-                if (mAppInforsArrayList != null) {
-                    newFragment.setAppInforsArrayList(mAppInforsArrayList, FavoriteOrExcludeDialogFragment.EXCLUDE_MODE,getApplicationContext());
                     newFragment.show(fragmentManager, "excludeDialogFragment");
-                } else
-                    Toast.makeText(getApplicationContext(), R.string.waite_a_secend_app_loading, Toast.LENGTH_SHORT).show();
             }
         });
         step2GoToSettingButton.setVisibility(View.GONE);
@@ -510,35 +501,6 @@ public class MainActivity extends Activity {
     }
 
 
-    private class LoadInstalledApp extends AsyncTask<Void, Void, ArrayList<AppInfors>> {
-        protected ArrayList<AppInfors> doInBackground(Void... voids) {
-            PackageManager packageManager = getPackageManager();
-            ArrayList<AppInfors> arrayList = new ArrayList<AppInfors>();
-            Set<PackageInfo> set = Utility.getInstalledApps(getApplicationContext());
-            PackageInfo[] array = set.toArray(new PackageInfo[set.size()]);
-            for (PackageInfo pack : array) {
-
-//                try {
-                    AppInfors appInfors = new AppInfors();
-                    appInfors.label = (String) packageManager.getApplicationLabel(pack.applicationInfo);
-                    appInfors.packageName = pack.packageName;
-//                    appInfors.iconDrawable = packageManager.getApplicationIcon(pack.packageName);
-                    appInfors.launchIntent = packageManager.getLaunchIntentForPackage(pack.packageName);
-//                    Bitmap iconBitmap = Utility.drawableToBitmap(packageManager.getApplicationIcon(pack.packageName));
-//                    appInfors.iconBitmap = Bitmap.createScaledBitmap(iconBitmap, (int) (24 * mScale), (int) (24 * mScale), false);
-                    arrayList.add(appInfors);
-//                } catch (PackageManager.NameNotFoundException e) {
-//                    Log.e(LOG_TAG, "name not found " + e);
-//                }
-                Collections.sort(arrayList);
-
-            }
-            return arrayList;
-        }
-        protected void onPostExecute(ArrayList<AppInfors> result) {
-            mAppInforsArrayList = result;
-        }
-    }
 
     private boolean isStep1Ok(){
         AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
