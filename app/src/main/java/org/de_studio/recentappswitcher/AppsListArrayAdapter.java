@@ -12,7 +12,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
@@ -52,7 +51,6 @@ public class AppsListArrayAdapter extends BaseAdapter {
         ImageView icon = (ImageView) returnView.findViewById(R.id.add_favorite_list_item_image_view);
         TextView label = (TextView) returnView.findViewById(R.id.add_favorite_list_item_label_text_view);
         CheckBox checkBox = (CheckBox) returnView.findViewById(R.id.add_favorite_list_item_check_box);
-        if (mMode == FavoriteOrExcludeDialogFragment.EXCLUDE_MODE){
             if (sharedPreferenceExclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,new HashSet<String>()).contains(appInfors.packageName)){
                 checkBox.setChecked(true);
             }
@@ -60,66 +58,33 @@ public class AppsListArrayAdapter extends BaseAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     String packageName = appInfors.packageName;
-                    Set<String> set = sharedPreferenceExclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,null);
-                    if (set == null){
+                    Set<String> set = sharedPreferenceExclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, null);
+                    if (set == null) {
                         set = new HashSet<String>();
                     }
                     Set<String> setClone = new HashSet<String>();
                     setClone.addAll(set);
-                    if (isChecked & packageName !=null){
-                            setClone.add(packageName);
-                            sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,setClone).commit();
+                    if (isChecked & packageName != null) {
+                        setClone.add(packageName);
+                        sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, setClone).commit();
 
 
-
-                    }else if (!isChecked & packageName!= null){
-                        if (setClone.contains(packageName)){
+                    } else if (!isChecked & packageName != null) {
+                        if (setClone.contains(packageName)) {
                             setClone.remove(packageName);
-                            sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,setClone).commit();
+                            sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, setClone).commit();
                         }
                     }
-                    Log.e(LOG_TAG,"size of set = " + setClone.size());
+                    Log.e(LOG_TAG, "size of set = " + setClone.size());
 
                 }
             });
-        }else if (mMode == FavoriteOrExcludeDialogFragment.FAVORITE_MODE){
-            if (sharedPreferenceFavorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY,new HashSet<String>()).contains(appInfors.packageName)){
-                checkBox.setChecked(true);
-            }
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    String packageName = appInfors.packageName;
-                    Set<String> set = sharedPreferenceFavorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, null);
-                    if (set == null){
-                        set = new HashSet<String>();
-                    }
-                    Set<String> setClone = new HashSet<String>();
-                    setClone.addAll(set);
-                    if (isChecked & packageName !=null){
-                        if (setClone.size()==6){
-                            Toast.makeText(context,context.getString(R.string.limit_for_favorite_app_is_6),Toast.LENGTH_SHORT).show();
-                            buttonView.setChecked(false);
-                        }else {
-                            setClone.add(packageName);
-                            sharedPreferenceFavorite.edit().putStringSet(EdgeSettingDialogFragment.FAVORITE_KEY,setClone).commit();
-                        }
+        try {
+            icon.setImageDrawable(packageManager.getApplicationIcon(appInfors.packageName));
 
-
-                    }else if (!isChecked & packageName!= null){
-                        if (setClone.contains(packageName)){
-                            setClone.remove(packageName);
-                            sharedPreferenceFavorite.edit().putStringSet(EdgeSettingDialogFragment.FAVORITE_KEY,setClone).commit();
-                        }
-                    }
-                    Log.e(LOG_TAG,"size of set = " + setClone.size());
-
-                }
-            });
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(LOG_TAG, "name not found");
         }
-
-//        icon.setImageDrawable(appInfors.iconDrawable);
-        icon.setImageBitmap(appInfors.iconBitmap);
         label.setText(appInfors.label);
 
         return returnView;
