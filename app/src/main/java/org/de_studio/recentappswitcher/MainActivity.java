@@ -1,6 +1,5 @@
 package org.de_studio.recentappswitcher;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
@@ -11,7 +10,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -520,18 +518,18 @@ public class MainActivity extends Activity {
             PackageInfo[] array = set.toArray(new PackageInfo[set.size()]);
             for (PackageInfo pack : array) {
 
-                try {
+//                try {
                     AppInfors appInfors = new AppInfors();
                     appInfors.label = (String) packageManager.getApplicationLabel(pack.applicationInfo);
                     appInfors.packageName = pack.packageName;
 //                    appInfors.iconDrawable = packageManager.getApplicationIcon(pack.packageName);
                     appInfors.launchIntent = packageManager.getLaunchIntentForPackage(pack.packageName);
-                    Bitmap iconBitmap = Utility.drawableToBitmap(packageManager.getApplicationIcon(pack.packageName));
-                    appInfors.iconBitmap = Bitmap.createScaledBitmap(iconBitmap, (int) (24 * mScale), (int) (24 * mScale), false);
+//                    Bitmap iconBitmap = Utility.drawableToBitmap(packageManager.getApplicationIcon(pack.packageName));
+//                    appInfors.iconBitmap = Bitmap.createScaledBitmap(iconBitmap, (int) (24 * mScale), (int) (24 * mScale), false);
                     arrayList.add(appInfors);
-                } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(LOG_TAG, "name not found " + e);
-                }
+//                } catch (PackageManager.NameNotFoundException e) {
+//                    Log.e(LOG_TAG, "name not found " + e);
+//                }
                 Collections.sort(arrayList);
 
             }
