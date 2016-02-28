@@ -291,6 +291,7 @@ public class EdgeGestureService extends Service {
         private FrameLayout itemView;
         private AppCompatImageView[] iconImageList;
         private List<AppCompatImageView> iconImageArrayList;
+        private DelayToSwitchTask delayToSwitchTask;
 
         public OnTouchListener(int position, AppCompatImageView[] iconImageList, FrameLayout itemView, List<AppCompatImageView> iconImageArrayList) {
             this.position = position;
@@ -303,7 +304,6 @@ public class EdgeGestureService extends Service {
         public boolean onTouch(View v, MotionEvent event) {
             int x_cord = (int) event.getRawX();
             int y_cord = (int) event.getRawY();
-            Log.e(LOG_TAG, "onTouch");
             if (touched){
                 if (!switched) {
                     long currentTime = System.currentTimeMillis();
@@ -318,6 +318,12 @@ public class EdgeGestureService extends Service {
                         itemView.removeView(backView);
                         itemView.removeView(homeView);
                         itemView.removeView(expandView);
+                    if (itemView.isAttachedToWindow()) {
+                        windowManager.removeView(itemView);
+                    }
+                    if (shortcutView.isAttachedToWindow()) {
+                        windowManager.removeView(shortcutView);
+                    }
                     if (isFreeVersion){
                         isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY,System.currentTimeMillis())
                                 > MainActivity.trialTime;
@@ -689,13 +695,21 @@ public class EdgeGestureService extends Service {
                     }
 
 
-
+                    switched = false;
                     touched = false;
+                    if (delayToSwitchTask != null) {
+                        delayToSwitchTask.cancel(true);
+                    }
+                    if (itemView.isAttachedToWindow()) {
+                        windowManager.removeView(itemView);
+                    }
+                    if (shortcutView.isAttachedToWindow()) {
+                        windowManager.removeView(shortcutView);
+                    }
 
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    Log.e(LOG_TAG, "onMove");
-                    if (switched & !itemSwitched) {
+//                    if (switched & !itemSwitched) {
 //                        for (int i = 0; i < 6; i++) {
 //                            if (i >= favoritePackageName.length) {
 //                                iconImageArrayList.get(i).setImageDrawable(ContextCompat. getDrawable(getApplicationContext() , R.drawable.ic_add_circle_outline_white_48dp));
@@ -709,34 +723,46 @@ public class EdgeGestureService extends Service {
 //                        }
 //                        itemSwitched = false;
 
-                        shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
-                        ViewGroup.LayoutParams gridParams = shortcutGridView.getLayoutParams();
-                        gridParams.height = (int)(mScale* (float)(48 * gridRow + 22* (gridRow -1)));
-                        gridParams.width = (int)(mScale* (float)(48 * gridColumn + 22* (gridColumn -1)));
-                        shortcutGridView.setLayoutParams(gridParams);
-                        shortcutGridView.setAdapter(shortcutAdapter);
-                        WindowManager.LayoutParams shortcutViewParams = new WindowManager.LayoutParams(
-                                WindowManager.LayoutParams.MATCH_PARENT,
-                                WindowManager.LayoutParams.MATCH_PARENT,
-                                WindowManager.LayoutParams.TYPE_PHONE,
-                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE| WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
-                                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                                PixelFormat.TRANSLUCENT);
-                        shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-                        Utility.setFavoriteShortcutGridViewPosition(shortcutGridView,x_init_cord,y_init_cord,mScale,position, windowManager, defaultShared);
-                        windowManager.addView(shortcutView,shortcutViewParams);
-                        windowManager.removeView(itemView);
-                        itemSwitched = true;
-                    }
+//                        shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
+//                        ViewGroup.LayoutParams gridParams = shortcutGridView.getLayoutParams();
+//                        gridParams.height = (int)(mScale* (float)(48 * gridRow + 22* (gridRow -1)));
+//                        gridParams.width = (int)(mScale* (float)(48 * gridColumn + 22* (gridColumn -1)));
+//                        shortcutGridView.setLayoutParams(gridParams);
+//                        shortcutGridView.setAdapter(shortcutAdapter);
+//                        WindowManager.LayoutParams shortcutViewParams = new WindowManager.LayoutParams(
+//                                WindowManager.LayoutParams.MATCH_PARENT,
+//                                WindowManager.LayoutParams.MATCH_PARENT,
+//                                WindowManager.LayoutParams.TYPE_PHONE,
+//                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+//                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE| WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+//                                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+//                                PixelFormat.TRANSLUCENT);
+//                        shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+//                        Utility.setFavoriteShortcutGridViewPosition(shortcutGridView,x_init_cord,y_init_cord,mScale,position, windowManager, defaultShared);
+//                        windowManager.addView(shortcutView,shortcutViewParams);
+//                        windowManager.removeView(itemView);
+//                        itemSwitched = true;
+//                    }
                     int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
                     int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
                     if (iconToSwitch != -1) {
+
+                        if (delayToSwitchTask == null) {
+                            delayToSwitchTask = new DelayToSwitchTask();
+                            delayToSwitchTask.execute();
+                        }else if (delayToSwitchTask.isCancelled()) {
+                            delayToSwitchTask = new DelayToSwitchTask();
+                            delayToSwitchTask.execute();
+                        }
                         if (!touched) {
                             firstTouchTime = System.currentTimeMillis();
                             touched = true;
                         }
                     } else {
+                        if (delayToSwitchTask != null) {
+                            delayToSwitchTask.cancel(true);
+                            delayToSwitchTask = null;
+                        }
                         touched = false;
                     }
                     if (iconToSwitch != -1 | moveToHomeBackNoti > 0) {
@@ -807,6 +833,59 @@ public class EdgeGestureService extends Service {
                     break;
             }
             return true;
+        }
+        private class DelayToSwitchTask extends AsyncTask<Void, Void, Void> {
+            private boolean isSleepEnough = false;
+            @Override
+            protected Void doInBackground(Void... params) {
+                isSleepEnough = false;
+                try {
+                    Thread.sleep(holdTime);
+                    isSleepEnough = true;
+                } catch (InterruptedException e) {
+                    Log.e(LOG_TAG,"interrupt sleeping");
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onCancelled(Void aVoid) {
+                super.onCancelled(aVoid);
+                isSleepEnough = false;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                if (isSleepEnough & touched) {
+                    shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
+                    ViewGroup.LayoutParams gridParams = shortcutGridView.getLayoutParams();
+                    gridParams.height = (int) (mScale * (float) (48 * gridRow + 22 * (gridRow - 1)));
+                    gridParams.width = (int) (mScale * (float) (48 * gridColumn + 22 * (gridColumn - 1)));
+                    shortcutGridView.setLayoutParams(gridParams);
+                    shortcutGridView.setAdapter(shortcutAdapter);
+                    WindowManager.LayoutParams shortcutViewParams = new WindowManager.LayoutParams(
+                            WindowManager.LayoutParams.MATCH_PARENT,
+                            WindowManager.LayoutParams.MATCH_PARENT,
+                            WindowManager.LayoutParams.TYPE_PHONE,
+                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                            PixelFormat.TRANSLUCENT);
+                    shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                    Utility.setFavoriteShortcutGridViewPosition(shortcutGridView, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared);
+                    if (!shortcutView.isAttachedToWindow()) {
+                        windowManager.addView(shortcutView, shortcutViewParams);
+                    }
+                    if (itemView.isAttachedToWindow()) {
+                        windowManager.removeView(itemView);
+                    }
+                    switched = true;
+
+                }
+
+                super.onPostExecute(aVoid);
+            }
         }
     }
     public void expandStatusBar() {
@@ -939,37 +1018,11 @@ public class EdgeGestureService extends Service {
     public static class BootCompleteReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
-            context.startService(new Intent(context,EdgeGestureService.class));
+            context.startService(new Intent(context, EdgeGestureService.class));
         }
     }
 
-    private class DelayToSwitchTask extends AsyncTask<Void, Void, Void> {
-        private boolean isSleepEnough = false;
-        @Override
-        protected Void doInBackground(Void... params) {
-            isSleepEnough = false;
-            try {
-                Thread.sleep(1000);
-                isSleepEnough = true;
-            } catch (InterruptedException e) {
-                Log.e(LOG_TAG,"interrupt sleeping");
-            }
 
-            return null;
-        }
-
-        @Override
-        protected void onCancelled(Void aVoid) {
-            super.onCancelled(aVoid);
-            isSleepEnough = false;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            switched = true;
-            super.onPostExecute(aVoid);
-        }
-    }
 
 
 }
