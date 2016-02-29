@@ -304,15 +304,6 @@ public class EdgeGestureService extends Service {
         public boolean onTouch(View v, MotionEvent event) {
             int x_cord = (int) event.getRawX();
             int y_cord = (int) event.getRawY();
-            if (touched){
-                if (!switched) {
-                    long currentTime = System.currentTimeMillis();
-                    long eslapeTime = currentTime - firstTouchTime;
-                    if (eslapeTime > holdTime) {
-                        switched = true;
-                    }
-                }
-            }
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                         itemView.removeView(backView);
@@ -420,7 +411,6 @@ public class EdgeGestureService extends Service {
                                 }
                             }
                         }
-                        if (packagename.length ==0) switched = true;
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
@@ -474,21 +464,33 @@ public class EdgeGestureService extends Service {
                                 }
                             }
                         }
-                        if (packagename.length ==0) switched = true;
-                    }
-                    numOfIcon = iconImageArrayList.size();
-                    x = new int[numOfIcon];
-                    y = new int[numOfIcon];
-                    for (int i = 0; i < numOfIcon; i++) {
-                        x[i] = (int) iconImageArrayList.get(i).getX();
-                        y[i] = (int) iconImageArrayList.get(i).getY();
-                    }
-                    try {
-                        windowManager.addView(itemView, itemViewParameter);
 
-                    }catch (IllegalStateException e){
-                        Log.e(LOG_TAG," item_view has already been added to the window manager");
                     }
+
+                    if (packagename.length ==0) {
+                        if (delayToSwitchTask == null) {
+                            delayToSwitchTask = new DelayToSwitchTask();
+                            delayToSwitchTask.switchShortcut();
+                        } else if (delayToSwitchTask.isCancelled()) {
+                            delayToSwitchTask = new DelayToSwitchTask();
+                            delayToSwitchTask.switchShortcut();
+                        }
+                    } else {
+                        numOfIcon = iconImageArrayList.size();
+                        x = new int[numOfIcon];
+                        y = new int[numOfIcon];
+                        for (int i = 0; i < numOfIcon; i++) {
+                            x[i] = (int) iconImageArrayList.get(i).getX();
+                            y[i] = (int) iconImageArrayList.get(i).getY();
+                        }
+                        try {
+                            windowManager.addView(itemView, itemViewParameter);
+
+                        }catch (IllegalStateException e){
+                            Log.e(LOG_TAG," item_view has already been added to the window manager");
+                        }
+                    }
+
                     break;
 
                 case MotionEvent.ACTION_UP:
@@ -858,33 +860,37 @@ public class EdgeGestureService extends Service {
             @Override
             protected void onPostExecute(Void aVoid) {
                 if (isSleepEnough & touched) {
-                    shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
-                    ViewGroup.LayoutParams gridParams = shortcutGridView.getLayoutParams();
-                    gridParams.height = (int) (mScale * (float) (48 * gridRow + 22 * (gridRow - 1)));
-                    gridParams.width = (int) (mScale * (float) (48 * gridColumn + 22 * (gridColumn - 1)));
-                    shortcutGridView.setLayoutParams(gridParams);
-                    shortcutGridView.setAdapter(shortcutAdapter);
-                    WindowManager.LayoutParams shortcutViewParams = new WindowManager.LayoutParams(
-                            WindowManager.LayoutParams.MATCH_PARENT,
-                            WindowManager.LayoutParams.MATCH_PARENT,
-                            WindowManager.LayoutParams.TYPE_PHONE,
-                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
-                                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                            PixelFormat.TRANSLUCENT);
-                    shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-                    Utility.setFavoriteShortcutGridViewPosition(shortcutGridView, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared);
-                    if (!shortcutView.isAttachedToWindow()) {
-                        windowManager.addView(shortcutView, shortcutViewParams);
-                    }
-                    if (itemView.isAttachedToWindow()) {
-                        windowManager.removeView(itemView);
-                    }
-                    switched = true;
+                    switchShortcut();
 
                 }
 
                 super.onPostExecute(aVoid);
+            }
+
+            protected void switchShortcut() {
+                shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
+                ViewGroup.LayoutParams gridParams = shortcutGridView.getLayoutParams();
+                gridParams.height = (int) (mScale * (float) (48 * gridRow + 22 * (gridRow - 1)));
+                gridParams.width = (int) (mScale * (float) (48 * gridColumn + 22 * (gridColumn - 1)));
+                shortcutGridView.setLayoutParams(gridParams);
+                shortcutGridView.setAdapter(shortcutAdapter);
+                WindowManager.LayoutParams shortcutViewParams = new WindowManager.LayoutParams(
+                        WindowManager.LayoutParams.MATCH_PARENT,
+                        WindowManager.LayoutParams.MATCH_PARENT,
+                        WindowManager.LayoutParams.TYPE_PHONE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                                WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                        PixelFormat.TRANSLUCENT);
+                shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                Utility.setFavoriteShortcutGridViewPosition(shortcutGridView, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared);
+                if (!shortcutView.isAttachedToWindow()) {
+                    windowManager.addView(shortcutView, shortcutViewParams);
+                }
+                if (itemView.isAttachedToWindow()) {
+                    windowManager.removeView(itemView);
+                }
+                switched = true;
             }
         }
     }

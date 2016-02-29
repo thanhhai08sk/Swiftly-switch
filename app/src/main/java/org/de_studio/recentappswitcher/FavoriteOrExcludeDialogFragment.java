@@ -108,8 +108,6 @@ public class FavoriteOrExcludeDialogFragment extends DialogFragment {
                 mListView.setAdapter(mAdapter);
             }
 
-
-
         }
     }
 
