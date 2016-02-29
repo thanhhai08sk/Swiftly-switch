@@ -1,6 +1,5 @@
 package org.de_studio.recentappswitcher;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
@@ -11,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +28,7 @@ import java.util.Set;
  * Created by hai on 1/5/2016.
  */
 public class FavoriteOrExcludeDialogFragment extends DialogFragment {
+    private static final String LOG_TAG = FavoriteOrExcludeDialogFragment.class.getSimpleName();
     public static final String APP_INFORS_KEY = "app_infors";
     public static final int FAVORITE_MODE = 1;
     public static final int EXCLUDE_MODE = 2;
@@ -57,7 +58,7 @@ public class FavoriteOrExcludeDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        getContext().stopService(new Intent(getContext(), EdgeGestureService.class));
-        getActivity().stopService(new Intent(getActivity(),EdgeGestureService.class));
+        getActivity().stopService(new Intent(getActivity(), EdgeGestureService.class));
         new LoadInstalledApp().execute();
 
 
@@ -65,12 +66,13 @@ public class FavoriteOrExcludeDialogFragment extends DialogFragment {
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        getActivity().startService(new Intent(getActivity(), EdgeGestureService.class));
-        Activity mainActivity = getActivity();
-        if (mainActivity instanceof MainActivity){
-            ((MainActivity) mainActivity).setFavoriteView();
+        try {
+            getActivity().startService(new Intent(getActivity(), EdgeGestureService.class));
+        } catch (NullPointerException e) {
+            Log.e(LOG_TAG, "Null when get activity from on dismiss");
         }
+
+        super.onDismiss(dialog);
     }
 
     private class LoadInstalledApp extends AsyncTask<Void, Void, ArrayList<AppInfors>> {
@@ -101,8 +103,11 @@ public class FavoriteOrExcludeDialogFragment extends DialogFragment {
         protected void onPostExecute(ArrayList<AppInfors> result) {
 
             progressBar.setVisibility(View.GONE);
-            mAdapter = new AppsListArrayAdapter(getActivity(),result,EXCLUDE_MODE);
-            mListView.setAdapter(mAdapter);
+            if (getActivity() != null) {
+                mAdapter = new AppsListArrayAdapter(getActivity(),result,EXCLUDE_MODE);
+                mListView.setAdapter(mAdapter);
+            }
+
 
 
         }

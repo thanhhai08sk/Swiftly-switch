@@ -331,7 +331,6 @@ public class MainActivity extends Activity {
 
             }
         });
-        setFavoriteView();
 
         ImageButton editExcludeButton = (ImageButton) findViewById(R.id.main_exclude_edit_image_button);
         editExcludeButton.setOnClickListener(new View.OnClickListener() {
@@ -410,47 +409,47 @@ public class MainActivity extends Activity {
         transaction1.add(android.R.id.content,newFragment).addToBackStack(null).commit();
     }
 
-    public void setFavoriteView(){
-        PackageManager packageManager = getPackageManager();
-        LinearLayout[] linearLayouts = new LinearLayout[6];
-        linearLayouts[0] = (LinearLayout) findViewById(R.id.favorite_app_0_linear_layout);
-        linearLayouts[1] = (LinearLayout) findViewById(R.id.favorite_app_1_linear_layout);
-        linearLayouts[2] = (LinearLayout) findViewById(R.id.favorite_app_2_linear_layout);
-        linearLayouts[3] = (LinearLayout) findViewById(R.id.favorite_app_3_linear_layout);
-        linearLayouts[4] = (LinearLayout) findViewById(R.id.favorite_app_4_linear_layout);
-        linearLayouts[5] = (LinearLayout) findViewById(R.id.favorite_app_5_linear_layout);
-        ImageView[] icons = new ImageView[6];
-        icons[0] = (ImageView) findViewById(R.id.favorite_app_0_item_image_view);
-        icons[1] = (ImageView) findViewById(R.id.favorite_app_1_item_image_view);
-        icons[2] = (ImageView) findViewById(R.id.favorite_app_2_item_image_view);
-        icons[3] = (ImageView) findViewById(R.id.favorite_app_3_item_image_view);
-        icons[4] = (ImageView) findViewById(R.id.favorite_app_4_item_image_view);
-        icons[5] = (ImageView) findViewById(R.id.favorite_app_5_item_image_view);
-        TextView[] labels = new TextView[6];
-        labels[0] = (TextView) findViewById(R.id.favorite_app_0_item_label_text_view);
-        labels[1] = (TextView) findViewById(R.id.favorite_app_1_item_label_text_view);
-        labels[2] = (TextView) findViewById(R.id.favorite_app_2_item_label_text_view);
-        labels[3] = (TextView) findViewById(R.id.favorite_app_3_item_label_text_view);
-        labels[4] = (TextView) findViewById(R.id.favorite_app_4_item_label_text_view);
-        labels[5] = (TextView) findViewById(R.id.favorite_app_5_item_label_text_view);
-        Set<String> set = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY,new HashSet<String>());
-        String[] favoritePackageName = new String[set.size()];
-        set.toArray(favoritePackageName);
-        for (int i = 0; i< 6; i++){
-            if (i< favoritePackageName.length){
-                try {
-                    labels[i].setText(packageManager.getApplicationLabel(packageManager.getApplicationInfo(favoritePackageName[i],0)));
-                    icons[i].setImageDrawable(packageManager.getApplicationIcon(favoritePackageName[i]));
-                    linearLayouts[i].setVisibility(View.VISIBLE);
-                }catch (PackageManager.NameNotFoundException e){
-                    Log.e(LOG_TAG,"name not found");
-                }
-
-            }else {
-                linearLayouts[i].setVisibility(View.GONE);
-            }
-        }
-    }
+//    public void setFavoriteView(){
+//        PackageManager packageManager = getPackageManager();
+//        LinearLayout[] linearLayouts = new LinearLayout[6];
+//        linearLayouts[0] = (LinearLayout) findViewById(R.id.favorite_app_0_linear_layout);
+//        linearLayouts[1] = (LinearLayout) findViewById(R.id.favorite_app_1_linear_layout);
+//        linearLayouts[2] = (LinearLayout) findViewById(R.id.favorite_app_2_linear_layout);
+//        linearLayouts[3] = (LinearLayout) findViewById(R.id.favorite_app_3_linear_layout);
+//        linearLayouts[4] = (LinearLayout) findViewById(R.id.favorite_app_4_linear_layout);
+//        linearLayouts[5] = (LinearLayout) findViewById(R.id.favorite_app_5_linear_layout);
+//        ImageView[] icons = new ImageView[6];
+//        icons[0] = (ImageView) findViewById(R.id.favorite_app_0_item_image_view);
+//        icons[1] = (ImageView) findViewById(R.id.favorite_app_1_item_image_view);
+//        icons[2] = (ImageView) findViewById(R.id.favorite_app_2_item_image_view);
+//        icons[3] = (ImageView) findViewById(R.id.favorite_app_3_item_image_view);
+//        icons[4] = (ImageView) findViewById(R.id.favorite_app_4_item_image_view);
+//        icons[5] = (ImageView) findViewById(R.id.favorite_app_5_item_image_view);
+//        TextView[] labels = new TextView[6];
+//        labels[0] = (TextView) findViewById(R.id.favorite_app_0_item_label_text_view);
+//        labels[1] = (TextView) findViewById(R.id.favorite_app_1_item_label_text_view);
+//        labels[2] = (TextView) findViewById(R.id.favorite_app_2_item_label_text_view);
+//        labels[3] = (TextView) findViewById(R.id.favorite_app_3_item_label_text_view);
+//        labels[4] = (TextView) findViewById(R.id.favorite_app_4_item_label_text_view);
+//        labels[5] = (TextView) findViewById(R.id.favorite_app_5_item_label_text_view);
+//        Set<String> set = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY,new HashSet<String>());
+//        String[] favoritePackageName = new String[set.size()];
+//        set.toArray(favoritePackageName);
+//        for (int i = 0; i< 6; i++){
+//            if (i< favoritePackageName.length){
+//                try {
+//                    labels[i].setText(packageManager.getApplicationLabel(packageManager.getApplicationInfo(favoritePackageName[i],0)));
+//                    icons[i].setImageDrawable(packageManager.getApplicationIcon(favoritePackageName[i]));
+//                    linearLayouts[i].setVisibility(View.VISIBLE);
+//                }catch (PackageManager.NameNotFoundException e){
+//                    Log.e(LOG_TAG,"name not found");
+//                }
+//
+//            }else {
+//                linearLayouts[i].setVisibility(View.GONE);
+//            }
+//        }
+//    }
 
     public void setStepButtonAndDescription(){
         boolean isStep1Ok;
@@ -508,10 +507,6 @@ public class MainActivity extends Activity {
                 android.os.Process.myUid(), getPackageName());
         return  mode == AppOpsManager.MODE_ALLOWED;
 
-    }
-    private boolean isStep2Ok(){
-        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-        return  manager.isEnabled();
     }
 
     public void checkDrawOverlayPermission() {
