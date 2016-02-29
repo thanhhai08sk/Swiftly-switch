@@ -46,6 +46,7 @@ import android.widget.Toast;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 
 import java.lang.reflect.InvocationTargetException;
@@ -1017,7 +1018,7 @@ public class EdgeGestureService extends Service {
     }
 
     public void showAddFavoriteDialog(){
-        startActivity(new Intent(getApplicationContext(),MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        startActivity(new Intent(getApplicationContext(), SetFavoriteShortcutActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
 
