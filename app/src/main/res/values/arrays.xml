@@ -14,4 +14,21 @@
         <item>@string/setting_shortcut_bluetooth</item>
         <item>@string/setting_shortcut_rotation</item>
     </string-array>
+    <string-array name="grid_row">
+        <item>@string/grid_2_row</item>
+        <item>@string/grid_3_row</item>
+        <item>@string/grid_4_row</item>
+        <item>@string/grid_5_row</item>
+        <item>@string/grid_6_row</item>
+        <item>@string/grid_7_row</item>
+    </string-array>
+
+    <string-array name="grid_column">
+        <item>@string/grid_2_column</item>
+        <item>@string/grid_3_column</item>
+        <item>@string/grid_4_column</item>
+        <item>@string/grid_5_column</item>
+        <item>@string/grid_6_column</item>
+        <item>@string/grid_7_column</item>
+    </string-array>
 </resources>
