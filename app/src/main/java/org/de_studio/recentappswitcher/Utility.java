@@ -201,12 +201,12 @@ public  class Utility {
 
     }
 
-    public static void setFavoriteShortcutGridViewPosition(GridView gridView, int x_init_cord, int y_init_cord, float mScale, int edgePosition, WindowManager windowManager, SharedPreferences sharedPreferences, int distanceFromEdgeDp) {
+    public static void setFavoriteShortcutGridViewPosition(GridView gridView, int x_init_cord, int y_init_cord, float mScale, int edgePosition, WindowManager windowManager, SharedPreferences sharedPreferences, int distanceFromEdgeDp, int gap) {
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
         int row = sharedPreferences.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         int column = sharedPreferences.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
-        float gridWide = ((float)(column*48 + (column -1)*22)) * mScale;
-        float gridTall = ((float)(row*48 + (row -1)*22)) * mScale;
+        float gridWide = ((float)(column*48 + (column -1)*gap)) * mScale;
+        float gridTall = ((float)(row*48 + (row -1)*gap)) * mScale;
         Point point = new Point();
         windowManager.getDefaultDisplay().getSize(point);
         int x = point.x;

@@ -52,7 +52,7 @@
             <android.support.v7.widget.AppCompatSpinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/set_favorite_shortcut_grid_row"
+                android:id="@+id/set_favorite_shortcut_grid_row_spinner"
                 android:spinnerMode="dropdown"
                 android:entries="@array/grid_row"
                 android:background="@color/white"
@@ -69,7 +69,7 @@
             <android.support.v7.widget.AppCompatSpinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/set_favorite_shortcut_grid_column"
+                android:id="@+id/set_favorite_shortcut_grid_column_spinner"
                 android:spinnerMode="dropdown"
                 android:entries="@array/grid_column"
                 android:background="@color/white"
