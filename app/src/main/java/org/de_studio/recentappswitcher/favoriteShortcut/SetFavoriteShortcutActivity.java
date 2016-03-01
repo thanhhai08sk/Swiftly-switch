@@ -23,23 +23,25 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
     private FavoriteShortcutAdapter mAdapter;
     private static final String LOG_TAG = SetFavoriteShortcutActivity.class.getSimpleName();
     private float mScale;
+    private GridView gridView;
+    private SharedPreferences defaultSharedPreference;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_favorite_shortcut);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final SharedPreferences defaultSharedPreference = getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
+        defaultSharedPreference = getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         int gridRow = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         int gridColumn = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
         int shortcutGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 22);
         mScale = getResources().getDisplayMetrics().density;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        GridView gridView = (GridView) findViewById(R.id.favorite_shortcut_grid_view);
+        gridView = (GridView) findViewById(R.id.favorite_shortcut_grid_view);
         AppCompatSpinner gridRowSpinner = (AppCompatSpinner) findViewById(R.id.set_favorite_shortcut_grid_row_spinner);
         AppCompatSpinner gridColumnSpinner = (AppCompatSpinner) findViewById(R.id.set_favorite_shortcut_grid_column_spinner);
-        TextView gridGapValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_gap_value_text_view);
+        final TextView gridGapValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_gap_value_text_view);
         AppCompatSeekBar gridGapSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_gap_seek_bar);
-        TextView gridDistanceValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_distance_value_text_view);
+        final TextView gridDistanceValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_distance_value_text_view);
         AppCompatSeekBar gridDistanceSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_distance_seek_bar);
 
 
@@ -49,6 +51,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, position + 2).commit();
+                updateGridView();
             }
 
             @Override
@@ -63,6 +66,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, position + 2).commit();
+                updateGridView();
             }
 
             @Override
@@ -79,6 +83,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, progress + 5).commit();
+                gridGapValueTextView.setText(progress + 5 + " dp");
             }
 
             @Override
@@ -88,7 +93,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                updateGridView();
             }
         });
 
@@ -98,7 +103,8 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         gridDistanceSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.GRID_DISTANCE_FROM_EDGE_KEY,progress + 20).commit();
+                defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.GRID_DISTANCE_FROM_EDGE_KEY, progress + 20).commit();
+                gridDistanceValueTextView.setText(progress + 20 + " dp");
             }
 
             @Override
@@ -108,11 +114,10 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
 
-        gridView.setVerticalSpacing((int)( shortcutGap* mScale));
+        gridView.setVerticalSpacing((int) (shortcutGap * mScale));
         gridView.setNumColumns(gridColumn);
         ViewGroup.LayoutParams gridParams = gridView.getLayoutParams();
         gridParams.height = (int)(mScale* (float)(48 * gridRow + shortcutGap* (gridRow -1)));
@@ -138,6 +143,18 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         super.onResume();
         Log.e(LOG_TAG, "onResume");
         mAdapter.notifyDataSetChanged();
+    }
+
+    private void updateGridView() {
+        ViewGroup.LayoutParams gridParams = gridView.getLayoutParams();
+        int gridRow = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
+        int gridColumn = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
+        int gridGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 22);
+        gridView.setVerticalSpacing((int)( gridGap*mScale));
+        gridView.setNumColumns(gridColumn);
+        gridParams.height = (int) (mScale * (float) (48 * gridRow + gridGap * (gridRow - 1)));
+        gridParams.width = (int) (mScale * (float) (48 * gridColumn + gridGap * (gridColumn - 1)));
+        gridView.setLayoutParams(gridParams);
     }
 
 }
