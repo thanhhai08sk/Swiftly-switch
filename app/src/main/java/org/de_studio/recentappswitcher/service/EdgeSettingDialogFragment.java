@@ -44,6 +44,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String ICON_DISTANCE_KEY = "icon_distance";
     public static final String NUM_OF_GRID_ROW_KEY = "grid_row";
     public static final String NUM_OF_GRID_COLUMN_KEY = "grid_column";
+    public static final String GAP_OF_SHORTCUT_KEY = "shortcut_gap";
     private static int edgeNumber;
     private  float mScale;
     private static SharedPreferences sharedPreferences,defaultSharedPreferences;

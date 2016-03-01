@@ -27,12 +27,13 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         SharedPreferences defaultSharedPreference = getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         int gridRow = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         int gridColumn = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
+        int shortcutGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 22);
         mScale = getResources().getDisplayMetrics().density;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         GridView gridView = (GridView) findViewById(R.id.favorite_shortcut_grid_view);
         ViewGroup.LayoutParams gridParams = gridView.getLayoutParams();
-        gridParams.height = (int)(mScale* (float)(48 * gridRow + 22* (gridRow -1)));
-        gridParams.width = (int)(mScale* (float)(48 * gridColumn + 22* (gridColumn -1)));
+        gridParams.height = (int)(mScale* (float)(48 * gridRow + shortcutGap* (gridRow -1)));
+        gridParams.width = (int)(mScale* (float)(48 * gridColumn + shortcutGap* (gridColumn -1)));
         gridView.setLayoutParams(gridParams);
         mAdapter = new FavoriteShortcutAdapter(this);
         gridView.setAdapter(mAdapter);
