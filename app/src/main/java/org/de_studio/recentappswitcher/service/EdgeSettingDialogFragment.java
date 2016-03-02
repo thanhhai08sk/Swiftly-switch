@@ -89,6 +89,31 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
         final TextView sensitiveNumberTextView = (TextView) rootView.findViewById(R.id.edge_dialog_sensitive_number_text);
         final AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
+        final AppCompatSpinner modeSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_mode_spinner);
+        boolean isOnlyFavorite = sharedPreferences.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
+        if (isOnlyFavorite) {
+            modeSpinner.setSelection(1);
+        } else {
+            modeSpinner.setSelection(0);
+        }
+        modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        sharedPreferences.edit().putBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false).commit();
+                        break;
+                    case 1:
+                        sharedPreferences.edit().putBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY,true).commit();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         int spinnerCurrentPosition =1;
         if (edgeNumber == 2) spinnerCurrentPosition = 5;
         for (int i =0; i<spinnerEntries.length; i++) {
@@ -232,6 +257,8 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                     positionSpinner.setSelection(5);
                     sharedPreferences.edit().putString(EDGE_POSITION_KEY, (String) positionSpinner.getItemAtPosition(5)).commit();
                 }
+                modeSpinner.setSelection(0);
+                sharedPreferences.edit().putBoolean(IS_ONLY_FAVORITE_KEY,false).commit();
                 sensitiveSeekBar.setProgress(7);
                 sharedPreferences.edit().putInt(EDGE_SENSIIVE_KEY, 12).commit();
                 lengthSeekBar.setProgress(75);
