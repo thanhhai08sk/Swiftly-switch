@@ -21,6 +21,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     private static final String LOG_TAG = FavoriteShortcutAdapter.class.getSimpleName();
     private Context mContext;
 
+
     public FavoriteShortcutAdapter(Context context) {
         mContext = context;
     }
