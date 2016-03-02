@@ -109,7 +109,7 @@ public class EdgeGestureService extends Service {
     private Vibrator vibrator;
     private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl;
     private long holdTime = 450, firstTouchTime;
-    private boolean touched = false, switched = false, itemSwitched = false, isOutOfTrial = false, isFreeVersion = false;
+    private boolean touched = false, switched = false, isOutOfTrial = false, isFreeVersion = false;
     private String[] spinnerEntries;
     private GridView shortcutGridView;
     private FavoriteShortcutAdapter shortcutAdapter;
@@ -266,10 +266,12 @@ public class EdgeGestureService extends Service {
         iconImageArrayList2.add(iconImageList2[3]);
         iconImageArrayList2.add(iconImageList2[4]);
         iconImageArrayList2.add(iconImageList2[5]);
-        OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, iconImageList1, item1View, iconImageArrayList1);
+        boolean isOnlyFavorite1 = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
+        boolean isOnlyFavorite2 = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
+        OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, iconImageList1, item1View, iconImageArrayList1,isOnlyFavorite1);
         edge1Image.setOnTouchListener(onTouchListener1);
 
-        OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position, iconImageList2, item2View, iconImageArrayList2);
+        OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position, iconImageList2, item2View, iconImageArrayList2,isOnlyFavorite2);
         edge2Image.setOnTouchListener(onTouchListener2);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
@@ -293,12 +295,14 @@ public class EdgeGestureService extends Service {
         private AppCompatImageView[] iconImageList;
         private List<AppCompatImageView> iconImageArrayList;
         private DelayToSwitchTask delayToSwitchTask;
+        private boolean isOnlyFavorite;
 
-        public OnTouchListener(int position, AppCompatImageView[] iconImageList, FrameLayout itemView, List<AppCompatImageView> iconImageArrayList) {
+        public OnTouchListener(int position, AppCompatImageView[] iconImageList, FrameLayout itemView, List<AppCompatImageView> iconImageArrayList, boolean isOnlyFavorite) {
             this.position = position;
             this.iconImageList = iconImageList;
             this.itemView = itemView;
             this.iconImageArrayList = iconImageArrayList;
+            this.isOnlyFavorite = isOnlyFavorite;
         }
 
         @Override
@@ -322,8 +326,7 @@ public class EdgeGestureService extends Service {
                     }else isOutOfTrial = false;
 
                     Set<String> excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
-                    switched = false;
-                    itemSwitched = false;
+
                     if (position < 30){
                         x_init_cord = x_cord;
                     }else {
@@ -332,6 +335,19 @@ public class EdgeGestureService extends Service {
                     if (position >= 30){
                         y_init_cord = y_cord;
                     }else y_init_cord = y_cord - getYOffset(y_cord);
+
+                    switched = isOnlyFavorite;
+                    if (isOnlyFavorite) {
+                        if (delayToSwitchTask == null) {
+                            delayToSwitchTask = new DelayToSwitchTask();
+                            delayToSwitchTask.switchShortcut();
+                        } else if (delayToSwitchTask.isCancelled()) {
+                            delayToSwitchTask = new DelayToSwitchTask();
+                            delayToSwitchTask.switchShortcut();
+                        }
+                        break;
+                    }
+
                     float xForHomeBackNotiView = x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
                     float yForHomeBackNotiView = y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
                     int radiusForHomeBackNotiView = (int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl;
@@ -749,6 +765,9 @@ public class EdgeGestureService extends Service {
 //                        windowManager.removeView(itemView);
 //                        itemSwitched = true;
 //                    }
+                    if (switched) {
+                        break;
+                    }
                     int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
                     int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
                     if (iconToSwitch != -1) {
