@@ -1,7 +1,9 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +14,10 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.AppInfors;
+import org.de_studio.recentappswitcher.IconPackManager;
+import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 import java.util.ArrayList;
 
@@ -29,6 +34,8 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
     private int mPosition;
     private String mPackageSelected;
     private AppChangeListener listener = null;
+    private SharedPreferences sharedPreferences;
+    private IconPackManager.IconPack iconPack;
 
     public ChooseAppListViewAdapter(Context context, ArrayList<AppInfors> appInforses, int position) {
         super();
@@ -42,6 +49,13 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
                 mPackageSelected = shortcut.getPackageName();
             }else mPackageSelected = null;
 
+        }
+        sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
+        String iconPackPacka = sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "com.colechamberlin.stickers");
+        if (!iconPackPacka.equals("none")) {
+            IconPackManager iconPackManager = new IconPackManager();
+            iconPackManager.setContext(mContext);
+            iconPack = iconPackManager.getInstance(iconPackPacka);
         }
 
     }
@@ -92,7 +106,14 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
             }else radioButton.setChecked(false);
         }else radioButton.setChecked(false);
         try {
-            imageView.setImageDrawable(mContext.getPackageManager().getApplicationIcon(mAppInfosArrayList.get(position).packageName));
+            Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(mAppInfosArrayList.get(position).packageName);
+            if (iconPack!=null) {
+
+                imageView.setImageDrawable(iconPack.getDrawableIconForPackage(mAppInfosArrayList.get(position).packageName, defaultDrawable));
+            } else {
+                imageView.setImageDrawable(defaultDrawable);
+
+            }
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(LOG_TAG, "NameNotFound " + e);
         }
