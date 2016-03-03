@@ -17,6 +17,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
@@ -43,6 +44,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
@@ -113,6 +115,7 @@ public class EdgeGestureService extends Service {
     private String[] spinnerEntries;
     private GridView shortcutGridView;
     private FavoriteShortcutAdapter shortcutAdapter;
+    private IconPackManager.IconPack iconPack;
 
     @Nullable
     @Override
@@ -266,6 +269,17 @@ public class EdgeGestureService extends Service {
         iconImageArrayList2.add(iconImageList2[3]);
         iconImageArrayList2.add(iconImageList2[4]);
         iconImageArrayList2.add(iconImageList2[5]);
+
+        String iconPackPacka = defaultShared.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "none");
+        if (!iconPackPacka.equals("none")) {
+            IconPackManager iconPackManager = new IconPackManager();
+            iconPackManager.setContext(getApplicationContext());
+            iconPack = iconPackManager.getInstance(iconPackPacka);
+            if (iconPack != null) {
+                iconPack.load();
+            }
+        }
+
         boolean isOnlyFavorite1 = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
         boolean isOnlyFavorite2 = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
         OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, iconImageList1, item1View, iconImageArrayList1,isOnlyFavorite1);
@@ -421,7 +435,13 @@ public class EdgeGestureService extends Service {
                                 try {
 //                                    Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
 //                                    ImageView iconi = iconImageArrayList.get(i);
-                                    iconImageArrayList.get(i).setImageDrawable(getPackageManager().getApplicationIcon(packagename[i]));
+                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(packagename[i]);
+                                    if (iconPack != null) {
+                                        iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(packagename[i], defaultDrawable));
+                                    } else {
+                                        iconImageArrayList.get(i).setImageDrawable(defaultDrawable);
+
+                                    }
                                 } catch (PackageManager.NameNotFoundException e) {
                                     Log.e(LOG_TAG, "NameNotFound" + e);
                                 }
@@ -472,9 +492,13 @@ public class EdgeGestureService extends Service {
                                 iconImageArrayList.get(i).setImageDrawable(null);
                             } else {
                                 try {
-//                                    Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
-                                    iconImageArrayList.get(i).setImageDrawable(getPackageManager().getApplicationIcon(packagename[i]));
-//                                    iconi.setImageDrawable(icon);
+                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(packagename[i]);
+                                    if (iconPack != null) {
+                                        iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(packagename[i], defaultDrawable));
+                                    } else {
+                                        iconImageArrayList.get(i).setImageDrawable(defaultDrawable);
+
+                                    }
                                 } catch (PackageManager.NameNotFoundException e) {
                                     Log.e(LOG_TAG, "NameNotFound" + e);
                                 }
