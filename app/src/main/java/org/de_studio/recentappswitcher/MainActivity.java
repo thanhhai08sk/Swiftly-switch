@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,14 +16,11 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -34,8 +30,6 @@ import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public class MainActivity extends Activity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -226,6 +220,7 @@ public class MainActivity extends Activity {
         final FrameLayout stepTextFrame = (FrameLayout) findViewById(R.id.step_text_frame_layout);
         ImageButton edge1SettingButton = (ImageButton) findViewById(R.id.edge_1_setting_image_button);
         ImageButton edge2SettingButton = (ImageButton) findViewById(R.id.edge_2_setting_image_button);
+        ImageButton iconPackSettingButton = (ImageButton) findViewById(R.id.main_icon_pack_support_setting_button);
         edge1SettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -260,6 +255,15 @@ public class MainActivity extends Activity {
 
             }
         });
+
+        iconPackSettingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
         setStepButtonAndDescription();
 
 
@@ -322,13 +326,6 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), SetFavoriteShortcutActivity.class));
-//                android.app.FragmentManager fragmentManager = getFragmentManager();
-//                FavoriteOrExcludeDialogFragment newFragment = new FavoriteOrExcludeDialogFragment();
-//                if (mAppInforsArrayList != null) {
-//                    newFragment.setAppInforsArrayList(mAppInforsArrayList, FavoriteOrExcludeDialogFragment.FAVORITE_MODE,getApplicationContext());
-//                    newFragment.show(fragmentManager, "addAppDialog");
-//                }else Toast.makeText(getApplicationContext(),R.string.waite_a_secend_app_loading,Toast.LENGTH_SHORT).show();
-
             }
         });
 
@@ -379,12 +376,6 @@ public class MainActivity extends Activity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
 
 
@@ -409,47 +400,7 @@ public class MainActivity extends Activity {
         transaction1.add(android.R.id.content,newFragment).addToBackStack(null).commit();
     }
 
-//    public void setFavoriteView(){
-//        PackageManager packageManager = getPackageManager();
-//        LinearLayout[] linearLayouts = new LinearLayout[6];
-//        linearLayouts[0] = (LinearLayout) findViewById(R.id.favorite_app_0_linear_layout);
-//        linearLayouts[1] = (LinearLayout) findViewById(R.id.favorite_app_1_linear_layout);
-//        linearLayouts[2] = (LinearLayout) findViewById(R.id.favorite_app_2_linear_layout);
-//        linearLayouts[3] = (LinearLayout) findViewById(R.id.favorite_app_3_linear_layout);
-//        linearLayouts[4] = (LinearLayout) findViewById(R.id.favorite_app_4_linear_layout);
-//        linearLayouts[5] = (LinearLayout) findViewById(R.id.favorite_app_5_linear_layout);
-//        ImageView[] icons = new ImageView[6];
-//        icons[0] = (ImageView) findViewById(R.id.favorite_app_0_item_image_view);
-//        icons[1] = (ImageView) findViewById(R.id.favorite_app_1_item_image_view);
-//        icons[2] = (ImageView) findViewById(R.id.favorite_app_2_item_image_view);
-//        icons[3] = (ImageView) findViewById(R.id.favorite_app_3_item_image_view);
-//        icons[4] = (ImageView) findViewById(R.id.favorite_app_4_item_image_view);
-//        icons[5] = (ImageView) findViewById(R.id.favorite_app_5_item_image_view);
-//        TextView[] labels = new TextView[6];
-//        labels[0] = (TextView) findViewById(R.id.favorite_app_0_item_label_text_view);
-//        labels[1] = (TextView) findViewById(R.id.favorite_app_1_item_label_text_view);
-//        labels[2] = (TextView) findViewById(R.id.favorite_app_2_item_label_text_view);
-//        labels[3] = (TextView) findViewById(R.id.favorite_app_3_item_label_text_view);
-//        labels[4] = (TextView) findViewById(R.id.favorite_app_4_item_label_text_view);
-//        labels[5] = (TextView) findViewById(R.id.favorite_app_5_item_label_text_view);
-//        Set<String> set = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY,new HashSet<String>());
-//        String[] favoritePackageName = new String[set.size()];
-//        set.toArray(favoritePackageName);
-//        for (int i = 0; i< 6; i++){
-//            if (i< favoritePackageName.length){
-//                try {
-//                    labels[i].setText(packageManager.getApplicationLabel(packageManager.getApplicationInfo(favoritePackageName[i],0)));
-//                    icons[i].setImageDrawable(packageManager.getApplicationIcon(favoritePackageName[i]));
-//                    linearLayouts[i].setVisibility(View.VISIBLE);
-//                }catch (PackageManager.NameNotFoundException e){
-//                    Log.e(LOG_TAG,"name not found");
-//                }
-//
-//            }else {
-//                linearLayouts[i].setVisibility(View.GONE);
-//            }
-//        }
-//    }
+
 
     public void setStepButtonAndDescription(){
         boolean isStep1Ok;
@@ -528,12 +479,4 @@ public class MainActivity extends Activity {
         }
     }
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-//        if (requestCode == 1) {
-//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                //do nothing
-//            }
-//        }
-//    }
 }

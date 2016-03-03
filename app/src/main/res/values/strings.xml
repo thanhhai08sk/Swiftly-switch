@@ -93,4 +93,5 @@
     <string name="edge_dialog_mode_array_only_favorite">Only favorite</string>
     <string name="main_more_setting_title">More setting</string>
     <string name="main_icon_pack_support">Set icon pack</string>
+    <string name="icon_pack_system_icon_pack_label">System</string>
 </resources>
