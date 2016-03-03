@@ -18,6 +18,7 @@ public class IconPackSettingDialogFragment extends DialogFragment {
     private static final String LOG_TAG = IconPackSettingDialogFragment.class.getSimpleName();
     private ProgressBar progressBar;
     private ListView mListView;
+    private IconPackListAdapter mAdapter;
 
     @Nullable
     @Override
@@ -27,7 +28,8 @@ public class IconPackSettingDialogFragment extends DialogFragment {
         progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
         IconPackManager manager = new IconPackManager();
         HashMap<String, IconPackManager.IconPack> hashMap = manager.getAvailableIconPacks(true);
-
+        mAdapter = new IconPackListAdapter(getActivity(), hashMap);
+        mListView.setAdapter(mAdapter);
 
         return rootView;
     }
