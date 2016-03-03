@@ -39,6 +39,23 @@ public class IconPackManager
     public void setContext (Context c) {
         mContext = c;
     }
+    public IconPack getInstance(String packageOfIconPack) {
+        IconPack iconPack = new IconPack();
+        iconPack.packageName = packageOfIconPack;
+        ApplicationInfo ai = null;
+        try
+        {
+            ai = mContext.getPackageManager().getApplicationInfo(iconPack.packageName, PackageManager.GET_META_DATA);
+            iconPack.name  = mContext.getPackageManager().getApplicationLabel(ai).toString();
+        }
+        catch (PackageManager.NameNotFoundException e)
+        {
+            // shouldn't happen
+            e.printStackTrace();
+            return null;
+        }
+        return iconPack;
+    }
 
     public class IconPack
     {
@@ -56,22 +73,7 @@ public class IconPackManager
 
         Resources iconPackres = null;
 
-        public IconPack getInstance(String packageOfIconPack) {
-            IconPack iconPack = new IconPack();
-            iconPack.packageName = packageOfIconPack;
-            ApplicationInfo ai = null;
-            try
-            {
-                ai = mContext.getPackageManager().getApplicationInfo(iconPack.packageName, PackageManager.GET_META_DATA);
-                iconPack.name  = mContext.getPackageManager().getApplicationLabel(ai).toString();
-            }
-            catch (PackageManager.NameNotFoundException e)
-            {
-                // shouldn't happen
-                e.printStackTrace();
-            }
-            return iconPack;
-        }
+
 
         public void load()
         {

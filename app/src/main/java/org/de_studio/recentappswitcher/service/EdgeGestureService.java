@@ -283,7 +283,6 @@ public class EdgeGestureService extends Service {
 
         shortcutView = (FrameLayout) layoutInflater.inflate(R.layout.grid_shortcut, null);
         shortcutGridView = (GridView) shortcutView.findViewById(R.id.edge_shortcut_grid_view);
-        shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
 
         return START_NOT_STICKY;
     }
