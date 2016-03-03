@@ -364,32 +364,21 @@ public class EdgeGestureService extends Service {
                     float xForHomeBackNotiView = x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
                     float yForHomeBackNotiView = y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
                     int radiusForHomeBackNotiView = (int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl;
-                    expandView = new ExpandStatusBarView(getApplicationContext());
+                    expandView = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,"show notification",position,3);
                     expandView.setX(xForHomeBackNotiView);
                     expandView.setY(yForHomeBackNotiView);
-                    expandView.setRadius(radiusForHomeBackNotiView);
-                    expandView.setOvalOffset(ovalOffSet);
-                    expandView.setPosition(position);
                     expandView.setVisibility(View.INVISIBLE);
                     itemView.addView(expandView);
 
-                    homeView = new ExpandStatusBarView(getApplicationContext());
+                    homeView = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,"home",position,1);
                     homeView.setX(xForHomeBackNotiView);
                     homeView.setY(yForHomeBackNotiView);
-                    homeView.setRadius(radiusForHomeBackNotiView);
-                    homeView.setOvalOffset(ovalOffSet);
-                    homeView.setPosition(position);
-                    homeView.setText("home");
                     homeView.setVisibility(View.INVISIBLE);
                     itemView.addView(homeView);
 
-                    backView = new ExpandStatusBarView(getApplicationContext());
+                    backView = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,"back",position,2);
                     backView.setX(xForHomeBackNotiView);
                     backView.setY(yForHomeBackNotiView);
-                    backView.setRadius(radiusForHomeBackNotiView);
-                    backView.setOvalOffset(ovalOffSet);
-                    backView.setPosition(position);
-                    backView.setText("back");
                     backView.setVisibility(View.INVISIBLE);
                     itemView.addView(backView);
 

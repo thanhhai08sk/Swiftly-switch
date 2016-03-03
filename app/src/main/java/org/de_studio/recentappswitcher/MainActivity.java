@@ -259,7 +259,9 @@ public class MainActivity extends Activity {
         iconPackSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                android.app.FragmentManager fragmentManager = getFragmentManager();
+                IconPackSettingDialogFragment newFragment = new IconPackSettingDialogFragment();
+                newFragment.show(fragmentManager, "iconPackDialogFragment");
             }
         });
 

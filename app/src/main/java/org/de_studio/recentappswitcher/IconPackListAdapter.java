@@ -41,12 +41,12 @@ public class IconPackListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return mHashMap.size()+1;
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return mHashMap;
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 
 import org.de_studio.recentappswitcher.R;
@@ -31,31 +32,19 @@ public class ExpandStatusBarView extends View {
     private float mScale;
     private int textSize = 16, strokeWidth = 30; // in dp
 
-    public ExpandStatusBarView(Context context){
+    public ExpandStatusBarView(Context context, int radius,int ovalOffset, String text, int positionOfEdge, int positionOfArc){
         super(context);
+        this.radius = radius;
+        this.ovalOffset = ovalOffset;
+        this.text = text;
+        this.position = positionOfEdge;
+        homwBackNoti = positionOfArc;
         init();
+        Log.e("ExpandStatusBarView ", "position%10 = " + position % 10);
     }
 
-    public void setRadius(int radius){
-        this.radius = radius;
-    }
-    public void setOvalOffset(int ovalOffset){
-        this.ovalOffset = ovalOffset;
-    }
     public String getText(){
         return text;
-    }
-    public void setText(String text){
-        this.text = text;
-        if (text.contains("home")){
-            homwBackNoti = 1;
-        }
-        if (text.contains("back")){
-            homwBackNoti = 2;
-        }
-    }
-    public void setPosition(int position){
-        this.position = position;
     }
 
 
@@ -68,57 +57,32 @@ public class ExpandStatusBarView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-//        Log.e("expand", "onDraw");
         oval.set(ovalOffset, ovalOffset,ovalOffset + radius * 2,ovalOffset+ radius * 2);
         if (homwBackNoti ==3){
-            switch (position){
-                case 10: path.addArc(oval, -270, 70);
+            switch (position/10){
+                case 1: path.addArc(oval, -270, 70);
                     break;
-                case 11: path.addArc(oval, -270, 70);
+                case 2: path.addArc(oval, 20, 70);
                     break;
-                case 12: path.addArc(oval, -270, 70);
-                    break;
-                case 20: path.addArc(oval, 20, 70);
-                    break;
-                case 21: path.addArc(oval, 20, 70);
-                    break;
-                case 22: path.addArc(oval, 20, 70);
-                    break;
-                case 31: path.addArc(oval, -70,70);
+                case 3: path.addArc(oval, -70,70);
                     break;
             }
         }else if (homwBackNoti==1){
-            switch (position){
-                case 10: path.addArc(oval, -115, 25);
+            switch (position/10){
+                case 1: path.addArc(oval, -115, 25);
                     break;
-                case 11: path.addArc(oval, -115, 25);
+                case 2: path.addArc(oval, -90, 25);
                     break;
-                case 12: path.addArc(oval, -115, 25);
-                    break;
-                case 20: path.addArc(oval, -90, 25);
-                    break;
-                case 21: path.addArc(oval, -90, 25);
-                    break;
-                case 22: path.addArc(oval, -90, 25);
-                    break;
-                case 31: path.addArc(oval,-180,25);
+                case 3: path.addArc(oval,-180,25);
                     break;
             }
         }else if (homwBackNoti ==2){
-            switch (position){
-                case 10: path.addArc(oval, -160, 40);
+            switch (position/10){
+                case 1: path.addArc(oval, -160, 40);
                     break;
-                case 11: path.addArc(oval, -160, 40);
+                case 2: path.addArc(oval, -60, 40);
                     break;
-                case 12: path.addArc(oval, -160, 40);
-                    break;
-                case 20: path.addArc(oval, -60, 40);
-                    break;
-                case 21: path.addArc(oval, -60, 40);
-                    break;
-                case 22: path.addArc(oval, -60, 40);
-                    break;
-                case 31: path.addArc(oval,-150,40);
+                case 3: path.addArc(oval,-150,40);
                     break;
             }
         }
