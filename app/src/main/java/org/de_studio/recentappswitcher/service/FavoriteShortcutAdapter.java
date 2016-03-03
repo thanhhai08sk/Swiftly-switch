@@ -1,7 +1,9 @@
 package org.de_studio.recentappswitcher.service;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import org.de_studio.recentappswitcher.IconPackManager;
+import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
@@ -21,9 +25,18 @@ import io.realm.Realm;
 public class FavoriteShortcutAdapter extends BaseAdapter {
     private static final String LOG_TAG = FavoriteShortcutAdapter.class.getSimpleName();
     private Context mContext;
+    private SharedPreferences sharedPreferences;
+    private IconPackManager.IconPack iconPack;
 
     public FavoriteShortcutAdapter(Context context) {
         mContext = context;
+        sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
+        String iconPackPacka = sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "com.colechamberlin.stickers");
+        if (!iconPackPacka.equals("none")) {
+            IconPackManager iconPackManager = new IconPackManager();
+            iconPackManager.setContext(mContext);
+            iconPack = iconPackManager.getInstance(iconPackPacka);
+        }
     }
 
     @Override
@@ -58,7 +71,14 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         } else {
             if (shortcut.getType() == Shortcut.TYPE_APP) {
                 try {
-                    imageView.setImageDrawable(mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName()));
+                    Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
+                    if (iconPack!=null) {
+
+                            imageView.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
+                    } else {
+                        imageView.setImageDrawable(defaultDrawable);
+
+                    }
                 } catch (PackageManager.NameNotFoundException e) {
                     Log.e(LOG_TAG, "NameNotFound " + e);
                 }

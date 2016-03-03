@@ -26,11 +26,18 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     private static final String LOG_TAG = FavoriteShortcutAdapter.class.getSimpleName();
     private Context mContext;
     private SharedPreferences sharedPreferences;
+    private IconPackManager.IconPack iconPack;
 
 
     public FavoriteShortcutAdapter(Context context) {
         mContext = context;
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
+        String iconPackPacka = sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "none");
+        if (!iconPackPacka.equals("none")) {
+            IconPackManager iconPackManager = new IconPackManager();
+            iconPackManager.setContext(mContext);
+            iconPack = iconPackManager.getInstance(iconPackPacka);
+        }
     }
 
     @Override
@@ -66,14 +73,9 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
             if (shortcut.getType() == Shortcut.TYPE_APP) {
                 try {
                     Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
-                    String iconPackPacka = sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "none");
-                    if (!iconPackPacka.equals("none")) {
-                        IconPackManager iconPackManager = new IconPackManager();
-                        iconPackManager.setContext(mContext);
-                        IconPackManager.IconPack iconPack = iconPackManager.getInstance(iconPackPacka);
-                        if (iconPack != null) {
+                    if (iconPack!=null) {
+
                             imageView.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
-                        } else imageView.setImageDrawable(defaultDrawable);
                     } else {
                         imageView.setImageDrawable(defaultDrawable);
 
