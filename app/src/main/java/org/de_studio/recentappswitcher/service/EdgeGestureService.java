@@ -109,7 +109,7 @@ public class EdgeGestureService extends Service {
     private AppCompatImageView[] iconImageList1, iconImageList2;
     private ExpandStatusBarView expandView, homeView, backView;
     private Vibrator vibrator;
-    private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl;
+    private int ovalOffSet, ovalRadiusPlus = 35, ovalRadiusPlusPxl, ovalOffSetInDp = 50;
     private long holdTime = 450, firstTouchTime;
     private boolean touched = false, switched = false, isOutOfTrial = false, isFreeVersion = false;
     private String[] spinnerEntries;
@@ -1009,7 +1009,7 @@ public class EdgeGestureService extends Service {
         edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
         icon_distance = defaultShared.getInt(EdgeSettingDialogFragment.ICON_DISTANCE_KEY,110);
-        ovalOffSet = (int) (25 * mScale);
+        ovalOffSet = (int) (ovalOffSetInDp * mScale);
         ovalRadiusPlusPxl = (int) (ovalRadiusPlus * mScale);
         Set<String> set = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, new HashSet<String>());
         favoritePackageName = new String[set.size()];

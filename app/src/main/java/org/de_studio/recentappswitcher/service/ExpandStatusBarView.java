@@ -1,6 +1,8 @@
 package org.de_studio.recentappswitcher.service;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -30,7 +32,7 @@ public class ExpandStatusBarView extends View {
     private int homwBackNoti = 3;
     private int ovalOffset =0;
     private float mScale;
-    private int textSize = 16, strokeWidth = 30; // in dp
+    private int textSize = 16, strokeWidth = 60; // in dp
 
     public ExpandStatusBarView(Context context, int radius,int ovalOffset, String text, int positionOfEdge, int positionOfArc){
         super(context);
@@ -57,7 +59,7 @@ public class ExpandStatusBarView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        oval.set(ovalOffset, ovalOffset,ovalOffset + radius * 2,ovalOffset+ radius * 2);
+        oval.set(ovalOffset, ovalOffset, ovalOffset + radius * 2, ovalOffset + radius * 2);
         if (homwBackNoti ==3){
             switch (position/10){
                 case 1: path.addArc(oval, -270, 70);
@@ -69,11 +71,11 @@ public class ExpandStatusBarView extends View {
             }
         }else if (homwBackNoti==1){
             switch (position/10){
-                case 1: path.addArc(oval, -115, 25);
+                case 1: path.addArc(oval, -120, 30);
                     break;
-                case 2: path.addArc(oval, -90, 25);
+                case 2: path.addArc(oval, -90, 30);
                     break;
-                case 3: path.addArc(oval,-180,25);
+                case 3: path.addArc(oval,-180,30);
                     break;
             }
         }else if (homwBackNoti ==2){
@@ -86,7 +88,9 @@ public class ExpandStatusBarView extends View {
                     break;
             }
         }
+        Bitmap addBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_back);
         canvas.drawPath(path,backgroundPaint);
+        canvas.drawBitmap(addBitmap,(float)ovalOffset,(float)(ovalOffset*2),textPaint);
         canvas.drawTextOnPath(text.toUpperCase(), path, 0, ((float)(textSize/2.5))*mScale, textPaint);
 
     }
@@ -100,10 +104,10 @@ public class ExpandStatusBarView extends View {
         textPaint.setTypeface(Typeface.DEFAULT_BOLD);
 
         backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        backgroundPaint.setColor(ContextCompat. getColor(getContext(), R.color.colorPrimary));
+        backgroundPaint.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         backgroundPaint.setStyle(Paint.Style.STROKE);
         backgroundPaint.setStrokeWidth(strokeWidth * mScale);
-        backgroundPaint.setStrokeCap(Paint.Cap.ROUND);
+//        backgroundPaint.setStrokeCap(Paint.Cap.ROUND);
         oval = new RectF();
 
         path = new Path();
