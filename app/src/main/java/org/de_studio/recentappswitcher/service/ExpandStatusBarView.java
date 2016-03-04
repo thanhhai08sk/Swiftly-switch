@@ -31,8 +31,8 @@ public class ExpandStatusBarView extends View {
     private int radius;
     private int homwBackNoti = 4;
     private int ovalOffset =0;
-    private float mScale;
-    private int textSize = 16, strokeWidth = 60; // in dp
+    private float mScale,o1x,o1y   ;
+    private int textSize = 16, strokeWidth = 45; // in dp
 
     public ExpandStatusBarView(Context context, int radius,int ovalOffset, String text, int positionOfEdge, int positionOfArc){
         super(context);
@@ -88,10 +88,10 @@ public class ExpandStatusBarView extends View {
                     break;
             }
         }
-        Bitmap addBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_back);
+        Bitmap addBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_home);
         canvas.drawPath(path,backgroundPaint);
-        canvas.drawBitmap(addBitmap,(float)ovalOffset,(float)(ovalOffset*2),textPaint);
-        canvas.drawTextOnPath(text.toUpperCase(), path, 0, ((float)(textSize/2.5))*mScale, textPaint);
+        canvas.drawBitmap(addBitmap,o1x,o1y,textPaint);
+//        canvas.drawTextOnPath(text.toUpperCase(), path, 0, ((float) (textSize / 2.5)) * mScale, textPaint);
 
     }
     private void init(){
@@ -111,6 +111,10 @@ public class ExpandStatusBarView extends View {
         oval = new RectF();
 
         path = new Path();
+        float sin15 = (float)(Math.sin(0.0833 * Math.PI));
+        float cos15 = (float) (Math.cos(0.0833 * Math.PI));
+        o1x = ovalOffset + (float)radius -(float)(radius) * sin15 - 16*mScale;
+        o1y = ovalOffset +(float)radius - (float)(radius)*cos15 - 16*mScale;
 
     }
 

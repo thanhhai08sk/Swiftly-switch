@@ -109,7 +109,7 @@ public class EdgeGestureService extends Service {
     private AppCompatImageView[] iconImageList1, iconImageList2;
     private ExpandStatusBarView expandView, homeView, backView;
     private Vibrator vibrator;
-    private int ovalOffSet, ovalRadiusPlus = 35, ovalRadiusPlusPxl, ovalOffSetInDp = 50;
+    private int ovalOffSet, ovalRadiusPlus = 20, ovalRadiusPlusPxl, ovalOffSetInDp = 70;
     private long holdTime = 450, firstTouchTime;
     private boolean touched = false, switched = false, isOutOfTrial = false, isFreeVersion = false;
     private String[] spinnerEntries;
