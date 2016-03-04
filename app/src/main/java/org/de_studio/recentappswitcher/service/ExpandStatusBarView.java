@@ -33,6 +33,7 @@ public class ExpandStatusBarView extends View {
     private int ovalOffset =0;
     private float mScale,o1x,o1y   ;
     private int textSize = 16, strokeWidth = 45; // in dp
+    private Bitmap actionBitmap;
 
     public ExpandStatusBarView(Context context, int radius,int ovalOffset, String text, int positionOfEdge, int positionOfArc){
         super(context);
@@ -88,9 +89,8 @@ public class ExpandStatusBarView extends View {
                     break;
             }
         }
-        Bitmap addBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_home);
-        canvas.drawPath(path,backgroundPaint);
-        canvas.drawBitmap(addBitmap,o1x,o1y,textPaint);
+        canvas.drawPath(path, backgroundPaint);
+        canvas.drawBitmap(actionBitmap, o1x, o1y, textPaint);
 //        canvas.drawTextOnPath(text.toUpperCase(), path, 0, ((float) (textSize / 2.5)) * mScale, textPaint);
 
     }
@@ -111,10 +111,106 @@ public class ExpandStatusBarView extends View {
         oval = new RectF();
 
         path = new Path();
-        float sin15 = (float)(Math.sin(0.0833 * Math.PI));
-        float cos15 = (float) (Math.cos(0.0833 * Math.PI));
-        o1x = ovalOffset + (float)radius -(float)(radius) * sin15 - 16*mScale;
-        o1y = ovalOffset +(float)radius - (float)(radius)*cos15 - 16*mScale;
+        float sin;
+        float cos;
+
+        switch (homwBackNoti) {
+            case 1:
+                actionBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_home);
+                break;
+            case 2:
+                actionBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_back);
+                break;
+            case 3:
+                actionBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_recent);
+                break;
+            case 4:
+                actionBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_expand);
+                break;
+        }
+
+        switch (position / 10) {
+            case 1:
+                switch (homwBackNoti) {
+                    case 1:
+                        sin = (float)(Math.sin(0.0833 * Math.PI)); //15
+                        cos = (float) (Math.cos(0.0833 * Math.PI));  //15
+                        o1x = ovalOffset + (float)radius -(float)(radius) * sin - 16*mScale;
+                        o1y = ovalOffset +(float)radius - (float)(radius)*cos - 16*mScale;
+                        break;
+                    case 2:
+                        sin = (float)(Math.sin(0.2778 * Math.PI)); //50
+                        cos = (float) (Math.cos(0.2778 * Math.PI));  //50
+                        o1x = ovalOffset + (float)radius -(float)(radius) * sin - 16*mScale;
+                        o1y = ovalOffset +(float)radius - (float)(radius)*cos - 16*mScale;
+                        break;
+                    case 3:
+                        o1x = ovalOffset - 16*mScale;
+                        o1y = ovalOffset +(float)radius - 16*mScale;
+                        break;
+                    case 4:
+                        sin = (float)(Math.sin(0.1944 * Math.PI)); //35
+                        cos = (float) (Math.cos(0.1944 * Math.PI));  //35
+                        o1x = ovalOffset + (float)radius -(float)(radius) * sin - 16*mScale;
+                        o1y = ovalOffset +(float)radius + (float)(radius)*cos - 16*mScale;
+                        break;
+                }
+                break;
+            case 2:
+                switch (homwBackNoti) {
+                    case 1:
+                        sin = (float)(Math.sin(0.0833 * Math.PI)); //15
+                        cos = (float) (Math.cos(0.0833 * Math.PI));  //15
+                        o1x = ovalOffset + (float)radius +(float)(radius) * sin - 16*mScale;
+                        o1y = ovalOffset +(float)radius - (float)(radius)*cos - 16*mScale;
+                        break;
+                    case 2:
+                        sin = (float)(Math.sin(0.2778 * Math.PI)); //50
+                        cos = (float) (Math.cos(0.2778 * Math.PI));  //50
+                        o1x = ovalOffset + (float)radius +(float)(radius) * sin - 16*mScale;
+                        o1y = ovalOffset +(float)radius - (float)(radius)*cos - 16*mScale;
+                        break;
+                    case 3:
+                        o1x = ovalOffset - 16 * mScale + 2 * ((float) radius);
+                        o1y = ovalOffset +(float)radius - 16*mScale;
+                        break;
+                    case 4:
+                        sin = (float)(Math.sin(0.1944 * Math.PI)); //35
+                        cos = (float) (Math.cos(0.1944 * Math.PI));  //35
+                        o1x = ovalOffset + (float)radius +(float)(radius) * sin - 16*mScale;
+                        o1y = ovalOffset +(float)radius + (float)(radius)*cos - 16*mScale;
+                        break;
+                }
+                break;
+            case 3:
+                switch (homwBackNoti) {
+                    case 1:
+                        sin = (float)(Math.sin(0.0833 * Math.PI)); //15
+                        cos = (float) (Math.cos(0.0833 * Math.PI));  //15
+                        o1x = ovalOffset + (float)radius -(float)(radius) * cos - 16*mScale;
+                        o1y = ovalOffset +(float)radius - (float)(radius)*sin - 16*mScale;
+                        break;
+                    case 2:
+                        sin = (float)(Math.sin(0.2778 * Math.PI)); //50
+                        cos = (float) (Math.cos(0.2778 * Math.PI));  //50
+                        o1x = ovalOffset + (float)radius -(float)(radius) * cos - 16*mScale;
+                        o1y = ovalOffset +(float)radius - (float)(radius)*sin - 16*mScale;
+                        break;
+                    case 3:
+                        o1x = ovalOffset + (float)(radius) - 16*mScale;
+                        o1y = ovalOffset - 16*mScale;
+                        break;
+                    case 4:
+                        sin = (float)(Math.sin(0.1944 * Math.PI)); //35
+                        cos = (float) (Math.cos(0.1944 * Math.PI));  //35
+                        o1x = ovalOffset + (float)radius +(float)(radius) * cos - 16*mScale;
+                        o1y = ovalOffset +(float)radius - (float)(radius)*sin - 16*mScale;
+                        break;
+                }
+                break;
+        }
+
+
 
     }
 
