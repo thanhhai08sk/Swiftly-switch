@@ -364,7 +364,7 @@ public class EdgeGestureService extends Service {
                     float xForHomeBackNotiView = x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
                     float yForHomeBackNotiView = y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
                     int radiusForHomeBackNotiView = (int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl;
-                    expandView = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,"show notification",position,3);
+                    expandView = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,"show notification",position,4);
                     expandView.setX(xForHomeBackNotiView);
                     expandView.setY(yForHomeBackNotiView);
                     expandView.setVisibility(View.INVISIBLE);
@@ -662,7 +662,7 @@ public class EdgeGestureService extends Service {
                                 if (Utility.isAccessibilityEnable(getApplicationContext())) {
                                     manager.sendAccessibilityEvent(event1);
                                 }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-                            } else if (homeBackNoti == 3) {
+                            } else if (homeBackNoti == 4) {
                                 expandStatusBar();
                             }
                         } else if(!isOutOfTrial & homeBackNoti >0){
@@ -692,7 +692,7 @@ public class EdgeGestureService extends Service {
                                 if (Utility.isAccessibilityEnable(getApplicationContext())) {
                                     manager.sendAccessibilityEvent(event1);
                                 }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-                            } else if (homeBackNoti == 3) {
+                            } else if (homeBackNoti == 4) {
                                 expandStatusBar();
                             }
                         }else if (isOutOfTrial & homeBackNoti >0){
@@ -722,7 +722,7 @@ public class EdgeGestureService extends Service {
                                 if (Utility.isAccessibilityEnable(getApplicationContext())) {
                                     manager.sendAccessibilityEvent(event1);
                                 }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-                            } else if (homeBackNoti == 3) {
+                            } else if (homeBackNoti == 4) {
                                 Toast.makeText(getApplicationContext(),getString(R.string.edge_service_out_of_trial_text_when_homebacknoti),Toast.LENGTH_LONG).show();
                             }
                         }
@@ -844,7 +844,7 @@ public class EdgeGestureService extends Service {
                             backView.setVisibility(View.VISIBLE);
                             expandView.setVisibility(View.INVISIBLE);
                             break;
-                        case 3:
+                        case 4:
                             homeView.setVisibility(View.INVISIBLE);
                             backView.setVisibility(View.INVISIBLE);
                             expandView.setVisibility(View.VISIBLE);

@@ -255,44 +255,37 @@ public  class Utility {
         }
     }
 
-    public static int isHomeOrBackOrNoti(int x_init, int y_init, int x, int y, int radius, float mScale, int position){
-
+    public static int isHomeOrBackOrNoti(int x_init_int, int y_init_int, int x_int, int y_int, int radius_int, float mScale, int position){
+        double x_init = (double)x_init_int;
+        double y_init = (double)y_init_int;
+        double x = (double) x_int;
+        double y = (double) y_int;
+        double radius = (double) radius_int;
         double distance = Math.sqrt(Math.pow((double)x - (double)x_init,2) + Math.pow((double)y - (double) y_init, 2));
         double distanceNeeded_pxl = (double) ((35+ radius)* mScale);
         double maxAng = 0.4166*Math.PI;  // 75 degree
         double midAng = 0.3333* Math.PI; //60 degree
         double minAng = 0.0833*Math.PI; //15 degree
-        if (position >= 30){
-            double oriAng = Math.acos((double)(Math.abs(y - y_init))/distance);
-            boolean isLeft = x < x_init;
-            if (isLeft){
-                if (oriAng > minAng & oriAng < midAng & distance > distanceNeeded_pxl){
-                    return 2;
-                }else if (oriAng > midAng & oriAng < 0.5*Math.PI & distance > distanceNeeded_pxl){
-                    return 1;
-                }else return 0;
-
-            }else {
-                if (oriAng > minAng & oriAng < 0.5*Math.PI & distance > distanceNeeded_pxl){
-                    return 3;
-                }else return 0;
-            }
-        }else {
-            boolean isTop = y < y_init;
-            double oriAng = Math.acos((double)(Math.abs(x - x_init))/distance);
-
-            if (isTop){
-                if (oriAng>minAng & oriAng < midAng & distance > distanceNeeded_pxl){
-                    return 2;
-                }else if (oriAng>midAng & oriAng < 0.5*Math.PI & distance >= distanceNeeded_pxl){
-                    return 1;
-                }else return 0;
-            }else {
-                if (oriAng>minAng & oriAng < 0.5*Math.PI & distance >= distanceNeeded_pxl){
-                    return 3;
-                }else return 0;
-            }
+        double ang30 = 0.1666*Math.PI;
+        double ang70 = 0.3889*Math.PI;
+        double ang110 = 0.6111*Math.PI;
+        double alpha;
+        if (distance < distanceNeeded_pxl) {
+            return 0;
         }
+
+        if (position >= 30) {
+            alpha = Math.acos((x_init - x) / distance);
+        }else {
+            alpha = Math.acos((y_init-y)/distance);
+        }
+        if (alpha < ang30) {
+            return 1;
+        }else if (alpha < ang70) {
+            return 2;
+        }else if (alpha < ang110) {
+            return 3;
+        }else return 4;
 
     }
 //    public static int[] getExpandSpec(int x_init,int y_init,int rad, int distanceFromIcon,WindowManager win){

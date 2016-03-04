@@ -29,7 +29,7 @@ public class ExpandStatusBarView extends View {
     private int width,height,x_init,y_init;
     private RectF oval;
     private int radius;
-    private int homwBackNoti = 3;
+    private int homwBackNoti = 4;
     private int ovalOffset =0;
     private float mScale;
     private int textSize = 16, strokeWidth = 60; // in dp
@@ -60,7 +60,7 @@ public class ExpandStatusBarView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         oval.set(ovalOffset, ovalOffset, ovalOffset + radius * 2, ovalOffset + radius * 2);
-        if (homwBackNoti ==3){
+        if (homwBackNoti ==4){
             switch (position/10){
                 case 1: path.addArc(oval, -270, 70);
                     break;
