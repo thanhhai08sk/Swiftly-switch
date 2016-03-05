@@ -502,7 +502,7 @@ public  class Utility {
                 if (getWifiState(context)) {
                     return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_wifi);
                 }else
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_wifi_off);
+                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_wifi_no_bound_off);
 
             case MainActivity.ACTION_NOTI:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_expand);
@@ -510,8 +510,16 @@ public  class Utility {
                 if (getBluetoothState(context)) {
                     return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_bluetooth);
                 } else {
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_bluetooth_off);
+                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_bluetooth_no_bound_off);
                 }
+            case MainActivity.ACTION_ROTATE:
+                if (getIsRotationAuto(context)) {
+                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_rotate_no_bound_auto);
+                } else {
+                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_rotate_no_bound_lock);
+                }
+            case MainActivity.ACTION_POWER_MENU:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_power_menu_no_bound);
             case MainActivity.ACTION_NONE:
                 return null;
         }

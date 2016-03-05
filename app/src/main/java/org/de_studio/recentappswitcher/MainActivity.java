@@ -46,6 +46,8 @@ public class MainActivity extends Activity {
     public static final String ACTION_WIFI = "wifi";
     public static final String ACTION_BLUETOOTH = "bluetooth";
     public static final String ACTION_NONE = "none";
+    public static final String ACTION_ROTATE = "rotate";
+    public static final String ACTION_POWER_MENU = "power_menu";
     public static final int REQUEST_CODE = 3243;
     public static final long trialTime = 1000*60*60*24*7;
     private SharedPreferences sharedPreferences1, sharedPreferences2, sharedPreferencesDefautl,sharedPreferences_favorite, sharedPreferences_exclude;
