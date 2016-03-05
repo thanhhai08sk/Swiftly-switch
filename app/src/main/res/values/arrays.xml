@@ -35,4 +35,11 @@
         <item>@string/grid_6_column</item>
         <item>@string/grid_7_column</item>
     </string-array>
+
+    <string-array name="outer_setting_list_action">
+        <item>@string/action_1</item>
+        <item>@string/action_2</item>
+        <item>@string/action_3</item>
+        <item>@string/action_4</item>
+    </string-array>
 </resources>

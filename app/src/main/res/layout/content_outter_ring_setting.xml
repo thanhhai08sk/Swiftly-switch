@@ -11,31 +11,11 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".OuterRingSettingActivity"
     tools:showIn="@layout/activity_outter_ring_setting">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/outer_ring_setting_linear_layout"
-        android:layout_gravity="center_vertical"
-        >
         <ListView
             android:layout_width="0dp"
             android:layout_height="300dp"
             android:layout_weight="1"
             android:id="@+id/outer_ring_setting_list_view"
             >
-
         </ListView>
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="300dp"
-            android:layout_weight="0"
-            android:id="@+id/outer_ring_setting_frame_layout"
-            >
-
-        </FrameLayout>
-
-
-    </LinearLayout>
-
 </LinearLayout>

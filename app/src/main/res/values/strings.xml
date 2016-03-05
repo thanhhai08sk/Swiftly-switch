@@ -89,6 +89,10 @@
     <string name="grid_5_column">5 column</string>
     <string name="grid_6_column">6 column</string>
     <string name="grid_7_column">7 column</string>
+    <string name="action_1">Action 1</string>
+    <string name="action_2">Action 2</string>
+    <string name="action_3">Action 3</string>
+    <string name="action_4">Action 4</string>
     <string name="set_favorite_shortcut_grid_by">by</string>
     <string name="set_favorite_shortcut_grid_gap_title_text_view">Space between shortcuts</string>
     <string name="set_favorite_shortcut_grid_distance_title_text_view">Distance from the Edge</string>
