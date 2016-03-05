@@ -534,6 +534,50 @@ public  class Utility {
         return null;
     }
 
+    public static Bitmap getBitmapForOuterSetting(Context context,String action) {
+        switch (action) {
+            case MainActivity.ACTION_HOME:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_home);
+            case MainActivity.ACTION_BACK:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_back);
+            case MainActivity.ACTION_WIFI:
+                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_wifi);
+            case MainActivity.ACTION_NOTI:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_expand);
+            case MainActivity.ACTION_BLUETOOTH:
+                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_bluetooth);
+            case MainActivity.ACTION_ROTATE:
+                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_rotate_no_bound_auto);
+            case MainActivity.ACTION_POWER_MENU:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_power_menu_no_bound);
+            case MainActivity.ACTION_NONE:
+                return null;
+        }
+        return null;
+    }
+
+    public static String getLabelForOuterSetting(Context context, String action) {
+        switch (action) {
+            case MainActivity.ACTION_HOME:
+                return context.getString(R.string.setting_shortcut_home);
+            case MainActivity.ACTION_BACK:
+                return context.getString(R.string.setting_shortcut_back);
+            case MainActivity.ACTION_WIFI:
+                return context.getString(R.string.setting_shortcut_wifi);
+            case MainActivity.ACTION_NOTI:
+                return context.getString(R.string.setting_shortcut_noti);
+            case MainActivity.ACTION_BLUETOOTH:
+                return context.getString(R.string.setting_shortcut_bluetooth);
+            case MainActivity.ACTION_ROTATE:
+                return context.getString(R.string.setting_shortcut_rotation);
+            case MainActivity.ACTION_POWER_MENU:
+                return context.getString(R.string.setting_shortcut_power_menu);
+            case MainActivity.ACTION_NONE:
+                return context.getString(R.string.setting_shortcut_none);
+        }
+        return context.getString(R.string.setting_shortcut_none);
+    }
+
     public static void homeAction(Context context, View v,String className, String packageName) {
         AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
         event1.setClassName(className);

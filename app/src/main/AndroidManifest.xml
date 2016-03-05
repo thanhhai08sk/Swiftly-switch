@@ -79,7 +79,7 @@
                 android:value="org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity" />
         </activity>
         <activity
-            android:name=".OutterRingSettingActivity"
+            android:name=".OuterRingSettingActivity"
             android:label="@string/title_activity_outter_ring_setting"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">

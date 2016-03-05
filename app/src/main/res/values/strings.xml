@@ -68,6 +68,10 @@
     <string name="setting_shortcut_bluetooth">On/off bluetooth</string>
     <string name="setting_shortcut_rotation">Auto/lock rotation</string>
     <string name="setting_shortcut_power_menu">Show power menu</string>
+    <string name="setting_shortcut_none">None</string>
+    <string name="setting_shortcut_back">Back</string>
+    <string name="setting_shortcut_home">Home</string>
+    <string name="setting_shortcut_noti">Expand status bar</string>
     <string name="ask_for_write_setting_notification_text">Click here and grant WRITE SETTING for Swiftly switch</string>
     <string name="ask_for_write_setting_notification_title">Swiftly switch need Write Setting permission</string>
     <string name="choose_shortcut_apps_tab_title">Apps</string>
@@ -95,4 +99,5 @@
     <string name="main_icon_pack_support">Set icon pack</string>
     <string name="icon_pack_system_icon_pack_label">System</string>
     <string name="title_activity_outter_ring_setting">OutterRingSettingActivity</string>
+    <string name="main_outer_ring_setting">Outer ring action</string>
 </resources>

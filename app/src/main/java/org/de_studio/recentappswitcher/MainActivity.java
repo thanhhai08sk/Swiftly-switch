@@ -229,6 +229,7 @@ public class MainActivity extends Activity {
         ImageButton edge1SettingButton = (ImageButton) findViewById(R.id.edge_1_setting_image_button);
         ImageButton edge2SettingButton = (ImageButton) findViewById(R.id.edge_2_setting_image_button);
         ImageButton iconPackSettingButton = (ImageButton) findViewById(R.id.main_icon_pack_support_setting_button);
+        ImageButton outerRingSettingButton = (ImageButton) findViewById(R.id.main_outter_ring_setting_button);
         edge1SettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -270,6 +271,12 @@ public class MainActivity extends Activity {
                 android.app.FragmentManager fragmentManager = getFragmentManager();
                 IconPackSettingDialogFragment newFragment = new IconPackSettingDialogFragment();
                 newFragment.show(fragmentManager, "iconPackDialogFragment");
+            }
+        });
+        outerRingSettingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), OuterRingSettingActivity.class));
             }
         });
 
