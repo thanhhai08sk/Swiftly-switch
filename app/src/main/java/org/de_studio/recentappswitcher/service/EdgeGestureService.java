@@ -554,7 +554,7 @@ public class EdgeGestureService extends Service {
                         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
                         if (shortcut != null) {
                             if (shortcut.getType() == Shortcut.TYPE_APP) {
-                                Intent extApp = null;
+                                Intent extApp ;
                                 extApp = getPackageManager().getLaunchIntentForPackage(shortcut.getPackageName());
                                 if (extApp != null) {
                                     ComponentName componentName = extApp.getComponent();
