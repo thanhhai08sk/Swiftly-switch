@@ -16,11 +16,16 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
+import android.support.v4.view.accessibility.AccessibilityEventCompat;
+import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
@@ -524,6 +529,36 @@ public  class Utility {
                 return null;
         }
         return null;
+    }
+
+    public static void homeAction(Context context, View v,String className, String packageName) {
+        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+        event1.setClassName(className);
+        event1.getText().add("home");
+        event1.setAction(1);
+        event1.setPackageName(packageName);
+        event1.setEnabled(true);
+        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+        recordCompat.setSource(v);
+        if (Utility.isAccessibilityEnable(context)) {
+            manager.sendAccessibilityEvent(event1);
+        }else Toast.makeText(context, R.string.ask_user_to_turn_on_accessibility_toast, Toast.LENGTH_LONG).show();
+    }
+
+    public static void backAction(Context context, View v, String className, String packageName) {
+        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+        event1.setClassName(className);
+        event1.getText().add("back");
+        event1.setAction(2);
+        event1.setPackageName(packageName);
+        event1.setEnabled(true);
+        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+        recordCompat.setSource(v);
+        if (Utility.isAccessibilityEnable(context)) {
+            manager.sendAccessibilityEvent(event1);
+        }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
     }
 
 

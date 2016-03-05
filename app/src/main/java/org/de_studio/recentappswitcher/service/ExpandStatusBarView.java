@@ -41,7 +41,7 @@ public class ExpandStatusBarView extends View {
     private Context mContext;
     private SharedPreferences sharedPreferences;
 
-    public ExpandStatusBarView(Context context, int radius,int ovalOffset, String text, int positionOfEdge, int positionOfArc){
+    public ExpandStatusBarView(Context context, int radius,int ovalOffset, int positionOfEdge, int positionOfArc){
         super(context);
         this.radius = radius;
         this.ovalOffset = ovalOffset;

@@ -107,7 +107,7 @@ public class EdgeGestureService extends Service {
     public int edge1Position, edge2Position;
     private SharedPreferences defaultShared, sharedPreferences1, sharedPreferences2, sharedPreferences_favorite, sharedPreferences_exclude;
     private AppCompatImageView[] iconImageList1, iconImageList2;
-    private ExpandStatusBarView expandView, homeView, backView;
+    private ExpandStatusBarView action4View, action1View, action2View,action3View;
     private Vibrator vibrator;
     private int ovalOffSet, ovalRadiusPlus = 20, ovalRadiusPlusPxl, ovalOffSetInDp = 70;
     private long holdTime = 450, firstTouchTime;
@@ -324,9 +324,9 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                        itemView.removeView(backView);
-                        itemView.removeView(homeView);
-                        itemView.removeView(expandView);
+                        itemView.removeView(action2View);
+                        itemView.removeView(action1View);
+                        itemView.removeView(action4View);
                     if (itemView.isAttachedToWindow()) {
                         windowManager.removeView(itemView);
                     }
@@ -364,23 +364,29 @@ public class EdgeGestureService extends Service {
                     float xForHomeBackNotiView = x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
                     float yForHomeBackNotiView = y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
                     int radiusForHomeBackNotiView = (int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl;
-                    expandView = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,"show notification",position,4);
-                    expandView.setX(xForHomeBackNotiView);
-                    expandView.setY(yForHomeBackNotiView);
-                    expandView.setVisibility(View.INVISIBLE);
-                    itemView.addView(expandView);
+                    action4View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,4);
+                    action4View.setX(xForHomeBackNotiView);
+                    action4View.setY(yForHomeBackNotiView);
+                    action4View.setVisibility(View.INVISIBLE);
+                    itemView.addView(action4View);
 
-                    homeView = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,"home",position,1);
-                    homeView.setX(xForHomeBackNotiView);
-                    homeView.setY(yForHomeBackNotiView);
-                    homeView.setVisibility(View.INVISIBLE);
-                    itemView.addView(homeView);
+                    action1View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,1);
+                    action1View.setX(xForHomeBackNotiView);
+                    action1View.setY(yForHomeBackNotiView);
+                    action1View.setVisibility(View.INVISIBLE);
+                    itemView.addView(action1View);
 
-                    backView = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,"back",position,2);
-                    backView.setX(xForHomeBackNotiView);
-                    backView.setY(yForHomeBackNotiView);
-                    backView.setVisibility(View.INVISIBLE);
-                    itemView.addView(backView);
+                    action2View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,2);
+                    action2View.setX(xForHomeBackNotiView);
+                    action2View.setY(yForHomeBackNotiView);
+                    action2View.setVisibility(View.INVISIBLE);
+                    itemView.addView(action2View);
+
+                    action3View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,3);
+                    action3View.setX(xForHomeBackNotiView);
+                    action3View.setY(yForHomeBackNotiView);
+                    action3View.setVisibility(View.INVISIBLE);
+                    itemView.addView(action3View);
 
                     WindowManager.LayoutParams itemViewParameter = new WindowManager.LayoutParams(
                             WindowManager.LayoutParams.MATCH_PARENT,
@@ -534,9 +540,10 @@ public class EdgeGestureService extends Service {
                         Log.e(LOG_TAG, "shortcutView is not attacked to the windowManager");
                     }
 
-                    itemView.removeView(expandView);
-                    itemView.removeView(homeView);
-                    itemView.removeView(backView);
+                    itemView.removeView(action4View);
+                    itemView.removeView(action1View);
+                    itemView.removeView(action2View);
+                    itemView.removeView(action3View);
 
                     if (switched) {
                         int gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
@@ -620,8 +627,6 @@ public class EdgeGestureService extends Service {
                                 }
 
                             if (extApp != null) {
-//                            extApp.addCategory(Intent.CATEGORY_LAUNCHER);
-//                            extApp.setAction(Intent.ACTION_MAIN);
                                 ComponentName componentName = extApp.getComponent();
                                 Intent startApp = new Intent(Intent.ACTION_MAIN,null);
                                 startApp.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -635,97 +640,23 @@ public class EdgeGestureService extends Service {
                         packagename = null;
                         int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
                         Log.e(LOG_TAG, "homeBackNoti = " + homeBackNoti);
-                        if (!isFreeVersion){
-                            if (homeBackNoti == 1) {
-                                AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                                event1.setClassName(getClass().getName());
-                                event1.getText().add("home");
-                                event1.setAction(1);
-                                event1.setPackageName(getPackageName());
-                                event1.setEnabled(true);
-                                AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                                AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                                recordCompat.setSource(v);
-                                if (Utility.isAccessibilityEnable(getApplicationContext())) {
-                                    manager.sendAccessibilityEvent(event1);
-                                }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-                            } else if (homeBackNoti == 2) {
-                                AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                                event1.setClassName(getClass().getName());
-                                event1.getText().add("back");
-                                event1.setAction(2);
-                                event1.setPackageName(getPackageName());
-                                event1.setEnabled(true);
-                                AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                                AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                                recordCompat.setSource(v);
-                                if (Utility.isAccessibilityEnable(getApplicationContext())) {
-                                    manager.sendAccessibilityEvent(event1);
-                                }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-                            } else if (homeBackNoti == 4) {
-                                expandStatusBar();
-                            }
-                        } else if(!isOutOfTrial & homeBackNoti >0){
-                            if (homeBackNoti == 1) {
-                                AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                                event1.setClassName(getClass().getName());
-                                event1.getText().add("home");
-                                event1.setAction(1);
-                                event1.setPackageName(getPackageName());
-                                event1.setEnabled(true);
-                                AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                                AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                                recordCompat.setSource(v);
-                                if (Utility.isAccessibilityEnable(getApplicationContext())) {
-                                    manager.sendAccessibilityEvent(event1);
-                                }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-                            } else if (homeBackNoti == 2) {
-                                AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                                event1.setClassName(getClass().getName());
-                                event1.getText().add("back");
-                                event1.setAction(2);
-                                event1.setPackageName(getPackageName());
-                                event1.setEnabled(true);
-                                AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                                AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                                recordCompat.setSource(v);
-                                if (Utility.isAccessibilityEnable(getApplicationContext())) {
-                                    manager.sendAccessibilityEvent(event1);
-                                }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-                            } else if (homeBackNoti == 4) {
-                                expandStatusBar();
-                            }
-                        }else if (isOutOfTrial & homeBackNoti >0){
-                            if (homeBackNoti == 1) {
-                                AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                                event1.setClassName(getClass().getName());
-                                event1.getText().add("home");
-                                event1.setAction(1);
-                                event1.setPackageName(getPackageName());
-                                event1.setEnabled(true);
-                                AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                                AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                                recordCompat.setSource(v);
-                                if (Utility.isAccessibilityEnable(getApplicationContext())) {
-                                    manager.sendAccessibilityEvent(event1);
-                                }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-                            } else if (homeBackNoti == 2) {
-                                AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                                event1.setClassName(getClass().getName());
-                                event1.getText().add("back");
-                                event1.setAction(2);
-                                event1.setPackageName(getPackageName());
-                                event1.setEnabled(true);
-                                AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                                AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                                recordCompat.setSource(v);
-                                if (Utility.isAccessibilityEnable(getApplicationContext())) {
-                                    manager.sendAccessibilityEvent(event1);
-                                }else Toast.makeText(getApplicationContext(),R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-                            } else if (homeBackNoti == 4) {
-                                Toast.makeText(getApplicationContext(),getString(R.string.edge_service_out_of_trial_text_when_homebacknoti),Toast.LENGTH_LONG).show();
-                            }
+                        switch (homeBackNoti) {
+                            case 1:
+                                Utility.homeAction(getApplicationContext(),v,getClass().getName(),getPackageName());
+                                break;
+                            case 2:
+                                Utility.backAction(getApplicationContext(),v,getClass().getName(),getPackageName());
+                                break;
+                            case 3:
+                                break;
+                            case 4:
+                                if (!isFreeVersion | !isOutOfTrial) {
+                                    expandStatusBar();
+                                } else {
+                                    Toast.makeText(getApplicationContext(),getString(R.string.edge_service_out_of_trial_text_when_homebacknoti),Toast.LENGTH_LONG).show();
+                                }
                         }
+
                     }
 
 
@@ -742,41 +673,10 @@ public class EdgeGestureService extends Service {
                     }
 
                     break;
-                case MotionEvent.ACTION_MOVE:
-//                    if (switched & !itemSwitched) {
-//                        for (int i = 0; i < 6; i++) {
-//                            if (i >= favoritePackageName.length) {
-//                                iconImageArrayList.get(i).setImageDrawable(ContextCompat. getDrawable(getApplicationContext() , R.drawable.ic_add_circle_outline_white_48dp));
-//                            } else {
-//                                try {
-//                                    iconImageArrayList.get(i).setImageDrawable(getPackageManager().getApplicationIcon(favoritePackageName[i]));
-//                                } catch (PackageManager.NameNotFoundException e) {
-//                                    Log.e(LOG_TAG, "NameNotFound" + e);
-//                                }
-//                            }
-//                        }
-//                        itemSwitched = false;
 
-//                        shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
-//                        ViewGroup.LayoutParams gridParams = shortcutGridView.getLayoutParams();
-//                        gridParams.height = (int)(mScale* (float)(48 * gridRow + 22* (gridRow -1)));
-//                        gridParams.width = (int)(mScale* (float)(48 * gridColumn + 22* (gridColumn -1)));
-//                        shortcutGridView.setLayoutParams(gridParams);
-//                        shortcutGridView.setAdapter(shortcutAdapter);
-//                        WindowManager.LayoutParams shortcutViewParams = new WindowManager.LayoutParams(
-//                                WindowManager.LayoutParams.MATCH_PARENT,
-//                                WindowManager.LayoutParams.MATCH_PARENT,
-//                                WindowManager.LayoutParams.TYPE_PHONE,
-//                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-//                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE| WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
-//                                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-//                                PixelFormat.TRANSLUCENT);
-//                        shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-//                        Utility.setFavoriteShortcutGridViewPosition(shortcutGridView,x_init_cord,y_init_cord,mScale,position, windowManager, defaultShared);
-//                        windowManager.addView(shortcutView,shortcutViewParams);
-//                        windowManager.removeView(itemView);
-//                        itemSwitched = true;
-//                    }
+
+
+                case MotionEvent.ACTION_MOVE:
                     if (switched) {
                         break;
                     }
@@ -830,24 +730,24 @@ public class EdgeGestureService extends Service {
                     }
                     switch (moveToHomeBackNoti) {
                         case 0:
-                            homeView.setVisibility(View.INVISIBLE);
-                            backView.setVisibility(View.INVISIBLE);
-                            expandView.setVisibility(View.INVISIBLE);
+                            action1View.setVisibility(View.INVISIBLE);
+                            action2View.setVisibility(View.INVISIBLE);
+                            action4View.setVisibility(View.INVISIBLE);
                             break;
                         case 1:
-                            homeView.setVisibility(View.VISIBLE);
-                            backView.setVisibility(View.INVISIBLE);
-                            expandView.setVisibility(View.INVISIBLE);
+                            action1View.setVisibility(View.VISIBLE);
+                            action2View.setVisibility(View.INVISIBLE);
+                            action4View.setVisibility(View.INVISIBLE);
                             break;
                         case 2:
-                            homeView.setVisibility(View.INVISIBLE);
-                            backView.setVisibility(View.VISIBLE);
-                            expandView.setVisibility(View.INVISIBLE);
+                            action1View.setVisibility(View.INVISIBLE);
+                            action2View.setVisibility(View.VISIBLE);
+                            action4View.setVisibility(View.INVISIBLE);
                             break;
                         case 4:
-                            homeView.setVisibility(View.INVISIBLE);
-                            backView.setVisibility(View.INVISIBLE);
-                            expandView.setVisibility(View.VISIBLE);
+                            action1View.setVisibility(View.INVISIBLE);
+                            action2View.setVisibility(View.INVISIBLE);
+                            action4View.setVisibility(View.VISIBLE);
                             break;
                     }
                     break;
@@ -976,15 +876,15 @@ public class EdgeGestureService extends Service {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (item1View.isAttachedToWindow()) {
-            item1View.removeView(backView);
-            item1View.removeView(homeView);
-            item1View.removeView(expandView);
+            item1View.removeView(action2View);
+            item1View.removeView(action1View);
+            item1View.removeView(action4View);
             windowManager.removeView(item1View);
         }
         if (item2View.isAttachedToWindow()) {
-            item2View.removeView(backView);
-            item2View.removeView(homeView);
-            item2View.removeView(expandView);
+            item2View.removeView(action2View);
+            item2View.removeView(action1View);
+            item2View.removeView(action4View);
             windowManager.removeView(item2View);
         }
 
