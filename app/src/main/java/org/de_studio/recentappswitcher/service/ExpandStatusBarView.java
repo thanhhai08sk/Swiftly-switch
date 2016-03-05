@@ -3,7 +3,6 @@ package org.de_studio.recentappswitcher.service;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -18,6 +17,7 @@ import android.view.View;
 
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 
 /**
  * Created by hai on 12/29/2015.
@@ -38,6 +38,7 @@ public class ExpandStatusBarView extends View {
     private float mScale,o1x,o1y   ;
     private int textSize = 16, strokeWidth = 45; // in dp
     private Bitmap actionBitmap;
+    private Context mContext;
     private SharedPreferences sharedPreferences;
 
     public ExpandStatusBarView(Context context, int radius,int ovalOffset, String text, int positionOfEdge, int positionOfArc){
@@ -45,6 +46,7 @@ public class ExpandStatusBarView extends View {
         this.radius = radius;
         this.ovalOffset = ovalOffset;
         this.text = text;
+        mContext = context;
         this.position = positionOfEdge;
         homwBackNoti = positionOfArc;
         sharedPreferences = context.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
@@ -124,21 +126,21 @@ public class ExpandStatusBarView extends View {
         path = new Path();
         float sin;
         float cos;
-
-        switch (homwBackNoti) {
-            case 1:
-                actionBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_home);
-                break;
-            case 2:
-                actionBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_back);
-                break;
-            case 3:
-                actionBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_recent);
-                break;
-            case 4:
-                actionBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_expand);
-                break;
-        }
+        actionBitmap = Utility.getBitmapFromAction(mContext, sharedPreferences, homwBackNoti);
+//        switch (homwBackNoti) {
+//            case 1:
+//                actionBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_home);
+//                break;
+//            case 2:
+//                actionBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_back);
+//                break;
+//            case 3:
+//                actionBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_recent);
+//                break;
+//            case 4:
+//                actionBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_expand);
+//                break;
+//        }
 
         switch (position / 10) {
             case 1:
