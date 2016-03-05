@@ -1,18 +1,22 @@
 package org.de_studio.recentappswitcher.service;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RadialGradient;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 
+import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 
 /**
@@ -34,6 +38,7 @@ public class ExpandStatusBarView extends View {
     private float mScale,o1x,o1y   ;
     private int textSize = 16, strokeWidth = 45; // in dp
     private Bitmap actionBitmap;
+    private SharedPreferences sharedPreferences;
 
     public ExpandStatusBarView(Context context, int radius,int ovalOffset, String text, int positionOfEdge, int positionOfArc){
         super(context);
@@ -42,6 +47,7 @@ public class ExpandStatusBarView extends View {
         this.text = text;
         this.position = positionOfEdge;
         homwBackNoti = positionOfArc;
+        sharedPreferences = context.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         init();
         Log.e("ExpandStatusBarView ", "position%10 = " + position % 10);
     }
@@ -104,7 +110,12 @@ public class ExpandStatusBarView extends View {
         textPaint.setTypeface(Typeface.DEFAULT_BOLD);
 
         backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        backgroundPaint.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+//        backgroundPaint.setColor(ContextCompat.getColor(getContext(), R.color.outRing));
+        int  color1 = ContextCompat.getColor(getContext(), R.color.outRing);
+        int color2 = ContextCompat.getColor(getContext(), R.color.outOutRing);
+        RadialGradient gradient = new RadialGradient(ovalOffset + radius, ovalOffset + radius, radius +20*mScale,
+                new int[]{color1, color2}, new float[]{0.85f, 1.0f}, Shader.TileMode.CLAMP);
+        backgroundPaint.setShader(gradient);
         backgroundPaint.setStyle(Paint.Style.STROKE);
         backgroundPaint.setStrokeWidth(strokeWidth * mScale);
 //        backgroundPaint.setStrokeCap(Paint.Cap.ROUND);

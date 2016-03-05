@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
@@ -474,6 +475,47 @@ public  class Utility {
     public static int getSizeOfFavoriteGrid(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         return sharedPreferences.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5) * sharedPreferences.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
+    }
+
+    public static Bitmap getBitmapFromAction(Context context,SharedPreferences sharedPreferences, int actionButton) {
+        String action = MainActivity.ACTION_NONE;
+        switch (actionButton) {
+            case 1:
+                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_1_KEY, MainActivity.ACTION_HOME);
+                break;
+            case 2:
+                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_2_KEY, MainActivity.ACTION_BACK);
+                break;
+            case 3:
+                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_NONE);
+                break;
+            case 4:
+                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_4_KEY, MainActivity.ACTION_NOTI);
+                break;
+        }
+        switch (action) {
+            case MainActivity.ACTION_HOME:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_home);
+            case MainActivity.ACTION_BACK:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_back);
+            case MainActivity.ACTION_WIFI:
+                if (getWifiState(context)) {
+                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_wifi);
+                }else
+                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_wifi_off);
+
+            case MainActivity.ACTION_NOTI:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_expand);
+            case MainActivity.ACTION_BLUETOOTH:
+                if (getBluetoothState(context)) {
+                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_bluetooth);
+                } else {
+                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_bluetooth_off);
+                }
+            case MainActivity.ACTION_NONE:
+                return null;
+        }
+        return null;
     }
 
 

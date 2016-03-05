@@ -40,6 +40,12 @@ public class MainActivity extends Activity {
     public static final String EXCLUDE_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_exclude_shared_preferences";
     public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.pro";
     public static final String FREE_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.trial";
+    public static final String ACTION_HOME = "home";
+    public static final String ACTION_BACK = "back";
+    public static final String ACTION_NOTI = "noti";
+    public static final String ACTION_WIFI = "wifi";
+    public static final String ACTION_BLUETOOTH = "bluetooth";
+    public static final String ACTION_NONE = "none";
     public static final int REQUEST_CODE = 3243;
     public static final long trialTime = 1000*60*60*24*7;
     private SharedPreferences sharedPreferences1, sharedPreferences2, sharedPreferencesDefautl,sharedPreferences_favorite, sharedPreferences_exclude;
