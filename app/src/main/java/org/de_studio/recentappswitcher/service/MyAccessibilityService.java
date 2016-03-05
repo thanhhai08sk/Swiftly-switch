@@ -21,6 +21,8 @@ public class MyAccessibilityService extends AccessibilityService {
             }else if (event.getAction() ==3){
                 Log.e("MyAccessibilityService ", "power");
                 performGlobalAction(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG);
+            }else if (event.getAction() == 4) {
+                performGlobalAction(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS);
             }
 
         }

@@ -15,6 +15,7 @@ import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
@@ -31,6 +32,8 @@ import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -559,6 +562,65 @@ public  class Utility {
         if (Utility.isAccessibilityEnable(context)) {
             manager.sendAccessibilityEvent(event1);
         }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+    }
+
+    public static void notiAction(Context context, View v, String className, String packageName) {
+        Object sbservice =context.getSystemService("statusbar");
+        try {
+            Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
+            Method showsb;
+            if (Build.VERSION.SDK_INT >= 17) {
+                showsb = statusbarManager.getMethod("expandNotificationsPanel");
+            } else {
+                showsb = statusbarManager.getMethod("expand");
+            }
+            showsb.invoke(sbservice);
+        } catch (ClassNotFoundException e) {
+            Log.e(LOG_TAG, "ClassNotFound " + e);
+        } catch (NoSuchMethodException e) {
+            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+            event1.setClassName(className);
+            event1.getText().add("noti");
+            event1.setAction(4);
+            event1.setPackageName(packageName);
+            event1.setEnabled(true);
+            AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+            recordCompat.setSource(v);
+            if (Utility.isAccessibilityEnable(context)) {
+                manager.sendAccessibilityEvent(event1);
+            }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+        } catch (IllegalAccessException e) {
+            Log.e(LOG_TAG, "IllegalAccessException " + e);
+        } catch (InvocationTargetException e) {
+            Log.e(LOG_TAG, "InvocationTargetException " + e);
+        }
+    }
+
+
+    public static void executeAction(Context context, String action, View v, String className, String packageName) {
+        switch (action) {
+            case MainActivity.ACTION_HOME:
+                homeAction(context,v,className,packageName);
+                break;
+            case MainActivity.ACTION_BACK:
+                backAction(context,v,className,packageName);
+                break;
+            case MainActivity.ACTION_NOTI:
+                notiAction(context,v,className,packageName);
+                break;
+            case MainActivity.ACTION_WIFI:
+                toggleWifi(context);
+                break;
+            case MainActivity.ACTION_BLUETOOTH:
+                toggleBluetooth(context);
+                break;
+            case MainActivity.ACTION_ROTATE:
+                setAutorotation(context);
+                break;
+            case MainActivity.ACTION_NONE:
+                //nothing
+        }
     }
 
 

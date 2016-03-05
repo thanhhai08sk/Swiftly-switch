@@ -51,8 +51,6 @@ import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -640,22 +638,26 @@ public class EdgeGestureService extends Service {
                         packagename = null;
                         int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
                         Log.e(LOG_TAG, "homeBackNoti = " + homeBackNoti);
+                        String action = MainActivity.ACTION_NONE;
                         switch (homeBackNoti) {
                             case 1:
-                                Utility.homeAction(getApplicationContext(),v,getClass().getName(),getPackageName());
+                                action = defaultShared.getString(EdgeSettingDialogFragment.ACTION_1_KEY, MainActivity.ACTION_HOME);
                                 break;
                             case 2:
-                                Utility.backAction(getApplicationContext(),v,getClass().getName(),getPackageName());
+                                action = defaultShared.getString(EdgeSettingDialogFragment.ACTION_2_KEY, MainActivity.ACTION_BACK);
                                 break;
                             case 3:
+                                action = defaultShared.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_NONE);
                                 break;
                             case 4:
-                                if (!isFreeVersion | !isOutOfTrial) {
-                                    expandStatusBar();
-                                } else {
-                                    Toast.makeText(getApplicationContext(),getString(R.string.edge_service_out_of_trial_text_when_homebacknoti),Toast.LENGTH_LONG).show();
-                                }
+                                action = defaultShared.getString(EdgeSettingDialogFragment.ACTION_4_KEY, MainActivity.ACTION_NOTI);
                         }
+                        if (action.equals(MainActivity.ACTION_NOTI) & isFreeVersion & isOutOfTrial) {
+                            Toast.makeText(getApplicationContext(), getString(R.string.edge_service_out_of_trial_text_when_homebacknoti), Toast.LENGTH_LONG).show();
+                        } else {
+                            Utility.executeAction(getApplicationContext(),action,v,getClass().getName(),getPackageName());
+                        }
+
 
                     }
 
@@ -836,41 +838,7 @@ public class EdgeGestureService extends Service {
             }
         }
     }
-    public void expandStatusBar() {
-        Object sbservice = getSystemService("statusbar");
-        try {
-            Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
-            Method showsb;
-            if (Build.VERSION.SDK_INT >= 17) {
-                showsb = statusbarManager.getMethod("expandNotificationsPanel");
-            } else {
-                showsb = statusbarManager.getMethod("expand");
-            }
-            showsb.invoke(sbservice);
-        } catch (ClassNotFoundException e) {
-            Log.e(LOG_TAG, "ClassNotFound " + e);
-        } catch (NoSuchMethodException e) {
-            Log.e(LOG_TAG, "NosuchMethod " + e);
-            try {
-                Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
-                Method showsb =statusbarManager.getMethod("expandSettingsPanel");
-                showsb.invoke(sbservice);
 
-            }catch (ClassNotFoundException e1) {
-                Log.e(LOG_TAG, "ClassNotFound 2 " + e1);
-            }catch (NoSuchMethodException e1){
-                Log.e(LOG_TAG, "NosuchMethod 2 " + e1);
-            }catch (InvocationTargetException e1) {
-            Log.e(LOG_TAG, "InvocationTargetException 2" + e1);
-            }catch (IllegalAccessException e1) {
-                Log.e(LOG_TAG, "IllegalAccessException 2 " + e1);
-            }
-        } catch (IllegalAccessException e) {
-            Log.e(LOG_TAG, "IllegalAccessException " + e);
-        } catch (InvocationTargetException e) {
-            Log.e(LOG_TAG, "InvocationTargetException " + e);
-        }
-    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
