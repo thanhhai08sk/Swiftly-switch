@@ -316,6 +316,8 @@ public class EdgeGestureService extends Service {
             this.isOnlyFavorite = isOnlyFavorite;
         }
 
+
+
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             int x_cord = (int) event.getRawX();
@@ -362,29 +364,41 @@ public class EdgeGestureService extends Service {
                     float xForHomeBackNotiView = x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
                     float yForHomeBackNotiView = y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
                     int radiusForHomeBackNotiView = (int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl;
-                    action4View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,4);
-                    action4View.setX(xForHomeBackNotiView);
-                    action4View.setY(yForHomeBackNotiView);
-                    action4View.setVisibility(View.INVISIBLE);
-                    itemView.addView(action4View);
+                    if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_4_KEY, MainActivity.ACTION_NOTI).equals(MainActivity.ACTION_NONE)) {
+                        action4View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,4);
+                        action4View.setX(xForHomeBackNotiView);
+                        action4View.setY(yForHomeBackNotiView);
+                        action4View.setVisibility(View.INVISIBLE);
+                        itemView.addView(action4View);
+                    }
 
-                    action1View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,1);
-                    action1View.setX(xForHomeBackNotiView);
-                    action1View.setY(yForHomeBackNotiView);
-                    action1View.setVisibility(View.INVISIBLE);
-                    itemView.addView(action1View);
+                    if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_1_KEY, MainActivity.ACTION_HOME).equals(MainActivity.ACTION_NONE)) {
+                        action1View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,1);
+                        action1View.setX(xForHomeBackNotiView);
+                        action1View.setY(yForHomeBackNotiView);
+                        action1View.setVisibility(View.INVISIBLE);
+                        itemView.addView(action1View);
+                    }
 
-                    action2View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,2);
-                    action2View.setX(xForHomeBackNotiView);
-                    action2View.setY(yForHomeBackNotiView);
-                    action2View.setVisibility(View.INVISIBLE);
-                    itemView.addView(action2View);
 
-                    action3View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,3);
-                    action3View.setX(xForHomeBackNotiView);
-                    action3View.setY(yForHomeBackNotiView);
-                    action3View.setVisibility(View.INVISIBLE);
-                    itemView.addView(action3View);
+                    if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_2_KEY, MainActivity.ACTION_BACK).equals(MainActivity.ACTION_NONE)) {
+                        action2View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,2);
+                        action2View.setX(xForHomeBackNotiView);
+                        action2View.setY(yForHomeBackNotiView);
+                        action2View.setVisibility(View.INVISIBLE);
+                        itemView.addView(action2View);
+                    }
+
+
+
+                    if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_NONE).equals(MainActivity.ACTION_NONE)) {
+                        action3View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,3);
+                        action3View.setX(xForHomeBackNotiView);
+                        action3View.setY(yForHomeBackNotiView);
+                        action3View.setVisibility(View.INVISIBLE);
+                        itemView.addView(action3View);
+                    }
+
 
                     WindowManager.LayoutParams itemViewParameter = new WindowManager.LayoutParams(
                             WindowManager.LayoutParams.MATCH_PARENT,
@@ -537,11 +551,18 @@ public class EdgeGestureService extends Service {
                     } catch (IllegalArgumentException e) {
                         Log.e(LOG_TAG, "shortcutView is not attacked to the windowManager");
                     }
-
-                    itemView.removeView(action4View);
-                    itemView.removeView(action1View);
-                    itemView.removeView(action2View);
-                    itemView.removeView(action3View);
+                    if (action1View != null) {
+                        itemView.removeView(action1View);
+                    }
+                    if (action2View != null) {
+                        itemView.removeView(action2View);
+                    }
+                    if (action3View != null) {
+                        itemView.removeView(action3View);
+                    }
+                    if (action4View != null) {
+                        itemView.removeView(action4View);
+                    }
 
                     if (switched) {
                         int gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
@@ -732,34 +753,74 @@ public class EdgeGestureService extends Service {
                     }
                     switch (moveToHomeBackNoti) {
                         case 0:
-                            action1View.setVisibility(View.INVISIBLE);
-                            action2View.setVisibility(View.INVISIBLE);
-                            action3View.setVisibility(View.INVISIBLE);
-                            action4View.setVisibility(View.INVISIBLE);
+                            if (action1View != null) {
+                                action1View.setVisibility(View.INVISIBLE);
+                            }
+                            if (action2View != null) {
+                                action2View.setVisibility(View.INVISIBLE);
+                            }
+                            if (action3View != null) {
+                                action3View.setVisibility(View.INVISIBLE);
+                            }
+                            if (action4View != null) {
+                                action4View.setVisibility(View.INVISIBLE);
+                            }
                             break;
                         case 1:
-                            action1View.setVisibility(View.VISIBLE);
-                            action2View.setVisibility(View.INVISIBLE);
-                            action3View.setVisibility(View.INVISIBLE);
-                            action4View.setVisibility(View.INVISIBLE);
+                            if (action1View != null) {
+                                action1View.setVisibility(View.VISIBLE);
+                            }
+                            if (action2View != null) {
+                                action2View.setVisibility(View.INVISIBLE);
+                            }
+                            if (action3View != null) {
+                                action3View.setVisibility(View.INVISIBLE);
+                            }
+                            if (action4View != null) {
+                                action4View.setVisibility(View.INVISIBLE);
+                            }
                             break;
                         case 2:
-                            action1View.setVisibility(View.INVISIBLE);
-                            action2View.setVisibility(View.VISIBLE);
-                            action3View.setVisibility(View.INVISIBLE);
-                            action4View.setVisibility(View.INVISIBLE);
+                            if (action1View != null) {
+                                action1View.setVisibility(View.INVISIBLE);
+                            }
+                            if (action2View != null) {
+                                action2View.setVisibility(View.VISIBLE);
+                            }
+                            if (action3View != null) {
+                                action3View.setVisibility(View.INVISIBLE);
+                            }
+                            if (action4View != null) {
+                                action4View.setVisibility(View.INVISIBLE);
+                            }
                             break;
                         case 3:
-                            action1View.setVisibility(View.INVISIBLE);
-                            action2View.setVisibility(View.INVISIBLE);
-                            action3View.setVisibility(View.VISIBLE);
-                            action4View.setVisibility(View.INVISIBLE);
+                            if (action1View != null) {
+                                action1View.setVisibility(View.INVISIBLE);
+                            }
+                            if (action2View != null) {
+                                action2View.setVisibility(View.INVISIBLE);
+                            }
+                            if (action3View != null) {
+                                action3View.setVisibility(View.VISIBLE);
+                            }
+                            if (action4View != null) {
+                                action4View.setVisibility(View.INVISIBLE);
+                            }
                             break;
                         case 4:
-                            action1View.setVisibility(View.INVISIBLE);
-                            action2View.setVisibility(View.INVISIBLE);
-                            action3View.setVisibility(View.INVISIBLE);
-                            action4View.setVisibility(View.VISIBLE);
+                            if (action1View != null) {
+                                action1View.setVisibility(View.INVISIBLE);
+                            }
+                            if (action2View != null) {
+                                action2View.setVisibility(View.INVISIBLE);
+                            }
+                            if (action3View != null) {
+                                action3View.setVisibility(View.INVISIBLE);
+                            }
+                            if (action4View != null) {
+                                action4View.setVisibility(View.VISIBLE);
+                            }
                             break;
                     }
                     break;
@@ -854,17 +915,33 @@ public class EdgeGestureService extends Service {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (item1View.isAttachedToWindow()) {
-            item1View.removeView(action2View);
-            item1View.removeView(action1View);
-            item1View.removeView(action4View);
-            item1View.removeView(action3View);
+            if (action1View != null) {
+                item1View.removeView(action2View);
+            }
+            if (action2View != null) {
+                item1View.removeView(action1View);
+            }
+            if (action3View != null) {
+                item1View.removeView(action4View);
+            }
+            if (action4View != null) {
+                item1View.removeView(action3View);
+            }
             windowManager.removeView(item1View);
         }
         if (item2View.isAttachedToWindow()) {
-            item2View.removeView(action2View);
-            item2View.removeView(action1View);
-            item2View.removeView(action4View);
-            item2View.removeView(action3View);
+            if (action1View != null) {
+                item2View.removeView(action2View);
+            }
+            if (action2View != null) {
+                item2View.removeView(action1View);
+            }
+            if (action3View != null) {
+                item2View.removeView(action4View);
+            }
+            if (action4View != null) {
+                item2View.removeView(action3View);
+            }
             windowManager.removeView(item2View);
         }
 
