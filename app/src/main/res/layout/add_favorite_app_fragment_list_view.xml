@@ -11,8 +11,8 @@
         android:id="@+id/add_favorite_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/list_app_background"
-        android:dividerHeight="4dp"
+        android:dividerHeight="1dp"
+        android:divider="@color/black"
         >
     </ListView>
 

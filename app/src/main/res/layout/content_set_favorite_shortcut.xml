@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/set_favorite_shortcut_grid_size_text_view"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
 
                 />
             <android.support.v7.widget.AppCompatSpinner
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:text="@string/set_favorite_shortcut_grid_by"
                 />
             <android.support.v7.widget.AppCompatSpinner
@@ -92,13 +92,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/set_favorite_shortcut_grid_gap_title_text_view"
                 android:layout_weight="1"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:text="12dp"
                 android:id="@+id/set_favorite_shortcut_grid_gap_value_text_view"
                 />
@@ -130,13 +130,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/set_favorite_shortcut_grid_distance_title_text_view"
                 android:layout_weight="1"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:text="12dp"
                 android:id="@+id/set_favorite_shortcut_grid_distance_value_text_view"
                 />

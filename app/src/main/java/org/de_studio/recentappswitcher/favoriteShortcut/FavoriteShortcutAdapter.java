@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,15 +88,19 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                 switch (shortcut.getAction()) {
                     case Shortcut.ACTION_WIFI:
                         imageView.setImageResource(R.drawable.ic_action_wifi_on);
+                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color. black));
                         break;
                     case Shortcut.ACTION_BLUETOOTH:
                         imageView.setImageResource(R.drawable.ic_action_bluetooth_on);
+                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                     case Shortcut.ACTION_ROTATION:
                         imageView.setImageResource(R.drawable.ic_action_rotate_on);
+                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                     case Shortcut.ACTION_POWER_MENU:
                         imageView.setImageResource(R.drawable.ic_action_power_menu);
+                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                 }
             }

@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -99,6 +100,7 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_power_menu))) {
             icon.setImageResource(R.drawable.ic_action_power_menu);
         }
+        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
