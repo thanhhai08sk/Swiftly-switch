@@ -734,21 +734,31 @@ public class EdgeGestureService extends Service {
                         case 0:
                             action1View.setVisibility(View.INVISIBLE);
                             action2View.setVisibility(View.INVISIBLE);
+                            action3View.setVisibility(View.INVISIBLE);
                             action4View.setVisibility(View.INVISIBLE);
                             break;
                         case 1:
                             action1View.setVisibility(View.VISIBLE);
                             action2View.setVisibility(View.INVISIBLE);
+                            action3View.setVisibility(View.INVISIBLE);
                             action4View.setVisibility(View.INVISIBLE);
                             break;
                         case 2:
                             action1View.setVisibility(View.INVISIBLE);
                             action2View.setVisibility(View.VISIBLE);
+                            action3View.setVisibility(View.INVISIBLE);
+                            action4View.setVisibility(View.INVISIBLE);
+                            break;
+                        case 3:
+                            action1View.setVisibility(View.INVISIBLE);
+                            action2View.setVisibility(View.INVISIBLE);
+                            action3View.setVisibility(View.VISIBLE);
                             action4View.setVisibility(View.INVISIBLE);
                             break;
                         case 4:
                             action1View.setVisibility(View.INVISIBLE);
                             action2View.setVisibility(View.INVISIBLE);
+                            action3View.setVisibility(View.INVISIBLE);
                             action4View.setVisibility(View.VISIBLE);
                             break;
                     }
@@ -847,12 +857,14 @@ public class EdgeGestureService extends Service {
             item1View.removeView(action2View);
             item1View.removeView(action1View);
             item1View.removeView(action4View);
+            item1View.removeView(action3View);
             windowManager.removeView(item1View);
         }
         if (item2View.isAttachedToWindow()) {
             item2View.removeView(action2View);
             item2View.removeView(action1View);
             item2View.removeView(action4View);
+            item2View.removeView(action3View);
             windowManager.removeView(item2View);
         }
 

@@ -608,6 +608,21 @@ public  class Utility {
         }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
     }
 
+    public static void powerAction(Context context, View v, String className, String packageName) {
+        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+        event1.setClassName(className);
+        event1.getText().add("power");
+        event1.setAction(3);
+        event1.setPackageName(packageName);
+        event1.setEnabled(true);
+        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+        recordCompat.setSource(v);
+        if (Utility.isAccessibilityEnable(context)) {
+            manager.sendAccessibilityEvent(event1);
+        }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+    }
+
     public static void notiAction(Context context, View v, String className, String packageName) {
         Object sbservice =context.getSystemService("statusbar");
         try {
@@ -664,6 +679,10 @@ public  class Utility {
                 break;
             case MainActivity.ACTION_NONE:
                 //nothing
+                break;
+            case MainActivity.ACTION_POWER_MENU:
+                powerAction(context,v,className,packageName);
+                break;
         }
     }
 

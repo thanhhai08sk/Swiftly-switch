@@ -96,6 +96,17 @@ public class ExpandStatusBarView extends View {
                 case 3: path.addArc(oval,-150,40);
                     break;
             }
+        }else if (homwBackNoti == 3) {
+            switch (position / 10) {
+                case 1:
+                    path.addArc(oval, -200,40);
+                    break;
+                case 2:
+                    path.addArc(oval,-20,40);
+                    break;
+                case 3:
+                    path.addArc(oval,-110,40);
+            }
         }
         canvas.drawPath(path, backgroundPaint);
         canvas.drawBitmap(actionBitmap, o1x, o1y, textPaint);
