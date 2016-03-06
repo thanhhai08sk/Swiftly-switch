@@ -64,16 +64,16 @@ public class OuterRingAdapter extends BaseAdapter {
 
         String cuttentAction= MainActivity.ACTION_NONE;
         switch (position) {
-            case 1:
+            case 0:
                 cuttentAction = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_1_KEY, MainActivity.ACTION_HOME);
                 break;
-            case 2:
+            case 1:
                 cuttentAction = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_2_KEY, MainActivity.ACTION_BACK);
                 break;
-            case 3:
+            case 2:
                 cuttentAction = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_NONE);
                 break;
-            case 4:
+            case 3:
                 cuttentAction = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_4_KEY, MainActivity.ACTION_NOTI);
                 break;
         }
