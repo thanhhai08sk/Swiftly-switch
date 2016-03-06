@@ -12,7 +12,7 @@
     <color name="edgeSettingBackground">#e2000000</color>
     <color name="icon_tint">#94ff4081</color>
     <color name="edge_2_switch_trial_tint">#a2000000</color>
-    <color name="list_app_background">#7385a6</color>
+    <color name="list_app_background">#352626</color>
     <color name="outRing">#384168</color>
     <color name="outOutRing">#72384168</color>
 </resources>
