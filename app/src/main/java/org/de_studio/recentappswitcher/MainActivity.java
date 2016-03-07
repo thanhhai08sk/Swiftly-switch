@@ -221,6 +221,7 @@ public class MainActivity extends Activity {
         step1GoToSettingButton = (Button) findViewById(R.id.step1_go_to_setting_button);
         ImageButton favoriteInfoButton = (ImageButton) findViewById(R.id.main_favorite_info_image_button);
         ImageButton excludeInfoButton = (ImageButton) findViewById(R.id.main_exclude_info_image_button);
+        ImageButton disableAccessibilityInfoButton = (ImageButton) findViewById(R.id.main_disable_accessibility_info_image_button);
         final FrameLayout stepTextFrame = (FrameLayout) findViewById(R.id.step_text_frame_layout);
         ImageButton edge1SettingButton = (ImageButton) findViewById(R.id.edge_1_setting_image_button);
         ImageButton edge2SettingButton = (ImageButton) findViewById(R.id.edge_2_setting_image_button);
@@ -307,11 +308,16 @@ public class MainActivity extends Activity {
         step1GoToSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (step == 1) {
-                    startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                } else {
-                    startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-                }
+
+                    if (step == 1) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                        }
+                    } else {
+                        startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+                    }
+
+
             }
         });
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
@@ -376,6 +382,28 @@ public class MainActivity extends Activity {
                             }
                         });
                 builder.show();
+            }
+        });
+        disableAccessibilityInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(R.string.main_consider_disable_accessibility_dialog_title)
+                        .setMessage(R.string.main_disable_accessibility_detail_text)
+                        .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //do nothing
+                            }
+                        });
+                builder.show();
+            }
+        });
+        ImageButton disableAccessibilityButton = (ImageButton) findViewById(R.id.main_disable_accessiblity_image_button);
+        disableAccessibilityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
             }
         });
 

@@ -104,4 +104,8 @@
     <string name="icon_pack_system_icon_pack_label">System</string>
     <string name="title_activity_outter_ring_setting">OutterRingSettingActivity</string>
     <string name="main_outer_ring_setting">Outer ring action</string>
+    <string name="main_disable_accessibility_title">Disable accessibility</string>
+    <string name="main_disable_accessibility_detail_text">Enable accessibility can cause lag in some device especially when using Chrome. This happen to all
+    apps that use accessibility. If the lag is too extreme please disable the Swiftly switch accessibility service, all feature still available except the navigation (home, back, power menu).</string>
+    <string name="main_consider_disable_accessibility_dialog_title">Consider disable Accessibility service</string>
 </resources>
