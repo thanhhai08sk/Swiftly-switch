@@ -69,43 +69,46 @@ public class ExpandStatusBarView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         oval.set(ovalOffset, ovalOffset, ovalOffset + radius * 2, ovalOffset + radius * 2);
+        int action1Acr = 29;
+        int action23Arc = 39;
+        int action4Arc = 69;
         if (homwBackNoti ==4){
             switch (position/10){
-                case 1: path.addArc(oval, -270, 70);
+                case 1: path.addArc(oval, -270, action4Arc);
                     break;
-                case 2: path.addArc(oval, 20, 70);
+                case 2: path.addArc(oval, 20, action4Arc);
                     break;
-                case 3: path.addArc(oval, -70,70);
+                case 3: path.addArc(oval, -70,action4Arc);
                     break;
             }
         }else if (homwBackNoti==1){
             switch (position/10){
-                case 1: path.addArc(oval, -120, 30);
+                case 1: path.addArc(oval, -120, action1Acr);
                     break;
-                case 2: path.addArc(oval, -90, 30);
+                case 2: path.addArc(oval, -90, action1Acr);
                     break;
-                case 3: path.addArc(oval,-180,30);
+                case 3: path.addArc(oval,-180,action1Acr);
                     break;
             }
         }else if (homwBackNoti ==2){
             switch (position/10){
-                case 1: path.addArc(oval, -160, 40);
+                case 1: path.addArc(oval, -160, action23Arc);
                     break;
-                case 2: path.addArc(oval, -60, 40);
+                case 2: path.addArc(oval, -60, action23Arc);
                     break;
-                case 3: path.addArc(oval,-150,40);
+                case 3: path.addArc(oval,-150,action23Arc);
                     break;
             }
         }else if (homwBackNoti == 3) {
             switch (position / 10) {
                 case 1:
-                    path.addArc(oval, -200,40);
+                    path.addArc(oval, -200,action23Arc);
                     break;
                 case 2:
-                    path.addArc(oval,-20,40);
+                    path.addArc(oval,-20,action23Arc);
                     break;
                 case 3:
-                    path.addArc(oval,-110,40);
+                    path.addArc(oval,-110,action23Arc);
             }
         }
         canvas.drawPath(path, backgroundPaint);

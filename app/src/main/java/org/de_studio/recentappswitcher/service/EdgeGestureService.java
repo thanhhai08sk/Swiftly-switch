@@ -368,7 +368,7 @@ public class EdgeGestureService extends Service {
                         action4View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,4);
                         action4View.setX(xForHomeBackNotiView);
                         action4View.setY(yForHomeBackNotiView);
-                        action4View.setVisibility(View.INVISIBLE);
+//                        action4View.setVisibility(View.INVISIBLE);
                         itemView.addView(action4View);
                     }
 
@@ -376,7 +376,7 @@ public class EdgeGestureService extends Service {
                         action1View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,1);
                         action1View.setX(xForHomeBackNotiView);
                         action1View.setY(yForHomeBackNotiView);
-                        action1View.setVisibility(View.INVISIBLE);
+//                        action1View.setVisibility(View.INVISIBLE);
                         itemView.addView(action1View);
                     }
 
@@ -385,7 +385,7 @@ public class EdgeGestureService extends Service {
                         action2View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,2);
                         action2View.setX(xForHomeBackNotiView);
                         action2View.setY(yForHomeBackNotiView);
-                        action2View.setVisibility(View.INVISIBLE);
+//                        action2View.setVisibility(View.INVISIBLE);
                         itemView.addView(action2View);
                     }
 
@@ -395,7 +395,7 @@ public class EdgeGestureService extends Service {
                         action3View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,3);
                         action3View.setX(xForHomeBackNotiView);
                         action3View.setY(yForHomeBackNotiView);
-                        action3View.setVisibility(View.INVISIBLE);
+//                        action3View.setVisibility(View.INVISIBLE);
                         itemView.addView(action3View);
                     }
 
@@ -751,78 +751,78 @@ public class EdgeGestureService extends Service {
                         }
                         hasOneActive = false;
                     }
-                    switch (moveToHomeBackNoti) {
-                        case 0:
-                            if (action1View != null) {
-                                action1View.setVisibility(View.INVISIBLE);
-                            }
-                            if (action2View != null) {
-                                action2View.setVisibility(View.INVISIBLE);
-                            }
-                            if (action3View != null) {
-                                action3View.setVisibility(View.INVISIBLE);
-                            }
-                            if (action4View != null) {
-                                action4View.setVisibility(View.INVISIBLE);
-                            }
-                            break;
-                        case 1:
-                            if (action1View != null) {
-                                action1View.setVisibility(View.VISIBLE);
-                            }
-                            if (action2View != null) {
-                                action2View.setVisibility(View.INVISIBLE);
-                            }
-                            if (action3View != null) {
-                                action3View.setVisibility(View.INVISIBLE);
-                            }
-                            if (action4View != null) {
-                                action4View.setVisibility(View.INVISIBLE);
-                            }
-                            break;
-                        case 2:
-                            if (action1View != null) {
-                                action1View.setVisibility(View.INVISIBLE);
-                            }
-                            if (action2View != null) {
-                                action2View.setVisibility(View.VISIBLE);
-                            }
-                            if (action3View != null) {
-                                action3View.setVisibility(View.INVISIBLE);
-                            }
-                            if (action4View != null) {
-                                action4View.setVisibility(View.INVISIBLE);
-                            }
-                            break;
-                        case 3:
-                            if (action1View != null) {
-                                action1View.setVisibility(View.INVISIBLE);
-                            }
-                            if (action2View != null) {
-                                action2View.setVisibility(View.INVISIBLE);
-                            }
-                            if (action3View != null) {
-                                action3View.setVisibility(View.VISIBLE);
-                            }
-                            if (action4View != null) {
-                                action4View.setVisibility(View.INVISIBLE);
-                            }
-                            break;
-                        case 4:
-                            if (action1View != null) {
-                                action1View.setVisibility(View.INVISIBLE);
-                            }
-                            if (action2View != null) {
-                                action2View.setVisibility(View.INVISIBLE);
-                            }
-                            if (action3View != null) {
-                                action3View.setVisibility(View.INVISIBLE);
-                            }
-                            if (action4View != null) {
-                                action4View.setVisibility(View.VISIBLE);
-                            }
-                            break;
-                    }
+//                    switch (moveToHomeBackNoti) {
+//                        case 0:
+//                            if (action1View != null) {
+//                                action1View.setVisibility(View.INVISIBLE);
+//                            }
+//                            if (action2View != null) {
+//                                action2View.setVisibility(View.INVISIBLE);
+//                            }
+//                            if (action3View != null) {
+//                                action3View.setVisibility(View.INVISIBLE);
+//                            }
+//                            if (action4View != null) {
+//                                action4View.setVisibility(View.INVISIBLE);
+//                            }
+//                            break;
+//                        case 1:
+//                            if (action1View != null) {
+//                                action1View.setVisibility(View.VISIBLE);
+//                            }
+//                            if (action2View != null) {
+//                                action2View.setVisibility(View.INVISIBLE);
+//                            }
+//                            if (action3View != null) {
+//                                action3View.setVisibility(View.INVISIBLE);
+//                            }
+//                            if (action4View != null) {
+//                                action4View.setVisibility(View.INVISIBLE);
+//                            }
+//                            break;
+//                        case 2:
+//                            if (action1View != null) {
+//                                action1View.setVisibility(View.INVISIBLE);
+//                            }
+//                            if (action2View != null) {
+//                                action2View.setVisibility(View.VISIBLE);
+//                            }
+//                            if (action3View != null) {
+//                                action3View.setVisibility(View.INVISIBLE);
+//                            }
+//                            if (action4View != null) {
+//                                action4View.setVisibility(View.INVISIBLE);
+//                            }
+//                            break;
+//                        case 3:
+//                            if (action1View != null) {
+//                                action1View.setVisibility(View.INVISIBLE);
+//                            }
+//                            if (action2View != null) {
+//                                action2View.setVisibility(View.INVISIBLE);
+//                            }
+//                            if (action3View != null) {
+//                                action3View.setVisibility(View.VISIBLE);
+//                            }
+//                            if (action4View != null) {
+//                                action4View.setVisibility(View.INVISIBLE);
+//                            }
+//                            break;
+//                        case 4:
+//                            if (action1View != null) {
+//                                action1View.setVisibility(View.INVISIBLE);
+//                            }
+//                            if (action2View != null) {
+//                                action2View.setVisibility(View.INVISIBLE);
+//                            }
+//                            if (action3View != null) {
+//                                action3View.setVisibility(View.INVISIBLE);
+//                            }
+//                            if (action4View != null) {
+//                                action4View.setVisibility(View.VISIBLE);
+//                            }
+//                            break;
+//                    }
                     break;
 
                 case MotionEvent.ACTION_OUTSIDE:

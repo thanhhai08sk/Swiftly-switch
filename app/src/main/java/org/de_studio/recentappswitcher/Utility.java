@@ -1,6 +1,9 @@
 package org.de_studio.recentappswitcher;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
@@ -17,6 +20,7 @@ import android.graphics.drawable.Drawable;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.support.v7.widget.AppCompatImageView;
@@ -675,7 +679,25 @@ public  class Utility {
                 toggleBluetooth(context);
                 break;
             case MainActivity.ACTION_ROTATE:
-                setAutorotation(context);
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    Utility.setAutorotation(context);
+                } else {
+                    if (Settings.System.canWrite(context)) {
+                        Utility.setAutorotation(context);
+                    } else {
+                        Intent notiIntent = new Intent();
+                        notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                        PendingIntent notiPending = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+                        builder.setContentTitle(context.getString(R.string.ask_for_write_setting_notification_title)).setContentText(context.getString(R.string.ask_for_write_setting_notification_text)).setSmallIcon(R.drawable.ic_settings_white_36px)
+                                .setContentIntent(notiPending)
+                                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                .setDefaults(NotificationCompat.DEFAULT_SOUND);
+                        Notification notification = builder.build();
+                        NotificationManager notificationManager = (NotificationManager)context.getSystemService(context.NOTIFICATION_SERVICE);
+                        notificationManager.notify(22, notification);
+                    }
+                }
                 break;
             case MainActivity.ACTION_NONE:
                 //nothing
