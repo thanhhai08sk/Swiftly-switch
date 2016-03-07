@@ -100,7 +100,7 @@ public class EdgeGestureService extends Service {
     private int[] x, y;
     private int numOfIcon;
     private boolean hasOneActive = false;
-    private boolean hasVibrate = false, hasHomwBackNotiVisible = false;
+    private boolean hasHomwBackNotiVisible = false;
     private boolean isEdge1On, isEdge2On;
     public int edge1Position, edge2Position;
     private SharedPreferences defaultShared, sharedPreferences1, sharedPreferences2, sharedPreferences_favorite, sharedPreferences_exclude;
@@ -324,6 +324,9 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, false)) {
+                        vibrator.vibrate(15);
+                    }
                         itemView.removeView(action2View);
                         itemView.removeView(action1View);
                         itemView.removeView(action4View);
@@ -743,13 +746,6 @@ public class EdgeGestureService extends Service {
                         touched = false;
                     }
                     if (iconToSwitch != -1 | moveToHomeBackNoti > 0) {
-                        if (!hasVibrate) {
-                            if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY,false)){
-                                vibrator.vibrate(15);
-                            }
-
-                            hasVibrate = true;
-                        }
                         for (int i = 0; i < iconImageArrayList.size(); i++) {
                             hasOneActive = true;
                             if (i == iconToSwitch) {
@@ -758,7 +754,6 @@ public class EdgeGestureService extends Service {
                         }
                     }
                     if (iconToSwitch == -1 & moveToHomeBackNoti == 0) {
-                        hasVibrate = false;
                         if (hasOneActive) {
                             for (ImageView imageView : iconImageArrayList) {
                                 if (imageView.getColorFilter() != null) {
