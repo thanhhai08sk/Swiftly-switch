@@ -40,6 +40,7 @@ public class ExpandStatusBarView extends View {
     private Bitmap actionBitmap;
     private Context mContext;
     private SharedPreferences sharedPreferences;
+    private boolean isBackground = true;
 
     public ExpandStatusBarView(Context context, int radius,int ovalOffset, int positionOfEdge, int positionOfArc){
         super(context);
@@ -111,10 +112,18 @@ public class ExpandStatusBarView extends View {
                     path.addArc(oval,-110,action23Arc);
             }
         }
-        canvas.drawPath(path, backgroundPaint);
+        if (isBackground) {
+            canvas.drawPath(path, backgroundPaint);
+        }
+
         canvas.drawBitmap(actionBitmap, o1x, o1y, textPaint);
 //        canvas.drawTextOnPath(text.toUpperCase(), path, 0, ((float) (textSize / 2.5)) * mScale, textPaint);
 
+    }
+
+    public void drawBackground(boolean isBackground) {
+        this.isBackground = isBackground;
+        invalidate();
     }
     private void init(){
         mScale = getResources().getDisplayMetrics().density;
