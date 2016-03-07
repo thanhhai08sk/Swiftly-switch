@@ -101,6 +101,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textSize="18sp"
                 android:text="@string/main_edge1_section_text"
                 android:textAllCaps="false"
                 android:textColor="@color/white" />
@@ -136,6 +137,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textSize="18sp"
                 android:text="@string/main_edge2_section_text"
                 android:textAllCaps="false"
                 android:textColor="@color/white" />
@@ -177,6 +179,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textSize="18sp"
                     android:text="@string/main_favorite_app_title"
                     android:textColor="@color/white" />
                 <ImageButton
@@ -379,6 +382,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textSize="18sp"
                 android:text="@string/main_exclude_app_title"
                 android:textColor="@color/white" />
             <ImageButton
@@ -431,6 +435,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textSize="18sp"
                     android:text="@string/main_disable_haptic_feedback_text"
                     android:textColor="@color/white" />
                 <Switch
@@ -455,6 +460,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textSize="18sp"
                     android:text="@string/main_icon_pack_support"
                     android:textAllCaps="false"
                     android:textColor="@color/white" />
@@ -484,6 +490,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textSize="18sp"
                     android:text="@string/main_outer_ring_setting"
                     android:textAllCaps="false"
                     android:textColor="@color/white" />
@@ -511,6 +518,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textSize="18sp"
                     android:text="@string/main_disable_accessibility_title"
                     android:textColor="@color/white" />
                 <ImageButton
