@@ -49,18 +49,17 @@ public class MainActivity extends Activity {
     public static final String ACTION_ROTATE = "rotate";
     public static final String ACTION_POWER_MENU = "power_menu";
     public static final int REQUEST_CODE = 3243;
-    public static final long trialTime = 1000*60*60*24*7;
-    private SharedPreferences sharedPreferences1, sharedPreferences2, sharedPreferencesDefautl,sharedPreferences_favorite, sharedPreferences_exclude;
+    public static final long trialTime = 1000 * 60 * 60 * 24 * 7;
+    private SharedPreferences sharedPreferences1, sharedPreferences2, sharedPreferencesDefautl, sharedPreferences_favorite, sharedPreferences_exclude;
     private ArrayList<AppInfors> mAppInforsArrayList;
-    Button step1Button;
-    TextView step1Text;
-    TextView step2Text;
-    Button step2Button;
-    Button step1GoToSettingButton, step2GoToSettingButton;
-    TextView descriptionText;
-    float mScale;
+    private Button step1Button;
+    private TextView step1Text;
+    private Button step2Button;
+    private Button step1GoToSettingButton;
+    private TextView descriptionText;
     private boolean isTrial = false, isOutOfTrial = false;
     private long trialTimePass, beginTime;
+    private int step = 1;
 
 
     @Override
@@ -68,15 +67,14 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         if (getPackageName().equals(FREE_VERSION_PACKAGE_NAME)) isTrial = true;
         setContentView(R.layout.activity_main);
-        mScale = getResources().getDisplayMetrics().density;
         sharedPreferences1 = getSharedPreferences(EDGE_1_SHAREDPREFERENCE, 0);
         sharedPreferences2 = getSharedPreferences(EDGE_2_SHAREDPREFERENCE, 0);
         sharedPreferencesDefautl = getSharedPreferences(DEFAULT_SHAREDPREFERENCE, 0);
-        sharedPreferences_favorite = getSharedPreferences(FAVORITE_SHAREDPREFERENCE,0);
-        sharedPreferences_exclude = getSharedPreferences(EXCLUDE_SHAREDPREFERENCE,0);
-        beginTime = sharedPreferencesDefautl.getLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY,0);
-        if (beginTime ==0){
-            sharedPreferencesDefautl.edit().putLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY,System.currentTimeMillis()).commit();
+        sharedPreferences_favorite = getSharedPreferences(FAVORITE_SHAREDPREFERENCE, 0);
+        sharedPreferences_exclude = getSharedPreferences(EXCLUDE_SHAREDPREFERENCE, 0);
+        beginTime = sharedPreferencesDefautl.getLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY, 0);
+        if (beginTime == 0) {
+            sharedPreferencesDefautl.edit().putLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY, System.currentTimeMillis()).commit();
             beginTime = System.currentTimeMillis();
         }
         if (System.currentTimeMillis() - beginTime > trialTime) isOutOfTrial = true;
@@ -98,10 +96,10 @@ public class MainActivity extends Activity {
             }
         });
         final AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.main_app_bar_layout);
-        if (!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, false)){
-            int timeOpen = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.APP_OPEN_TIME_KEY,0);
-            sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.APP_OPEN_TIME_KEY, timeOpen +1).commit();
-            if (timeOpen >=8){
+        if (!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, false)) {
+            int timeOpen = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.APP_OPEN_TIME_KEY, 0);
+            sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.APP_OPEN_TIME_KEY, timeOpen + 1).commit();
+            if (timeOpen >= 8) {
 
                 final LinearLayout doYouLoveLinearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.do_you_love_this_app, null);
                 appBarLayout.addView(doYouLoveLinearLayout);
@@ -110,7 +108,7 @@ public class MainActivity extends Activity {
                 noButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY,true).commit();
+                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, true).commit();
                         appBarLayout.removeView(doYouLoveLinearLayout);
                     }
                 });
@@ -122,7 +120,7 @@ public class MainActivity extends Activity {
                                 .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY,true).commit();
+                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, true).commit();
                                         appBarLayout.removeView(doYouLoveLinearLayout);
                                         Uri uri = Uri.parse("mbarket://details?id=" + getPackageName());
                                         Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -139,7 +137,7 @@ public class MainActivity extends Activity {
                                 .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY,true).commit();
+                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, true).commit();
                                         appBarLayout.removeView(doYouLoveLinearLayout);
                                         // d
                                     }
@@ -155,10 +153,10 @@ public class MainActivity extends Activity {
         Switch edge1Switch = (Switch) findViewById(R.id.edge_1_switch);
         Switch edge2Switch = (Switch) findViewById(R.id.edge_2_switch);
         Switch disableHapticSwitch = (Switch) findViewById(R.id.main_disable_haptic_feedback_switch);
-        disableHapticSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY,false));
+        disableHapticSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, false));
         edge1Switch.setChecked(sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true));
         edge2Switch.setChecked(sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, false));
-        if (isTrial){
+        if (isTrial) {
             edge2Switch.setChecked(false);
         }
         edge1Switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -215,14 +213,12 @@ public class MainActivity extends Activity {
         disableHapticSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY,isChecked).commit();
+                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, isChecked).commit();
             }
         });
         step2Button = (Button) findViewById(R.id.step2_button);
         step1Text = (TextView) findViewById(R.id.step_1_text);
-        step2Text = (TextView) findViewById(R.id.step_2_text);
         step1GoToSettingButton = (Button) findViewById(R.id.step1_go_to_setting_button);
-        step2GoToSettingButton = (Button) findViewById(R.id.step2_go_to_setting_button);
         ImageButton favoriteInfoButton = (ImageButton) findViewById(R.id.main_favorite_info_image_button);
         ImageButton excludeInfoButton = (ImageButton) findViewById(R.id.main_exclude_info_image_button);
         final FrameLayout stepTextFrame = (FrameLayout) findViewById(R.id.step_text_frame_layout);
@@ -287,27 +283,22 @@ public class MainActivity extends Activity {
         step1Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                step1Text.setVisibility(View.VISIBLE);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (isStep1Ok()){
-                        step2GoToSettingButton.setVisibility(View.GONE);
-                    }else step1GoToSettingButton.setVisibility(View.VISIBLE);
-
+                step =1;
+                if (isStep1Ok()) {
+                    step1Text.setText(R.string.main_step1_text_success);
+                } else {
+                    step1Text.setText(R.string.main_step1_information);
                 }
-                step2Text.setVisibility(View.GONE);
-                step2GoToSettingButton.setVisibility(View.GONE);
                 stepTextFrame.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.text_board_1));
             }
         });
         step2Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                step1Text.setVisibility(View.GONE);
-                step1GoToSettingButton.setVisibility(View.GONE);
-                step2Text.setVisibility(View.VISIBLE);
+                step = 2;
                 if (Utility.isAccessibilityEnable(getApplicationContext())) {
-                    step2GoToSettingButton.setVisibility(View.GONE);
-                } else step2GoToSettingButton.setVisibility(View.VISIBLE);
+                    step1Text.setText(R.string.main_step2_text_success);
+                } else step1Text.setText(R.string.main_step2_information);
 
                 stepTextFrame.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.text_board_2_));
             }
@@ -316,22 +307,20 @@ public class MainActivity extends Activity {
         step1GoToSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                if (step == 1) {
+                    startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                } else {
+                    startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+                }
             }
         });
-        step2GoToSettingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-            }
-        });
-        if  (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1){
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
             startService(new Intent(this, EdgeGestureService.class));
 
-        }else {
+        } else {
             checkDrawOverlayPermission();
 
-            if (Settings.canDrawOverlays(this)){
+            if (Settings.canDrawOverlays(this)) {
                 startService(new Intent(this, EdgeGestureService.class));
 
             }
@@ -353,10 +342,9 @@ public class MainActivity extends Activity {
 //                FragmentManager fragmentManager = getSupportFragmentManager();
                 android.app.FragmentManager fragmentManager = getFragmentManager();
                 FavoriteOrExcludeDialogFragment newFragment = new FavoriteOrExcludeDialogFragment();
-                    newFragment.show(fragmentManager, "excludeDialogFragment");
+                newFragment.show(fragmentManager, "excludeDialogFragment");
             }
         });
-        step2GoToSettingButton.setVisibility(View.GONE);
 
 
         favoriteInfoButton.setOnClickListener(new View.OnClickListener() {
@@ -394,13 +382,10 @@ public class MainActivity extends Activity {
     }
 
 
-
-
     @Override
     protected void onResume() {
         super.onResume();
         setStepButtonAndDescription();
-        step2GoToSettingButton.setVisibility(View.GONE);
     }
 
     public void showDialog() {
@@ -414,66 +399,45 @@ public class MainActivity extends Activity {
         android.app.FragmentManager fragmentManager1 = getFragmentManager();
         android.app.FragmentTransaction transaction1 = fragmentManager1.beginTransaction();
         transaction1.setTransition(android.app.FragmentTransaction.TRANSIT_ENTER_MASK);
-        transaction1.add(android.R.id.content,newFragment).addToBackStack(null).commit();
+        transaction1.add(android.R.id.content, newFragment).addToBackStack(null).commit();
     }
 
 
-
-    public void setStepButtonAndDescription(){
-        boolean isStep1Ok;
-        boolean isStep2Ok = Utility.isAccessibilityEnable(this);
-        Log.e(LOG_TAG, "isStep2OK = " + isStep2Ok);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            isStep1Ok = true;
-            step1Text.setText(R.string.main_step1_text_for_kitkat_and_below);
-            step1Text.setPadding(0, 0, 0, 0);
-            step1GoToSettingButton.setVisibility(View.GONE);
-
-        } else {
-            AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-            int mode = appOps.checkOpNoThrow("android:get_usage_stats",
-                    android.os.Process.myUid(), getPackageName());
-            isStep1Ok = mode == AppOpsManager.MODE_ALLOWED;
-        }
-        if (isStep1Ok) {
+    public void setStepButtonAndDescription() {
+        boolean isStep1ok = isStep1Ok();
+        if (isStep1ok) {
             step1Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_green));
-            step1GoToSettingButton.setVisibility(View.GONE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                step1Text.setText(R.string.main_step1_text_success);
-            }
+            step1Text.setText(R.string.main_step1_text_success);
 
         } else {
             step1Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_red));
             step1Text.setText(R.string.main_step1_information);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                step1GoToSettingButton.setVisibility(View.VISIBLE);
-            }
         }
+        boolean isStep2Ok = Utility.isAccessibilityEnable(this);
+        Log.e(LOG_TAG, "isStep2OK = " + isStep2Ok);
 
         if (isStep2Ok) {
             step2Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_green));
-            step2Text.setText(R.string.main_step2_text_success);
-            step2GoToSettingButton.setVisibility(View.GONE);
 
         } else {
             step2Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_red));
-            step2Text.setText(R.string.main_step2_information);
-            step2GoToSettingButton.setVisibility(View.VISIBLE);
         }
 
-        if (isStep1Ok & isStep2Ok){
+        if (isStep1ok & isStep2Ok) {
             descriptionText.setText("");
             descriptionText.setVisibility(View.GONE);
         }
     }
 
 
+    private boolean isStep1Ok() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+            int mode = appOps.checkOpNoThrow("android:get_usage_stats",
+                    android.os.Process.myUid(), getPackageName());
+            return mode == AppOpsManager.MODE_ALLOWED;
+        } else return true;
 
-    private boolean isStep1Ok(){
-        AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-        int mode = appOps.checkOpNoThrow("android:get_usage_stats",
-                android.os.Process.myUid(), getPackageName());
-        return  mode == AppOpsManager.MODE_ALLOWED;
 
     }
 
@@ -486,7 +450,7 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE) {
             if (Settings.canDrawOverlays(this)) {
                 // continue here - permission was granted
