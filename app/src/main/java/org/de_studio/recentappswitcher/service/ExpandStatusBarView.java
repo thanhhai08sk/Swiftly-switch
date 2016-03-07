@@ -36,7 +36,7 @@ public class ExpandStatusBarView extends View {
     private int homwBackNoti = 4;
     private int ovalOffset =0;
     private float mScale,o1x,o1y   ;
-    private int textSize = 16, strokeWidth = 45; // in dp
+    private int textSize = 16, strokeWidth = 35; // in dp
     private Bitmap actionBitmap;
     private Context mContext;
     private SharedPreferences sharedPreferences;
