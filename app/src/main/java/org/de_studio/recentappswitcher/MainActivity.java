@@ -265,9 +265,39 @@ public class MainActivity extends Activity {
         iconPackSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                android.app.FragmentManager fragmentManager = getFragmentManager();
-                IconPackSettingDialogFragment newFragment = new IconPackSettingDialogFragment();
-                newFragment.show(fragmentManager, "iconPackDialogFragment");
+                if (isTrial) {
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
+                    builder.setMessage(R.string.main_icon_pack_trial_dialog_message)
+                            .setPositiveButton(R.string.main_edge_switch_2_trial_buy_pro_button, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Uri uri = Uri.parse("mbarket://details?id=" + PRO_VERSION_PACKAGE_NAME);
+                                    Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+                                    gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                                            Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                                    try {
+                                        startActivity(gotoMarket);
+                                    } catch (ActivityNotFoundException e) {
+                                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                                Uri.parse("http://play.google.com/store/apps/details?id=" + PRO_VERSION_PACKAGE_NAME)));
+                                    }
+                                }
+                            })
+                            .setNegativeButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            });
+                    builder.show();
+
+
+                } else {
+                    android.app.FragmentManager fragmentManager = getFragmentManager();
+                    IconPackSettingDialogFragment newFragment = new IconPackSettingDialogFragment();
+                    newFragment.show(fragmentManager, "iconPackDialogFragment");
+                }
+
             }
         });
         outerRingSettingButton.setOnClickListener(new View.OnClickListener() {
