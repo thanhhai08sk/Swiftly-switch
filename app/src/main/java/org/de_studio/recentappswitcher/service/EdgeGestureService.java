@@ -741,7 +741,7 @@ public class EdgeGestureService extends Service {
 
 
                 case MotionEvent.ACTION_MOVE:
-                    if (!isClockShown & !switched) {
+                    if (!isClockShown & !switched & !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY,false)) {
                         Log.e(LOG_TAG, "Show clock");
                         clockView = Utility.disPlayClock(getApplicationContext(), windowManager);
                         isClockShown = true;

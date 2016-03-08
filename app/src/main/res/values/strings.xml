@@ -113,4 +113,5 @@
     <string name="main_consider_disable_accessibility_dialog_title">Consider disable Accessibility service</string>
     <string name="main_usage_access_can_not_found">Can not found this setting on your device. Please try grant it manually.</string>
     <string name="batterylife">Battery life:</string>
+    <string name="main_disable_clock_text">Disable clock</string>
 </resources>

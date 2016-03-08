@@ -39,6 +39,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String TRIAL_TIME_PASS_KEY = "trial_time_pass";
     public static final String BEGIN_DAY_KEY = "begin_trial_time";
     public static final String DISABLE_HAPTIC_FEEDBACK_KEY = "disable_haptic";
+    public static final String DISABLE_CLOCK_KEY = "disable_clock";
     public static final String APP_OPEN_TIME_KEY = "app_open_time";
     public static final String HAS_REACT_FOR_VOTE_KEY = "has_react_for_vote";
     public static final String ICON_DISTANCE_KEY = "icon_distance";

@@ -154,7 +154,9 @@ public class MainActivity extends Activity {
         Switch edge1Switch = (Switch) findViewById(R.id.edge_1_switch);
         Switch edge2Switch = (Switch) findViewById(R.id.edge_2_switch);
         Switch disableHapticSwitch = (Switch) findViewById(R.id.main_disable_haptic_feedback_switch);
+        Switch disableClockSwitch = (Switch) findViewById(R.id.main_disable_clock_switch);
         disableHapticSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, false));
+        disableClockSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY,false));
         edge1Switch.setChecked(sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true));
         edge2Switch.setChecked(sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, false));
         if (isTrial) {
@@ -215,6 +217,12 @@ public class MainActivity extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, isChecked).commit();
+            }
+        });
+        disableClockSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY,isChecked).commit();
             }
         });
         step2Button = (Button) findViewById(R.id.step2_button);
