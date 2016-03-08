@@ -42,8 +42,8 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         AppCompatSpinner gridRowSpinner = (AppCompatSpinner) findViewById(R.id.set_favorite_shortcut_grid_row_spinner);
         AppCompatSpinner gridColumnSpinner = (AppCompatSpinner) findViewById(R.id.set_favorite_shortcut_grid_column_spinner);
         if (isTrial) {
-            gridColumnSpinner.setClickable(false);
-            gridRowSpinner.setClickable(false);
+            gridColumnSpinner.setEnabled(false);
+            gridRowSpinner.setEnabled(false);
         }
         final TextView gridGapValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_gap_value_text_view);
         AppCompatSeekBar gridGapSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_gap_seek_bar);
