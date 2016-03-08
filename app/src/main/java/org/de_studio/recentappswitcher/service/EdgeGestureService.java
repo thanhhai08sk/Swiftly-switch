@@ -1020,6 +1020,10 @@ public class EdgeGestureService extends Service {
                     windowManager.removeView(itemView);
                 }
                 switched = true;
+                if (clockView.isAttachedToWindow()) {
+                    windowManager.removeView(clockView);
+                    isClockShown = false;
+                }
             }
         }
     }
