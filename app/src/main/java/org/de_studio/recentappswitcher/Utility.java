@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -25,11 +26,14 @@ import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
@@ -38,6 +42,8 @@ import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -707,6 +713,30 @@ public  class Utility {
                 break;
         }
     }
+
+    public static View disPlayClock(Context context, WindowManager windowManager) {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
+        LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = layoutInflater.inflate(R.layout.clock, null);
+        TextView hourTextView = (TextView) view.findViewById(R.id.clock_time_in_hour);
+        TextView dateTextView = (TextView) view.findViewById(R.id.clock_time_in_date);
+        TextView batteryLifeTextView = (TextView) view.findViewById(R.id.clock_battery_life);
+        hourTextView.setText(hourFormat.format(c.getTime()));
+        dateTextView.setText(dateFormat.format(c.getTime()));
+        WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                PixelFormat.TRANSLUCENT);
+        paramsEdge1.gravity = Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL;
+        windowManager.addView(view,paramsEdge1);
+        return view;
+
+    }
+
 
 
 }

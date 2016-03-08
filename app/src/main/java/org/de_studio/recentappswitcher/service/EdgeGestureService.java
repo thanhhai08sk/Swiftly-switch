@@ -114,6 +114,8 @@ public class EdgeGestureService extends Service {
     private GridView shortcutGridView;
     private FavoriteShortcutAdapter shortcutAdapter;
     private IconPackManager.IconPack iconPack;
+    private boolean isClockShown =false;
+    private View clockView;
 
     @Nullable
     @Override
@@ -333,6 +335,12 @@ public class EdgeGestureService extends Service {
                 case MotionEvent.ACTION_DOWN:
                     if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, false)) {
                         vibrator.vibrate(15);
+                    }
+                    try {
+                        windowManager.removeView(clockView);
+                        isClockShown = false;
+                    } catch (IllegalArgumentException e) {
+                        Log.e(LOG_TAG, "clockView is not attacked to the windowManager");
                     }
                         itemView.removeView(action2View);
                         itemView.removeView(action1View);
@@ -578,6 +586,12 @@ public class EdgeGestureService extends Service {
                     } catch (IllegalArgumentException e) {
                         Log.e(LOG_TAG, "shortcutView is not attacked to the windowManager");
                     }
+                    try {
+                        windowManager.removeView(clockView);
+                        isClockShown = false;
+                    } catch (IllegalArgumentException e) {
+                        Log.e(LOG_TAG, "clockView is not attacked to the windowManager");
+                    }
                     if (action1View != null) {
                         itemView.removeView(action1View);
                     }
@@ -727,6 +741,11 @@ public class EdgeGestureService extends Service {
 
 
                 case MotionEvent.ACTION_MOVE:
+                    if (!isClockShown) {
+                        Log.e(LOG_TAG, "Show clock");
+                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager);
+                        isClockShown = true;
+                    }
                     if (switched) {
                         break;
                     }
