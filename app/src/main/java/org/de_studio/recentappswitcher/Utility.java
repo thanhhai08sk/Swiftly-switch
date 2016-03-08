@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -19,6 +20,7 @@ import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.wifi.WifiManager;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
@@ -723,6 +725,8 @@ public  class Utility {
         TextView hourTextView = (TextView) view.findViewById(R.id.clock_time_in_hour);
         TextView dateTextView = (TextView) view.findViewById(R.id.clock_time_in_date);
         TextView batteryLifeTextView = (TextView) view.findViewById(R.id.clock_battery_life);
+        String batteryString = context.getString(R.string.batterylife)+ " "+ getBatteryLevel(context) + "%";
+        batteryLifeTextView.setText(batteryString);
         hourTextView.setText(hourFormat.format(c.getTime()));
         dateTextView.setText(dateFormat.format(c.getTime()));
         WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
@@ -731,10 +735,27 @@ public  class Utility {
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 PixelFormat.TRANSLUCENT);
-        paramsEdge1.gravity = Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL;
+        paramsEdge1.gravity = Gravity.TOP|Gravity.CENTER_HORIZONTAL;
         windowManager.addView(view,paramsEdge1);
         return view;
 
+    }
+    public static int getBatteryLevel(Context context) {
+        Intent batteryIntent =context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        int level,scale;
+        try {
+            level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+            scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+        } catch (NullPointerException e) {
+            Log.e(LOG_TAG, "Null when get battery life");
+            return 50;
+        }
+        // Error checking that probably isn't needed but I added just in case.
+        if(level == -1 || scale == -1) {
+            return 50;
+        }
+
+        return((int) (((float)level / (float)scale) * 100.0f));
     }
 
 

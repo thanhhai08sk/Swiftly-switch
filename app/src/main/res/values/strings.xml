@@ -112,4 +112,5 @@
     apps that use accessibility. If the lag is too extreme please disable the Swiftly switch accessibility service, all feature still available except the navigation (home, back, power menu).</string>
     <string name="main_consider_disable_accessibility_dialog_title">Consider disable Accessibility service</string>
     <string name="main_usage_access_can_not_found">Can not found this setting on your device. Please try grant it manually.</string>
+    <string name="batterylife">Battery life:</string>
 </resources>

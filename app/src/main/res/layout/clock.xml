@@ -3,6 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
+    android:paddingTop="100dp"
     android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
@@ -16,7 +17,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16dp"
+        android:textSize="18dp"
         android:textColor="@color/white"
         android:singleLine="true"
         android:id="@+id/clock_time_in_date"
@@ -27,6 +28,7 @@
         android:layout_height="wrap_content"
         android:textSize="16dp"
         android:singleLine="true"
+        android:fontFamily="sans-serif-light"
         android:textColor="@color/white"
         android:text="55% Battery life"
         android:id="@+id/clock_battery_life"
