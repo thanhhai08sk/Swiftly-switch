@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
@@ -341,7 +342,13 @@ public class MainActivity extends Activity {
 
                     if (step == 1) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                            try {
+                                startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                            } catch (ActivityNotFoundException e) {
+                                Log.e(LOG_TAG, "Can not found usage access setting");
+                                Toast.makeText(MainActivity.this,R.string.main_usage_access_can_not_found,Toast.LENGTH_LONG).show();
+                            }
+
                         }
                     } else {
                         startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
