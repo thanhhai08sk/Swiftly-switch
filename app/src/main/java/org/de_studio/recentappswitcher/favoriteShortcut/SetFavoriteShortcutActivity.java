@@ -23,10 +23,12 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
     private FavoriteShortcutAdapter mAdapter;
     private static final String LOG_TAG = SetFavoriteShortcutActivity.class.getSimpleName();
     private float mScale;
+    private boolean isTrial = false;
     private GridView gridView;
     private SharedPreferences defaultSharedPreference;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME)) isTrial = true;
         setContentView(R.layout.activity_set_favorite_shortcut);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -39,6 +41,10 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         gridView = (GridView) findViewById(R.id.favorite_shortcut_grid_view);
         AppCompatSpinner gridRowSpinner = (AppCompatSpinner) findViewById(R.id.set_favorite_shortcut_grid_row_spinner);
         AppCompatSpinner gridColumnSpinner = (AppCompatSpinner) findViewById(R.id.set_favorite_shortcut_grid_column_spinner);
+        if (isTrial) {
+            gridColumnSpinner.setClickable(false);
+            gridRowSpinner.setClickable(false);
+        }
         final TextView gridGapValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_gap_value_text_view);
         AppCompatSeekBar gridGapSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_gap_seek_bar);
         final TextView gridDistanceValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_distance_value_text_view);

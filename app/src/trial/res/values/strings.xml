@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Swiftly switch free</string>
+    <string name="set_favorite_shortcut_grid_size_text_view">Grid size (Pro only):</string>
 
 </resources>

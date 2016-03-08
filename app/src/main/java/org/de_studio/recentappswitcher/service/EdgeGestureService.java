@@ -202,6 +202,10 @@ public class EdgeGestureService extends Service {
                 windowManager.removeView(edge1View);
             }
             windowManager.addView(edge1View, paramsEdge1);
+        } else {
+            if (edge1View.isAttachedToWindow()) {
+                windowManager.removeView(edge1View);
+            }
         }
         edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edge2Image = (MyImageView) edge2View.findViewById(R.id.edge_image);
@@ -249,7 +253,10 @@ public class EdgeGestureService extends Service {
                 windowManager.removeView(edge2View);
             }
             windowManager.addView(edge2View, paramsEdge2);
-
+        } else {
+            if (edge2View.isAttachedToWindow()) {
+                windowManager.removeView(edge2View);
+            }
         }
 
         item2View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
