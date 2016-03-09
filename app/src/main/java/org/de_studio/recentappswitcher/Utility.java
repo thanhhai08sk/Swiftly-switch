@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
+import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 import java.lang.reflect.InvocationTargetException;
@@ -97,12 +98,12 @@ public  class Utility {
         return -1;
     }
 
-    public static int findShortcutToSwitch(int x_cord, int y_cord, int x_grid, int y_grid, int radOfIcon, float mScale,int gird_row, int grid_column, int grid_gap) {
+    public static int findShortcutToSwitch(int x_cord, int y_cord, int x_grid, int y_grid, int sizeOfIcon, float mScale,int gird_row, int grid_column, int grid_gap) {
         int item_x,item_y;
         for (int i = 0; i < grid_column; i++) {
             for (int j = 0; j < gird_row; j++) {
-                item_x = (int)(x_grid + radOfIcon*mScale +i*(radOfIcon*2 + grid_gap)*mScale);
-                item_y = (int) (y_grid + radOfIcon * mScale + j * (radOfIcon*2 + grid_gap) * mScale);
+                item_x = (int)(x_grid + (sizeOfIcon/2)*mScale +i*(sizeOfIcon + grid_gap)*mScale);
+                item_y = (int) (y_grid + (sizeOfIcon/2) * mScale + j * (sizeOfIcon + grid_gap) * mScale);
                 double distance = Math.sqrt(Math.pow((double)x_cord - (double)item_x,2) + Math.pow((double)y_cord - (double) item_y, 2));
                 if (distance <= 35 * mScale) {
                     return j * grid_column + i;
@@ -226,8 +227,8 @@ public  class Utility {
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
         int row = sharedPreferences.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         int column = sharedPreferences.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
-        float gridWide = ((float)(column*48 + (column -1)*gap)) * mScale;
-        float gridTall = ((float)(row*48 + (row -1)*gap)) * mScale;
+        float gridWide = ((float)(column* EdgeGestureService.GRID_ICON_SIZE + (column -1)*gap)) * mScale;
+        float gridTall = ((float)(row*EdgeGestureService.GRID_ICON_SIZE + (row -1)*gap)) * mScale;
         Point point = new Point();
         windowManager.getDefaultDisplay().getSize(point);
         int x = point.x;

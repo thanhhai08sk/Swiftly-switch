@@ -98,7 +98,8 @@ public class EdgeGestureService extends Service {
     private String[] packagename, favoritePackageName;
     private String launcherPackagename;
     private int[] x, y;
-    private int numOfIcon, gridIconSize = 58, gridRow, gridColumn, gridGap;
+    private int numOfIcon, gridRow, gridColumn, gridGap;
+    public static final int GRID_ICON_SIZE = 58;
     private boolean hasOneActive = false;
     private boolean hasHomwBackNotiVisible = false;
     private boolean isEdge1On, isEdge2On;
@@ -604,7 +605,7 @@ public class EdgeGestureService extends Service {
                     }
 
                     if (switched) {
-                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), icon_rad, mScale, gridRow, gridColumn, gridGap);
+                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), GRID_ICON_SIZE, mScale, gridRow, gridColumn, gridGap);
                         Log.e(LOG_TAG, "shortcutToSwitch = " + shortcutToSwitch + "\ngrid_x =" + shortcutGridView.getX() + "\ngrid_y = " + shortcutGridView.getY() +
                                 "\nx_cord = " + x_cord + "\ny_cord = " + y_cord);
                         Realm myRealm = Realm.getInstance(getApplicationContext());
@@ -742,7 +743,7 @@ public class EdgeGestureService extends Service {
                         isClockShown = true;
                     }
                     if (switched) {
-                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), icon_rad, mScale, gridRow, gridColumn, gridGap);
+                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), GRID_ICON_SIZE, mScale, gridRow, gridColumn, gridGap);
 
                         if (shortcutAdapter != null) {
                             shortcutAdapter.setBackground(shortcutToSwitch);
@@ -1002,8 +1003,8 @@ public class EdgeGestureService extends Service {
                 shortcutGridView.setVerticalSpacing((int) (gridGap * mScale));
                 shortcutGridView.setNumColumns(gridColumn);
                 int gridDistanceFromEdge = defaultShared.getInt(EdgeSettingDialogFragment.GRID_DISTANCE_FROM_EDGE_KEY, 60);
-                gridParams.height = (int) (mScale * (float) (gridIconSize * gridRow + gridGap * (gridRow - 1)));
-                gridParams.width = (int) (mScale * (float) (gridIconSize * gridColumn + gridGap * (gridColumn - 1)));
+                gridParams.height = (int) (mScale * (float) (GRID_ICON_SIZE * gridRow + gridGap * (gridRow - 1))+10);
+                gridParams.width = (int) (mScale * (float) (GRID_ICON_SIZE * gridColumn + gridGap * (gridColumn - 1))+10);
                 shortcutGridView.setLayoutParams(gridParams);
                 shortcutGridView.setAdapter(shortcutAdapter);
                 WindowManager.LayoutParams shortcutViewParams = new WindowManager.LayoutParams(
