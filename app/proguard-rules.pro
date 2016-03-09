@@ -15,3 +15,12 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontwarn io.realm.processor.RealmProcessor
+-dontwarn io.realm.processor.ClassMetaData
+-dontwarn io.realm.processor.DefaultModuleGenerator
+-dontwarn io.realm.processor.ModuleMetaData
+-dontwarn io.realm.processor.RealmProxyClassGenerator
+-dontwarn io.realm.processor.RealmProxyMediatorGenerator
+-dontwarn io.realm.processor.RealmVersionChecker
+-dontwarn io.realm.processor.Utils
+-dontwarn io.realm.processor.javawriter.JavaWriter

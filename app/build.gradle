@@ -8,11 +8,11 @@ android {
     productFlavors {
         trial{
             applicationId "org.de_studio.recentappswitcher.trial"
-            flavorDimension "version"
+            dimension "version"
         }
         pro{
             applicationId "org.de_studio.recentappswitcher.pro"
-            flavorDimension "version"
+            dimension "version"
         }
 
     }
@@ -21,8 +21,8 @@ android {
         applicationId "org.de_studio.recentappswitcher"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 16
-        versionName "2.0.3"
+        versionCode 17
+        versionName "2.0.4"
     }
     buildTypes {
         release {
