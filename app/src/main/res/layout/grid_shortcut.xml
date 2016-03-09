@@ -8,7 +8,7 @@
         android:layout_width="258dp"
         android:layout_height="258dp"
         android:id="@+id/edge_shortcut_grid_view"
-        android:columnWidth="48dp"
+        android:columnWidth="58dp"
         android:numColumns="4"
         android:verticalSpacing="22dp"
         android:horizontalSpacing="22dp"
