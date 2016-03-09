@@ -90,7 +90,7 @@ public class EdgeGestureService extends Service {
     public int icon_width = 48, icon_rad = 24;
     public int icon_distance = 110, distance_to_arc = 35, distance_to_arc_pxl;
     public float icon_distance_pxl, icon_24dp_in_pxls;
-    public int edge1Length, edge2Length;
+    public int edge1Length, edge2Length, edge1offset, edge2offset;
     public int edge1HeightPxl, edge2HeightPxl;
     public int edge1WidthPxl, edge2WidthPxl;
     public int edge1Sensivite, edge2Sensitive;
@@ -1081,6 +1081,8 @@ public class EdgeGestureService extends Service {
         sharedPreferences2 = getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
         edge1Length = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
         edge2Length = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_LENGTH_KEY, 150);
+        edge1offset = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_OFFSET_KEY, 0);
+        edge2offset = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_OFFSET_KEY, 0);
         edge1Sensivite = sharedPreferences1.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY, 12);
         edge2Sensitive = sharedPreferences2.getInt(EdgeSettingDialogFragment.EDGE_SENSIIVE_KEY, 12);
         isEdge1On = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true);

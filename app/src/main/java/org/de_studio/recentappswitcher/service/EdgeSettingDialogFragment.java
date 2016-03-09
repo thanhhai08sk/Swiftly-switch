@@ -297,6 +297,8 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                     positionSpinner.setSelection(5);
                     sharedPreferences.edit().putString(EDGE_POSITION_KEY, (String) positionSpinner.getItemAtPosition(5)).commit();
                 }
+                sharedPreferences.edit().putInt(EDGE_OFFSET_KEY, 0).commit();
+                offsetSeekBar.setProgress(150);
                 modeSpinner.setSelection(0);
                 sharedPreferences.edit().putBoolean(IS_ONLY_FAVORITE_KEY,false).commit();
                 sensitiveSeekBar.setProgress(7);
