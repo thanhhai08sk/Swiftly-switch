@@ -3,36 +3,40 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:paddingTop="30dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="30dp">
+
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30dp"
-        android:fontFamily="sans-serif-light"
         android:id="@+id/clock_time_in_hour"
-        android:textColor="@color/white"
-        android:singleLine="true"
-        />
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14dp"
         android:fontFamily="sans-serif-light"
-        android:textColor="@color/white"
         android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+
+    <TextView
         android:id="@+id/clock_time_in_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="14dp"
 
         />
+
     <TextView
+        android:id="@+id/clock_battery_life"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14dp"
-        android:singleLine="true"
         android:fontFamily="sans-serif-light"
-        android:textColor="@color/white"
+        android:singleLine="true"
         android:text="55% Battery life"
-        android:id="@+id/clock_battery_life"
+        android:textColor="@color/white"
+        android:textSize="14dp"
 
         />
 

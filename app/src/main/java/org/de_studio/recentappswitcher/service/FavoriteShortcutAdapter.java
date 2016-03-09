@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     private Context mContext;
     private SharedPreferences sharedPreferences;
     private IconPackManager.IconPack iconPack;
+    private int mBackgroundAt = -1;
 
     public FavoriteShortcutAdapter(Context context) {
         mContext = context;
@@ -54,11 +56,18 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         return 0;
     }
 
+    public void setBackground(int position) {
+        mBackgroundAt = position;
+        FavoriteShortcutAdapter.this.notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
         if (convertView == null) {
             imageView = new ImageView(mContext);
+            int padding =(int) mContext.getResources().getDimension(R.dimen.icon_padding);
+            imageView.setPadding(padding,padding,padding,padding);
             imageView.setLayoutParams(new GridView.LayoutParams((int) mContext.getResources().getDimension(R.dimen.icon_size), (int) mContext.getResources().getDimension(R.dimen.icon_size)));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         } else {
@@ -114,6 +123,9 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                 }
             }
 
+        }
+        if (position == mBackgroundAt) {
+            imageView.setBackground(ContextCompat.getDrawable(mContext,R.drawable.icon_background_square));
         }
 
         return imageView;

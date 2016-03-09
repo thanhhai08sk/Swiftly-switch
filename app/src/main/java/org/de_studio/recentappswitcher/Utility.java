@@ -726,6 +726,7 @@ public  class Utility {
         TextView dateTextView = (TextView) view.findViewById(R.id.clock_time_in_date);
         TextView batteryLifeTextView = (TextView) view.findViewById(R.id.clock_battery_life);
         String batteryString = context.getString(R.string.batterylife)+ " "+ getBatteryLevel(context) + "%";
+//        String batteryString =getBatteryLevel(context) + "%";
         batteryLifeTextView.setText(batteryString);
         hourTextView.setText(hourFormat.format(c.getTime()));
         dateTextView.setText(dateFormat.format(c.getTime()));

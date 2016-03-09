@@ -98,14 +98,14 @@ public class EdgeGestureService extends Service {
     private String[] packagename, favoritePackageName;
     private String launcherPackagename;
     private int[] x, y;
-    private int numOfIcon;
+    private int numOfIcon, gridIconSize = 58, gridRow, gridColumn, gridGap;
     private boolean hasOneActive = false;
     private boolean hasHomwBackNotiVisible = false;
     private boolean isEdge1On, isEdge2On;
     public int edge1Position, edge2Position;
     private SharedPreferences defaultShared, sharedPreferences1, sharedPreferences2, sharedPreferences_favorite, sharedPreferences_exclude;
     private AppCompatImageView[] iconImageList1, iconImageList2;
-    private ExpandStatusBarView action4View, action1View, action2View,action3View;
+    private ExpandStatusBarView action4View, action1View, action2View, action3View;
     private Vibrator vibrator;
     private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl, ovalOffSetInDp = 70;
     private long holdTime = 450, firstTouchTime;
@@ -114,7 +114,7 @@ public class EdgeGestureService extends Service {
     private GridView shortcutGridView;
     private FavoriteShortcutAdapter shortcutAdapter;
     private IconPackManager.IconPack iconPack;
-    private boolean isClockShown =false;
+    private boolean isClockShown = false;
     private View clockView;
 
     @Nullable
@@ -126,7 +126,7 @@ public class EdgeGestureService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME) ) isFreeVersion = true;
+        if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME)) isFreeVersion = true;
         Set<String> favoriteSet = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, new HashSet<String>());
         favoritePackageName = new String[favoriteSet.size()];
         favoriteSet.toArray(favoritePackageName);
@@ -142,10 +142,10 @@ public class EdgeGestureService extends Service {
         edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edge1Image = (MyImageView) edge1View.findViewById(R.id.edge_image);
         ViewGroup.LayoutParams edge1ImageLayoutParams = edge1Image.getLayoutParams();
-        if (Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()) >= 30){
+        if (Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()) >= 30) {
             edge1HeightPxl = (int) (edge1Sensivite * mScale);
             edge1WidthPxl = (int) (edge1Length * mScale);
-        }else {
+        } else {
             edge1HeightPxl = (int) (edge1Length * mScale);
             edge1WidthPxl = (int) (edge1Sensivite * mScale);
         }
@@ -212,7 +212,7 @@ public class EdgeGestureService extends Service {
         edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edge2Image = (MyImageView) edge2View.findViewById(R.id.edge_image);
         ViewGroup.LayoutParams edge2ImageLayoutParams = edge2Image.getLayoutParams();
-        if (Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext()) >= 30){
+        if (Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext()) >= 30) {
             edge2HeightPxl = (int) (edge2Sensitive * mScale);
             edge2WidthPxl = (int) (edge2Length * mScale);
         }
@@ -289,17 +289,17 @@ public class EdgeGestureService extends Service {
 
         boolean isOnlyFavorite1 = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
         boolean isOnlyFavorite2 = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
-        OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, iconImageList1, item1View, iconImageArrayList1,isOnlyFavorite1);
+        OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, iconImageList1, item1View, iconImageArrayList1, isOnlyFavorite1);
         edge1Image.setOnTouchListener(onTouchListener1);
 
-        OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position, iconImageList2, item2View, iconImageArrayList2,isOnlyFavorite2);
+        OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position, iconImageList2, item2View, iconImageArrayList2, isOnlyFavorite2);
         edge2Image.setOnTouchListener(onTouchListener2);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.drawable.ic_stat_ic_looks_white_48dp1)
                 .setContentText(getString(R.string.notification_text)).setContentTitle(getString(R.string.notification_title));
         Notification notificationCompat = builder.build();
-        startForeground(NOTIFICATION_ID,notificationCompat);
+        startForeground(NOTIFICATION_ID, notificationCompat);
 
 
         shortcutView = (FrameLayout) layoutInflater.inflate(R.layout.grid_shortcut, null);
@@ -326,7 +326,6 @@ public class EdgeGestureService extends Service {
         }
 
 
-
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             int x_cord = (int) event.getRawX();
@@ -342,30 +341,30 @@ public class EdgeGestureService extends Service {
                     } catch (IllegalArgumentException e) {
                         Log.e(LOG_TAG, "clockView is not attacked to the windowManager");
                     }
-                        itemView.removeView(action2View);
-                        itemView.removeView(action1View);
-                        itemView.removeView(action4View);
+                    itemView.removeView(action2View);
+                    itemView.removeView(action1View);
+                    itemView.removeView(action4View);
                     if (itemView.isAttachedToWindow()) {
                         windowManager.removeView(itemView);
                     }
                     if (shortcutView.isAttachedToWindow()) {
                         windowManager.removeView(shortcutView);
                     }
-                    if (isFreeVersion){
-                        isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY,System.currentTimeMillis())
+                    if (isFreeVersion) {
+                        isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY, System.currentTimeMillis())
                                 > MainActivity.trialTime;
-                    }else isOutOfTrial = false;
+                    } else isOutOfTrial = false;
 
                     Set<String> excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
 
-                    if (position < 30){
+                    if (position < 30) {
                         x_init_cord = x_cord;
-                    }else {
+                    } else {
                         x_init_cord = x_cord - getXOffset(x_cord);
                     }
-                    if (position >= 30){
+                    if (position >= 30) {
                         y_init_cord = y_cord;
-                    }else y_init_cord = y_cord - getYOffset(y_cord);
+                    } else y_init_cord = y_cord - getYOffset(y_cord);
 
                     switched = isOnlyFavorite;
                     if (isOnlyFavorite) {
@@ -384,7 +383,7 @@ public class EdgeGestureService extends Service {
                     int radiusForHomeBackNotiView = (int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl;
                     isStayPermanent = defaultShared.getBoolean(EdgeSettingDialogFragment.IS_ACTIONS_STAY_PERMANENT, false);
                     if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_4_KEY, MainActivity.ACTION_NOTI).equals(MainActivity.ACTION_NONE)) {
-                        action4View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,4);
+                        action4View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 4);
                         action4View.setX(xForHomeBackNotiView);
                         action4View.setY(yForHomeBackNotiView);
                         if (isStayPermanent) {
@@ -396,7 +395,7 @@ public class EdgeGestureService extends Service {
                     }
 
                     if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_1_KEY, MainActivity.ACTION_HOME).equals(MainActivity.ACTION_NONE)) {
-                        action1View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,1);
+                        action1View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 1);
                         action1View.setX(xForHomeBackNotiView);
                         action1View.setY(yForHomeBackNotiView);
                         if (isStayPermanent) {
@@ -409,7 +408,7 @@ public class EdgeGestureService extends Service {
 
 
                     if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_2_KEY, MainActivity.ACTION_BACK).equals(MainActivity.ACTION_NONE)) {
-                        action2View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,2);
+                        action2View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 2);
                         action2View.setX(xForHomeBackNotiView);
                         action2View.setY(yForHomeBackNotiView);
                         if (isStayPermanent) {
@@ -421,9 +420,8 @@ public class EdgeGestureService extends Service {
                     }
 
 
-
                     if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_NONE).equals(MainActivity.ACTION_NONE)) {
-                        action3View = new ExpandStatusBarView(getApplicationContext(),radiusForHomeBackNotiView,ovalOffSet,position,3);
+                        action3View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 3);
                         action3View.setX(xForHomeBackNotiView);
                         action3View.setY(yForHomeBackNotiView);
                         if (isStayPermanent) {
@@ -440,7 +438,7 @@ public class EdgeGestureService extends Service {
                             WindowManager.LayoutParams.MATCH_PARENT,
                             WindowManager.LayoutParams.TYPE_PHONE,
                             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE| WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
                                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                             PixelFormat.TRANSLUCENT);
                     itemViewParameter.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
@@ -501,13 +499,13 @@ public class EdgeGestureService extends Service {
                                 mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
                             }
                             Set<Long> setKey = mySortedMap.keySet();
-                            Log.e(LOG_TAG,"mySortedMap size = " + mySortedMap.size());
+                            Log.e(LOG_TAG, "mySortedMap size = " + mySortedMap.size());
                             for (Long key : setKey) {
                                 UsageStats usageStats = mySortedMap.get(key);
-                                if (usageStats == null){
-                                    Log.e(LOG_TAG," usageStats is null");
+                                if (usageStats == null) {
+                                    Log.e(LOG_TAG, " usageStats is null");
                                 }
-                                if (usageStats != null){
+                                if (usageStats != null) {
                                     String packa = usageStats.getPackageName();
                                     try {
                                         if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
@@ -515,9 +513,9 @@ public class EdgeGestureService extends Service {
                                         } else if (packa.contains("systemui") |
                                                 packa.contains("googlequicksearchbox") |
                                                 key == mySortedMap.firstKey() |
-                                                excludeSet.contains(packa)|
+                                                excludeSet.contains(packa) |
                                                 packa.contains("launcher") |
-                                                getPackageManager().getLaunchIntentForPackage(packa)== null) {
+                                                getPackageManager().getLaunchIntentForPackage(packa) == null) {
                                             // do nothing
                                         } else tempPackageName.add(packa);
                                     } catch (PackageManager.NameNotFoundException e) {
@@ -549,7 +547,7 @@ public class EdgeGestureService extends Service {
 
                     }
 
-                    if (packagename.length ==0) {
+                    if (packagename.length == 0) {
                         if (delayToSwitchTask == null) {
                             delayToSwitchTask = new DelayToSwitchTask();
                             delayToSwitchTask.switchShortcut();
@@ -568,8 +566,8 @@ public class EdgeGestureService extends Service {
                         try {
                             windowManager.addView(itemView, itemViewParameter);
 
-                        }catch (IllegalStateException e){
-                            Log.e(LOG_TAG," item_view has already been added to the window manager");
+                        } catch (IllegalStateException e) {
+                            Log.e(LOG_TAG, " item_view has already been added to the window manager");
                         }
                     }
 
@@ -578,8 +576,8 @@ public class EdgeGestureService extends Service {
                 case MotionEvent.ACTION_UP:
                     try {
                         windowManager.removeView(itemView);
-                    }catch (IllegalArgumentException e){
-                        Log.e(LOG_TAG,"itemView is not attacked to the windowManager");
+                    } catch (IllegalArgumentException e) {
+                        Log.e(LOG_TAG, "itemView is not attacked to the windowManager");
                     }
                     try {
                         windowManager.removeView(shortcutView);
@@ -606,17 +604,14 @@ public class EdgeGestureService extends Service {
                     }
 
                     if (switched) {
-                        int gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
-                        int gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
-                        int gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 22);
-                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), icon_rad, mScale, gridRow, gridColumn,gridGap);
+                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), icon_rad, mScale, gridRow, gridColumn, gridGap);
                         Log.e(LOG_TAG, "shortcutToSwitch = " + shortcutToSwitch + "\ngrid_x =" + shortcutGridView.getX() + "\ngrid_y = " + shortcutGridView.getY() +
                                 "\nx_cord = " + x_cord + "\ny_cord = " + y_cord);
                         Realm myRealm = Realm.getInstance(getApplicationContext());
                         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
                         if (shortcut != null) {
                             if (shortcut.getType() == Shortcut.TYPE_APP) {
-                                Intent extApp ;
+                                Intent extApp;
                                 extApp = getPackageManager().getLaunchIntentForPackage(shortcut.getPackageName());
                                 if (extApp != null) {
                                     ComponentName componentName = extApp.getComponent();
@@ -682,19 +677,19 @@ public class EdgeGestureService extends Service {
                         int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
                         if (packageToSwitch != -1) {
                             Intent extApp = null;
-                                if (packageToSwitch < packagename.length){
-                                    extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
-                                }
+                            if (packageToSwitch < packagename.length) {
+                                extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
+                            }
 
                             if (extApp != null) {
                                 ComponentName componentName = extApp.getComponent();
-                                Intent startApp = new Intent(Intent.ACTION_MAIN,null);
+                                Intent startApp = new Intent(Intent.ACTION_MAIN, null);
                                 startApp.addCategory(Intent.CATEGORY_LAUNCHER);
                                 startApp.setComponent(componentName);
-                                startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_NO_ANIMATION );
+                                startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(startApp);
                                 Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
-                            }else Log.e(LOG_TAG, "extApp = null " );
+                            } else Log.e(LOG_TAG, "extApp = null ");
 
                         }
                         packagename = null;
@@ -717,7 +712,7 @@ public class EdgeGestureService extends Service {
                         if (action.equals(MainActivity.ACTION_NOTI) & isFreeVersion & isOutOfTrial) {
                             Toast.makeText(getApplicationContext(), getString(R.string.edge_service_out_of_trial_text_when_homebacknoti), Toast.LENGTH_LONG).show();
                         } else {
-                            Utility.executeAction(getApplicationContext(),action,v,getClass().getName(),getPackageName());
+                            Utility.executeAction(getApplicationContext(), action, v, getClass().getName(), getPackageName());
                         }
 
 
@@ -739,14 +734,23 @@ public class EdgeGestureService extends Service {
                     break;
 
 
-
                 case MotionEvent.ACTION_MOVE:
-                    if (!isClockShown & !switched & !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY,false)) {
+
+                    if (!isClockShown & !switched & !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
                         Log.e(LOG_TAG, "Show clock");
                         clockView = Utility.disPlayClock(getApplicationContext(), windowManager);
                         isClockShown = true;
                     }
                     if (switched) {
+                        gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
+                        gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
+                        gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 22);
+
+
+                        if (shortcutAdapter != null) {
+                            shortcutAdapter.setBackground(6);
+                        }
+
                         break;
                     }
                     int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
@@ -756,7 +760,7 @@ public class EdgeGestureService extends Service {
                         if (delayToSwitchTask == null) {
                             delayToSwitchTask = new DelayToSwitchTask();
                             delayToSwitchTask.execute();
-                        }else if (delayToSwitchTask.isCancelled()) {
+                        } else if (delayToSwitchTask.isCancelled()) {
                             delayToSwitchTask = new DelayToSwitchTask();
                             delayToSwitchTask.execute();
                         }
@@ -958,8 +962,10 @@ public class EdgeGestureService extends Service {
             }
             return true;
         }
+
         private class DelayToSwitchTask extends AsyncTask<Void, Void, Void> {
             private boolean isSleepEnough = false;
+
             @Override
             protected Void doInBackground(Void... params) {
                 isSleepEnough = false;
@@ -967,7 +973,7 @@ public class EdgeGestureService extends Service {
                     Thread.sleep(holdTime);
                     isSleepEnough = true;
                 } catch (InterruptedException e) {
-                    Log.e(LOG_TAG,"interrupt sleeping");
+                    Log.e(LOG_TAG, "interrupt sleeping");
                 }
 
                 return null;
@@ -995,11 +1001,11 @@ public class EdgeGestureService extends Service {
                 int gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
                 int gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
                 int gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 22);
-                shortcutGridView.setVerticalSpacing((int)( gridGap*mScale));
+                shortcutGridView.setVerticalSpacing((int) (gridGap * mScale));
                 shortcutGridView.setNumColumns(gridColumn);
                 int gridDistanceFromEdge = defaultShared.getInt(EdgeSettingDialogFragment.GRID_DISTANCE_FROM_EDGE_KEY, 60);
-                gridParams.height = (int) (mScale * (float) (48 * gridRow + gridGap * (gridRow - 1)));
-                gridParams.width = (int) (mScale * (float) (48 * gridColumn + gridGap * (gridColumn - 1)));
+                gridParams.height = (int) (mScale * (float) (gridIconSize * gridRow + gridGap * (gridRow - 1)));
+                gridParams.width = (int) (mScale * (float) (gridIconSize * gridColumn + gridGap * (gridColumn - 1)));
                 shortcutGridView.setLayoutParams(gridParams);
                 shortcutGridView.setAdapter(shortcutAdapter);
                 WindowManager.LayoutParams shortcutViewParams = new WindowManager.LayoutParams(
@@ -1012,7 +1018,7 @@ public class EdgeGestureService extends Service {
                         PixelFormat.TRANSLUCENT);
                 shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
 
-                Utility.setFavoriteShortcutGridViewPosition(shortcutGridView, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared, gridDistanceFromEdge,gridGap);
+                Utility.setFavoriteShortcutGridViewPosition(shortcutGridView, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared, gridDistanceFromEdge, gridGap);
                 if (!shortcutView.isAttachedToWindow()) {
                     windowManager.addView(shortcutView, shortcutViewParams);
                 }
@@ -1083,12 +1089,12 @@ public class EdgeGestureService extends Service {
         spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
         edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
-        icon_distance = defaultShared.getInt(EdgeSettingDialogFragment.ICON_DISTANCE_KEY,110);
+        icon_distance = defaultShared.getInt(EdgeSettingDialogFragment.ICON_DISTANCE_KEY, 110);
         ovalOffSet = (int) (ovalOffSetInDp * mScale);
         ovalRadiusPlusPxl = (int) (ovalRadiusPlus * mScale);
-        Set<String> set = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, new HashSet<String>());
-        favoritePackageName = new String[set.size()];
-        set.toArray(favoritePackageName);
+        gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
+        gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
+        gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 22);
         Log.e(LOG_TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
                 "\nEdge1 position = " + edge1Position + "\nEdge2 positon = " + edge2Position);
     }
@@ -1106,7 +1112,6 @@ public class EdgeGestureService extends Service {
     }
 
 
-
     private int getYOffset(int y_init) {
         Point point = new Point();
         windowManager.getDefaultDisplay().getSize(point);
@@ -1119,31 +1124,29 @@ public class EdgeGestureService extends Service {
         } else return 0;
     }
 
-    private int getXOffset(int x_init){
+    private int getXOffset(int x_init) {
         Point point = new Point();
         windowManager.getDefaultDisplay().getSize(point);
         int distanceNeeded = (int) (mScale * (icon_distance + icon_rad));
         int distanceWeHave = point.x - x_init;
-        if (distanceWeHave < distanceNeeded){
+        if (distanceWeHave < distanceNeeded) {
             return distanceNeeded - distanceWeHave;
-        }else if (x_init < distanceNeeded){
+        } else if (x_init < distanceNeeded) {
             return x_init - distanceNeeded;
-        }else return 0;
+        } else return 0;
     }
 
-    public void showAddFavoriteDialog(){
+    public void showAddFavoriteDialog() {
         startActivity(new Intent(getApplicationContext(), SetFavoriteShortcutActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
 
-    public static class BootCompleteReceiver extends BroadcastReceiver{
+    public static class BootCompleteReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             context.startService(new Intent(context, EdgeGestureService.class));
         }
     }
-
-
 
 
 }

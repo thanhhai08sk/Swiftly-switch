@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 public class SetFavoriteShortcutActivity extends AppCompatActivity {
@@ -58,6 +59,8 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, position + 2).commit();
                 updateGridView();
+                getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
             }
 
             @Override
@@ -73,6 +76,8 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, position + 2).commit();
                 updateGridView();
+                getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
             }
 
             @Override
