@@ -742,202 +742,200 @@ public class EdgeGestureService extends Service {
                         isClockShown = true;
                     }
                     if (switched) {
-                        gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
-                        gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
-                        gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 22);
-
+                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), icon_rad, mScale, gridRow, gridColumn, gridGap);
 
                         if (shortcutAdapter != null) {
-                            shortcutAdapter.setBackground(6);
+                            shortcutAdapter.setBackground(shortcutToSwitch);
                         }
 
                         break;
-                    }
-                    int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
-                    int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
-                    if (iconToSwitch != -1) {
-
-                        if (delayToSwitchTask == null) {
-                            delayToSwitchTask = new DelayToSwitchTask();
-                            delayToSwitchTask.execute();
-                        } else if (delayToSwitchTask.isCancelled()) {
-                            delayToSwitchTask = new DelayToSwitchTask();
-                            delayToSwitchTask.execute();
-                        }
-                        if (!touched) {
-                            firstTouchTime = System.currentTimeMillis();
-                            touched = true;
-                        }
                     } else {
-                        if (delayToSwitchTask != null) {
-                            delayToSwitchTask.cancel(true);
-                            delayToSwitchTask = null;
+                        int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
+                        int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
+                        if (iconToSwitch != -1) {
+
+                            if (delayToSwitchTask == null) {
+                                delayToSwitchTask = new DelayToSwitchTask();
+                                delayToSwitchTask.execute();
+                            } else if (delayToSwitchTask.isCancelled()) {
+                                delayToSwitchTask = new DelayToSwitchTask();
+                                delayToSwitchTask.execute();
+                            }
+                            if (!touched) {
+                                firstTouchTime = System.currentTimeMillis();
+                                touched = true;
+                            }
+                        } else {
+                            if (delayToSwitchTask != null) {
+                                delayToSwitchTask.cancel(true);
+                                delayToSwitchTask = null;
+                            }
+                            touched = false;
                         }
-                        touched = false;
-                    }
-                    if (iconToSwitch != -1 | moveToHomeBackNoti > 0) {
-                        for (int i = 0; i < iconImageArrayList.size(); i++) {
-                            hasOneActive = true;
-                            if (i == iconToSwitch) {
-                                iconImageArrayList.get(i).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.icon_tint));
-                            } else iconImageArrayList.get(i).setColorFilter(null);
-                        }
-                    }
-                    if (iconToSwitch == -1 & moveToHomeBackNoti == 0) {
-                        if (hasOneActive) {
-                            for (ImageView imageView : iconImageArrayList) {
-                                if (imageView.getColorFilter() != null) {
-                                    imageView.setColorFilter(null);
-                                }
+                        if (iconToSwitch != -1 | moveToHomeBackNoti > 0) {
+                            for (int i = 0; i < iconImageArrayList.size(); i++) {
+                                hasOneActive = true;
+                                if (i == iconToSwitch) {
+                                    iconImageArrayList.get(i).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.icon_tint));
+                                } else iconImageArrayList.get(i).setColorFilter(null);
                             }
                         }
-                        hasOneActive = false;
-                    }
-                    if (!isStayPermanent) {
-                        switch (moveToHomeBackNoti) {
-                            case 0:
-                                if (action1View != null) {
-                                    action1View.setVisibility(View.INVISIBLE);
+                        if (iconToSwitch == -1 & moveToHomeBackNoti == 0) {
+                            if (hasOneActive) {
+                                for (ImageView imageView : iconImageArrayList) {
+                                    if (imageView.getColorFilter() != null) {
+                                        imageView.setColorFilter(null);
+                                    }
                                 }
-                                if (action2View != null) {
-                                    action2View.setVisibility(View.INVISIBLE);
-                                }
-                                if (action3View != null) {
-                                    action3View.setVisibility(View.INVISIBLE);
-                                }
-                                if (action4View != null) {
-                                    action4View.setVisibility(View.INVISIBLE);
-                                }
-                                break;
-                            case 1:
-                                if (action1View != null) {
-                                    action1View.setVisibility(View.VISIBLE);
-                                }
-                                if (action2View != null) {
-                                    action2View.setVisibility(View.INVISIBLE);
-                                }
-                                if (action3View != null) {
-                                    action3View.setVisibility(View.INVISIBLE);
-                                }
-                                if (action4View != null) {
-                                    action4View.setVisibility(View.INVISIBLE);
-                                }
-                                break;
-                            case 2:
-                                if (action1View != null) {
-                                    action1View.setVisibility(View.INVISIBLE);
-                                }
-                                if (action2View != null) {
-                                    action2View.setVisibility(View.VISIBLE);
-                                }
-                                if (action3View != null) {
-                                    action3View.setVisibility(View.INVISIBLE);
-                                }
-                                if (action4View != null) {
-                                    action4View.setVisibility(View.INVISIBLE);
-                                }
-                                break;
-                            case 3:
-                                if (action1View != null) {
-                                    action1View.setVisibility(View.INVISIBLE);
-                                }
-                                if (action2View != null) {
-                                    action2View.setVisibility(View.INVISIBLE);
-                                }
-                                if (action3View != null) {
-                                    action3View.setVisibility(View.VISIBLE);
-                                }
-                                if (action4View != null) {
-                                    action4View.setVisibility(View.INVISIBLE);
-                                }
-                                break;
-                            case 4:
-                                if (action1View != null) {
-                                    action1View.setVisibility(View.INVISIBLE);
-                                }
-                                if (action2View != null) {
-                                    action2View.setVisibility(View.INVISIBLE);
-                                }
-                                if (action3View != null) {
-                                    action3View.setVisibility(View.INVISIBLE);
-                                }
-                                if (action4View != null) {
-                                    action4View.setVisibility(View.VISIBLE);
-                                }
-                                break;
+                            }
+                            hasOneActive = false;
                         }
-                    } else {
-                        switch (moveToHomeBackNoti) {
-                            case 0:
-                                if (action1View != null) {
-                                    action1View.drawBackground(false);
-                                }
-                                if (action2View != null) {
-                                    action2View.drawBackground(false);
-                                }
-                                if (action3View != null) {
-                                    action3View.drawBackground(false);
-                                }
-                                if (action4View != null) {
-                                    action4View.drawBackground(false);
-                                }
-                                break;
-                            case 1:
-                                if (action1View != null) {
-                                    action1View.drawBackground(true);
-                                }
-                                if (action2View != null) {
-                                    action2View.drawBackground(false);
-                                }
-                                if (action3View != null) {
-                                    action3View.drawBackground(false);
-                                }
-                                if (action4View != null) {
-                                    action4View.drawBackground(false);
-                                }
-                                break;
-                            case 2:
-                                if (action1View != null) {
-                                    action1View.drawBackground(false);
-                                }
-                                if (action2View != null) {
-                                    action2View.drawBackground(true);
-                                }
-                                if (action3View != null) {
-                                    action3View.drawBackground(false);
-                                }
-                                if (action4View != null) {
-                                    action4View.drawBackground(false);
-                                }
-                                break;
-                            case 3:
-                                if (action1View != null) {
-                                    action1View.drawBackground(false);
-                                }
-                                if (action2View != null) {
-                                    action2View.drawBackground(false);
-                                }
-                                if (action3View != null) {
-                                    action3View.drawBackground(true);
-                                }
-                                if (action4View != null) {
-                                    action4View.drawBackground(false);
-                                }
-                                break;
-                            case 4:
-                                if (action1View != null) {
-                                    action1View.drawBackground(false);
-                                }
-                                if (action2View != null) {
-                                    action2View.drawBackground(false);
-                                }
-                                if (action3View != null) {
-                                    action3View.drawBackground(false);
-                                }
-                                if (action4View != null) {
-                                    action4View.drawBackground(true);
-                                }
-                                break;
+                        if (!isStayPermanent) {
+                            switch (moveToHomeBackNoti) {
+                                case 0:
+                                    if (action1View != null) {
+                                        action1View.setVisibility(View.INVISIBLE);
+                                    }
+                                    if (action2View != null) {
+                                        action2View.setVisibility(View.INVISIBLE);
+                                    }
+                                    if (action3View != null) {
+                                        action3View.setVisibility(View.INVISIBLE);
+                                    }
+                                    if (action4View != null) {
+                                        action4View.setVisibility(View.INVISIBLE);
+                                    }
+                                    break;
+                                case 1:
+                                    if (action1View != null) {
+                                        action1View.setVisibility(View.VISIBLE);
+                                    }
+                                    if (action2View != null) {
+                                        action2View.setVisibility(View.INVISIBLE);
+                                    }
+                                    if (action3View != null) {
+                                        action3View.setVisibility(View.INVISIBLE);
+                                    }
+                                    if (action4View != null) {
+                                        action4View.setVisibility(View.INVISIBLE);
+                                    }
+                                    break;
+                                case 2:
+                                    if (action1View != null) {
+                                        action1View.setVisibility(View.INVISIBLE);
+                                    }
+                                    if (action2View != null) {
+                                        action2View.setVisibility(View.VISIBLE);
+                                    }
+                                    if (action3View != null) {
+                                        action3View.setVisibility(View.INVISIBLE);
+                                    }
+                                    if (action4View != null) {
+                                        action4View.setVisibility(View.INVISIBLE);
+                                    }
+                                    break;
+                                case 3:
+                                    if (action1View != null) {
+                                        action1View.setVisibility(View.INVISIBLE);
+                                    }
+                                    if (action2View != null) {
+                                        action2View.setVisibility(View.INVISIBLE);
+                                    }
+                                    if (action3View != null) {
+                                        action3View.setVisibility(View.VISIBLE);
+                                    }
+                                    if (action4View != null) {
+                                        action4View.setVisibility(View.INVISIBLE);
+                                    }
+                                    break;
+                                case 4:
+                                    if (action1View != null) {
+                                        action1View.setVisibility(View.INVISIBLE);
+                                    }
+                                    if (action2View != null) {
+                                        action2View.setVisibility(View.INVISIBLE);
+                                    }
+                                    if (action3View != null) {
+                                        action3View.setVisibility(View.INVISIBLE);
+                                    }
+                                    if (action4View != null) {
+                                        action4View.setVisibility(View.VISIBLE);
+                                    }
+                                    break;
+                            }
+                        } else {
+                            switch (moveToHomeBackNoti) {
+                                case 0:
+                                    if (action1View != null) {
+                                        action1View.drawBackground(false);
+                                    }
+                                    if (action2View != null) {
+                                        action2View.drawBackground(false);
+                                    }
+                                    if (action3View != null) {
+                                        action3View.drawBackground(false);
+                                    }
+                                    if (action4View != null) {
+                                        action4View.drawBackground(false);
+                                    }
+                                    break;
+                                case 1:
+                                    if (action1View != null) {
+                                        action1View.drawBackground(true);
+                                    }
+                                    if (action2View != null) {
+                                        action2View.drawBackground(false);
+                                    }
+                                    if (action3View != null) {
+                                        action3View.drawBackground(false);
+                                    }
+                                    if (action4View != null) {
+                                        action4View.drawBackground(false);
+                                    }
+                                    break;
+                                case 2:
+                                    if (action1View != null) {
+                                        action1View.drawBackground(false);
+                                    }
+                                    if (action2View != null) {
+                                        action2View.drawBackground(true);
+                                    }
+                                    if (action3View != null) {
+                                        action3View.drawBackground(false);
+                                    }
+                                    if (action4View != null) {
+                                        action4View.drawBackground(false);
+                                    }
+                                    break;
+                                case 3:
+                                    if (action1View != null) {
+                                        action1View.drawBackground(false);
+                                    }
+                                    if (action2View != null) {
+                                        action2View.drawBackground(false);
+                                    }
+                                    if (action3View != null) {
+                                        action3View.drawBackground(true);
+                                    }
+                                    if (action4View != null) {
+                                        action4View.drawBackground(false);
+                                    }
+                                    break;
+                                case 4:
+                                    if (action1View != null) {
+                                        action1View.drawBackground(false);
+                                    }
+                                    if (action2View != null) {
+                                        action2View.drawBackground(false);
+                                    }
+                                    if (action3View != null) {
+                                        action3View.drawBackground(false);
+                                    }
+                                    if (action4View != null) {
+                                        action4View.drawBackground(true);
+                                    }
+                                    break;
+                            }
                         }
                     }
 

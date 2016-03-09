@@ -126,7 +126,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         }
         if (position == mBackgroundAt) {
             imageView.setBackground(ContextCompat.getDrawable(mContext,R.drawable.icon_background_square));
-        }
+        }else imageView.setBackground(null);
 
         return imageView;
     }
