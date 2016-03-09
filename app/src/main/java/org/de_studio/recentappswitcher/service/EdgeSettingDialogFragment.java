@@ -32,6 +32,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String EDGE_POSITION_KEY = "position";
     public static final String EDGE_SENSIIVE_KEY = "sensitive";
     public static final String EDGE_LENGTH_KEY = "length";
+    public static final String EDGE_OFFSET_KEY = "off_set";
     public static final String EDGE_NUMBER_KEY = "number_of_edge";
     public static final String EDGE_ON_KEY = "is_on";
     public static final String FAVORITE_KEY = "favorite";
@@ -91,6 +92,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         edgeImage = (ImageView) rootView.findViewById(R.id.edge_dialog_edge_image_view);
 
         int currentLength = sharedPreferences.getInt(EDGE_LENGTH_KEY ,150);
+        int currentOffset = sharedPreferences.getInt(EDGE_OFFSET_KEY, 0);
         int currentSensitive = sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 12);
         int currentCircleSize = defaultSharedPreferences.getInt(ICON_DISTANCE_KEY,110);
         spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
@@ -230,6 +232,37 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             }
         });
 
+
+
+
+        final AppCompatSeekBar offsetSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.edge_dialog_offset_seek_bar);
+        offsetSeekBar.setProgress(currentOffset + 150);
+        final TextView edgeOffsetNumberText = (TextView) rootView.findViewById(R.id.edge_dialog_offset_number_view);
+        edgeOffsetNumberText.setText(currentOffset+ "dp");
+        offsetSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChanged; // -150 to 150
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChanged = progress - 150;
+                sharedPreferences.edit().putInt(EDGE_OFFSET_KEY, progressChanged).commit();
+                updateEdgeView();
+                edgeOffsetNumberText.setText(progressChanged + "dp");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+//                sharedPreferences.edit().putInt(EDGE_OFFSET_KEY, progressChanged).commit();
+            }
+        });
+
+
+
+
         final AppCompatSeekBar circleSizeSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.circle_size_seek_bar);
         final TextView circleSizeNumberText = (TextView) rootView.findViewById(R.id.edge_dialog_circle_size_number_view);
         circleSizeSeekBar.setProgress(currentCircleSize - 95);
@@ -306,6 +339,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         if (edgeNumber == 2) spinnerCurrentPosition = 5;
         int currentLength = sharedPreferences.getInt(EDGE_LENGTH_KEY ,150);
         int currentSensitive = sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 12);
+        int currentOffset = sharedPreferences.getInt(EDGE_OFFSET_KEY,0);
 
         for (int i =0; i<spinnerEntries.length; i++) {
             if (spinnerEntries[i].equals(sharedPreferences.getString(EDGE_POSITION_KEY, spinnerEntries[spinnerCurrentPosition]))) {
@@ -317,9 +351,19 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
             lp.width = (int) (currentLength * mScale);
             lp.height = (int) (currentSensitive* mScale);
+            if (currentOffset > 0) {
+                lp.rightMargin = (int) (currentOffset * mScale);
+            } else {
+                lp.leftMargin = (int) (-currentOffset * mScale);
+            }
         }else {
             lp.width = (int) (currentSensitive * mScale);
             lp.height = (int) (currentLength *mScale);
+            if (currentOffset > 0) {
+                lp.bottomMargin = (int) (currentOffset * mScale);
+            } else {
+                lp.topMargin = (int) (-currentOffset * mScale);
+            }
         }
         switch (spinnerCurrentPosition){
             case 0:
