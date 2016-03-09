@@ -165,8 +165,8 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         int gridGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
         gridView.setVerticalSpacing((int)( gridGap*mScale));
         gridView.setNumColumns(gridColumn);
-        gridParams.height = (int) (mScale * (float) (48 * gridRow + gridGap * (gridRow - 1)));
-        gridParams.width = (int) (mScale * (float) (48 * gridColumn + gridGap * (gridColumn - 1)));
+        gridParams.height = (int) (mScale * (float) (EdgeGestureService.GRID_ICON_SIZE * gridRow + gridGap * (gridRow - 1)));
+        gridParams.width = (int) (mScale * (float) (EdgeGestureService.GRID_ICON_SIZE * gridColumn + gridGap * (gridColumn - 1)));
         gridView.setLayoutParams(gridParams);
     }
 

@@ -26,7 +26,7 @@
             android:id="@+id/favorite_shortcut_grid_view"
             android:layout_width="258dp"
             android:layout_height="258dp"
-            android:columnWidth="48dp"
+            android:columnWidth="58dp"
             android:horizontalSpacing="22dp"
             android:numColumns="4"
             android:stretchMode="spacingWidth"
