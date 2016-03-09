@@ -142,13 +142,24 @@ public class EdgeGestureService extends Service {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edge1Image = (MyImageView) edge1View.findViewById(R.id.edge_image);
-        ViewGroup.LayoutParams edge1ImageLayoutParams = edge1Image.getLayoutParams();
+//        ViewGroup.LayoutParams edge1ImageLayoutParams = edge1Image.getLayoutParams();
+        RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1Image.getLayoutParams());
         if (Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()) >= 30) {
             edge1HeightPxl = (int) (edge1Sensivite * mScale);
             edge1WidthPxl = (int) (edge1Length * mScale);
+            if (edge1offset > 0) {
+                edge1ImageLayoutParams.rightMargin = (int) (edge1offset * mScale);
+            } else {
+                edge1ImageLayoutParams.leftMargin = (int) (-edge1offset * mScale);
+            }
         } else {
             edge1HeightPxl = (int) (edge1Length * mScale);
             edge1WidthPxl = (int) (edge1Sensivite * mScale);
+            if (edge1offset > 0) {
+                edge1ImageLayoutParams.bottomMargin = (int) (edge1offset * mScale);
+            } else {
+                edge1ImageLayoutParams.topMargin = (int) (-edge1offset * mScale);
+            }
         }
         edge1ImageLayoutParams.height = edge1HeightPxl;
         edge1ImageLayoutParams.width = edge1WidthPxl;
@@ -212,13 +223,25 @@ public class EdgeGestureService extends Service {
         }
         edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edge2Image = (MyImageView) edge2View.findViewById(R.id.edge_image);
-        ViewGroup.LayoutParams edge2ImageLayoutParams = edge2Image.getLayoutParams();
+        RelativeLayout.LayoutParams edge2ImageLayoutParams = new RelativeLayout.LayoutParams(edge2Image.getLayoutParams());
         if (Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext()) >= 30) {
             edge2HeightPxl = (int) (edge2Sensitive * mScale);
             edge2WidthPxl = (int) (edge2Length * mScale);
+            if (edge2offset > 0) {
+                edge2ImageLayoutParams.rightMargin = (int) (edge2offset * mScale);
+            } else {
+                edge2ImageLayoutParams.leftMargin = (int) (-edge2offset * mScale);
+            }
+        } else {
+
+            edge2HeightPxl = (int) (edge2Length * mScale);
+            edge2WidthPxl = (int) (edge2Sensitive * mScale);
+            if (edge2offset > 0) {
+                edge2ImageLayoutParams.bottomMargin = (int) (edge2offset * mScale);
+            } else {
+                edge2ImageLayoutParams.topMargin = (int) (-edge2offset * mScale);
+            }
         }
-        edge2HeightPxl = (int) (edge2Length * mScale);
-        edge2WidthPxl = (int) (edge2Sensitive * mScale);
         edge2ImageLayoutParams.height = edge2HeightPxl;
         edge2ImageLayoutParams.width = edge2WidthPxl;
         edge2Image.setLayoutParams(edge2ImageLayoutParams);
