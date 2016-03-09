@@ -36,7 +36,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         defaultSharedPreference = getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         int gridRow = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         int gridColumn = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
-        int shortcutGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 22);
+        int shortcutGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
         mScale = getResources().getDisplayMetrics().density;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         gridView = (GridView) findViewById(R.id.favorite_shortcut_grid_view);
@@ -87,14 +87,14 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         });
 
 
-        int currentGridGapSeekBarProgress = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY,22) - 5;
+        int currentGridGapSeekBarProgress = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY,12);
         gridGapSeekBar.setProgress(currentGridGapSeekBarProgress);
-        gridGapValueTextView.setText(currentGridGapSeekBarProgress + 5 + " dp");
+        gridGapValueTextView.setText(currentGridGapSeekBarProgress + 10 + " dp");
         gridGapSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, progress + 5).commit();
-                gridGapValueTextView.setText(progress + 5 + " dp");
+                defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, progress).commit();
+                gridGapValueTextView.setText(progress + 10 + " dp");
             }
 
             @Override
@@ -105,6 +105,8 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 updateGridView();
+                getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
             }
         });
 
@@ -131,8 +133,8 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         gridView.setVerticalSpacing((int) (shortcutGap * mScale));
         gridView.setNumColumns(gridColumn);
         ViewGroup.LayoutParams gridParams = gridView.getLayoutParams();
-        gridParams.height = (int)(mScale* (float)(48 * gridRow + shortcutGap* (gridRow -1)));
-        gridParams.width = (int)(mScale* (float)(48 * gridColumn + shortcutGap* (gridColumn -1)));
+        gridParams.height = (int)(mScale* (float)(EdgeGestureService.GRID_ICON_SIZE * gridRow + shortcutGap* (gridRow -1)));
+        gridParams.width = (int)(mScale* (float)(EdgeGestureService.GRID_ICON_SIZE * gridColumn + shortcutGap* (gridColumn -1)));
         gridView.setLayoutParams(gridParams);
         mAdapter = new FavoriteShortcutAdapter(this);
         gridView.setAdapter(mAdapter);
@@ -160,7 +162,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         ViewGroup.LayoutParams gridParams = gridView.getLayoutParams();
         int gridRow = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         int gridColumn = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
-        int gridGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 22);
+        int gridGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
         gridView.setVerticalSpacing((int)( gridGap*mScale));
         gridView.setNumColumns(gridColumn);
         gridParams.height = (int) (mScale * (float) (48 * gridRow + gridGap * (gridRow - 1)));

@@ -67,9 +67,9 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         if (convertView == null) {
             imageView = new ImageView(mContext);
             int padding =(int) mContext.getResources().getDimension(R.dimen.icon_padding);
-            imageView.setPadding(padding,padding,padding,padding);
+//            imageView.setPadding(padding,padding,padding,padding);
             imageView.setLayoutParams(new GridView.LayoutParams((int) mContext.getResources().getDimension(R.dimen.icon_size), (int) mContext.getResources().getDimension(R.dimen.icon_size)));
-            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            imageView.setScaleType(ImageView.ScaleType.CENTER);
         } else {
             imageView = (ImageView) convertView;
         }

@@ -999,12 +999,12 @@ public class EdgeGestureService extends Service {
                 ViewGroup.LayoutParams gridParams = shortcutGridView.getLayoutParams();
                 int gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
                 int gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
-                int gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 22);
+                int gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
                 shortcutGridView.setVerticalSpacing((int) (gridGap * mScale));
                 shortcutGridView.setNumColumns(gridColumn);
                 int gridDistanceFromEdge = defaultShared.getInt(EdgeSettingDialogFragment.GRID_DISTANCE_FROM_EDGE_KEY, 60);
-                gridParams.height = (int) (mScale * (float) (GRID_ICON_SIZE * gridRow + gridGap * (gridRow - 1))+10);
-                gridParams.width = (int) (mScale * (float) (GRID_ICON_SIZE * gridColumn + gridGap * (gridColumn - 1))+10);
+                gridParams.height = (int) (mScale * (float) (GRID_ICON_SIZE * gridRow + gridGap * (gridRow - 1)));
+                gridParams.width = (int) (mScale * (float) (GRID_ICON_SIZE * gridColumn + gridGap * (gridColumn - 1)));
                 shortcutGridView.setLayoutParams(gridParams);
                 shortcutGridView.setAdapter(shortcutAdapter);
                 WindowManager.LayoutParams shortcutViewParams = new WindowManager.LayoutParams(
@@ -1093,7 +1093,7 @@ public class EdgeGestureService extends Service {
         ovalRadiusPlusPxl = (int) (ovalRadiusPlus * mScale);
         gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
-        gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 22);
+        gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
         Log.e(LOG_TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
                 "\nEdge1 position = " + edge1Position + "\nEdge2 positon = " + edge2Position);
     }
