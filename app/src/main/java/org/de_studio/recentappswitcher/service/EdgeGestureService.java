@@ -767,9 +767,9 @@ public class EdgeGestureService extends Service {
                     }
                     if (switched) {
                         int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), GRID_ICON_SIZE, mScale, gridRow, gridColumn, gridGap);
-                        if (shortcutToSwitch != -1) {
-                            activateId = shortcutToSwitch + 1;
-                        }
+//                        if (shortcutToSwitch != -1) {
+//                            activateId = shortcutToSwitch + 1;
+//                        }
                         if (shortcutAdapter != null) {
                             shortcutAdapter.setBackground(shortcutToSwitch);
                         }
