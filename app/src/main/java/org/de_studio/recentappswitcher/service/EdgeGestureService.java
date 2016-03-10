@@ -98,7 +98,7 @@ public class EdgeGestureService extends Service {
     private String[] packagename, favoritePackageName;
     private String launcherPackagename;
     private int[] x, y;
-    private int numOfIcon, gridRow, gridColumn, gridGap;
+    private int numOfIcon, gridRow, gridColumn, gridGap, activateId = 0, activatedId = 0;
     public static final int GRID_ICON_SIZE = 58;
     private boolean hasOneActive = false;
     private boolean hasHomwBackNotiVisible = false;
@@ -767,16 +767,20 @@ public class EdgeGestureService extends Service {
                     }
                     if (switched) {
                         int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), GRID_ICON_SIZE, mScale, gridRow, gridColumn, gridGap);
-
+                        if (shortcutToSwitch != -1) {
+                            activateId = shortcutToSwitch + 1;
+                        }
                         if (shortcutAdapter != null) {
                             shortcutAdapter.setBackground(shortcutToSwitch);
                         }
-
-                        break;
                     } else {
                         int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
                         int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
+                        if (moveToHomeBackNoti > 0) {
+                            activateId = moveToHomeBackNoti + 30;
+                        }
                         if (iconToSwitch != -1) {
+                            activateId = iconToSwitch + 20;
 
                             if (delayToSwitchTask == null) {
                                 delayToSwitchTask = new DelayToSwitchTask();
@@ -961,6 +965,12 @@ public class EdgeGestureService extends Service {
                                     break;
                             }
                         }
+                    }
+                    if (defaultShared.getBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY, false) && activateId!=0 && activatedId!=activateId ) {
+
+                        vibrator.vibrate(15);
+                        activatedId = activateId;
+                        activateId = 0;
                     }
 
                     break;
