@@ -55,7 +55,8 @@
     Enable accessibility can cause lag in some device especially when using Chrome. This happen to all
     apps that use accessibility. If the lag is too extreme please disable this setting, all feature still available except the navigation (home, back, power menu).</string>
     <string name="ask_user_to_turn_on_accessibility_toast">Please turn on the Accessibility setting for this app</string>
-    <string name="main_disable_haptic_feedback_text">Disable haptic feedback</string>
+    <string name="main_haptic_feedback_on_trigger_text">Haptic feedback on trigger</string>
+    <string name="main_haptic_feedback_on_move_to_item">Haptic feedback on move to icon</string>
     <string name="main_do_you_love_this_app">Do you love this app?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>

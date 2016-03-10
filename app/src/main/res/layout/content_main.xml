@@ -436,7 +436,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="18sp"
-                    android:text="@string/main_disable_haptic_feedback_text"
+                    android:text="@string/main_haptic_feedback_on_trigger_text"
                     android:textColor="@color/white" />
                 <Switch
                     android:layout_width="wrap_content"
@@ -445,6 +445,33 @@
                     android:paddingRight="5dp"
                     android:checked="false"
                     android:id="@+id/main_disable_haptic_feedback_switch"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:text="@string/main_haptic_feedback_on_move_to_item"
+                    android:textColor="@color/white" />
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:paddingRight="5dp"
+                    android:checked="false"
+                    android:id="@+id/main_haptic_feedback_on_item_switch"
                     />
 
             </LinearLayout>
