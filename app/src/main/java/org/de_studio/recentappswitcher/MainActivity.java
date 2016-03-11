@@ -26,6 +26,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appinvite.AppInviteInvitation;
+
 import org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
@@ -50,6 +52,7 @@ public class MainActivity extends Activity {
     public static final String ACTION_ROTATE = "rotate";
     public static final String ACTION_POWER_MENU = "power_menu";
     public static final int REQUEST_CODE = 3243;
+    public static final int REQUEST_INVITE = 232;
     public static final long trialTime = 1000 * 60 * 60 * 24 * 7;
     private SharedPreferences sharedPreferences1, sharedPreferences2, sharedPreferencesDefautl, sharedPreferences_favorite, sharedPreferences_exclude;
     private ArrayList<AppInfors> mAppInforsArrayList;
@@ -156,6 +159,9 @@ public class MainActivity extends Activity {
         Switch hapticFeedbackOnTriggerSwitch = (Switch) findViewById(R.id.main_disable_haptic_feedback_switch);
         Switch hapticFeedbackOnItemSwitch = (Switch) findViewById(R.id.main_haptic_feedback_on_item_switch);
         Switch disableClockSwitch = (Switch) findViewById(R.id.main_disable_clock_switch);
+        LinearLayout shareFriendLinearLayout = (LinearLayout) findViewById(R.id.main_share_linear_layout);
+        LinearLayout reviewLinearLayout = (LinearLayout) findViewById(R.id.main_review_linear_layout);
+        LinearLayout emailLinearLayout = (LinearLayout) findViewById(R.id.main_email_linear_layout);
         hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, true));
         hapticFeedbackOnItemSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY,false));
         disableClockSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY,false));
@@ -460,6 +466,17 @@ public class MainActivity extends Activity {
             }
         });
 
+        shareFriendLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.share_with_friend_title) )
+                        .setMessage(getString(R.string.share_with_friend_message))
+                        .setCallToActionText(getString(R.string.install))
+                        .build();
+                startActivityForResult(intent, REQUEST_INVITE);
+            }
+        });
+
     }
 
 
@@ -538,6 +555,8 @@ public class MainActivity extends Activity {
                 startService(new Intent(this, EdgeGestureService.class));
 
             }
+        }else if (requestCode == REQUEST_INVITE) {
+            Toast.makeText(this, "Thanks!", Toast.LENGTH_SHORT);
         }
     }
 

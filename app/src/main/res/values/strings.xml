@@ -118,4 +118,7 @@
     <string name="share_with_friend">Share with friends</string>
     <string name="review_on_play_store">Review on Play Store</string>
     <string name="email_us">Email us</string>
+    <string name="share_with_friend_title">Share your friends</string>
+    <string name="share_with_friend_message">Hey! Try this awesome app? :)</string>
+    <string name="install">Install</string>
 </resources>
