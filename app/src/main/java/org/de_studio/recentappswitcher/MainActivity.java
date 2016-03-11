@@ -103,7 +103,7 @@ public class MainActivity extends Activity {
         if (!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, false)) {
             int timeOpen = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.APP_OPEN_TIME_KEY, 0);
             sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.APP_OPEN_TIME_KEY, timeOpen + 1).commit();
-            if (timeOpen >= 8) {
+            if (timeOpen >= 4) {
 
                 final LinearLayout doYouLoveLinearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.do_you_love_this_app, null);
                 appBarLayout.addView(doYouLoveLinearLayout);
@@ -144,6 +144,12 @@ public class MainActivity extends Activity {
                                         sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, true).commit();
                                         appBarLayout.removeView(doYouLoveLinearLayout);
                                         // d
+                                    }
+                                })
+                                .setNeutralButton(R.string.share, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        shareFriend();
                                     }
                                 });
                         builder.show();
@@ -469,11 +475,7 @@ public class MainActivity extends Activity {
         shareFriendLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.share_with_friend_title) )
-                        .setMessage(getString(R.string.share_with_friend_message))
-                        .setCallToActionText(getString(R.string.install))
-                        .build();
-                startActivityForResult(intent, REQUEST_INVITE);
+                shareFriend();
             }
         });
         emailLinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -598,6 +600,14 @@ public class MainActivity extends Activity {
         catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(MainActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    protected void shareFriend() {
+        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.share_with_friend_title) )
+                .setMessage(getString(R.string.share_with_friend_message))
+                .setCallToActionText(getString(R.string.install))
+                .build();
+        startActivityForResult(intent, REQUEST_INVITE);
     }
 
 }
