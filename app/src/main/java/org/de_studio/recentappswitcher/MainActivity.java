@@ -476,6 +476,29 @@ public class MainActivity extends Activity {
                 startActivityForResult(intent, REQUEST_INVITE);
             }
         });
+        emailLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendEmail();
+            }
+        });
+
+        reviewLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("mbarket://details?id=" + getPackageName());
+                Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+                gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                try {
+                    startActivity(gotoMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+                }
+            }
+        });
+
 
     }
 
@@ -557,6 +580,23 @@ public class MainActivity extends Activity {
             }
         }else if (requestCode == REQUEST_INVITE) {
             Toast.makeText(this, "Thanks!", Toast.LENGTH_SHORT);
+        }
+    }
+    protected void sendEmail() {
+        String[] TO = {"thanhhai08sk@gmail.com"};
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            finish();
+        }
+        catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(MainActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
         }
     }
 
