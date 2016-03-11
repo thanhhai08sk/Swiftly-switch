@@ -603,7 +603,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingTop="10dp"
-            android:paddingBottom="10dp"
             android:gravity="top|center"
 
             >
@@ -613,11 +612,12 @@
                 android:orientation="vertical"
                 android:layout_margin="10dp"
                 android:gravity="center_horizontal"
+                android:id="@+id/main_share_linear_layout"
                 >
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_share_white_48dp"
+                    android:src="@drawable/ic_share_white_36dp"
                     android:id="@+id/main_share_image_button"
                     />
                 <TextView
@@ -625,6 +625,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textAlignment="center"
+                    android:textSize="12sp"
                     android:text="@string/share_with_friend"
                     />
 
@@ -636,11 +637,12 @@
                 android:orientation="vertical"
                 android:layout_margin="10dp"
                 android:gravity="center_horizontal"
+                android:id="@+id/main_review_linear_layout"
                 >
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_rate_review_white_48dp"
+                    android:src="@drawable/ic_rate_review_white_36dp"
                     android:id="@+id/main_review_image_button"
                     />
                 <TextView
@@ -648,6 +650,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textAlignment="center"
+                    android:textSize="12sp"
                     android:text="@string/review_on_play_store"
                     />
 
@@ -659,11 +662,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center_horizontal"
+                android:id="@+id/main_email_linear_layout"
                 >
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_email_white_48dp"
+                    android:src="@drawable/ic_email_white_36dp"
                     android:id="@+id/main_email_image_button"
                     />
                 <TextView
@@ -671,6 +675,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textAlignment="center"
+                    android:textSize="12sp"
                     android:text="@string/email_us"
                     />
 
