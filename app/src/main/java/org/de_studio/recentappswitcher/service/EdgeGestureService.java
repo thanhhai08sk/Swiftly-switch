@@ -528,26 +528,30 @@ public class EdgeGestureService extends Service {
                             Set<Long> setKey = mySortedMap.keySet();
                             Log.e(LOG_TAG, "mySortedMap size = " + mySortedMap.size());
                             for (Long key : setKey) {
-                                UsageStats usageStats = mySortedMap.get(key);
-                                if (usageStats == null) {
-                                    Log.e(LOG_TAG, " usageStats is null");
-                                }
-                                if (usageStats != null) {
-                                    String packa = usageStats.getPackageName();
-                                    try {
-                                        if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
-                                            //do nothing
-                                        } else if (packa.contains("systemui") |
-                                                packa.contains("googlequicksearchbox") |
-                                                key == mySortedMap.firstKey() |
-                                                excludeSet.contains(packa) |
-                                                packa.contains("launcher") |
-                                                getPackageManager().getLaunchIntentForPackage(packa) == null) {
-                                            // do nothing
-                                        } else tempPackageName.add(packa);
-                                    } catch (PackageManager.NameNotFoundException e) {
-                                        Log.e(LOG_TAG, "name not found" + e);
+                                if (key >= currentTimeMillis) {
+                                    Log.e(LOG_TAG, "key is in future");
+                                } else {
+                                    UsageStats usageStats = mySortedMap.get(key);
+                                    if (usageStats == null) {
+                                        Log.e(LOG_TAG, " usageStats is null");
+                                    } else {
+                                        String packa = usageStats.getPackageName();
+                                        try {
+                                            if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
+                                                //do nothing
+                                            } else if (packa.contains("systemui") |
+                                                    packa.contains("googlequicksearchbox") |
+                                                    key == mySortedMap.firstKey() |
+                                                    excludeSet.contains(packa) |
+                                                    packa.contains("launcher") |
+                                                    getPackageManager().getLaunchIntentForPackage(packa) == null) {
+                                                // do nothing
+                                            } else tempPackageName.add(packa);
+                                        } catch (PackageManager.NameNotFoundException e) {
+                                            Log.e(LOG_TAG, "name not found" + e);
+                                        }
                                     }
+
                                 }
 
                             }
@@ -969,7 +973,7 @@ public class EdgeGestureService extends Service {
                             }
                         }
                     }
-                    if (defaultShared.getBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY, false) && activateId!=0 && activatedId!=activateId ) {
+                    if (defaultShared.getBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY, false) && activateId != 0 && activatedId != activateId) {
 
                         vibrator.vibrate(15);
                         activatedId = activateId;
@@ -1057,11 +1061,11 @@ public class EdgeGestureService extends Service {
                 if (!shortcutView.isAttachedToWindow()) {
                     windowManager.addView(shortcutView, shortcutViewParams);
                 }
-                if (itemView!=null && itemView.isAttachedToWindow()) {
+                if (itemView != null && itemView.isAttachedToWindow()) {
                     windowManager.removeView(itemView);
                 }
                 switched = true;
-                if (clockView!=null && clockView.isAttachedToWindow()) {
+                if (clockView != null && clockView.isAttachedToWindow()) {
                     windowManager.removeView(clockView);
                     isClockShown = false;
                 }

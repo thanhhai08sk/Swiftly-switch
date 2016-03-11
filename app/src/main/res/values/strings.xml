@@ -51,8 +51,8 @@
     <string name="main_buy_pro_button_text">Upgrade to Pro</string>
     <string name="edge_service_out_of_trial_text_when_homebacknoti">You are out of 7 day trial time of this application. Upgrade to Pro version to use this function</string>
     <string name="action_settings">Setting</string>
-    <string name="accessibility_service_description">Please turn on this setting./nThis is for navigation(home,back,power menu) and on some Samsung device for expand status bar.
-    Enable accessibility can cause lag in some device especially when using Chrome. This happen to all
+    <string name="accessibility_service_description">Please turn on this setting.This is for navigation(home,back,power menu) and on some Samsung device for expand status bar.
+    Enable accessibility can cause lag in some device when using Chrome. This happen to all
     apps that use accessibility. If the lag is too extreme please disable this setting, all feature still available except the navigation (home, back, power menu).</string>
     <string name="ask_user_to_turn_on_accessibility_toast">Please turn on the Accessibility setting for this app</string>
     <string name="main_haptic_feedback_on_trigger_text">Haptic feedback on trigger</string>
@@ -109,7 +109,7 @@
     <string name="title_activity_outter_ring_setting">OutterRingSettingActivity</string>
     <string name="main_outer_ring_setting">Outer ring action</string>
     <string name="main_disable_accessibility_title">Disable accessibility</string>
-    <string name="main_disable_accessibility_detail_text">Enable accessibility can cause lag in some device especially when using Chrome. This happen to all
+    <string name="main_disable_accessibility_detail_text">Enable accessibility can cause lag in some device when using Chrome. This happen to all
     apps that use accessibility. If the lag is too extreme please disable the Swiftly switch accessibility service, all feature still available except the navigation (home, back, power menu).</string>
     <string name="main_consider_disable_accessibility_dialog_title">Consider disable Accessibility service</string>
     <string name="main_usage_access_can_not_found">Can not found this setting on your device. Please try grant it manually.</string>
