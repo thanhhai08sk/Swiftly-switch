@@ -38,4 +38,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'io.realm:realm-android:0.84.1'
+    compile 'com.google.android.gms:play-services-appinvite:8.4.0'
 }
+apply plugin: 'com.google.gms.google-services'
+

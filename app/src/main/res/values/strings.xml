@@ -115,4 +115,7 @@
     <string name="main_usage_access_can_not_found">Can not found this setting on your device. Please try grant it manually.</string>
     <string name="batterylife">Battery life:</string>
     <string name="main_disable_clock_text">Disable clock</string>
+    <string name="share_with_friend">Share with friends</string>
+    <string name="review_on_play_store">Review on Play Store</string>
+    <string name="email_us">Email us</string>
 </resources>

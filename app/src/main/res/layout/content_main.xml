@@ -101,7 +101,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:text="@string/main_edge1_section_text"
                 android:textAllCaps="false"
                 android:textColor="@color/white" />
@@ -130,14 +130,14 @@
             android:layout_height="wrap_content"
             android:background="@drawable/round_button_4pt"
             android:gravity="center_vertical"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="6dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:text="@string/main_edge2_section_text"
                 android:textAllCaps="false"
                 android:textColor="@color/white" />
@@ -166,7 +166,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/round_button_4pt"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="6dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -179,7 +179,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:text="@string/main_favorite_app_title"
                     android:textColor="@color/white" />
                 <ImageButton
@@ -372,7 +372,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingTop="10dp"
+            android:paddingTop="6dp"
             android:layout_marginTop="10dp"
             android:paddingBottom="10dp"
             android:background="@drawable/round_button_4pt"
@@ -382,7 +382,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:text="@string/main_exclude_app_title"
                 android:textColor="@color/white" />
             <ImageButton
@@ -435,7 +435,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:text="@string/main_haptic_feedback_on_trigger_text"
                     android:textColor="@color/white" />
                 <Switch
@@ -462,7 +462,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:text="@string/main_haptic_feedback_on_move_to_item"
                     android:textColor="@color/white" />
                 <Switch
@@ -489,7 +489,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:text="@string/main_disable_clock_text"
                     android:textColor="@color/white" />
                 <Switch
@@ -514,7 +514,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:text="@string/main_icon_pack_support"
                     android:textAllCaps="false"
                     android:textColor="@color/white" />
@@ -544,7 +544,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:text="@string/main_outer_ring_setting"
                     android:textAllCaps="false"
                     android:textColor="@color/white" />
@@ -572,7 +572,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:text="@string/main_disable_accessibility_title"
                     android:textColor="@color/white" />
                 <ImageButton
@@ -592,6 +592,86 @@
                     android:background="@color/transparent"
                     android:src="@drawable/ic_settings_white_36px"
                     android:paddingRight="5dp"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:gravity="top|center"
+
+            >
+            <LinearLayout
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="10dp"
+                android:gravity="center_horizontal"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_share_white_48dp"
+                    android:id="@+id/main_share_image_button"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:text="@string/share_with_friend"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="10dp"
+                android:gravity="center_horizontal"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_rate_review_white_48dp"
+                    android:id="@+id/main_review_image_button"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:text="@string/review_on_play_store"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="70dp"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_email_white_48dp"
+                    android:id="@+id/main_email_image_button"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:text="@string/email_us"
                     />
 
             </LinearLayout>
