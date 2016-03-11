@@ -143,27 +143,30 @@ public class EdgeGestureService extends Service {
         edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
         edge1Image = (MyImageView) edge1View.findViewById(R.id.edge_image);
 //        ViewGroup.LayoutParams edge1ImageLayoutParams = edge1Image.getLayoutParams();
-        RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1Image.getLayoutParams());
-        if (Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()) >= 30) {
-            edge1HeightPxl = (int) (edge1Sensivite * mScale);
-            edge1WidthPxl = (int) (edge1Length * mScale);
-            if (edge1offset > 0) {
-                edge1ImageLayoutParams.rightMargin = (int) (edge1offset * mScale);
+        if (edge1Image != null) {
+            RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1Image.getLayoutParams());
+            if (Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()) >= 30) {
+                edge1HeightPxl = (int) (edge1Sensivite * mScale);
+                edge1WidthPxl = (int) (edge1Length * mScale);
+                if (edge1offset > 0) {
+                    edge1ImageLayoutParams.rightMargin = (int) (edge1offset * mScale);
+                } else {
+                    edge1ImageLayoutParams.leftMargin = (int) (-edge1offset * mScale);
+                }
             } else {
-                edge1ImageLayoutParams.leftMargin = (int) (-edge1offset * mScale);
+                edge1HeightPxl = (int) (edge1Length * mScale);
+                edge1WidthPxl = (int) (edge1Sensivite * mScale);
+                if (edge1offset > 0) {
+                    edge1ImageLayoutParams.bottomMargin = (int) (edge1offset * mScale);
+                } else {
+                    edge1ImageLayoutParams.topMargin = (int) (-edge1offset * mScale);
+                }
             }
-        } else {
-            edge1HeightPxl = (int) (edge1Length * mScale);
-            edge1WidthPxl = (int) (edge1Sensivite * mScale);
-            if (edge1offset > 0) {
-                edge1ImageLayoutParams.bottomMargin = (int) (edge1offset * mScale);
-            } else {
-                edge1ImageLayoutParams.topMargin = (int) (-edge1offset * mScale);
-            }
+            edge1ImageLayoutParams.height = edge1HeightPxl;
+            edge1ImageLayoutParams.width = edge1WidthPxl;
+            edge1Image.setLayoutParams(edge1ImageLayoutParams);
         }
-        edge1ImageLayoutParams.height = edge1HeightPxl;
-        edge1ImageLayoutParams.width = edge1WidthPxl;
-        edge1Image.setLayoutParams(edge1ImageLayoutParams);
+
         icon_distance_pxl = icon_distance * mScale;
         icon_24dp_in_pxls = 24 * mScale;
         distance_to_arc_pxl = (int) (distance_to_arc * mScale);
@@ -356,7 +359,7 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, false)) {
+                    if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, true)) {
                         vibrator.vibrate(15);
                     }
                     try {
@@ -1054,11 +1057,11 @@ public class EdgeGestureService extends Service {
                 if (!shortcutView.isAttachedToWindow()) {
                     windowManager.addView(shortcutView, shortcutViewParams);
                 }
-                if (itemView.isAttachedToWindow()) {
+                if (itemView!=null && itemView.isAttachedToWindow()) {
                     windowManager.removeView(itemView);
                 }
                 switched = true;
-                if (clockView.isAttachedToWindow()) {
+                if (clockView!=null && clockView.isAttachedToWindow()) {
                     windowManager.removeView(clockView);
                     isClockShown = false;
                 }
