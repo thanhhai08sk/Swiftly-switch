@@ -25,7 +25,6 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.support.v7.widget.AppCompatImageView;
@@ -98,7 +97,7 @@ public class EdgeGestureService extends Service {
     private String[] packagename, favoritePackageName;
     private String launcherPackagename;
     private int[] x, y;
-    private int numOfIcon, gridRow, gridColumn, gridGap, activateId = 0, activatedId = 0;
+    private int numOfIcon, gridRow, gridColumn, gridGap, activateId = 0, activatedId = 0, iconIdForsetBackground =0, iconIdBackgrounded = -1;
     public static final int GRID_ICON_SIZE = 58;
     private boolean hasOneActive = false;
     private boolean hasHomwBackNotiVisible = false;
@@ -601,6 +600,7 @@ public class EdgeGestureService extends Service {
                             Log.e(LOG_TAG, " item_view has already been added to the window manager");
                         }
                     }
+                    iconIdBackgrounded = -1;
 
                     break;
 
@@ -787,6 +787,41 @@ public class EdgeGestureService extends Service {
                             activateId = moveToHomeBackNoti + 30;
                         }
                         if (iconToSwitch != -1) {
+                            if (iconToSwitch < iconImageArrayList.size() && iconIdBackgrounded != iconToSwitch) {
+                                if (iconIdBackgrounded != -1) {
+                                    ImageView iconResetBackground = iconImageArrayList.get(iconIdBackgrounded);
+                                    FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(iconResetBackground.getLayoutParams());
+                                    layoutParams1.width = (int) (48 * mScale);
+                                    layoutParams1.height = (int) (48 * mScale);
+                                    float x = iconResetBackground.getX();
+                                    float y = iconResetBackground.getY();
+                                    iconResetBackground.setBackground(null);
+                                    iconResetBackground.setX(x + 14 * mScale);
+                                    iconResetBackground.setY(y+ 8*mScale);
+//                                    iconResetBackground.setTranslationX(14 * mScale);
+//                                    iconResetBackground.setTranslationY(8 * mScale);
+                                    iconResetBackground.setLayoutParams(layoutParams1);
+                                    Log.e(LOG_TAG, "resetBackground1");
+                                }
+                                ImageView iconHighlight = iconImageArrayList.get(iconToSwitch);
+                                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(iconHighlight.getLayoutParams());
+                                float x = iconHighlight.getX();
+                                float y = iconHighlight.getY();
+
+                                layoutParams.height = (int) (65 * mScale);
+                                layoutParams.width = (int) (75 * mScale);
+                                iconHighlight.setBackground(getDrawable(R.drawable.icon_background));
+                                iconHighlight.setX(x - 14 * mScale);
+                                iconHighlight.setY(y - 8*mScale);
+//                                iconHighlight.setTranslationX(-14 * mScale);
+//                                iconHighlight.setTranslationY(-8 * mScale);
+                                iconHighlight.setLayoutParams(layoutParams);
+                                iconIdBackgrounded = iconToSwitch;
+                                Log.e(LOG_TAG, "setBackground");
+
+                            }
+
+
                             activateId = iconToSwitch + 20;
 
                             if (delayToSwitchTask == null) {
@@ -801,20 +836,52 @@ public class EdgeGestureService extends Service {
                                 touched = true;
                             }
                         } else {
+                            if (iconIdBackgrounded != -1 && iconIdBackgrounded < iconImageArrayList.size()) {
+                                ImageView iconResetBackground = iconImageArrayList.get(iconIdBackgrounded);
+                                FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(iconResetBackground.getLayoutParams());
+                                layoutParams1.width = (int) (48 * mScale);
+                                layoutParams1.height = (int) (48 * mScale);
+                                float x = iconResetBackground.getX();
+                                float y = iconResetBackground.getY();
+                                iconResetBackground.setBackground(null);
+                                iconResetBackground.setX(x + 14 * mScale);
+                                iconResetBackground.setY(y + 8 * mScale);
+                                iconResetBackground.setLayoutParams(layoutParams1);
+                                iconIdBackgrounded = -1;
+                            }
+
+
+
+
                             if (delayToSwitchTask != null) {
                                 delayToSwitchTask.cancel(true);
                                 delayToSwitchTask = null;
                             }
                             touched = false;
                         }
-                        if (iconToSwitch != -1 | moveToHomeBackNoti > 0) {
-                            for (int i = 0; i < iconImageArrayList.size(); i++) {
-                                hasOneActive = true;
-                                if (i == iconToSwitch) {
-                                    iconImageArrayList.get(i).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.icon_tint));
-                                } else iconImageArrayList.get(i).setColorFilter(null);
-                            }
-                        }
+//                        if (iconToSwitch != -1 | moveToHomeBackNoti > 0) {
+//                            for (int i = 0; i < iconImageArrayList.size(); i++) {
+//                                hasOneActive = true;
+//                                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(iconImageArrayList.get(i).getLayoutParams());
+//                                ImageView imageView = iconImageArrayList.get(i);
+//                                if (i == iconToSwitch) {
+////                                    iconImageArrayList.get(i).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.icon_tint));
+//                                    layoutParams.height = (int) (65 * mScale);
+//                                    layoutParams.width = (int) (75 * mScale);
+//                                    imageView.setBackground(getDrawable(R.drawable.icon_background));
+//                                    imageView.setLayoutParams(layoutParams);
+//
+//
+//                                } else{
+//                                    layoutParams.height = (int) (48 * mScale);
+//                                    layoutParams.width = (int) (48 * mScale);
+//                                    imageView.setBackground(null);
+//
+//                                    imageView.setLayoutParams(layoutParams);
+////                                    iconImageArrayList.get(i).setColorFilter(null);
+//                                }
+//                            }
+//                        }
                         if (iconToSwitch == -1 & moveToHomeBackNoti == 0) {
                             if (hasOneActive) {
                                 for (ImageView imageView : iconImageArrayList) {
@@ -1035,6 +1102,21 @@ public class EdgeGestureService extends Service {
             }
 
             protected void switchShortcut() {
+                if (iconIdBackgrounded != -1) {
+                    if (iconIdBackgrounded < iconImageArrayList.size()) {
+                        ImageView iconResetBackground = iconImageArrayList.get(iconIdBackgrounded);
+                        FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(iconResetBackground.getLayoutParams());
+                        layoutParams1.width = (int) (48 * mScale);
+                        layoutParams1.height = (int) (48 * mScale);
+                        float x = iconResetBackground.getX();
+                        float y = iconResetBackground.getY();
+                        iconResetBackground.setBackground(null);
+                        iconResetBackground.setX(x + 14 * mScale);
+                        iconResetBackground.setY(y + 8 * mScale);
+                        iconResetBackground.setLayoutParams(layoutParams1);
+                        iconIdBackgrounded = -1;
+                    }else iconIdBackgrounded = -1;
+                }
                 shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
                 ViewGroup.LayoutParams gridParams = shortcutGridView.getLayoutParams();
                 int gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);

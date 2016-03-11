@@ -19,14 +19,14 @@ android {
 
     defaultConfig {
         applicationId "org.de_studio.recentappswitcher"
-        minSdkVersion 19
+        minSdkVersion 20
         targetSdkVersion 23
         versionCode 17
-        versionName "2.0.4"
+        versionName "2.0.5"
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
