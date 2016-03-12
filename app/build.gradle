@@ -4,6 +4,9 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
     flavorDimensions "version"
+    lintOptions {
+        disable 'MissingTranslation'
+    }
 
     productFlavors {
         trial{
@@ -21,7 +24,7 @@ android {
         applicationId "org.de_studio.recentappswitcher"
         minSdkVersion 20
         targetSdkVersion 23
-        versionCode 17
+        versionCode 18
         versionName "2.0.5"
     }
     buildTypes {
