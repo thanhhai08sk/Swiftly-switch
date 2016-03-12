@@ -97,7 +97,7 @@ public class EdgeGestureService extends Service {
     private String[] packagename, favoritePackageName;
     private String launcherPackagename;
     private int[] x, y;
-    private int numOfIcon, gridRow, gridColumn, gridGap, activateId = 0, activatedId = 0, iconIdForsetBackground =0, iconIdBackgrounded = -1;
+    private int numOfIcon, gridRow, gridColumn, gridGap, activateId = 0, activatedId = 0;
     public static final int GRID_ICON_SIZE = 58;
     private boolean hasOneActive = false;
     private boolean hasHomwBackNotiVisible = false;
@@ -336,7 +336,7 @@ public class EdgeGestureService extends Service {
 
     public class OnTouchListener implements View.OnTouchListener {
         private int x_init_cord, y_init_cord;
-        private int position;
+        private int position, iconIdBackgrounded = -1;
         private FrameLayout itemView;
         private AppCompatImageView[] iconImageList;
         private List<AppCompatImageView> iconImageArrayList;
@@ -795,8 +795,8 @@ public class EdgeGestureService extends Service {
                                 float x = iconHighlight.getX();
                                 float y = iconHighlight.getY();
 
-                                layoutParams.height = (int) (65 * mScale);
-                                layoutParams.width = (int) (75 * mScale);
+                                layoutParams.height = (int) (64 * mScale);
+                                layoutParams.width = (int) (76 * mScale);
                                 iconHighlight.setBackground(getDrawable(R.drawable.icon_background));
                                 iconHighlight.setX(x - 14 * mScale);
                                 iconHighlight.setY(y - 8*mScale);
