@@ -32,6 +32,8 @@
         android:paddingRight="10dp"
         android:buttonTint="@color/black"
         android:id="@+id/add_favorite_list_item_check_box"
+        android:clickable="false"
+        android:focusable="false"
         />
 
 

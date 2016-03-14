@@ -9,14 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -28,15 +26,15 @@ public class AppsListArrayAdapter extends BaseAdapter {
     private PackageManager packageManager;
     static private ArrayList<AppInfors> mAppInfosArrayList;
     static int mMode;
-    private static SharedPreferences sharedPreferenceFavorite, sharedPreferenceExclude;
-    public AppsListArrayAdapter(Context context, ArrayList<AppInfors> inforsArrayList, int mode){
+    private static SharedPreferences sharedPreferenceExclude;
+
+    public AppsListArrayAdapter(Context context, ArrayList<AppInfors> inforsArrayList, int mode) {
         super();
         this.context = context;
         mMode = mode;
         mAppInfosArrayList = inforsArrayList;
         packageManager = context.getPackageManager();
-        sharedPreferenceFavorite = context.getSharedPreferences(MainActivity.FAVORITE_SHAREDPREFERENCE, 0);
-        sharedPreferenceExclude = context.getSharedPreferences(MainActivity.EXCLUDE_SHAREDPREFERENCE,0);
+        sharedPreferenceExclude = context.getSharedPreferences(MainActivity.EXCLUDE_SHAREDPREFERENCE, 0);
     }
 
     @Override
@@ -47,38 +45,45 @@ public class AppsListArrayAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final AppInfors appInfors = mAppInfosArrayList.get(position);
-        View returnView = LayoutInflater.from(context).inflate(R.layout.dialog_favorite_app_item, parent, false);
+        View returnView = convertView;
+        if (returnView == null) {
+            returnView = LayoutInflater.from(context).inflate(R.layout.dialog_favorite_app_item, parent, false);
+        }
         ImageView icon = (ImageView) returnView.findViewById(R.id.add_favorite_list_item_image_view);
         TextView label = (TextView) returnView.findViewById(R.id.add_favorite_list_item_label_text_view);
         CheckBox checkBox = (CheckBox) returnView.findViewById(R.id.add_favorite_list_item_check_box);
-            if (sharedPreferenceExclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY,new HashSet<String>()).contains(appInfors.packageName)){
-                checkBox.setChecked(true);
-            }
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    String packageName = appInfors.packageName;
-                    Set<String> set = sharedPreferenceExclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, null);
-                    if (set == null) {
-                        set = new HashSet<String>();
-                    }
-                    Set<String> setClone = new HashSet<String>();
-                    setClone.addAll(set);
-                    if (isChecked & packageName != null) {
-                        setClone.add(packageName);
-                        sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, setClone).commit();
+        Set<String> excludeSet = sharedPreferenceExclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, null);
+        if (excludeSet!=null && excludeSet.contains(appInfors.packageName)) {
+            checkBox.setChecked(true);
+        } else {
+            checkBox.setChecked(false);
+        }
 
-
-                    } else if (!isChecked & packageName != null) {
-                        if (setClone.contains(packageName)) {
-                            setClone.remove(packageName);
-                            sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, setClone).commit();
-                        }
-                    }
-                    Log.e(LOG_TAG, "size of set = " + setClone.size());
-
-                }
-            });
+//        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                String packageName = appInfors.packageName;
+//                Set<String> set = sharedPreferenceExclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, null);
+//                if (set == null) {
+//                    set = new HashSet<String>();
+//                }
+//                Set<String> setClone = new HashSet<String>();
+//                setClone.addAll(set);
+//                if (isChecked & packageName != null) {
+//                    setClone.add(packageName);
+//                    sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, setClone).commit();
+//
+//
+//                } else if (!isChecked & packageName != null) {
+//                    if (setClone.contains(packageName)) {
+//                        setClone.remove(packageName);
+//                        sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, setClone).commit();
+//                    }
+//                }
+//                Log.e(LOG_TAG, "size of set = " + setClone.size());
+//
+//            }
+//        });
         try {
             icon.setImageDrawable(packageManager.getApplicationIcon(appInfors.packageName));
 
