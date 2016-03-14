@@ -114,19 +114,18 @@ public  class Utility {
         return -1;
     }
 
-    public static void setIconPositionNew(AppCompatImageView[] icon, float r, float icon_24_dp_pxl, int position, int x_i, int y_i) {
+    public static void setIconPositionNew(AppCompatImageView[] icon, float r, float icon_24_dp_pxl, int position, int x_i, int y_i, int n) {
         double alpha, beta;
-        int n = icon.length;
         double[] alphaN = new double[n];
         switch (n) {
             case 4:
-                alpha = 0.1389; // 25 degree
+                alpha = 0.1389*Math.PI; // 25 degree
                 break;
             case 5:
-                alpha = 0.111; // 20 degree
+                alpha = 0.111*Math.PI; // 20 degree
                 break;
             case 6:
-                alpha = 0.0556; // 10 degree
+                alpha = 0.0556 *Math.PI; // 10 degree
                 break;
             default: alpha = 0.0556;
         }
@@ -148,9 +147,11 @@ public  class Utility {
                     break;
             }
         }
-
-
-
+        if (n < icon.length) {
+            for (int j = n; j < icon.length ; j++) {
+                icon[j].setVisibility(View.GONE);
+            }
+        }
 
     }
 

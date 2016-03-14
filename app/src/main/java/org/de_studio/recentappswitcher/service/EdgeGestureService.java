@@ -477,7 +477,8 @@ public class EdgeGestureService extends Service {
 //                    }catch (IllegalStateException e){
 //                        Log.e(LOG_TAG," item_view has already been added to the window manager");
 //                    }
-                    Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
+//                    Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
+                    Utility.setIconPositionNew(iconImageList,icon_distance_pxl,icon_24dp_in_pxls,position,x_init_cord,y_init_cord,6);
 
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
