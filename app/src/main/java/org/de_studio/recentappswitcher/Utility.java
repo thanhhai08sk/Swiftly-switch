@@ -114,6 +114,46 @@ public  class Utility {
         return -1;
     }
 
+    public static void setIconPositionNew(AppCompatImageView[] icon, float r, float icon_24_dp_pxl, int position, int x_i, int y_i) {
+        double alpha, beta;
+        int n = icon.length;
+        double[] alphaN = new double[n];
+        switch (n) {
+            case 4:
+                alpha = 0.1389; // 25 degree
+                break;
+            case 5:
+                alpha = 0.111; // 20 degree
+                break;
+            case 6:
+                alpha = 0.0556; // 10 degree
+                break;
+            default: alpha = 0.0556;
+        }
+        beta = Math.PI -2*alpha;
+        for (int i = 0; i < n; i++) {
+            alphaN[i] = alpha + i* (beta/(n - 1));
+            switch (position / 10) {
+                case 1:
+                    icon[i].setX(x_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
+                    icon[i].setY(y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
+                    break;
+                case 2:
+                    icon[i].setX(x_i + r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
+                    icon[i].setY(y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
+                    break;
+                case 3:
+                    icon[i].setX(x_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
+                    icon[i].setY(y_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
+                    break;
+            }
+        }
+
+
+
+
+    }
+
     public static void setIconsPosition(AppCompatImageView[] icon, int x_init_cord, int y_init_cord, float icon_distance_pxl, float icon_24_dp_pxl, int edgePosition){
         double sin10 = 0.1736, sin42 = 0.6691, sin74 = 0.9613, cos10 = 0.9848, cos42 = 0.7431, cos74 = 0.2756;
         switch (edgePosition){
