@@ -97,7 +97,7 @@ public class EdgeGestureService extends Service {
     private String[] packagename, favoritePackageName;
     private String launcherPackagename;
     private int[] x, y;
-    private int numOfIcon, gridRow, gridColumn, gridGap, activateId = 0, activatedId = 0;
+    private int numOfIcon, gridRow, gridColumn, gridGap, activateId = 0, activatedId = 0,gridX,gridY;
     public static final int GRID_ICON_SIZE = 58;
     private boolean hasOneActive = false;
     private boolean hasHomwBackNotiVisible = false;
@@ -774,7 +774,7 @@ public class EdgeGestureService extends Service {
                         isClockShown = true;
                     }
                     if (switched) {
-                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), GRID_ICON_SIZE, mScale, gridRow, gridColumn, gridGap);
+                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX,gridY, GRID_ICON_SIZE, mScale, gridRow, gridColumn, gridGap);
 //                        if (shortcutToSwitch != -1) {
 //                            activateId = shortcutToSwitch + 1;
 //                        }
@@ -1075,6 +1075,8 @@ public class EdgeGestureService extends Service {
                 shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
 
                 Utility.setFavoriteShortcutGridViewPosition(shortcutGridView, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared, gridDistanceFromEdge, gridGap);
+                gridX =(int) shortcutGridView.getX();
+                gridY = (int)shortcutGridView.getY();
                 if (!shortcutView.isAttachedToWindow()) {
                     windowManager.addView(shortcutView, shortcutViewParams);
                 }

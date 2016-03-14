@@ -29,9 +29,13 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     private SharedPreferences sharedPreferences;
     private IconPackManager.IconPack iconPack;
     private int mBackgroundAt = -1;
+    private Realm myRealm;
+    private Shortcut shortcut;
+    private Drawable defaultDrawable;
 
     public FavoriteShortcutAdapter(Context context) {
         mContext = context;
+        myRealm = Realm.getInstance(mContext);
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         String iconPackPacka = sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "com.colechamberlin.stickers");
         if (!iconPackPacka.equals("none")) {
@@ -63,24 +67,21 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
-        if (convertView == null) {
+        ImageView imageView = (ImageView) convertView;
+        if (imageView == null) {
             imageView = new ImageView(mContext);
 //            int padding =(int) mContext.getResources().getDimension(R.dimen.icon_padding);
 //            imageView.setPadding(padding,padding,padding,padding);
             imageView.setLayoutParams(new GridView.LayoutParams((int) mContext.getResources().getDimension(R.dimen.icon_size), (int) mContext.getResources().getDimension(R.dimen.icon_size)));
             imageView.setScaleType(ImageView.ScaleType.CENTER);
-        } else {
-            imageView = (ImageView) convertView;
         }
-        Realm myRealm = Realm.getInstance(mContext);
-        Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",position).findFirst();
+        shortcut = myRealm.where(Shortcut.class).equalTo("id",position).findFirst();
         if (shortcut == null) {
             imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
         } else {
             if (shortcut.getType() == Shortcut.TYPE_APP) {
                 try {
-                    Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
+                    defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
                     if (iconPack!=null) {
 
                             imageView.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
