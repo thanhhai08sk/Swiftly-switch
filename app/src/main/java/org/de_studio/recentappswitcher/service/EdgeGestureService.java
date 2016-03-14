@@ -336,12 +336,12 @@ public class EdgeGestureService extends Service {
 
     public class OnTouchListener implements View.OnTouchListener {
         private int x_init_cord, y_init_cord;
-        private int position, iconIdBackgrounded = -1;
+        private int position, iconIdBackgrounded = -1,preShortcutToSwitch = -1;
         private FrameLayout itemView;
         private AppCompatImageView[] iconImageList;
         private List<AppCompatImageView> iconImageArrayList;
         private DelayToSwitchTask delayToSwitchTask;
-        private boolean isOnlyFavorite, isStayPermanent;
+        private boolean isOnlyFavorite, isStayPermanent, isShortcutBackgroundNull = true;
 
         public OnTouchListener(int position, AppCompatImageView[] iconImageList, FrameLayout itemView, List<AppCompatImageView> iconImageArrayList, boolean isOnlyFavorite) {
             this.position = position;
@@ -358,6 +358,8 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    isShortcutBackgroundNull = true;
+                    preShortcutToSwitch = -1;
                     clearIconBackground();
                     if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, true)) {
                         vibrator.vibrate(15);
@@ -779,7 +781,16 @@ public class EdgeGestureService extends Service {
 //                            activateId = shortcutToSwitch + 1;
 //                        }
                         if (shortcutAdapter != null) {
-                            shortcutAdapter.setBackground(shortcutToSwitch);
+                            if (shortcutToSwitch != -1 && shortcutToSwitch != preShortcutToSwitch) {
+                                shortcutAdapter.setBackground(shortcutToSwitch);
+                                isShortcutBackgroundNull = true;
+                                preShortcutToSwitch = shortcutToSwitch;
+                            }else if (isShortcutBackgroundNull && shortcutToSwitch ==-1) {
+                                shortcutAdapter.setBackground(shortcutToSwitch);
+                                isShortcutBackgroundNull = false;
+                                preShortcutToSwitch = -1;
+                            }
+
                         }
                     } else {
                         int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
