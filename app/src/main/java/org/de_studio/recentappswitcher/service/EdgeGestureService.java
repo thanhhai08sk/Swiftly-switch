@@ -709,7 +709,8 @@ public class EdgeGestureService extends Service {
                             showAddFavoriteDialog();
                         }
                     } else {
-                        int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
+//                        int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
+                        int packageToSwitch = Utility.findIconToSwitchNew(x,y,x_cord,y_cord,icon_24dp_in_pxls,mScale);
                         if (packageToSwitch != -1) {
                             Intent extApp = null;
                             if (packageToSwitch < packagename.length) {
@@ -765,12 +766,11 @@ public class EdgeGestureService extends Service {
                     if (shortcutView.isAttachedToWindow()) {
                         windowManager.removeView(shortcutView);
                     }
-
                     break;
 
 
-                case MotionEvent.ACTION_MOVE:
 
+                case MotionEvent.ACTION_MOVE:
                     if (!isClockShown & !switched & !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
                         Log.e(LOG_TAG, "Show clock");
                         clockView = Utility.disPlayClock(getApplicationContext(), windowManager);
@@ -794,7 +794,8 @@ public class EdgeGestureService extends Service {
 
                         }
                     } else {
-                        int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
+//                        int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
+                        int iconToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls, mScale);
                         int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
                         if (moveToHomeBackNoti > 0) {
                             activateId = moveToHomeBackNoti + 30;
@@ -811,7 +812,7 @@ public class EdgeGestureService extends Service {
                                 layoutParams.width = (int) (76 * mScale);
                                 iconHighlight.setBackground(getDrawable(R.drawable.icon_background));
                                 iconHighlight.setX(x - 14 * mScale);
-                                iconHighlight.setY(y - 8*mScale);
+                                iconHighlight.setY(y - 8 * mScale);
 //                                iconHighlight.setTranslationX(-14 * mScale);
 //                                iconHighlight.setTranslationY(-8 * mScale);
                                 iconHighlight.setLayoutParams(layoutParams);
@@ -830,6 +831,12 @@ public class EdgeGestureService extends Service {
                                 delayToSwitchTask = new DelayToSwitchTask();
                                 delayToSwitchTask.execute();
                             }
+                            if ( activatedId != activateId) {
+                                if (delayToSwitchTask != null) {
+                                    delayToSwitchTask.cancel(true);
+                                }
+                            }
+
                             if (!touched) {
                                 firstTouchTime = System.currentTimeMillis();
                                 touched = true;
@@ -1001,9 +1008,10 @@ public class EdgeGestureService extends Service {
                             }
                         }
                     }
-                    if (defaultShared.getBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY, false) && activateId != 0 && activatedId != activateId) {
-
-                        vibrator.vibrate(15);
+                    if ( activateId != 0 && activatedId != activateId) {
+                        if (defaultShared.getBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY, false)) {
+                            vibrator.vibrate(15);
+                        }
                         activatedId = activateId;
                         activateId = 0;
                     }

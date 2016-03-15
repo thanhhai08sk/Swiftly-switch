@@ -98,6 +98,19 @@ public  class Utility {
         return -1;
     }
 
+    public static int findIconToSwitchNew(int[] x, int[] y, int x_cord, int y_cord, float radOfIconPxl, float mScale) {
+        double distance;
+        double distanceNeeded = 35*mScale;
+        for (int i = 0; i < x.length; i++) {
+            distance = Math.sqrt(Math.pow((double)x_cord - (double)(x[i] + radOfIconPxl),2) + Math.pow((double)y_cord - (double)(y[i]+radOfIconPxl), 2));
+            if (distance <= distanceNeeded) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
     public static int findShortcutToSwitch(int x_cord, int y_cord, int x_grid, int y_grid, int sizeOfIcon, float mScale,int gird_row, int grid_column, int grid_gap) {
         int item_x,item_y;
         double distance;
