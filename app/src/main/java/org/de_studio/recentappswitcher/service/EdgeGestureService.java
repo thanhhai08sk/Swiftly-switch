@@ -386,15 +386,20 @@ public class EdgeGestureService extends Service {
 
                     Set<String> excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
 
-                    if (position < 30) {
-                        x_init_cord = x_cord;
-                    } else {
-                        x_init_cord = x_cord - getXOffset(x_cord);
+                    switch (position / 10) {
+                        case 1:
+                            x_init_cord =(int) (x_cord - 10*mScale);
+                            y_init_cord = y_cord - getYOffset(y_cord);
+                            break;
+                        case 2:
+                            x_init_cord =(int) (x_cord + 10*mScale);
+                            y_init_cord = y_cord - getYOffset(y_cord);
+                            break;
+                        case 3:
+                            x_init_cord = x_cord - getXOffset(x_cord);
+                            y_init_cord =(int)( y_cord - 10*mScale);
+                            break;
                     }
-                    if (position >= 30) {
-                        y_init_cord = y_cord;
-                    } else y_init_cord = y_cord - getYOffset(y_cord);
-
                     switched = isOnlyFavorite;
                     if (isOnlyFavorite) {
                         if (delayToSwitchTask == null) {
