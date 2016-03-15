@@ -198,7 +198,7 @@
                     android:id="@+id/main_favorite_add_app_image_button"
                     android:background="@color/transparent"
                     android:src="@drawable/ic_edit_white_24dp"
-                    android:paddingRight="5dp"
+                    android:paddingRight="10dp"
                     />
 
             </LinearLayout>
@@ -401,7 +401,7 @@
                 android:id="@+id/main_exclude_edit_image_button"
                 android:background="@color/transparent"
                 android:src="@drawable/ic_edit_white_24dp"
-                android:paddingRight="5dp"
+                android:paddingRight="10dp"
                 />
 
         </LinearLayout>
@@ -442,7 +442,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:paddingRight="5dp"
                     android:checked="false"
                     android:id="@+id/main_disable_haptic_feedback_switch"
                     />
@@ -469,7 +468,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:paddingRight="5dp"
                     android:checked="false"
                     android:id="@+id/main_haptic_feedback_on_item_switch"
                     />
@@ -496,7 +494,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:paddingRight="5dp"
                     android:checked="false"
                     android:id="@+id/main_disable_clock_switch"
                     />
@@ -508,6 +505,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:paddingBottom="10dp"
+                android:paddingTop="10dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -528,8 +526,8 @@
                     android:layout_weight="0"
                     android:background="@color/transparent"
                     android:paddingLeft="16dp"
-                    android:paddingRight="5dp"
-                    android:src="@drawable/ic_settings_white_36px" />
+                    android:paddingRight="10dp"
+                    android:src="@drawable/ic_edit_white_24dp" />
 
             </LinearLayout>
 
@@ -538,6 +536,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:paddingBottom="10dp"
+                android:paddingTop="10dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -558,8 +557,8 @@
                     android:layout_weight="0"
                     android:background="@color/transparent"
                     android:paddingLeft="16dp"
-                    android:paddingRight="5dp"
-                    android:src="@drawable/ic_settings_white_36px" />
+                    android:paddingRight="10dp"
+                    android:src="@drawable/ic_edit_white_24dp" />
 
             </LinearLayout>
 
@@ -567,6 +566,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -591,8 +592,8 @@
                     android:layout_weight="0"
                     android:id="@+id/main_disable_accessiblity_image_button"
                     android:background="@color/transparent"
-                    android:src="@drawable/ic_settings_white_36px"
-                    android:paddingRight="5dp"
+                    android:src="@drawable/ic_edit_white_24dp"
+                    android:paddingRight="10dp"
                     />
 
             </LinearLayout>
