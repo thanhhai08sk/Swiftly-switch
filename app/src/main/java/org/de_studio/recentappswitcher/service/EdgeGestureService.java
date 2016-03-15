@@ -97,7 +97,7 @@ public class EdgeGestureService extends Service {
     private String[] packagename, favoritePackageName;
     private String launcherPackagename;
     private int[] x, y;
-    private int numOfIcon, gridRow, gridColumn, gridGap, activateId = 0, activatedId = 0,gridX,gridY;
+    private int numOfIcon, gridRow, gridColumn, gridGap, activateId = 0, activatedId = 0,gridX,gridY, numOfRecent;
     public static final int GRID_ICON_SIZE = 58;
     private boolean hasOneActive = false;
     private boolean hasHomwBackNotiVisible = false;
@@ -478,7 +478,7 @@ public class EdgeGestureService extends Service {
 //                        Log.e(LOG_TAG," item_view has already been added to the window manager");
 //                    }
 //                    Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
-                    Utility.setIconPositionNew(iconImageList,icon_distance_pxl,icon_24dp_in_pxls,position,x_init_cord,y_init_cord,6);
+                    Utility.setIconPositionNew(iconImageList,icon_distance_pxl,icon_24dp_in_pxls,position,x_init_cord,y_init_cord,numOfRecent);
 
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -1181,6 +1181,7 @@ public class EdgeGestureService extends Service {
         icon_distance = defaultShared.getInt(EdgeSettingDialogFragment.ICON_DISTANCE_KEY, 110);
         ovalOffSet = (int) (ovalOffSetInDp * mScale);
         ovalRadiusPlusPxl = (int) (ovalRadiusPlus * mScale);
+        numOfRecent = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_RECENT_KEY, 6);
         gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
         gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);

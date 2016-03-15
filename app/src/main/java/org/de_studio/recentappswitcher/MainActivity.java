@@ -256,6 +256,7 @@ public class MainActivity extends Activity {
         ImageButton edge2SettingButton = (ImageButton) findViewById(R.id.edge_2_setting_image_button);
         ImageButton iconPackSettingButton = (ImageButton) findViewById(R.id.main_icon_pack_support_setting_button);
         ImageButton outerRingSettingButton = (ImageButton) findViewById(R.id.main_outter_ring_setting_button);
+        ImageButton numberOfRecentButton = (ImageButton) findViewById(R.id.main_number_of_recent_setting_button);
         edge1SettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -333,6 +334,58 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), OuterRingSettingActivity.class));
+            }
+        });
+
+        numberOfRecentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int current = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.NUM_OF_RECENT_KEY, 6);
+                int checked = 2;
+                switch (current) {
+                    case 4:
+                        checked = 0;
+                        break;
+                    case 5:
+                        checked = 1;
+                        break;
+                    case 6:
+                        checked = 2;
+                        break;
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(R.string.main_number_of_recent)
+                        .setSingleChoiceItems(new CharSequence[]{"4", "5", "6"}, checked, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case 0:
+                                        sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.NUM_OF_RECENT_KEY, 4).commit();
+                                        break;
+                                    case 1:
+                                        sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.NUM_OF_RECENT_KEY, 5).commit();
+                                        break;
+                                    case 2:
+                                        sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.NUM_OF_RECENT_KEY, 6).commit();
+                                        break;
+                                }
+                            }
+                        })
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                                startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                            }
+                        })
+                .
+                setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //do nothing
+                    }
+                });
+                builder.show();
             }
         });
 

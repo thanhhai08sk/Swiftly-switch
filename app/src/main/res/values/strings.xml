@@ -124,4 +124,5 @@
     <string name="share_with_friend_message">Hey! Try this awesome app? :)</string>
     <string name="install">Install</string>
     <string name="share">Share</string>
+    <string name="main_number_of_recent">Number of recent apps</string>
 </resources>

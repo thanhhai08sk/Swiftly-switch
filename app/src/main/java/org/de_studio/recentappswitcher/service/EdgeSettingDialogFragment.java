@@ -45,6 +45,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String APP_OPEN_TIME_KEY = "app_open_time";
     public static final String HAS_REACT_FOR_VOTE_KEY = "has_react_for_vote";
     public static final String ICON_DISTANCE_KEY = "icon_distance";
+    public static final String NUM_OF_RECENT_KEY = "num_of_recent";
     public static final String NUM_OF_GRID_ROW_KEY = "grid_row";
     public static final String NUM_OF_GRID_COLUMN_KEY = "grid_column";
     public static final String GAP_OF_SHORTCUT_KEY = "shortcut_gap";

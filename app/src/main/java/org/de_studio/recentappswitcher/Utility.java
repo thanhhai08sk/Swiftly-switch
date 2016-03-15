@@ -119,7 +119,8 @@ public  class Utility {
         double[] alphaN = new double[n];
         switch (n) {
             case 4:
-                alpha = 0.1389*Math.PI; // 25 degree
+//                alpha = 0.1389*Math.PI; // 25 degree
+                alpha = 0.111*Math.PI; // 20 degree
                 break;
             case 5:
                 alpha = 0.111*Math.PI; // 20 degree
