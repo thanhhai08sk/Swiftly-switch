@@ -117,6 +117,9 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                     case 1:
                         sharedPreferences.edit().putBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY,true).commit();
                 }
+
+                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
+                mContext.startService(new Intent(mContext, EdgeGestureService.class));
             }
 
             @Override
@@ -166,6 +169,8 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 }
                 edgeImage.setLayoutParams(lp);
                 updateEdgeView();
+                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
+                mContext.startService(new Intent(mContext, EdgeGestureService.class));
             }
 
             @Override
@@ -199,6 +204,8 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 sharedPreferences.edit().putInt(EDGE_SENSIIVE_KEY, progressChanged).commit();
+                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
+                mContext.startService(new Intent(mContext, EdgeGestureService.class));
             }
         });
         final AppCompatSeekBar lengthSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.length_seek_bar);
@@ -231,6 +238,8 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 sharedPreferences.edit().putInt(EDGE_LENGTH_KEY, progressChanged).commit();
+                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
+                mContext.startService(new Intent(mContext, EdgeGestureService.class));
             }
         });
 
@@ -258,6 +267,8 @@ public class EdgeSettingDialogFragment extends DialogFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
+                mContext.startService(new Intent(mContext, EdgeGestureService.class));
 //                sharedPreferences.edit().putInt(EDGE_OFFSET_KEY, progressChanged).commit();
             }
         });
@@ -285,6 +296,8 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 defaultSharedPreferences.edit().putInt(ICON_DISTANCE_KEY,progressChanged).commit();
+                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
+                mContext.startService(new Intent(mContext, EdgeGestureService.class));
             }
         });
 
@@ -309,6 +322,8 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 sharedPreferences.edit().putInt(EDGE_LENGTH_KEY, 150).commit();
                 circleSizeSeekBar.setProgress(15);
                 defaultSharedPreferences.edit().putInt(ICON_DISTANCE_KEY,110).commit();
+                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
+                mContext.startService(new Intent(mContext, EdgeGestureService.class));
 
             }
         });
@@ -326,7 +341,6 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext =  getActivity();
-        mContext.stopService(new Intent(mContext, EdgeGestureService.class));
 
         mScale = getResources().getDisplayMetrics().density;
     }
@@ -335,7 +349,6 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public void onDestroyView() {
         super.onDestroyView();
         Log.e(LOG_TAG, sharedPreferences.getString(EDGE_POSITION_KEY, "null") + "\n" + sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 0) + "\n" + sharedPreferences.getInt(EDGE_LENGTH_KEY, 0));
-        mContext.startService(new Intent(mContext, EdgeGestureService.class));
     }
 
     private void updateEdgeView(){
