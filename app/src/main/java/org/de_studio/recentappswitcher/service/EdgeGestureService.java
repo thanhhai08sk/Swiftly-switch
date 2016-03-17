@@ -25,6 +25,7 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.support.v7.widget.AppCompatImageView;
@@ -819,7 +820,12 @@ public class EdgeGestureService extends Service {
 
                                 layoutParams.height = (int) (64 * mScale);
                                 layoutParams.width = (int) (76 * mScale);
-                                iconHighlight.setBackground(getDrawable(R.drawable.icon_background));
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    iconHighlight.setBackground(getDrawable(R.drawable.icon_background));
+                                } else {
+                                    iconHighlight.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.icon_background));
+                                }
+
                                 iconHighlight.setX(x - 14 * mScale);
                                 iconHighlight.setY(y - 8 * mScale);
 //                                iconHighlight.setTranslationX(-14 * mScale);

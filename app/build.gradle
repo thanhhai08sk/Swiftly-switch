@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         applicationId "org.de_studio.recentappswitcher"
-        minSdkVersion 20
+        minSdkVersion 19
         targetSdkVersion 23
         versionCode 22
         versionName "2.0.9"
