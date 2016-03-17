@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/dialog_vibration_duration_value"
         android:text="15ms"
+        android:layout_gravity="right"
         />
     <SeekBar
         android:layout_width="match_parent"

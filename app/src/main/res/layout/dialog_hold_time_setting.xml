@@ -9,13 +9,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/dialog_hold_time_value"
         android:text="450ms"
+        android:layout_gravity="right"
         />
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dialog_hold_time_seek_bar"
         android:padding="10dp"
-        android:max="1300"
+        android:max="1000"
         android:progress="150"
         />
 

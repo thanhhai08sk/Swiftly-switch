@@ -109,7 +109,7 @@ public class EdgeGestureService extends Service {
     private ExpandStatusBarView action4View, action1View, action2View, action3View;
     private Vibrator vibrator;
     private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl, ovalOffSetInDp = 70;
-    private long holdTime = 450, firstTouchTime;
+    private long holdTime = 450, vibrationDuration;
     private boolean touched = false, switched = false, isOutOfTrial = false, isFreeVersion = false;
     private String[] spinnerEntries;
     private GridView shortcutGridView;
@@ -853,7 +853,6 @@ public class EdgeGestureService extends Service {
                             }
 
                             if (!touched) {
-                                firstTouchTime = System.currentTimeMillis();
                                 touched = true;
                             }
                         } else {
@@ -1029,7 +1028,7 @@ public class EdgeGestureService extends Service {
                     }
                     if ( activateId != 0 && activatedId != activateId) {
                         if (defaultShared.getBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY, false)) {
-                            vibrator.vibrate(15);
+                            vibrator.vibrate(vibrationDuration);
                         }
                         activatedId = activateId;
                         activateId = 0;
@@ -1212,6 +1211,8 @@ public class EdgeGestureService extends Service {
         gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
         gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
+        holdTime = defaultShared.getInt(EdgeSettingDialogFragment.HOLD_TIME_KEY, 450);
+        vibrationDuration = defaultShared.getInt(EdgeSettingDialogFragment.VIBRATION_DURATION_KEY, 15);
         Log.e(LOG_TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
                 "\nEdge1 position = " + edge1Position + "\nEdge2 positon = " + edge2Position);
     }
