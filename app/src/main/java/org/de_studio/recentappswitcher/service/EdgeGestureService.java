@@ -97,7 +97,7 @@ public class EdgeGestureService extends Service {
     private String[] packagename, favoritePackageName;
     private String launcherPackagename;
     private int[] x, y;
-    private int numOfIcon, gridRow, gridColumn, gridGap, activateId = 0, activatedId = 0,gridX,gridY, numOfRecent;
+    private int numOfIcon, gridRow, gridColumn, gridGap,gridX,gridY, numOfRecent;
     public static final int GRID_ICON_SIZE = 58;
     private boolean hasOneActive = false;
     private boolean hasHomwBackNotiVisible = false;
@@ -336,7 +336,7 @@ public class EdgeGestureService extends Service {
 
     public class OnTouchListener implements View.OnTouchListener {
         private int x_init_cord, y_init_cord;
-        private int position, iconIdBackgrounded = -1,preShortcutToSwitch = -1;
+        private int position, iconIdBackgrounded = -1,preShortcutToSwitch = -1, activateId = 0, activatedId = 0;
         private FrameLayout itemView;
         private AppCompatImageView[] iconImageList;
         private List<AppCompatImageView> iconImageArrayList;
@@ -783,9 +783,13 @@ public class EdgeGestureService extends Service {
                     }
                     if (switched) {
                         int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX,gridY, GRID_ICON_SIZE, mScale, gridRow, gridColumn, gridGap);
-//                        if (shortcutToSwitch != -1) {
-//                            activateId = shortcutToSwitch + 1;
-//                        }
+                        if (shortcutToSwitch != -1) {
+                            activateId = shortcutToSwitch + 1;
+                        } else {
+                            activatedId = 0;
+                            activateId = 0;
+                        }
+
                         if (shortcutAdapter != null) {
                             if (shortcutToSwitch != -1 && shortcutToSwitch != preShortcutToSwitch) {
                                 shortcutAdapter.setBackground(shortcutToSwitch);
@@ -847,6 +851,8 @@ public class EdgeGestureService extends Service {
                                 touched = true;
                             }
                         } else {
+                            activatedId = 0;
+                            activateId = 0;
                             clearIconBackground();
 
                             if (delayToSwitchTask != null) {
