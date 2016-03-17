@@ -22,6 +22,7 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -256,6 +257,9 @@ public class MainActivity extends Activity {
         ImageButton edge2SettingButton = (ImageButton) findViewById(R.id.edge_2_setting_image_button);
         ImageButton iconPackSettingButton = (ImageButton) findViewById(R.id.main_icon_pack_support_setting_button);
         ImageButton outerRingSettingButton = (ImageButton) findViewById(R.id.main_outter_ring_setting_button);
+        final ImageButton vibrationDurationSettingButton = (ImageButton) findViewById(R.id.main_vibration_duration_setting_image_button);
+        ImageButton holdTimeSettingButton = (ImageButton) findViewById(R.id.main_hold_time_setting_image_button);
+        ImageButton holdTimeInfoButton = (ImageButton) findViewById(R.id.main_hold_time_info_image_button);
         edge1SettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -333,6 +337,47 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), OuterRingSettingActivity.class));
+            }
+        });
+
+        vibrationDurationSettingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
+                View view = View.inflate(MainActivity.this, R.layout.dialog_vibration_duration_setting, null);
+                SeekBar seekBar = (SeekBar) view.findViewById(R.id.dialog_vibration_duration_seek_bar);
+                final TextView textView = (TextView) view.findViewById(R.id.dialog_vibration_duration_value);
+                int currentValue = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.VIBRATION_DURATION_KEY, 15);
+                textView.setText(currentValue +" ms");
+                seekBar.setProgress(currentValue - 5);
+                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    int progressChanged;
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        progressChanged = progress +5;
+                        textView.setText(progressChanged + " ms");
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.VIBRATION_DURATION_KEY,progressChanged).commit();
+                        stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                        startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                    }
+                });
+                builder.setView(view).
+                        setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //do nothing
+                            }
+                        });
+                builder.show();
             }
         });
 

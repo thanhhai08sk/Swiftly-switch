@@ -57,6 +57,8 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String ACTION_3_KEY = "action_3";
     public static final String ACTION_4_KEY = "action_4";
     public static final String IS_ACTIONS_STAY_PERMANENT = "is_permanent";
+    public static final String VIBRATION_DURATION_KEY = "vibration_duration";
+    public static final String HOLD_TIME_KEY  = "hold_time";
     private static int edgeNumber;
     private  float mScale;
     private static SharedPreferences sharedPreferences,defaultSharedPreferences;
