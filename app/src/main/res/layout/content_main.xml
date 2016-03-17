@@ -566,6 +566,77 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:text="@string/main_vibration_duration"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
+
+
+
+                <ImageButton
+                    android:id="@+id/main_vibration_duration_setting_image_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:background="@color/transparent"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/ic_edit_white_24dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:text="@string/main_hold_time"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:id="@+id/main_hold_time_info_image_button"
+                    android:background="@color/transparent"
+                    android:src="@drawable/ic_info_outline_white_24dp"
+                    android:paddingRight="16dp"
+                    />
+
+
+
+                <ImageButton
+                    android:id="@+id/main_hold_time_setting_image_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:background="@color/transparent"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/ic_edit_white_24dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:orientation="horizontal">

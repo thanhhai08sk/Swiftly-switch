@@ -125,4 +125,7 @@
     <string name="install">Install</string>
     <string name="share">Share</string>
     <string name="main_number_of_recent">Number of recent apps</string>
+    <string name="main_vibration_duration">Vibration duration</string>
+    <string name="main_hold_time">Hold time</string>
+    <string name="main_hold_time_info">Time needed to switch to favorite shortcut when you hold at one of recent apps</string>
 </resources>
