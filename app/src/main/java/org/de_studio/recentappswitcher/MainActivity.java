@@ -371,6 +371,51 @@ public class MainActivity extends Activity {
                     }
                 });
                 builder.setView(view).
+                        setTitle(R.string.main_vibration_duration).
+                        setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //do nothing
+                            }
+                        });
+                builder.show();
+            }
+        });
+
+        holdTimeSettingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
+                View view = View.inflate(MainActivity.this, R.layout.dialog_hold_time_setting, null);
+                SeekBar seekBar = (SeekBar) view.findViewById(R.id.dialog_hold_time_seek_bar);
+                final TextView textView = (TextView) view.findViewById(R.id.dialog_hold_time_value);
+                int currentValue = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.HOLD_TIME_KEY, 450);
+                textView.setText(currentValue +" ms");
+                seekBar.setProgress(currentValue - 300);
+                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    int progressChanged;
+
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        progressChanged = progress + 300;
+                        textView.setText(progressChanged + " ms");
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.HOLD_TIME_KEY, progressChanged).commit();
+                        stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                        startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                    }
+                });
+
+                builder.setView(view).
+                        setTitle(R.string.main_hold_time).
                         setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
