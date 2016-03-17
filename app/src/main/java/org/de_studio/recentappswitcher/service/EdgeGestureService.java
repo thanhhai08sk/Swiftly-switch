@@ -857,8 +857,10 @@ public class EdgeGestureService extends Service {
                                 touched = true;
                             }
                         } else {
-                            activatedId = 0;
-                            activateId = 0;
+                            if (moveToHomeBackNoti == 0) {
+                                activatedId = 0;
+                                activateId = 0;
+                            }
                             clearIconBackground();
 
                             if (delayToSwitchTask != null) {
