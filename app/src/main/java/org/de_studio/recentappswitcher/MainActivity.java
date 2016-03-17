@@ -426,6 +426,22 @@ public class MainActivity extends Activity {
             }
         });
 
+        holdTimeInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(R.string.main_hold_time)
+                        .setMessage(R.string.main_hold_time_info)
+                        .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //do nothing
+                            }
+                        });
+                builder.show();
+            }
+        });
+
 //        numberOfRecentButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
