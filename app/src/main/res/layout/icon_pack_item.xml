@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+ >
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:id="@+id/icon_pack_icon_image_view"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:layout_weight="0"
+        android:src="@drawable/ic_email_white_48dp"
         />
     <TextView
-        android:layout_width="300dp"
+        android:layout_width="260dp"
+        android:layout_centerVertical="true"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:singleLine="true"
+        android:layout_toRightOf="@id/icon_pack_icon_image_view"
         android:id="@+id/icon_pack_label_text_view"
         android:text="Icon pack"
         />
@@ -23,11 +25,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/icon_pack_radio_button"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
         android:paddingRight="10dp"
         android:clickable="false"
         android:focusable="false"
-        android:layout_weight="0"
         />
 
-</LinearLayout>
+</RelativeLayout>
 

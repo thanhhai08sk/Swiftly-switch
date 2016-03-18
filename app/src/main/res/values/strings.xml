@@ -34,9 +34,9 @@
     <string name="edge_dialog_default_button">Default</string>
     <string name="edge_dialog_cancel_button">Cancel</string>
     <string name="edge_dialog_ok_button" translatable="false">Ok</string>
-    <string name="main_favorite_app_title">Favorite apps:</string>
-    <string name="main_favorite_info_title">Favorite apps</string>
-    <string name="main_favorite_app_info_text">Apps that will be listed when you hold on the one of the recent apps icon for 1 second or when there are no recent app</string>
+    <string name="main_favorite_app_title">Favorite shortcut:</string>
+    <string name="main_favorite_info_title">Favorite shortcut</string>
+    <string name="main_favorite_app_info_text">Apps/shortcut that will be listed when you hold on the one of the recent apps icon for 1 second or when there are no recent app</string>
     <string name="limit_for_favorite_app_is_6">The limit for favorite app is 6!</string>
     <string name="main_exclude_info_title">Exclude apps</string>
     <string name="main_exclude_app_title">Exclude apps:</string>
@@ -64,7 +64,7 @@
     <string name="no">No</string>
     <string name="please_vote_for_this_app">Please consider vote for this app on Store</string>
     <string name="edge_dialog_set_circle_size_text">Circle size</string>
-    <string name="title_activity_set_favorite_shortcut">SetFavoriteShortcutActivity</string>
+    <string name="title_activity_set_favorite_shortcut">Favorite shortcut setting</string>
     <string name="title_activity_choose_shortcut">ChooseShortcutActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="app_tab_fragment_back_button">Back</string>
@@ -108,7 +108,7 @@
     <string name="main_more_setting_title">More setting</string>
     <string name="main_icon_pack_support">Set icon pack</string>
     <string name="icon_pack_system_icon_pack_label">System</string>
-    <string name="title_activity_outter_ring_setting">OutterRingSettingActivity</string>
+    <string name="title_activity_outter_ring_setting">Outer zone Setting</string>
     <string name="main_outer_ring_setting">Outer ring action</string>
     <string name="main_disable_accessibility_title">Disable accessibility</string>
     <string name="main_disable_accessibility_detail_text">Enable accessibility can cause lag in some device when using Chrome. This happen to all

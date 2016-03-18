@@ -5,7 +5,7 @@
     android:id="@+id/edge_relativelayout"
     >
 
-    <org.de_studio.recentappswitcher.service.MyImageView
+    <ImageView
         android:layout_width="12dp"
         android:layout_height="150dp"
         android:id="@+id/edge_image"

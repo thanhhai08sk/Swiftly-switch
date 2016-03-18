@@ -28,6 +28,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     private Context mContext;
     private SharedPreferences sharedPreferences;
     private IconPackManager.IconPack iconPack;
+    private int iconPadding;
 
 
     public FavoriteShortcutAdapter(Context context) {
@@ -39,6 +40,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
             iconPackManager.setContext(mContext);
             iconPack = iconPackManager.getInstance(iconPackPacka);
         }
+        iconPadding = (int)mContext.getResources().getDimension(R.dimen.icon_padding);
     }
 
     @Override
@@ -62,7 +64,8 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         if (convertView == null) {
             imageView = new ImageView(mContext);
             imageView.setLayoutParams(new GridView.LayoutParams((int) mContext.getResources().getDimension(R.dimen.icon_size), (int) mContext.getResources().getDimension(R.dimen.icon_size)));
-            imageView.setScaleType(ImageView.ScaleType.CENTER);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            imageView.setPadding(iconPadding,iconPadding,iconPadding,iconPadding);
         } else {
             imageView = (ImageView) convertView;
         }

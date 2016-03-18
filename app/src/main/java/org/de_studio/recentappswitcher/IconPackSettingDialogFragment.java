@@ -8,12 +8,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
@@ -24,7 +24,6 @@ import java.util.HashMap;
  */
 public class IconPackSettingDialogFragment extends DialogFragment {
     private static final String LOG_TAG = IconPackSettingDialogFragment.class.getSimpleName();
-    private ProgressBar progressBar;
     static ListView mListView;
     private IconPackListAdapter mAdapter;
 
@@ -33,7 +32,6 @@ public class IconPackSettingDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.dialog_fragment_icon_pack, container);
         mListView = (ListView) rootView.findViewById(R.id.icon_pack_list_view);
-        progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
         IconPackManager manager = new IconPackManager();
         manager.setContext(getActivity());
         HashMap<String, IconPackManager.IconPack> hashMap = manager.getAvailableIconPacks(true);
@@ -58,6 +56,14 @@ public class IconPackSettingDialogFragment extends DialogFragment {
         }
 
         super.onDismiss(dialog);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Window window = getDialog().getWindow();
+        window.setLayout((int)getContext().getResources().getDimension(R.dimen.icon_pack_dialog_width), (int)getContext().getResources().getDimension(R.dimen.icon_pack_dialog_heigh));
+        window.setGravity(Gravity.CENTER);
     }
 
     @NonNull

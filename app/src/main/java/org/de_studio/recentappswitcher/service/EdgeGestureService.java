@@ -83,8 +83,8 @@ public class EdgeGestureService extends Service {
     private WindowManager windowManager;
     private RelativeLayout edge1View;
     private RelativeLayout edge2View;
-    private MyImageView edge1Image;
-    private MyImageView edge2Image;
+    private ImageView edge1Image;
+    private ImageView edge2Image;
     private FrameLayout item1View, item2View, shortcutView;
     public int icon_height = 48;
     public int icon_width = 48, icon_rad = 24;
@@ -141,7 +141,7 @@ public class EdgeGestureService extends Service {
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
-        edge1Image = (MyImageView) edge1View.findViewById(R.id.edge_image);
+        edge1Image = (ImageView) edge1View.findViewById(R.id.edge_image);
 //        ViewGroup.LayoutParams edge1ImageLayoutParams = edge1Image.getLayoutParams();
         if (edge1Image != null) {
             RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1Image.getLayoutParams());
@@ -225,7 +225,7 @@ public class EdgeGestureService extends Service {
             }
         }
         edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
-        edge2Image = (MyImageView) edge2View.findViewById(R.id.edge_image);
+        edge2Image = (ImageView) edge2View.findViewById(R.id.edge_image);
         RelativeLayout.LayoutParams edge2ImageLayoutParams = new RelativeLayout.LayoutParams(edge2Image.getLayoutParams());
         if (Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext()) >= 30) {
             edge2HeightPxl = (int) (edge2Sensitive * mScale);

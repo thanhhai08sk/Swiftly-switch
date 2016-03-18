@@ -32,9 +32,11 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     private Realm myRealm;
     private Shortcut shortcut;
     private Drawable defaultDrawable;
+    private int iconPadding;
 
     public FavoriteShortcutAdapter(Context context) {
         mContext = context;
+        iconPadding =(int) mContext.getResources().getDimension(R.dimen.icon_padding);
         myRealm = Realm.getInstance(mContext);
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         String iconPackPacka = sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "com.colechamberlin.stickers");
@@ -73,7 +75,8 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
 //            int padding =(int) mContext.getResources().getDimension(R.dimen.icon_padding);
 //            imageView.setPadding(padding,padding,padding,padding);
             imageView.setLayoutParams(new GridView.LayoutParams((int) mContext.getResources().getDimension(R.dimen.icon_size), (int) mContext.getResources().getDimension(R.dimen.icon_size)));
-            imageView.setScaleType(ImageView.ScaleType.CENTER);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            imageView.setPadding(iconPadding, iconPadding, iconPadding, iconPadding);
         }
         shortcut = myRealm.where(Shortcut.class).equalTo("id",position).findFirst();
         if (shortcut == null) {
