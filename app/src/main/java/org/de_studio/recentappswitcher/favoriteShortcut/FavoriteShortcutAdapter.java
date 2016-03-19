@@ -73,8 +73,10 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",position).findFirst();
         if (shortcut == null) {
             imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+            imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
         } else {
             if (shortcut.getType() == Shortcut.TYPE_APP) {
+                imageView.setColorFilter(null);
                 try {
                     Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
                     if (iconPack!=null) {
