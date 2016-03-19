@@ -33,6 +33,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     private Shortcut shortcut;
     private Drawable defaultDrawable;
     private int iconPadding;
+    private boolean backgroundMode = false;
 
     public FavoriteShortcutAdapter(Context context) {
         mContext = context;
@@ -45,6 +46,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
             iconPackManager.setContext(mContext);
             iconPack = iconPackManager.getInstance(iconPackPacka);
         }
+        backgroundMode = false;
     }
 
     @Override
@@ -64,12 +66,19 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
 
     public void setBackground(int position) {
         mBackgroundAt = position;
+        backgroundMode = true;
         FavoriteShortcutAdapter.this.notifyDataSetChanged();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView = (ImageView) convertView;
+        if (backgroundMode && convertView != null) {
+            if (position == mBackgroundAt) {
+                imageView.setBackground(ContextCompat.getDrawable(mContext,R.drawable.icon_background_square));
+            }else imageView.setBackground(null);
+            return imageView;
+        }
         if (imageView == null) {
             imageView = new ImageView(mContext);
 //            int padding =(int) mContext.getResources().getDimension(R.dimen.icon_padding);
@@ -128,9 +137,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
             }
 
         }
-        if (position == mBackgroundAt) {
-            imageView.setBackground(ContextCompat.getDrawable(mContext,R.drawable.icon_background_square));
-        }else imageView.setBackground(null);
+
 
         return imageView;
     }
