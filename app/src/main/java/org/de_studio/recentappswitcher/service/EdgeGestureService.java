@@ -95,7 +95,7 @@ public class EdgeGestureService extends Service {
     public int edge1WidthPxl, edge2WidthPxl;
     public int edge1Sensivite, edge2Sensitive;
     private List<AppCompatImageView> iconImageArrayList1, iconImageArrayList2;
-    private String[] packagename, favoritePackageName;
+    private String[] packagename;
     private String launcherPackagename;
     private int[] x, y;
     private int numOfIcon, gridRow, gridColumn, gridGap,gridX,gridY, numOfRecent;
@@ -128,9 +128,6 @@ public class EdgeGestureService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME)) isFreeVersion = true;
-        Set<String> favoriteSet = sharedPreferences_favorite.getStringSet(EdgeSettingDialogFragment.FAVORITE_KEY, new HashSet<String>());
-        favoritePackageName = new String[favoriteSet.size()];
-        favoriteSet.toArray(favoritePackageName);
         Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
         launcherIntent.addCategory(Intent.CATEGORY_HOME);
         ResolveInfo res = getPackageManager().resolveActivity(launcherIntent, 0);
@@ -138,6 +135,9 @@ public class EdgeGestureService extends Service {
             launcherPackagename = res.activityInfo.packageName;
         } else launcherPackagename = "";
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        if (edge1View!= null && edge1View.isAttachedToWindow()) {
+            Log.e(LOG_TAG, "edge1View still attached to window");
+        }
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
@@ -1227,9 +1227,11 @@ public class EdgeGestureService extends Service {
         super.onDestroy();
         if (edge1View.isAttachedToWindow()) {
             windowManager.removeView(edge1View);
+            edge1View = null;
         }
         if (edge2View.isAttachedToWindow()) {
             windowManager.removeView(edge2View);
+            edge2View = null;
         }
         Log.e(LOG_TAG, "onDestroy service");
     }

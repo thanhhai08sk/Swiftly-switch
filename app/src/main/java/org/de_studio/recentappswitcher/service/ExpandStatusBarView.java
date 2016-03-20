@@ -52,7 +52,7 @@ public class ExpandStatusBarView extends View {
         homwBackNoti = positionOfArc;
         sharedPreferences = context.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         init();
-        Log.e("ExpandStatusBarView ", "position%10 = " + position % 10);
+        Log.e("ExpandStatusBarView ", "position = " + position);
     }
 
     public String getText(){
