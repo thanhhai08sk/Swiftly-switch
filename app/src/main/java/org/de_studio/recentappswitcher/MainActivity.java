@@ -27,8 +27,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.appinvite.AppInviteInvitation;
-
 import org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
@@ -761,11 +759,13 @@ public class MainActivity extends Activity {
     }
 
     protected void shareFriend() {
-        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.share_with_friend_title) )
-                .setMessage(getString(R.string.share_with_friend_message))
-                .setCallToActionText(getString(R.string.install))
-                .build();
-        startActivityForResult(intent, REQUEST_INVITE);
+        String url = "http://play.google.com/store/apps/details?id="  + getPackageName();
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, url);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        startActivity(intent);
     }
 
 }

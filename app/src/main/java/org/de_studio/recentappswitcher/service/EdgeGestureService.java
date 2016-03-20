@@ -137,6 +137,11 @@ public class EdgeGestureService extends Service {
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         if (edge1View != null && edge1View.isAttachedToWindow()) {
             Log.e(LOG_TAG, "edge1View still attached to window");
+            windowManager.removeView(edge1View);
+        }
+        if (edge2View != null && edge2View.isAttachedToWindow()) {
+            Log.e(LOG_TAG, "edge1View still attached to window");
+            windowManager.removeView(edge2View);
         }
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -374,6 +379,13 @@ public class EdgeGestureService extends Service {
                     edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
                     if (position != edge1Position && position != edge2Position) {
                         Log.e(LOG_TAG, "postion != edge1position and edge2 position");
+                        if (edge1View != null && edge1View.isAttachedToWindow()) {
+                            windowManager.removeView(edge1View);
+                        }
+                        if (edge2View != null && edge2View.isAttachedToWindow()) {
+                            windowManager.removeView(edge2View);
+                        }
+                        onDestroy();
                         return false;
                     }
                     Log.e(LOG_TAG,"position = "+ position + "\nEdge1position = "+ edge1Position + "\nEdge2Position = "+ edge2Position);
