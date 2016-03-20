@@ -3,7 +3,7 @@
     android:packageNames="org.de_studio.recentappswitcher.pro"
     android:accessibilityEventTypes="typeTouchInteractionEnd"
     android:accessibilityFlags="flagDefault"
-    android:accessibilityFeedbackType="feedbackVisual"
+    android:accessibilityFeedbackType="feedbackGeneric"
     android:canRetrieveWindowContent="false"
     android:notificationTimeout="500"
     />

@@ -1183,7 +1183,7 @@ public class EdgeGestureService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (item1View.isAttachedToWindow()) {
+        if (item1View!=null && item1View.isAttachedToWindow()) {
             if (action1View != null) {
                 item1View.removeView(action2View);
             }
@@ -1198,7 +1198,7 @@ public class EdgeGestureService extends Service {
             }
             windowManager.removeView(item1View);
         }
-        if (item2View.isAttachedToWindow()) {
+        if (item2View!= null && item2View.isAttachedToWindow()) {
             if (action1View != null) {
                 item2View.removeView(action2View);
             }

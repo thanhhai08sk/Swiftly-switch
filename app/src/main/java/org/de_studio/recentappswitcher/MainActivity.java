@@ -765,7 +765,12 @@ public class MainActivity extends Activity {
         intent.putExtra(Intent.EXTRA_TEXT, url);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
                 Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        startActivity(intent);
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Log.e(LOG_TAG, "Activity not found when share app");
+        }
+
     }
 
 }
