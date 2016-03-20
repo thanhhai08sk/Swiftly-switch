@@ -103,7 +103,7 @@ public class EdgeGestureService extends Service {
     private boolean hasOneActive = false;
     private boolean hasHomwBackNotiVisible = false;
     private boolean isEdge1On, isEdge2On;
-    public int edge1Position, edge2Position;
+    public int edge1Position, edge2Position,iconPaddingLeft, iconPaddingTop;
     private SharedPreferences defaultShared, sharedPreferences1, sharedPreferences2, sharedPreferences_favorite, sharedPreferences_exclude;
     private AppCompatImageView[] iconImageList1, iconImageList2;
     private ExpandStatusBarView action4View, action1View, action2View, action3View;
@@ -831,6 +831,7 @@ public class EdgeGestureService extends Service {
 //                                iconHighlight.setTranslationX(-14 * mScale);
 //                                iconHighlight.setTranslationY(-8 * mScale);
                                 iconHighlight.setLayoutParams(layoutParams);
+                                iconHighlight.setPadding(iconPaddingLeft, iconPaddingTop, iconPaddingLeft, iconPaddingTop);
                                 iconIdBackgrounded = iconToSwitch;
                                 Log.e(LOG_TAG, "setBackground");
 
@@ -1141,6 +1142,7 @@ public class EdgeGestureService extends Service {
                     iconResetBackground.setX(x + 14 * mScale);
                     iconResetBackground.setY(y + 8 * mScale);
                     iconResetBackground.setLayoutParams(layoutParams1);
+                    iconResetBackground.setPadding(0, 0, 0, 0);
                     iconIdBackgrounded = -1;
                 }else iconIdBackgrounded = -1;
             }
@@ -1213,6 +1215,9 @@ public class EdgeGestureService extends Service {
         gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
         holdTime = defaultShared.getInt(EdgeSettingDialogFragment.HOLD_TIME_KEY, 450);
         vibrationDuration = defaultShared.getInt(EdgeSettingDialogFragment.VIBRATION_DURATION_KEY, 15);
+        iconPaddingLeft =(int) (14*mScale);
+        iconPaddingTop = (int) (8 * mScale);
+
         Log.e(LOG_TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
                 "\nEdge1 position = " + edge1Position + "\nEdge2 positon = " + edge2Position);
     }

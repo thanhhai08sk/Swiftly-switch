@@ -80,11 +80,9 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                 try {
                     Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
                     if (iconPack!=null) {
-
                             imageView.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
                     } else {
                         imageView.setImageDrawable(defaultDrawable);
-
                     }
                 } catch (PackageManager.NameNotFoundException e) {
                     Log.e(LOG_TAG, "NameNotFound " + e);
