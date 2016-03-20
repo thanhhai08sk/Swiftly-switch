@@ -719,8 +719,32 @@ public  class Utility {
                 manager.sendAccessibilityEvent(event1);
             }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
         } catch (IllegalAccessException e) {
+            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+            event1.setClassName(className);
+            event1.getText().add("noti");
+            event1.setAction(4);
+            event1.setPackageName(packageName);
+            event1.setEnabled(true);
+            AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+            recordCompat.setSource(v);
+            if (Utility.isAccessibilityEnable(context)) {
+                manager.sendAccessibilityEvent(event1);
+            }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
             Log.e(LOG_TAG, "IllegalAccessException " + e);
         } catch (InvocationTargetException e) {
+            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+            event1.setClassName(className);
+            event1.getText().add("noti");
+            event1.setAction(4);
+            event1.setPackageName(packageName);
+            event1.setEnabled(true);
+            AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+            recordCompat.setSource(v);
+            if (Utility.isAccessibilityEnable(context)) {
+                manager.sendAccessibilityEvent(event1);
+            }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
             Log.e(LOG_TAG, "InvocationTargetException " + e);
         }
     }
