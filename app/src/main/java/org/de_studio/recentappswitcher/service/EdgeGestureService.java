@@ -98,12 +98,12 @@ public class EdgeGestureService extends Service {
     private String[] packagename;
     private String launcherPackagename;
     private int[] x, y;
-    private int numOfIcon, gridRow, gridColumn, gridGap,gridX,gridY, numOfRecent;
+    private int numOfIcon, gridRow, gridColumn, gridGap, gridX, gridY, numOfRecent;
     public static final int GRID_ICON_SIZE = 58;
     private boolean hasOneActive = false;
     private boolean hasHomwBackNotiVisible = false;
     private boolean isEdge1On, isEdge2On;
-    public int edge1Position, edge2Position,iconPaddingLeft, iconPaddingTop;
+    public int edge1Position, edge2Position, iconPaddingLeft, iconPaddingTop;
     private SharedPreferences defaultShared, sharedPreferences1, sharedPreferences2, sharedPreferences_favorite, sharedPreferences_exclude;
     private AppCompatImageView[] iconImageList1, iconImageList2;
     private ExpandStatusBarView action4View, action1View, action2View, action3View;
@@ -135,174 +135,191 @@ public class EdgeGestureService extends Service {
             launcherPackagename = res.activityInfo.packageName;
         } else launcherPackagename = "";
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        if (edge1View!= null && edge1View.isAttachedToWindow()) {
+        if (edge1View != null && edge1View.isAttachedToWindow()) {
             Log.e(LOG_TAG, "edge1View still attached to window");
         }
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
-        edge1Image = (ImageView) edge1View.findViewById(R.id.edge_image);
-//        ViewGroup.LayoutParams edge1ImageLayoutParams = edge1Image.getLayoutParams();
-        if (edge1Image != null) {
-            RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1Image.getLayoutParams());
-            if (Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()) >= 30) {
-                edge1HeightPxl = (int) (edge1Sensivite * mScale);
-                edge1WidthPxl = (int) (edge1Length * mScale);
-                if (edge1offset > 0) {
-                    edge1ImageLayoutParams.rightMargin = (int) (edge1offset * mScale);
-                } else {
-                    edge1ImageLayoutParams.leftMargin = (int) (-edge1offset * mScale);
-                }
-            } else {
-                edge1HeightPxl = (int) (edge1Length * mScale);
-                edge1WidthPxl = (int) (edge1Sensivite * mScale);
-                if (edge1offset > 0) {
-                    edge1ImageLayoutParams.bottomMargin = (int) (edge1offset * mScale);
-                } else {
-                    edge1ImageLayoutParams.topMargin = (int) (-edge1offset * mScale);
-                }
-            }
-            edge1ImageLayoutParams.height = edge1HeightPxl;
-            edge1ImageLayoutParams.width = edge1WidthPxl;
-            edge1Image.setLayoutParams(edge1ImageLayoutParams);
-        }
-
-        icon_distance_pxl = icon_distance * mScale;
-        icon_24dp_in_pxls = 24 * mScale;
-        distance_to_arc_pxl = (int) (distance_to_arc * mScale);
-        item1View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
-        iconImageList1 = new AppCompatImageView[6];
-        iconImageList1[0] = (AppCompatImageView) item1View.findViewById(R.id.item_0);
-        iconImageList1[1] = (AppCompatImageView) item1View.findViewById(R.id.item_1);
-        iconImageList1[2] = (AppCompatImageView) item1View.findViewById(R.id.item_2);
-        iconImageList1[3] = (AppCompatImageView) item1View.findViewById(R.id.item_3);
-        iconImageList1[4] = (AppCompatImageView) item1View.findViewById(R.id.item_4);
-        iconImageList1[5] = (AppCompatImageView) item1View.findViewById(R.id.item_5);
-        iconImageArrayList1 = new ArrayList<AppCompatImageView>();
-        iconImageArrayList1.add(iconImageList1[0]);
-        iconImageArrayList1.add(iconImageList1[1]);
-        iconImageArrayList1.add(iconImageList1[2]);
-        iconImageArrayList1.add(iconImageList1[3]);
-        iconImageArrayList1.add(iconImageList1[4]);
-        iconImageArrayList1.add(iconImageList1[5]);
-        WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                PixelFormat.TRANSLUCENT);
-        switch (edge1Position) {
-            case 10:
-                paramsEdge1.gravity = Gravity.TOP | Gravity.RIGHT;
-                break;
-            case 11:
-                paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-                break;
-            case 12:
-                paramsEdge1.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                break;
-            case 20:
-                paramsEdge1.gravity = Gravity.TOP | Gravity.LEFT;
-                break;
-            case 21:
-                paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-                break;
-            case 22:
-                paramsEdge1.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                break;
-            case 31:
-                paramsEdge1.gravity = Gravity.BOTTOM | Gravity.CENTER;
-                break;
-        }
         if (isEdge1On) {
-            if (edge1View.isAttachedToWindow()) {
-                windowManager.removeView(edge1View);
-            }
-            windowManager.addView(edge1View, paramsEdge1);
-        } else {
-            if (edge1View.isAttachedToWindow()) {
-                windowManager.removeView(edge1View);
-            }
-        }
-        edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
-        edge2Image = (ImageView) edge2View.findViewById(R.id.edge_image);
-        RelativeLayout.LayoutParams edge2ImageLayoutParams = new RelativeLayout.LayoutParams(edge2Image.getLayoutParams());
-        if (Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext()) >= 30) {
-            edge2HeightPxl = (int) (edge2Sensitive * mScale);
-            edge2WidthPxl = (int) (edge2Length * mScale);
-            if (edge2offset > 0) {
-                edge2ImageLayoutParams.rightMargin = (int) (edge2offset * mScale);
-            } else {
-                edge2ImageLayoutParams.leftMargin = (int) (-edge2offset * mScale);
-            }
-        } else {
+            edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
+            edge1Image = (ImageView) edge1View.findViewById(R.id.edge_image);
 
-            edge2HeightPxl = (int) (edge2Length * mScale);
-            edge2WidthPxl = (int) (edge2Sensitive * mScale);
-            if (edge2offset > 0) {
-                edge2ImageLayoutParams.bottomMargin = (int) (edge2offset * mScale);
-            } else {
-                edge2ImageLayoutParams.topMargin = (int) (-edge2offset * mScale);
+//        ViewGroup.LayoutParams edge1ImageLayoutParams = edge1Image.getLayoutParams();
+            if (edge1Image != null) {
+                RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1Image.getLayoutParams());
+                if (Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()) >= 30) {
+                    edge1HeightPxl = (int) (edge1Sensivite * mScale);
+                    edge1WidthPxl = (int) (edge1Length * mScale);
+                    if (edge1offset > 0) {
+                        edge1ImageLayoutParams.rightMargin = (int) (edge1offset * mScale);
+                    } else {
+                        edge1ImageLayoutParams.leftMargin = (int) (-edge1offset * mScale);
+                    }
+                } else {
+                    edge1HeightPxl = (int) (edge1Length * mScale);
+                    edge1WidthPxl = (int) (edge1Sensivite * mScale);
+                    if (edge1offset > 0) {
+                        edge1ImageLayoutParams.bottomMargin = (int) (edge1offset * mScale);
+                    } else {
+                        edge1ImageLayoutParams.topMargin = (int) (-edge1offset * mScale);
+                    }
+                }
+                edge1ImageLayoutParams.height = edge1HeightPxl;
+                edge1ImageLayoutParams.width = edge1WidthPxl;
+                edge1Image.setLayoutParams(edge1ImageLayoutParams);
             }
+
+            icon_distance_pxl = icon_distance * mScale;
+            icon_24dp_in_pxls = 24 * mScale;
+            distance_to_arc_pxl = (int) (distance_to_arc * mScale);
+            item1View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
+            iconImageList1 = new AppCompatImageView[6];
+            iconImageList1[0] = (AppCompatImageView) item1View.findViewById(R.id.item_0);
+            iconImageList1[1] = (AppCompatImageView) item1View.findViewById(R.id.item_1);
+            iconImageList1[2] = (AppCompatImageView) item1View.findViewById(R.id.item_2);
+            iconImageList1[3] = (AppCompatImageView) item1View.findViewById(R.id.item_3);
+            iconImageList1[4] = (AppCompatImageView) item1View.findViewById(R.id.item_4);
+            iconImageList1[5] = (AppCompatImageView) item1View.findViewById(R.id.item_5);
+            iconImageArrayList1 = new ArrayList<AppCompatImageView>();
+            iconImageArrayList1.add(iconImageList1[0]);
+            iconImageArrayList1.add(iconImageList1[1]);
+            iconImageArrayList1.add(iconImageList1[2]);
+            iconImageArrayList1.add(iconImageList1[3]);
+            iconImageArrayList1.add(iconImageList1[4]);
+            iconImageArrayList1.add(iconImageList1[5]);
+            WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.TYPE_PHONE,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    PixelFormat.TRANSLUCENT);
+            switch (edge1Position) {
+                case 10:
+                    paramsEdge1.gravity = Gravity.TOP | Gravity.RIGHT;
+                    break;
+                case 11:
+                    paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+                    break;
+                case 12:
+                    paramsEdge1.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                    break;
+                case 20:
+                    paramsEdge1.gravity = Gravity.TOP | Gravity.LEFT;
+                    break;
+                case 21:
+                    paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                    break;
+                case 22:
+                    paramsEdge1.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                    break;
+                case 31:
+                    paramsEdge1.gravity = Gravity.BOTTOM | Gravity.CENTER;
+                    break;
+            }
+            if (isEdge1On) {
+                if (edge1View.isAttachedToWindow()) {
+                    windowManager.removeView(edge1View);
+                }
+                windowManager.addView(edge1View, paramsEdge1);
+            } else {
+                if (edge1View.isAttachedToWindow()) {
+                    windowManager.removeView(edge1View);
+                }
+            }
+
+            boolean isOnlyFavorite1 = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
+
+            OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, iconImageList1, item1View, iconImageArrayList1, isOnlyFavorite1);
+            edge1Image.setOnTouchListener(onTouchListener1);
         }
-        edge2ImageLayoutParams.height = edge2HeightPxl;
-        edge2ImageLayoutParams.width = edge2WidthPxl;
-        edge2Image.setLayoutParams(edge2ImageLayoutParams);
-        WindowManager.LayoutParams paramsEdge2 = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                PixelFormat.TRANSLUCENT);
-        switch (edge2Position) {
-            case 10:
-                paramsEdge2.gravity = Gravity.TOP | Gravity.RIGHT;
-                break;
-            case 11:
-                paramsEdge2.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-                break;
-            case 12:
-                paramsEdge2.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                break;
-            case 20:
-                paramsEdge2.gravity = Gravity.TOP | Gravity.LEFT;
-                break;
-            case 21:
-                paramsEdge2.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-                break;
-            case 22:
-                paramsEdge2.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                break;
-            case 31:
-                paramsEdge2.gravity = Gravity.BOTTOM | Gravity.CENTER;
-                break;
-        }
+
+
         if (isEdge2On) {
-            if (edge2View.isAttachedToWindow()) {
-                windowManager.removeView(edge2View);
-            }
-            windowManager.addView(edge2View, paramsEdge2);
-        } else {
-            if (edge2View.isAttachedToWindow()) {
-                windowManager.removeView(edge2View);
-            }
-        }
+            edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
+            edge2Image = (ImageView) edge2View.findViewById(R.id.edge_image);
+            RelativeLayout.LayoutParams edge2ImageLayoutParams = new RelativeLayout.LayoutParams(edge2Image.getLayoutParams());
+            if (Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext()) >= 30) {
+                edge2HeightPxl = (int) (edge2Sensitive * mScale);
+                edge2WidthPxl = (int) (edge2Length * mScale);
+                if (edge2offset > 0) {
+                    edge2ImageLayoutParams.rightMargin = (int) (edge2offset * mScale);
+                } else {
+                    edge2ImageLayoutParams.leftMargin = (int) (-edge2offset * mScale);
+                }
+            } else {
 
-        item2View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
-        iconImageList2 = new AppCompatImageView[6];
-        iconImageList2[0] = (AppCompatImageView) item2View.findViewById(R.id.item_0);
-        iconImageList2[1] = (AppCompatImageView) item2View.findViewById(R.id.item_1);
-        iconImageList2[2] = (AppCompatImageView) item2View.findViewById(R.id.item_2);
-        iconImageList2[3] = (AppCompatImageView) item2View.findViewById(R.id.item_3);
-        iconImageList2[4] = (AppCompatImageView) item2View.findViewById(R.id.item_4);
-        iconImageList2[5] = (AppCompatImageView) item2View.findViewById(R.id.item_5);
-        iconImageArrayList2 = new ArrayList<AppCompatImageView>();
-        iconImageArrayList2.add(iconImageList2[0]);
-        iconImageArrayList2.add(iconImageList2[1]);
-        iconImageArrayList2.add(iconImageList2[2]);
-        iconImageArrayList2.add(iconImageList2[3]);
-        iconImageArrayList2.add(iconImageList2[4]);
-        iconImageArrayList2.add(iconImageList2[5]);
+                edge2HeightPxl = (int) (edge2Length * mScale);
+                edge2WidthPxl = (int) (edge2Sensitive * mScale);
+                if (edge2offset > 0) {
+                    edge2ImageLayoutParams.bottomMargin = (int) (edge2offset * mScale);
+                } else {
+                    edge2ImageLayoutParams.topMargin = (int) (-edge2offset * mScale);
+                }
+            }
+            edge2ImageLayoutParams.height = edge2HeightPxl;
+            edge2ImageLayoutParams.width = edge2WidthPxl;
+            edge2Image.setLayoutParams(edge2ImageLayoutParams);
+            WindowManager.LayoutParams paramsEdge2 = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.TYPE_PHONE,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    PixelFormat.TRANSLUCENT);
+            switch (edge2Position) {
+                case 10:
+                    paramsEdge2.gravity = Gravity.TOP | Gravity.RIGHT;
+                    break;
+                case 11:
+                    paramsEdge2.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+                    break;
+                case 12:
+                    paramsEdge2.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                    break;
+                case 20:
+                    paramsEdge2.gravity = Gravity.TOP | Gravity.LEFT;
+                    break;
+                case 21:
+                    paramsEdge2.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                    break;
+                case 22:
+                    paramsEdge2.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                    break;
+                case 31:
+                    paramsEdge2.gravity = Gravity.BOTTOM | Gravity.CENTER;
+                    break;
+            }
+            if (isEdge2On) {
+                if (edge2View.isAttachedToWindow()) {
+                    windowManager.removeView(edge2View);
+                }
+                windowManager.addView(edge2View, paramsEdge2);
+            } else {
+                if (edge2View.isAttachedToWindow()) {
+                    windowManager.removeView(edge2View);
+                }
+            }
+
+            item2View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
+            iconImageList2 = new AppCompatImageView[6];
+            iconImageList2[0] = (AppCompatImageView) item2View.findViewById(R.id.item_0);
+            iconImageList2[1] = (AppCompatImageView) item2View.findViewById(R.id.item_1);
+            iconImageList2[2] = (AppCompatImageView) item2View.findViewById(R.id.item_2);
+            iconImageList2[3] = (AppCompatImageView) item2View.findViewById(R.id.item_3);
+            iconImageList2[4] = (AppCompatImageView) item2View.findViewById(R.id.item_4);
+            iconImageList2[5] = (AppCompatImageView) item2View.findViewById(R.id.item_5);
+            iconImageArrayList2 = new ArrayList<AppCompatImageView>();
+            iconImageArrayList2.add(iconImageList2[0]);
+            iconImageArrayList2.add(iconImageList2[1]);
+            iconImageArrayList2.add(iconImageList2[2]);
+            iconImageArrayList2.add(iconImageList2[3]);
+            iconImageArrayList2.add(iconImageList2[4]);
+            iconImageArrayList2.add(iconImageList2[5]);
+
+
+            boolean isOnlyFavorite2 = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
+            OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position, iconImageList2, item2View, iconImageArrayList2, isOnlyFavorite2);
+            edge2Image.setOnTouchListener(onTouchListener2);
+        }
 
         String iconPackPacka = defaultShared.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "none");
         if (!iconPackPacka.equals("none")) {
@@ -314,13 +331,6 @@ public class EdgeGestureService extends Service {
             }
         }
 
-        boolean isOnlyFavorite1 = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
-        boolean isOnlyFavorite2 = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
-        OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, iconImageList1, item1View, iconImageArrayList1, isOnlyFavorite1);
-        edge1Image.setOnTouchListener(onTouchListener1);
-
-        OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position, iconImageList2, item2View, iconImageArrayList2, isOnlyFavorite2);
-        edge2Image.setOnTouchListener(onTouchListener2);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.drawable.ic_stat_ic_looks_white_48dp1)
@@ -337,7 +347,7 @@ public class EdgeGestureService extends Service {
 
     public class OnTouchListener implements View.OnTouchListener {
         private int x_init_cord, y_init_cord;
-        private int position, iconIdBackgrounded = -1,preShortcutToSwitch = -1, activateId = 0, activatedId = 0;
+        private int position, iconIdBackgrounded = -1, preShortcutToSwitch = -1, activateId = 0, activatedId = 0;
         private FrameLayout itemView;
         private AppCompatImageView[] iconImageList;
         private List<AppCompatImageView> iconImageArrayList;
@@ -355,10 +365,18 @@ public class EdgeGestureService extends Service {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+
             int x_cord = (int) event.getRawX();
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
+                    edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
+                    if (position != edge1Position && position != edge2Position) {
+                        Log.e(LOG_TAG, "postion != edge1position and edge2 position");
+                        return false;
+                    }
+                    Log.e(LOG_TAG,"position = "+ position + "\nEdge1position = "+ edge1Position + "\nEdge2Position = "+ edge2Position);
                     isShortcutBackgroundNull = true;
                     preShortcutToSwitch = -1;
                     clearIconBackground();
@@ -389,16 +407,16 @@ public class EdgeGestureService extends Service {
 
                     switch (position / 10) {
                         case 1:
-                            x_init_cord =(int) (x_cord - 10*mScale);
+                            x_init_cord = (int) (x_cord - 10 * mScale);
                             y_init_cord = y_cord - getYOffset(y_cord);
                             break;
                         case 2:
-                            x_init_cord =(int) (x_cord + 10*mScale);
+                            x_init_cord = (int) (x_cord + 10 * mScale);
                             y_init_cord = y_cord - getYOffset(y_cord);
                             break;
                         case 3:
                             x_init_cord = x_cord - getXOffset(x_cord);
-                            y_init_cord =(int)( y_cord - 10*mScale);
+                            y_init_cord = (int) (y_cord - 10 * mScale);
                             break;
                     }
                     switched = isOnlyFavorite;
@@ -484,7 +502,7 @@ public class EdgeGestureService extends Service {
 //                        Log.e(LOG_TAG," item_view has already been added to the window manager");
 //                    }
 //                    Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
-                    Utility.setIconPositionNew(iconImageList,icon_distance_pxl,icon_24dp_in_pxls,position,x_init_cord,y_init_cord,6);
+                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls, position, x_init_cord, y_init_cord, 6);
 
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -716,7 +734,7 @@ public class EdgeGestureService extends Service {
                         }
                     } else {
 //                        int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
-                        int packageToSwitch = Utility.findIconToSwitchNew(x,y,x_cord,y_cord,icon_24dp_in_pxls,mScale);
+                        int packageToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls, mScale);
                         if (packageToSwitch != -1) {
                             Intent extApp = null;
                             if (packageToSwitch < packagename.length) {
@@ -775,7 +793,6 @@ public class EdgeGestureService extends Service {
                     break;
 
 
-
                 case MotionEvent.ACTION_MOVE:
                     if (!isClockShown & !switched & !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
                         Log.e(LOG_TAG, "Show clock");
@@ -783,7 +800,7 @@ public class EdgeGestureService extends Service {
                         isClockShown = true;
                     }
                     if (switched) {
-                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX,gridY, GRID_ICON_SIZE, mScale, gridRow, gridColumn, gridGap);
+                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, GRID_ICON_SIZE, mScale, gridRow, gridColumn, gridGap);
                         if (shortcutToSwitch != -1) {
                             activateId = shortcutToSwitch + 1;
                         } else {
@@ -796,7 +813,7 @@ public class EdgeGestureService extends Service {
                                 shortcutAdapter.setBackground(shortcutToSwitch);
                                 isShortcutBackgroundNull = true;
                                 preShortcutToSwitch = shortcutToSwitch;
-                            }else if (isShortcutBackgroundNull && shortcutToSwitch ==-1) {
+                            } else if (isShortcutBackgroundNull && shortcutToSwitch == -1) {
                                 shortcutAdapter.setBackground(shortcutToSwitch);
                                 isShortcutBackgroundNull = false;
                                 preShortcutToSwitch = -1;
@@ -823,7 +840,7 @@ public class EdgeGestureService extends Service {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     iconHighlight.setBackground(getDrawable(R.drawable.icon_background));
                                 } else {
-                                    iconHighlight.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.icon_background));
+                                    iconHighlight.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
                                 }
 
                                 iconHighlight.setX(x - 14 * mScale);
@@ -847,7 +864,7 @@ public class EdgeGestureService extends Service {
                                 delayToSwitchTask = new DelayToSwitchTask();
                                 delayToSwitchTask.execute();
                             }
-                            if ( activatedId != activateId) {
+                            if (activatedId != activateId) {
                                 if (delayToSwitchTask != null) {
                                     delayToSwitchTask.cancel(true);
                                 }
@@ -1027,7 +1044,7 @@ public class EdgeGestureService extends Service {
                             }
                         }
                     }
-                    if ( activateId != 0 && activatedId != activateId) {
+                    if (activateId != 0 && activatedId != activateId) {
                         if (defaultShared.getBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY, false)) {
                             vibrator.vibrate(vibrationDuration);
                         }
@@ -1114,8 +1131,8 @@ public class EdgeGestureService extends Service {
                 shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
 
                 Utility.setFavoriteShortcutGridViewPosition(shortcutGridView, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared, gridDistanceFromEdge, gridGap);
-                gridX =(int) shortcutGridView.getX();
-                gridY = (int)shortcutGridView.getY();
+                gridX = (int) shortcutGridView.getX();
+                gridY = (int) shortcutGridView.getY();
                 if (!shortcutView.isAttachedToWindow()) {
                     windowManager.addView(shortcutView, shortcutViewParams);
                 }
@@ -1129,6 +1146,7 @@ public class EdgeGestureService extends Service {
                 }
             }
         }
+
         private void clearIconBackground() {
             if (iconIdBackgrounded != -1) {
                 if (iconIdBackgrounded < iconImageArrayList.size()) {
@@ -1144,7 +1162,7 @@ public class EdgeGestureService extends Service {
                     iconResetBackground.setLayoutParams(layoutParams1);
                     iconResetBackground.setPadding(0, 0, 0, 0);
                     iconIdBackgrounded = -1;
-                }else iconIdBackgrounded = -1;
+                } else iconIdBackgrounded = -1;
             }
         }
     }
@@ -1204,8 +1222,6 @@ public class EdgeGestureService extends Service {
         isEdge1On = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true);
         isEdge2On = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, false);
         spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
-        edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
-        edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
         icon_distance = defaultShared.getInt(EdgeSettingDialogFragment.ICON_DISTANCE_KEY, 110);
         ovalOffSet = (int) (ovalOffSetInDp * mScale);
         ovalRadiusPlusPxl = (int) (ovalRadiusPlus * mScale);
@@ -1215,8 +1231,10 @@ public class EdgeGestureService extends Service {
         gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
         holdTime = defaultShared.getInt(EdgeSettingDialogFragment.HOLD_TIME_KEY, 450);
         vibrationDuration = defaultShared.getInt(EdgeSettingDialogFragment.VIBRATION_DURATION_KEY, 15);
-        iconPaddingLeft =(int) (14*mScale);
+        iconPaddingLeft = (int) (14 * mScale);
         iconPaddingTop = (int) (8 * mScale);
+        edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
+        edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
 
         Log.e(LOG_TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
                 "\nEdge1 position = " + edge1Position + "\nEdge2 positon = " + edge2Position);
@@ -1225,13 +1243,11 @@ public class EdgeGestureService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (edge1View.isAttachedToWindow()) {
+        if (edge1View!=null && edge1View.isAttachedToWindow()) {
             windowManager.removeView(edge1View);
-            edge1View = null;
         }
-        if (edge2View.isAttachedToWindow()) {
+        if (edge2View!=null && edge2View.isAttachedToWindow()) {
             windowManager.removeView(edge2View);
-            edge2View = null;
         }
         Log.e(LOG_TAG, "onDestroy service");
     }
@@ -1260,7 +1276,6 @@ public class EdgeGestureService extends Service {
             return x_init - distanceNeeded;
         } else return 0;
     }
-
 
 
     public void showAddFavoriteDialog() {
