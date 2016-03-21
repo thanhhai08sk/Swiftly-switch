@@ -62,7 +62,7 @@ public class IconPackSettingDialogFragment extends DialogFragment {
     public void onResume() {
         super.onResume();
         Window window = getDialog().getWindow();
-        window.setLayout((int)getContext().getResources().getDimension(R.dimen.icon_pack_dialog_width), (int)getContext().getResources().getDimension(R.dimen.icon_pack_dialog_heigh));
+        window.setLayout((int)getResources().getDimension(R.dimen.icon_pack_dialog_width), (int)getResources().getDimension(R.dimen.icon_pack_dialog_heigh));
         window.setGravity(Gravity.CENTER);
     }
 
