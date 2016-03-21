@@ -222,12 +222,12 @@ public class EdgeGestureService extends Service {
                     break;
             }
             if (isEdge1On) {
-                if (edge1View.isAttachedToWindow()) {
+                if (edge1View!=null&& edge1View.isAttachedToWindow()) {
                     windowManager.removeView(edge1View);
                 }
                 windowManager.addView(edge1View, paramsEdge1);
             } else {
-                if (edge1View.isAttachedToWindow()) {
+                if (edge1View!=null&& edge1View.isAttachedToWindow()) {
                     windowManager.removeView(edge1View);
                 }
             }
@@ -294,12 +294,12 @@ public class EdgeGestureService extends Service {
                     break;
             }
             if (isEdge2On) {
-                if (edge2View.isAttachedToWindow()) {
+                if (edge2View!=null&& edge2View.isAttachedToWindow()) {
                     windowManager.removeView(edge2View);
                 }
                 windowManager.addView(edge2View, paramsEdge2);
             } else {
-                if (edge2View.isAttachedToWindow()) {
+                if (edge2View!=null&& edge2View.isAttachedToWindow()) {
                     windowManager.removeView(edge2View);
                 }
             }
@@ -404,10 +404,10 @@ public class EdgeGestureService extends Service {
                     itemView.removeView(action2View);
                     itemView.removeView(action1View);
                     itemView.removeView(action4View);
-                    if (itemView.isAttachedToWindow()) {
+                    if (item1View!=null && itemView.isAttachedToWindow()) {
                         windowManager.removeView(itemView);
                     }
-                    if (shortcutView.isAttachedToWindow()) {
+                    if (shortcutView!=null&& shortcutView.isAttachedToWindow()) {
                         windowManager.removeView(shortcutView);
                     }
                     if (isFreeVersion) {
@@ -796,10 +796,10 @@ public class EdgeGestureService extends Service {
                     if (delayToSwitchTask != null) {
                         delayToSwitchTask.cancel(true);
                     }
-                    if (itemView.isAttachedToWindow()) {
+                    if (itemView!=null && itemView.isAttachedToWindow()) {
                         windowManager.removeView(itemView);
                     }
-                    if (shortcutView.isAttachedToWindow()) {
+                    if (shortcutView!=null && shortcutView.isAttachedToWindow()) {
                         windowManager.removeView(shortcutView);
                     }
                     break;
@@ -1067,18 +1067,18 @@ public class EdgeGestureService extends Service {
                     break;
 
                 case MotionEvent.ACTION_OUTSIDE:
-                    if (item1View.isAttachedToWindow()) {
+                    if (item1View!=null && item1View.isAttachedToWindow()) {
                         windowManager.removeView(item1View);
                     }
-                    if (item2View.isAttachedToWindow()) {
+                    if (item2View!=null&& item2View.isAttachedToWindow()) {
                         windowManager.removeView(item2View);
                     }
                     break;
                 case MotionEvent.ACTION_CANCEL:
-                    if (item1View.isAttachedToWindow()) {
+                    if (item1View!=null&& item1View.isAttachedToWindow()) {
                         windowManager.removeView(item1View);
                     }
-                    if (item2View.isAttachedToWindow()) {
+                    if (item2View!=null&& item2View.isAttachedToWindow()) {
                         windowManager.removeView(item2View);
                     }
                     break;
@@ -1145,7 +1145,7 @@ public class EdgeGestureService extends Service {
                 Utility.setFavoriteShortcutGridViewPosition(shortcutGridView, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared, gridDistanceFromEdge, gridGap);
                 gridX = (int) shortcutGridView.getX();
                 gridY = (int) shortcutGridView.getY();
-                if (!shortcutView.isAttachedToWindow()) {
+                if (shortcutView!=null && !shortcutView.isAttachedToWindow()) {
                     windowManager.addView(shortcutView, shortcutViewParams);
                 }
                 if (itemView != null && itemView.isAttachedToWindow()) {
