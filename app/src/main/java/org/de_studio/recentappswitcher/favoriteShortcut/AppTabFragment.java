@@ -50,14 +50,19 @@ public class AppTabFragment extends Fragment{
     }
 
     public void setmPositioinToNext() {
-        if (mPosition < Utility.getSizeOfFavoriteGrid(getContext())-1) {
+        if (mPosition < Utility.getSizeOfFavoriteGrid(getContext())-1 &&  mAdapter !=null) {
             mPosition++;
-            mAdapter.setmPosition(mPosition);
+            try {
+                mAdapter.setmPosition(mPosition);
+            } catch (NullPointerException e) {
+                Log.e(LOG_TAG, "mAdapter = null");
+            }
+
         }
     }
 
     public void setmPositionToBack() {
-        if (mPosition > 0) {
+        if (mPosition > 0 && mAdapter != null) {
             mPosition--;
             mAdapter.setmPosition(mPosition);
         }
