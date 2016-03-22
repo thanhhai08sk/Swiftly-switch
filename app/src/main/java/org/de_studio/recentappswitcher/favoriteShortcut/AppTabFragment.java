@@ -1,9 +1,11 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -106,7 +108,18 @@ public class AppTabFragment extends Fragment{
         }
         protected void onPostExecute(ArrayList<AppInfors> result) {
             progressBar.setVisibility(View.GONE);
-            mAdapter = new ChooseAppListViewAdapter(getContext(), result, mPosition);
+            Context context;
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+                context = getContext();
+            } else {
+                Log.e(LOG_TAG, "getActivity");
+                context = getActivity();
+            }
+            if (context == null) {
+                Log.e(LOG_TAG, "context == null");
+                context = getContext();
+            }
+            mAdapter = new ChooseAppListViewAdapter(context, result, mPosition);
             mListView.setAdapter(mAdapter);
             ((ChooseShortcutActivity) getActivity()).setAppAdapter(mAdapter);
             if (mListView == null) {

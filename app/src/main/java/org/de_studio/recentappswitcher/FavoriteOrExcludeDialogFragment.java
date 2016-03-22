@@ -103,7 +103,7 @@ public class FavoriteOrExcludeDialogFragment extends DialogFragment {
         protected ArrayList<AppInfors> doInBackground(Void... voids) {
 
             PackageManager packageManager;
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
                 packageManager = getContext().getPackageManager();
             } else {
                 packageManager = getActivity().getPackageManager();
