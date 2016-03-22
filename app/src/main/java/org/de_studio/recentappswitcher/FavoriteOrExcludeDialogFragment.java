@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -100,7 +101,13 @@ public class FavoriteOrExcludeDialogFragment extends DialogFragment {
 
     private class LoadInstalledApp extends AsyncTask<Void, Void, ArrayList<AppInfors>> {
         protected ArrayList<AppInfors> doInBackground(Void... voids) {
-            PackageManager packageManager = getActivity().getPackageManager();
+
+            PackageManager packageManager;
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                packageManager = getContext().getPackageManager();
+            } else {
+                packageManager = getActivity().getPackageManager();
+            }
             ArrayList<AppInfors> arrayList = new ArrayList<AppInfors>();
             Set<PackageInfo> set = Utility.getInstalledApps(getActivity());
             PackageInfo[] array = set.toArray(new PackageInfo[set.size()]);
