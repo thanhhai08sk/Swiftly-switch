@@ -145,7 +145,7 @@
         <android.support.v7.widget.AppCompatSeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="50"
+            android:progress="20"
             android:id="@+id/favorite_shortcut_grid_distance_seek_bar"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"

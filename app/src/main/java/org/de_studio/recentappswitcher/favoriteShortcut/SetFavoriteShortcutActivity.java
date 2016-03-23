@@ -110,7 +110,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
             }
         });
 
-        int currentGridDistanceSeekBarProgress = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GRID_DISTANCE_FROM_EDGE_KEY,60) - 20;
+        int currentGridDistanceSeekBarProgress = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GRID_DISTANCE_FROM_EDGE_KEY,20) - 20;
         gridDistanceSeekBar.setProgress(currentGridDistanceSeekBarProgress);
         gridDistanceValueTextView.setText(currentGridDistanceSeekBarProgress + 20 + " dp");
         gridDistanceSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

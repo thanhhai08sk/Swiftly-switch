@@ -1127,7 +1127,7 @@ public class EdgeGestureService extends Service {
                 int gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
                 shortcutGridView.setVerticalSpacing((int) (gridGap * mScale));
                 shortcutGridView.setNumColumns(gridColumn);
-                int gridDistanceFromEdge = defaultShared.getInt(EdgeSettingDialogFragment.GRID_DISTANCE_FROM_EDGE_KEY, 60);
+                int gridDistanceFromEdge = defaultShared.getInt(EdgeSettingDialogFragment.GRID_DISTANCE_FROM_EDGE_KEY, 20);
                 gridParams.height = (int) (mScale * (float) (GRID_ICON_SIZE * gridRow + gridGap * (gridRow - 1)));
                 gridParams.width = (int) (mScale * (float) (GRID_ICON_SIZE * gridColumn + gridGap * (gridColumn - 1)));
                 shortcutGridView.setLayoutParams(gridParams);
