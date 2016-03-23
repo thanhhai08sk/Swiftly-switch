@@ -43,7 +43,7 @@
     <string name="main_exclude_app_info">Apps that will not be listed in the recent apps</string>
     <string name="please_add_favorite_item">Please add your favorite apps in the FAVORITE APP section</string>
     <string name="waite_a_secend_app_loading">Wait a second, app loading ...</string>
-    <string name="notification_text">Hide this notification by long tapping and selecting Block from the info page</string>
+    <string name="notification_text">Hide this by long tapping and selecting Block notification from the info page</string>
     <string name="notification_title">Swiftly switch is running ...</string>
     <string name="main_description_text">You need to complete 2 STEP setting below before you can use this app!</string>
     <string name="main_configuration">Configuration</string>

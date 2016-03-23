@@ -18,6 +18,7 @@ import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
@@ -335,10 +336,21 @@ public class EdgeGestureService extends Service {
                 iconPack.load();
             }
         }
+        Intent hideNotiIntent = new Intent();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            hideNotiIntent.setClassName("com.android.settings", "com.android.settings.Settings$AppNotificationSettingsActivity");
+            hideNotiIntent.putExtra("app_package", getPackageName());
+            hideNotiIntent.putExtra("app_uid", getApplicationInfo().uid);
+        } else {
+            hideNotiIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            hideNotiIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            hideNotiIntent.setData(Uri.parse("package:" + getPackageName()));
+        }
 
-
+        PendingIntent notiPending = PendingIntent.getActivity(getApplicationContext(), 0, hideNotiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.drawable.ic_stat_ic_looks_white_48dp1)
+                .setContentIntent(notiPending)
                 .setContentText(getString(R.string.notification_text)).setContentTitle(getString(R.string.notification_title));
         Notification notificationCompat = builder.build();
         startForeground(NOTIFICATION_ID, notificationCompat);
