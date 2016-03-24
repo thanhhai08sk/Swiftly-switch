@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 
+import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import org.de_studio.recentappswitcher.AppInfors;
+import org.de_studio.recentappswitcher.MyApplication;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 
@@ -114,6 +116,8 @@ public class AppTabFragment extends Fragment{
         protected void onPostExecute(ArrayList<AppInfors> result) {
             progressBar.setVisibility(View.GONE);
             Context context;
+            Application application = (Application)MyApplication.getContext();
+            MyApplication app = (MyApplication)application;
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
                 context = getContext();
             } else {
@@ -124,7 +128,7 @@ public class AppTabFragment extends Fragment{
                 Log.e(LOG_TAG, "context == null");
                 context = getContext();
             }
-            mAdapter = new ChooseAppListViewAdapter(context, result, mPosition);
+            mAdapter = new ChooseAppListViewAdapter(app, result, mPosition);
             mListView.setAdapter(mAdapter);
             ((ChooseShortcutActivity) getActivity()).setAppAdapter(mAdapter);
             if (mListView == null) {

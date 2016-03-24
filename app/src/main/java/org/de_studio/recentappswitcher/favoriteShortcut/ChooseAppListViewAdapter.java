@@ -42,7 +42,7 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
         mPosition = position;
         mContext = context;
         mAppInfosArrayList = appInforses;
-        Realm myRealm = Realm.getInstance(mContext);
+        Realm myRealm = Realm.getDefaultInstance();
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         if (shortcut != null ) {
             if (shortcut.getType() == Shortcut.TYPE_APP) {
@@ -62,7 +62,8 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
 
     public void setmPosition(int position) {
         mPosition = position;
-        Realm myRealm = Realm.getInstance(mContext);
+//        Realm myRealm = Realm.getInstance(mContext);
+        Realm myRealm = Realm.getDefaultInstance();
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         if (shortcut != null ) {
             if (shortcut.getType() == Shortcut.TYPE_APP) {
@@ -97,7 +98,8 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
         }
         ImageView imageView = (ImageView) view.findViewById(R.id.choose_app_image_view);
         TextView textView = (TextView) view.findViewById(R.id.choose_app_title_text_view);
-        Realm myRealm = Realm.getInstance(mContext);
+//        Realm myRealm = Realm.getInstance(mContext);
+        Realm myRealm = Realm.getDefaultInstance();
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         RadioButton radioButton = (RadioButton) view.findViewById(R.id.choose_app_radio_button);
         if (shortcut != null) {
@@ -122,7 +124,8 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Realm myRealm = Realm.getInstance(mContext);
+//                Realm myRealm = Realm.getInstance(mContext);
+                Realm myRealm = Realm.getDefaultInstance();
                 myRealm.beginTransaction();
                 RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findAll();
                 Log.e(LOG_TAG, "mPosition = " + mPosition);
@@ -150,4 +153,5 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
     public void registerListener(AppChangeListener listener) {
         this.listener = listener;
     }
+
 }

@@ -159,8 +159,8 @@ public class MainActivity extends Activity {
 
         descriptionText = (TextView) findViewById(R.id.main_description_text_view);
         step1Button = (Button) findViewById(R.id.step1_button);
-        Switch edge1Switch = (Switch) findViewById(R.id.edge_1_switch);
-        Switch edge2Switch = (Switch) findViewById(R.id.edge_2_switch);
+        final Switch edge1Switch = (Switch) findViewById(R.id.edge_1_switch);
+        final Switch edge2Switch = (Switch) findViewById(R.id.edge_2_switch);
         Switch hapticFeedbackOnTriggerSwitch = (Switch) findViewById(R.id.main_disable_haptic_feedback_switch);
         Switch hapticFeedbackOnItemSwitch = (Switch) findViewById(R.id.main_haptic_feedback_on_item_switch);
         Switch disableClockSwitch = (Switch) findViewById(R.id.main_disable_clock_switch);
@@ -180,9 +180,15 @@ public class MainActivity extends Activity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 sharedPreferences1.edit().putBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, isChecked).commit();
+                if (!isChecked && !edge2Switch.isChecked()) {
+                    stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                } else {
+                    stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                    startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                }
 
-                stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+
+
 
             }
         });
@@ -218,9 +224,14 @@ public class MainActivity extends Activity {
 
 
                 } else {
+                    if (!isChecked && !edge1Switch.isChecked()) {
+                        stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                    } else {
+                        stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                        startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                    }
                     sharedPreferences2.edit().putBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, isChecked).commit();
-                    stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                    startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+
                 }
 
 
@@ -772,5 +783,6 @@ public class MainActivity extends Activity {
         }
 
     }
+
 
 }
