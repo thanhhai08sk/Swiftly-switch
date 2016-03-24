@@ -146,6 +146,9 @@ public class EdgeGestureService extends Service {
         }
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        icon_distance_pxl = icon_distance * mScale;
+        icon_24dp_in_pxls = 24 * mScale;
+        distance_to_arc_pxl = (int) (distance_to_arc * mScale);
         if (isEdge1On) {
             edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
             edge1Image = (ImageView) edge1View.findViewById(R.id.edge_image);
@@ -174,10 +177,6 @@ public class EdgeGestureService extends Service {
                 edge1ImageLayoutParams.width = edge1WidthPxl;
                 edge1Image.setLayoutParams(edge1ImageLayoutParams);
             }
-
-            icon_distance_pxl = icon_distance * mScale;
-            icon_24dp_in_pxls = 24 * mScale;
-            distance_to_arc_pxl = (int) (distance_to_arc * mScale);
             item1View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
             iconImageList1 = new AppCompatImageView[6];
             iconImageList1[0] = (AppCompatImageView) item1View.findViewById(R.id.item_0);
