@@ -1267,9 +1267,13 @@ public class EdgeGestureService extends Service {
     public void onDestroy() {
         super.onDestroy();
         if (edge1View!=null && edge1View.isAttachedToWindow()) {
+            Log.e(LOG_TAG, "remove edge1");
+            edge1View.setVisibility(View.GONE);
             windowManager.removeView(edge1View);
         }
         if (edge2View!=null && edge2View.isAttachedToWindow()) {
+            Log.e(LOG_TAG, "remove edge2");
+            edge2View.setVisibility(View.GONE);
             windowManager.removeView(edge2View);
         }
         Log.e(LOG_TAG, "onDestroy service");

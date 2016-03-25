@@ -285,54 +285,61 @@ public  class Utility {
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
         int row = sharedPreferences.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         int column = sharedPreferences.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
+        boolean isCenter = sharedPreferences.getBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE, false);
         float gridWide = ((float)(column* EdgeGestureService.GRID_ICON_SIZE + (column -1)*gap)) * mScale;
         float gridTall = ((float)(row*EdgeGestureService.GRID_ICON_SIZE + (row -1)*gap)) * mScale;
         Point point = new Point();
         windowManager.getDefaultDisplay().getSize(point);
         int x = point.x;
         int y = point.y;
-        switch (edgePosition) {
-            case 10:
-                gridView.setX(((float)x_init_cord)-distanceFromEdge - gridWide);
-                gridView.setY(0);
-                break;
-            case 11:
-                gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
-                if (((float) y_init_cord) - gridTall / 2 < 0) {
+        if (!isCenter) {
+            switch (edgePosition) {
+                case 10:
+                    gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
                     gridView.setY(0);
-                } else if (((float) y_init_cord) - gridTall / 2 + gridTall > y) {
+                    break;
+                case 11:
+                    gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
+                    if (((float) y_init_cord) - gridTall / 2 < 0) {
+                        gridView.setY(0);
+                    } else if (((float) y_init_cord) - gridTall / 2 + gridTall > y) {
+                        gridView.setY(y - gridTall);
+                    } else {
+                        gridView.setY(((float) y_init_cord) - gridTall / 2);
+                    }
+                    break;
+                case 12:
+                    gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
                     gridView.setY(y - gridTall);
-                } else {
-                    gridView.setY(((float) y_init_cord) - gridTall / 2);
-                }
-                break;
-            case 12:
-                gridView.setX(((float)x_init_cord)-distanceFromEdge - gridWide);
-                gridView.setY(y - gridTall);
-                break;
-            case 20:
-                gridView.setX(((float)x_init_cord)+distanceFromEdge );
-                gridView.setY(0);
-                break;
-            case 21:
-                gridView.setX(((float) x_init_cord) + distanceFromEdge);
-                if (((float) y_init_cord) - gridTall / 2 < 0) {
+                    break;
+                case 20:
+                    gridView.setX(((float) x_init_cord) + distanceFromEdge);
                     gridView.setY(0);
-                } else if (((float) y_init_cord) - gridTall / 2 + gridTall > y) {
+                    break;
+                case 21:
+                    gridView.setX(((float) x_init_cord) + distanceFromEdge);
+                    if (((float) y_init_cord) - gridTall / 2 < 0) {
+                        gridView.setY(0);
+                    } else if (((float) y_init_cord) - gridTall / 2 + gridTall > y) {
+                        gridView.setY(y - gridTall);
+                    } else {
+                        gridView.setY(((float) y_init_cord) - gridTall / 2);
+                    }
+                    break;
+                case 22:
+                    gridView.setX(((float) x_init_cord) + distanceFromEdge);
                     gridView.setY(y - gridTall);
-                } else {
-                    gridView.setY(((float) y_init_cord) - gridTall / 2);
-                }
-                break;
-            case 22:
-                gridView.setX(((float)x_init_cord)+distanceFromEdge);
-                gridView.setY(y - gridTall);
-                break;
-            case 31:
-                gridView.setX(((float)x_init_cord)- gridWide/2);
-                gridView.setY(((float) y_init_cord) - distanceFromEdge - gridTall);
-                break;
+                    break;
+                case 31:
+                    gridView.setX(((float) x_init_cord) - gridWide / 2);
+                    gridView.setY(((float) y_init_cord) - distanceFromEdge - gridTall);
+                    break;
+            }
+        } else {
+            gridView.setX((x-gridWide)/2);
+            gridView.setY((y-gridTall)/2);
         }
+
     }
 
     public static int isHomeOrBackOrNoti(int x_init_int, int y_init_int, int x_int, int y_int, int radius_int, float mScale, int position){
