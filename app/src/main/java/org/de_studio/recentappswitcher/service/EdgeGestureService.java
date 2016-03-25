@@ -61,6 +61,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 /**
  * Created by hai on 12/15/2015.
@@ -96,7 +98,7 @@ public class EdgeGestureService extends Service {
     public int edge1WidthPxl, edge2WidthPxl;
     public int edge1Sensivite, edge2Sensitive;
     private List<AppCompatImageView> iconImageArrayList1, iconImageArrayList2;
-    private String[] packagename;
+    private String[] packagename, pinnedPackageName;
     private String launcherPackagename;
     private int[] x, y;
     private int numOfIcon, gridRow, gridColumn, gridGap, gridX, gridY, numOfRecent;
@@ -118,6 +120,7 @@ public class EdgeGestureService extends Service {
     private IconPackManager.IconPack iconPack;
     private boolean isClockShown = false;
     private View clockView;
+    private Realm pinAppRealm;
 
     @Nullable
     @Override
@@ -222,12 +225,12 @@ public class EdgeGestureService extends Service {
                     break;
             }
             if (isEdge1On) {
-                if (edge1View!=null&& edge1View.isAttachedToWindow()) {
+                if (edge1View != null && edge1View.isAttachedToWindow()) {
                     windowManager.removeView(edge1View);
                 }
                 windowManager.addView(edge1View, paramsEdge1);
             } else {
-                if (edge1View!=null&& edge1View.isAttachedToWindow()) {
+                if (edge1View != null && edge1View.isAttachedToWindow()) {
                     windowManager.removeView(edge1View);
                 }
             }
@@ -294,12 +297,12 @@ public class EdgeGestureService extends Service {
                     break;
             }
             if (isEdge2On) {
-                if (edge2View!=null&& edge2View.isAttachedToWindow()) {
+                if (edge2View != null && edge2View.isAttachedToWindow()) {
                     windowManager.removeView(edge2View);
                 }
                 windowManager.addView(edge2View, paramsEdge2);
             } else {
-                if (edge2View!=null&& edge2View.isAttachedToWindow()) {
+                if (edge2View != null && edge2View.isAttachedToWindow()) {
                     windowManager.removeView(edge2View);
                 }
             }
@@ -399,7 +402,7 @@ public class EdgeGestureService extends Service {
                         onDestroy();
                         return false;
                     }
-                    Log.e(LOG_TAG,"position = "+ position + "\nEdge1position = "+ edge1Position + "\nEdge2Position = "+ edge2Position);
+                    Log.e(LOG_TAG, "position = " + position + "\nEdge1position = " + edge1Position + "\nEdge2Position = " + edge2Position);
                     isShortcutBackgroundNull = true;
                     preShortcutToSwitch = -1;
                     clearIconBackground();
@@ -415,10 +418,10 @@ public class EdgeGestureService extends Service {
                     itemView.removeView(action2View);
                     itemView.removeView(action1View);
                     itemView.removeView(action4View);
-                    if (item1View!=null && itemView.isAttachedToWindow()) {
+                    if (item1View != null && itemView.isAttachedToWindow()) {
                         windowManager.removeView(itemView);
                     }
-                    if (shortcutView!=null&& shortcutView.isAttachedToWindow()) {
+                    if (shortcutView != null && shortcutView.isAttachedToWindow()) {
                         windowManager.removeView(shortcutView);
                     }
                     if (isFreeVersion) {
@@ -605,8 +608,24 @@ public class EdgeGestureService extends Service {
                                 }
 
                             }
-                            packagename = new String[tempPackageName.size()];
-                            tempPackageName.toArray(packagename);
+                            if (6 - tempPackageName.size() - pinnedPackageName.length > 0) {
+                                packagename = new String[tempPackageName.size() + pinnedPackageName.length];
+                            } else {
+                                packagename = new String[6];
+                            }
+                            int n = 0;
+                            for (int t = 0; t < packagename.length; t++) {
+                                if (t + pinnedPackageName.length < packagename.length) {
+                                    packagename[t] = tempPackageName.get(t);
+                                } else {
+                                    packagename[t] = pinnedPackageName[n];
+                                    n++;
+                                }
+
+                            }
+
+//                            packagename = new String[tempPackageName.size()];
+//                            tempPackageName.toArray(packagename);
                         } else Log.e(LOG_TAG, "erros in mySortedMap");
                         for (int i = 0; i < 6; i++) {
                             if (i >= packagename.length) {
@@ -807,10 +826,10 @@ public class EdgeGestureService extends Service {
                     if (delayToSwitchTask != null) {
                         delayToSwitchTask.cancel(true);
                     }
-                    if (itemView!=null && itemView.isAttachedToWindow()) {
+                    if (itemView != null && itemView.isAttachedToWindow()) {
                         windowManager.removeView(itemView);
                     }
-                    if (shortcutView!=null && shortcutView.isAttachedToWindow()) {
+                    if (shortcutView != null && shortcutView.isAttachedToWindow()) {
                         windowManager.removeView(shortcutView);
                     }
                     break;
@@ -1078,18 +1097,18 @@ public class EdgeGestureService extends Service {
                     break;
 
                 case MotionEvent.ACTION_OUTSIDE:
-                    if (item1View!=null && item1View.isAttachedToWindow()) {
+                    if (item1View != null && item1View.isAttachedToWindow()) {
                         windowManager.removeView(item1View);
                     }
-                    if (item2View!=null&& item2View.isAttachedToWindow()) {
+                    if (item2View != null && item2View.isAttachedToWindow()) {
                         windowManager.removeView(item2View);
                     }
                     break;
                 case MotionEvent.ACTION_CANCEL:
-                    if (item1View!=null&& item1View.isAttachedToWindow()) {
+                    if (item1View != null && item1View.isAttachedToWindow()) {
                         windowManager.removeView(item1View);
                     }
-                    if (item2View!=null&& item2View.isAttachedToWindow()) {
+                    if (item2View != null && item2View.isAttachedToWindow()) {
                         windowManager.removeView(item2View);
                     }
                     break;
@@ -1156,7 +1175,7 @@ public class EdgeGestureService extends Service {
                 Utility.setFavoriteShortcutGridViewPosition(shortcutGridView, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared, gridDistanceFromEdge, gridGap);
                 gridX = (int) shortcutGridView.getX();
                 gridY = (int) shortcutGridView.getY();
-                if (shortcutView!=null && !shortcutView.isAttachedToWindow()) {
+                if (shortcutView != null && !shortcutView.isAttachedToWindow()) {
                     windowManager.addView(shortcutView, shortcutViewParams);
                 }
                 if (itemView != null && itemView.isAttachedToWindow()) {
@@ -1194,7 +1213,7 @@ public class EdgeGestureService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (item1View!=null && item1View.isAttachedToWindow()) {
+        if (item1View != null && item1View.isAttachedToWindow()) {
             if (action1View != null) {
                 item1View.removeView(action2View);
             }
@@ -1209,7 +1228,7 @@ public class EdgeGestureService extends Service {
             }
             windowManager.removeView(item1View);
         }
-        if (item2View!= null && item2View.isAttachedToWindow()) {
+        if (item2View != null && item2View.isAttachedToWindow()) {
             if (action1View != null) {
                 item2View.removeView(action2View);
             }
@@ -1258,6 +1277,29 @@ public class EdgeGestureService extends Service {
         iconPaddingTop = (int) (8 * mScale);
         edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
+        pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext()).name("pinApp").build());
+        pinAppRealm.beginTransaction();
+//        Shortcut country1 = pinAppRealm.createObject(Shortcut.class);
+//
+//        // Set its fields
+//        country1.setPackageName(getPackageName());
+//        country1.setId(0);
+//
+//        pinAppRealm.commitTransaction();
+        RealmResults<Shortcut> results1 =
+                pinAppRealm.where(Shortcut.class).findAll();
+        int i = 0;
+        if (results1 == null) {
+            pinnedPackageName = new String[0];
+        } else {
+            pinnedPackageName = new String[results1.size()];
+            for (Shortcut shortcut : results1) {
+                Log.e(LOG_TAG,"result = " + shortcut.getPackageName());
+                pinnedPackageName[i] = shortcut.getPackageName();
+                Log.e(LOG_TAG,"pinnedPack = " + pinnedPackageName[0]);
+                i++;
+            }
+        }
 
         Log.e(LOG_TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
                 "\nEdge1 position = " + edge1Position + "\nEdge2 positon = " + edge2Position);
@@ -1266,12 +1308,12 @@ public class EdgeGestureService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (edge1View!=null && edge1View.isAttachedToWindow()) {
+        if (edge1View != null && edge1View.isAttachedToWindow()) {
             Log.e(LOG_TAG, "remove edge1");
             edge1View.setVisibility(View.GONE);
             windowManager.removeView(edge1View);
         }
-        if (edge2View!=null && edge2View.isAttachedToWindow()) {
+        if (edge2View != null && edge2View.isAttachedToWindow()) {
             Log.e(LOG_TAG, "remove edge2");
             edge2View.setVisibility(View.GONE);
             windowManager.removeView(edge2View);
