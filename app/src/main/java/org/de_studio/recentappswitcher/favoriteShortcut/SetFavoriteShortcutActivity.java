@@ -11,8 +11,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.MainActivity;
@@ -49,7 +51,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         final TextView gridGapValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_gap_value_text_view);
         AppCompatSeekBar gridGapSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_gap_seek_bar);
         final TextView gridDistanceValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_distance_value_text_view);
-        AppCompatSeekBar gridDistanceSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_distance_seek_bar);
+        final AppCompatSeekBar gridDistanceSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_distance_seek_bar);
 
 
         int currentRowSpinnerPosition = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY,5)-2;
@@ -127,6 +129,17 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        gridDistanceSeekBar.setEnabled(!defaultSharedPreference.getBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE,false));
+
+        Switch placeToCenterSwitch = (Switch) findViewById(R.id.set_favorite_place_center);
+        placeToCenterSwitch.setChecked(defaultSharedPreference.getBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE,false));
+        placeToCenterSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                defaultSharedPreference.edit().putBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE,isChecked).commit();
+                gridDistanceSeekBar.setEnabled(!isChecked);
             }
         });
 

@@ -45,6 +45,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textSize="16sp"
                 android:text="@string/set_favorite_shortcut_grid_size_text_view"
                 android:textColor="@color/black"
 
@@ -62,6 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
+                android:textSize="16sp"
                 android:paddingRight="16dp"
                 android:textColor="@color/black"
                 android:text="@string/set_favorite_shortcut_grid_by"
@@ -92,12 +94,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/set_favorite_shortcut_grid_gap_title_text_view"
                 android:layout_weight="1"
+                android:textSize="16sp"
                 android:textColor="@color/black"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
+                android:textSize="16sp"
                 android:textColor="@color/black"
                 android:text="12dp"
                 android:id="@+id/set_favorite_shortcut_grid_gap_value_text_view"
@@ -118,6 +122,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="52dp"
+            android:layout_marginRight="52dp"
+            android:layout_marginTop="30dp"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:text="@string/place_in_the_center"
+                android:textColor="@color/black" />
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:checked="false"
+                android:id="@+id/set_favorite_place_center"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="52dp"
             android:layout_marginRight="52dp"
             android:layout_marginTop="30dp"
@@ -130,6 +160,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/set_favorite_shortcut_grid_distance_title_text_view"
                 android:layout_weight="1"
+                android:textSize="16sp"
                 android:textColor="@color/black"
                 />
             <TextView
@@ -137,6 +168,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:textColor="@color/black"
+                android:textSize="16sp"
                 android:text="12dp"
                 android:id="@+id/set_favorite_shortcut_grid_distance_value_text_view"
                 />
