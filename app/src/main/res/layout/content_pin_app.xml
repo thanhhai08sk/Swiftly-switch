@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/drag_list_view"
         dslv:drag_enabled = "true"
+        dslv:drag_handle_id= "@drawable/ic_edit_white_24dp"
         >
 
     </com.mobeta.android.dslv.DragSortListView>

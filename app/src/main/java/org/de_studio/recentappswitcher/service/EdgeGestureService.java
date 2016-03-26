@@ -1277,8 +1277,8 @@ public class EdgeGestureService extends Service {
         iconPaddingTop = (int) (8 * mScale);
         edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
-        pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext()).name("pinApp").build());
-        pinAppRealm.beginTransaction();
+        pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext()).name("pinApp.realm").build());
+//        pinAppRealm.beginTransaction();
 //        Shortcut country1 = pinAppRealm.createObject(Shortcut.class);
 //
 //        // Set its fields
