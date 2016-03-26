@@ -10,6 +10,7 @@ import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
 
 public class PinAppActivity extends AppCompatActivity {
+    private PinAppAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +22,7 @@ public class PinAppActivity extends AppCompatActivity {
         listView.setFloatViewManager(controller);
         listView.setOnTouchListener(controller);
         listView.setDragEnabled(true);
-        PinAppAdapter adapter = new PinAppAdapter(this);
+        adapter = new PinAppAdapter(this);
         listView.setAdapter(adapter);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -38,4 +39,9 @@ public class PinAppActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        adapter.notifyDataSetChanged();
+    }
 }
