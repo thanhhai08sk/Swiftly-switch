@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.mobeta.android.dslv.DragSortListView;
 
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
+import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 import io.realm.Realm;
@@ -32,10 +34,12 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
     private Drawable defaultDrawable;
     private SharedPreferences sharedPreferences;
     private IconPackManager.IconPack iconPack;
+    private PackageManager packageManager;
     private static final String LOG_TAG = PinAppAdapter.class.getSimpleName();
     public PinAppAdapter(Context context) {
         super();
         mContext = context;
+        packageManager = context.getPackageManager();
         pinRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("pinApp.realm").build());
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         String iconPackPacka = sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "com.colechamberlin.stickers");
@@ -70,6 +74,13 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
         ImageView icon = (ImageView) view.findViewById(R.id.pin_app_list_item_icon_image_view);
         TextView label = (TextView) view.findViewById(R.id.pin_app_list_item_label_text_view);
         shortcut = pinRealm.where(Shortcut.class).equalTo("id",position).findFirst();
+        CharSequence title= "";
+        try {
+            title = packageManager.getApplicationLabel(packageManager.getApplicationInfo(shortcut.getPackageName(), 0));
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(LOG_TAG, "NamenotFound");
+        }
+
         if (shortcut != null) {
                 try {
                     defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
@@ -83,7 +94,7 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
                 } catch (PackageManager.NameNotFoundException e) {
                     Log.e(LOG_TAG, "NameNotFound " + e);
                 }
-            label.setText(shortcut.getLabel());
+            label.setText(title);
         }
 //        view.setOnLongClickListener(new View.OnLongClickListener() {
 //            @Override
@@ -136,5 +147,7 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
         }
         pinRealm.commitTransaction();
         notifyDataSetChanged();
+        mContext.stopService(new Intent(mContext, EdgeGestureService.class));
+        mContext.startService(new Intent(mContext, EdgeGestureService.class));
     }
 }

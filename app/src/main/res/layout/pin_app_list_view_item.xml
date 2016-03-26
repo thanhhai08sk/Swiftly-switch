@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:src="@drawable/ic_edit_white_24dp"
+        android:src="@drawable/ic_drag_handle_black_36dp"
         android:paddingLeft="16dp"
         android:paddingRight="10dp"
         android:id="@+id/pin_app_list_item_dragger"
