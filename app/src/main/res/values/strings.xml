@@ -131,4 +131,5 @@
     <string name="place_in_the_center">Place it in the center</string>
     <string name="main_pin_app">Pin apps to recent</string>
     <string name="title_activity_pin_app">PinAppActivity</string>
+    <string name="out_of_limit">Out of limit</string>
 </resources>

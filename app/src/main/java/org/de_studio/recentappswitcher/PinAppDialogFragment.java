@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -17,50 +16,91 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
-import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 /**
  * Created by hai on 3/26/2016.
  */
 public class PinAppDialogFragment extends DialogFragment {
-    private static final String LOG_TAG = FavoriteOrExcludeDialogFragment.class.getSimpleName();
+    private static final String LOG_TAG = PinAppDialogFragment.class.getSimpleName();
     public static final String APP_INFORS_KEY = "app_infors";
     public static final int FAVORITE_MODE = 1;
     public static final int EXCLUDE_MODE = 2;
     static ListView mListView;
     private ProgressBar progressBar;
     private ArrayList<AppInfors> appInforsArrayList;
-    AppsListArrayAdapter mAdapter;
+    private Realm pinRealm;
+    InstallAppPinAppAdapter mAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.add_favorite_app_fragment_list_view,container);
-        final SharedPreferences sharedPreferenceExclude = getActivity().getSharedPreferences(MainActivity.EXCLUDE_SHAREDPREFERENCE, 0);
+        View rootView = inflater.inflate(R.layout.add_favorite_app_fragment_list_view, container);
         mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
+        pinRealm = Realm.getInstance(new RealmConfiguration.Builder(MyApplication.getContext()).name("pinApp.realm").build());
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String packageName = appInforsArrayList.get(position).packageName;
-                Set<String> set = sharedPreferenceExclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, null);
-                if (set == null) {
-                    set = new HashSet<String>();
+                CheckBox checkBox = (CheckBox)view.findViewById(R.id.add_favorite_list_item_check_box);
+                int size = (int)pinRealm.where(Shortcut.class).count();
+                Log.e(LOG_TAG, "pinApp count = " + size);
+                if (checkBox != null) {
+                    if (checkBox.isChecked()) {
+                        pinRealm.beginTransaction();
+                        Shortcut removeShortcut = pinRealm.where(Shortcut.class).equalTo("packageName",packageName).findFirst();
+                        int removeId = removeShortcut.getId();
+                        pinRealm.where(Shortcut.class).equalTo("packageName",packageName).findFirst().removeFromRealm();
+                        RealmResults<Shortcut> results = pinRealm.where(Shortcut.class).findAll();
+                        results.sort("id",true);
+//                        for (Shortcut tem : results) {
+//                            Log.e(LOG_TAG, "package clicked = " + packageName);
+//                            Log.e(LOG_TAG, "ori id = " + tem.getId());
+//                            tem.setId(tem.getId() - 1);
+//
+//                        }
+                        for (int i = 0; i < results.size(); i++) {
+                            Log.e(LOG_TAG, "id = " + results.get(i).getId());
+                            if (results.get(i).getId() >= removeId) {
+                                Log.e(LOG_TAG, "when i = " + i + "result id = " + results.get(i).getId());
+                                Shortcut shortcut = results.get(i);
+                                int oldId = shortcut.getId();
+                                shortcut.setId(oldId - 1);
+                            }
+
+//                            results.get(i).setId(results.get(i).getId() - 1);
+                        }
+                        pinRealm.commitTransaction();
+                    } else {
+                        if (size < 6) {
+                            Shortcut newShortcut = new Shortcut();
+                            newShortcut.setId(size);
+                            Log.e(LOG_TAG, "size = " + size);
+                            newShortcut.setPackageName(packageName);
+                            pinRealm.beginTransaction();
+                            pinRealm.copyToRealm(newShortcut);
+                            pinRealm.commitTransaction();
+                        } else {
+                            Toast.makeText(MyApplication.getContext(),getString(R.string.out_of_limit),Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
                 }
-                Set<String> setClone = new HashSet<String>();
-                setClone.addAll(set);
-                if (setClone.contains(packageName)) {
-                    setClone.remove(packageName);
-                }else setClone.add(packageName);
-                sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, setClone).commit();
+
                 mAdapter.notifyDataSetChanged();
             }
         });
@@ -130,7 +170,7 @@ public class PinAppDialogFragment extends DialogFragment {
             progressBar.setVisibility(View.GONE);
             if (getActivity() != null) {
                 appInforsArrayList = result;
-                mAdapter = new AppsListArrayAdapter(getActivity(),result,EXCLUDE_MODE);
+                mAdapter = new InstallAppPinAppAdapter(getActivity(),result,pinRealm);
                 mListView.setAdapter(mAdapter);
             }
 

@@ -266,6 +266,12 @@ public class MainActivity extends Activity {
         ImageButton edge2SettingButton = (ImageButton) findViewById(R.id.edge_2_setting_image_button);
         ImageButton iconPackSettingButton = (ImageButton) findViewById(R.id.main_icon_pack_support_setting_button);
         ImageButton pinAppImageButton = (ImageButton) findViewById(R.id.main_pin_app_setting_button);
+        pinAppImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), PinAppActivity.class));
+            }
+        });
         ImageButton outerRingSettingButton = (ImageButton) findViewById(R.id.main_outter_ring_setting_button);
         final ImageButton vibrationDurationSettingButton = (ImageButton) findViewById(R.id.main_vibration_duration_setting_image_button);
         ImageButton holdTimeSettingButton = (ImageButton) findViewById(R.id.main_hold_time_setting_image_button);

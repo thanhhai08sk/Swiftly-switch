@@ -16,7 +16,6 @@ import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import java.util.ArrayList;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 /**
  * Created by hai on 3/26/2016.
@@ -27,9 +26,9 @@ public class InstallAppPinAppAdapter extends BaseAdapter {
     private Realm pinRealm;
     private PackageManager packageManager;
     static private ArrayList<AppInfors> mAppInfosArrayList;
-    public InstallAppPinAppAdapter(Context context, ArrayList<AppInfors> inforsArrayList) {
+    public InstallAppPinAppAdapter(Context context, ArrayList<AppInfors> inforsArrayList, Realm realm) {
         super();
-        pinRealm = Realm.getInstance(new RealmConfiguration.Builder(context).name("pinApp.realm").build());
+        pinRealm = realm;
         this.context = context;
         mAppInfosArrayList = inforsArrayList;
         packageManager = context.getPackageManager();
