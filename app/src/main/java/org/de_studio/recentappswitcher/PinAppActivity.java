@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,10 @@ public class PinAppActivity extends AppCompatActivity {
         DragSortListView listView = (DragSortListView) findViewById(R.id.drag_list_view);
         DragSortController controller = new DragSortController(listView);
         controller.setDragHandleId(R.id.pin_app_list_item_dragger);
+        controller.setRemoveEnabled(true);
+        controller.setBackgroundColor(Color.TRANSPARENT);
+        listView.setFloatViewManager(controller);
+        listView.setOnTouchListener(controller);
         listView.setFloatViewManager(controller);
         listView.setOnTouchListener(controller);
         listView.setDragEnabled(true);
@@ -26,7 +31,6 @@ public class PinAppActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

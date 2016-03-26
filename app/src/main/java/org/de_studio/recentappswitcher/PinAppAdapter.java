@@ -27,7 +27,7 @@ import io.realm.RealmResults;
 /**
  * Created by hai on 3/25/2016.
  */
-public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropListener {
+public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropListener ,DragSortListView.RemoveListener{
     private Context mContext;
     private Realm pinRealm;
     private Shortcut shortcut;
@@ -149,5 +149,25 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
         notifyDataSetChanged();
         mContext.stopService(new Intent(mContext, EdgeGestureService.class));
         mContext.startService(new Intent(mContext, EdgeGestureService.class));
+    }
+
+    public void remove(int id) {
+        pinRealm.beginTransaction();
+        pinRealm.where(Shortcut.class).equalTo("id",id).findFirst().removeFromRealm();
+        RealmResults<Shortcut> results = pinRealm.where(Shortcut.class).findAll();
+        results.sort("id",true);
+        for (int i = 0; i < results.size(); i++) {
+            Log.e(LOG_TAG, "id = " + results.get(i).getId());
+            if (results.get(i).getId() >= id) {
+                Log.e(LOG_TAG, "when i = " + i + "result id = " + results.get(i).getId());
+                Shortcut shortcut = results.get(i);
+                int oldId = shortcut.getId();
+                shortcut.setId(oldId - 1);
+            }
+
+//                            results.get(i).setId(results.get(i).getId() - 1);
+        }
+        pinRealm.commitTransaction();
+        notifyDataSetChanged();
     }
 }
