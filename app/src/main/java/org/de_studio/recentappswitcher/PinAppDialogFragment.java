@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,9 +29,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by hai on 1/5/2016.
+ * Created by hai on 3/26/2016.
  */
-public class FavoriteOrExcludeDialogFragment extends DialogFragment {
+public class PinAppDialogFragment extends DialogFragment {
     private static final String LOG_TAG = FavoriteOrExcludeDialogFragment.class.getSimpleName();
     public static final String APP_INFORS_KEY = "app_infors";
     public static final int FAVORITE_MODE = 1;
@@ -70,7 +69,6 @@ public class FavoriteOrExcludeDialogFragment extends DialogFragment {
         return rootView;
     }
 
-    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
@@ -138,5 +136,4 @@ public class FavoriteOrExcludeDialogFragment extends DialogFragment {
 
         }
     }
-
 }

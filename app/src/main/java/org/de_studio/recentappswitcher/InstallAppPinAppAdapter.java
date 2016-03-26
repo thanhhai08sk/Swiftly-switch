@@ -1,7 +1,6 @@
 package org.de_studio.recentappswitcher;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,29 +11,28 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 
 import java.util.ArrayList;
-import java.util.Set;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
- * Created by hai on 1/5/2016.
+ * Created by hai on 3/26/2016.
  */
-public class AppsListArrayAdapter extends BaseAdapter {
+public class InstallAppPinAppAdapter extends BaseAdapter {
     private static final String LOG_TAG = AppsListArrayAdapter.class.getSimpleName();
     private Context context;
+    private Realm pinRealm;
     private PackageManager packageManager;
     static private ArrayList<AppInfors> mAppInfosArrayList;
-    static int mMode;
-    private static SharedPreferences sharedPreferenceExclude;
-
-    public AppsListArrayAdapter(Context context, ArrayList<AppInfors> inforsArrayList, int mode) {
+    public InstallAppPinAppAdapter(Context context, ArrayList<AppInfors> inforsArrayList) {
         super();
+        pinRealm = Realm.getInstance(new RealmConfiguration.Builder(context).name("pinApp.realm").build());
         this.context = context;
-        mMode = mode;
         mAppInfosArrayList = inforsArrayList;
         packageManager = context.getPackageManager();
-        sharedPreferenceExclude = context.getSharedPreferences(MainActivity.EXCLUDE_SHAREDPREFERENCE, 0);
     }
 
     @Override
@@ -52,13 +50,7 @@ public class AppsListArrayAdapter extends BaseAdapter {
         ImageView icon = (ImageView) returnView.findViewById(R.id.add_favorite_list_item_image_view);
         TextView label = (TextView) returnView.findViewById(R.id.add_favorite_list_item_label_text_view);
         CheckBox checkBox = (CheckBox) returnView.findViewById(R.id.add_favorite_list_item_check_box);
-        Set<String> excludeSet = sharedPreferenceExclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, null);
-        if (excludeSet!=null && excludeSet.contains(appInfors.packageName)) {
-            checkBox.setChecked(true);
-        } else {
-            checkBox.setChecked(false);
-        }
-
+        checkBox.setChecked(pinRealm.where(Shortcut.class).equalTo("packageName",appInfors.packageName).findFirst()!=null);
         try {
             icon.setImageDrawable(packageManager.getApplicationIcon(appInfors.packageName));
 
