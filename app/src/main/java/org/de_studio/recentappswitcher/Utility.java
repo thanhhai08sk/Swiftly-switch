@@ -40,7 +40,6 @@ import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 import java.lang.reflect.InvocationTargetException;
@@ -281,17 +280,13 @@ public  class Utility {
 
     }
 
-    public static void setFavoriteShortcutGridViewPosition(GridView gridView, int x_init_cord, int y_init_cord, float mScale, int edgePosition, WindowManager windowManager, SharedPreferences sharedPreferences, int distanceFromEdgeDp, int gap) {
+    public static void setFavoriteShortcutGridViewPosition(GridView gridView,float gridTall, float gridWide, int x_init_cord, int y_init_cord, float mScale, int edgePosition, WindowManager windowManager, SharedPreferences sharedPreferences, int distanceFromEdgeDp, int gap) {
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
-        int row = sharedPreferences.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
-        int column = sharedPreferences.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
         boolean isCenter = sharedPreferences.getBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE, false);
-        float gridWide = ((float)(column* EdgeGestureService.GRID_ICON_SIZE + (column -1)*gap)) * mScale;
-        float gridTall = ((float)(row*EdgeGestureService.GRID_ICON_SIZE + (row -1)*gap)) * mScale;
         Point point = new Point();
         windowManager.getDefaultDisplay().getSize(point);
-        int x = point.x;
-        int y = point.y;
+        float x = point.x;
+        float y = point.y;
         if (!isCenter) {
             switch (edgePosition) {
                 case 10:
@@ -300,12 +295,12 @@ public  class Utility {
                     break;
                 case 11:
                     gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
-                    if (((float) y_init_cord) - gridTall / 2 < 0) {
+                    if (((float) y_init_cord) - gridTall / (float)2 < 0) {
                         gridView.setY(0);
-                    } else if (((float) y_init_cord) - gridTall / 2 + gridTall > y) {
+                    } else if (((float) y_init_cord) - gridTall /(float) 2 + gridTall > y) {
                         gridView.setY(y - gridTall);
                     } else {
-                        gridView.setY(((float) y_init_cord) - gridTall / 2);
+                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
                     }
                     break;
                 case 12:
@@ -318,12 +313,12 @@ public  class Utility {
                     break;
                 case 21:
                     gridView.setX(((float) x_init_cord) + distanceFromEdge);
-                    if (((float) y_init_cord) - gridTall / 2 < 0) {
+                    if (((float) y_init_cord) - gridTall /(float) 2 < 0) {
                         gridView.setY(0);
-                    } else if (((float) y_init_cord) - gridTall / 2 + gridTall > y) {
+                    } else if (((float) y_init_cord) - gridTall /(float) 2 + gridTall > y) {
                         gridView.setY(y - gridTall);
                     } else {
-                        gridView.setY(((float) y_init_cord) - gridTall / 2);
+                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
                     }
                     break;
                 case 22:
@@ -331,7 +326,7 @@ public  class Utility {
                     gridView.setY(y - gridTall);
                     break;
                 case 31:
-                    gridView.setX(((float) x_init_cord) - gridWide / 2);
+                    gridView.setX(((float) x_init_cord) - gridWide /(float) 2);
                     gridView.setY(((float) y_init_cord) - distanceFromEdge - gridTall);
                     break;
             }

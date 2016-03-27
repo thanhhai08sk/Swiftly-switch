@@ -544,10 +544,12 @@ public class EdgeGestureService extends Service {
                             ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                             ComponentName componentName = taskInfo.baseActivity;
                             String packName = componentName.getPackageName();
-                            if (i != 0 && !packName.equals(launcherPackagename) && !excludeSet.contains(packName) && !packName.contains("launcher") && pinnedSet.contains(packName)) {
+                            if (i != 0 && !packName.equals(launcherPackagename) && !excludeSet.contains(packName) && !packName.contains("launcher") && !pinnedSet.contains(packName)) {
                                 tempPackageName.add(packName);
                             }
                         }
+
+
                         if (6 - tempPackageName.size() - pinnedPackageName.length > 0) {
                             packagename = new String[tempPackageName.size() + pinnedPackageName.length];
                         } else {
@@ -1178,8 +1180,10 @@ public class EdgeGestureService extends Service {
                 shortcutGridView.setVerticalSpacing((int) (gridGap * mScale));
                 shortcutGridView.setNumColumns(gridColumn);
                 int gridDistanceFromEdge = defaultShared.getInt(EdgeSettingDialogFragment.GRID_DISTANCE_FROM_EDGE_KEY, 20);
-                gridParams.height = (int) (mScale * (float) (GRID_ICON_SIZE * gridRow + gridGap * (gridRow - 1)));
-                gridParams.width = (int) (mScale * (float) (GRID_ICON_SIZE * gridColumn + gridGap * (gridColumn - 1)));
+                float gridWide = (int) (mScale * (float) (GRID_ICON_SIZE * gridColumn + gridGap * (gridColumn - 1)));
+                float gridTall = (int) (mScale * (float) (GRID_ICON_SIZE * gridRow + gridGap * (gridRow - 1)));
+                gridParams.height = (int) gridTall;
+                gridParams.width = (int) gridWide;
                 shortcutGridView.setLayoutParams(gridParams);
                 shortcutGridView.setAdapter(shortcutAdapter);
                 WindowManager.LayoutParams shortcutViewParams = new WindowManager.LayoutParams(
@@ -1190,9 +1194,9 @@ public class EdgeGestureService extends Service {
                                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
                                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                         PixelFormat.TRANSLUCENT);
-                shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+//                shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
 
-                Utility.setFavoriteShortcutGridViewPosition(shortcutGridView, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared, gridDistanceFromEdge, gridGap);
+                Utility.setFavoriteShortcutGridViewPosition(shortcutGridView,gridTall,gridWide, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared, gridDistanceFromEdge, gridGap);
                 gridX = (int) shortcutGridView.getX();
                 gridY = (int) shortcutGridView.getY();
                 if (shortcutView != null && !shortcutView.isAttachedToWindow()) {

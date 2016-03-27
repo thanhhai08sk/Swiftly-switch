@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -50,36 +51,61 @@ public class OuterRingSettingActivity extends AppCompatActivity {
                 builder.setSingleChoiceItems(listActionlabel, currentChecked, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        switch (position) {
-                            case 0:
-                                sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_1_KEY,listAction[which]).commit();
-                                break;
-                            case 1:
-                                sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_2_KEY,listAction[which]).commit();
-                                break;
-                            case 2:
-                                sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_3_KEY,listAction[which]).commit();
-                                break;
-                            case 3:
-                                sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_4_KEY,listAction[which]).commit();
-                                break;
+                        try {
+                            switch (position) {
+                                case 0:
+                                    sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_1_KEY, listAction[which]).commit();
+                                    break;
+                                case 1:
+                                    sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_2_KEY, listAction[which]).commit();
+                                    break;
+                                case 2:
+                                    sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_3_KEY, listAction[which]).commit();
+                                    break;
+                                case 3:
+                                    sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_4_KEY, listAction[which]).commit();
+                                    break;
+                            }
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            Log.e(LOG_TAG, "ArrayIndexOutOfBounds when set outer ring action");
                         }
-                    }
-                });
-                builder.setPositiveButton(getResources().getString(R.string.edge_dialog_ok_button), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
 
                     }
-                }).setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        mAdapter.notifyDataSetChanged();
                     }
-                });
-                builder.create().show();
-            }
-        });
+
+                    );
+                    builder.setPositiveButton(
+
+                    getResources()
+
+                    .
+
+                    getString(R.string.edge_dialog_ok_button),
+
+                    new DialogInterface.OnClickListener()
+
+                    {
+                        @Override
+                        public void onClick (DialogInterface dialog,int which){
+
+                    }
+                    }
+
+                    ).
+
+                    setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss (DialogInterface dialog){
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    );
+                    builder.create().
+
+                    show();
+                }
+            });
 
     }
 

@@ -106,7 +106,7 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "id = " + pinRealm.where(Shortcut.class).equalTo("id",position).findFirst().getId(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "id = " + pinRealm.where(Shortcut.class).equalTo("id", position).findFirst().getId(), Toast.LENGTH_SHORT).show();
             }
         });
         return view;
@@ -155,7 +155,7 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
         pinRealm.beginTransaction();
         pinRealm.where(Shortcut.class).equalTo("id",id).findFirst().removeFromRealm();
         RealmResults<Shortcut> results = pinRealm.where(Shortcut.class).findAll();
-        results.sort("id",true);
+        results.sort("id", true);
         for (int i = 0; i < results.size(); i++) {
             Log.e(LOG_TAG, "id = " + results.get(i).getId());
             if (results.get(i).getId() >= id) {
@@ -169,5 +169,7 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
         }
         pinRealm.commitTransaction();
         notifyDataSetChanged();
+        mContext.stopService(new Intent(mContext, EdgeGestureService.class));
+        mContext.startService(new Intent(mContext, EdgeGestureService.class));
     }
 }
