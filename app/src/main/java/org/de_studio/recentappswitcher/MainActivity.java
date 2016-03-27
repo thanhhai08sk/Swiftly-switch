@@ -260,6 +260,7 @@ public class MainActivity extends Activity {
         step1GoToSettingButton = (Button) findViewById(R.id.step1_go_to_setting_button);
         ImageButton favoriteInfoButton = (ImageButton) findViewById(R.id.main_favorite_info_image_button);
         ImageButton excludeInfoButton = (ImageButton) findViewById(R.id.main_exclude_info_image_button);
+        ImageButton pinAppInfoButton = (ImageButton)findViewById(R.id.main_pin_app_info_image_button);
         ImageButton disableAccessibilityInfoButton = (ImageButton) findViewById(R.id.main_disable_accessibility_info_image_button);
         final FrameLayout stepTextFrame = (FrameLayout) findViewById(R.id.step_text_frame_layout);
         ImageButton edge1SettingButton = (ImageButton) findViewById(R.id.edge_1_setting_image_button);
@@ -269,7 +270,35 @@ public class MainActivity extends Activity {
         pinAppImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), PinAppActivity.class));
+                if (isTrial && isOutOfTrial) {
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
+                    builder.setMessage(R.string.edge_service_out_of_trial_text_when_homebacknoti)
+                            .setPositiveButton(R.string.main_edge_switch_2_trial_buy_pro_button, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Uri uri = Uri.parse("mbarket://details?id=" + PRO_VERSION_PACKAGE_NAME);
+                                    Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+                                    gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                                            Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                                    try {
+                                        startActivity(gotoMarket);
+                                    } catch (ActivityNotFoundException e) {
+                                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                                Uri.parse("http://play.google.com/store/apps/details?id=" + PRO_VERSION_PACKAGE_NAME)));
+                                    }
+                                }
+                            })
+                            .setNegativeButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            });
+                    builder.show();
+                } else {
+                    startActivity(new Intent(getApplicationContext(), PinAppActivity.class));
+                }
+
             }
         });
         ImageButton outerRingSettingButton = (ImageButton) findViewById(R.id.main_outter_ring_setting_button);
@@ -614,6 +643,21 @@ public class MainActivity extends Activity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle(getString(R.string.main_exclude_info_title))
                         .setMessage(R.string.main_exclude_app_info)
+                        .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //do nothing
+                            }
+                        });
+                builder.show();
+            }
+        });
+        pinAppInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(getString(R.string.main_pin_app))
+                        .setMessage(R.string.pin_app_info)
                         .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
