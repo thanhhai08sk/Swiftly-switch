@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -35,6 +36,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
     private Realm myRealm;
     private ChooseAppListViewAdapter mAppAdapter;
     private ChooseSettingShortcutListViewAdapter mSettingAdapter;
+    private Context mContext;
 
 
     private ViewPager mViewPager;
@@ -43,6 +45,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPosition = getIntent().getFlags();
+        mContext = this;
 //        Toast.makeText(getApplicationContext(),"ChooseShortcutActivity position = "+ mPosition,Toast.LENGTH_SHORT).show();
         setContentView(R.layout.activity_choose_shortcut);
 
@@ -145,6 +148,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
                 case 0:
                     mAppTabFragment = AppTabFragment.newInstance(position + 1);
                     mAppTabFragment.setmPosition(mPosition);
+                    mAppTabFragment.setmContext(mContext);
                     return mAppTabFragment;
                 case 1:
                     mSettingTabFragment = SettingTabFragment.newInstance(position + 1);
@@ -152,6 +156,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
                     return mSettingTabFragment;
                 default: mAppTabFragment = AppTabFragment.newInstance(position + 1);
                     mAppTabFragment.setmPosition(mPosition);
+                    mAppTabFragment.setmContext(mContext);
                     return mAppTabFragment;
             }
 

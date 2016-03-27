@@ -38,6 +38,7 @@ public class AppTabFragment extends Fragment{
     private ChooseAppListViewAdapter mAdapter;
     private int mPosition;
     private ProgressBar progressBar;
+    private Context mContext;
 
     public static AppTabFragment newInstance(int sectionNumber) {
         AppTabFragment fragment = new AppTabFragment();
@@ -49,6 +50,10 @@ public class AppTabFragment extends Fragment{
 
     public void setmPosition(int mPosition) {
         this.mPosition = mPosition;
+    }
+
+    public void setmContext(Context context) {
+        mContext = context;
     }
 
     public void setmPositioinToNext() {
@@ -130,7 +135,8 @@ public class AppTabFragment extends Fragment{
             }
             mAdapter = new ChooseAppListViewAdapter(app, result, mPosition);
             mListView.setAdapter(mAdapter);
-            ((ChooseShortcutActivity) getActivity()).setAppAdapter(mAdapter);
+//            ((ChooseShortcutActivity) getActivity()).setAppAdapter(mAdapter);
+            ((ChooseShortcutActivity) mContext).setAppAdapter(mAdapter);
             if (mListView == null) {
                 Log.e(LOG_TAG, "mListView = null");
             }
