@@ -53,6 +53,7 @@ import org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActiv
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -121,6 +122,7 @@ public class EdgeGestureService extends Service {
     private boolean isClockShown = false;
     private View clockView;
     private Realm pinAppRealm;
+    private Set<String> pinnedSet;
 
     @Nullable
     @Override
@@ -542,12 +544,29 @@ public class EdgeGestureService extends Service {
                             ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                             ComponentName componentName = taskInfo.baseActivity;
                             String packName = componentName.getPackageName();
-                            if (i != 0 & !packName.equals(launcherPackagename) & !excludeSet.contains(packName) & !packName.contains("launcher")) {
+                            if (i != 0 && !packName.equals(launcherPackagename) && !excludeSet.contains(packName) && !packName.contains("launcher") && pinnedSet.contains(packName)) {
                                 tempPackageName.add(packName);
                             }
                         }
-                        packagename = new String[tempPackageName.size()];
-                        tempPackageName.toArray(packagename);
+                        if (6 - tempPackageName.size() - pinnedPackageName.length > 0) {
+                            packagename = new String[tempPackageName.size() + pinnedPackageName.length];
+                        } else {
+                            packagename = new String[6];
+                        }
+                        int n = 0;
+                        for (int t = 0; t < packagename.length; t++) {
+                            if (t + pinnedPackageName.length < packagename.length) {
+                                packagename[t] = tempPackageName.get(t);
+                            } else {
+                                packagename[t] = pinnedPackageName[n];
+                                n++;
+                            }
+
+                        }
+
+
+//                        packagename = new String[tempPackageName.size()];
+//                        tempPackageName.toArray(packagename);
                         for (int i = 0; i < 6; i++) {
                             if (i >= packagename.length) {
                                 iconImageArrayList.get(i).setImageDrawable(null);
@@ -596,7 +615,8 @@ public class EdgeGestureService extends Service {
                                                     packa.contains("googlequicksearchbox") |
                                                     key == mySortedMap.firstKey() |
                                                     excludeSet.contains(packa) |
-                                                    packa.contains("launcher") |
+                                                    pinnedSet.contains(packa) |
+                                                    packa.contains("launcher")|
                                                     getPackageManager().getLaunchIntentForPackage(packa) == null) {
                                                 // do nothing
                                             } else tempPackageName.add(packa);
@@ -1288,6 +1308,9 @@ public class EdgeGestureService extends Service {
 //        pinAppRealm.commitTransaction();
         RealmResults<Shortcut> results1 =
                 pinAppRealm.where(Shortcut.class).findAll();
+        if (isFreeVersion && isOutOfTrial) {
+            results1 = null;
+        }
         int i = 0;
         if (results1 == null) {
             pinnedPackageName = new String[0];
@@ -1300,6 +1323,7 @@ public class EdgeGestureService extends Service {
                 i++;
             }
         }
+        pinnedSet = new HashSet<String>(Arrays.asList(pinnedPackageName));
 
         Log.e(LOG_TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
                 "\nEdge1 position = " + edge1Position + "\nEdge2 positon = " + edge2Position);
