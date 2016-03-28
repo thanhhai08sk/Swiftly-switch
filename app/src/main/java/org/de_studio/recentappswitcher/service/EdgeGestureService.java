@@ -89,7 +89,7 @@ public class EdgeGestureService extends Service {
     private RelativeLayout edge2View;
     private ImageView edge1Image;
     private ImageView edge2Image;
-    private FrameLayout item1View, item2View, shortcutView;
+    private FrameLayout item1View, item2View, shortcutView,backgroundFrame;
     public int icon_height = 48;
     public int icon_width = 48, icon_rad = 24;
     public int icon_distance = 110, distance_to_arc = 35, distance_to_arc_pxl;
@@ -123,6 +123,7 @@ public class EdgeGestureService extends Service {
     private View clockView;
     private Realm pinAppRealm;
     private Set<String> pinnedSet;
+    private WindowManager.LayoutParams backgroundParams;
 
     @Nullable
     @Override
@@ -154,6 +155,15 @@ public class EdgeGestureService extends Service {
         icon_distance_pxl = icon_distance * mScale;
         icon_24dp_in_pxls = 24 * mScale;
         distance_to_arc_pxl = (int) (distance_to_arc * mScale);
+        backgroundFrame = (FrameLayout) layoutInflater.inflate(R.layout.background, null);
+        backgroundParams = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                PixelFormat.TRANSLUCENT);
         if (isEdge1On) {
             edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
             edge1Image = (ImageView) edge1View.findViewById(R.id.edge_image);
@@ -391,6 +401,9 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    if (!backgroundFrame.isAttachedToWindow()) {
+                        windowManager.addView(backgroundFrame,backgroundParams);
+                    }
                     edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
                     edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
                     if (position != edge1Position && position != edge2Position) {
@@ -737,6 +750,11 @@ public class EdgeGestureService extends Service {
                         isClockShown = false;
                     } catch (IllegalArgumentException e) {
                         Log.e(LOG_TAG, "clockView is not attacked to the windowManager");
+                    }
+                    try {
+                        windowManager.removeView(backgroundFrame);
+                    } catch (IllegalArgumentException e) {
+                        Log.e(LOG_TAG, "background is not attacted to window");
                     }
                     if (action1View != null) {
                         itemView.removeView(action1View);
