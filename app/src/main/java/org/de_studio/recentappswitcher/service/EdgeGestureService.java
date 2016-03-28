@@ -556,15 +556,28 @@ public class EdgeGestureService extends Service {
                             packagename = new String[6];
                         }
                         int n = 0;
-                        for (int t = 0; t < packagename.length; t++) {
-                            if (t + pinnedPackageName.length < packagename.length) {
-                                packagename[t] = tempPackageName.get(t);
-                            } else {
-                                packagename[t] = pinnedPackageName[n];
-                                n++;
+                        if (defaultShared.getBoolean(EdgeSettingDialogFragment.IS_PIN_TO_TOP_KEY, false)) {
+                            for (int t = 0; t < packagename.length; t++) {
+                                if (t < pinnedPackageName.length) {
+                                    packagename[t] = pinnedPackageName[t];
+                                } else {
+                                    packagename[t] = tempPackageName.get(t - pinnedPackageName.length);
+                                }
+
                             }
 
+                        } else {
+                            for (int t = 0; t < packagename.length; t++) {
+                                if (t + pinnedPackageName.length < packagename.length) {
+                                    packagename[t] = tempPackageName.get(t);
+                                } else {
+                                    packagename[t] = pinnedPackageName[n];
+                                    n++;
+                                }
+
+                            }
                         }
+
 
 
 //                        packagename = new String[tempPackageName.size()];
@@ -636,15 +649,27 @@ public class EdgeGestureService extends Service {
                                 packagename = new String[6];
                             }
                             int n = 0;
-                            for (int t = 0; t < packagename.length; t++) {
-                                if (t + pinnedPackageName.length < packagename.length) {
-                                    packagename[t] = tempPackageName.get(t);
-                                } else {
-                                    packagename[t] = pinnedPackageName[n];
-                                    n++;
-                                }
+                            if (defaultShared.getBoolean(EdgeSettingDialogFragment.IS_PIN_TO_TOP_KEY, false)) {
+                                for (int t = 0; t < packagename.length; t++) {
+                                    if (t < pinnedPackageName.length) {
+                                        packagename[t] = pinnedPackageName[t];
+                                    } else {
+                                        packagename[t] = tempPackageName.get(t - pinnedPackageName.length);
+                                    }
 
+                                }
+                            } else {
+                                for (int t = 0; t < packagename.length; t++) {
+                                    if (t + pinnedPackageName.length < packagename.length) {
+                                        packagename[t] = tempPackageName.get(t);
+                                    } else {
+                                        packagename[t] = pinnedPackageName[n];
+                                        n++;
+                                    }
+
+                                }
                             }
+
 
 //                            packagename = new String[tempPackageName.size()];
 //                            tempPackageName.toArray(packagename);

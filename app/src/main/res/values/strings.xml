@@ -130,7 +130,7 @@
     <string name="main_hold_time_info">Time needed to switch to favorite shortcut when you hold at one of recent apps</string>
     <string name="place_in_the_center">Place it in the center</string>
     <string name="main_pin_app">Pin apps to recent</string>
-    <string name="title_activity_pin_app">PinAppActivity</string>
+    <string name="title_activity_pin_app">Pin App</string>
     <string name="out_of_limit">Out of limit</string>
     <string name="pin_app_info">You can pin your most use apps so it always in the recent list.</string>
     <string name="pin_to_top">Pin to top</string>
