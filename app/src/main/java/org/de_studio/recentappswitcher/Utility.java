@@ -295,13 +295,13 @@ public  class Utility {
                     break;
                 case 11:
                     gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
-                    if (((float) y_init_cord) - gridTall / (float)2 < 0) {
-                        gridView.setY(0);
-                    } else if (((float) y_init_cord) - gridTall /(float) 2 + gridTall > y) {
-                        gridView.setY(y - gridTall);
-                    } else {
+//                    if (((float) y_init_cord) - gridTall / (float)2 < 0) {
+//                        gridView.setY(0);
+//                    } else if (((float) y_init_cord) - gridTall /(float) 2 + gridTall > y) {
+//                        gridView.setY(y - gridTall);
+//                    } else {
                         gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
-                    }
+//                    }
                     break;
                 case 12:
                     gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
@@ -313,13 +313,13 @@ public  class Utility {
                     break;
                 case 21:
                     gridView.setX(((float) x_init_cord) + distanceFromEdge);
-                    if (((float) y_init_cord) - gridTall /(float) 2 < 0) {
-                        gridView.setY(0);
-                    } else if (((float) y_init_cord) - gridTall /(float) 2 + gridTall > y) {
-                        gridView.setY(y - gridTall);
-                    } else {
+//                    if (((float) y_init_cord) - gridTall /(float) 2 < 0) {
+//                        gridView.setY(0);
+//                    } else if (((float) y_init_cord) - gridTall /(float) 2 + gridTall > y) {
+//                        gridView.setY(y - gridTall);
+//                    } else {
                         gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
-                    }
+//                    }
                     break;
                 case 22:
                     gridView.setX(((float) x_init_cord) + distanceFromEdge);
