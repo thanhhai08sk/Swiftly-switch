@@ -169,7 +169,7 @@ public class MainActivity extends Activity {
         Switch hapticFeedbackOnTriggerSwitch = (Switch) findViewById(R.id.main_disable_haptic_feedback_switch);
         Switch hapticFeedbackOnItemSwitch = (Switch) findViewById(R.id.main_haptic_feedback_on_item_switch);
         Switch disableClockSwitch = (Switch) findViewById(R.id.main_disable_clock_switch);
-        LinearLayout shareFriendLinearLayout = (LinearLayout) findViewById(R.id.main_share_linear_layout);
+        final LinearLayout shareFriendLinearLayout = (LinearLayout) findViewById(R.id.main_share_linear_layout);
         LinearLayout reviewLinearLayout = (LinearLayout) findViewById(R.id.main_review_linear_layout);
         LinearLayout emailLinearLayout = (LinearLayout) findViewById(R.id.main_email_linear_layout);
         hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, true));
@@ -436,22 +436,24 @@ public class MainActivity extends Activity {
         backgroundColorSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int currentColor = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY,1879048192);
                 ColorPickerDialogBuilder
                         .with(MainActivity.this)
-                        .setTitle("Choose color")
-                        .initialColor(70000000)
+                        .setTitle(getApplicationContext().getString(R.string.main_set_background_color))
+                        .initialColor(currentColor)
                         .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                         .density(12)
                         .setOnColorSelectedListener(new OnColorSelectedListener() {
                             @Override
                             public void onColorSelected(int selectedColor) {
-                                Toast.makeText(getApplicationContext(),"onColorSelected: 0x" + Integer.toHexString(selectedColor),Toast.LENGTH_SHORT).show();
                             }
                         })
                         .setPositiveButton("ok", new ColorPickerClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-                                Toast.makeText(getApplicationContext(),"onColorSelected: 0x" + Integer.toHexString(selectedColor),Toast.LENGTH_SHORT).show();
+                                sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY,selectedColor).commit();
+                                stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                                startService(new Intent(getApplicationContext(), EdgeGestureService.class));
                             }
                         })
                         .setNegativeButton("cancel", new DialogInterface.OnClickListener() {

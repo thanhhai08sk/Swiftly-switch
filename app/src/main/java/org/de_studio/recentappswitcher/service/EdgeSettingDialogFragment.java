@@ -61,6 +61,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String VIBRATION_DURATION_KEY = "vibration_duration";
     public static final String HOLD_TIME_KEY  = "hold_time";
     public static final String IS_PIN_TO_TOP_KEY = "is_pin_to_top";
+    public static final String BACKGROUND_COLOR_KEY = "background_color";
     private static int edgeNumber;
     private  float mScale;
     private static SharedPreferences sharedPreferences,defaultSharedPreferences;

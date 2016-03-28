@@ -124,6 +124,7 @@ public class EdgeGestureService extends Service {
     private Realm pinAppRealm;
     private Set<String> pinnedSet;
     private WindowManager.LayoutParams backgroundParams;
+    private int backgroundColor;
 
     @Nullable
     @Override
@@ -156,6 +157,7 @@ public class EdgeGestureService extends Service {
         icon_24dp_in_pxls = 24 * mScale;
         distance_to_arc_pxl = (int) (distance_to_arc * mScale);
         backgroundFrame = (FrameLayout) layoutInflater.inflate(R.layout.background, null);
+        backgroundFrame.setBackgroundColor(backgroundColor);
         backgroundParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT,
@@ -1345,6 +1347,8 @@ public class EdgeGestureService extends Service {
         edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
         pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext()).name("pinApp.realm").build());
+        backgroundColor  = defaultShared.getInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY,1879048192);
+
 //        pinAppRealm.beginTransaction();
 //        Shortcut country1 = pinAppRealm.createObject(Shortcut.class);
 //
