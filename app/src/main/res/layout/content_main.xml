@@ -39,6 +39,7 @@
                 android:background="@drawable/arrow_button_red"
                 android:text="@string/main_step1_text"
                 android:textAllCaps="false"
+                style="@style/step_button"
                 android:textColor="@color/white" />
 
             <Button

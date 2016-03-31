@@ -619,7 +619,7 @@ public class EdgeGestureService extends Service {
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-                        long currentTimeMillis = System.currentTimeMillis();
+                        long currentTimeMillis = System.currentTimeMillis()+5000;
                         List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, currentTimeMillis - 1000 * 1000, currentTimeMillis);
                         ArrayList<String> tempPackageName = new ArrayList<String>();
                         if (stats != null) {
@@ -629,27 +629,35 @@ public class EdgeGestureService extends Service {
                             }
                             Set<Long> setKey = mySortedMap.keySet();
                             Log.e(LOG_TAG, "mySortedMap size = " + mySortedMap.size());
+                            UsageStats usageStats;
+                            String packa;
+                            PackageManager packageManager = getPackageManager();
                             for (Long key : setKey) {
                                 if (key >= currentTimeMillis) {
                                     Log.e(LOG_TAG, "key is in future");
                                 } else {
-                                    UsageStats usageStats = mySortedMap.get(key);
+                                    usageStats = mySortedMap.get(key);
                                     if (usageStats == null) {
                                         Log.e(LOG_TAG, " usageStats is null");
                                     } else {
-                                        String packa = usageStats.getPackageName();
+                                        packa = usageStats.getPackageName();
                                         try {
-                                            if (getPackageManager().getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
+                                            if (packageManager.getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
                                                 //do nothing
-                                            } else if (packa.contains("systemui") |
-                                                    packa.contains("googlequicksearchbox") |
-                                                    key == mySortedMap.firstKey() |
-                                                    excludeSet.contains(packa) |
-                                                    pinnedSet.contains(packa) |
-                                                    packa.contains("launcher")|
-                                                    getPackageManager().getLaunchIntentForPackage(packa) == null) {
+                                            } else if (     packageManager.getLaunchIntentForPackage(packa) == null ||
+                                                            packa.contains("systemui") ||
+                                                            packa.contains("googlequicksearchbox") ||
+                                                            key == mySortedMap.firstKey() ||
+                                                            excludeSet.contains(packa) ||
+                                                            pinnedSet.contains(packa) ||
+                                                            packa.contains("launcher") )
+                                                             {
                                                 // do nothing
                                             } else tempPackageName.add(packa);
+                                            if (tempPackageName.size() >= 8) {
+                                                Log.e(LOG_TAG, "tempackage >= 8");
+                                                break;
+                                            }
                                         } catch (PackageManager.NameNotFoundException e) {
                                             Log.e(LOG_TAG, "name not found" + e);
                                         }
@@ -735,6 +743,8 @@ public class EdgeGestureService extends Service {
                     iconIdBackgrounded = -1;
 
                     break;
+
+
 
                 case MotionEvent.ACTION_UP:
                     try {
@@ -899,11 +909,16 @@ public class EdgeGestureService extends Service {
                     if (shortcutView != null && shortcutView.isAttachedToWindow()) {
                         windowManager.removeView(shortcutView);
                     }
+                    try {
+                        windowManager.removeView(backgroundFrame);
+                    } catch (IllegalArgumentException e) {
+                        Log.e(LOG_TAG, "background is not attacted to window");
+                    }
                     break;
 
 
                 case MotionEvent.ACTION_MOVE:
-                    if (!isClockShown & !switched & !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
+                    if (!isClockShown && !switched && !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
                         Log.e(LOG_TAG, "Show clock");
                         clockView = Utility.disPlayClock(getApplicationContext(), windowManager);
                         isClockShown = true;
@@ -1170,6 +1185,9 @@ public class EdgeGestureService extends Service {
                     if (item2View != null && item2View.isAttachedToWindow()) {
                         windowManager.removeView(item2View);
                     }
+                    if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
+                        windowManager.removeView(backgroundFrame);
+                    }
                     break;
                 case MotionEvent.ACTION_CANCEL:
                     if (item1View != null && item1View.isAttachedToWindow()) {
@@ -1177,6 +1195,9 @@ public class EdgeGestureService extends Service {
                     }
                     if (item2View != null && item2View.isAttachedToWindow()) {
                         windowManager.removeView(item2View);
+                    }
+                    if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
+                        windowManager.removeView(backgroundFrame);
                     }
                     break;
             }
@@ -1312,6 +1333,9 @@ public class EdgeGestureService extends Service {
             }
             windowManager.removeView(item2View);
         }
+        if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
+            windowManager.removeView(backgroundFrame);
+        }
 
     }
 
@@ -1392,6 +1416,9 @@ public class EdgeGestureService extends Service {
             Log.e(LOG_TAG, "remove edge2");
             edge2View.setVisibility(View.GONE);
             windowManager.removeView(edge2View);
+        }
+        if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
+            windowManager.removeView(backgroundFrame);
         }
         Log.e(LOG_TAG, "onDestroy service");
     }
