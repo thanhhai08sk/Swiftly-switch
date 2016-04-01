@@ -824,9 +824,10 @@ public  class Utility {
                 PixelFormat.TRANSLUCENT);
         paramsEdge1.gravity = Gravity.TOP|Gravity.CENTER_HORIZONTAL;
         windowManager.addView(view, paramsEdge1);
-        hourTextView.startAnimation(animationSet);
-        dateTextView.startAnimation(animationSet);
-        batteryLifeTextView.startAnimation(animationSet);
+//        hourTextView.startAnimation(animationSet);
+//        dateTextView.startAnimation(animationSet);
+//        batteryLifeTextView.startAnimation(animationSet);
+        view.animate().alpha(1f).setDuration(1500);
         return view;
 
     }
