@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
+import android.view.animation.AnimationSet;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -801,7 +802,7 @@ public  class Utility {
         }
     }
 
-    public static View disPlayClock(Context context, WindowManager windowManager) {
+    public static View disPlayClock(Context context, WindowManager windowManager, AnimationSet animationSet) {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
@@ -822,7 +823,10 @@ public  class Utility {
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 PixelFormat.TRANSLUCENT);
         paramsEdge1.gravity = Gravity.TOP|Gravity.CENTER_HORIZONTAL;
-        windowManager.addView(view,paramsEdge1);
+        windowManager.addView(view, paramsEdge1);
+        hourTextView.startAnimation(animationSet);
+        dateTextView.startAnimation(animationSet);
+        batteryLifeTextView.startAnimation(animationSet);
         return view;
 
     }

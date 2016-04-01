@@ -689,8 +689,15 @@
                     android:id="@+id/main_hold_time_info_image_button"
                     android:background="@color/transparent"
                     android:src="@drawable/ic_info_outline_white_24dp"
-                    android:paddingRight="16dp"
+                    android:paddingRight="8dp"
                     />
+                <Switch
+                    android:id="@+id/main_hold_time_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:paddingRight="8dp"
+                    android:checked="true" />
 
 
 

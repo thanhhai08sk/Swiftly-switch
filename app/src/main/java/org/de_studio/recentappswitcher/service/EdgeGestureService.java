@@ -39,6 +39,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -125,6 +127,7 @@ public class EdgeGestureService extends Service {
     private Set<String> pinnedSet;
     private WindowManager.LayoutParams backgroundParams;
     private int backgroundColor;
+    private AnimationSet clockAnimation;
 
     @Nullable
     @Override
@@ -920,7 +923,7 @@ public class EdgeGestureService extends Service {
                 case MotionEvent.ACTION_MOVE:
                     if (!isClockShown && !switched && !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
                         Log.e(LOG_TAG, "Show clock");
-                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager);
+                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager,clockAnimation);
                         isClockShown = true;
                     }
                     if (switched) {
@@ -981,10 +984,10 @@ public class EdgeGestureService extends Service {
 
                             activateId = iconToSwitch + 20;
 
-                            if (delayToSwitchTask == null) {
+                            if (defaultShared.getBoolean(EdgeSettingDialogFragment.HOLD_TIME_ENABLE_KEY,true) && delayToSwitchTask == null) {
                                 delayToSwitchTask = new DelayToSwitchTask();
                                 delayToSwitchTask.execute();
-                            } else if (delayToSwitchTask.isCancelled()) {
+                            } else if (defaultShared.getBoolean(EdgeSettingDialogFragment.HOLD_TIME_ENABLE_KEY, true) && delayToSwitchTask.isCancelled()) {
                                 delayToSwitchTask = new DelayToSwitchTask();
                                 delayToSwitchTask.execute();
                             }
@@ -1371,7 +1374,11 @@ public class EdgeGestureService extends Service {
         edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
         pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext()).name("pinApp.realm").build());
-        backgroundColor  = defaultShared.getInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY,1879048192);
+        backgroundColor  = defaultShared.getInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY, 1879048192);
+        clockAnimation = new AnimationSet(getBaseContext(), null);
+        clockAnimation.addAnimation(new AlphaAnimation(0f,1f));
+//        clockAnimation.addAnimation(new TranslateAnimation(0,0,0,1000));
+        clockAnimation.setDuration(1000);
 
 //        pinAppRealm.beginTransaction();
 //        Shortcut country1 = pinAppRealm.createObject(Shortcut.class);
