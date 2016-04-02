@@ -407,7 +407,9 @@ public class EdgeGestureService extends Service {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     if (!backgroundFrame.isAttachedToWindow()) {
-                        windowManager.addView(backgroundFrame,backgroundParams);
+                        backgroundFrame.setAlpha(0f);
+                        windowManager.addView(backgroundFrame, backgroundParams);
+                        backgroundFrame.animate().alpha(1f).setDuration(300);
                     }
                     edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
                     edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
@@ -923,7 +925,7 @@ public class EdgeGestureService extends Service {
                 case MotionEvent.ACTION_MOVE:
                     if (!isClockShown && !switched && !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
                         Log.e(LOG_TAG, "Show clock");
-                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager,clockAnimation);
+                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager);
                         isClockShown = true;
                     }
                     if (switched) {
