@@ -515,6 +515,32 @@
             </LinearLayout>
 
             <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:text="@string/main_disable_clock_text"
+                android:textColor="@color/white" />
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:checked="false"
+                android:id="@+id/main_disable_clock_switch"
+                />
+
+        </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -528,14 +554,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="16sp"
-                    android:text="@string/main_disable_clock_text"
+                    android:text="@string/main_disable_animation_text"
                     android:textColor="@color/white" />
                 <Switch
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:checked="false"
-                    android:id="@+id/main_disable_clock_switch"
+                    android:id="@+id/main_disable_animation_switch"
                     />
 
             </LinearLayout>

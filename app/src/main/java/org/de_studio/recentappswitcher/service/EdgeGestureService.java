@@ -407,9 +407,13 @@ public class EdgeGestureService extends Service {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     if (!backgroundFrame.isAttachedToWindow()) {
-                        backgroundFrame.setAlpha(0f);
-                        windowManager.addView(backgroundFrame, backgroundParams);
-                        backgroundFrame.animate().alpha(1f).setDuration(300);
+                        if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY, false)) {
+                            backgroundFrame.setAlpha(0f);
+                            windowManager.addView(backgroundFrame, backgroundParams);
+                            backgroundFrame.animate().alpha(1f).setDuration(300);
+                        } else {
+                            windowManager.addView(backgroundFrame, backgroundParams);
+                        }
                     }
                     edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
                     edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
@@ -740,7 +744,10 @@ public class EdgeGestureService extends Service {
                         }
                         try {
                             windowManager.addView(itemView, itemViewParameter);
-
+//                            for (AppCompatImageView icon : iconImageList) {
+//                                icon.setAlpha(0f);
+//                                icon.animate().alpha(1f).setDuration(150);
+//                            }
                         } catch (IllegalStateException e) {
                             Log.e(LOG_TAG, " item_view has already been added to the window manager");
                         }
@@ -925,7 +932,7 @@ public class EdgeGestureService extends Service {
                 case MotionEvent.ACTION_MOVE:
                     if (!isClockShown && !switched && !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
                         Log.e(LOG_TAG, "Show clock");
-                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager);
+                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,false));
                         isClockShown = true;
                     }
                     if (switched) {

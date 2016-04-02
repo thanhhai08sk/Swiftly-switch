@@ -801,7 +801,7 @@ public  class Utility {
         }
     }
 
-    public static View disPlayClock(Context context, WindowManager windowManager) {
+    public static View disPlayClock(Context context, WindowManager windowManager, boolean isDisableAnimation) {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
@@ -826,7 +826,10 @@ public  class Utility {
 //        hourTextView.startAnimation(animationSet);
 //        dateTextView.startAnimation(animationSet);
 //        batteryLifeTextView.startAnimation(animationSet);
-        view.animate().alpha(1f).setDuration(1000);
+        if (!isDisableAnimation) {
+            view.setAlpha(0f);
+            view.animate().alpha(1f).setDuration(1000);
+        }
         return view;
 
     }
