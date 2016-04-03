@@ -53,6 +53,8 @@ public class MainActivity extends Activity {
     public static final String ACTION_WIFI = "wifi";
     public static final String ACTION_BLUETOOTH = "bluetooth";
     public static final String ACTION_NONE = "none";
+    public static final String ACTION_PASTE = "paste";
+    public static final String ACTION_LAST_APP = "last_app";
     public static final String ACTION_ROTATE = "rotate";
     public static final String ACTION_POWER_MENU = "power_menu";
     public static final int REQUEST_CODE = 3243;

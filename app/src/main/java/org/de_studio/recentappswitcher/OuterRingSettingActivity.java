@@ -19,17 +19,20 @@ public class OuterRingSettingActivity extends AppCompatActivity {
     private OuterRingAdapter mAdapter;
     private String[] listAction;
     private SharedPreferences sharedPreferences;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPreferences = getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         listAction = new String[]{MainActivity.ACTION_NONE,
-        MainActivity.ACTION_HOME,
-        MainActivity.ACTION_BACK,
-        MainActivity.ACTION_NOTI,
-        MainActivity.ACTION_WIFI,
-        MainActivity.ACTION_BLUETOOTH,
-        MainActivity.ACTION_ROTATE,
-        MainActivity.ACTION_POWER_MENU};
+                MainActivity.ACTION_HOME,
+                MainActivity.ACTION_BACK,
+                MainActivity.ACTION_NOTI,
+                MainActivity.ACTION_WIFI,
+                MainActivity.ACTION_BLUETOOTH,
+                MainActivity.ACTION_LAST_APP,
+                MainActivity.ACTION_PASTE,
+                MainActivity.ACTION_ROTATE,
+                MainActivity.ACTION_POWER_MENU};
         setContentView(R.layout.activity_outter_ring_setting);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -42,70 +45,70 @@ public class OuterRingSettingActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 CharSequence[] listActionlabel = getResources().getStringArray(R.array.outer_ring_list_available_action);
-                CharSequence currentLabel = ((TextView)view.findViewById(R.id.outer_item_action_label_text_view)).getText();
+                CharSequence currentLabel = ((TextView) view.findViewById(R.id.outer_item_action_label_text_view)).getText();
                 int currentChecked = 0;
                 while (!currentLabel.equals(listActionlabel[currentChecked])) {
                     currentChecked++;
                 }
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(OuterRingSettingActivity.this);
                 builder.setSingleChoiceItems(listActionlabel, currentChecked, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            switch (position) {
-                                case 0:
-                                    sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_1_KEY, listAction[which]).commit();
-                                    break;
-                                case 1:
-                                    sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_2_KEY, listAction[which]).commit();
-                                    break;
-                                case 2:
-                                    sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_3_KEY, listAction[which]).commit();
-                                    break;
-                                case 3:
-                                    sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_4_KEY, listAction[which]).commit();
-                                    break;
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    switch (position) {
+                                        case 0:
+                                            sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_1_KEY, listAction[which]).commit();
+                                            break;
+                                        case 1:
+                                            sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_2_KEY, listAction[which]).commit();
+                                            break;
+                                        case 2:
+                                            sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_3_KEY, listAction[which]).commit();
+                                            break;
+                                        case 3:
+                                            sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_4_KEY, listAction[which]).commit();
+                                            break;
+                                    }
+                                } catch (ArrayIndexOutOfBoundsException e) {
+                                    Log.e(LOG_TAG, "ArrayIndexOutOfBounds when set outer ring action");
+                                }
+
                             }
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            Log.e(LOG_TAG, "ArrayIndexOutOfBounds when set outer ring action");
                         }
 
-                    }
-                    }
+                );
+                builder.setPositiveButton(
 
-                    );
-                    builder.setPositiveButton(
+                        getResources()
 
-                    getResources()
+                                .
 
-                    .
+                                        getString(R.string.edge_dialog_ok_button),
 
-                    getString(R.string.edge_dialog_ok_button),
+                        new DialogInterface.OnClickListener()
 
-                    new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                    {
-                        @Override
-                        public void onClick (DialogInterface dialog,int which){
-
-                    }
-                    }
-
-                    ).
-
-                    setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss (DialogInterface dialog){
-                            mAdapter.notifyDataSetChanged();
+                            }
                         }
-                    }
 
-                    );
-                    builder.create().
+                ).
 
-                    show();
-                }
-            });
+                        setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                                 @Override
+                                                 public void onDismiss(DialogInterface dialog) {
+                                                     mAdapter.notifyDataSetChanged();
+                                                 }
+                                             }
+
+                        );
+                builder.create().
+
+                        show();
+            }
+        });
 
     }
 

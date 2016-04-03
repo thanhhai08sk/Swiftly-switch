@@ -413,6 +413,7 @@ public class EdgeGestureService extends Service {
                             backgroundFrame.animate().alpha(1f).setDuration(300);
                         } else {
                             windowManager.addView(backgroundFrame, backgroundParams);
+                            backgroundFrame.setAlpha(1f);
                         }
                     }
                     edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
