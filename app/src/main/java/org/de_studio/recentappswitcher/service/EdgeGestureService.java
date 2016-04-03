@@ -102,7 +102,7 @@ public class EdgeGestureService extends Service {
     public int edge1Sensivite, edge2Sensitive;
     private List<AppCompatImageView> iconImageArrayList1, iconImageArrayList2;
     private String[] packagename, pinnedPackageName;
-    private String launcherPackagename;
+    private String launcherPackagename,lastAppPackageName;
     private int[] x, y;
     private int numOfIcon, gridRow, gridColumn, gridGap, gridX, gridY, numOfRecent;
     public static final int GRID_ICON_SIZE = 58;
@@ -406,6 +406,7 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    Log.e(LOG_TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
                     if (!backgroundFrame.isAttachedToWindow()) {
                         if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY, false)) {
                             backgroundFrame.setAlpha(0f);
@@ -642,8 +643,10 @@ public class EdgeGestureService extends Service {
                             UsageStats usageStats;
                             String packa;
                             PackageManager packageManager = getPackageManager();
+                            boolean hasKeyInFuture = false;
                             for (Long key : setKey) {
                                 if (key >= currentTimeMillis) {
+                                    hasKeyInFuture = true;
                                     Log.e(LOG_TAG, "key is in future");
                                 } else {
                                     usageStats = mySortedMap.get(key);
@@ -675,6 +678,11 @@ public class EdgeGestureService extends Service {
 
                                 }
 
+                            }
+                            if (hasKeyInFuture) {
+                                lastAppPackageName = tempPackageName.get(1);
+                            } else {
+                                lastAppPackageName = tempPackageName.get(0);
                             }
                             if (6 - tempPackageName.size() - pinnedPackageName.length > 0) {
                                 packagename = new String[tempPackageName.size() + pinnedPackageName.length];

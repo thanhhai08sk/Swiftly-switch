@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -47,6 +48,7 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -861,6 +863,52 @@ public  class Utility {
         }
 
         return((int) (((float)level / (float)scale) * 100.0f));
+    }
+
+    public static String getForegroundApp(Context context) {
+        ActivityManager.RunningAppProcessInfo resultInfo=null, info=null;
+        ActivityManager mActivityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+        List <ActivityManager.RunningAppProcessInfo> l = mActivityManager.getRunningAppProcesses();
+        Iterator<ActivityManager.RunningAppProcessInfo> i = l.iterator();
+        Log.e(LOG_TAG, "list size = " + l.size());
+        while(i.hasNext()){
+            info = i.next();
+            if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+                    ) {
+                if (!isRunningService(context, info.processName, mActivityManager)) {
+                    resultInfo = info;
+                    break;
+                } else {
+                    Log.e(LOG_TAG, "info = " + info.processName);
+                }
+            }
+        }
+        if (resultInfo != null && resultInfo.importanceReasonComponent!= null) {
+            String packageReturn = resultInfo.importanceReasonComponent.getPackageName();
+            if (!packageReturn.isEmpty()) {
+                return packageReturn;
+            }else return null;
+        }else return null;
+
+    }
+
+    public static boolean isRunningService(Context mContext, String processname, ActivityManager mActivityManager){
+        if(processname==null || processname.isEmpty())
+            return false;
+
+        ActivityManager.RunningServiceInfo service;
+
+        if(mActivityManager==null)
+            mActivityManager = (ActivityManager)mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        List <ActivityManager.RunningServiceInfo> l = mActivityManager.getRunningServices(9999);
+        Iterator <ActivityManager.RunningServiceInfo> i = l.iterator();
+        while(i.hasNext()){
+            service = i.next();
+            if(service.process.equals(processname))
+                return true;
+        }
+
+        return false;
     }
 
 
