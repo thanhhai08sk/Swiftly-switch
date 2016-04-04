@@ -14,6 +14,7 @@
         <item>@string/setting_shortcut_wifi</item>
         <item>@string/setting_shortcut_bluetooth</item>
         <item>@string/setting_shortcut_rotation</item>
+        <item>@string/setting_shortcut_last_app</item>
         <item>@string/setting_shortcut_power_menu</item>
     </string-array>
 </resources>

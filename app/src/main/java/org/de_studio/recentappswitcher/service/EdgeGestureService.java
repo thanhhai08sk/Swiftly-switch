@@ -917,7 +917,8 @@ public class EdgeGestureService extends Service {
                         if (action.equals(MainActivity.ACTION_NOTI) & isFreeVersion & isOutOfTrial) {
                             Toast.makeText(getApplicationContext(), getString(R.string.edge_service_out_of_trial_text_when_homebacknoti), Toast.LENGTH_LONG).show();
                         } else {
-                            Utility.executeAction(getApplicationContext(), action, v, getClass().getName(), getPackageName(),lastAppPackageName);
+                            Log.e(LOG_TAG, "Action = " + action);
+                            Utility.executeAction(getApplicationContext(), action, v, getClass().getName(), getPackageName(), lastAppPackageName);
                         }
 
 

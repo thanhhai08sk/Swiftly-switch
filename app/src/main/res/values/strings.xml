@@ -138,5 +138,5 @@
     <string name="main_set_background_color">Set background color</string>
     <string name="main_disable_animation_text">Disable background animation</string>
     <string name="last_app">Last app</string>
-    <string name="paste">Paste</string>
+    <string name="setting_shortcut_last_app">Last app</string>
 </resources>

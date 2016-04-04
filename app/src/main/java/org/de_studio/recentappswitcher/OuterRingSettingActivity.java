@@ -29,9 +29,8 @@ public class OuterRingSettingActivity extends AppCompatActivity {
                 MainActivity.ACTION_NOTI,
                 MainActivity.ACTION_WIFI,
                 MainActivity.ACTION_BLUETOOTH,
-                MainActivity.ACTION_LAST_APP,
-                MainActivity.ACTION_PASTE,
                 MainActivity.ACTION_ROTATE,
+                MainActivity.ACTION_LAST_APP,
                 MainActivity.ACTION_POWER_MENU};
         setContentView(R.layout.activity_outter_ring_setting);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

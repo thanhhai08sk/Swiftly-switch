@@ -606,8 +606,6 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_power_menu_no_bound);
             case MainActivity.ACTION_LAST_APP:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_last_app);
-            case MainActivity.ACTION_PASTE:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_paste);
             case MainActivity.ACTION_NONE:
                 return null;
         }
@@ -632,8 +630,6 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_power_menu_no_bound);
             case MainActivity.ACTION_LAST_APP:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_last_app);
-            case MainActivity.ACTION_PASTE:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_paste);
             case MainActivity.ACTION_NONE:
                 return null;
         }
@@ -658,8 +654,6 @@ public  class Utility {
                 return context.getString(R.string.setting_shortcut_power_menu);
             case MainActivity.ACTION_LAST_APP:
                 return context.getString(R.string.last_app);
-            case MainActivity.ACTION_PASTE:
-                return context.getString(R.string.paste);
             case MainActivity.ACTION_NONE:
                 return context.getString(R.string.setting_shortcut_none);
         }
