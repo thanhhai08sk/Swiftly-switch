@@ -266,7 +266,7 @@ public class MainActivity extends Activity {
         disableAnimationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,isChecked).commit();
+                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,!isChecked).commit();
             }
         });
         holdTimeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

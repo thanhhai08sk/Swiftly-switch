@@ -29,6 +29,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.Gravity;
@@ -411,7 +412,7 @@ public class EdgeGestureService extends Service {
                         if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY, false)) {
                             backgroundFrame.setAlpha(0f);
                             windowManager.addView(backgroundFrame, backgroundParams);
-                            backgroundFrame.animate().alpha(1f).setDuration(300);
+                            backgroundFrame.animate().alpha(1f).setDuration(200).setInterpolator(new FastOutSlowInInterpolator());
                         } else {
                             windowManager.addView(backgroundFrame, backgroundParams);
                             backgroundFrame.setAlpha(1f);

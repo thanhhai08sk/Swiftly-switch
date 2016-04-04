@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingTop="30dp">
+    android:paddingTop="20dp">
 
     <TextView
         android:id="@+id/clock_time_in_hour"
@@ -13,8 +13,8 @@
         android:fontFamily="sans-serif-light"
         android:singleLine="true"
         android:textColor="@color/white"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        android:textSize="24dp"
+         />
 
 
     <TextView

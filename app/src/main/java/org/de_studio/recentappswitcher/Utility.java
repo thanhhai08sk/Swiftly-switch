@@ -867,7 +867,7 @@ public  class Utility {
 //        batteryLifeTextView.startAnimation(animationSet);
         if (!isDisableAnimation) {
             view.setAlpha(0f);
-            view.animate().alpha(1f).setDuration(1000);
+            view.animate().alpha(1f).setDuration(300);
         }
         return view;
 
