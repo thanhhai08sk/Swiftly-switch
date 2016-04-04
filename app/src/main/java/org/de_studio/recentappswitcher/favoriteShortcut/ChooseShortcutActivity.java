@@ -204,6 +204,18 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
                     case Shortcut.ACTION_POWER_MENU:
                         currentShortcut.setImageResource(R.drawable.ic_action_power_menu);
                         break;
+                    case Shortcut.ACTION_HOME:
+                        currentShortcut.setImageResource(R.drawable.ic_icon_home);
+                        break;
+                    case Shortcut.ACTION_BACK:
+                        currentShortcut.setImageResource(R.drawable.ic_icon_back);
+                        break;
+                    case Shortcut.ACTION_NOTI:
+                        currentShortcut.setImageResource(R.drawable.ic_icon_noti);
+                        break;
+                    case Shortcut.ACTION_LAST_APP:
+                        currentShortcut.setImageResource(R.drawable.ic_icon_last_app);
+                        break;
                 }
             }
         } else {

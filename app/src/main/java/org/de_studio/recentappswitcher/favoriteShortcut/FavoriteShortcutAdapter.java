@@ -105,6 +105,22 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                         imageView.setImageResource(R.drawable.ic_action_power_menu);
                         imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
+                    case Shortcut.ACTION_HOME:
+                        imageView.setImageResource(R.drawable.ic_icon_home);
+                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_BACK:
+                        imageView.setImageResource(R.drawable.ic_icon_back);
+                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_NOTI:
+                        imageView.setImageResource(R.drawable.ic_icon_noti);
+                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_LAST_APP:
+                        imageView.setImageResource(R.drawable.ic_icon_last_app);
+                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
                 }
             }
 

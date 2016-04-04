@@ -13,6 +13,10 @@ public class Shortcut extends RealmObject {
     public static final int ACTION_BLUETOOTH = 1;
     public static final int ACTION_POWER_MENU = 2;
     public static final int ACTION_ROTATION = 3;
+    public static final int ACTION_HOME = 4;
+    public static final int ACTION_BACK = 5;
+    public static final int ACTION_NOTI = 6;
+    public static final int ACTION_LAST_APP = 7;
     @PrimaryKey
     private int id;
     private int type;

@@ -553,6 +553,14 @@ public  class Utility {
             return Shortcut.ACTION_ROTATION;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_power_menu))) {
             return Shortcut.ACTION_POWER_MENU;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_home))) {
+            return Shortcut.ACTION_HOME;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_back))) {
+            return Shortcut.ACTION_BACK;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_noti))) {
+            return Shortcut.ACTION_NOTI;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_last_app))) {
+            return Shortcut.ACTION_LAST_APP;
         }else return -1;
     }
 

@@ -133,6 +133,18 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                     case Shortcut.ACTION_POWER_MENU:
                         imageView.setImageResource(R.drawable.ic_action_power_menu);
                         break;
+                    case Shortcut.ACTION_HOME:
+                        imageView.setImageResource(R.drawable.ic_icon_home);
+                        break;
+                    case Shortcut.ACTION_BACK:
+                        imageView.setImageResource(R.drawable.ic_icon_back);
+                        break;
+                    case Shortcut.ACTION_NOTI:
+                        imageView.setImageResource(R.drawable.ic_icon_noti);
+                        break;
+                    case Shortcut.ACTION_LAST_APP:
+                        imageView.setImageResource(R.drawable.ic_icon_last_app);
+                        break;
                 }
             }
 

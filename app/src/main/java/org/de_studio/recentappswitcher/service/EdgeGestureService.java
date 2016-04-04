@@ -877,6 +877,19 @@ public class EdgeGestureService extends Service {
                                             manager.sendAccessibilityEvent(event1);
                                         } else
                                             Toast.makeText(getApplicationContext(), R.string.ask_user_to_turn_on_accessibility_toast, Toast.LENGTH_LONG).show();
+                                        break;
+                                    case Shortcut.ACTION_HOME:
+                                        Utility.homeAction(getApplicationContext(),v,getClass().getName(),getPackageName());
+                                        break;
+                                    case Shortcut.ACTION_BACK:
+                                        Utility.backAction(getApplicationContext(),v,getClass().getName(),getPackageName());
+                                        break;
+                                    case Shortcut.ACTION_NOTI:
+                                        Utility.notiAction(getApplicationContext(),v,getClass().getName(),getPackageName());
+                                        break;
+                                    case Shortcut.ACTION_LAST_APP:
+                                        Utility.lastAppAction(getApplicationContext(),lastAppPackageName);
+                                        break;
                                 }
                             }
                         } else if (shortcutToSwitch != -1) {
