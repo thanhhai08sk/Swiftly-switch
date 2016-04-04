@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -630,7 +631,7 @@ public  class Utility {
             case MainActivity.ACTION_POWER_MENU:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_power_menu_no_bound);
             case MainActivity.ACTION_LAST_APP:
-                return BitmapFactory.decodeResource(context.getResources(),R.drawable.ic_action_last_app);
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_last_app);
             case MainActivity.ACTION_PASTE:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_paste);
             case MainActivity.ACTION_NONE:
@@ -679,6 +680,7 @@ public  class Utility {
             manager.sendAccessibilityEvent(event1);
         }else Toast.makeText(context, R.string.ask_user_to_turn_on_accessibility_toast, Toast.LENGTH_LONG).show();
     }
+
 
     public static void backAction(Context context, View v, String className, String packageName) {
         AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
@@ -767,11 +769,29 @@ public  class Utility {
         }
     }
 
+    public static void lastAppAction(Context context, String packageName) {
+        Intent extApp = null;
 
-    public static void executeAction(Context context, String action, View v, String className, String packageName) {
+        extApp = context.getPackageManager().getLaunchIntentForPackage(packageName);
+
+
+        if (extApp != null) {
+            ComponentName componentName = extApp.getComponent();
+            Intent startApp = new Intent(Intent.ACTION_MAIN, null);
+            startApp.addCategory(Intent.CATEGORY_LAUNCHER);
+            startApp.setComponent(componentName);
+            startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            context.startActivity(startApp);
+            Log.e(LOG_TAG, "packageToSwitch = " + packageName);
+        } else Log.e(LOG_TAG, "extApp = null ");
+    }
+
+
+    public static void executeAction(Context context, String action, View v, String className, String packageName, String lastAppPackageName) {
         switch (action) {
             case MainActivity.ACTION_HOME:
-                homeAction(context,v,className,packageName);
+//                homeAction(context,v,className,packageName);
+                homeAction(context, v, className, packageName);
                 break;
             case MainActivity.ACTION_BACK:
                 backAction(context,v,className,packageName);
@@ -811,6 +831,9 @@ public  class Utility {
                 break;
             case MainActivity.ACTION_POWER_MENU:
                 powerAction(context,v,className,packageName);
+                break;
+            case MainActivity.ACTION_LAST_APP:
+                lastAppAction(context,lastAppPackageName);
                 break;
         }
     }

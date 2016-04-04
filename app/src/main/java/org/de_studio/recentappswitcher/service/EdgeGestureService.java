@@ -662,7 +662,7 @@ public class EdgeGestureService extends Service {
                                                             packa.contains("googlequicksearchbox") ||
                                                             key == mySortedMap.firstKey() ||
                                                             excludeSet.contains(packa) ||
-                                                            pinnedSet.contains(packa) ||
+//                                                            pinnedSet.contains(packa) ||
                                                             packa.contains("launcher") )
                                                              {
                                                 // do nothing
@@ -683,6 +683,11 @@ public class EdgeGestureService extends Service {
                                 lastAppPackageName = tempPackageName.get(1);
                             } else {
                                 lastAppPackageName = tempPackageName.get(0);
+                            }
+                            for (String t : pinnedSet) {
+                                if (tempPackageName.contains(t)) {
+                                    tempPackageName.remove(t);
+                                }
                             }
                             if (6 - tempPackageName.size() - pinnedPackageName.length > 0) {
                                 packagename = new String[tempPackageName.size() + pinnedPackageName.length];
@@ -912,7 +917,7 @@ public class EdgeGestureService extends Service {
                         if (action.equals(MainActivity.ACTION_NOTI) & isFreeVersion & isOutOfTrial) {
                             Toast.makeText(getApplicationContext(), getString(R.string.edge_service_out_of_trial_text_when_homebacknoti), Toast.LENGTH_LONG).show();
                         } else {
-                            Utility.executeAction(getApplicationContext(), action, v, getClass().getName(), getPackageName());
+                            Utility.executeAction(getApplicationContext(), action, v, getClass().getName(), getPackageName(),lastAppPackageName);
                         }
 
 

@@ -11,20 +11,27 @@ public class MyAccessibilityService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         Log.e("MyAccessibilityService", "get event");
-        if (event.getEventType() == AccessibilityEvent.TYPE_TOUCH_INTERACTION_END){
-            if (event.getAction()==1){
-                Log.e("MyAccessibilityService ", "home");
-                performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME);
-            }else if (event.getAction()==2){
-                Log.e("MyAccessibilityService ", "back");
-                performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
-            }else if (event.getAction() ==3){
-                Log.e("MyAccessibilityService ", "power");
-                performGlobalAction(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG);
-            }else if (event.getAction() == 4) {
-                Log.e("MyAccessibilityService ", "noti");
-                performGlobalAction(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS);
+        if (event.getEventType() == AccessibilityEvent.TYPE_TOUCH_INTERACTION_END) {
+            switch (event.getAction()) {
+                case 1:
+                    Log.e("MyAccessibilityService ", "home");
+                    performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME);
+                    break;
+                case 2:
+                    Log.e("MyAccessibilityService ", "back");
+                    performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
+                    break;
+                case 3:
+                    Log.e("MyAccessibilityService ", "power");
+                    performGlobalAction(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG);
+                    break;
+                case 4:
+                    Log.e("MyAccessibilityService ", "noti");
+                    performGlobalAction(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS);
+                    break;
+
             }
+
 
         }
     }
