@@ -575,7 +575,9 @@ public class EdgeGestureService extends Service {
                             }
                         }
 
-
+                        if (tempPackageName.size() >= 1) {
+                            lastAppPackageName = tempPackageName.get(0);
+                        }
                         if (6 - tempPackageName.size() - pinnedPackageName.length > 0) {
                             packagename = new String[tempPackageName.size() + pinnedPackageName.length];
                         } else {
@@ -680,9 +682,13 @@ public class EdgeGestureService extends Service {
 
                             }
                             if (hasKeyInFuture) {
-                                lastAppPackageName = tempPackageName.get(1);
+                                if (tempPackageName.size() >= 2) {
+                                    lastAppPackageName = tempPackageName.get(1);
+                                }
                             } else {
-                                lastAppPackageName = tempPackageName.get(0);
+                                if (tempPackageName.size() >= 1) {
+                                    lastAppPackageName = tempPackageName.get(0);
+                                }
                             }
                             for (String t : pinnedSet) {
                                 if (tempPackageName.contains(t)) {
