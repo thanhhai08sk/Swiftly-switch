@@ -29,6 +29,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.support.v7.widget.AppCompatImageView;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -842,7 +843,7 @@ public  class Utility {
 
     public static View disPlayClock(Context context, WindowManager windowManager, boolean isDisableAnimation) {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
+        int mHour;
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.clock, null);
@@ -852,8 +853,18 @@ public  class Utility {
         String batteryString = context.getString(R.string.batterylife)+ " "+ getBatteryLevel(context) + "%";
 //        String batteryString =getBatteryLevel(context) + "%";
         batteryLifeTextView.setText(batteryString);
-        hourTextView.setText(hourFormat.format(c.getTime()));
         dateTextView.setText(dateFormat.format(c.getTime()));
+        if (!DateFormat.is24HourFormat(context))
+        {
+            SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm");
+
+            hourTextView.setText(hourFormat.format(c.getTime()));
+
+        }
+        else {
+            SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
+            hourTextView.setText(hourFormat.format(c.getTime()));
+        }
         WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -867,7 +878,7 @@ public  class Utility {
 //        batteryLifeTextView.startAnimation(animationSet);
         if (!isDisableAnimation) {
             view.setAlpha(0f);
-            view.animate().alpha(1f).setDuration(300);
+            view.animate().alpha(1f).setDuration(120);
         }
         return view;
 

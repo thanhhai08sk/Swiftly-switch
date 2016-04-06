@@ -412,7 +412,7 @@ public class EdgeGestureService extends Service {
                         if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY, false)) {
                             backgroundFrame.setAlpha(0f);
                             windowManager.addView(backgroundFrame, backgroundParams);
-                            backgroundFrame.animate().alpha(1f).setDuration(200).setInterpolator(new FastOutSlowInInterpolator());
+                            backgroundFrame.animate().alpha(1f).setDuration(120).setInterpolator(new FastOutSlowInInterpolator());
                         } else {
                             windowManager.addView(backgroundFrame, backgroundParams);
                             backgroundFrame.setAlpha(1f);
