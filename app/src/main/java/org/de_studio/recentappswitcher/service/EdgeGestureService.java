@@ -324,7 +324,6 @@ public class EdgeGestureService extends Service {
                     windowManager.removeView(edge2View);
                 }
             }
-
             item2View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
             iconImageList2 = new AppCompatImageView[6];
             iconImageList2[0] = (AppCompatImageView) item2View.findViewById(R.id.item_0);
@@ -409,7 +408,7 @@ public class EdgeGestureService extends Service {
                 case MotionEvent.ACTION_DOWN:
                     Log.e(LOG_TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
                     if (!backgroundFrame.isAttachedToWindow()) {
-                        if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY, false)) {
+                        if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY, true)) {
                             backgroundFrame.setAlpha(0f);
                             windowManager.addView(backgroundFrame, backgroundParams);
                             backgroundFrame.animate().alpha(1f).setDuration(120).setInterpolator(new FastOutSlowInInterpolator());
@@ -967,7 +966,7 @@ public class EdgeGestureService extends Service {
                 case MotionEvent.ACTION_MOVE:
                     if (!isClockShown && !switched && !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
                         Log.e(LOG_TAG, "Show clock");
-                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,false));
+                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,true));
                         isClockShown = true;
                     }
                     if (switched) {
@@ -1285,7 +1284,6 @@ public class EdgeGestureService extends Service {
 
             protected void switchShortcut() {
                 clearIconBackground();
-                shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
                 ViewGroup.LayoutParams gridParams = shortcutGridView.getLayoutParams();
                 int gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
                 int gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
@@ -1421,6 +1419,7 @@ public class EdgeGestureService extends Service {
         backgroundColor  = defaultShared.getInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY, 1879048192);
         clockAnimation = new AnimationSet(getBaseContext(), null);
         clockAnimation.addAnimation(new AlphaAnimation(0f,1f));
+        shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
 //        clockAnimation.addAnimation(new TranslateAnimation(0,0,0,1000));
         clockAnimation.setDuration(1000);
 
