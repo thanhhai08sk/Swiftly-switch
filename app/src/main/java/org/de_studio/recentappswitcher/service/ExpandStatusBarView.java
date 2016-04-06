@@ -69,6 +69,8 @@ public class ExpandStatusBarView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        canvas.save();
+        canvas.clipRect(0, 0, 3 * radius, 3 * radius);
         oval.set(ovalOffset, ovalOffset, ovalOffset + radius * 2, ovalOffset + radius * 2);
         int action1Acr = 29;
         int action23Arc = 39;
@@ -118,6 +120,7 @@ public class ExpandStatusBarView extends View {
 
         canvas.drawBitmap(actionBitmap, o1x, o1y, textPaint);
 //        canvas.drawTextOnPath(text.toUpperCase(), path, 0, ((float) (textSize / 2.5)) * mScale, textPaint);
+        canvas.restore();
 
     }
 
