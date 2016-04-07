@@ -340,6 +340,7 @@ public class MainActivity extends Activity {
         });
         ImageButton outerRingSettingButton = (ImageButton) findViewById(R.id.main_outter_ring_setting_button);
         final ImageButton vibrationDurationSettingButton = (ImageButton) findViewById(R.id.main_vibration_duration_setting_image_button);
+        ImageButton iconSizeSettingButton = (ImageButton) findViewById(R.id.main_icon_size_setting_image_button);
         ImageButton backgroundColorSettingButton = (ImageButton) findViewById(R.id.main_background_color_setting_image_button);
         ImageButton holdTimeSettingButton = (ImageButton) findViewById(R.id.main_hold_time_setting_image_button);
         ImageButton holdTimeInfoButton = (ImageButton) findViewById(R.id.main_hold_time_info_image_button);
@@ -455,6 +456,48 @@ public class MainActivity extends Activity {
                 });
                 builder.setView(view).
                         setTitle(R.string.main_vibration_duration).
+                        setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //do nothing
+                            }
+                        });
+                builder.show();
+            }
+        });
+
+        iconSizeSettingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
+                View view = View.inflate(MainActivity.this, R.layout.dialog_icon_size_setting, null);
+                SeekBar seekBar = (SeekBar) view.findViewById(R.id.dialog_icon_size_seek_bar);
+                final TextView textView = (TextView) view.findViewById(R.id.dialog_icon_size_value);
+                int currentValue =(int) (sharedPreferencesDefautl.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f) * 100);
+                textView.setText(currentValue +" %");
+                seekBar.setProgress(currentValue - 80);
+                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    int progressChanged;
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        progressChanged = progress +80;
+                        textView.setText(progressChanged + " %");
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        sharedPreferencesDefautl.edit().putFloat(EdgeSettingDialogFragment.ICON_SCALE,((float)progressChanged)/100).commit();
+                        stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                        startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                    }
+                });
+                builder.setView(view).
+                        setTitle(R.string.main_icon_size).
                         setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

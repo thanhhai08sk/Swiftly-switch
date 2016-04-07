@@ -134,4 +134,5 @@
     <string name="last_app">Last app</string>
     <string name="setting_shortcut_last_app">Last app</string>
     <string name="edge_dialog_show_guide_text">Show guide</string>
+    <string name="main_icon_size">Icon size</string>
 </resources>
