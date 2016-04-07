@@ -114,7 +114,7 @@ public class EdgeGestureService extends Service {
     private AppCompatImageView[] iconImageList1, iconImageList2;
     private ExpandStatusBarView action4View, action1View, action2View, action3View;
     private Vibrator vibrator;
-    private int ovalOffSet, ovalRadiusPlus = 15, ovalRadiusPlusPxl, ovalOffSetInDp = 70;
+    private int ovalOffSet, ovalRadiusPlus = 17, ovalRadiusPlusPxl, ovalOffSetInDp = 70;
     private long holdTime = 450, vibrationDuration;
     private boolean touched = false, switched = false, isOutOfTrial = false, isFreeVersion = false;
     private String[] spinnerEntries;
@@ -272,12 +272,12 @@ public class EdgeGestureService extends Service {
                     windowManager.removeView(edge1View);
                 }
             }
-
             boolean isOnlyFavorite1 = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
-
             OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, iconImageList1, item1View, iconImageArrayList1, isOnlyFavorite1);
             edge1Image.setOnTouchListener(onTouchListener1);
         }
+
+
 
 
         if (isEdge2On) {
@@ -371,7 +371,12 @@ public class EdgeGestureService extends Service {
             iconImageArrayList2.add(iconImageList2[3]);
             iconImageArrayList2.add(iconImageList2[4]);
             iconImageArrayList2.add(iconImageList2[5]);
-
+            FrameLayout.LayoutParams sampleParas2 = new FrameLayout.LayoutParams(iconImageArrayList2.get(0).getLayoutParams());
+            for (AppCompatImageView image : iconImageArrayList1) {
+                sampleParas2.height =(int) (48*mIconScale *mScale);
+                sampleParas2.width = (int) (48*mIconScale *mScale);
+                image.setLayoutParams(sampleParas2);
+            }
 
             boolean isOnlyFavorite2 = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
             OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position, iconImageList2, item2View, iconImageArrayList2, isOnlyFavorite2);
@@ -1440,7 +1445,7 @@ public class EdgeGestureService extends Service {
         spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
         icon_distance = defaultShared.getInt(EdgeSettingDialogFragment.ICON_DISTANCE_KEY, 110);
         ovalOffSet = (int) (ovalOffSetInDp * mScale);
-        ovalRadiusPlusPxl = (int) (ovalRadiusPlus * mScale);
+        ovalRadiusPlusPxl = (int) (ovalRadiusPlus*mIconScale * mScale);
         numOfRecent = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_RECENT_KEY, 6);
         gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
