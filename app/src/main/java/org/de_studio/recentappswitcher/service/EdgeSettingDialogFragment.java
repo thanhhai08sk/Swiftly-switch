@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -65,6 +67,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String IS_PIN_TO_TOP_KEY = "is_pin_to_top";
     public static final String BACKGROUND_COLOR_KEY = "background_color";
     public static final String USE_GUIDE_KEY = "edge_guide";
+    public static final String SERVICE_ID = "service_id";
     private static int edgeNumber;
     private  float mScale;
     private static SharedPreferences sharedPreferences,defaultSharedPreferences;
@@ -109,6 +112,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         final TextView sensitiveNumberTextView = (TextView) rootView.findViewById(R.id.edge_dialog_sensitive_number_text);
         final AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
         final AppCompatSpinner modeSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_mode_spinner);
+        final CheckBox showGuideCheckBox = (CheckBox) rootView.findViewById(R.id.edge_dialog_show_guide_checkbox);
         boolean isOnlyFavorite = sharedPreferences.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
         if (isOnlyFavorite) {
             modeSpinner.setSelection(1);
@@ -136,6 +140,15 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             }
         });
 
+        showGuideCheckBox.setChecked(sharedPreferences.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false));
+        showGuideCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sharedPreferences.edit().putBoolean(USE_GUIDE_KEY,isChecked).commit();
+                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
+                mContext.startService(new Intent(mContext, EdgeGestureService.class));
+            }
+        });
         int spinnerCurrentPosition =1;
         if (edgeNumber == 2) spinnerCurrentPosition = 5;
         for (int i =0; i<spinnerEntries.length; i++) {
@@ -323,6 +336,8 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 sharedPreferences.edit().putInt(EDGE_OFFSET_KEY, 0).commit();
                 offsetSeekBar.setProgress(150);
                 modeSpinner.setSelection(0);
+                showGuideCheckBox.setChecked(false);
+                sharedPreferences.edit().putBoolean(USE_GUIDE_KEY,false).commit();
                 sharedPreferences.edit().putBoolean(IS_ONLY_FAVORITE_KEY,false).commit();
                 sensitiveSeekBar.setProgress(7);
                 sharedPreferences.edit().putInt(EDGE_SENSIIVE_KEY, 12).commit();

@@ -58,6 +58,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -91,7 +92,7 @@ public class EdgeGestureService extends Service {
     private ImageView edge1Image;
     private ImageView edge2Image;
     private FrameLayout item1View, item2View, shortcutView,backgroundFrame;
-    public int icon_height = 48;
+    public int icon_height = 48,serviceId;
     public int icon_width = 48, icon_rad = 24;
     public int icon_distance = 110, distance_to_arc = 35, distance_to_arc_pxl;
     public float icon_distance_pxl, icon_24dp_in_pxls;
@@ -171,7 +172,7 @@ public class EdgeGestureService extends Service {
         if (isEdge1On) {
             edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
             edge1Image = (ImageView) edge1View.findViewById(R.id.edge_image);
-            if (defaultShared.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false)) {
+            if (sharedPreferences1.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false)) {
                 switch (edge1Position / 10) {
                     case 1:
                         edge1Image.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge_background_right));
@@ -273,7 +274,7 @@ public class EdgeGestureService extends Service {
         if (isEdge2On) {
             edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
             edge2Image = (ImageView) edge2View.findViewById(R.id.edge_image);
-            if (defaultShared.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false)) {
+            if (sharedPreferences2.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false)) {
                 switch (edge2Position / 10) {
                     case 1:
                         edge2Image.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge_background_right));
@@ -428,10 +429,9 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
-                    edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
                     Log.e(LOG_TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
-                    if (!backgroundFrame.isAttachedToWindow() && (position == edge1Position || position == edge2Position)) {
+//                    if (!backgroundFrame.isAttachedToWindow() && (position == edge1Position || position == edge2Position)) {
+                    if (!backgroundFrame.isAttachedToWindow() && (defaultShared.getInt(EdgeSettingDialogFragment.SERVICE_ID,10) == serviceId )) {
                         if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY, true)) {
                             backgroundFrame.setAlpha(0f);
                             windowManager.addView(backgroundFrame, backgroundParams);
@@ -441,19 +441,20 @@ public class EdgeGestureService extends Service {
                             backgroundFrame.setAlpha(1f);
                         }
                     }
-                    if (position != edge1Position && position != edge2Position) {
-                        Log.e(LOG_TAG, "postion != edge1position and edge2 position");
-                        if (edge1View != null && edge1View.isAttachedToWindow()) {
-                            windowManager.removeView(edge1View);
-                        }
-                        if (edge2View != null && edge2View.isAttachedToWindow()) {
-                            windowManager.removeView(edge2View);
-                        }
-                        if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
-                            backgroundFrame.setBackgroundColor(R.color.transparent);
-                            windowManager.removeView(backgroundFrame);
-                        }
-                        onDestroy();
+//                    if (position != edge1Position && position != edge2Position) {
+                    if (defaultShared.getInt(EdgeSettingDialogFragment.SERVICE_ID,10) != serviceId) {
+                        Log.e(LOG_TAG, "the service id is different");
+//                        if (edge1View != null && edge1View.isAttachedToWindow()) {
+//                            windowManager.removeView(edge1View);
+//                        }
+//                        if (edge2View != null && edge2View.isAttachedToWindow()) {
+//                            windowManager.removeView(edge2View);
+//                        }
+//                        if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
+//                            backgroundFrame.setBackgroundColor(R.color.transparent);
+//                            windowManager.removeView(backgroundFrame);
+//                        }
+                        stopSelf();
                         return false;
                     }
                     Log.e(LOG_TAG, "position = " + position + "\nEdge1position = " + edge1Position + "\nEdge2Position = " + edge2Position);
@@ -1444,7 +1445,9 @@ public class EdgeGestureService extends Service {
         pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext()).name("pinApp.realm").build());
         backgroundColor  = defaultShared.getInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY, 1879048192);
         shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
-
+        Random r = new Random();
+        serviceId = r.nextInt(1000);
+        defaultShared.edit().putInt(EdgeSettingDialogFragment.SERVICE_ID,serviceId).commit();
 //        pinAppRealm.beginTransaction();
 //        Shortcut country1 = pinAppRealm.createObject(Shortcut.class);
 //
