@@ -40,8 +40,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.AnimationSet;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -128,7 +126,6 @@ public class EdgeGestureService extends Service {
     private Set<String> pinnedSet;
     private WindowManager.LayoutParams backgroundParams;
     private int backgroundColor;
-    private AnimationSet clockAnimation;
 
     @Nullable
     @Override
@@ -139,6 +136,7 @@ public class EdgeGestureService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME)) isFreeVersion = true;
         Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
         launcherIntent.addCategory(Intent.CATEGORY_HOME);
@@ -149,11 +147,11 @@ public class EdgeGestureService extends Service {
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         if (edge1View != null && edge1View.isAttachedToWindow()) {
             Log.e(LOG_TAG, "edge1View still attached to window");
-            windowManager.removeView(edge1View);
+            windowManager.removeViewImmediate(edge1View);
         }
         if (edge2View != null && edge2View.isAttachedToWindow()) {
             Log.e(LOG_TAG, "edge1View still attached to window");
-            windowManager.removeView(edge2View);
+            windowManager.removeViewImmediate(edge2View);
         }
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -173,6 +171,18 @@ public class EdgeGestureService extends Service {
         if (isEdge1On) {
             edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
             edge1Image = (ImageView) edge1View.findViewById(R.id.edge_image);
+            if (defaultShared.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false)) {
+                switch (edge1Position / 10) {
+                    case 1:
+                        edge1Image.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge_background_right));
+                        break;
+                    case 2:
+                        edge1Image.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge_background_left));
+                        break;
+                    case 3:
+                        edge1Image.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge_background_bottom));
+                }
+            }
 
 //        ViewGroup.LayoutParams edge1ImageLayoutParams = edge1Image.getLayoutParams();
             if (edge1Image != null) {
@@ -263,6 +273,18 @@ public class EdgeGestureService extends Service {
         if (isEdge2On) {
             edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
             edge2Image = (ImageView) edge2View.findViewById(R.id.edge_image);
+            if (defaultShared.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false)) {
+                switch (edge2Position / 10) {
+                    case 1:
+                        edge2Image.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge_background_right));
+                        break;
+                    case 2:
+                        edge2Image.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge_background_left));
+                        break;
+                    case 3:
+                        edge2Image.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge_background_bottom));
+                }
+            }
             RelativeLayout.LayoutParams edge2ImageLayoutParams = new RelativeLayout.LayoutParams(edge2Image.getLayoutParams());
             if (Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext()) >= 30) {
                 edge2HeightPxl = (int) (edge2Sensitive * mScale);
@@ -406,8 +428,10 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
+                    edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
                     Log.e(LOG_TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
-                    if (!backgroundFrame.isAttachedToWindow()) {
+                    if (!backgroundFrame.isAttachedToWindow() && (position == edge1Position || position == edge2Position)) {
                         if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY, true)) {
                             backgroundFrame.setAlpha(0f);
                             windowManager.addView(backgroundFrame, backgroundParams);
@@ -417,8 +441,6 @@ public class EdgeGestureService extends Service {
                             backgroundFrame.setAlpha(1f);
                         }
                     }
-                    edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
-                    edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
                     if (position != edge1Position && position != edge2Position) {
                         Log.e(LOG_TAG, "postion != edge1position and edge2 position");
                         if (edge1View != null && edge1View.isAttachedToWindow()) {
@@ -426,6 +448,10 @@ public class EdgeGestureService extends Service {
                         }
                         if (edge2View != null && edge2View.isAttachedToWindow()) {
                             windowManager.removeView(edge2View);
+                        }
+                        if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
+                            backgroundFrame.setBackgroundColor(R.color.transparent);
+                            windowManager.removeView(backgroundFrame);
                         }
                         onDestroy();
                         return false;
@@ -1417,11 +1443,7 @@ public class EdgeGestureService extends Service {
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
         pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext()).name("pinApp.realm").build());
         backgroundColor  = defaultShared.getInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY, 1879048192);
-        clockAnimation = new AnimationSet(getBaseContext(), null);
-        clockAnimation.addAnimation(new AlphaAnimation(0f,1f));
         shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
-//        clockAnimation.addAnimation(new TranslateAnimation(0,0,0,1000));
-        clockAnimation.setDuration(1000);
 
 //        pinAppRealm.beginTransaction();
 //        Shortcut country1 = pinAppRealm.createObject(Shortcut.class);
@@ -1452,25 +1474,47 @@ public class EdgeGestureService extends Service {
 
         Log.e(LOG_TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
                 "\nEdge1 position = " + edge1Position + "\nEdge2 positon = " + edge2Position);
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (edge1View != null && edge1View.isAttachedToWindow()) {
-            Log.e(LOG_TAG, "remove edge1");
+        int n = 0;
+//        if (edge1View != null && edge1View.isAttachedToWindow()) {
+//            Log.e(LOG_TAG, "remove edge1");
+//            edge1View.setVisibility(View.GONE);
+//            windowManager.removeView(edge1View);
+//        }
+//        if (edge2View != null && edge2View.isAttachedToWindow()) {
+//            Log.e(LOG_TAG, "remove edge2");
+//            edge2View.setVisibility(View.GONE);
+//            windowManager.removeView(edge2View);
+//        }
+//        if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
+//            windowManager.removeView(backgroundFrame);
+//        }
+        while (edge1View != null && edge1View.isAttachedToWindow() && n < 20) {
+            Log.e(LOG_TAG, "remove edge1, n = " + n);
             edge1View.setVisibility(View.GONE);
             windowManager.removeView(edge1View);
+            windowManager.removeViewImmediate(edge1View);
+            n++;
         }
-        if (edge2View != null && edge2View.isAttachedToWindow()) {
-            Log.e(LOG_TAG, "remove edge2");
+        while (edge2View != null && edge2View.isAttachedToWindow() && n < 20) {
+            Log.e(LOG_TAG, "remove edge2, n = " + n);
             edge2View.setVisibility(View.GONE);
             windowManager.removeView(edge2View);
+            windowManager.removeViewImmediate(edge2View);
+            n++;
         }
-        if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
+        while (backgroundFrame != null && backgroundFrame.isAttachedToWindow() && n <20) {
             windowManager.removeView(backgroundFrame);
+            windowManager.removeViewImmediate(backgroundFrame);
+            n++;
         }
-        Log.e(LOG_TAG, "onDestroy service");
+        Log.e(LOG_TAG, "onDestroy service, n = " + n);
+        super.onDestroy();
     }
 
 

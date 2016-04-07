@@ -124,42 +124,59 @@ public class MainActivity extends Activity {
                 yesButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
-                        builder.setMessage(R.string.please_vote_for_this_app)
-                                .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, true).commit();
-                                        appBarLayout.removeView(doYouLoveLinearLayout);
-                                        Uri uri = Uri.parse("mbarket://details?id=" + getPackageName());
-                                        Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
-                                        gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                                                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                                        try {
-                                            startActivity(gotoMarket);
-                                        } catch (ActivityNotFoundException e) {
-                                            startActivity(new Intent(Intent.ACTION_VIEW,
-                                                    Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
-                                        }
-                                    }
-                                })
-                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, true).commit();
-                                        appBarLayout.removeView(doYouLoveLinearLayout);
-                                        // d
-                                    }
-                                })
-                                .setNeutralButton(R.string.share, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        shareFriend();
-                                    }
-                                });
-                        builder.show();
+                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, true).commit();
+                        appBarLayout.removeView(doYouLoveLinearLayout);
+                        Uri uri = Uri.parse("mbarket://details?id=" + getPackageName());
+                        Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+                        gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                        try {
+                            startActivity(gotoMarket);
+                        } catch (ActivityNotFoundException e) {
+                            startActivity(new Intent(Intent.ACTION_VIEW,
+                                    Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+                        }
                     }
                 });
+//                yesButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
+//                        builder.setMessage(R.string.please_vote_for_this_app)
+//                                .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, true).commit();
+//                                        appBarLayout.removeView(doYouLoveLinearLayout);
+//                                        Uri uri = Uri.parse("mbarket://details?id=" + getPackageName());
+//                                        Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+//                                        gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+//                                                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+//                                        try {
+//                                            startActivity(gotoMarket);
+//                                        } catch (ActivityNotFoundException e) {
+//                                            startActivity(new Intent(Intent.ACTION_VIEW,
+//                                                    Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+//                                        }
+//                                    }
+//                                })
+//                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, true).commit();
+//                                        appBarLayout.removeView(doYouLoveLinearLayout);
+//                                        // d
+//                                    }
+//                                })
+//                                .setNeutralButton(R.string.share, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        shareFriend();
+//                                    }
+//                                });
+//                        builder.show();
+//                    }
+//                });
             }
         }
 
@@ -643,12 +660,14 @@ public class MainActivity extends Activity {
             }
         });
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            stopService(new Intent(this, EdgeGestureService.class));
             startService(new Intent(this, EdgeGestureService.class));
 
         } else {
             checkDrawOverlayPermission();
 
             if (Settings.canDrawOverlays(this)) {
+                stopService(new Intent(this, EdgeGestureService.class));
                 startService(new Intent(this, EdgeGestureService.class));
 
             }
@@ -849,6 +868,7 @@ public class MainActivity extends Activity {
         if (requestCode == REQUEST_CODE) {
             if (Settings.canDrawOverlays(this)) {
                 // continue here - permission was granted
+                stopService(new Intent(this, EdgeGestureService.class));
                 startService(new Intent(this, EdgeGestureService.class));
 
             }

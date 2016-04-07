@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/main_do_you_love_yes_button"
         android:textColor="@color/colorAccent"
-        android:text="@string/yes"
+        android:text="@string/edge_dialog_ok_button"
         style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
         />
     <Button

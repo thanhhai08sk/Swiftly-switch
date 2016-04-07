@@ -1,7 +1,7 @@
 <resources>
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="MissingTranslation"
-    <string name="app_name">Swiftly switch</string>
+    <string name="app_name" translatable="false">Swiftly switch</string>
     <string name="edge_gesture_notification_title">Recent App Switcher</string>
     <string name="edge_gesture_notification_content_text">App running</string>
     <string name="main_step1_text">Step 1: \nUsage stat</string>
@@ -27,22 +27,19 @@
     <string name="edge_dialog_array_left_top">Left top</string>
     <string name="edge_dialog_array_left_centre">Left centre</string>
     <string name="edge_dialog_array_left_bottom">Left bottom</string>
-    <string name="edge_dialog_array_bottom_left">Bottom left</string>
     <string name="edge_dialog_array_bottom_centre">Bottom centre</string>
-    <string name="edge_dialog_array_bottom_right">Bottom right</string>
     <string name="edge_dialog_set_offset_text">Offset</string>
     <string name="edge_dialog_default_button">Default</string>
     <string name="edge_dialog_cancel_button">Cancel</string>
-    <string name="edge_dialog_ok_button" translatable="false">Ok</string>
+    <string name="edge_dialog_ok_button">Ok</string>
     <string name="main_favorite_app_title">Favorite shortcut:</string>
     <string name="main_favorite_info_title">Favorite shortcut</string>
     <string name="main_favorite_app_info_text">Apps/shortcut that will be listed when you hold on the one of the recent apps icon for 1 second or when there are no recent app</string>
-    <string name="limit_for_favorite_app_is_6">The limit for favorite app is 6!</string>
+    <string name="limit_for_favorite_app_is_6">The limit for favorite apps is 6!</string>
     <string name="main_exclude_info_title">Blacklist</string>
     <string name="main_exclude_app_title">Blacklist:</string>
     <string name="main_exclude_app_info">Apps that will not be listed in the recent apps</string>
     <string name="please_add_favorite_item">Please add your favorite apps in the FAVORITE APP section</string>
-    <string name="waite_a_secend_app_loading">Wait a second, app loading ...</string>
     <string name="notification_text">Hide this by tapping then selecting Block notification from the info page</string>
     <string name="notification_title">Swiftly switch is running ...</string>
     <string name="main_description_text">You need to complete 2 STEP setting below before you can use this app!</string>
@@ -58,15 +55,13 @@
     apps that use accessibility. If the lag is too extreme please disable this setting, all feature still available except the navigation (home, back, power menu).</string>
     <string name="ask_user_to_turn_on_accessibility_toast">Please turn on the Accessibility setting for this app</string>
     <string name="main_haptic_feedback_on_trigger_text">Haptic feedback on trigger</string>
-    <string name="main_haptic_feedback_on_move_to_item">Haptic feedback on move to icon</string>
-    <string name="main_do_you_love_this_app">Do you love this app?</string>
+    <string name="main_haptic_feedback_on_move_to_item">Haptic feedback on icons</string>
+    <string name="main_do_you_love_this_app">If you like this app, please consider take time review it on Play store</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="please_vote_for_this_app">Please consider vote for this app on Store</string>
     <string name="edge_dialog_set_circle_size_text">Circle size</string>
     <string name="title_activity_set_favorite_shortcut">Favorite shortcut setting</string>
-    <string name="title_activity_choose_shortcut">ChooseShortcutActivity</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_choose_shortcut">Choose Shortcut</string>
     <string name="app_tab_fragment_back_button">Back</string>
     <string name="app_tab_fragment_next_button">Next</string>
     <string name="app_tab_fragment_ok_button">OK</string>
@@ -108,7 +103,7 @@
     <string name="main_more_setting_title">More setting</string>
     <string name="main_icon_pack_support">Set icon pack</string>
     <string name="icon_pack_system_icon_pack_label">System</string>
-    <string name="title_activity_outter_ring_setting">Outer zone Setting</string>
+    <string name="title_activity_outter_ring_setting">Outer zone setting</string>
     <string name="main_outer_ring_setting">Outer ring action</string>
     <string name="main_disable_accessibility_title">Disable accessibility</string>
     <string name="main_disable_accessibility_detail_text">Enable accessibility can cause lag in some device when using Chrome. This happen to all
@@ -124,7 +119,6 @@
     <string name="share_with_friend_message">Hey! Try this awesome app? :)</string>
     <string name="install">Install</string>
     <string name="share">Share</string>
-    <string name="main_number_of_recent">Number of recent apps</string>
     <string name="main_vibration_duration">Vibration duration</string>
     <string name="main_hold_time">Hold time</string>
     <string name="main_hold_time_info">Time needed to switch to favorite shortcut when you hold at one of recent apps</string>
