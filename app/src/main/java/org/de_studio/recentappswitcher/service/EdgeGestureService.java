@@ -95,7 +95,7 @@ public class EdgeGestureService extends Service {
     public int icon_height = 48,serviceId;
     public int icon_width = 48, icon_rad = 24;
     public int icon_distance = 110, distance_to_arc = 35, distance_to_arc_pxl;
-    public float icon_distance_pxl, icon_24dp_in_pxls, mIconScale =1.3f;
+    public float icon_distance_pxl, icon_24dp_in_pxls, mIconScale =1f;
     public int edge1Length, edge2Length, edge1offset, edge2offset;
     public int edge1HeightPxl, edge2HeightPxl;
     public int edge1WidthPxl, edge2WidthPxl;
@@ -105,7 +105,7 @@ public class EdgeGestureService extends Service {
     private String launcherPackagename,lastAppPackageName;
     private int[] x, y;
     private int numOfIcon, gridRow, gridColumn, gridGap, gridX, gridY, numOfRecent;
-    public static final int GRID_ICON_SIZE = 58;
+    public static final int GRID_ICON_SIZE = 48, GRID_2_PADDING = 10;
     private boolean hasOneActive = false;
     private boolean hasHomwBackNotiVisible = false;
     private boolean isEdge1On, isEdge2On;
@@ -855,7 +855,7 @@ public class EdgeGestureService extends Service {
                     }
 
                     if (switched) {
-                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), GRID_ICON_SIZE, mScale, gridRow, gridColumn, gridGap);
+                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(),(int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
                         Log.e(LOG_TAG, "shortcutToSwitch = " + shortcutToSwitch + "\ngrid_x =" + shortcutGridView.getX() + "\ngrid_y = " + shortcutGridView.getY() +
                                 "\nx_cord = " + x_cord + "\ny_cord = " + y_cord);
                         Realm myRealm = Realm.getInstance(getApplicationContext());
@@ -1011,7 +1011,7 @@ public class EdgeGestureService extends Service {
                         isClockShown = true;
                     }
                     if (switched) {
-                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, GRID_ICON_SIZE, mScale, gridRow, gridColumn, gridGap);
+                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY,(int)( GRID_ICON_SIZE * mIconScale)+ GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
                         if (shortcutToSwitch != -1) {
                             activateId = shortcutToSwitch + 1;
                         } else {
@@ -1331,9 +1331,10 @@ public class EdgeGestureService extends Service {
                 int gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
                 shortcutGridView.setVerticalSpacing((int) (gridGap * mScale));
                 shortcutGridView.setNumColumns(gridColumn);
+                shortcutGridView.setGravity(Gravity.CENTER);
                 int gridDistanceFromEdge = defaultShared.getInt(EdgeSettingDialogFragment.GRID_DISTANCE_FROM_EDGE_KEY, 20);
-                float gridWide = (int) (mScale * (float) (GRID_ICON_SIZE * gridColumn + gridGap * (gridColumn - 1)));
-                float gridTall = (int) (mScale * (float) (GRID_ICON_SIZE * gridRow + gridGap * (gridRow - 1)));
+                float gridWide = (int) (mScale * (float) (((GRID_ICON_SIZE * mIconScale)+GRID_2_PADDING) * gridColumn + gridGap * (gridColumn - 1)));
+                float gridTall = (int) (mScale * (float) (((GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING) * gridRow + gridGap * (gridRow - 1)));
                 gridParams.height = (int) gridTall;
                 gridParams.width = (int) gridWide;
                 shortcutGridView.setLayoutParams(gridParams);
@@ -1461,6 +1462,7 @@ public class EdgeGestureService extends Service {
         shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
         Random r = new Random();
         serviceId = r.nextInt(1000);
+        mIconScale = defaultShared.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f);
         defaultShared.edit().putInt(EdgeSettingDialogFragment.SERVICE_ID,serviceId).commit();
 //        pinAppRealm.beginTransaction();
 //        Shortcut country1 = pinAppRealm.createObject(Shortcut.class);

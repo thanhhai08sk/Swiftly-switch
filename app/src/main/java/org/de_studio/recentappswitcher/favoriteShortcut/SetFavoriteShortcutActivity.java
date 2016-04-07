@@ -25,7 +25,7 @@ import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 public class SetFavoriteShortcutActivity extends AppCompatActivity {
     private FavoriteShortcutAdapter mAdapter;
     private static final String LOG_TAG = SetFavoriteShortcutActivity.class.getSimpleName();
-    private float mScale;
+    private float mScale, mIconScale;
     private boolean isTrial = false;
     private GridView gridView;
     private SharedPreferences defaultSharedPreference;
@@ -40,6 +40,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         int gridColumn = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
         int shortcutGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
         mScale = getResources().getDisplayMetrics().density;
+        mIconScale = defaultSharedPreference.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         gridView = (GridView) findViewById(R.id.favorite_shortcut_grid_view);
         AppCompatSpinner gridRowSpinner = (AppCompatSpinner) findViewById(R.id.set_favorite_shortcut_grid_row_spinner);
@@ -146,8 +147,8 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         gridView.setVerticalSpacing((int) (shortcutGap * mScale));
         gridView.setNumColumns(gridColumn);
         ViewGroup.LayoutParams gridParams = gridView.getLayoutParams();
-        gridParams.height = (int)(mScale* (float)(EdgeGestureService.GRID_ICON_SIZE * gridRow + shortcutGap* (gridRow -1)));
-        gridParams.width = (int)(mScale* (float)(EdgeGestureService.GRID_ICON_SIZE * gridColumn + shortcutGap* (gridColumn -1)));
+        gridParams.height = (int)(mScale* (float)((EdgeGestureService.GRID_ICON_SIZE* mIconScale + EdgeGestureService.GRID_2_PADDING) * gridRow + shortcutGap* (gridRow -1)));
+        gridParams.width = (int)(mScale* (float)((EdgeGestureService.GRID_ICON_SIZE * mIconScale + EdgeGestureService.GRID_2_PADDING) * gridColumn + shortcutGap* (gridColumn -1)));
         gridView.setLayoutParams(gridParams);
         mAdapter = new FavoriteShortcutAdapter(this);
         gridView.setAdapter(mAdapter);
@@ -178,8 +179,8 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         int gridGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
         gridView.setVerticalSpacing((int)( gridGap*mScale));
         gridView.setNumColumns(gridColumn);
-        gridParams.height = (int) (mScale * (float) (EdgeGestureService.GRID_ICON_SIZE * gridRow + gridGap * (gridRow - 1)));
-        gridParams.width = (int) (mScale * (float) (EdgeGestureService.GRID_ICON_SIZE * gridColumn + gridGap * (gridColumn - 1)));
+        gridParams.height = (int) (mScale * (float) ((EdgeGestureService.GRID_ICON_SIZE * mIconScale + EdgeGestureService.GRID_2_PADDING) * gridRow + gridGap * (gridRow - 1)));
+        gridParams.width = (int) (mScale * (float) ((EdgeGestureService.GRID_ICON_SIZE *mIconScale + EdgeGestureService.GRID_2_PADDING) * gridColumn + gridGap * (gridColumn - 1)));
         gridView.setLayoutParams(gridParams);
     }
 
