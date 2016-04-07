@@ -95,7 +95,7 @@ public class EdgeGestureService extends Service {
     public int icon_height = 48,serviceId;
     public int icon_width = 48, icon_rad = 24;
     public int icon_distance = 110, distance_to_arc = 35, distance_to_arc_pxl;
-    public float icon_distance_pxl, icon_24dp_in_pxls;
+    public float icon_distance_pxl, icon_24dp_in_pxls, mIconScale =1.3f;
     public int edge1Length, edge2Length, edge1offset, edge2offset;
     public int edge1HeightPxl, edge2HeightPxl;
     public int edge1WidthPxl, edge2WidthPxl;
@@ -169,6 +169,9 @@ public class EdgeGestureService extends Service {
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
                         WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 PixelFormat.TRANSLUCENT);
+
+
+
         if (isEdge1On) {
             edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
             edge1Image = (ImageView) edge1View.findViewById(R.id.edge_image);
@@ -224,6 +227,12 @@ public class EdgeGestureService extends Service {
             iconImageArrayList1.add(iconImageList1[3]);
             iconImageArrayList1.add(iconImageList1[4]);
             iconImageArrayList1.add(iconImageList1[5]);
+            FrameLayout.LayoutParams sampleParas1 = new FrameLayout.LayoutParams(iconImageArrayList1.get(0).getLayoutParams());
+            for (AppCompatImageView image : iconImageArrayList1) {
+                sampleParas1.height =(int) (48*mIconScale *mScale);
+                sampleParas1.width = (int) (48*mIconScale *mScale);
+                image.setLayoutParams(sampleParas1);
+            }
             WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
@@ -583,7 +592,7 @@ public class EdgeGestureService extends Service {
 //                        Log.e(LOG_TAG," item_view has already been added to the window manager");
 //                    }
 //                    Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
-                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls, position, x_init_cord, y_init_cord, 6);
+                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6);
 
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -925,7 +934,7 @@ public class EdgeGestureService extends Service {
                         }
                     } else {
 //                        int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
-                        int packageToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls, mScale);
+                        int packageToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
                         if (packageToSwitch != -1) {
                             Intent extApp = null;
                             if (packageToSwitch < packagename.length) {
@@ -1019,7 +1028,7 @@ public class EdgeGestureService extends Service {
                         }
                     } else {
 //                        int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
-                        int iconToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls, mScale);
+                        int iconToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
                         int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
                         if (moveToHomeBackNoti > 0) {
                             activateId = moveToHomeBackNoti + 30;
@@ -1032,8 +1041,8 @@ public class EdgeGestureService extends Service {
                                 float x = iconHighlight.getX();
                                 float y = iconHighlight.getY();
 
-                                layoutParams.height = (int) (64 * mScale);
-                                layoutParams.width = (int) (76 * mScale);
+                                layoutParams.height = (int) ((16 + 48*mIconScale) * mScale);
+                                layoutParams.width = (int) ((28+ 48 * mIconScale) * mScale);
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     iconHighlight.setBackground(getDrawable(R.drawable.icon_background));
                                 } else {
@@ -1356,8 +1365,8 @@ public class EdgeGestureService extends Service {
                 if (iconIdBackgrounded < iconImageArrayList.size()) {
                     ImageView iconResetBackground = iconImageArrayList.get(iconIdBackgrounded);
                     FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(iconResetBackground.getLayoutParams());
-                    layoutParams1.width = (int) (48 * mScale);
-                    layoutParams1.height = (int) (48 * mScale);
+                    layoutParams1.width = (int) (48 * mScale * mIconScale);
+                    layoutParams1.height = (int) (48 * mScale * mIconScale);
                     float x = iconResetBackground.getX();
                     float y = iconResetBackground.getY();
                     iconResetBackground.setBackground(null);
