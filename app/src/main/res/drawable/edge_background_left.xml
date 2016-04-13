@@ -3,7 +3,9 @@
     <item
         android:right="-5dp"
         android:top="-5dp"
-        android:bottom="-5dp">
+        android:bottom="-5dp"
+        android:id="@+id/shape"
+        >
         <shape>
             <solid android:color="@color/transparent" />
             <stroke

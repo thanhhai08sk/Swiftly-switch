@@ -66,6 +66,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String HOLD_TIME_KEY  = "hold_time";
     public static final String IS_PIN_TO_TOP_KEY = "is_pin_to_top";
     public static final String BACKGROUND_COLOR_KEY = "background_color";
+    public static final String GUIDE_COLOR_KEY = "guide_color";
     public static final String USE_GUIDE_KEY = "edge_guide";
     public static final String SERVICE_ID = "service_id";
     public static final String ICON_SCALE = "icon_scale";

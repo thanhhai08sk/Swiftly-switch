@@ -15,9 +15,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -126,7 +129,7 @@ public class EdgeGestureService extends Service {
     private Realm pinAppRealm;
     private Set<String> pinnedSet;
     private WindowManager.LayoutParams backgroundParams;
-    private int backgroundColor;
+    private int backgroundColor, guideColor;
 
     @Nullable
     @Override
@@ -176,16 +179,27 @@ public class EdgeGestureService extends Service {
             edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
             edge1Image = (ImageView) edge1View.findViewById(R.id.edge_image);
             if (sharedPreferences1.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false)) {
+                GradientDrawable shape = new GradientDrawable();
+                shape.setShape(GradientDrawable.RECTANGLE);
+                shape.setCornerRadius(0);
+                shape.setStroke((int)(2*mScale),guideColor);
+                LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
                 switch (edge1Position / 10) {
                     case 1:
-                        edge1Image.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge_background_right));
+                        drawable.setLayerInset(0,(int)(-5*mScale),(int)(-5*mScale),0,(int)(-5*mScale));
                         break;
                     case 2:
-                        edge1Image.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge_background_left));
+                        drawable.setLayerInset(0,0,(int)(-5*mScale),(int)(-5*mScale),(int)(-5*mScale));
                         break;
                     case 3:
-                        edge1Image.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge_background_bottom));
+                        drawable.setLayerInset(0,(int)(-5*mScale),(int)(-5*mScale),(int)(-5*mScale),0);
+                        break;
                 }
+
+                edge1Image.setBackground(drawable);
+
+
+
             }
 
 //        ViewGroup.LayoutParams edge1ImageLayoutParams = edge1Image.getLayoutParams();
@@ -284,16 +298,24 @@ public class EdgeGestureService extends Service {
             edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
             edge2Image = (ImageView) edge2View.findViewById(R.id.edge_image);
             if (sharedPreferences2.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false)) {
+                GradientDrawable shape = new GradientDrawable();
+                shape.setShape(GradientDrawable.RECTANGLE);
+                shape.setCornerRadius(0);
+                shape.setStroke((int)(2*mScale),guideColor);
+                LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
                 switch (edge2Position / 10) {
                     case 1:
-                        edge2Image.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge_background_right));
+                        drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), 0, (int) (-5 * mScale));
                         break;
                     case 2:
-                        edge2Image.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge_background_left));
+                        drawable.setLayerInset(0, 0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale));
                         break;
                     case 3:
-                        edge2Image.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.edge_background_bottom));
+                        drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale), 0);
+                        break;
                 }
+
+                edge2Image.setBackground(drawable);
             }
             RelativeLayout.LayoutParams edge2ImageLayoutParams = new RelativeLayout.LayoutParams(edge2Image.getLayoutParams());
             if (Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext()) >= 30) {
@@ -1469,6 +1491,8 @@ public class EdgeGestureService extends Service {
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
         pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext()).name("pinApp.realm").build());
         backgroundColor  = defaultShared.getInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY, 1879048192);
+//        guideColor = defaultShared.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY,16728193);
+        guideColor = defaultShared.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY, Color.argb(255,255,64,129));
         shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
         Random r = new Random();
         serviceId = r.nextInt(1000);
