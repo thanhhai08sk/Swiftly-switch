@@ -71,7 +71,7 @@ public class OuterRingAdapter extends BaseAdapter {
                 cuttentAction = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_2_KEY, MainActivity.ACTION_BACK);
                 break;
             case 2:
-                cuttentAction = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_NONE);
+                cuttentAction = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_LAST_APP);
                 break;
             case 3:
                 cuttentAction = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_4_KEY, MainActivity.ACTION_NOTI);
