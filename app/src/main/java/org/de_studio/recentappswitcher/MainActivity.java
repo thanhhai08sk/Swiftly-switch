@@ -56,6 +56,9 @@ public class MainActivity extends Activity {
     public static final String ACTION_LAST_APP = "last_app";
     public static final String ACTION_ROTATE = "rotate";
     public static final String ACTION_POWER_MENU = "power_menu";
+    public static final String ACTION_CALL_LOGS = "call_logs";
+    public static final String ACTION_CONTACT = "contacts";
+    public static final String ACTION_DIAL = "dial";
     public static final int REQUEST_CODE = 3243;
     public static final int REQUEST_INVITE = 232;
     public static final long trialTime = 1000 * 60 * 60 * 24 * 7;
@@ -491,7 +494,7 @@ public class MainActivity extends Activity {
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        sharedPreferencesDefautl.edit().putFloat(EdgeSettingDialogFragment.ICON_SCALE,((float)progressChanged)/100).commit();
+                        sharedPreferencesDefautl.edit().putFloat(EdgeSettingDialogFragment.ICON_SCALE, ((float) progressChanged) / 100).commit();
                         stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
                         startService(new Intent(getApplicationContext(), EdgeGestureService.class));
                     }

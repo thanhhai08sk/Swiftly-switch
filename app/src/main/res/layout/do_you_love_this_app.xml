@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:padding="5dp"
     android:gravity="center_horizontal"
-    android:orientation="horizontal">
+    android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,21 +12,29 @@
         android:textColor="@color/white"
         android:paddingRight="16dp"
         />
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/main_do_you_love_yes_button"
-        android:textColor="@color/colorAccent"
-        android:text="@string/edge_dialog_ok_button"
-        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-        />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/main_do_you_love_no_button"
-        android:textColor="@color/colorAccent"
-        android:text="@string/no"
-        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-        />
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_do_you_love_yes_button"
+            android:textColor="@color/colorAccent"
+            android:text="@string/edge_dialog_ok_button"
+            style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_do_you_love_no_button"
+            android:textColor="@color/colorAccent"
+            android:text="@string/no"
+            style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+            />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -70,7 +70,7 @@ public class ExpandStatusBarView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.save();
-        canvas.clipRect(0, 0, 3 * radius, 3 * radius);
+        canvas.clipRect(0, 0, 4 * radius, 4 * radius);
         oval.set(ovalOffset, ovalOffset, ovalOffset + radius * 2, ovalOffset + radius * 2);
         int action1Acr = 29;
         int action23Arc = 39;
@@ -253,4 +253,9 @@ public class ExpandStatusBarView extends View {
 
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int heightSpec = MeasureSpec.makeMeasureSpec((int)(600*mScale), MeasureSpec.EXACTLY);
+        super.onMeasure(heightSpec, heightSpec);
+    }
 }

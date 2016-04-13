@@ -73,6 +73,9 @@
     <string name="setting_shortcut_back">Back</string>
     <string name="setting_shortcut_home">Home</string>
     <string name="setting_shortcut_noti">Expand status bar</string>
+    <string name="setting_shortcut_dial">Dial</string>
+    <string name="setting_shortcut_contact">Contact</string>
+    <string name="setting_shortcut_call_log">Call logs</string>
     <string name="ask_for_write_setting_notification_text">Click here and grant WRITE SETTING for Swiftly switch</string>
     <string name="ask_for_write_setting_notification_title">Swiftly switch need Write Setting permission</string>
     <string name="choose_shortcut_apps_tab_title">Apps</string>
@@ -103,8 +106,8 @@
     <string name="main_more_setting_title">More setting</string>
     <string name="main_icon_pack_support">Set icon pack</string>
     <string name="icon_pack_system_icon_pack_label">System</string>
-    <string name="title_activity_outter_ring_setting">Outer zone setting</string>
-    <string name="main_outer_ring_setting">Outer ring action</string>
+    <string name="title_activity_outter_ring_setting">Quick actions setting</string>
+    <string name="main_outer_ring_setting">Quick actions</string>
     <string name="main_disable_accessibility_title">Disable accessibility</string>
     <string name="main_disable_accessibility_detail_text">Enable accessibility can cause lag in some device when using Chrome. This happen to all
     apps that use accessibility. If the lag is too extreme please disable the Swiftly switch accessibility service, all feature still available except the navigation (home, back, power menu).</string>

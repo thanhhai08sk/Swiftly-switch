@@ -372,7 +372,7 @@ public class EdgeGestureService extends Service {
             iconImageArrayList2.add(iconImageList2[4]);
             iconImageArrayList2.add(iconImageList2[5]);
             FrameLayout.LayoutParams sampleParas2 = new FrameLayout.LayoutParams(iconImageArrayList2.get(0).getLayoutParams());
-            for (AppCompatImageView image : iconImageArrayList1) {
+            for (AppCompatImageView image : iconImageArrayList2) {
                 sampleParas2.height =(int) (48*mIconScale *mScale);
                 sampleParas2.width = (int) (48*mIconScale *mScale);
                 image.setLayoutParams(sampleParas2);
@@ -443,7 +443,7 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    Log.e(LOG_TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
+//                    Log.e(LOG_TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
 //                    if (!backgroundFrame.isAttachedToWindow() && (position == edge1Position || position == edge2Position)) {
                     if (!backgroundFrame.isAttachedToWindow() && (defaultShared.getInt(EdgeSettingDialogFragment.SERVICE_ID,10) == serviceId )) {
                         if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY, true)) {
@@ -458,16 +458,16 @@ public class EdgeGestureService extends Service {
 //                    if (position != edge1Position && position != edge2Position) {
                     if (defaultShared.getInt(EdgeSettingDialogFragment.SERVICE_ID,10) != serviceId) {
                         Log.e(LOG_TAG, "the service id is different");
-//                        if (edge1View != null && edge1View.isAttachedToWindow()) {
-//                            windowManager.removeView(edge1View);
-//                        }
-//                        if (edge2View != null && edge2View.isAttachedToWindow()) {
-//                            windowManager.removeView(edge2View);
-//                        }
-//                        if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
-//                            backgroundFrame.setBackgroundColor(R.color.transparent);
-//                            windowManager.removeView(backgroundFrame);
-//                        }
+                        if (edge1View != null && edge1View.isAttachedToWindow()) {
+                            windowManager.removeView(edge1View);
+                        }
+                        if (edge2View != null && edge2View.isAttachedToWindow()) {
+                            windowManager.removeView(edge2View);
+                        }
+                        if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
+                            backgroundFrame.setBackgroundColor(R.color.transparent);
+                            windowManager.removeView(backgroundFrame);
+                        }
                         stopSelf();
                         return false;
                     }
@@ -920,17 +920,27 @@ public class EdgeGestureService extends Service {
                                             Toast.makeText(getApplicationContext(), R.string.ask_user_to_turn_on_accessibility_toast, Toast.LENGTH_LONG).show();
                                         break;
                                     case Shortcut.ACTION_HOME:
-                                        Utility.homeAction(getApplicationContext(),v,getClass().getName(),getPackageName());
+                                        Utility.homeAction(getApplicationContext(), v, getClass().getName(), getPackageName());
                                         break;
                                     case Shortcut.ACTION_BACK:
-                                        Utility.backAction(getApplicationContext(),v,getClass().getName(),getPackageName());
+                                        Utility.backAction(getApplicationContext(), v, getClass().getName(), getPackageName());
                                         break;
                                     case Shortcut.ACTION_NOTI:
-                                        Utility.notiAction(getApplicationContext(),v,getClass().getName(),getPackageName());
+                                        Utility.notiAction(getApplicationContext(), v, getClass().getName(), getPackageName());
                                         break;
                                     case Shortcut.ACTION_LAST_APP:
-                                        Utility.lastAppAction(getApplicationContext(),lastAppPackageName);
+                                        Utility.lastAppAction(getApplicationContext(), lastAppPackageName);
                                         break;
+                                    case Shortcut.ACTION_CALL_LOGS:
+                                        Utility.callLogsAction(getApplicationContext());
+                                        break;
+                                    case Shortcut.ACTION_DIAL:
+                                        Utility.dialAction(getApplicationContext());
+                                        break;
+                                    case Shortcut.ACTION_CONTACT:
+                                        Utility.contactAction(getApplicationContext());
+                                        break;
+
                                 }
                             }
                         } else if (shortcutToSwitch != -1) {

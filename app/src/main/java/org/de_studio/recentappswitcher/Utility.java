@@ -21,9 +21,11 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.provider.CallLog;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
@@ -562,6 +564,12 @@ public  class Utility {
             return Shortcut.ACTION_NOTI;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_last_app))) {
             return Shortcut.ACTION_LAST_APP;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_call_log))) {
+            return Shortcut.ACTION_CALL_LOGS;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_contact))) {
+            return Shortcut.ACTION_CONTACT;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_dial))) {
+            return Shortcut.ACTION_DIAL;
         }else return -1;
     }
 
@@ -615,8 +623,15 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_power_menu_no_bound);
             case MainActivity.ACTION_LAST_APP:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_last_app);
+            case MainActivity.ACTION_CALL_LOGS:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_call_log);
+            case MainActivity.ACTION_CONTACT:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_contact);
+            case MainActivity.ACTION_DIAL:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_dial);
             case MainActivity.ACTION_NONE:
                 return null;
+
         }
         return null;
     }
@@ -639,6 +654,12 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_power_menu_no_bound);
             case MainActivity.ACTION_LAST_APP:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_last_app);
+            case MainActivity.ACTION_CALL_LOGS:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_call_log);
+            case MainActivity.ACTION_CONTACT:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_contact);
+            case MainActivity.ACTION_DIAL:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_dial);
             case MainActivity.ACTION_NONE:
                 return null;
         }
@@ -663,6 +684,12 @@ public  class Utility {
                 return context.getString(R.string.setting_shortcut_power_menu);
             case MainActivity.ACTION_LAST_APP:
                 return context.getString(R.string.last_app);
+            case MainActivity.ACTION_CALL_LOGS:
+                return context.getString(R.string.setting_shortcut_call_log);
+            case MainActivity.ACTION_CONTACT:
+                return context.getString(R.string.setting_shortcut_contact);
+            case MainActivity.ACTION_DIAL:
+                return context.getString(R.string.setting_shortcut_dial);
             case MainActivity.ACTION_NONE:
                 return context.getString(R.string.setting_shortcut_none);
         }
@@ -683,6 +710,7 @@ public  class Utility {
             manager.sendAccessibilityEvent(event1);
         }else Toast.makeText(context, R.string.ask_user_to_turn_on_accessibility_toast, Toast.LENGTH_LONG).show();
     }
+
 
 
     public static void backAction(Context context, View v, String className, String packageName) {
@@ -789,6 +817,26 @@ public  class Utility {
         } else Log.e(LOG_TAG, "extApp = null ");
     }
 
+    public static void callLogsAction(Context context) {
+        Intent launchCallLog = new Intent(Intent.ACTION_VIEW);
+        launchCallLog.setData(CallLog.Calls.CONTENT_URI);
+        launchCallLog.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        context.startActivity(launchCallLog);
+    }
+
+    public static void contactAction(Context context) {
+        Intent launchContact = new Intent(Intent.ACTION_VIEW);
+        launchContact.setData(Uri.parse("content://contacts/people/"));
+        launchContact.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        context.startActivity(launchContact);
+    }
+
+    public static void dialAction(Context context) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        context.startActivity(intent);
+    }
+
 
     public static void executeAction(Context context, String action, View v, String className, String packageName, String lastAppPackageName) {
         switch (action) {
@@ -836,7 +884,16 @@ public  class Utility {
                 powerAction(context,v,className,packageName);
                 break;
             case MainActivity.ACTION_LAST_APP:
-                lastAppAction(context,lastAppPackageName);
+                lastAppAction(context, lastAppPackageName);
+                break;
+            case MainActivity.ACTION_CONTACT:
+                contactAction(context);
+                break;
+            case MainActivity.ACTION_CALL_LOGS:
+                callLogsAction(context);
+                break;
+            case MainActivity.ACTION_DIAL:
+                dialAction(context);
                 break;
         }
     }

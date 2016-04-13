@@ -31,6 +31,9 @@ public class OuterRingSettingActivity extends AppCompatActivity {
                 MainActivity.ACTION_BLUETOOTH,
                 MainActivity.ACTION_ROTATE,
                 MainActivity.ACTION_LAST_APP,
+                MainActivity.ACTION_DIAL,
+                MainActivity.ACTION_CONTACT,
+                MainActivity.ACTION_CALL_LOGS,
                 MainActivity.ACTION_POWER_MENU};
         setContentView(R.layout.activity_outter_ring_setting);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

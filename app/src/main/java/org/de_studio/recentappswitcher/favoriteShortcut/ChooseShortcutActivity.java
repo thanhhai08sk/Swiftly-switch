@@ -216,6 +216,15 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
                     case Shortcut.ACTION_LAST_APP:
                         currentShortcut.setImageResource(R.drawable.ic_icon_last_app);
                         break;
+                    case Shortcut.ACTION_CALL_LOGS:
+                        currentShortcut.setImageResource(R.drawable.ic_icon_call_log);
+                        break;
+                    case Shortcut.ACTION_CONTACT:
+                        currentShortcut.setImageResource(R.drawable.ic_icon_contact);
+                        break;
+                    case Shortcut.ACTION_DIAL:
+                        currentShortcut.setImageResource(R.drawable.ic_icon_dial);
+                        break;
                 }
             }
         } else {

@@ -21,6 +21,9 @@
         <item>@string/setting_shortcut_back</item>
         <item>@string/setting_shortcut_noti</item>
         <item>@string/setting_shortcut_last_app</item>
+        <item>@string/setting_shortcut_dial</item>
+        <item>@string/setting_shortcut_contact</item>
+        <item>@string/setting_shortcut_call_log</item>
     </string-array>
     <string-array name="grid_row">
         <item>@string/grid_2_row</item>
@@ -55,5 +58,8 @@
         <item>@string/setting_shortcut_bluetooth</item>
         <item>@string/setting_shortcut_rotation</item>
         <item>@string/setting_shortcut_last_app</item>
+        <item>@string/setting_shortcut_dial</item>
+        <item>@string/setting_shortcut_contact</item>
+        <item>@string/setting_shortcut_call_log</item>
     </string-array>
 </resources>

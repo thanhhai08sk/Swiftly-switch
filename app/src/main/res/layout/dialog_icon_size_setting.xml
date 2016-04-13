@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/dialog_icon_size_value"
-        android:text="15ms"
+        android:text="100 %"
         android:layout_gravity="right"
         />
     <SeekBar
@@ -17,7 +17,7 @@
         android:id="@+id/dialog_icon_size_seek_bar"
         android:padding="10dp"
         android:max="50"
-        android:progress="200"
+        android:progress="20"
         />
 
 </LinearLayout>

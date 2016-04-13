@@ -29,11 +29,12 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     private SharedPreferences sharedPreferences;
     private IconPackManager.IconPack iconPack;
     private int iconPadding;
-
+    private float mIconScale;
 
     public FavoriteShortcutAdapter(Context context) {
         mContext = context;
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
+        mIconScale = sharedPreferences.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f);
         String iconPackPacka = sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "none");
         if (!iconPackPacka.equals("none")) {
             IconPackManager iconPackManager = new IconPackManager();
@@ -63,8 +64,9 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         ImageView imageView;
         if (convertView == null) {
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams((int) mContext.getResources().getDimension(R.dimen.icon_size), (int) mContext.getResources().getDimension(R.dimen.icon_size)));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            imageView.setLayoutParams(new GridView.LayoutParams((int) (mContext.getResources().getDimension(R.dimen.icon_size) * mIconScale + mContext.getResources().getDimension(R.dimen.icon_padding_x_2)),
+                    (int) (mContext.getResources().getDimension(R.dimen.icon_size) * mIconScale + mContext.getResources().getDimension(R.dimen.icon_padding_x_2))));
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             imageView.setPadding(iconPadding,iconPadding,iconPadding,iconPadding);
         } else {
             imageView = (ImageView) convertView;
@@ -119,6 +121,18 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                         break;
                     case Shortcut.ACTION_LAST_APP:
                         imageView.setImageResource(R.drawable.ic_icon_last_app);
+                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_CALL_LOGS:
+                        imageView.setImageResource(R.drawable.ic_icon_call_log);
+                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_DIAL:
+                        imageView.setImageResource(R.drawable.ic_icon_dial);
+                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_CONTACT:
+                        imageView.setImageResource(R.drawable.ic_icon_contact);
                         imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                 }
