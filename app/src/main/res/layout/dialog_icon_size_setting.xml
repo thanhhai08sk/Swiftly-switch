@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/dialog_icon_size_seek_bar"
         android:padding="10dp"
-        android:max="50"
+        android:max="60"
         android:progress="20"
         />
 

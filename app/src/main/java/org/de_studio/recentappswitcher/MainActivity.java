@@ -480,12 +480,12 @@ public class MainActivity extends Activity {
                 final TextView textView = (TextView) view.findViewById(R.id.dialog_icon_size_value);
                 int currentValue =(int) (sharedPreferencesDefautl.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f) * 100);
                 textView.setText(currentValue +" %");
-                seekBar.setProgress(currentValue - 80);
+                seekBar.setProgress(currentValue - 70);
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     int progressChanged;
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        progressChanged = progress +80;
+                        progressChanged = progress +70;
                         textView.setText(progressChanged + " %");
                     }
 
