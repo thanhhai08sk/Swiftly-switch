@@ -429,6 +429,7 @@ public class EdgeGestureService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.drawable.ic_stat_ic_looks_white_48dp1)
                 .setContentIntent(notiPending)
+                .setPriority(Notification.PRIORITY_MIN)
                 .setContentText(getString(R.string.notification_text)).setContentTitle(getString(R.string.notification_title));
         Notification notificationCompat = builder.build();
         startForeground(NOTIFICATION_ID, notificationCompat);
@@ -509,7 +510,7 @@ public class EdgeGestureService extends Service {
                     itemView.removeView(action2View);
                     itemView.removeView(action1View);
                     itemView.removeView(action4View);
-                    if (item1View != null && itemView.isAttachedToWindow()) {
+                    if (itemView != null && itemView.isAttachedToWindow()) {
                         windowManager.removeView(itemView);
                     }
                     if (shortcutView != null && shortcutView.isAttachedToWindow()) {
