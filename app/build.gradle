@@ -24,8 +24,8 @@ android {
         applicationId "org.de_studio.recentappswitcher"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 37
-        versionName "2.1.05"
+        versionCode 38
+        versionName "2.1.06"
     }
     buildTypes {
         release {
@@ -41,7 +41,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'io.realm:realm-android:0.84.1'
-    compile project(':libraries:drag-sort-listview:library')
+//    compile project(':libraries:drag-sort-listview:library')
+    compile project(':library')
     compile 'com.github.QuadFlask:colorpicker:0.0.10'
 }
 

@@ -53,7 +53,8 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         AppCompatSeekBar gridGapSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_gap_seek_bar);
         final TextView gridDistanceValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_distance_value_text_view);
         final AppCompatSeekBar gridDistanceSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_distance_seek_bar);
-
+        final AppCompatSeekBar gridDistanceVerticalSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_distance_vertical_seek_bar);
+        final TextView gridDistanceVerticalValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_distance_vertical_value_text_view);
 
         int currentRowSpinnerPosition = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY,5)-2;
         gridRowSpinner.setSelection(currentRowSpinnerPosition);
@@ -114,8 +115,11 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         });
 
         int currentGridDistanceSeekBarProgress = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GRID_DISTANCE_FROM_EDGE_KEY,20) - 20;
+        int currentGridDistanceVerticalSeekBarProgress = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GRID_DISTANCE_VERTICAL_FROM_EDGE_KEY, 20);
         gridDistanceSeekBar.setProgress(currentGridDistanceSeekBarProgress);
+        gridDistanceVerticalSeekBar.setProgress(currentGridDistanceVerticalSeekBarProgress);
         gridDistanceValueTextView.setText(currentGridDistanceSeekBarProgress + 20 + " dp");
+        gridDistanceVerticalValueTextView.setText(currentGridDistanceVerticalSeekBarProgress +" dp");
         gridDistanceSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -132,8 +136,26 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-        gridDistanceSeekBar.setEnabled(!defaultSharedPreference.getBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE,false));
 
+        gridDistanceVerticalSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.GRID_DISTANCE_VERTICAL_FROM_EDGE_KEY,progress).commit();
+                gridDistanceVerticalValueTextView.setText(progress + " dp");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        gridDistanceSeekBar.setEnabled(!defaultSharedPreference.getBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE,false));
+        gridDistanceVerticalSeekBar.setEnabled(!defaultSharedPreference.getBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE,false));
         Switch placeToCenterSwitch = (Switch) findViewById(R.id.set_favorite_place_center);
         placeToCenterSwitch.setChecked(defaultSharedPreference.getBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE,false));
         placeToCenterSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -141,6 +163,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 defaultSharedPreference.edit().putBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE,isChecked).commit();
                 gridDistanceSeekBar.setEnabled(!isChecked);
+                gridDistanceVerticalSeekBar.setEnabled(!isChecked);
             }
         });
 

@@ -100,6 +100,7 @@
     <string name="set_favorite_shortcut_grid_by">by</string>
     <string name="set_favorite_shortcut_grid_gap_title_text_view">Space between shortcuts</string>
     <string name="set_favorite_shortcut_grid_distance_title_text_view">Distance from the Edge</string>
+    <string name="set_favorite_shortcut_grid_distance_vertical_title_text_view">Distance from the Edge(vertical)</string>
     <string name="edge_dialog_set_mode_text">Mode</string>
     <string name="edge_dialog_mode_array_default">Default</string>
     <string name="edge_dialog_mode_array_only_favorite">Only favorite</string>

@@ -55,6 +55,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String IS_CENTRE_FAVORITE = "is_centre";
     public static final String GAP_OF_SHORTCUT_KEY = "shortcut_gap";
     public static final String GRID_DISTANCE_FROM_EDGE_KEY = "grid_distance_from_edge";
+    public static final String GRID_DISTANCE_VERTICAL_FROM_EDGE_KEY = "grid_distance_vertical_from_edge";
     public static final String IS_ONLY_FAVORITE_KEY = "is_only_favorite";
     public static final String ICON_PACK_PACKAGE_NAME_KEY = "icon_pack_packa";
     public static final String ACTION_1_KEY = "action_1";
