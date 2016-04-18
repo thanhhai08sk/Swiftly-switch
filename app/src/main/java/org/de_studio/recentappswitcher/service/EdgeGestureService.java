@@ -1483,7 +1483,7 @@ public class EdgeGestureService extends Service {
         gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
         gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
-        holdTime = defaultShared.getInt(EdgeSettingDialogFragment.HOLD_TIME_KEY, 450);
+        holdTime = defaultShared.getInt(EdgeSettingDialogFragment.HOLD_TIME_KEY, 600);
         vibrationDuration = defaultShared.getInt(EdgeSettingDialogFragment.VIBRATION_DURATION_KEY, 15);
         iconPaddingLeft = (int) (14 * mScale);
         iconPaddingTop = (int) (8 * mScale);

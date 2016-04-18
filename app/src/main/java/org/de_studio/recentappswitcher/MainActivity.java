@@ -586,7 +586,7 @@ public class MainActivity extends Activity {
                 View view = View.inflate(MainActivity.this, R.layout.dialog_hold_time_setting, null);
                 SeekBar seekBar = (SeekBar) view.findViewById(R.id.dialog_hold_time_seek_bar);
                 final TextView textView = (TextView) view.findViewById(R.id.dialog_hold_time_value);
-                int currentValue = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.HOLD_TIME_KEY, 450);
+                int currentValue = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.HOLD_TIME_KEY, 600);
                 textView.setText(currentValue +" ms");
                 seekBar.setProgress(currentValue - 300);
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

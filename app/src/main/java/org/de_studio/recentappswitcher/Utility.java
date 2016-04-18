@@ -286,7 +286,7 @@ public  class Utility {
 
     }
 
-    public static void setFavoriteShortcutGridViewPosition(GridView gridView,float gridTall, float gridWide, int x_init_cord, int y_init_cord, float mScale, int edgePosition, WindowManager windowManager, SharedPreferences sharedPreferences, int distanceFromEdgeDp, int gap) {
+    public static void setFavoriteShortcutGridViewPosition(GridView gridView,float gridTall, float gridWide, int x_init_cord, int y_init_cord, float mScale, int edgePosition, WindowManager windowManager, SharedPreferences sharedPreferences, int distanceFromEdgeDp, int distanceVertical) {
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
         boolean isCenter = sharedPreferences.getBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE, false);
         Point point = new Point();
