@@ -288,6 +288,7 @@ public  class Utility {
 
     public static void setFavoriteShortcutGridViewPosition(GridView gridView,float gridTall, float gridWide, int x_init_cord, int y_init_cord, float mScale, int edgePosition, WindowManager windowManager, SharedPreferences sharedPreferences, int distanceFromEdgeDp, int distanceVertical) {
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
+        float distanceVerticalFromEdge = ((float)distanceVertical)* mScale;
         boolean isCenter = sharedPreferences.getBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE, false);
         Point point = new Point();
         windowManager.getDefaultDisplay().getSize(point);
@@ -297,7 +298,7 @@ public  class Utility {
             switch (edgePosition) {
                 case 10:
                     gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
-                    gridView.setY(0);
+                    gridView.setY(distanceVerticalFromEdge);
                     break;
                 case 11:
                     gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
@@ -311,11 +312,11 @@ public  class Utility {
                     break;
                 case 12:
                     gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
-                    gridView.setY(y - gridTall);
+                    gridView.setY(y - gridTall - distanceVerticalFromEdge);
                     break;
                 case 20:
                     gridView.setX(((float) x_init_cord) + distanceFromEdge);
-                    gridView.setY(0);
+                    gridView.setY(distanceVerticalFromEdge);
                     break;
                 case 21:
                     gridView.setX(((float) x_init_cord) + distanceFromEdge);
@@ -329,11 +330,11 @@ public  class Utility {
                     break;
                 case 22:
                     gridView.setX(((float) x_init_cord) + distanceFromEdge);
-                    gridView.setY(y - gridTall);
+                    gridView.setY(y - gridTall - distanceVerticalFromEdge);
                     break;
                 case 31:
                     gridView.setX(((float) x_init_cord) - gridWide /(float) 2);
-                    gridView.setY(((float) y_init_cord) - distanceFromEdge - gridTall);
+                    gridView.setY(((float) y_init_cord) - distanceVerticalFromEdge - gridTall);
                     break;
             }
         } else {
