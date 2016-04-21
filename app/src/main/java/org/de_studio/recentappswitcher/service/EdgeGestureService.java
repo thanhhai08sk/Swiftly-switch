@@ -138,6 +138,7 @@ public class EdgeGestureService extends Service {
     }
 
 
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -438,7 +439,7 @@ public class EdgeGestureService extends Service {
         shortcutView = (FrameLayout) layoutInflater.inflate(R.layout.grid_shortcut, null);
         shortcutGridView = (GridView) shortcutView.findViewById(R.id.edge_shortcut_grid_view);
 
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     public class OnTouchListener implements View.OnTouchListener {
@@ -1602,6 +1603,13 @@ public class EdgeGestureService extends Service {
         startActivity(new Intent(getApplicationContext(), SetFavoriteShortcutActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
+
+//    public static class BootCompleteReceiver extends BroadcastReceiver {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            context.startService(new Intent(context, EdgeGestureService.class));
+//        }
+//    }
 
     public static class BootCompleteReceiver extends BroadcastReceiver {
         @Override
