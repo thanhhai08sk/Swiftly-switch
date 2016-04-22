@@ -107,7 +107,7 @@
     <string name="place_in_the_center">Đặt ở giữa màn hình</string>
     <string name="review_on_play_store">Đánh giá trên Play store</string>
     <string name="set_favorite_shortcut_grid_by">nhân</string>
-    <string name="set_favorite_shortcut_grid_distance_title_text_view">Khoảng cách từ cạnh</string>
+    <string name="set_favorite_shortcut_grid_distance_title_text_view">Khoảng cách từ cạnh(ngang)</string>
     <string name="set_favorite_shortcut_grid_gap_title_text_view">Khoảng cách giữa các icon</string>
     <string name="set_favorite_shortcut_grid_size_text_view">Kích thước:</string>
     <string name="setting_shortcut_back">Nút Back</string>
@@ -128,4 +128,8 @@
     <string name="title_activity_pin_app">Gim ứng dụng</string>
     <string name="title_activity_set_favorite_shortcut">Thiết lập khu vực yêu thích</string>
     <string name="yes">Có</string>
+    <string name="edge_dialog_show_guide_text">Hiện chỉ dẫn</string>
+    <string name="main_icon_size">Kích thước icon</string>
+    <string name="main_set_guide_color">Màu thanh chỉ đẫn</string>
+    <string name="set_favorite_shortcut_grid_distance_vertical_title_text_view">Khoảng cách từ cạnh(dọc)</string>
 </resources>
