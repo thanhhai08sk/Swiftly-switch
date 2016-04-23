@@ -31,6 +31,7 @@ import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -134,7 +135,7 @@ public  class Utility {
         return -1;
     }
 
-    public static void setIconPositionNew(final MyImageView[] icon, float r, float icon_24_dp_pxl, int position, int x_i, int y_i, int n) {
+    public static void setIconPositionNew(final MyImageView[] icon, float r, float icon_24_dp_pxl, int position, int x_i, int y_i, int n, boolean disAni) {
         Log.e(LOG_TAG, "setIconPositionNew");
         double alpha, beta;
         double[] alphaN = new double[n];
@@ -155,57 +156,131 @@ public  class Utility {
         beta = Math.PI - 2 * alpha;
         float x;
         float y;
-        for (int i = 0; i < n; i++) {
-            alphaN[i] = alpha + i * (beta / (n - 1));
-            switch (position / 10) {
-                case 1:
-                    icon[i].setX(x_i);
-                    icon[i].setY(y_i);
-                    x = x_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
-                    y = y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
-                    if (i == 0) {
-                        icon[i].animate().setDuration(100).x(x).y(y).setListener(new Animator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
-                                icon[0].setOnAnimation(true);
-                            }
+        if (disAni) {
+            for (int i = 0; i < n; i++) {
+                alphaN[i] = alpha + i * (beta / (n - 1));
+                switch (position / 10) {
+                    case 1:
+                        icon[i].setX(x_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
+                        icon[i].setY(y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
+                        break;
+                    case 2:
+                        icon[i].setX(x_i + r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
+                        icon[i].setY(y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
+                        break;
+                    case 3:
+                        icon[i].setX(x_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
+                        icon[i].setY(y_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
+                        break;
+                }
+            }
+        } else {
+            for (int i = 0; i < n; i++) {
+                alphaN[i] = alpha + i * (beta / (n - 1));
+                switch (position / 10) {
+                    case 1:
+                        icon[i].setX(x_i);
+                        icon[i].setY(y_i);
+                        x = x_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
+                        y = y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
+                        icon[i].setRotation(0f);
+                        if (i == 0) {
+                            icon[i].animate().setDuration(100).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+                                    icon[0].setOnAnimation(true);
+                                }
 
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                icon[0].setOnAnimation(false);
-                            }
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    icon[0].setOnAnimation(false);
+                                }
 
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-                                icon[0].setOnAnimation(false);
-                            }
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+                                    icon[0].setOnAnimation(false);
+                                }
 
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
+                                @Override
+                                public void onAnimationRepeat(Animator animation) {
 
-                            }
-                        });
-                    } else {
-                        icon[i].animate().setDuration(100).x(x).y(y);
-                    }
+                                }
+                            });
+                        } else {
+                            icon[i].animate().setDuration(100).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
+                        }
 
 //                    icon[i].setX(x);
 //                    icon[i].setY(y);
-                    break;
-                case 2:
-                    x = x_i + r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
-                    y = y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
-                    icon[i].setX(x);
-                    icon[i].setY(y);
-                    break;
-                case 3:
-                    x = x_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
-                    y = y_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
-                    icon[i].setX(x);
-                    icon[i].setY(y);
-                    break;
+                        break;
+                    case 2:
+                        x = x_i + r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
+                        y = y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
+                        icon[i].setX(x_i);
+                        icon[i].setY(y_i);
+                        icon[i].setRotation(0f);
+                        if (i == 0) {
+                            icon[i].animate().setDuration(100).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+                                    icon[0].setOnAnimation(true);
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    icon[0].setOnAnimation(false);
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+                                    icon[0].setOnAnimation(false);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animation) {
+
+                                }
+                            });
+                        } else {
+                            icon[i].animate().setDuration(100).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
+                        }
+                        break;
+                    case 3:
+                        x = x_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
+                        y = y_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
+                        icon[i].setX(x_i);
+                        icon[i].setY(y_i);
+                        icon[i].setRotation(0f);
+                        if (i == 0) {
+                            icon[i].animate().setDuration(100).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+                                    icon[0].setOnAnimation(true);
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    icon[0].setOnAnimation(false);
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+                                    icon[0].setOnAnimation(false);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animation) {
+
+                                }
+                            });
+                        } else {
+                            icon[i].animate().setDuration(100).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
+                        }
+                        break;
+                }
             }
         }
+
         if (n < icon.length) {
             for (int j = n; j < icon.length; j++) {
                 icon[j].setVisibility(View.GONE);

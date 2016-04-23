@@ -443,7 +443,7 @@ public class EdgeGestureService extends Service {
 
     public class OnTouchListener implements View.OnTouchListener {
         private int x_init_cord, y_init_cord;
-        private int position, iconIdBackgrounded = -1, preShortcutToSwitch = -1, activateId = 0, activatedId = 0;
+        private int position, iconIdBackgrounded = -2, preShortcutToSwitch = -1, activateId = 0, activatedId = 0;
         private FrameLayout itemView;
         private MyImageView[] iconImageList;
         private List<MyImageView> iconImageArrayList;
@@ -620,7 +620,7 @@ public class EdgeGestureService extends Service {
 //                        Log.e(LOG_TAG," item_view has already been added to the window manager");
 //                    }
 //                    Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
-                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6);
+                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,true));
 
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -837,7 +837,7 @@ public class EdgeGestureService extends Service {
                             Log.e(LOG_TAG, " item_view has already been added to the window manager");
                         }
                     }
-                    iconIdBackgrounded = -1;
+                    iconIdBackgrounded = -2;
 
                     break;
 
@@ -1078,9 +1078,10 @@ public class EdgeGestureService extends Service {
                         }
                         if (iconToSwitch != -1) {
                             if (iconToSwitch < iconImageArrayList.size() && iconIdBackgrounded != iconToSwitch) {
-                                clearIconBackground();
+
 
                                 if (!iconImageArrayList.get(0).isOnAnimation()) {
+                                    clearIconBackground();
                                     MyImageView iconHighlight = iconImageArrayList.get(iconToSwitch);
                                     FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(iconHighlight.getLayoutParams());
                                     float x = iconHighlight.getX();
@@ -1099,9 +1100,10 @@ public class EdgeGestureService extends Service {
 //                                iconHighlight.setTranslationY(-8 * mScale);
                                     iconHighlight.setLayoutParams(layoutParams);
                                     iconHighlight.setPadding(iconPaddingLeft, iconPaddingTop, iconPaddingLeft, iconPaddingTop);
-                                    iconIdBackgrounded = iconToSwitch;
                                     Log.e(LOG_TAG, "setBackground");
+                                    iconIdBackgrounded = iconToSwitch;
                                 }
+
 
 
                             }
@@ -1409,7 +1411,7 @@ public class EdgeGestureService extends Service {
         }
 
         private void clearIconBackground() {
-            if (iconIdBackgrounded != -1) {
+            if (iconIdBackgrounded != -2) {
                 if (iconIdBackgrounded < iconImageArrayList.size()) {
                     ImageView iconResetBackground = iconImageArrayList.get(iconIdBackgrounded);
                     FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(iconResetBackground.getLayoutParams());
@@ -1422,8 +1424,8 @@ public class EdgeGestureService extends Service {
                     iconResetBackground.setY(y + 8 * mScale);
                     iconResetBackground.setLayoutParams(layoutParams1);
                     iconResetBackground.setPadding(0, 0, 0, 0);
-                    iconIdBackgrounded = -1;
-                } else iconIdBackgrounded = -1;
+                    iconIdBackgrounded = -2;
+                } else iconIdBackgrounded = -2;
             }
         }
     }
