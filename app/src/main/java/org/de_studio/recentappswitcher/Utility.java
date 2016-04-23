@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.animation.Animator;
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -46,6 +47,7 @@ import android.widget.Toast;
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.service.MyImageView;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -132,7 +134,7 @@ public  class Utility {
         return -1;
     }
 
-    public static void setIconPositionNew(AppCompatImageView[] icon, float r, float icon_24_dp_pxl, int position, int x_i, int y_i, int n) {
+    public static void setIconPositionNew(final MyImageView[] icon, float r, float icon_24_dp_pxl, int position, int x_i, int y_i, int n) {
         Log.e(LOG_TAG, "setIconPositionNew");
         double alpha, beta;
         double[] alphaN = new double[n];
@@ -161,7 +163,32 @@ public  class Utility {
                     icon[i].setY(y_i);
                     x = x_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
                     y = y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
-                    icon[i].animate().setDuration(100).x(x).y(y);
+                    if (i == 0) {
+                        icon[i].animate().setDuration(100).x(x).y(y).setListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+                                icon[0].setOnAnimation(true);
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                icon[0].setOnAnimation(false);
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+                                icon[0].setOnAnimation(false);
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        });
+                    } else {
+                        icon[i].animate().setDuration(100).x(x).y(y);
+                    }
+
 //                    icon[i].setX(x);
 //                    icon[i].setY(y);
                     break;

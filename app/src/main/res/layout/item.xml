@@ -7,14 +7,14 @@
     custom1:text = "Expand status bar"
     >
 
-    <android.support.v7.widget.AppCompatImageView
+    <org.de_studio.recentappswitcher.service.MyImageView
         android:id="@+id/item_0"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:scaleType="fitCenter"
 
         />
-    <android.support.v7.widget.AppCompatImageView
+    <org.de_studio.recentappswitcher.service.MyImageView
         android:id="@+id/item_1"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -23,28 +23,28 @@
         />
 
 
-    <android.support.v7.widget.AppCompatImageView
+    <org.de_studio.recentappswitcher.service.MyImageView
         android:id="@+id/item_2"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:scaleType="fitCenter"
          />
 
-    <android.support.v7.widget.AppCompatImageView
+    <org.de_studio.recentappswitcher.service.MyImageView
         android:id="@+id/item_3"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:scaleType="fitCenter"
         />
 
-    <android.support.v7.widget.AppCompatImageView
+    <org.de_studio.recentappswitcher.service.MyImageView
         android:id="@+id/item_4"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:scaleType="fitCenter"
          />
 
-    <android.support.v7.widget.AppCompatImageView
+    <org.de_studio.recentappswitcher.service.MyImageView
         android:id="@+id/item_5"
         android:layout_width="48dp"
         android:layout_height="48dp"

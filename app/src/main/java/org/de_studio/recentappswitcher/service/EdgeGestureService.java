@@ -33,7 +33,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -103,7 +102,7 @@ public class EdgeGestureService extends Service {
     public int edge1HeightPxl, edge2HeightPxl;
     public int edge1WidthPxl, edge2WidthPxl;
     public int edge1Sensivite, edge2Sensitive;
-    private List<AppCompatImageView> iconImageArrayList1, iconImageArrayList2;
+    private List<MyImageView> iconImageArrayList1, iconImageArrayList2;
     private String[] packagename, pinnedPackageName;
     private String launcherPackagename,lastAppPackageName;
     private int[] x, y;
@@ -114,7 +113,7 @@ public class EdgeGestureService extends Service {
     private boolean isEdge1On, isEdge2On;
     public int edge1Position, edge2Position, iconPaddingLeft, iconPaddingTop;
     private SharedPreferences defaultShared, sharedPreferences1, sharedPreferences2, sharedPreferences_favorite, sharedPreferences_exclude;
-    private AppCompatImageView[] iconImageList1, iconImageList2;
+    private MyImageView[] iconImageList1, iconImageList2;
     private ExpandStatusBarView action4View, action1View, action2View, action3View;
     private Vibrator vibrator;
     private int ovalOffSet, ovalRadiusPlus = 17, ovalRadiusPlusPxl, ovalOffSetInDp = 70;
@@ -228,14 +227,14 @@ public class EdgeGestureService extends Service {
                 edge1Image.setLayoutParams(edge1ImageLayoutParams);
             }
             item1View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
-            iconImageList1 = new AppCompatImageView[6];
-            iconImageList1[0] = (AppCompatImageView) item1View.findViewById(R.id.item_0);
-            iconImageList1[1] = (AppCompatImageView) item1View.findViewById(R.id.item_1);
-            iconImageList1[2] = (AppCompatImageView) item1View.findViewById(R.id.item_2);
-            iconImageList1[3] = (AppCompatImageView) item1View.findViewById(R.id.item_3);
-            iconImageList1[4] = (AppCompatImageView) item1View.findViewById(R.id.item_4);
-            iconImageList1[5] = (AppCompatImageView) item1View.findViewById(R.id.item_5);
-            iconImageArrayList1 = new ArrayList<AppCompatImageView>();
+            iconImageList1 = new MyImageView[6];
+            iconImageList1[0] = (MyImageView) item1View.findViewById(R.id.item_0);
+            iconImageList1[1] = (MyImageView) item1View.findViewById(R.id.item_1);
+            iconImageList1[2] = (MyImageView) item1View.findViewById(R.id.item_2);
+            iconImageList1[3] = (MyImageView) item1View.findViewById(R.id.item_3);
+            iconImageList1[4] = (MyImageView) item1View.findViewById(R.id.item_4);
+            iconImageList1[5] = (MyImageView) item1View.findViewById(R.id.item_5);
+            iconImageArrayList1 = new ArrayList<MyImageView>();
             iconImageArrayList1.add(iconImageList1[0]);
             iconImageArrayList1.add(iconImageList1[1]);
             iconImageArrayList1.add(iconImageList1[2]);
@@ -243,7 +242,7 @@ public class EdgeGestureService extends Service {
             iconImageArrayList1.add(iconImageList1[4]);
             iconImageArrayList1.add(iconImageList1[5]);
             FrameLayout.LayoutParams sampleParas1 = new FrameLayout.LayoutParams(iconImageArrayList1.get(0).getLayoutParams());
-            for (AppCompatImageView image : iconImageArrayList1) {
+            for (MyImageView image : iconImageArrayList1) {
                 sampleParas1.height =(int) (48*mIconScale *mScale);
                 sampleParas1.width = (int) (48*mIconScale *mScale);
                 image.setLayoutParams(sampleParas1);
@@ -380,14 +379,14 @@ public class EdgeGestureService extends Service {
                 }
             }
             item2View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
-            iconImageList2 = new AppCompatImageView[6];
-            iconImageList2[0] = (AppCompatImageView) item2View.findViewById(R.id.item_0);
-            iconImageList2[1] = (AppCompatImageView) item2View.findViewById(R.id.item_1);
-            iconImageList2[2] = (AppCompatImageView) item2View.findViewById(R.id.item_2);
-            iconImageList2[3] = (AppCompatImageView) item2View.findViewById(R.id.item_3);
-            iconImageList2[4] = (AppCompatImageView) item2View.findViewById(R.id.item_4);
-            iconImageList2[5] = (AppCompatImageView) item2View.findViewById(R.id.item_5);
-            iconImageArrayList2 = new ArrayList<AppCompatImageView>();
+            iconImageList2 = new MyImageView[6];
+            iconImageList2[0] = (MyImageView) item2View.findViewById(R.id.item_0);
+            iconImageList2[1] = (MyImageView) item2View.findViewById(R.id.item_1);
+            iconImageList2[2] = (MyImageView) item2View.findViewById(R.id.item_2);
+            iconImageList2[3] = (MyImageView) item2View.findViewById(R.id.item_3);
+            iconImageList2[4] = (MyImageView) item2View.findViewById(R.id.item_4);
+            iconImageList2[5] = (MyImageView) item2View.findViewById(R.id.item_5);
+            iconImageArrayList2 = new ArrayList<MyImageView>();
             iconImageArrayList2.add(iconImageList2[0]);
             iconImageArrayList2.add(iconImageList2[1]);
             iconImageArrayList2.add(iconImageList2[2]);
@@ -395,7 +394,7 @@ public class EdgeGestureService extends Service {
             iconImageArrayList2.add(iconImageList2[4]);
             iconImageArrayList2.add(iconImageList2[5]);
             FrameLayout.LayoutParams sampleParas2 = new FrameLayout.LayoutParams(iconImageArrayList2.get(0).getLayoutParams());
-            for (AppCompatImageView image : iconImageArrayList2) {
+            for (MyImageView image : iconImageArrayList2) {
                 sampleParas2.height =(int) (48*mIconScale *mScale);
                 sampleParas2.width = (int) (48*mIconScale *mScale);
                 image.setLayoutParams(sampleParas2);
@@ -446,12 +445,12 @@ public class EdgeGestureService extends Service {
         private int x_init_cord, y_init_cord;
         private int position, iconIdBackgrounded = -1, preShortcutToSwitch = -1, activateId = 0, activatedId = 0;
         private FrameLayout itemView;
-        private AppCompatImageView[] iconImageList;
-        private List<AppCompatImageView> iconImageArrayList;
+        private MyImageView[] iconImageList;
+        private List<MyImageView> iconImageArrayList;
         private DelayToSwitchTask delayToSwitchTask;
         private boolean isOnlyFavorite, isStayPermanent, isShortcutBackgroundNull = true;
 
-        public OnTouchListener(int position, AppCompatImageView[] iconImageList, FrameLayout itemView, List<AppCompatImageView> iconImageArrayList, boolean isOnlyFavorite) {
+        public OnTouchListener(int position, MyImageView[] iconImageList, FrameLayout itemView, List<MyImageView> iconImageArrayList, boolean isOnlyFavorite) {
             this.position = position;
             this.iconImageList = iconImageList;
             this.itemView = itemView;
@@ -1080,27 +1079,30 @@ public class EdgeGestureService extends Service {
                         if (iconToSwitch != -1) {
                             if (iconToSwitch < iconImageArrayList.size() && iconIdBackgrounded != iconToSwitch) {
                                 clearIconBackground();
-                                ImageView iconHighlight = iconImageArrayList.get(iconToSwitch);
-                                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(iconHighlight.getLayoutParams());
-                                float x = iconHighlight.getX();
-                                float y = iconHighlight.getY();
 
-                                layoutParams.height = (int) ((16 + 48*mIconScale) * mScale);
-                                layoutParams.width = (int) ((28+ 48 * mIconScale) * mScale);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    iconHighlight.setBackground(getDrawable(R.drawable.icon_background));
-                                } else {
-                                    iconHighlight.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
-                                }
+                                if (!iconImageArrayList.get(0).isOnAnimation()) {
+                                    MyImageView iconHighlight = iconImageArrayList.get(iconToSwitch);
+                                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(iconHighlight.getLayoutParams());
+                                    float x = iconHighlight.getX();
+                                    float y = iconHighlight.getY();
 
-                                iconHighlight.setX(x - 14 * mScale);
-                                iconHighlight.setY(y - 8 * mScale);
+                                    layoutParams.height = (int) ((16 + 48*mIconScale) * mScale);
+                                    layoutParams.width = (int) ((28+ 48 * mIconScale) * mScale);
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                        iconHighlight.setBackground(getDrawable(R.drawable.icon_background));
+                                    } else {
+                                        iconHighlight.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
+                                    }
+                                    iconHighlight.setX(x - 14 * mScale);
+                                    iconHighlight.setY(y - 8 * mScale);
 //                                iconHighlight.setTranslationX(-14 * mScale);
 //                                iconHighlight.setTranslationY(-8 * mScale);
-                                iconHighlight.setLayoutParams(layoutParams);
-                                iconHighlight.setPadding(iconPaddingLeft, iconPaddingTop, iconPaddingLeft, iconPaddingTop);
-                                iconIdBackgrounded = iconToSwitch;
-                                Log.e(LOG_TAG, "setBackground");
+                                    iconHighlight.setLayoutParams(layoutParams);
+                                    iconHighlight.setPadding(iconPaddingLeft, iconPaddingTop, iconPaddingLeft, iconPaddingTop);
+                                    iconIdBackgrounded = iconToSwitch;
+                                    Log.e(LOG_TAG, "setBackground");
+                                }
+
 
                             }
 
