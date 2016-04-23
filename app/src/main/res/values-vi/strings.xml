@@ -81,7 +81,7 @@
     <string name="icon_pack_system_icon_pack_label">Hệ thống</string>
     <string name="install">Cài đặt</string>
     <string name="last_app">Ứng dụng gần đây nhất</string>
-    <string name="main_animation_text">Hiệu ứng nền</string>
+    <string name="main_animation_text">Tắt hiệu ứng</string>
     <string name="main_consider_disable_accessibility_dialog_title">Xem xét hủy Khả năng truy cập thiết lập</string>
     <string name="main_disable_accessibility_detail_text">Kích hoạt thiết lập Khả năng truy cập có thể khiến thiết bị của bạn gặp vấn đề về hiệu năng và pin. Điều này rất hiếm gặp và nó ảnh hưởng bởi tất cả các ứng dụng có sử dụng thiết lập này.</string>
     <string name="main_disable_accessibility_title">Hủy thiết lập Khả năng truy cập</string>

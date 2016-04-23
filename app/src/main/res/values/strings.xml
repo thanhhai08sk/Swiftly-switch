@@ -134,7 +134,7 @@
     <string name="pin_to_top">Pin to top</string>
     <string name="pin_to_bottom">Pin to bottom</string>
     <string name="main_set_background_color">Set background color</string>
-    <string name="main_animation_text">Background animation</string>
+    <string name="main_animation_text">Disable animation</string>
     <string name="last_app">Last app</string>
     <string name="setting_shortcut_last_app">Last app</string>
     <string name="edge_dialog_show_guide_text">Show guide</string>

@@ -1050,6 +1050,7 @@ public  class Utility {
         if (!isDisableAnimation) {
             view.setAlpha(0f);
             view.animate().alpha(1f).setDuration(120);
+
         }
         return view;
 

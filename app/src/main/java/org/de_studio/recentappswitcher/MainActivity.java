@@ -199,7 +199,7 @@ public class MainActivity extends Activity {
         hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, true));
         hapticFeedbackOnItemSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY,false));
         disableClockSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY,false));
-        disableAnimationSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,false));
+        disableAnimationSwitch.setChecked(!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,false));
         holdTimeSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HOLD_TIME_ENABLE_KEY,true));
         edge1Switch.setChecked(sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true));
         edge2Switch.setChecked(sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, false));
@@ -287,7 +287,7 @@ public class MainActivity extends Activity {
         disableAnimationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,!isChecked).commit();
+                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,isChecked).commit();
             }
         });
         holdTimeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

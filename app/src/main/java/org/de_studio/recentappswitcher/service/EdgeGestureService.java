@@ -469,7 +469,7 @@ public class EdgeGestureService extends Service {
 //                    Log.e(LOG_TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
 //                    if (!backgroundFrame.isAttachedToWindow() && (position == edge1Position || position == edge2Position)) {
                     if (!backgroundFrame.isAttachedToWindow() && (defaultShared.getInt(EdgeSettingDialogFragment.SERVICE_ID,10) == serviceId )) {
-                        if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY, true)) {
+                        if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY, false)) {
                             backgroundFrame.setAlpha(0f);
                             windowManager.addView(backgroundFrame, backgroundParams);
                             backgroundFrame.animate().alpha(1f).setDuration(120).setInterpolator(new FastOutSlowInInterpolator());
@@ -1045,7 +1045,7 @@ public class EdgeGestureService extends Service {
                     }
                     if (!isClockShown && !switched && !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
                         Log.e(LOG_TAG, "Show clock");
-                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,true));
+                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,false));
                         isClockShown = true;
                     }
                     if (switched) {
