@@ -151,20 +151,31 @@ public  class Utility {
                 alpha = 0.0556;
         }
         beta = Math.PI - 2 * alpha;
+        float x;
+        float y;
         for (int i = 0; i < n; i++) {
             alphaN[i] = alpha + i * (beta / (n - 1));
             switch (position / 10) {
                 case 1:
-                    icon[i].setX(x_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
-                    icon[i].setY(y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
+                    icon[i].setX(x_i);
+                    icon[i].setY(y_i);
+                    x = x_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
+                    y = y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
+                    icon[i].animate().setDuration(100).x(x).y(y);
+//                    icon[i].setX(x);
+//                    icon[i].setY(y);
                     break;
                 case 2:
-                    icon[i].setX(x_i + r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
-                    icon[i].setY(y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
+                    x = x_i + r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
+                    y = y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
+                    icon[i].setX(x);
+                    icon[i].setY(y);
                     break;
                 case 3:
-                    icon[i].setX(x_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
-                    icon[i].setY(y_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
+                    x = x_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
+                    y = y_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
+                    icon[i].setX(x);
+                    icon[i].setY(y);
                     break;
             }
         }

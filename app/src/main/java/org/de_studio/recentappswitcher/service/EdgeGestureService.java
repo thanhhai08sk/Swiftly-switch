@@ -824,10 +824,10 @@ public class EdgeGestureService extends Service {
                         numOfIcon = iconImageArrayList.size();
                         x = new int[numOfIcon];
                         y = new int[numOfIcon];
-                        for (int i = 0; i < numOfIcon; i++) {
-                            x[i] = (int) iconImageArrayList.get(i).getX();
-                            y[i] = (int) iconImageArrayList.get(i).getY();
-                        }
+//                        for (int i = 0; i < numOfIcon; i++) {
+//                            x[i] = (int) iconImageArrayList.get(i).getX();
+//                            y[i] = (int) iconImageArrayList.get(i).getY();
+//                        }
                         try {
                             windowManager.addView(itemView, itemViewParameter);
 //                            for (AppCompatImageView icon : iconImageList) {
@@ -1040,6 +1040,10 @@ public class EdgeGestureService extends Service {
 
 
                 case MotionEvent.ACTION_MOVE:
+                    for (int i = 0; i < numOfIcon; i++) {
+                        x[i] = (int) iconImageArrayList.get(i).getX();
+                        y[i] = (int) iconImageArrayList.get(i).getY();
+                    }
                     if (!isClockShown && !switched && !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
                         Log.e(LOG_TAG, "Show clock");
                         clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,true));
