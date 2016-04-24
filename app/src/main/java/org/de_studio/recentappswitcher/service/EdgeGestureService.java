@@ -894,7 +894,8 @@ public class EdgeGestureService extends Service {
                                     startApp.addCategory(Intent.CATEGORY_LAUNCHER);
                                     startApp.setComponent(componentName);
                                     startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(startApp);
+                                    extApp.addFlags(805306368);
+                                    startActivity(extApp);
                                 } else {
                                     Log.e(LOG_TAG, "extApp of shortcut = null ");
                                 }
@@ -981,12 +982,14 @@ public class EdgeGestureService extends Service {
                             }
 
                             if (extApp != null) {
-                                ComponentName componentName = extApp.getComponent();
-                                Intent startApp = new Intent(Intent.ACTION_MAIN, null);
-                                startApp.addCategory(Intent.CATEGORY_LAUNCHER);
-                                startApp.setComponent(componentName);
-                                startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(startApp);
+//                                ComponentName componentName = extApp.getComponent();
+//                                Intent startApp = new Intent(Intent.ACTION_MAIN, null);
+//                                startApp.addCategory(Intent.CATEGORY_LAUNCHER);
+//                                startApp.setComponent(componentName);
+//                                startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                extApp.addFlags(805306368);
+                                startActivity(extApp);
+//                                startActivity(startApp);
                                 Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
                             } else Log.e(LOG_TAG, "extApp = null ");
 
@@ -1084,7 +1087,6 @@ public class EdgeGestureService extends Service {
                         if (moveToHomeBackNoti > 0) {
                             activateId = moveToHomeBackNoti + 30;
                         }
-                        Log.e(LOG_TAG, "iconToSwitch = " + iconToSwitch);
                         if (iconToSwitch != -1) {
                             if (iconToSwitch < iconImageArrayList.size() && iconIdBackgrounded != iconToSwitch) {
 
@@ -1109,8 +1111,6 @@ public class EdgeGestureService extends Service {
 //                                iconHighlight.setTranslationY(-8 * mScale);
                                     iconHighlight.setLayoutParams(layoutParams);
                                     iconHighlight.setPadding(iconPaddingLeft, iconPaddingTop, iconPaddingLeft, iconPaddingTop);
-                                    Log.e(LOG_TAG, "set Icon Background");
-                                    Log.e(LOG_TAG, "iconIdBackgrounded = " + iconIdBackgrounded);
                                     iconIdBackgrounded = iconToSwitch;
                                 }
 
