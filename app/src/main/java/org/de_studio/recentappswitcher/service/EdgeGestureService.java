@@ -620,7 +620,7 @@ public class EdgeGestureService extends Service {
 //                        Log.e(LOG_TAG," item_view has already been added to the window manager");
 //                    }
 //                    Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
-                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,true));
+                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,false));
 
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -1039,10 +1039,7 @@ public class EdgeGestureService extends Service {
 
 
                 case MotionEvent.ACTION_MOVE:
-                    for (int i = 0; i < numOfIcon; i++) {
-                        x[i] = (int) iconImageArrayList.get(i).getX();
-                        y[i] = (int) iconImageArrayList.get(i).getY();
-                    }
+
                     if (!isClockShown && !switched && !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
                         Log.e(LOG_TAG, "Show clock");
                         clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,false));
@@ -1071,11 +1068,23 @@ public class EdgeGestureService extends Service {
                         }
                     } else {
 //                        int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
-                        int iconToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
+                        int iconToSwitch = -1;
+                        if (!iconImageArrayList.get(0).isOnAnimation()) {
+                            if (iconIdBackgrounded == -2) {
+                                for (int i = 0; i < numOfIcon; i++) {
+                                    x[i] = (int) iconImageArrayList.get(i).getX();
+                                    y[i] = (int) iconImageArrayList.get(i).getY();
+                                }
+                            }
+
+                            iconToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
+                        }
+
                         int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
                         if (moveToHomeBackNoti > 0) {
                             activateId = moveToHomeBackNoti + 30;
                         }
+                        Log.e(LOG_TAG, "iconToSwitch = " + iconToSwitch);
                         if (iconToSwitch != -1) {
                             if (iconToSwitch < iconImageArrayList.size() && iconIdBackgrounded != iconToSwitch) {
 
@@ -1100,7 +1109,8 @@ public class EdgeGestureService extends Service {
 //                                iconHighlight.setTranslationY(-8 * mScale);
                                     iconHighlight.setLayoutParams(layoutParams);
                                     iconHighlight.setPadding(iconPaddingLeft, iconPaddingTop, iconPaddingLeft, iconPaddingTop);
-                                    Log.e(LOG_TAG, "setBackground");
+                                    Log.e(LOG_TAG, "set Icon Background");
+                                    Log.e(LOG_TAG, "iconIdBackgrounded = " + iconIdBackgrounded);
                                     iconIdBackgrounded = iconToSwitch;
                                 }
 
@@ -1413,6 +1423,7 @@ public class EdgeGestureService extends Service {
         private void clearIconBackground() {
             if (iconIdBackgrounded != -2) {
                 if (iconIdBackgrounded < iconImageArrayList.size()) {
+                    Log.e(LOG_TAG, "Clear Icon Background");
                     ImageView iconResetBackground = iconImageArrayList.get(iconIdBackgrounded);
                     FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(iconResetBackground.getLayoutParams());
                     layoutParams1.width = (int) (48 * mScale * mIconScale);
