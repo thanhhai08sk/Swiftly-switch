@@ -499,7 +499,7 @@ public class EdgeGestureService extends Service {
                     preShortcutToSwitch = -1;
                     clearIconBackground();
                     if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, true)) {
-                        vibrator.vibrate(15);
+                        vibrator.vibrate(vibrationDuration);
                     }
                     try {
                         windowManager.removeView(clockView);
@@ -1087,11 +1087,11 @@ public class EdgeGestureService extends Service {
                         if (moveToHomeBackNoti > 0) {
                             activateId = moveToHomeBackNoti + 30;
                         }
-                        if (iconToSwitch != -1) {
+                        if (iconToSwitch != -1 && !iconImageArrayList.get(0).isOnAnimation()) {
                             if (iconToSwitch < iconImageArrayList.size() && iconIdBackgrounded != iconToSwitch) {
 
 
-                                if (!iconImageArrayList.get(0).isOnAnimation()) {
+//                                if (!iconImageArrayList.get(0).isOnAnimation()) {
                                     clearIconBackground();
                                     MyImageView iconHighlight = iconImageArrayList.get(iconToSwitch);
                                     FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(iconHighlight.getLayoutParams());
@@ -1112,12 +1112,12 @@ public class EdgeGestureService extends Service {
                                     iconHighlight.setLayoutParams(layoutParams);
                                     iconHighlight.setPadding(iconPaddingLeft, iconPaddingTop, iconPaddingLeft, iconPaddingTop);
                                     iconIdBackgrounded = iconToSwitch;
-                                }
+//                                }
 
 
 
                             }
-
+                            Log.e(LOG_TAG, "set activateId = icontoswitch + 20 \nonAnimation = " + iconImageArrayList.get(0).isOnAnimation());
 
                             activateId = iconToSwitch + 20;
 

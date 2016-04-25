@@ -187,6 +187,7 @@ public  class Utility {
                         y = y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
                         icon[i].setRotation(0f);
                         if (i == 0) {
+                            icon[0].setOnAnimation(true);
                             icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
                                 @Override
                                 public void onAnimationStart(Animator animation) {
