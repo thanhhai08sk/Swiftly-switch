@@ -65,6 +65,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String IS_ACTIONS_STAY_PERMANENT = "is_permanent";
     public static final String VIBRATION_DURATION_KEY = "vibration_duration";
     public static final String HOLD_TIME_KEY  = "hold_time";
+    public static final String ANI_TIME_KEY = "animation_time";
     public static final String IS_PIN_TO_TOP_KEY = "is_pin_to_top";
     public static final String BACKGROUND_COLOR_KEY = "background_color";
     public static final String GUIDE_COLOR_KEY = "guide_color";
