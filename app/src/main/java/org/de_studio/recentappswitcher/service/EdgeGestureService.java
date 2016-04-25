@@ -128,7 +128,7 @@ public class EdgeGestureService extends Service {
     private Realm pinAppRealm;
     private Set<String> pinnedSet;
     private WindowManager.LayoutParams backgroundParams;
-    private int backgroundColor, guideColor;
+    private int backgroundColor, guideColor, animationTime;
 
     @Nullable
     @Override
@@ -469,10 +469,10 @@ public class EdgeGestureService extends Service {
 //                    Log.e(LOG_TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
 //                    if (!backgroundFrame.isAttachedToWindow() && (position == edge1Position || position == edge2Position)) {
                     if (!backgroundFrame.isAttachedToWindow() && (defaultShared.getInt(EdgeSettingDialogFragment.SERVICE_ID,10) == serviceId )) {
-                        if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY, false)) {
+                        if (defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, true)) {
                             backgroundFrame.setAlpha(0f);
                             windowManager.addView(backgroundFrame, backgroundParams);
-                            backgroundFrame.animate().alpha(1f).setDuration(120).setInterpolator(new FastOutSlowInInterpolator());
+                            backgroundFrame.animate().alpha(1f).setDuration(defaultShared.getInt(EdgeSettingDialogFragment.ANI_TIME_KEY,100)).setInterpolator(new FastOutSlowInInterpolator());
                         } else {
                             windowManager.addView(backgroundFrame, backgroundParams);
                             backgroundFrame.setAlpha(1f);
@@ -620,7 +620,7 @@ public class EdgeGestureService extends Service {
 //                        Log.e(LOG_TAG," item_view has already been added to the window manager");
 //                    }
 //                    Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
-                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,false));
+                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY,true), animationTime);
 
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -1045,7 +1045,7 @@ public class EdgeGestureService extends Service {
 
                     if (!isClockShown && !switched && !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
                         Log.e(LOG_TAG, "Show clock");
-                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_ANIMATION_KEY,false));
+                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY,true), defaultShared.getInt(EdgeSettingDialogFragment.ANI_TIME_KEY,100));
                         isClockShown = true;
                     }
                     if (switched) {
@@ -1547,7 +1547,7 @@ public class EdgeGestureService extends Service {
             }
         }
         pinnedSet = new HashSet<String>(Arrays.asList(pinnedPackageName));
-
+        animationTime = defaultShared.getInt(EdgeSettingDialogFragment.ANI_TIME_KEY, 100);
         Log.e(LOG_TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
                 "\nEdge1 position = " + edge1Position + "\nEdge2 positon = " + edge2Position);
 

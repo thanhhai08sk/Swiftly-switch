@@ -134,9 +134,12 @@ public  class Utility {
         return -1;
     }
 
-    public static void setIconPositionNew(final MyImageView[] icon, float r, float icon_24_dp_pxl, int position, int x_i, int y_i, int n, boolean disAni) {
+    public static void setIconPositionNew(final MyImageView[] icon, float r, float icon_24_dp_pxl, int position, int x_i, int y_i, int n, boolean isAnimation, int animationTime) {
         Log.e(LOG_TAG, "setIconPositionNew");
         double alpha, beta;
+        if (animationTime <= 50) {
+            isAnimation = false;
+        }
         double[] alphaN = new double[n];
         switch (n) {
             case 4:
@@ -155,7 +158,7 @@ public  class Utility {
         beta = Math.PI - 2 * alpha;
         float x;
         float y;
-        if (disAni) {
+        if (!isAnimation) {
             for (int i = 0; i < n; i++) {
                 alphaN[i] = alpha + i * (beta / (n - 1));
                 switch (position / 10) {
@@ -184,7 +187,7 @@ public  class Utility {
                         y = y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
                         icon[i].setRotation(0f);
                         if (i == 0) {
-                            icon[i].animate().setDuration(100).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
+                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
                                 @Override
                                 public void onAnimationStart(Animator animation) {
                                     icon[0].setOnAnimation(true);
@@ -206,7 +209,7 @@ public  class Utility {
                                 }
                             });
                         } else {
-                            icon[i].animate().setDuration(100).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
+                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
                         }
 
 //                    icon[i].setX(x);
@@ -219,7 +222,7 @@ public  class Utility {
                         icon[i].setY(y_i);
                         icon[i].setRotation(0f);
                         if (i == 0) {
-                            icon[i].animate().setDuration(100).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
+                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
                                 @Override
                                 public void onAnimationStart(Animator animation) {
                                     icon[0].setOnAnimation(true);
@@ -241,7 +244,7 @@ public  class Utility {
                                 }
                             });
                         } else {
-                            icon[i].animate().setDuration(100).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
+                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
                         }
                         break;
                     case 3:
@@ -251,7 +254,7 @@ public  class Utility {
                         icon[i].setY(y_i);
                         icon[i].setRotation(0f);
                         if (i == 0) {
-                            icon[i].animate().setDuration(100).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
+                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
                                 @Override
                                 public void onAnimationStart(Animator animation) {
                                     icon[0].setOnAnimation(true);
@@ -273,7 +276,7 @@ public  class Utility {
                                 }
                             });
                         } else {
-                            icon[i].animate().setDuration(100).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
+                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
                         }
                         break;
                 }
@@ -1012,7 +1015,10 @@ public  class Utility {
         }
     }
 
-    public static View disPlayClock(Context context, WindowManager windowManager, boolean isDisableAnimation) {
+    public static View disPlayClock(Context context, WindowManager windowManager, boolean isAnimation, int animationTime) {
+        if (animationTime <= 50) {
+            isAnimation = false;
+        }
         Calendar c = Calendar.getInstance();
         int mHour;
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
@@ -1047,9 +1053,9 @@ public  class Utility {
 //        hourTextView.startAnimation(animationSet);
 //        dateTextView.startAnimation(animationSet);
 //        batteryLifeTextView.startAnimation(animationSet);
-        if (!isDisableAnimation) {
+        if (isAnimation) {
             view.setAlpha(0f);
-            view.animate().alpha(1f).setDuration(120);
+            view.animate().alpha(1f).setDuration(animationTime).setInterpolator(new FastOutSlowInInterpolator());
 
         }
         return view;
