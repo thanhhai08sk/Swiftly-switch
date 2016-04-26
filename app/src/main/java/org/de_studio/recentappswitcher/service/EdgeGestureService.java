@@ -591,7 +591,7 @@ public class EdgeGestureService extends Service {
                     }
 
 
-                    if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_NONE).equals(MainActivity.ACTION_LAST_APP)) {
+                    if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_LAST_APP).equals(MainActivity.ACTION_NONE)) {
                         action3View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 3);
                         action3View.setX(xForHomeBackNotiView);
                         action3View.setY(yForHomeBackNotiView);

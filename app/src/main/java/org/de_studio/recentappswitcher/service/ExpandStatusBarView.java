@@ -117,8 +117,10 @@ public class ExpandStatusBarView extends View {
         if (isBackground) {
             canvas.drawPath(path, backgroundPaint);
         }
+        if (actionBitmap != null) {
+            canvas.drawBitmap(actionBitmap, o1x, o1y, textPaint);
+        }
 
-        canvas.drawBitmap(actionBitmap, o1x, o1y, textPaint);
 //        canvas.drawTextOnPath(text.toUpperCase(), path, 0, ((float) (textSize / 2.5)) * mScale, textPaint);
         canvas.restore();
 
