@@ -404,7 +404,7 @@ public  class Utility {
 
     }
 
-    public static void setFavoriteShortcutGridViewPosition(GridView gridView,float gridTall, float gridWide, int x_init_cord, int y_init_cord, float mScale, int edgePosition, WindowManager windowManager, SharedPreferences sharedPreferences, int distanceFromEdgeDp, int distanceVertical) {
+    public static void setFavoriteShortcutGridViewPosition(GridView gridView,float gridTall, float gridWide, int x_init_cord, int y_init_cord, float mScale, int edgePosition, WindowManager windowManager, SharedPreferences sharedPreferences, int distanceFromEdgeDp, int distanceVertical, int iconToSwitch) {
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
         float distanceVerticalFromEdge = ((float)distanceVertical)* mScale;
         boolean isCenter = sharedPreferences.getBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE, false);
@@ -412,6 +412,7 @@ public  class Utility {
         windowManager.getDefaultDisplay().getSize(point);
         float x = point.x;
         float y = point.y;
+        float triggerPoint = getTriggerPoint((float) x_init_cord, (float) y_init_cord, sharedPreferences, edgePosition, iconToSwitch, mScale);
         if (!isCenter) {
             switch (edgePosition) {
                 case 10:
@@ -425,8 +426,14 @@ public  class Utility {
 //                    } else if (((float) y_init_cord) - gridTall /(float) 2 + gridTall > y) {
 //                        gridView.setY(y - gridTall);
 //                    } else {
-                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
+//                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
 //                    }
+                    if (iconToSwitch != -1) {
+                        gridView.setY(triggerPoint - gridTall / (float) 2);
+                    } else {
+                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
+                    }
+
                     break;
                 case 12:
                     gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
@@ -443,15 +450,24 @@ public  class Utility {
 //                    } else if (((float) y_init_cord) - gridTall /(float) 2 + gridTall > y) {
 //                        gridView.setY(y - gridTall);
 //                    } else {
-                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
+//                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
 //                    }
+                    if (iconToSwitch != -1) {
+                        gridView.setY(triggerPoint - gridTall / (float) 2);
+                    } else {
+                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
+                    }
                     break;
                 case 22:
                     gridView.setX(((float) x_init_cord) + distanceFromEdge);
                     gridView.setY(y - gridTall - distanceVerticalFromEdge);
                     break;
                 case 31:
-                    gridView.setX(((float) x_init_cord) - gridWide /(float) 2);
+                    if (iconToSwitch != -1) {
+                        gridView.setX(triggerPoint - gridWide / (float) 2);
+                    } else {
+                        gridView.setX(((float) x_init_cord) - gridWide /(float) 2);
+                    }
                     gridView.setY(((float) y_init_cord) - distanceVerticalFromEdge - gridTall);
                     break;
             }
@@ -461,6 +477,34 @@ public  class Utility {
         }
 
     }
+
+    public static float getTriggerPoint(float x_init,float y_init,SharedPreferences sharedPreferences, int edgePosition, int iconToSwitch, float mScale) {
+        float returnValue = 0;
+        float circleSize = mScale * (float) sharedPreferences.getInt(EdgeSettingDialogFragment.ICON_DISTANCE_KEY, 110);
+//        float iconScale = sharedPreferences.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f);
+//        float iconSize24 = iconScale *mScale * 24;
+        double alpha, beta, alphaOfIconToSwitch;
+        alpha = 0.0556 * Math.PI; // 10 degree
+        beta = Math.PI - 2 * alpha;
+        alphaOfIconToSwitch = alpha + iconToSwitch * (beta / 5);
+        switch (edgePosition / 10) {
+            case 1:
+                returnValue = y_init - circleSize * (float) Math.cos(alphaOfIconToSwitch);
+                break;
+            case 2:
+                returnValue = y_init - circleSize * (float) Math.cos(alphaOfIconToSwitch);
+//                        icon[i].setX(x_i + r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
+//                        icon[i].setY(y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
+                break;
+            case 3:
+                returnValue = x_init - circleSize * (float) Math.cos(alphaOfIconToSwitch);
+//                        icon[i].setX(x_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
+//                        icon[i].setY(y_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
+                break;
+        }
+        return returnValue;
+    }
+
 
     public static int isHomeOrBackOrNoti(int x_init_int, int y_init_int, int x_int, int y_int, int radius_int, float mScale, int position){
         double x_init = (double)x_init_int;

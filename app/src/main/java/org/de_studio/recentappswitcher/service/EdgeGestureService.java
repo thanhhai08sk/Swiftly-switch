@@ -1125,10 +1125,10 @@ public class EdgeGestureService extends Service {
 
                             if (defaultShared.getBoolean(EdgeSettingDialogFragment.HOLD_TIME_ENABLE_KEY,true) && delayToSwitchTask == null) {
                                 delayToSwitchTask = new DelayToSwitchTask();
-                                delayToSwitchTask.execute();
+                                delayToSwitchTask.execute(iconToSwitch);
                             } else if (defaultShared.getBoolean(EdgeSettingDialogFragment.HOLD_TIME_ENABLE_KEY, true) && delayToSwitchTask.isCancelled()) {
                                 delayToSwitchTask = new DelayToSwitchTask();
-                                delayToSwitchTask.execute();
+                                delayToSwitchTask.execute(iconToSwitch);
                             }
                             if (activatedId != activateId) {
                                 if (delayToSwitchTask != null) {
@@ -1346,12 +1346,14 @@ public class EdgeGestureService extends Service {
             return true;
         }
 
-        private class DelayToSwitchTask extends AsyncTask<Void, Void, Void> {
+        private class DelayToSwitchTask extends AsyncTask<Integer, Void, Void> {
             private boolean isSleepEnough = false;
+            private int iconToSwitch = -1;
 
             @Override
-            protected Void doInBackground(Void... params) {
+            protected Void doInBackground(Integer... params) {
                 isSleepEnough = false;
+                iconToSwitch = params[0];
                 try {
                     Thread.sleep(holdTime);
                     isSleepEnough = true;
@@ -1405,7 +1407,7 @@ public class EdgeGestureService extends Service {
                         PixelFormat.TRANSLUCENT);
 //                shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
 
-                Utility.setFavoriteShortcutGridViewPosition(shortcutGridView,gridTall,gridWide, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared, gridDistanceFromEdge, gridDistanceVertical);
+                Utility.setFavoriteShortcutGridViewPosition(shortcutGridView,gridTall,gridWide, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared, gridDistanceFromEdge, gridDistanceVertical, iconToSwitch);
                 gridX = (int) shortcutGridView.getX();
                 gridY = (int) shortcutGridView.getY();
                 if (shortcutView != null && !shortcutView.isAttachedToWindow()) {
