@@ -96,7 +96,6 @@ public class AppTabFragment extends Fragment{
 
     private class LoadInstalledApp extends AsyncTask<Void, Void, ArrayList<AppInfors>> {
         protected ArrayList<AppInfors> doInBackground(Void... voids) {
-            Float mScale = getResources().getDisplayMetrics().density;
             PackageManager packageManager = getActivity().getPackageManager();
             ArrayList<AppInfors> arrayList = new ArrayList<AppInfors>();
             Set<PackageInfo> set = Utility.getInstalledApps(getContext());
@@ -125,18 +124,24 @@ public class AppTabFragment extends Fragment{
             MyApplication app = (MyApplication)application;
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
                 context = getContext();
+                Log.e(LOG_TAG, "getContext");
             } else {
                 Log.e(LOG_TAG, "getActivity");
                 context = getActivity();
             }
-            if (context == null) {
-                Log.e(LOG_TAG, "context == null");
-                context = getContext();
-            }
             mAdapter = new ChooseAppListViewAdapter(app, result, mPosition);
             mListView.setAdapter(mAdapter);
-//            ((ChooseShortcutActivity) getActivity()).setAppAdapter(mAdapter);
-            ((ChooseShortcutActivity) mContext).setAppAdapter(mAdapter);
+            try {
+                ((ChooseShortcutActivity) mContext).setAppAdapter(mAdapter);
+            } catch (NullPointerException e) {
+                try {
+                    ((ChooseShortcutActivity) context).setAppAdapter(mAdapter);
+                } catch (NullPointerException e1) {
+                    Log.e(LOG_TAG, "null context");
+                }
+
+            }
+
             if (mListView == null) {
                 Log.e(LOG_TAG, "mListView = null");
             }

@@ -72,8 +72,10 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
                     positionText.setText(mPosition + 1 + ".");
                     setCurrentShortcutImageView();
                 }
-                mAppTabFragment.setmPositioinToNext();
-                mSettingTabFragment.setmPositioinToNext();
+                    mAppTabFragment.setmPositioinToNext();
+                    mSettingTabFragment.setmPositioinToNext();
+
+
             }
         });
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -84,8 +86,10 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
                     positionText.setText(mPosition + 1 + ".");
                     setCurrentShortcutImageView();
                 }
-                mAppTabFragment.setmPositionToBack();
-                mSettingTabFragment.setmPositionToBack();
+                    mAppTabFragment.setmPositionToBack();
+                    mSettingTabFragment.setmPositionToBack();
+
+
             }
         });
 
