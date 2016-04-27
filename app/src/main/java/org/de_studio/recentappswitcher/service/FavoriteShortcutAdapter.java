@@ -77,7 +77,9 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         ImageView imageView = (ImageView) convertView;
         if (backgroundMode && convertView != null) {
             if (position == mBackgroundAt) {
-                imageView.setBackground(ContextCompat.getDrawable(mContext,R.drawable.icon_background_square));
+                if (imageView.getDrawable()!=null) {
+                    imageView.setBackground(ContextCompat.getDrawable(mContext,R.drawable.icon_background_square));
+                }
             }else imageView.setBackground(null);
             return imageView;
         }
@@ -157,6 +159,8 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                     case Shortcut.ACTION_DIAL:
                         imageView.setImageResource(R.drawable.ic_icon_dial);
                         break;
+                    case Shortcut.ACTION_NONE:
+                        imageView.setImageDrawable(null);
                 }
             }
 

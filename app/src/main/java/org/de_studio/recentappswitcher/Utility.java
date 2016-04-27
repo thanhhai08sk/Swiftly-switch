@@ -689,6 +689,8 @@ public  class Utility {
             return Shortcut.ACTION_CONTACT;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_dial))) {
             return Shortcut.ACTION_DIAL;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_none))) {
+            return Shortcut.ACTION_NONE;
         }else return -1;
     }
 

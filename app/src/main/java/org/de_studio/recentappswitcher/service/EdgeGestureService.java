@@ -965,6 +965,8 @@ public class EdgeGestureService extends Service {
                                     case Shortcut.ACTION_CONTACT:
                                         Utility.contactAction(getApplicationContext());
                                         break;
+                                    case Shortcut.ACTION_NONE:
+                                        break;
 
                                 }
                             }

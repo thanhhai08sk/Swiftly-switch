@@ -20,6 +20,7 @@ public class Shortcut extends RealmObject {
     public static final int ACTION_CALL_LOGS = 8;
     public static final int ACTION_DIAL = 9;
     public static final int ACTION_CONTACT = 10;
+    public static final int ACTION_NONE = 11;
     @PrimaryKey
     private int id;
     private int type;
