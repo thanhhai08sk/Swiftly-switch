@@ -412,7 +412,7 @@ public  class Utility {
         windowManager.getDefaultDisplay().getSize(point);
         float x = point.x;
         float y = point.y;
-        float triggerPoint = getTriggerPoint((float) x_init_cord, (float) y_init_cord, sharedPreferences, edgePosition, iconToSwitch, mScale);
+        float[] triggerPoint = getTriggerPoint((float) x_init_cord, (float) y_init_cord, sharedPreferences, edgePosition, iconToSwitch, mScale);
         if (!isCenter) {
             switch (edgePosition) {
                 case 10:
@@ -420,7 +420,12 @@ public  class Utility {
                     gridView.setY(distanceVerticalFromEdge);
                     break;
                 case 11:
-                    gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
+                    if (x_init_cord - triggerPoint[0] < distanceFromEdge) {
+                        gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
+                    } else {
+                        gridView.setX(triggerPoint[0] - gridWide);
+                    }
+
 //                    if (((float) y_init_cord) - gridTall / (float)2 < 0) {
 //                        gridView.setY(0);
 //                    } else if (((float) y_init_cord) - gridTall /(float) 2 + gridTall > y) {
@@ -429,7 +434,7 @@ public  class Utility {
 //                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
 //                    }
                     if (iconToSwitch != -1) {
-                        gridView.setY(triggerPoint - gridTall / (float) 2);
+                        gridView.setY(triggerPoint[1] - gridTall / (float) 2);
                     } else {
                         gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
                     }
@@ -453,7 +458,7 @@ public  class Utility {
 //                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
 //                    }
                     if (iconToSwitch != -1) {
-                        gridView.setY(triggerPoint - gridTall / (float) 2);
+                        gridView.setY(triggerPoint[1] - gridTall / (float) 2);
                     } else {
                         gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
                     }
@@ -464,7 +469,7 @@ public  class Utility {
                     break;
                 case 31:
                     if (iconToSwitch != -1) {
-                        gridView.setX(triggerPoint - gridWide / (float) 2);
+                        gridView.setX(triggerPoint[0] - gridWide / (float) 2);
                     } else {
                         gridView.setX(((float) x_init_cord) - gridWide /(float) 2);
                     }
@@ -478,8 +483,8 @@ public  class Utility {
 
     }
 
-    public static float getTriggerPoint(float x_init,float y_init,SharedPreferences sharedPreferences, int edgePosition, int iconToSwitch, float mScale) {
-        float returnValue = 0;
+    public static float[] getTriggerPoint(float x_init,float y_init,SharedPreferences sharedPreferences, int edgePosition, int iconToSwitch, float mScale) {
+        float[] returnValue = new float[2];
         float circleSize = mScale * (float) sharedPreferences.getInt(EdgeSettingDialogFragment.ICON_DISTANCE_KEY, 110);
 //        float iconScale = sharedPreferences.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f);
 //        float iconSize24 = iconScale *mScale * 24;
@@ -489,15 +494,18 @@ public  class Utility {
         alphaOfIconToSwitch = alpha + iconToSwitch * (beta / 5);
         switch (edgePosition / 10) {
             case 1:
-                returnValue = y_init - circleSize * (float) Math.cos(alphaOfIconToSwitch);
+                returnValue[0] = x_init - circleSize * (float) Math.sin(alphaOfIconToSwitch);
+                returnValue[1] = y_init - circleSize * (float) Math.cos(alphaOfIconToSwitch);
                 break;
             case 2:
-                returnValue = y_init - circleSize * (float) Math.cos(alphaOfIconToSwitch);
+                returnValue[0] = x_init + circleSize * (float) Math.sin(alphaOfIconToSwitch);
+                returnValue[1] = y_init - circleSize * (float) Math.cos(alphaOfIconToSwitch);
 //                        icon[i].setX(x_i + r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
 //                        icon[i].setY(y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
                 break;
             case 3:
-                returnValue = x_init - circleSize * (float) Math.cos(alphaOfIconToSwitch);
+                returnValue[0] = x_init - circleSize * (float) Math.cos(alphaOfIconToSwitch);
+                returnValue[1] = y_init - circleSize * (float) Math.sin(alphaOfIconToSwitch);
 //                        icon[i].setX(x_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
 //                        icon[i].setY(y_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
                 break;

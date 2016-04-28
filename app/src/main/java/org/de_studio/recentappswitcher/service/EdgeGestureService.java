@@ -709,6 +709,7 @@ public class EdgeGestureService extends Service {
                             Log.e(LOG_TAG, "mySortedMap size = " + mySortedMap.size());
                             UsageStats usageStats;
                             String packa;
+                            boolean isSystem = false;
                             PackageManager packageManager = getPackageManager();
                             boolean hasKeyInFuture = false;
                             for (Long key : setKey) {
@@ -721,8 +722,14 @@ public class EdgeGestureService extends Service {
                                         Log.e(LOG_TAG, " usageStats is null");
                                     } else {
                                         packa = usageStats.getPackageName();
+
                                         try {
-                                            if (packageManager.getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/")) {
+                                            try {
+                                                isSystem = packageManager.getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/");
+                                            } catch (NullPointerException e) {
+                                                Log.e(LOG_TAG, "isSystem = null");
+                                            }
+                                            if (isSystem) {
                                                 //do nothing
                                             } else if (     packageManager.getLaunchIntentForPackage(packa) == null ||
                                                             packa.contains("systemui") ||
