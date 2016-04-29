@@ -8,6 +8,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -996,13 +997,21 @@ public  class Utility {
 
 
         if (extApp != null) {
-//            ComponentName componentName = extApp.getComponent();
+            ComponentName componentName = extApp.getComponent();
 //            Intent startApp = new Intent(Intent.ACTION_MAIN, null);
 //            startApp.addCategory(Intent.CATEGORY_LAUNCHER);
 //            startApp.setComponent(componentName);
 //            startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            extApp.addFlags(805306368);
-            context.startActivity(extApp);
+//            extApp.addFlags(805306368);
+//            context.startActivity(extApp);
+            Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
+            startAppIntent.setComponent(componentName);
+            startAppIntent.addFlags(1064960);
+            startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startAppIntent.setFlags(270532608);
+            startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+            context.startActivity(startAppIntent);
             Log.e(LOG_TAG, "packageToSwitch = " + packageName);
         } else Log.e(LOG_TAG, "extApp = null ");
     }
