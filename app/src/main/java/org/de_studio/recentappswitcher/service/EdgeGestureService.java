@@ -998,6 +998,7 @@ public class EdgeGestureService extends Service {
                                 startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                 startAppIntent.setFlags(270532608);
+                                startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
                                 Intent gloveIntent = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
                                 gloveIntent.setFlags(270532608);
 //                                gloveIntent.addCategory("android.intent.category.LAUNCHER");
