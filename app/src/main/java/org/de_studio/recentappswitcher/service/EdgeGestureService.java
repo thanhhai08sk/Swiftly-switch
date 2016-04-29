@@ -991,13 +991,21 @@ public class EdgeGestureService extends Service {
                             }
 
                             if (extApp != null) {
-//                                ComponentName componentName = extApp.getComponent();
-//                                Intent startApp = new Intent(Intent.ACTION_MAIN, null);
-//                                startApp.addCategory(Intent.CATEGORY_LAUNCHER);
-//                                startApp.setComponent(componentName);
-//                                startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                extApp.addFlags(805306368);
-                                startActivity(extApp);
+                                ComponentName componentName = extApp.getComponent();
+                                Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
+                                startAppIntent.setComponent(componentName);
+                                startAppIntent.addFlags(1064960);
+                                startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                startAppIntent.setFlags(270532608);
+                                Intent gloveIntent = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
+                                gloveIntent.setFlags(270532608);
+//                                gloveIntent.addCategory("android.intent.category.LAUNCHER");
+
+//                                gloveIntent.addFlags(32768);
+
+//                                extApp.addFlags(268435456);
+                                startActivity(startAppIntent);
 //                                startActivity(startApp);
                                 Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
                             } else Log.e(LOG_TAG, "extApp = null ");
