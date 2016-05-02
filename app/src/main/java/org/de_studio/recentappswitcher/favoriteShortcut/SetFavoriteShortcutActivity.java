@@ -56,12 +56,12 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         final AppCompatSeekBar gridDistanceVerticalSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_distance_vertical_seek_bar);
         final TextView gridDistanceVerticalValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_distance_vertical_value_text_view);
 
-        int currentRowSpinnerPosition = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY,5)-2;
+        int currentRowSpinnerPosition = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY,5)-1;
         gridRowSpinner.setSelection(currentRowSpinnerPosition);
         gridRowSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, position + 2).commit();
+                defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, position + 1).commit();
                 updateGridView();
                 getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
                 getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
@@ -73,12 +73,12 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
             }
         });
 
-        int currentColumnSpinnerPosition = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY,4)-2;
+        int currentColumnSpinnerPosition = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY,4)-1;
         gridColumnSpinner.setSelection(currentColumnSpinnerPosition);
         gridColumnSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, position + 2).commit();
+                defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, position + 1).commit();
                 updateGridView();
                 getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
                 getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));

@@ -27,6 +27,7 @@
         <item>@string/setting_shortcut_call_log</item>
     </string-array>
     <string-array name="grid_row">
+        <item>@string/grid_1_row</item>
         <item>@string/grid_2_row</item>
         <item>@string/grid_3_row</item>
         <item>@string/grid_4_row</item>
@@ -36,6 +37,7 @@
     </string-array>
 
     <string-array name="grid_column">
+        <item>@string/grid_1_column</item>
         <item>@string/grid_2_column</item>
         <item>@string/grid_3_column</item>
         <item>@string/grid_4_column</item>

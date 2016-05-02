@@ -81,12 +81,14 @@
     <string name="choose_shortcut_apps_tab_title">Apps</string>
     <string name="choose_shortcut_actions_tab_title">Actions</string>
     <string name="set_favorite_shortcut_grid_size_text_view">Grid size: </string>
+    <string name="grid_1_row">1 row</string>
     <string name="grid_2_row">2 row</string>
     <string name="grid_3_row">3 row</string>
     <string name="grid_4_row">4 row</string>
     <string name="grid_5_row">5 row</string>
     <string name="grid_6_row">6 row</string>
     <string name="grid_7_row">7 row</string>
+    <string name="grid_1_column">1 column</string>
     <string name="grid_2_column">2 column</string>
     <string name="grid_3_column">3 column</string>
     <string name="grid_4_column">4 column</string>
