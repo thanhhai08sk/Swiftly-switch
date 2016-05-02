@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
@@ -650,6 +651,16 @@ public  class Utility {
         return false;
     }
 
+    public static void goHome(final Context context) {
+        final Intent intent = new Intent(context, (Class)MainActivity.class);
+        final Bundle bundle = new Bundle();
+        bundle.putInt("goHome", 1);
+        intent.putExtras(bundle);
+        intent.setFlags(268435456);
+        context.startActivity(intent);
+    }
+
+
 
     public static Bitmap drawableToBitmap (Drawable drawable) {
         Bitmap bitmap = null;
@@ -887,18 +898,24 @@ public  class Utility {
     }
 
     public static void homeAction(Context context, View v,String className, String packageName) {
-        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-        event1.setClassName(className);
-        event1.getText().add("home");
-        event1.setAction(1);
-        event1.setPackageName(packageName);
-        event1.setEnabled(true);
-        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-        recordCompat.setSource(v);
-        if (Utility.isAccessibilityEnable(context)) {
-            manager.sendAccessibilityEvent(event1);
-        }else Toast.makeText(context, R.string.ask_user_to_turn_on_accessibility_toast, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+
+
+//        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+//        event1.setClassName(className);
+//        event1.getText().add("home");
+//        event1.setAction(1);
+//        event1.setPackageName(packageName);
+//        event1.setEnabled(true);
+//        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+//        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+//        recordCompat.setSource(v);
+//        if (Utility.isAccessibilityEnable(context)) {
+//            manager.sendAccessibilityEvent(event1);
+//        }else Toast.makeText(context, R.string.ask_user_to_turn_on_accessibility_toast, Toast.LENGTH_LONG).show();
     }
 
 

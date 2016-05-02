@@ -722,7 +722,6 @@ public class EdgeGestureService extends Service {
                                         Log.e(LOG_TAG, " usageStats is null");
                                     } else {
                                         packa = usageStats.getPackageName();
-
                                         try {
                                             try {
                                                 isSystem = packageManager.getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/");
