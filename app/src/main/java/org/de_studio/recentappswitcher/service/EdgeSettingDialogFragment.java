@@ -272,14 +272,14 @@ public class EdgeSettingDialogFragment extends DialogFragment {
 
 
         final AppCompatSeekBar offsetSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.edge_dialog_offset_seek_bar);
-        offsetSeekBar.setProgress(currentOffset + 150);
+        offsetSeekBar.setProgress(currentOffset + 500);
         final TextView edgeOffsetNumberText = (TextView) rootView.findViewById(R.id.edge_dialog_offset_number_view);
         edgeOffsetNumberText.setText(currentOffset+ "dp");
         offsetSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChanged; // -150 to 150
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progressChanged = progress - 150;
+                progressChanged = progress - 500;
                 sharedPreferences.edit().putInt(EDGE_OFFSET_KEY, progressChanged).commit();
                 updateEdgeView();
                 edgeOffsetNumberText.setText(progressChanged + "dp");
@@ -338,7 +338,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                     sharedPreferences.edit().putString(EDGE_POSITION_KEY, (String) positionSpinner.getItemAtPosition(5)).commit();
                 }
                 sharedPreferences.edit().putInt(EDGE_OFFSET_KEY, 0).commit();
-                offsetSeekBar.setProgress(150);
+                offsetSeekBar.setProgress(500);
                 modeSpinner.setSelection(0);
                 showGuideCheckBox.setChecked(false);
                 sharedPreferences.edit().putBoolean(USE_GUIDE_KEY,false).commit();

@@ -208,12 +208,12 @@
         <android.support.v7.widget.AppCompatSeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="150"
+            android:progress="500"
             android:id="@+id/edge_dialog_offset_seek_bar"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
-            android:max="300"
+            android:max="1000"
             android:secondaryProgress="0"
             />
 
