@@ -1575,42 +1575,65 @@ public class EdgeGestureService extends Service {
 
     @Override
     public void onDestroy() {
+        removeAll();
         super.onDestroy();
-        int n = 0;
-//        if (edge1View != null && edge1View.isAttachedToWindow()) {
-//            Log.e(LOG_TAG, "remove edge1");
+//        int n = 0;
+//
+//        while (edge1View != null && edge1View.isAttachedToWindow() && n < 20) {
+//            Log.e(LOG_TAG, "remove edge1, n = " + n);
 //            edge1View.setVisibility(View.GONE);
 //            windowManager.removeView(edge1View);
+//            windowManager.removeViewImmediate(edge1View);
+//            n++;
 //        }
-//        if (edge2View != null && edge2View.isAttachedToWindow()) {
-//            Log.e(LOG_TAG, "remove edge2");
+//        while (edge2View != null && edge2View.isAttachedToWindow() && n < 20) {
+//            Log.e(LOG_TAG, "remove edge2, n = " + n);
 //            edge2View.setVisibility(View.GONE);
 //            windowManager.removeView(edge2View);
+//            windowManager.removeViewImmediate(edge2View);
+//            n++;
 //        }
-//        if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
+//        while (backgroundFrame != null && backgroundFrame.isAttachedToWindow() && n <20) {
 //            windowManager.removeView(backgroundFrame);
+//            windowManager.removeViewImmediate(backgroundFrame);
+//            n++;
 //        }
-        while (edge1View != null && edge1View.isAttachedToWindow() && n < 20) {
-            Log.e(LOG_TAG, "remove edge1, n = " + n);
-            edge1View.setVisibility(View.GONE);
+//        Log.e(LOG_TAG, "onDestroy service, n = " + n);
+//        super.onDestroy();
+    }
+
+    public final synchronized void removeAll() {
+        try {
             windowManager.removeView(edge1View);
-            windowManager.removeViewImmediate(edge1View);
-            n++;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, " Null when remove edge1View");
         }
-        while (edge2View != null && edge2View.isAttachedToWindow() && n < 20) {
-            Log.e(LOG_TAG, "remove edge2, n = " + n);
-            edge2View.setVisibility(View.GONE);
+        try {
             windowManager.removeView(edge2View);
-            windowManager.removeViewImmediate(edge2View);
-            n++;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, " Null when remove edge2View");
         }
-        while (backgroundFrame != null && backgroundFrame.isAttachedToWindow() && n <20) {
+        try {
             windowManager.removeView(backgroundFrame);
-            windowManager.removeViewImmediate(backgroundFrame);
-            n++;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, " Null when remove backgroundFrame");
         }
-        Log.e(LOG_TAG, "onDestroy service, n = " + n);
-        super.onDestroy();
+        try {
+            windowManager.removeView(clockView);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, " Null when remove clockView");
+        }
+        try {
+            windowManager.removeView(shortcutView);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, " Null when remove shortcutView");
+        }
+
     }
 
 
