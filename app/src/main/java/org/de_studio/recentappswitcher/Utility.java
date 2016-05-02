@@ -452,7 +452,12 @@ public  class Utility {
                     break;
                 case 12:
                     gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
-                    gridView.setY(y - gridTall - distanceVerticalFromEdge);
+                    if (y - triggerPoint[1] - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(y - gridTall - distanceVerticalFromEdge);
+                    } else {
+                        gridView.setY(triggerPoint[1] - gridTall/2);
+                    }
+
                     break;
                 case 20:
                     gridView.setX(((float) x_init_cord) + distanceFromEdge);
@@ -483,7 +488,11 @@ public  class Utility {
                     break;
                 case 22:
                     gridView.setX(((float) x_init_cord) + distanceFromEdge);
-                    gridView.setY(y - gridTall - distanceVerticalFromEdge);
+                    if (y - triggerPoint[1] - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(y - gridTall - distanceVerticalFromEdge);
+                    } else {
+                        gridView.setY(triggerPoint[1] - gridTall/2);
+                    }
                     break;
                 case 31:
                     if (iconToSwitch != -1) {
