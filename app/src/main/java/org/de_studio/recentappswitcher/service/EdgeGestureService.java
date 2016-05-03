@@ -151,11 +151,11 @@ public class EdgeGestureService extends Service {
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         if (edge1View != null && edge1View.isAttachedToWindow()) {
             Log.e(LOG_TAG, "edge1View still attached to window");
-            windowManager.removeViewImmediate(edge1View);
+            removeView(edge1View);
         }
         if (edge2View != null && edge2View.isAttachedToWindow()) {
             Log.e(LOG_TAG, "edge1View still attached to window");
-            windowManager.removeViewImmediate(edge2View);
+            removeView(edge2View);
         }
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -278,13 +278,11 @@ public class EdgeGestureService extends Service {
             }
             if (isEdge1On) {
                 if (edge1View != null && edge1View.isAttachedToWindow()) {
-                    windowManager.removeView(edge1View);
+                    removeView(edge1View);
                 }
                 windowManager.addView(edge1View, paramsEdge1);
             } else {
-                if (edge1View != null && edge1View.isAttachedToWindow()) {
-                    windowManager.removeView(edge1View);
-                }
+                removeView(edge1View);
             }
             boolean isOnlyFavorite1 = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
             OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, iconImageList1, item1View, iconImageArrayList1, isOnlyFavorite1);
@@ -370,12 +368,12 @@ public class EdgeGestureService extends Service {
             }
             if (isEdge2On) {
                 if (edge2View != null && edge2View.isAttachedToWindow()) {
-                    windowManager.removeView(edge2View);
+                    removeView(edge2View);
                 }
                 windowManager.addView(edge2View, paramsEdge2);
             } else {
                 if (edge2View != null && edge2View.isAttachedToWindow()) {
-                    windowManager.removeView(edge2View);
+                    removeView(edge2View);
                 }
             }
             item2View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
@@ -468,7 +466,7 @@ public class EdgeGestureService extends Service {
                 case MotionEvent.ACTION_DOWN:
 //                    Log.e(LOG_TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
 //                    if (!backgroundFrame.isAttachedToWindow() && (position == edge1Position || position == edge2Position)) {
-                    if (!backgroundFrame.isAttachedToWindow() && (defaultShared.getInt(EdgeSettingDialogFragment.SERVICE_ID,10) == serviceId )) {
+//                    if (!backgroundFrame.isAttachedToWindow() && (defaultShared.getInt(EdgeSettingDialogFragment.SERVICE_ID,10) == serviceId )) {
                         if (defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, true)) {
                             backgroundFrame.setAlpha(0f);
                             windowManager.addView(backgroundFrame, backgroundParams);
@@ -477,30 +475,32 @@ public class EdgeGestureService extends Service {
                             windowManager.addView(backgroundFrame, backgroundParams);
                             backgroundFrame.setAlpha(1f);
                         }
-                    }
+//                    }
 //                    if (position != edge1Position && position != edge2Position) {
-                    if (defaultShared.getInt(EdgeSettingDialogFragment.SERVICE_ID,10) != serviceId) {
-                        Log.e(LOG_TAG, "the service id is different");
-                        if (edge1View != null && edge1View.isAttachedToWindow()) {
-                            windowManager.removeView(edge1View);
-                        }
-                        if (edge2View != null && edge2View.isAttachedToWindow()) {
-                            windowManager.removeView(edge2View);
-                        }
-                        if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
-                            backgroundFrame.setBackgroundColor(R.color.transparent);
-                            windowManager.removeView(backgroundFrame);
-                        }
-                        stopSelf();
-                        return false;
-                    }
-                    Log.e(LOG_TAG, "position = " + position + "\nEdge1position = " + edge1Position + "\nEdge2Position = " + edge2Position);
+//                    if (defaultShared.getInt(EdgeSettingDialogFragment.SERVICE_ID,10) != serviceId) {
+//                        Log.e(LOG_TAG, "the service id is different");
+//                        if (edge1View != null && edge1View.isAttachedToWindow()) {
+//                            windowManager.removeView(edge1View);
+//                        }
+//                        if (edge2View != null && edge2View.isAttachedToWindow()) {
+//                            windowManager.removeView(edge2View);
+//                        }
+//                        if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
+//                            backgroundFrame.setBackgroundColor(R.color.transparent);
+//                            windowManager.removeView(backgroundFrame);
+//                        }
+//                        stopSelf();
+//                        return false;
+//                    }
+//                    Log.e(LOG_TAG, "position = " + position + "\nEdge1position = " + edge1Position + "\nEdge2Position = " + edge2Position);
                     isShortcutBackgroundNull = true;
                     preShortcutToSwitch = -1;
                     clearIconBackground();
                     if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, true)) {
                         vibrator.vibrate(vibrationDuration);
                     }
+                    isClockShown = false;
+
                     try {
                         windowManager.removeView(clockView);
                         isClockShown = false;
@@ -733,8 +733,9 @@ public class EdgeGestureService extends Service {
                                             } else if (     packageManager.getLaunchIntentForPackage(packa) == null ||
                                                             packa.contains("systemui") ||
                                                             packa.contains("googlequicksearchbox") ||
-                                                            key == mySortedMap.firstKey() ||
+//                                                            key == mySortedMap.firstKey() ||
                                                             excludeSet.contains(packa) ||
+                                                            tempPackageName.contains(packa) ||
 //                                                            pinnedSet.contains(packa) ||
                                                             packa.contains("launcher") )
                                                              {
@@ -752,14 +753,18 @@ public class EdgeGestureService extends Service {
                                 }
 
                             }
-                            if (hasKeyInFuture) {
-                                if (tempPackageName.size() >= 2) {
-                                    lastAppPackageName = tempPackageName.get(1);
-                                }
-                            } else {
-                                if (tempPackageName.size() >= 1) {
-                                    lastAppPackageName = tempPackageName.get(0);
-                                }
+                            tempPackageName.remove(0);
+//                            if (hasKeyInFuture) {
+//                                if (tempPackageName.size() >= 2) {
+//                                    lastAppPackageName = tempPackageName.get(1);
+//                                }
+//                            } else {
+//                                if (tempPackageName.size() >= 1) {
+//                                    lastAppPackageName = tempPackageName.get(0);
+//                                }
+//                            }
+                            if (tempPackageName.size() >= 1) {
+                                lastAppPackageName = tempPackageName.get(0);
                             }
                             for (String t : pinnedSet) {
                                 if (tempPackageName.contains(t)) {
@@ -1600,6 +1605,15 @@ public class EdgeGestureService extends Service {
 //        }
 //        Log.e(LOG_TAG, "onDestroy service, n = " + n);
 //        super.onDestroy();
+    }
+
+    public final synchronized void removeView(View view) {
+        try {
+            windowManager.removeView(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, " Null when remove View");
+        }
     }
 
     public final synchronized void removeAll() {
