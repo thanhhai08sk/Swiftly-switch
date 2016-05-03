@@ -93,18 +93,18 @@ public class EdgeGestureService extends Service {
     private RelativeLayout edge2View;
     private ImageView edge1Image;
     private ImageView edge2Image;
-    private FrameLayout item1View, item2View, shortcutView,backgroundFrame;
-    public int icon_height = 48,serviceId;
+    private FrameLayout item1View, item2View, shortcutView, backgroundFrame;
+    public int icon_height = 48, serviceId;
     public int icon_width = 48, icon_rad = 24;
     public int icon_distance = 110, distance_to_arc = 35, distance_to_arc_pxl;
-    public float icon_distance_pxl, icon_24dp_in_pxls, mIconScale =1f;
+    public float icon_distance_pxl, icon_24dp_in_pxls, mIconScale = 1f;
     public int edge1Length, edge2Length, edge1offset, edge2offset;
     public int edge1HeightPxl, edge2HeightPxl;
     public int edge1WidthPxl, edge2WidthPxl;
     public int edge1Sensivite, edge2Sensitive;
     private List<MyImageView> iconImageArrayList1, iconImageArrayList2;
     private String[] packagename, pinnedPackageName;
-    private String launcherPackagename,lastAppPackageName;
+    private String launcherPackagename, lastAppPackageName;
     private int[] x, y;
     private int numOfIcon, gridRow, gridColumn, gridGap, gridX, gridY, numOfRecent;
     public static final int GRID_ICON_SIZE = 48, GRID_2_PADDING = 10;
@@ -129,13 +129,13 @@ public class EdgeGestureService extends Service {
     private Set<String> pinnedSet;
     private WindowManager.LayoutParams backgroundParams;
     private int backgroundColor, guideColor, animationTime;
+    private Set<String> excludeSet;
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-
 
 
     @Override
@@ -175,7 +175,6 @@ public class EdgeGestureService extends Service {
                 PixelFormat.TRANSLUCENT);
 
 
-
         if (isEdge1On) {
             edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
             edge1Image = (ImageView) edge1View.findViewById(R.id.edge_image);
@@ -183,22 +182,21 @@ public class EdgeGestureService extends Service {
                 GradientDrawable shape = new GradientDrawable();
                 shape.setShape(GradientDrawable.RECTANGLE);
                 shape.setCornerRadius(0);
-                shape.setStroke((int)(2*mScale),guideColor);
+                shape.setStroke((int) (2 * mScale), guideColor);
                 LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
                 switch (edge1Position / 10) {
                     case 1:
-                        drawable.setLayerInset(0,(int)(-5*mScale),(int)(-5*mScale),0,(int)(-5*mScale));
+                        drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), 0, (int) (-5 * mScale));
                         break;
                     case 2:
-                        drawable.setLayerInset(0,0,(int)(-5*mScale),(int)(-5*mScale),(int)(-5*mScale));
+                        drawable.setLayerInset(0, 0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale));
                         break;
                     case 3:
-                        drawable.setLayerInset(0,(int)(-5*mScale),(int)(-5*mScale),(int)(-5*mScale),0);
+                        drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale), 0);
                         break;
                 }
 
                 edge1Image.setBackground(drawable);
-
 
 
             }
@@ -244,8 +242,8 @@ public class EdgeGestureService extends Service {
             iconImageArrayList1.add(iconImageList1[5]);
             FrameLayout.LayoutParams sampleParas1 = new FrameLayout.LayoutParams(iconImageArrayList1.get(0).getLayoutParams());
             for (MyImageView image : iconImageArrayList1) {
-                sampleParas1.height =(int) (48*mIconScale *mScale);
-                sampleParas1.width = (int) (48*mIconScale *mScale);
+                sampleParas1.height = (int) (48 * mIconScale * mScale);
+                sampleParas1.width = (int) (48 * mIconScale * mScale);
                 image.setLayoutParams(sampleParas1);
             }
             WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
@@ -291,8 +289,6 @@ public class EdgeGestureService extends Service {
         }
 
 
-
-
         if (isEdge2On) {
             edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
             edge2Image = (ImageView) edge2View.findViewById(R.id.edge_image);
@@ -300,7 +296,7 @@ public class EdgeGestureService extends Service {
                 GradientDrawable shape = new GradientDrawable();
                 shape.setShape(GradientDrawable.RECTANGLE);
                 shape.setCornerRadius(0);
-                shape.setStroke((int)(2*mScale),guideColor);
+                shape.setStroke((int) (2 * mScale), guideColor);
                 LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
                 switch (edge2Position / 10) {
                     case 1:
@@ -394,8 +390,8 @@ public class EdgeGestureService extends Service {
             iconImageArrayList2.add(iconImageList2[5]);
             FrameLayout.LayoutParams sampleParas2 = new FrameLayout.LayoutParams(iconImageArrayList2.get(0).getLayoutParams());
             for (MyImageView image : iconImageArrayList2) {
-                sampleParas2.height =(int) (48*mIconScale *mScale);
-                sampleParas2.width = (int) (48*mIconScale *mScale);
+                sampleParas2.height = (int) (48 * mIconScale * mScale);
+                sampleParas2.width = (int) (48 * mIconScale * mScale);
                 image.setLayoutParams(sampleParas2);
             }
 
@@ -465,17 +461,18 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    long startDown = System.currentTimeMillis();
 //                    Log.e(LOG_TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
 //                    if (!backgroundFrame.isAttachedToWindow() && (position == edge1Position || position == edge2Position)) {
 //                    if (!backgroundFrame.isAttachedToWindow() && (defaultShared.getInt(EdgeSettingDialogFragment.SERVICE_ID,10) == serviceId )) {
-                        if (defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, true)) {
-                            backgroundFrame.setAlpha(0f);
-                            windowManager.addView(backgroundFrame, backgroundParams);
-                            backgroundFrame.animate().alpha(1f).setDuration(defaultShared.getInt(EdgeSettingDialogFragment.ANI_TIME_KEY,100)).setInterpolator(new FastOutSlowInInterpolator());
-                        } else {
-                            windowManager.addView(backgroundFrame, backgroundParams);
-                            backgroundFrame.setAlpha(1f);
-                        }
+                    if (defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, true)) {
+                        backgroundFrame.setAlpha(0f);
+                        windowManager.addView(backgroundFrame, backgroundParams);
+                        backgroundFrame.animate().alpha(1f).setDuration(defaultShared.getInt(EdgeSettingDialogFragment.ANI_TIME_KEY, 100)).setInterpolator(new FastOutSlowInInterpolator());
+                    } else {
+                        windowManager.addView(backgroundFrame, backgroundParams);
+                        backgroundFrame.setAlpha(1f);
+                    }
 //                    }
 //                    if (position != edge1Position && position != edge2Position) {
 //                    if (defaultShared.getInt(EdgeSettingDialogFragment.SERVICE_ID,10) != serviceId) {
@@ -524,7 +521,7 @@ public class EdgeGestureService extends Service {
                                 > MainActivity.trialTime;
                     } else isOutOfTrial = false;
 
-                    Set<String> excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
+                    excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
 
                     switch (position / 10) {
                         case 1:
@@ -590,7 +587,6 @@ public class EdgeGestureService extends Service {
                         }
 
 
-
 //                        packagename = new String[tempPackageName.size()];
 //                        tempPackageName.toArray(packagename);
                         for (int i = 0; i < 6; i++) {
@@ -612,144 +608,151 @@ public class EdgeGestureService extends Service {
                                 }
                             }
                         }
+                    } else {
+                        GetRecentTask getRecentTask = new GetRecentTask();
+                        getRecentTask.execute();
                     }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-                        long currentTimeMillis = System.currentTimeMillis()+5000;
-//                        android.os.SystemClock.uptimeMillis()
-                        List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000*1000, currentTimeMillis);
-                        ArrayList<String> tempPackageName = new ArrayList<String>();
-                        if (stats != null) {
-                            SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
-                            for (UsageStats usageStats : stats) {
-                                mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
-                            }
-                            Set<Long> setKey = mySortedMap.keySet();
-                            Log.e(LOG_TAG, "mySortedMap size = " + mySortedMap.size());
-                            UsageStats usageStats;
-                            String packa;
-                            boolean isSystem = false;
-                            PackageManager packageManager = getPackageManager();
-                            boolean hasKeyInFuture = false;
-                            for (Long key : setKey) {
-                                if (key >= currentTimeMillis) {
-                                    hasKeyInFuture = true;
-                                    Log.e(LOG_TAG, "key is in future");
-                                } else {
-                                    usageStats = mySortedMap.get(key);
-                                    if (usageStats == null) {
-                                        Log.e(LOG_TAG, " usageStats is null");
-                                    } else {
-                                        packa = usageStats.getPackageName();
-                                        try {
-                                            try {
-                                                isSystem = packageManager.getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/");
-                                            } catch (NullPointerException e) {
-                                                Log.e(LOG_TAG, "isSystem = null");
-                                            }
-                                            if (isSystem) {
-                                                //do nothing
-                                            } else if (     packageManager.getLaunchIntentForPackage(packa) == null ||
-                                                    packa.contains("systemui") ||
-                                                    packa.contains("googlequicksearchbox") ||
-                                                    excludeSet.contains(packa) ||
-                                                    tempPackageName.contains(packa)
-                                                    )
-                                            {
-                                                // do nothing
-                                            } else tempPackageName.add(packa);
-                                            if (tempPackageName.size() >= 8) {
-                                                Log.e(LOG_TAG, "tempackage >= 8");
-                                                break;
-                                            }
-                                        } catch (PackageManager.NameNotFoundException e) {
-                                            Log.e(LOG_TAG, "name not found" + e);
-                                        }
-                                    }
-
-                                }
-
-                            }
-
-                            boolean inHome = false;
-                            if (tempPackageName.size() > 0) {
-                                if (tempPackageName.contains(launcherPackagename) && tempPackageName.get(0).equalsIgnoreCase(launcherPackagename)) {
-                                    inHome = true;
-                                }
-                                tempPackageName.remove(0);
-                                if (!inHome && tempPackageName.contains(launcherPackagename)) {
-                                    tempPackageName.remove(launcherPackagename);
-                                }
-                            }
-
-
-//                            if (hasKeyInFuture) {
-//                                if (tempPackageName.size() >= 2) {
-//                                    lastAppPackageName = tempPackageName.get(1);
+                    long start = System.currentTimeMillis();
+                    long timestart = start - startDown;
+                    Log.e(LOG_TAG, "time from start to get recent = " + timestart);
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                        UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
+//                        long currentTimeMillis = System.currentTimeMillis() + 5000;
+////                        android.os.SystemClock.uptimeMillis()
+//                        List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
+//                        ArrayList<String> tempPackageName = new ArrayList<String>();
+//                        if (stats != null) {
+//                            SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
+//                            for (UsageStats usageStats : stats) {
+//                                mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
+//                            }
+//                            Set<Long> setKey = mySortedMap.keySet();
+//                            Log.e(LOG_TAG, "mySortedMap size = " + mySortedMap.size());
+//                            UsageStats usageStats;
+//                            String packa;
+//                            boolean isSystem = false;
+//                            PackageManager packageManager = getPackageManager();
+//                            boolean hasKeyInFuture = false;
+//                            for (Long key : setKey) {
+//                                if (key >= currentTimeMillis) {
+//                                    hasKeyInFuture = true;
+//                                    Log.e(LOG_TAG, "key is in future");
+//                                } else {
+//                                    usageStats = mySortedMap.get(key);
+//                                    if (usageStats == null) {
+//                                        Log.e(LOG_TAG, " usageStats is null");
+//                                    } else {
+//                                        packa = usageStats.getPackageName();
+//                                        try {
+//                                            try {
+//                                                isSystem = packageManager.getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/");
+//                                            } catch (NullPointerException e) {
+//                                                Log.e(LOG_TAG, "isSystem = null");
+//                                            }
+//                                            if (isSystem) {
+//                                                //do nothing
+//                                            } else if (packageManager.getLaunchIntentForPackage(packa) == null ||
+//                                                    packa.contains("systemui") ||
+//                                                    packa.contains("googlequicksearchbox") ||
+//                                                    excludeSet.contains(packa) ||
+//                                                    tempPackageName.contains(packa)
+//                                                    ) {
+//                                                // do nothing
+//                                            } else tempPackageName.add(packa);
+//                                            if (tempPackageName.size() >= 8) {
+//                                                Log.e(LOG_TAG, "tempackage >= 8");
+//                                                break;
+//                                            }
+//                                        } catch (PackageManager.NameNotFoundException e) {
+//                                            Log.e(LOG_TAG, "name not found" + e);
+//                                        }
+//                                    }
+//
 //                                }
-//                            } else {
-//                                if (tempPackageName.size() >= 1) {
-//                                    lastAppPackageName = tempPackageName.get(0);
+//
+//                            }
+//
+//                            boolean inHome = false;
+//                            if (tempPackageName.size() > 0) {
+//                                if (tempPackageName.contains(launcherPackagename) && tempPackageName.get(0).equalsIgnoreCase(launcherPackagename)) {
+//                                    inHome = true;
+//                                }
+//                                tempPackageName.remove(0);
+//                                if (!inHome && tempPackageName.contains(launcherPackagename)) {
+//                                    tempPackageName.remove(launcherPackagename);
 //                                }
 //                            }
-                            if (tempPackageName.size() >= 1) {
-                                lastAppPackageName = tempPackageName.get(0);
-                            }
-                            for (String t : pinnedSet) {
-                                if (tempPackageName.contains(t)) {
-                                    tempPackageName.remove(t);
-                                }
-                            }
-                            if (6 - tempPackageName.size() - pinnedPackageName.length > 0) {
-                                packagename = new String[tempPackageName.size() + pinnedPackageName.length];
-                            } else {
-                                packagename = new String[6];
-                            }
-                            int n = 0;
-                            if (defaultShared.getBoolean(EdgeSettingDialogFragment.IS_PIN_TO_TOP_KEY, false)) {
-                                for (int t = 0; t < packagename.length; t++) {
-                                    if (t < pinnedPackageName.length) {
-                                        packagename[t] = pinnedPackageName[t];
-                                    } else {
-                                        packagename[t] = tempPackageName.get(t - pinnedPackageName.length);
-                                    }
-
-                                }
-                            } else {
-                                for (int t = 0; t < packagename.length; t++) {
-                                    if (t + pinnedPackageName.length < packagename.length) {
-                                        packagename[t] = tempPackageName.get(t);
-                                    } else {
-                                        packagename[t] = pinnedPackageName[n];
-                                        n++;
-                                    }
-
-                                }
-                            }
-
-
-//                            packagename = new String[tempPackageName.size()];
-//                            tempPackageName.toArray(packagename);
-                        } else Log.e(LOG_TAG, "erros in mySortedMap");
-                        for (int i = 0; i < 6; i++) {
-                            if (i >= packagename.length) {
-                                iconImageArrayList.get(i).setImageDrawable(null);
-                            } else {
-                                try {
-                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(packagename[i]);
-                                    if (iconPack != null) {
-                                        iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(packagename[i], defaultDrawable));
-                                    } else {
-                                        iconImageArrayList.get(i).setImageDrawable(defaultDrawable);
-
-                                    }
-                                } catch (PackageManager.NameNotFoundException e) {
-                                    Log.e(LOG_TAG, "NameNotFound" + e);
-                                }
-                            }
-                        }
-
-                    }
+//
+//
+////                            if (hasKeyInFuture) {
+////                                if (tempPackageName.size() >= 2) {
+////                                    lastAppPackageName = tempPackageName.get(1);
+////                                }
+////                            } else {
+////                                if (tempPackageName.size() >= 1) {
+////                                    lastAppPackageName = tempPackageName.get(0);
+////                                }
+////                            }
+//                            if (tempPackageName.size() >= 1) {
+//                                lastAppPackageName = tempPackageName.get(0);
+//                            }
+//                            for (String t : pinnedSet) {
+//                                if (tempPackageName.contains(t)) {
+//                                    tempPackageName.remove(t);
+//                                }
+//                            }
+//                            if (6 - tempPackageName.size() - pinnedPackageName.length > 0) {
+//                                packagename = new String[tempPackageName.size() + pinnedPackageName.length];
+//                            } else {
+//                                packagename = new String[6];
+//                            }
+//                            int n = 0;
+//                            if (defaultShared.getBoolean(EdgeSettingDialogFragment.IS_PIN_TO_TOP_KEY, false)) {
+//                                for (int t = 0; t < packagename.length; t++) {
+//                                    if (t < pinnedPackageName.length) {
+//                                        packagename[t] = pinnedPackageName[t];
+//                                    } else {
+//                                        packagename[t] = tempPackageName.get(t - pinnedPackageName.length);
+//                                    }
+//
+//                                }
+//                            } else {
+//                                for (int t = 0; t < packagename.length; t++) {
+//                                    if (t + pinnedPackageName.length < packagename.length) {
+//                                        packagename[t] = tempPackageName.get(t);
+//                                    } else {
+//                                        packagename[t] = pinnedPackageName[n];
+//                                        n++;
+//                                    }
+//
+//                                }
+//                            }
+//
+//
+////                            packagename = new String[tempPackageName.size()];
+////                            tempPackageName.toArray(packagename);
+//                        } else Log.e(LOG_TAG, "erros in mySortedMap");
+//                        for (int i = 0; i < 6; i++) {
+//                            if (i >= packagename.length) {
+//                                iconImageArrayList.get(i).setImageDrawable(null);
+//                            } else {
+//                                try {
+//                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(packagename[i]);
+//                                    if (iconPack != null) {
+//                                        iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(packagename[i], defaultDrawable));
+//                                    } else {
+//                                        iconImageArrayList.get(i).setImageDrawable(defaultDrawable);
+//
+//                                    }
+//                                } catch (PackageManager.NameNotFoundException e) {
+//                                    Log.e(LOG_TAG, "NameNotFound" + e);
+//                                }
+//                            }
+//                        }
+//
+//                    }
+                    long spendTime = System.currentTimeMillis() - start;
+                    Log.e(LOG_TAG, "time to get recent = " + spendTime);
                     if (isOnlyFavorite) {
                         if (delayToSwitchTask == null) {
                             delayToSwitchTask = new DelayToSwitchTask();
@@ -832,11 +835,10 @@ public class EdgeGestureService extends Service {
 //                        Log.e(LOG_TAG," item_view has already been added to the window manager");
 //                    }
 //                    Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
-                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY,true), animationTime);
+                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, true), animationTime);
 
 
-
-                    if (packagename.length == 0) {
+                    if (packagename!= null && packagename.length == 0) {
                         if (delayToSwitchTask == null) {
                             delayToSwitchTask = new DelayToSwitchTask();
                             delayToSwitchTask.switchShortcut();
@@ -863,16 +865,19 @@ public class EdgeGestureService extends Service {
                         }
                     }
                     iconIdBackgrounded = -2;
+                    long drawTime = System.currentTimeMillis() - start - spendTime;
+                    long totalTime = System.currentTimeMillis() - startDown;
+                    Log.e(LOG_TAG, " time to draw = " + drawTime);
+                    Log.e(LOG_TAG, "total time = " + totalTime);
 
                     break;
-
 
 
                 case MotionEvent.ACTION_UP:
 
 
                     if (switched) {
-                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(),(int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
+                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
 //                        Log.e(LOG_TAG, "shortcutToSwitch = " + shortcutToSwitch + "\ngrid_x =" + shortcutGridView.getX() + "\ngrid_y = " + shortcutGridView.getY() +
 //                                "\nx_cord = " + x_cord + "\ny_cord = " + y_cord);
 //                        Realm myRealm = Realm.getInstance(getApplicationContext());
@@ -1051,11 +1056,11 @@ public class EdgeGestureService extends Service {
 
                     if (!isClockShown && !switched && !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
                         Log.e(LOG_TAG, "Show clock");
-                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY,true), defaultShared.getInt(EdgeSettingDialogFragment.ANI_TIME_KEY,100));
+                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, true), defaultShared.getInt(EdgeSettingDialogFragment.ANI_TIME_KEY, 100));
                         isClockShown = true;
                     }
                     if (switched) {
-                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY,(int)( GRID_ICON_SIZE * mIconScale)+ GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
+                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
                         if (shortcutToSwitch != -1) {
                             activateId = shortcutToSwitch + 1;
                         } else {
@@ -1098,28 +1103,27 @@ public class EdgeGestureService extends Service {
 
 
 //                                if (!iconImageArrayList.get(0).isOnAnimation()) {
-                                    clearIconBackground();
-                                    MyImageView iconHighlight = iconImageArrayList.get(iconToSwitch);
-                                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(iconHighlight.getLayoutParams());
-                                    float x = iconHighlight.getX();
-                                    float y = iconHighlight.getY();
+                                clearIconBackground();
+                                MyImageView iconHighlight = iconImageArrayList.get(iconToSwitch);
+                                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(iconHighlight.getLayoutParams());
+                                float x = iconHighlight.getX();
+                                float y = iconHighlight.getY();
 
-                                    layoutParams.height = (int) ((16 + 48*mIconScale) * mScale);
-                                    layoutParams.width = (int) ((28+ 48 * mIconScale) * mScale);
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                        iconHighlight.setBackground(getDrawable(R.drawable.icon_background));
-                                    } else {
-                                        iconHighlight.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
-                                    }
-                                    iconHighlight.setX(x - 14 * mScale);
-                                    iconHighlight.setY(y - 8 * mScale);
+                                layoutParams.height = (int) ((16 + 48 * mIconScale) * mScale);
+                                layoutParams.width = (int) ((28 + 48 * mIconScale) * mScale);
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    iconHighlight.setBackground(getDrawable(R.drawable.icon_background));
+                                } else {
+                                    iconHighlight.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
+                                }
+                                iconHighlight.setX(x - 14 * mScale);
+                                iconHighlight.setY(y - 8 * mScale);
 //                                iconHighlight.setTranslationX(-14 * mScale);
 //                                iconHighlight.setTranslationY(-8 * mScale);
-                                    iconHighlight.setLayoutParams(layoutParams);
-                                    iconHighlight.setPadding(iconPaddingLeft, iconPaddingTop, iconPaddingLeft, iconPaddingTop);
-                                    iconIdBackgrounded = iconToSwitch;
+                                iconHighlight.setLayoutParams(layoutParams);
+                                iconHighlight.setPadding(iconPaddingLeft, iconPaddingTop, iconPaddingLeft, iconPaddingTop);
+                                iconIdBackgrounded = iconToSwitch;
 //                                }
-
 
 
                             }
@@ -1127,7 +1131,7 @@ public class EdgeGestureService extends Service {
 
                             activateId = iconToSwitch + 20;
 
-                            if (defaultShared.getBoolean(EdgeSettingDialogFragment.HOLD_TIME_ENABLE_KEY,true) && delayToSwitchTask == null) {
+                            if (defaultShared.getBoolean(EdgeSettingDialogFragment.HOLD_TIME_ENABLE_KEY, true) && delayToSwitchTask == null) {
                                 delayToSwitchTask = new DelayToSwitchTask();
                                 delayToSwitchTask.execute(iconToSwitch);
                             } else if (defaultShared.getBoolean(EdgeSettingDialogFragment.HOLD_TIME_ENABLE_KEY, true) && delayToSwitchTask.isCancelled()) {
@@ -1334,6 +1338,155 @@ public class EdgeGestureService extends Service {
             return true;
         }
 
+        private class GetRecentTask extends AsyncTask<Void, Void, Void> {
+            @Override
+            protected Void doInBackground(Void... params) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
+                    long currentTimeMillis = System.currentTimeMillis() + 5000;
+//                        android.os.SystemClock.uptimeMillis()
+                    List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
+                    ArrayList<String> tempPackageName = new ArrayList<String>();
+                    if (stats != null) {
+                        SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
+                        for (UsageStats usageStats : stats) {
+                            mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
+                        }
+                        Set<Long> setKey = mySortedMap.keySet();
+                        Log.e(LOG_TAG, "mySortedMap size = " + mySortedMap.size());
+                        UsageStats usageStats;
+                        String packa;
+                        boolean isSystem = false;
+                        PackageManager packageManager = getPackageManager();
+                        boolean hasKeyInFuture = false;
+                        for (Long key : setKey) {
+                            if (key >= currentTimeMillis) {
+                                hasKeyInFuture = true;
+                                Log.e(LOG_TAG, "key is in future");
+                            } else {
+                                usageStats = mySortedMap.get(key);
+                                if (usageStats == null) {
+                                    Log.e(LOG_TAG, " usageStats is null");
+                                } else {
+                                    packa = usageStats.getPackageName();
+                                    try {
+                                        try {
+                                            isSystem = packageManager.getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/");
+                                        } catch (NullPointerException e) {
+                                            Log.e(LOG_TAG, "isSystem = null");
+                                        }
+                                        if (isSystem) {
+                                            //do nothing
+                                        } else if (packageManager.getLaunchIntentForPackage(packa) == null ||
+                                                packa.contains("systemui") ||
+                                                packa.contains("googlequicksearchbox") ||
+                                                excludeSet.contains(packa) ||
+                                                tempPackageName.contains(packa)
+                                                ) {
+                                            // do nothing
+                                        } else tempPackageName.add(packa);
+                                        if (tempPackageName.size() >= 8) {
+                                            Log.e(LOG_TAG, "tempackage >= 8");
+                                            break;
+                                        }
+                                    } catch (PackageManager.NameNotFoundException e) {
+                                        Log.e(LOG_TAG, "name not found" + e);
+                                    }
+                                }
+
+                            }
+
+                        }
+
+                        boolean inHome = false;
+                        if (tempPackageName.size() > 0) {
+                            if (tempPackageName.contains(launcherPackagename) && tempPackageName.get(0).equalsIgnoreCase(launcherPackagename)) {
+                                inHome = true;
+                            }
+                            tempPackageName.remove(0);
+                            if (!inHome && tempPackageName.contains(launcherPackagename)) {
+                                tempPackageName.remove(launcherPackagename);
+                            }
+                        }
+
+
+//                            if (hasKeyInFuture) {
+//                                if (tempPackageName.size() >= 2) {
+//                                    lastAppPackageName = tempPackageName.get(1);
+//                                }
+//                            } else {
+//                                if (tempPackageName.size() >= 1) {
+//                                    lastAppPackageName = tempPackageName.get(0);
+//                                }
+//                            }
+                        if (tempPackageName.size() >= 1) {
+                            lastAppPackageName = tempPackageName.get(0);
+                        }
+                        for (String t : pinnedSet) {
+                            if (tempPackageName.contains(t)) {
+                                tempPackageName.remove(t);
+                            }
+                        }
+                        if (6 - tempPackageName.size() - pinnedPackageName.length > 0) {
+                            packagename = new String[tempPackageName.size() + pinnedPackageName.length];
+                        } else {
+                            packagename = new String[6];
+                        }
+                        int n = 0;
+                        if (defaultShared.getBoolean(EdgeSettingDialogFragment.IS_PIN_TO_TOP_KEY, false)) {
+                            for (int t = 0; t < packagename.length; t++) {
+                                if (t < pinnedPackageName.length) {
+                                    packagename[t] = pinnedPackageName[t];
+                                } else {
+                                    packagename[t] = tempPackageName.get(t - pinnedPackageName.length);
+                                }
+
+                            }
+                        } else {
+                            for (int t = 0; t < packagename.length; t++) {
+                                if (t + pinnedPackageName.length < packagename.length) {
+                                    packagename[t] = tempPackageName.get(t);
+                                } else {
+                                    packagename[t] = pinnedPackageName[n];
+                                    n++;
+                                }
+
+                            }
+                        }
+
+
+//                            packagename = new String[tempPackageName.size()];
+//                            tempPackageName.toArray(packagename);
+                    } else Log.e(LOG_TAG, "erros in mySortedMap");
+
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                for (int i = 0; i < 6; i++) {
+                    if (i >= packagename.length) {
+                        iconImageArrayList.get(i).setImageDrawable(null);
+                    } else {
+                        try {
+                            Drawable defaultDrawable = getPackageManager().getApplicationIcon(packagename[i]);
+                            if (iconPack != null) {
+                                iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(packagename[i], defaultDrawable));
+                            } else {
+                                iconImageArrayList.get(i).setImageDrawable(defaultDrawable);
+
+                            }
+                        } catch (PackageManager.NameNotFoundException e) {
+                            Log.e(LOG_TAG, "NameNotFound" + e);
+                        }
+                    }
+                }
+                super.onPostExecute(aVoid);
+            }
+        }
+
+
         private class DelayToSwitchTask extends AsyncTask<Integer, Void, Void> {
             private boolean isSleepEnough = false;
             private int iconToSwitch = -1;
@@ -1379,7 +1532,7 @@ public class EdgeGestureService extends Service {
                 shortcutGridView.setGravity(Gravity.CENTER);
                 int gridDistanceFromEdge = defaultShared.getInt(EdgeSettingDialogFragment.GRID_DISTANCE_FROM_EDGE_KEY, 20);
                 int gridDistanceVertical = defaultShared.getInt(EdgeSettingDialogFragment.GRID_DISTANCE_VERTICAL_FROM_EDGE_KEY, 20);
-                float gridWide = (int) (mScale * (float) (((GRID_ICON_SIZE * mIconScale)+GRID_2_PADDING) * gridColumn + gridGap * (gridColumn - 1)));
+                float gridWide = (int) (mScale * (float) (((GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING) * gridColumn + gridGap * (gridColumn - 1)));
                 float gridTall = (int) (mScale * (float) (((GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING) * gridRow + gridGap * (gridRow - 1)));
                 gridParams.height = (int) gridTall;
                 gridParams.width = (int) gridWide;
@@ -1395,7 +1548,7 @@ public class EdgeGestureService extends Service {
                         PixelFormat.TRANSLUCENT);
 //                shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
 
-                Utility.setFavoriteShortcutGridViewPosition(shortcutGridView,gridTall,gridWide, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared, gridDistanceFromEdge, gridDistanceVertical, iconToSwitch);
+                Utility.setFavoriteShortcutGridViewPosition(shortcutGridView, gridTall, gridWide, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared, gridDistanceFromEdge, gridDistanceVertical, iconToSwitch);
                 gridX = (int) shortcutGridView.getX();
                 gridY = (int) shortcutGridView.getY();
                 if (shortcutView != null && !shortcutView.isAttachedToWindow()) {
@@ -1489,7 +1642,7 @@ public class EdgeGestureService extends Service {
         spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
         icon_distance = defaultShared.getInt(EdgeSettingDialogFragment.ICON_DISTANCE_KEY, 110);
         ovalOffSet = (int) (ovalOffSetInDp * mScale);
-        ovalRadiusPlusPxl = (int) (ovalRadiusPlus*mIconScale * mScale);
+        ovalRadiusPlusPxl = (int) (ovalRadiusPlus * mIconScale * mScale);
         numOfRecent = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_RECENT_KEY, 6);
         gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
@@ -1502,14 +1655,14 @@ public class EdgeGestureService extends Service {
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
         pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext()).name("pinApp.realm").build());
         favoriteRealm = Realm.getInstance(getApplicationContext());
-        backgroundColor  = defaultShared.getInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY, 1879048192);
+        backgroundColor = defaultShared.getInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY, 1879048192);
 //        guideColor = defaultShared.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY,16728193);
-        guideColor = defaultShared.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY, Color.argb(255,255,64,129));
+        guideColor = defaultShared.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY, Color.argb(255, 255, 64, 129));
         shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
         Random r = new Random();
         serviceId = r.nextInt(1000);
         mIconScale = defaultShared.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f);
-        defaultShared.edit().putInt(EdgeSettingDialogFragment.SERVICE_ID,serviceId).commit();
+        defaultShared.edit().putInt(EdgeSettingDialogFragment.SERVICE_ID, serviceId).commit();
 //        pinAppRealm.beginTransaction();
 //        Shortcut country1 = pinAppRealm.createObject(Shortcut.class);
 //
@@ -1529,9 +1682,9 @@ public class EdgeGestureService extends Service {
         } else {
             pinnedPackageName = new String[results1.size()];
             for (Shortcut shortcut : results1) {
-                Log.e(LOG_TAG,"result = " + shortcut.getPackageName());
+                Log.e(LOG_TAG, "result = " + shortcut.getPackageName());
                 pinnedPackageName[i] = shortcut.getPackageName();
-                Log.e(LOG_TAG,"pinnedPack = " + pinnedPackageName[0]);
+                Log.e(LOG_TAG, "pinnedPack = " + pinnedPackageName[0]);
                 i++;
             }
         }
