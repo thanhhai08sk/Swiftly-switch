@@ -148,6 +148,7 @@ public class EdgeGestureService extends Service {
         if (res.activityInfo != null) {
             launcherPackagename = res.activityInfo.packageName;
         } else launcherPackagename = "";
+        Log.e(LOG_TAG, "Launcher packagename = " + launcherPackagename);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         if (edge1View != null && edge1View.isAttachedToWindow()) {
             Log.e(LOG_TAG, "edge1View still attached to window");
@@ -651,11 +652,9 @@ public class EdgeGestureService extends Service {
                                             } else if (     packageManager.getLaunchIntentForPackage(packa) == null ||
                                                     packa.contains("systemui") ||
                                                     packa.contains("googlequicksearchbox") ||
-//                                                            key == mySortedMap.firstKey() ||
                                                     excludeSet.contains(packa) ||
-                                                    tempPackageName.contains(packa) ||
-//                                                            pinnedSet.contains(packa) ||
-                                                    packa.contains("launcher") )
+                                                    tempPackageName.contains(packa)
+                                                    )
                                             {
                                                 // do nothing
                                             } else tempPackageName.add(packa);
@@ -671,9 +670,18 @@ public class EdgeGestureService extends Service {
                                 }
 
                             }
+
+                            boolean inHome = false;
                             if (tempPackageName.size() > 0) {
+                                if (tempPackageName.contains(launcherPackagename) && tempPackageName.get(0).equalsIgnoreCase(launcherPackagename)) {
+                                    inHome = true;
+                                }
                                 tempPackageName.remove(0);
+                                if (!inHome && tempPackageName.contains(launcherPackagename)) {
+                                    tempPackageName.remove(launcherPackagename);
+                                }
                             }
+
 
 //                            if (hasKeyInFuture) {
 //                                if (tempPackageName.size() >= 2) {
