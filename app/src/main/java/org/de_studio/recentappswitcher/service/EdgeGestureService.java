@@ -1316,26 +1316,10 @@ public class EdgeGestureService extends Service {
                     break;
 
                 case MotionEvent.ACTION_OUTSIDE:
-                    if (item1View != null && item1View.isAttachedToWindow()) {
-                        windowManager.removeView(item1View);
-                    }
-                    if (item2View != null && item2View.isAttachedToWindow()) {
-                        windowManager.removeView(item2View);
-                    }
-                    if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
-                        windowManager.removeView(backgroundFrame);
-                    }
+                    removeAllExceptEdgeView();
                     break;
                 case MotionEvent.ACTION_CANCEL:
-                    if (item1View != null && item1View.isAttachedToWindow()) {
-                        windowManager.removeView(item1View);
-                    }
-                    if (item2View != null && item2View.isAttachedToWindow()) {
-                        windowManager.removeView(item2View);
-                    }
-                    if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
-                        windowManager.removeView(backgroundFrame);
-                    }
+                    removeAllExceptEdgeView();
                     break;
             }
             return true;
@@ -1409,11 +1393,11 @@ public class EdgeGestureService extends Service {
                     windowManager.addView(shortcutView, shortcutViewParams);
                 }
                 if (itemView != null && itemView.isAttachedToWindow()) {
-                    windowManager.removeView(itemView);
+                    removeView(itemView);
                 }
                 switched = true;
                 if (clockView != null && clockView.isAttachedToWindow()) {
-                    windowManager.removeView(clockView);
+                    removeView(clockView);
                     isClockShown = false;
                 }
             }
@@ -1457,7 +1441,6 @@ public class EdgeGestureService extends Service {
             if (action4View != null) {
                 item1View.removeView(action3View);
             }
-            windowManager.removeView(item1View);
         }
         if (item2View != null && item2View.isAttachedToWindow()) {
             if (action1View != null) {
@@ -1472,11 +1455,8 @@ public class EdgeGestureService extends Service {
             if (action4View != null) {
                 item2View.removeView(action3View);
             }
-            windowManager.removeView(item2View);
         }
-        if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
-            windowManager.removeView(backgroundFrame);
-        }
+        removeAllExceptEdgeView();
 
     }
 
