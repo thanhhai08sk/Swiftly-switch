@@ -540,90 +540,6 @@ public class EdgeGestureService extends Service {
                             break;
                     }
                     switched = isOnlyFavorite;
-                    if (isOnlyFavorite) {
-                        if (delayToSwitchTask == null) {
-                            delayToSwitchTask = new DelayToSwitchTask();
-                            delayToSwitchTask.switchShortcut();
-                        } else if (delayToSwitchTask.isCancelled()) {
-                            delayToSwitchTask = new DelayToSwitchTask();
-                            delayToSwitchTask.switchShortcut();
-                        }
-                        break;
-                    }
-
-                    float xForHomeBackNotiView = x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
-                    float yForHomeBackNotiView = y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
-                    int radiusForHomeBackNotiView = (int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl;
-                    isStayPermanent = defaultShared.getBoolean(EdgeSettingDialogFragment.IS_ACTIONS_STAY_PERMANENT, false);
-                    if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_4_KEY, MainActivity.ACTION_NOTI).equals(MainActivity.ACTION_NONE)) {
-                        action4View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 4);
-                        action4View.setX(xForHomeBackNotiView);
-                        action4View.setY(yForHomeBackNotiView);
-                        if (isStayPermanent) {
-                            action4View.drawBackground(false);
-                        } else {
-                            action4View.setVisibility(View.INVISIBLE);
-                        }
-                        itemView.addView(action4View);
-                    }
-
-                    if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_1_KEY, MainActivity.ACTION_HOME).equals(MainActivity.ACTION_NONE)) {
-                        action1View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 1);
-                        action1View.setX(xForHomeBackNotiView);
-                        action1View.setY(yForHomeBackNotiView);
-                        if (isStayPermanent) {
-                            action1View.drawBackground(false);
-                        } else {
-                            action1View.setVisibility(View.INVISIBLE);
-                        }
-                        itemView.addView(action1View);
-                    }
-
-
-                    if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_2_KEY, MainActivity.ACTION_BACK).equals(MainActivity.ACTION_NONE)) {
-                        action2View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 2);
-                        action2View.setX(xForHomeBackNotiView);
-                        action2View.setY(yForHomeBackNotiView);
-                        if (isStayPermanent) {
-                            action2View.drawBackground(false);
-                        } else {
-                            action2View.setVisibility(View.INVISIBLE);
-                        }
-                        itemView.addView(action2View);
-                    }
-
-
-                    if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_LAST_APP).equals(MainActivity.ACTION_NONE)) {
-                        action3View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 3);
-                        action3View.setX(xForHomeBackNotiView);
-                        action3View.setY(yForHomeBackNotiView);
-                        if (isStayPermanent) {
-                            action3View.drawBackground(false);
-                        } else {
-                            action3View.setVisibility(View.INVISIBLE);
-                        }
-                        itemView.addView(action3View);
-                    }
-
-
-                    WindowManager.LayoutParams itemViewParameter = new WindowManager.LayoutParams(
-                            WindowManager.LayoutParams.MATCH_PARENT,
-                            WindowManager.LayoutParams.MATCH_PARENT,
-                            WindowManager.LayoutParams.TYPE_PHONE,
-                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
-                                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                            PixelFormat.TRANSLUCENT);
-                    itemViewParameter.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-//                    try {
-//                        windowManager.addView(itemView, itemViewParameter);
-//
-//                    }catch (IllegalStateException e){
-//                        Log.e(LOG_TAG," item_view has already been added to the window manager");
-//                    }
-//                    Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
-                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY,true), animationTime);
-
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
                         int numOfTask;
@@ -733,14 +649,14 @@ public class EdgeGestureService extends Service {
                                             if (isSystem) {
                                                 //do nothing
                                             } else if (     packageManager.getLaunchIntentForPackage(packa) == null ||
-                                                            packa.contains("systemui") ||
-                                                            packa.contains("googlequicksearchbox") ||
+                                                    packa.contains("systemui") ||
+                                                    packa.contains("googlequicksearchbox") ||
 //                                                            key == mySortedMap.firstKey() ||
-                                                            excludeSet.contains(packa) ||
-                                                            tempPackageName.contains(packa) ||
+                                                    excludeSet.contains(packa) ||
+                                                    tempPackageName.contains(packa) ||
 //                                                            pinnedSet.contains(packa) ||
-                                                            packa.contains("launcher") )
-                                                             {
+                                                    packa.contains("launcher") )
+                                            {
                                                 // do nothing
                                             } else tempPackageName.add(packa);
                                             if (tempPackageName.size() >= 8) {
@@ -826,6 +742,91 @@ public class EdgeGestureService extends Service {
                         }
 
                     }
+                    if (isOnlyFavorite) {
+                        if (delayToSwitchTask == null) {
+                            delayToSwitchTask = new DelayToSwitchTask();
+                            delayToSwitchTask.switchShortcut();
+                        } else if (delayToSwitchTask.isCancelled()) {
+                            delayToSwitchTask = new DelayToSwitchTask();
+                            delayToSwitchTask.switchShortcut();
+                        }
+                        break;
+                    }
+
+                    float xForHomeBackNotiView = x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
+                    float yForHomeBackNotiView = y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
+                    int radiusForHomeBackNotiView = (int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl;
+                    isStayPermanent = defaultShared.getBoolean(EdgeSettingDialogFragment.IS_ACTIONS_STAY_PERMANENT, false);
+                    if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_4_KEY, MainActivity.ACTION_NOTI).equals(MainActivity.ACTION_NONE)) {
+                        action4View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 4);
+                        action4View.setX(xForHomeBackNotiView);
+                        action4View.setY(yForHomeBackNotiView);
+                        if (isStayPermanent) {
+                            action4View.drawBackground(false);
+                        } else {
+                            action4View.setVisibility(View.INVISIBLE);
+                        }
+                        itemView.addView(action4View);
+                    }
+
+                    if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_1_KEY, MainActivity.ACTION_HOME).equals(MainActivity.ACTION_NONE)) {
+                        action1View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 1);
+                        action1View.setX(xForHomeBackNotiView);
+                        action1View.setY(yForHomeBackNotiView);
+                        if (isStayPermanent) {
+                            action1View.drawBackground(false);
+                        } else {
+                            action1View.setVisibility(View.INVISIBLE);
+                        }
+                        itemView.addView(action1View);
+                    }
+
+
+                    if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_2_KEY, MainActivity.ACTION_BACK).equals(MainActivity.ACTION_NONE)) {
+                        action2View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 2);
+                        action2View.setX(xForHomeBackNotiView);
+                        action2View.setY(yForHomeBackNotiView);
+                        if (isStayPermanent) {
+                            action2View.drawBackground(false);
+                        } else {
+                            action2View.setVisibility(View.INVISIBLE);
+                        }
+                        itemView.addView(action2View);
+                    }
+
+
+                    if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_LAST_APP).equals(MainActivity.ACTION_NONE)) {
+                        action3View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 3);
+                        action3View.setX(xForHomeBackNotiView);
+                        action3View.setY(yForHomeBackNotiView);
+                        if (isStayPermanent) {
+                            action3View.drawBackground(false);
+                        } else {
+                            action3View.setVisibility(View.INVISIBLE);
+                        }
+                        itemView.addView(action3View);
+                    }
+
+
+                    WindowManager.LayoutParams itemViewParameter = new WindowManager.LayoutParams(
+                            WindowManager.LayoutParams.MATCH_PARENT,
+                            WindowManager.LayoutParams.MATCH_PARENT,
+                            WindowManager.LayoutParams.TYPE_PHONE,
+                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                            PixelFormat.TRANSLUCENT);
+                    itemViewParameter.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+//                    try {
+//                        windowManager.addView(itemView, itemViewParameter);
+//
+//                    }catch (IllegalStateException e){
+//                        Log.e(LOG_TAG," item_view has already been added to the window manager");
+//                    }
+//                    Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
+                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY,true), animationTime);
+
+
 
                     if (packagename.length == 0) {
                         if (delayToSwitchTask == null) {
