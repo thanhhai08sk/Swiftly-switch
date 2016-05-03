@@ -130,6 +130,7 @@ public class EdgeGestureService extends Service {
     private WindowManager.LayoutParams backgroundParams;
     private int backgroundColor, guideColor, animationTime;
     private Set<String> excludeSet;
+    private long startDown;
 
     @Nullable
     @Override
@@ -461,7 +462,10 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    long startDown = System.currentTimeMillis();
+                    startDown = System.currentTimeMillis();
+                    Log.e(LOG_TAG, "Start action down at " + startDown);
+                    excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
+
 //                    Log.e(LOG_TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
 //                    if (!backgroundFrame.isAttachedToWindow() && (position == edge1Position || position == edge2Position)) {
 //                    if (!backgroundFrame.isAttachedToWindow() && (defaultShared.getInt(EdgeSettingDialogFragment.SERVICE_ID,10) == serviceId )) {
@@ -520,8 +524,6 @@ public class EdgeGestureService extends Service {
                         isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY, System.currentTimeMillis())
                                 > MainActivity.trialTime;
                     } else isOutOfTrial = false;
-
-                    excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
 
                     switch (position / 10) {
                         case 1:
@@ -608,149 +610,146 @@ public class EdgeGestureService extends Service {
                                 }
                             }
                         }
-                    } else {
-                        GetRecentTask getRecentTask = new GetRecentTask();
-                        getRecentTask.execute();
                     }
                     long start = System.currentTimeMillis();
                     long timestart = start - startDown;
                     Log.e(LOG_TAG, "time from start to get recent = " + timestart);
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                        UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-//                        long currentTimeMillis = System.currentTimeMillis() + 5000;
-////                        android.os.SystemClock.uptimeMillis()
-//                        List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
-//                        ArrayList<String> tempPackageName = new ArrayList<String>();
-//                        if (stats != null) {
-//                            SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
-//                            for (UsageStats usageStats : stats) {
-//                                mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
-//                            }
-//                            Set<Long> setKey = mySortedMap.keySet();
-//                            Log.e(LOG_TAG, "mySortedMap size = " + mySortedMap.size());
-//                            UsageStats usageStats;
-//                            String packa;
-//                            boolean isSystem = false;
-//                            PackageManager packageManager = getPackageManager();
-//                            boolean hasKeyInFuture = false;
-//                            for (Long key : setKey) {
-//                                if (key >= currentTimeMillis) {
-//                                    hasKeyInFuture = true;
-//                                    Log.e(LOG_TAG, "key is in future");
-//                                } else {
-//                                    usageStats = mySortedMap.get(key);
-//                                    if (usageStats == null) {
-//                                        Log.e(LOG_TAG, " usageStats is null");
-//                                    } else {
-//                                        packa = usageStats.getPackageName();
-//                                        try {
-//                                            try {
-//                                                isSystem = packageManager.getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/");
-//                                            } catch (NullPointerException e) {
-//                                                Log.e(LOG_TAG, "isSystem = null");
-//                                            }
-//                                            if (isSystem) {
-//                                                //do nothing
-//                                            } else if (packageManager.getLaunchIntentForPackage(packa) == null ||
-//                                                    packa.contains("systemui") ||
-//                                                    packa.contains("googlequicksearchbox") ||
-//                                                    excludeSet.contains(packa) ||
-//                                                    tempPackageName.contains(packa)
-//                                                    ) {
-//                                                // do nothing
-//                                            } else tempPackageName.add(packa);
-//                                            if (tempPackageName.size() >= 8) {
-//                                                Log.e(LOG_TAG, "tempackage >= 8");
-//                                                break;
-//                                            }
-//                                        } catch (PackageManager.NameNotFoundException e) {
-//                                            Log.e(LOG_TAG, "name not found" + e);
-//                                        }
-//                                    }
-//
-//                                }
-//
-//                            }
-//
-//                            boolean inHome = false;
-//                            if (tempPackageName.size() > 0) {
-//                                if (tempPackageName.contains(launcherPackagename) && tempPackageName.get(0).equalsIgnoreCase(launcherPackagename)) {
-//                                    inHome = true;
-//                                }
-//                                tempPackageName.remove(0);
-//                                if (!inHome && tempPackageName.contains(launcherPackagename)) {
-//                                    tempPackageName.remove(launcherPackagename);
-//                                }
-//                            }
-//
-//
-////                            if (hasKeyInFuture) {
-////                                if (tempPackageName.size() >= 2) {
-////                                    lastAppPackageName = tempPackageName.get(1);
-////                                }
-////                            } else {
-////                                if (tempPackageName.size() >= 1) {
-////                                    lastAppPackageName = tempPackageName.get(0);
-////                                }
-////                            }
-//                            if (tempPackageName.size() >= 1) {
-//                                lastAppPackageName = tempPackageName.get(0);
-//                            }
-//                            for (String t : pinnedSet) {
-//                                if (tempPackageName.contains(t)) {
-//                                    tempPackageName.remove(t);
-//                                }
-//                            }
-//                            if (6 - tempPackageName.size() - pinnedPackageName.length > 0) {
-//                                packagename = new String[tempPackageName.size() + pinnedPackageName.length];
-//                            } else {
-//                                packagename = new String[6];
-//                            }
-//                            int n = 0;
-//                            if (defaultShared.getBoolean(EdgeSettingDialogFragment.IS_PIN_TO_TOP_KEY, false)) {
-//                                for (int t = 0; t < packagename.length; t++) {
-//                                    if (t < pinnedPackageName.length) {
-//                                        packagename[t] = pinnedPackageName[t];
-//                                    } else {
-//                                        packagename[t] = tempPackageName.get(t - pinnedPackageName.length);
-//                                    }
-//
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
+                        long currentTimeMillis = System.currentTimeMillis() + 5000;
+//                        android.os.SystemClock.uptimeMillis()
+                        List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
+                        ArrayList<String> tempPackageName = new ArrayList<String>();
+                        if (stats != null) {
+                            SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
+                            for (UsageStats usageStats : stats) {
+                                mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
+                            }
+                            Set<Long> setKey = mySortedMap.keySet();
+                            Log.e(LOG_TAG, "mySortedMap size = " + mySortedMap.size());
+                            UsageStats usageStats;
+                            String packa;
+                            boolean isSystem = false;
+                            PackageManager packageManager = getPackageManager();
+                            boolean hasKeyInFuture = false;
+                            for (Long key : setKey) {
+                                if (key >= currentTimeMillis) {
+                                    hasKeyInFuture = true;
+                                    Log.e(LOG_TAG, "key is in future");
+                                } else {
+                                    usageStats = mySortedMap.get(key);
+                                    if (usageStats == null) {
+                                        Log.e(LOG_TAG, " usageStats is null");
+                                    } else {
+                                        packa = usageStats.getPackageName();
+                                        try {
+                                            try {
+                                                isSystem = packageManager.getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/");
+                                            } catch (NullPointerException e) {
+                                                Log.e(LOG_TAG, "isSystem = null");
+                                            }
+                                            if (isSystem) {
+                                                //do nothing
+                                            } else if (packageManager.getLaunchIntentForPackage(packa) == null ||
+                                                    packa.contains("systemui") ||
+                                                    packa.contains("googlequicksearchbox") ||
+                                                    excludeSet.contains(packa) ||
+                                                    tempPackageName.contains(packa)
+                                                    ) {
+                                                // do nothing
+                                            } else tempPackageName.add(packa);
+                                            if (tempPackageName.size() >= 8) {
+                                                Log.e(LOG_TAG, "tempackage >= 8");
+                                                break;
+                                            }
+                                        } catch (PackageManager.NameNotFoundException e) {
+                                            Log.e(LOG_TAG, "name not found" + e);
+                                        }
+                                    }
+
+                                }
+
+                            }
+
+                            boolean inHome = false;
+                            if (tempPackageName.size() > 0) {
+                                if (tempPackageName.contains(launcherPackagename) && tempPackageName.get(0).equalsIgnoreCase(launcherPackagename)) {
+                                    inHome = true;
+                                }
+                                tempPackageName.remove(0);
+                                if (!inHome && tempPackageName.contains(launcherPackagename)) {
+                                    tempPackageName.remove(launcherPackagename);
+                                }
+                            }
+
+
+//                            if (hasKeyInFuture) {
+//                                if (tempPackageName.size() >= 2) {
+//                                    lastAppPackageName = tempPackageName.get(1);
 //                                }
 //                            } else {
-//                                for (int t = 0; t < packagename.length; t++) {
-//                                    if (t + pinnedPackageName.length < packagename.length) {
-//                                        packagename[t] = tempPackageName.get(t);
-//                                    } else {
-//                                        packagename[t] = pinnedPackageName[n];
-//                                        n++;
-//                                    }
-//
+//                                if (tempPackageName.size() >= 1) {
+//                                    lastAppPackageName = tempPackageName.get(0);
 //                                }
 //                            }
-//
-//
-////                            packagename = new String[tempPackageName.size()];
-////                            tempPackageName.toArray(packagename);
-//                        } else Log.e(LOG_TAG, "erros in mySortedMap");
-//                        for (int i = 0; i < 6; i++) {
-//                            if (i >= packagename.length) {
-//                                iconImageArrayList.get(i).setImageDrawable(null);
-//                            } else {
-//                                try {
-//                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(packagename[i]);
-//                                    if (iconPack != null) {
-//                                        iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(packagename[i], defaultDrawable));
-//                                    } else {
-//                                        iconImageArrayList.get(i).setImageDrawable(defaultDrawable);
-//
-//                                    }
-//                                } catch (PackageManager.NameNotFoundException e) {
-//                                    Log.e(LOG_TAG, "NameNotFound" + e);
-//                                }
-//                            }
-//                        }
-//
-//                    }
+                            if (tempPackageName.size() >= 1) {
+                                lastAppPackageName = tempPackageName.get(0);
+                            }
+                            for (String t : pinnedSet) {
+                                if (tempPackageName.contains(t)) {
+                                    tempPackageName.remove(t);
+                                }
+                            }
+                            if (6 - tempPackageName.size() - pinnedPackageName.length > 0) {
+                                packagename = new String[tempPackageName.size() + pinnedPackageName.length];
+                            } else {
+                                packagename = new String[6];
+                            }
+                            int n = 0;
+                            if (defaultShared.getBoolean(EdgeSettingDialogFragment.IS_PIN_TO_TOP_KEY, false)) {
+                                for (int t = 0; t < packagename.length; t++) {
+                                    if (t < pinnedPackageName.length) {
+                                        packagename[t] = pinnedPackageName[t];
+                                    } else {
+                                        packagename[t] = tempPackageName.get(t - pinnedPackageName.length);
+                                    }
+
+                                }
+                            } else {
+                                for (int t = 0; t < packagename.length; t++) {
+                                    if (t + pinnedPackageName.length < packagename.length) {
+                                        packagename[t] = tempPackageName.get(t);
+                                    } else {
+                                        packagename[t] = pinnedPackageName[n];
+                                        n++;
+                                    }
+
+                                }
+                            }
+
+
+//                            packagename = new String[tempPackageName.size()];
+//                            tempPackageName.toArray(packagename);
+                        } else Log.e(LOG_TAG, "erros in mySortedMap");
+                        for (int i = 0; i < 6; i++) {
+                            if (i >= packagename.length) {
+                                iconImageArrayList.get(i).setImageDrawable(null);
+                            } else {
+                                try {
+                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(packagename[i]);
+                                    if (iconPack != null) {
+                                        iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(packagename[i], defaultDrawable));
+                                    } else {
+                                        iconImageArrayList.get(i).setImageDrawable(defaultDrawable);
+
+                                    }
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    Log.e(LOG_TAG, "NameNotFound" + e);
+                                }
+                            }
+                        }
+
+                    }
                     long spendTime = System.currentTimeMillis() - start;
                     Log.e(LOG_TAG, "time to get recent = " + spendTime);
                     if (isOnlyFavorite) {
@@ -868,7 +867,8 @@ public class EdgeGestureService extends Service {
                     long drawTime = System.currentTimeMillis() - start - spendTime;
                     long totalTime = System.currentTimeMillis() - startDown;
                     Log.e(LOG_TAG, " time to draw = " + drawTime);
-                    Log.e(LOG_TAG, "total time = " + totalTime);
+                    Log.e(LOG_TAG, "finish action down at " + System.currentTimeMillis());
+                    Log.e(LOG_TAG, "total time in action down = " + totalTime);
 
                     break;
 
@@ -1338,153 +1338,6 @@ public class EdgeGestureService extends Service {
             return true;
         }
 
-        private class GetRecentTask extends AsyncTask<Void, Void, Void> {
-            @Override
-            protected Void doInBackground(Void... params) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-                    long currentTimeMillis = System.currentTimeMillis() + 5000;
-//                        android.os.SystemClock.uptimeMillis()
-                    List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
-                    ArrayList<String> tempPackageName = new ArrayList<String>();
-                    if (stats != null) {
-                        SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
-                        for (UsageStats usageStats : stats) {
-                            mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
-                        }
-                        Set<Long> setKey = mySortedMap.keySet();
-                        Log.e(LOG_TAG, "mySortedMap size = " + mySortedMap.size());
-                        UsageStats usageStats;
-                        String packa;
-                        boolean isSystem = false;
-                        PackageManager packageManager = getPackageManager();
-                        boolean hasKeyInFuture = false;
-                        for (Long key : setKey) {
-                            if (key >= currentTimeMillis) {
-                                hasKeyInFuture = true;
-                                Log.e(LOG_TAG, "key is in future");
-                            } else {
-                                usageStats = mySortedMap.get(key);
-                                if (usageStats == null) {
-                                    Log.e(LOG_TAG, " usageStats is null");
-                                } else {
-                                    packa = usageStats.getPackageName();
-                                    try {
-                                        try {
-                                            isSystem = packageManager.getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/");
-                                        } catch (NullPointerException e) {
-                                            Log.e(LOG_TAG, "isSystem = null");
-                                        }
-                                        if (isSystem) {
-                                            //do nothing
-                                        } else if (packageManager.getLaunchIntentForPackage(packa) == null ||
-                                                packa.contains("systemui") ||
-                                                packa.contains("googlequicksearchbox") ||
-                                                excludeSet.contains(packa) ||
-                                                tempPackageName.contains(packa)
-                                                ) {
-                                            // do nothing
-                                        } else tempPackageName.add(packa);
-                                        if (tempPackageName.size() >= 8) {
-                                            Log.e(LOG_TAG, "tempackage >= 8");
-                                            break;
-                                        }
-                                    } catch (PackageManager.NameNotFoundException e) {
-                                        Log.e(LOG_TAG, "name not found" + e);
-                                    }
-                                }
-
-                            }
-
-                        }
-
-                        boolean inHome = false;
-                        if (tempPackageName.size() > 0) {
-                            if (tempPackageName.contains(launcherPackagename) && tempPackageName.get(0).equalsIgnoreCase(launcherPackagename)) {
-                                inHome = true;
-                            }
-                            tempPackageName.remove(0);
-                            if (!inHome && tempPackageName.contains(launcherPackagename)) {
-                                tempPackageName.remove(launcherPackagename);
-                            }
-                        }
-
-
-//                            if (hasKeyInFuture) {
-//                                if (tempPackageName.size() >= 2) {
-//                                    lastAppPackageName = tempPackageName.get(1);
-//                                }
-//                            } else {
-//                                if (tempPackageName.size() >= 1) {
-//                                    lastAppPackageName = tempPackageName.get(0);
-//                                }
-//                            }
-                        if (tempPackageName.size() >= 1) {
-                            lastAppPackageName = tempPackageName.get(0);
-                        }
-                        for (String t : pinnedSet) {
-                            if (tempPackageName.contains(t)) {
-                                tempPackageName.remove(t);
-                            }
-                        }
-                        if (6 - tempPackageName.size() - pinnedPackageName.length > 0) {
-                            packagename = new String[tempPackageName.size() + pinnedPackageName.length];
-                        } else {
-                            packagename = new String[6];
-                        }
-                        int n = 0;
-                        if (defaultShared.getBoolean(EdgeSettingDialogFragment.IS_PIN_TO_TOP_KEY, false)) {
-                            for (int t = 0; t < packagename.length; t++) {
-                                if (t < pinnedPackageName.length) {
-                                    packagename[t] = pinnedPackageName[t];
-                                } else {
-                                    packagename[t] = tempPackageName.get(t - pinnedPackageName.length);
-                                }
-
-                            }
-                        } else {
-                            for (int t = 0; t < packagename.length; t++) {
-                                if (t + pinnedPackageName.length < packagename.length) {
-                                    packagename[t] = tempPackageName.get(t);
-                                } else {
-                                    packagename[t] = pinnedPackageName[n];
-                                    n++;
-                                }
-
-                            }
-                        }
-
-
-//                            packagename = new String[tempPackageName.size()];
-//                            tempPackageName.toArray(packagename);
-                    } else Log.e(LOG_TAG, "erros in mySortedMap");
-
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                for (int i = 0; i < 6; i++) {
-                    if (i >= packagename.length) {
-                        iconImageArrayList.get(i).setImageDrawable(null);
-                    } else {
-                        try {
-                            Drawable defaultDrawable = getPackageManager().getApplicationIcon(packagename[i]);
-                            if (iconPack != null) {
-                                iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(packagename[i], defaultDrawable));
-                            } else {
-                                iconImageArrayList.get(i).setImageDrawable(defaultDrawable);
-
-                            }
-                        } catch (PackageManager.NameNotFoundException e) {
-                            Log.e(LOG_TAG, "NameNotFound" + e);
-                        }
-                    }
-                }
-                super.onPostExecute(aVoid);
-            }
-        }
 
 
         private class DelayToSwitchTask extends AsyncTask<Integer, Void, Void> {
