@@ -125,7 +125,7 @@ public class EdgeGestureService extends Service {
     private IconPackManager.IconPack iconPack;
     private boolean isClockShown = false;
     private View clockView;
-    private Realm pinAppRealm;
+    private Realm pinAppRealm, favoriteRealm;
     private Set<String> pinnedSet;
     private WindowManager.LayoutParams backgroundParams;
     private int backgroundColor, guideColor, animationTime;
@@ -500,22 +500,24 @@ public class EdgeGestureService extends Service {
                         vibrator.vibrate(vibrationDuration);
                     }
                     isClockShown = false;
-
-                    try {
-                        windowManager.removeView(clockView);
-                        isClockShown = false;
-                    } catch (IllegalArgumentException e) {
-                        Log.e(LOG_TAG, "clockView is not attacked to the windowManager");
-                    }
-                    itemView.removeView(action2View);
-                    itemView.removeView(action1View);
-                    itemView.removeView(action4View);
-                    if (itemView != null && itemView.isAttachedToWindow()) {
-                        windowManager.removeView(itemView);
-                    }
-                    if (shortcutView != null && shortcutView.isAttachedToWindow()) {
-                        windowManager.removeView(shortcutView);
-                    }
+                    removeView(clockView);
+                    removeView(itemView);
+                    removeView(shortcutView);
+//                    try {
+//                        windowManager.removeView(clockView);
+//                        isClockShown = false;
+//                    } catch (IllegalArgumentException e) {
+//                        Log.e(LOG_TAG, "clockView is not attacked to the windowManager");
+//                    }
+//                    itemView.removeView(action2View);
+//                    itemView.removeView(action1View);
+//                    itemView.removeView(action4View);
+//                    if (itemView != null && itemView.isAttachedToWindow()) {
+//                        windowManager.removeView(itemView);
+//                    }
+//                    if (shortcutView != null && shortcutView.isAttachedToWindow()) {
+//                        windowManager.removeView(shortcutView);
+//                    }
                     if (isFreeVersion) {
                         isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY, System.currentTimeMillis())
                                 > MainActivity.trialTime;
@@ -855,27 +857,7 @@ public class EdgeGestureService extends Service {
 
 
                 case MotionEvent.ACTION_UP:
-                    try {
-                        windowManager.removeView(itemView);
-                    } catch (IllegalArgumentException e) {
-                        Log.e(LOG_TAG, "itemView is not attacked to the windowManager");
-                    }
-                    try {
-                        windowManager.removeView(shortcutView);
-                    } catch (IllegalArgumentException e) {
-                        Log.e(LOG_TAG, "shortcutView is not attacked to the windowManager");
-                    }
-                    try {
-                        windowManager.removeView(clockView);
-                        isClockShown = false;
-                    } catch (IllegalArgumentException e) {
-                        Log.e(LOG_TAG, "clockView is not attacked to the windowManager");
-                    }
-                    try {
-                        windowManager.removeView(backgroundFrame);
-                    } catch (IllegalArgumentException e) {
-                        Log.e(LOG_TAG, "background is not attacted to window");
-                    }
+                    removeAllExceptEdgeView();
                     if (action1View != null) {
                         itemView.removeView(action1View);
                     }
@@ -891,10 +873,10 @@ public class EdgeGestureService extends Service {
 
                     if (switched) {
                         int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(),(int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
-                        Log.e(LOG_TAG, "shortcutToSwitch = " + shortcutToSwitch + "\ngrid_x =" + shortcutGridView.getX() + "\ngrid_y = " + shortcutGridView.getY() +
-                                "\nx_cord = " + x_cord + "\ny_cord = " + y_cord);
-                        Realm myRealm = Realm.getInstance(getApplicationContext());
-                        Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
+//                        Log.e(LOG_TAG, "shortcutToSwitch = " + shortcutToSwitch + "\ngrid_x =" + shortcutGridView.getX() + "\ngrid_y = " + shortcutGridView.getY() +
+//                                "\nx_cord = " + x_cord + "\ny_cord = " + y_cord);
+//                        Realm myRealm = Realm.getInstance(getApplicationContext());
+                        Shortcut shortcut = pinAppRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
                         if (shortcut != null) {
                             if (shortcut.getType() == Shortcut.TYPE_APP) {
                                 Intent extApp;
@@ -1538,6 +1520,7 @@ public class EdgeGestureService extends Service {
         edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
         pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext()).name("pinApp.realm").build());
+        favoriteRealm = Realm.getInstance(getApplicationContext());
         backgroundColor  = defaultShared.getInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY, 1879048192);
 //        guideColor = defaultShared.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY,16728193);
         guideColor = defaultShared.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY, Color.argb(255,255,64,129));
@@ -1647,7 +1630,52 @@ public class EdgeGestureService extends Service {
             e.printStackTrace();
             Log.e(LOG_TAG, " Null when remove shortcutView");
         }
+        try {
+            windowManager.removeView(item1View);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, " Null when remove item1View");
+        }
+        try {
+            windowManager.removeView(item2View);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, " Null when remove item2View");
+        }
 
+    }
+
+    public final synchronized void removeAllExceptEdgeView() {
+        try {
+            windowManager.removeView(backgroundFrame);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, " Null when remove backgroundFrame");
+        }
+        try {
+            windowManager.removeView(clockView);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, " Null when remove clockView");
+        }
+        try {
+            windowManager.removeView(shortcutView);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, " Null when remove shortcutView");
+        }
+        try {
+            windowManager.removeView(item1View);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, " Null when remove item1View");
+        }
+        try {
+            windowManager.removeView(item2View);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, " Null when remove item2View");
+        }
     }
 
 
