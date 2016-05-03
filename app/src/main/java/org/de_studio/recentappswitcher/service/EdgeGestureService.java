@@ -755,7 +755,10 @@ public class EdgeGestureService extends Service {
                                 }
 
                             }
-                            tempPackageName.remove(0);
+                            if (tempPackageName.size() > 0) {
+                                tempPackageName.remove(0);
+                            }
+
 //                            if (hasKeyInFuture) {
 //                                if (tempPackageName.size() >= 2) {
 //                                    lastAppPackageName = tempPackageName.get(1);
@@ -857,26 +860,14 @@ public class EdgeGestureService extends Service {
 
 
                 case MotionEvent.ACTION_UP:
-                    removeAllExceptEdgeView();
-                    if (action1View != null) {
-                        itemView.removeView(action1View);
-                    }
-                    if (action2View != null) {
-                        itemView.removeView(action2View);
-                    }
-                    if (action3View != null) {
-                        itemView.removeView(action3View);
-                    }
-                    if (action4View != null) {
-                        itemView.removeView(action4View);
-                    }
+
 
                     if (switched) {
                         int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(),(int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
 //                        Log.e(LOG_TAG, "shortcutToSwitch = " + shortcutToSwitch + "\ngrid_x =" + shortcutGridView.getX() + "\ngrid_y = " + shortcutGridView.getY() +
 //                                "\nx_cord = " + x_cord + "\ny_cord = " + y_cord);
 //                        Realm myRealm = Realm.getInstance(getApplicationContext());
-                        Shortcut shortcut = pinAppRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
+                        Shortcut shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
                         if (shortcut != null) {
                             if (shortcut.getType() == Shortcut.TYPE_APP) {
                                 Intent extApp;
@@ -1025,23 +1016,24 @@ public class EdgeGestureService extends Service {
 
 
                     }
-
+                    removeAllExceptEdgeView();
+                    if (action1View != null) {
+                        itemView.removeView(action1View);
+                    }
+                    if (action2View != null) {
+                        itemView.removeView(action2View);
+                    }
+                    if (action3View != null) {
+                        itemView.removeView(action3View);
+                    }
+                    if (action4View != null) {
+                        itemView.removeView(action4View);
+                    }
 
                     switched = false;
                     touched = false;
                     if (delayToSwitchTask != null) {
                         delayToSwitchTask.cancel(true);
-                    }
-                    if (itemView != null && itemView.isAttachedToWindow()) {
-                        windowManager.removeView(itemView);
-                    }
-                    if (shortcutView != null && shortcutView.isAttachedToWindow()) {
-                        windowManager.removeView(shortcutView);
-                    }
-                    try {
-                        windowManager.removeView(backgroundFrame);
-                    } catch (IllegalArgumentException e) {
-                        Log.e(LOG_TAG, "background is not attacted to window");
                     }
                     break;
 
