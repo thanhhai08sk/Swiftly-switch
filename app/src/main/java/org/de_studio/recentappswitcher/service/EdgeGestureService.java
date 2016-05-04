@@ -464,6 +464,21 @@ public class EdgeGestureService extends Service {
                 case MotionEvent.ACTION_DOWN:
                     startDown = System.currentTimeMillis();
                     Log.e(LOG_TAG, "Start action down at " + startDown);
+                    switch (position / 10) {
+                        case 1:
+                            x_init_cord = (int) (x_cord - 10 * mScale);
+                            y_init_cord = y_cord - getYOffset(y_cord);
+                            break;
+                        case 2:
+                            x_init_cord = (int) (x_cord + 10 * mScale);
+                            y_init_cord = y_cord - getYOffset(y_cord);
+                            break;
+                        case 3:
+                            x_init_cord = x_cord - getXOffset(x_cord);
+                            y_init_cord = (int) (y_cord - 10 * mScale);
+                            break;
+                    }
+                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, true), animationTime);
                     excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
 
 //                    Log.e(LOG_TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
@@ -524,21 +539,6 @@ public class EdgeGestureService extends Service {
                         isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY, System.currentTimeMillis())
                                 > MainActivity.trialTime;
                     } else isOutOfTrial = false;
-
-                    switch (position / 10) {
-                        case 1:
-                            x_init_cord = (int) (x_cord - 10 * mScale);
-                            y_init_cord = y_cord - getYOffset(y_cord);
-                            break;
-                        case 2:
-                            x_init_cord = (int) (x_cord + 10 * mScale);
-                            y_init_cord = y_cord - getYOffset(y_cord);
-                            break;
-                        case 3:
-                            x_init_cord = x_cord - getXOffset(x_cord);
-                            y_init_cord = (int) (y_cord - 10 * mScale);
-                            break;
-                    }
                     switched = isOnlyFavorite;
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -834,7 +834,6 @@ public class EdgeGestureService extends Service {
 //                        Log.e(LOG_TAG," item_view has already been added to the window manager");
 //                    }
 //                    Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
-                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, true), animationTime);
 
 
                     if (packagename!= null && packagename.length == 0) {
