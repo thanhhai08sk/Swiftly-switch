@@ -995,7 +995,7 @@ public class EdgeGestureService extends Service {
                                 startAppIntent.addFlags(1064960);
                                 startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                                startAppIntent.setFlags(270532608);
+                                startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
                                 startActivity(startAppIntent);
 //                                startActivity(startApp);
