@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mobeta.android.dslv.DragSortListView;
 
@@ -78,22 +77,29 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
         try {
             title = packageManager.getApplicationLabel(packageManager.getApplicationInfo(shortcut.getPackageName(), 0));
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e(LOG_TAG, "NamenotFound");
+            remove(position);
+            notifyDataSetChanged();
+            Log.e(LOG_TAG, "NamenotFound when get label");
+            return view;
+        } catch (NullPointerException e) {
+            Log.e(LOG_TAG, "Nullpoint when get label " + e);
         }
 
         if (shortcut != null) {
-                try {
-                    defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
-                    if (iconPack!=null) {
+            try {
+                defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
+                if (iconPack != null) {
 
-                        icon.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
-                    } else {
-                        icon.setImageDrawable(defaultDrawable);
+                    icon.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
+                } else {
+                    icon.setImageDrawable(defaultDrawable);
 
-                    }
-                } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(LOG_TAG, "NameNotFound " + e);
                 }
+            } catch (PackageManager.NameNotFoundException e) {
+                Log.e(LOG_TAG, "NameNotFound when set icon " + e);
+            } catch (NullPointerException e) {
+                Log.e(LOG_TAG, "Nullpoint when set icon " + e);
+            }
             label.setText(title);
         }
 //        view.setOnLongClickListener(new View.OnLongClickListener() {
@@ -103,12 +109,12 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
 //                return true;
 //            }
 //        });
-        icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, "id = " + pinRealm.where(Shortcut.class).equalTo("id", position).findFirst().getId(), Toast.LENGTH_SHORT).show();
-            }
-        });
+//        icon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(mContext, "id = " + pinRealm.where(Shortcut.class).equalTo("id", position).findFirst().getId(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
         return view;
     }
 
@@ -152,6 +158,7 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
     }
 
     public void remove(int id) {
+        Log.e(LOG_TAG, "remove " + id);
         pinRealm.beginTransaction();
         pinRealm.where(Shortcut.class).equalTo("id",id).findFirst().removeFromRealm();
         RealmResults<Shortcut> results = pinRealm.where(Shortcut.class).findAll();
