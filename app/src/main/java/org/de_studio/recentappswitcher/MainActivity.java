@@ -926,6 +926,10 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         setStepButtonAndDescription();
+        if (!(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1)) {
+            checkDrawOverlayPermission();
+        }
+
     }
 
     public void showDialog() {
