@@ -281,7 +281,7 @@ public  class Utility {
                                 }
                             });
                         } else {
-                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).withLayer();
+                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
                         }
                         break;
                 }
@@ -1137,18 +1137,24 @@ public  class Utility {
         TextView batteryLifeTextView = (TextView) view.findViewById(R.id.clock_battery_life);
         String batteryString = context.getString(R.string.batterylife)+ " "+ getBatteryLevel(context) + "%";
 //        String batteryString =getBatteryLevel(context) + "%";
-        batteryLifeTextView.setText(batteryString);
-        dateTextView.setText(dateFormat.format(c.getTime()));
+        if (batteryLifeTextView != null) {
+            batteryLifeTextView.setText(batteryString);
+        }
+        if (dateTextView != null) {
+            dateTextView.setText(dateFormat.format(c.getTime()));
+        }
         if (!DateFormat.is24HourFormat(context))
         {
             SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm");
-
-            hourTextView.setText(hourFormat.format(c.getTime()));
-
+            if (hourTextView != null) {
+                hourTextView.setText(hourFormat.format(c.getTime()));
+            }
         }
         else {
             SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
-            hourTextView.setText(hourFormat.format(c.getTime()));
+            if (hourTextView != null) {
+                hourTextView.setText(hourFormat.format(c.getTime()));
+            }
         }
         WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
