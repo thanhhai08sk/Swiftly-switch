@@ -15,4 +15,6 @@
     <color name="list_app_background">#e9ece9</color>
     <color name="outRing">#384168</color>
     <color name="outOutRing">#72384168</color>
+    <color name="grey">#4e4c4c</color>
+    <color name="main_background">#fffafafa</color>
 </resources>

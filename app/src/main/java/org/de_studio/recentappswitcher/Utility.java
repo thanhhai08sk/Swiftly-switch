@@ -281,7 +281,7 @@ public  class Utility {
                                 }
                             });
                         } else {
-                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
+                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).withLayer();
                         }
                         break;
                 }
