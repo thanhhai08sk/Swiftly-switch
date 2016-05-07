@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentTransaction;
@@ -80,22 +79,24 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                SharedPreferences getPrefs = PreferenceManager
-                        .getDefaultSharedPreferences(getBaseContext());
-                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
-                if (isFirstStart) {
-                    Intent i = new Intent(MainActivity.this, IntroActivity.class);
-                    startActivity(i);
-                    SharedPreferences.Editor e = getPrefs.edit();
-                    e.putBoolean("firstStart", false);
-                    e.apply();
-                }
-            }
-        });
-        t.start();
+//        Thread t = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                SharedPreferences getPrefs = PreferenceManager
+//                        .getDefaultSharedPreferences(getBaseContext());
+//                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
+//                if (isFirstStart) {
+//                    Intent i = new Intent(MainActivity.this, IntroActivity.class);
+//                    startActivity(i);
+//                    SharedPreferences.Editor e = getPrefs.edit();
+//                    e.putBoolean("firstStart", true);
+//                    e.apply();
+//                }
+//            }
+//        });
+//        t.start();
+//        Intent i = new Intent(MainActivity.this, IntroActivity.class);
+//        startActivity(i);
 
         if (getPackageName().equals(FREE_VERSION_PACKAGE_NAME)) isTrial = true;
         setContentView(R.layout.activity_main);
@@ -389,17 +390,18 @@ public class MainActivity extends Activity {
         edge2SettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-                android.app.FragmentManager fragmentManager = getFragmentManager();
-                EdgeSettingDialogFragment newFragment = new EdgeSettingDialogFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt(EdgeSettingDialogFragment.EDGE_NUMBER_KEY, 2);
-                newFragment.setArguments(bundle);
-//                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                transaction.add(android.R.id.content, newFragment)
-                        .addToBackStack(null).commit();
+                Intent i = new Intent(MainActivity.this, IntroActivity.class);
+                startActivity(i);
+
+//                android.app.FragmentManager fragmentManager = getFragmentManager();
+//                EdgeSettingDialogFragment newFragment = new EdgeSettingDialogFragment();
+//                Bundle bundle = new Bundle();
+//                bundle.putInt(EdgeSettingDialogFragment.EDGE_NUMBER_KEY, 2);
+//                newFragment.setArguments(bundle);
+//                android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+//                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//                transaction.add(android.R.id.content, newFragment)
+//                        .addToBackStack(null).commit();
 
             }
         });
