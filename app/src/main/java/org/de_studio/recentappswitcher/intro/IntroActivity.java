@@ -20,6 +20,7 @@ public class IntroActivity extends AppIntro2 {
         addSlide(IntroRecentFragment.newInstance(1));
         showStatusBar(true);
 
+
     }
 
     @Override

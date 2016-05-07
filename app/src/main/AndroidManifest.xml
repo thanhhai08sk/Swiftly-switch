@@ -104,6 +104,7 @@
                 android:value="org.de_studio.recentappswitcher.MainActivity" />
         </activity>
         <activity android:name=".intro.IntroActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/intro_activity" />
     </application>
 
