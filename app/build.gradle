@@ -45,5 +45,6 @@ dependencies {
 //    compile project(':libraries:drag-sort-listview:library')
     compile project(':library')
     compile 'com.github.QuadFlask:colorpicker:0.0.10'
+    compile 'com.github.paolorotolo:appintro:3.4.0'
 }
 

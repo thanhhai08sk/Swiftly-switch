@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentTransaction;
@@ -34,6 +35,7 @@ import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity;
+import org.de_studio.recentappswitcher.intro.IntroActivity;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
@@ -78,6 +80,23 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences getPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getBaseContext());
+                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
+                if (isFirstStart) {
+                    Intent i = new Intent(MainActivity.this, IntroActivity.class);
+                    startActivity(i);
+                    SharedPreferences.Editor e = getPrefs.edit();
+                    e.putBoolean("firstStart", false);
+                    e.apply();
+                }
+            }
+        });
+        t.start();
+
         if (getPackageName().equals(FREE_VERSION_PACKAGE_NAME)) isTrial = true;
         setContentView(R.layout.activity_main);
         sharedPreferences1 = getSharedPreferences(EDGE_1_SHAREDPREFERENCE, 0);
