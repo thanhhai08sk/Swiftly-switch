@@ -23,6 +23,7 @@ public class IntroNaviFragment extends Fragment {
     private static final int ANIMATION_DURATION = 2000;
     private ImageView introImage,hand;
     private float imageX, imageY, imageHeight, imageWidth;
+    private ViewPropertyAnimator[] propertyAnimators = new ViewPropertyAnimator[5];
 
 
     public static IntroNaviFragment newInstance(int index) {
@@ -80,6 +81,11 @@ public class IntroNaviFragment extends Fragment {
     }
 
     public void startAnimation() {
+        for (ViewPropertyAnimator p : propertyAnimators) {
+            if (p != null) {
+                p.cancel();
+            }
+        }
         imageX = introImage.getX();
         imageY = introImage.getY();
         imageHeight = introImage.getHeight();
@@ -87,9 +93,8 @@ public class IntroNaviFragment extends Fragment {
         Log.e(LOG_TAG, "imageX = " + imageX + "\nimageY = " + imageY + "\nimageHeight = " + imageHeight + "\nimageWidth = " + imageWidth);
         introImage.setImageResource(R.drawable.screenshot_1);
         hand.setX(imageX+ imageWidth + imageWidth/3);
-        hand.setY(imageY + imageHeight/2);
-        hand.animate().setDuration(ANIMATION_DURATION).x(imageX+ imageWidth/2 + imageWidth/3)
-                .y(imageY + imageHeight/2)
+        hand.setY(imageY + imageHeight/2  - hand.getHeight()/2);
+        propertyAnimators[0] = hand.animate().setDuration(ANIMATION_DURATION).x(imageX+ imageWidth/2 + imageWidth/3)
                 .setListener(new  Animation1());
     }
 
@@ -107,7 +112,7 @@ public class IntroNaviFragment extends Fragment {
         @Override
         public void onAnimationEnd(Animator animation) {
             introImage.setImageResource(R.drawable.screenshot_2);
-            hand.animate().setDuration(ANIMATION_DURATION).y(hand.getY() - imageHeight / 4).setListener(new Animation2());
+            propertyAnimators[1] = hand.animate().setDuration(ANIMATION_DURATION).y(hand.getY() - imageHeight / 4).setListener(new Animation2());
         }
 
         @Override
@@ -130,6 +135,9 @@ public class IntroNaviFragment extends Fragment {
         @Override
         public void onAnimationEnd(Animator animation) {
             introImage.setImageResource(R.drawable.screenshot_7);
+            propertyAnimators[2] = hand.animate().setDuration(ANIMATION_DURATION).x(hand.getX() - imageWidth / 3)
+                    .y(hand.getY() + imageHeight / 8).setListener(new Animation3());
+
         }
 
         @Override
@@ -137,6 +145,79 @@ public class IntroNaviFragment extends Fragment {
 
         }
     }
+
+    private class Animation3 implements Animator.AnimatorListener {
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationStart(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            introImage.setImageResource(R.drawable.screenshot_8);
+            propertyAnimators[3] = hand.animate().setDuration(ANIMATION_DURATION).x(hand.getX() - imageWidth/5)
+                    .y(hand.getY()+ imageHeight/5).setListener(new Animation4());
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+
+        }
+    }
+
+    private class Animation4 implements Animator.AnimatorListener {
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationStart(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            introImage.setImageResource(R.drawable.screenshot_9);
+            propertyAnimators[4] = hand.animate().setDuration(ANIMATION_DURATION).x(hand.getX() + imageWidth/6)
+                    .y(hand.getY() + imageHeight/8).setListener(new Animation5());
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+
+        }
+    }
+
+    private class Animation5 implements Animator.AnimatorListener {
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationStart(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            introImage.setImageResource(R.drawable.screenshot_10);
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+
+        }
+    }
+
+
+
 
 
 }

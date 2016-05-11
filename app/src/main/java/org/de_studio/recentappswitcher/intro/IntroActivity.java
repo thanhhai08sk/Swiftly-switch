@@ -46,7 +46,7 @@ public class IntroActivity extends AppIntro2 {
                     case 1:
                         recentSlide.startAnimation();
                         break;
-                    case 2:fifdfd
+                    case 2:
                         naviSlide.startAnimation();
                         break;
                 }
