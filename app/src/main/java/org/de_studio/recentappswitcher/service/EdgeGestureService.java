@@ -478,6 +478,7 @@ public class EdgeGestureService extends Service {
                             y_init_cord = (int) (y_cord - 10 * mScale);
                             break;
                     }
+                    clearIconBackground();c
                     Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, true), animationTime);
                     excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
 
@@ -512,7 +513,6 @@ public class EdgeGestureService extends Service {
 //                    Log.e(LOG_TAG, "position = " + position + "\nEdge1position = " + edge1Position + "\nEdge2Position = " + edge2Position);
                     isShortcutBackgroundNull = true;
                     preShortcutToSwitch = -1;
-                    clearIconBackground();
                     if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, true)) {
                         vibrator.vibrate(vibrationDuration);
                     }
