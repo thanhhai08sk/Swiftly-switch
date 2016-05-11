@@ -1,0 +1,19 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".intro.IntroNaviFragment">
+    <ImageView
+        android:layout_width="216dp"
+        android:layout_height="384dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:id="@+id/intro_image"
+        />
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/hand_resized"
+        android:id="@+id/intro_hand"
+        />
+
+</FrameLayout>
