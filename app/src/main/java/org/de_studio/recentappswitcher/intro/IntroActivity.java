@@ -21,6 +21,7 @@ public class IntroActivity extends AppIntro2 {
     private static final String LOG_TAG = IntroActivity.class.getSimpleName();
     private IntroRecentFragment recentSlide;
     private IntroNaviFragment naviSlide;
+    private IntroFavoFragment favoSlide;
 
 
     @Override
@@ -28,9 +29,11 @@ public class IntroActivity extends AppIntro2 {
 //        addSlide(new IntroRecentFragment());
         recentSlide = IntroRecentFragment.newInstance(1);
         naviSlide = IntroNaviFragment.newInstance(2);
+        favoSlide = IntroFavoFragment.newInstance(3);
         addSlide(AppIntroFragment.newInstance("fragment", "test", R.drawable.screenshot_1, Color.GREEN));
         addSlide(recentSlide);
         addSlide(naviSlide);
+        addSlide(favoSlide);
         showStatusBar(true);
         AppIntroViewPager pager = this.pager;
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -48,6 +51,9 @@ public class IntroActivity extends AppIntro2 {
                         break;
                     case 2:
                         naviSlide.startAnimation();
+                        break;
+                    case 3:
+                        favoSlide.startAnimation();
                         break;
                 }
             }

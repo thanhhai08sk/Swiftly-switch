@@ -1,30 +1,30 @@
 package org.de_studio.recentappswitcher.intro;
 
-
 import android.animation.Animator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import org.de_studio.recentappswitcher.R;
 
-public class IntroRecentFragment extends Fragment {
-    private static final String LOG_TAG = IntroRecentFragment.class.getSimpleName();
+/**
+ * Created by HaiNguyen on 5/11/16.
+ */
+public class IntroFavoFragment extends Fragment {
+    private static final String LOG_TAG = IntroFavoFragment.class.getSimpleName();
     private static final int ANIMATION_DURATION = 2000;
     private ImageView introImage,hand;
     private float imageX, imageY, imageHeight, imageWidth;
-    private ViewPropertyAnimator[] propertyAnimators = new ViewPropertyAnimator[4];
+    private ViewPropertyAnimator[] propertyAnimators = new ViewPropertyAnimator[5];
 
-    public static IntroRecentFragment newInstance(int index) {
-        IntroRecentFragment f = new IntroRecentFragment();
+    public static IntroFavoFragment newInstance(int index) {
+        IntroFavoFragment f = new IntroFavoFragment();
 
         // Supply index input as an argument.
         Bundle args = new Bundle();
@@ -94,9 +94,9 @@ public class IntroRecentFragment extends Fragment {
 
         @Override
         public void onAnimationEnd(Animator animation) {
-            introImage.setImageResource(R.drawable.screenshot_3);
-            propertyAnimators[2] = hand.animate().setDuration(ANIMATION_DURATION).x(hand.getX() - imageWidth / 8)
-                    .y(hand.getY() + imageHeight / 15)
+            introImage.setImageResource(R.drawable.screenshot_4);
+            propertyAnimators[2] = hand.animate().setDuration(ANIMATION_DURATION)
+                    .x(hand.getX() + 10)
                     .setListener(new Animation3());
         }
 
@@ -119,8 +119,10 @@ public class IntroRecentFragment extends Fragment {
 
         @Override
         public void onAnimationEnd(Animator animation) {
-            introImage.setImageResource(R.drawable.screenshot_4);
-            propertyAnimators[3] = hand.animate().alpha(0f).setDuration(ANIMATION_DURATION).setListener(new Animation4());
+            introImage.setImageResource(R.drawable.screenshot_11);
+            propertyAnimators[3] = hand.animate().x(hand.getX() - imageWidth/4)
+                    .y(hand.getY() + imageHeight/7)
+                    .setDuration(ANIMATION_DURATION).setListener(new Animation4());
 
 
         }
@@ -145,6 +147,7 @@ public class IntroRecentFragment extends Fragment {
         @Override
         public void onAnimationEnd(Animator animation) {
             introImage.setImageResource(R.drawable.screenshot_1a);
+            propertyAnimators[4] = hand.animate().alpha(0f).setDuration(ANIMATION_DURATION);
 
 
         }
