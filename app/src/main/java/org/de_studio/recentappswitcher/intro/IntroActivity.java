@@ -29,9 +29,8 @@ public class IntroActivity extends AppIntro2 {
         recentSlide = IntroRecentFragment.newInstance(1);
         naviSlide = IntroNaviFragment.newInstance(2);
         addSlide(AppIntroFragment.newInstance("fragment", "test", R.drawable.screenshot_1, Color.GREEN));
-
-        addSlide(naviSlide);
         addSlide(recentSlide);
+        addSlide(naviSlide);
         showStatusBar(true);
         AppIntroViewPager pager = this.pager;
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -44,10 +43,10 @@ public class IntroActivity extends AppIntro2 {
             public void onPageSelected(int position) {
                 Log.e(LOG_TAG, "onPageSelected " + position);
                 switch (position) {
-                    case 2:
+                    case 1:
                         recentSlide.startAnimation();
                         break;
-                    case 1:
+                    case 2:fifdfd
                         naviSlide.startAnimation();
                         break;
                 }
