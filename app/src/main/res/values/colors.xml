@@ -17,4 +17,8 @@
     <color name="outOutRing">#72384168</color>
     <color name="grey">#4e4c4c</color>
     <color name="main_background">#fffafafa</color>
+    <color name="background_1">#a1e4a2</color>
+    <color name="background_2">#c2c986</color>
+    <color name="background_3">#d78c8c</color>
+    <color name="background_4">#6878bf</color>
 </resources>

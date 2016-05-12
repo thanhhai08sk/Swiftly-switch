@@ -37,7 +37,7 @@ public class IntroFavoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_intro_recent, container,false);
+        View rootView = inflater.inflate(R.layout.fragment_intro_favo, container,false);
         introImage = (ImageView) rootView.findViewById(R.id.intro_image);
         introImage.setImageResource(R.drawable.screenshot_1);
         hand = (ImageView) rootView.findViewById(R.id.intro_hand);

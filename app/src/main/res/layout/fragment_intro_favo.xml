@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_1"
+    android:background="@color/background_3"
     >
 
     <TextView
@@ -10,18 +10,18 @@
         android:layout_height="wrap_content"
         android:id="@+id/title"
         android:layout_above="@id/intro_image"
-        android:text="@string/switch_between_recent_apps"
+        android:text="@string/easily_navigation"
         android:layout_centerHorizontal="true"
         android:fontFamily="sans-serif-bolt"
         android:textSize="24dp"
         android:paddingBottom="32dp"
         />
     <ImageView
-      android:id="@+id/intro_image"
-      android:layout_width="216dp"
-      android:layout_height="384dp"
-      android:layout_centerInParent="true"
-      />
+        android:id="@+id/intro_image"
+        android:layout_width="216dp"
+        android:layout_height="384dp"
+        android:layout_centerInParent="true"
+        />
     <TextView
         android:layout_width="300dp"
         android:layout_height="wrap_content"
