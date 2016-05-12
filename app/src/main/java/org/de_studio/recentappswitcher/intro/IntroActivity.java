@@ -22,15 +22,17 @@ public class IntroActivity extends AppIntro2 {
     private IntroRecentFragment recentSlide;
     private IntroNaviFragment naviSlide;
     private IntroFavoFragment favoSlide;
+    private IntroFirstPageFragment firstSlide;
 
 
     @Override
     public void init(@Nullable Bundle savedInstanceState) {
 //        addSlide(new IntroRecentFragment());
+        firstSlide = IntroFirstPageFragment.newInstance(0);
         recentSlide = IntroRecentFragment.newInstance(1);
         naviSlide = IntroNaviFragment.newInstance(2);
         favoSlide = IntroFavoFragment.newInstance(3);
-        addSlide(AppIntroFragment.newInstance("fragment", "test", R.drawable.screenshot_1, Color.GREEN));
+        addSlide(firstSlide);
         addSlide(recentSlide);
         addSlide(naviSlide);
         addSlide(favoSlide);

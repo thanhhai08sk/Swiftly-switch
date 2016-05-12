@@ -144,6 +144,7 @@
     <string name="main_set_guide_color">Set guide color</string>
     <string name="main_ani_time">Animation duration</string>
     <string name="intro_activity">App Intro</string>
+    <string name="a_new_way_to_use_your_phone">A new way to use your phone</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
