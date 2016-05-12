@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.R;
 
@@ -21,6 +22,7 @@ public class IntroFavoFragment extends Fragment {
     private static final int ANIMATION_DURATION = 2000;
     private ImageView introImage,hand;
     private float imageX, imageY, imageHeight, imageWidth;
+    private TextView introTitle;
     private ViewPropertyAnimator[] propertyAnimators = new ViewPropertyAnimator[5];
 
     public static IntroFavoFragment newInstance(int index) {
@@ -37,9 +39,12 @@ public class IntroFavoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_intro_favo, container,false);
+        View rootView = inflater.inflate(R.layout.fragment_intro_navi, container,false);
+        rootView.setBackgroundResource(R.color.background_3);
         introImage = (ImageView) rootView.findViewById(R.id.intro_image);
         introImage.setImageResource(R.drawable.screenshot_1);
+        introTitle =(TextView) rootView.findViewById(R.id.title);
+        introTitle.setText(R.string.access_your_favorite_app_and_system_setting_anywhere);
         hand = (ImageView) rootView.findViewById(R.id.intro_hand);
         return rootView;
     }
