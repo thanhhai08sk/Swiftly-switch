@@ -20,5 +20,6 @@
     <color name="background_1">#a1e4a2</color>
     <color name="background_2">#c2c986</color>
     <color name="background_3">#d78c8c</color>
-    <color name="background_4">#6878bf</color>
+    <color name="background_4">#918c83</color>
+    <color name="blue">#176789</color>
 </resources>

@@ -36,7 +36,7 @@ public class IntroActivity extends AppIntro2 {
         addSlide(recentSlide);
         addSlide(naviSlide);
         addSlide(favoSlide);
-        showStatusBar(true);
+        showStatusBar(false);
         AppIntroViewPager pager = this.pager;
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
