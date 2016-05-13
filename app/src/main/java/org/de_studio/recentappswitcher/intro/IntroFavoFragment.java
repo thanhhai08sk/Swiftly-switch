@@ -152,7 +152,29 @@ public class IntroFavoFragment extends Fragment {
         @Override
         public void onAnimationEnd(Animator animation) {
             introImage.setImageResource(R.drawable.screenshot_1a);
-            propertyAnimators[4] = hand.animate().alpha(0f).setDuration(ANIMATION_DURATION);
+            propertyAnimators[4] = hand.animate().alpha(0f).setDuration(ANIMATION_DURATION)
+                    .setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            startAnimation();
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
+
 
 
         }

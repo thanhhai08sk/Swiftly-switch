@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.intro;
 
 import android.animation.Animator;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
@@ -208,6 +209,13 @@ public class IntroNaviFragment extends Fragment {
         @Override
         public void onAnimationEnd(Animator animation) {
             introImage.setImageResource(R.drawable.screenshot_10);
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startAnimation();
+                }
+            },ANIMATION_DURATION);
         }
 
         @Override
