@@ -99,7 +99,7 @@ public class IntroFavoFragment extends Fragment {
 
         @Override
         public void onAnimationEnd(Animator animation) {
-            introImage.setImageResource(R.drawable.screenshot_4);
+            introImage.setImageResource(R.drawable.screenshot_3);
             propertyAnimators[2] = hand.animate().setDuration(ANIMATION_DURATION)
                     .x(hand.getX() + 10)
                     .setListener(new Animation3());
@@ -161,7 +161,10 @@ public class IntroFavoFragment extends Fragment {
 
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            startAnimation();
+                            if (IntroFavoFragment.this.isVisible()) {
+                                startAnimation();
+                            }
+
                         }
 
                         @Override

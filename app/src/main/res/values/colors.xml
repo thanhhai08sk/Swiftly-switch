@@ -22,4 +22,5 @@
     <color name="background_3">#d78c8c</color>
     <color name="background_4">#918c83</color>
     <color name="blue">#176789</color>
+    <color name="text_guide_background">#c3184279</color>
 </resources>

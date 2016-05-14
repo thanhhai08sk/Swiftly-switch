@@ -73,7 +73,9 @@ public class IntroRecentFragment extends Fragment {
         @Override
         public void onAnimationEnd(Animator animation) {
             introImage.setImageResource(R.drawable.screenshot_2);
-            propertyAnimators[1] = hand.animate().setDuration(ANIMATION_DURATION).y(hand.getY() - imageHeight/6).setListener(new Animation2());
+            propertyAnimators[1] = hand.animate().x(hand.getX() - imageWidth / 8)
+                    .y(hand.getY() + imageHeight / 15 - imageHeight/6)
+                    .setListener(new Animation3());
         }
 
         @Override
@@ -146,13 +148,16 @@ public class IntroRecentFragment extends Fragment {
         @Override
         public void onAnimationEnd(Animator animation) {
             introImage.setImageResource(R.drawable.screenshot_1a);
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    startAnimation();
-                }
-            },ANIMATION_DURATION);
+            if (IntroRecentFragment.this.isVisible()) {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startAnimation();
+                    }
+                },ANIMATION_DURATION);
+            }
+
 
 
 

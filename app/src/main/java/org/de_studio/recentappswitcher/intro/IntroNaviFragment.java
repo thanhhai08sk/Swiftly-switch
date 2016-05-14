@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.R;
 
@@ -25,6 +26,7 @@ public class IntroNaviFragment extends Fragment {
     private ImageView introImage,hand;
     private float imageX, imageY, imageHeight, imageWidth;
     private ViewPropertyAnimator[] propertyAnimators = new ViewPropertyAnimator[5];
+    private TextView textGuide;
 
 
     public static IntroNaviFragment newInstance(int index) {
@@ -52,6 +54,7 @@ public class IntroNaviFragment extends Fragment {
         introImage = (ImageView) rootView.findViewById(R.id.intro_image);
         introImage.setImageResource(R.drawable.screenshot_1);
         hand = (ImageView) rootView.findViewById(R.id.intro_hand);
+        textGuide = (TextView) rootView.findViewById(R.id.textGuide);
 //        final ViewTreeObserver observer = introImage.getViewTreeObserver();
 //        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 //            @Override
@@ -87,6 +90,7 @@ public class IntroNaviFragment extends Fragment {
                 p.cancel();
             }
         }
+        textGuide.setVisibility(View.GONE);
         imageX = introImage.getX();
         imageY = introImage.getY();
         imageHeight = introImage.getHeight();
@@ -136,6 +140,8 @@ public class IntroNaviFragment extends Fragment {
         @Override
         public void onAnimationEnd(Animator animation) {
             introImage.setImageResource(R.drawable.screenshot_7);
+            textGuide.setVisibility(View.VISIBLE);
+            textGuide.setText(R.string.setting_shortcut_home);
             propertyAnimators[2] = hand.animate().setDuration(ANIMATION_DURATION).x(hand.getX() - imageWidth / 3)
                     .y(hand.getY() + imageHeight / 8).setListener(new Animation3());
 
@@ -161,6 +167,7 @@ public class IntroNaviFragment extends Fragment {
         @Override
         public void onAnimationEnd(Animator animation) {
             introImage.setImageResource(R.drawable.screenshot_8);
+            textGuide.setText(R.string.app_tab_fragment_back_button);
             propertyAnimators[3] = hand.animate().setDuration(ANIMATION_DURATION).x(hand.getX() - imageWidth/5)
                     .y(hand.getY()+ imageHeight/5).setListener(new Animation4());
         }
@@ -185,6 +192,7 @@ public class IntroNaviFragment extends Fragment {
         @Override
         public void onAnimationEnd(Animator animation) {
             introImage.setImageResource(R.drawable.screenshot_9);
+            textGuide.setText(R.string.last_app);
             propertyAnimators[4] = hand.animate().setDuration(ANIMATION_DURATION).x(hand.getX() + imageWidth/6)
                     .y(hand.getY() + imageHeight/8).setListener(new Animation5());
         }
@@ -209,13 +217,17 @@ public class IntroNaviFragment extends Fragment {
         @Override
         public void onAnimationEnd(Animator animation) {
             introImage.setImageResource(R.drawable.screenshot_10);
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    startAnimation();
-                }
-            },ANIMATION_DURATION);
+            textGuide.setText(R.string.setting_shortcut_noti);
+            if (IntroNaviFragment.this.isVisible()) {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startAnimation();
+                    }
+                },ANIMATION_DURATION);
+            }
+
         }
 
         @Override
