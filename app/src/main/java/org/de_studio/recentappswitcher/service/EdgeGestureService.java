@@ -28,6 +28,7 @@ import android.os.IBinder;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
@@ -131,6 +132,7 @@ public class EdgeGestureService extends Service {
     private int backgroundColor, guideColor, animationTime;
     private Set<String> excludeSet;
     private long startDown;
+    private String[] savedPackage;
 
     @Nullable
     @Override
@@ -682,6 +684,16 @@ public class EdgeGestureService extends Service {
                                 }
                             }
 
+                            if (tempPackageName.size() < 6 && savedPackage !=null) {
+                                for (int i = 0; i < savedPackage.length; i++) {
+                                    if (!tempPackageName.contains(savedPackage[i]) && tempPackageName.size() < 6) {
+                                        tempPackageName.add(savedPackage[i]);
+                                    }
+                                }
+
+                            }
+
+
 
 //                            if (hasKeyInFuture) {
 //                                if (tempPackageName.size() >= 2) {
@@ -726,6 +738,9 @@ public class EdgeGestureService extends Service {
 
                                 }
                             }
+
+
+                            savedPackage = packagename;
 
 
 //                            packagename = new String[tempPackageName.size()];

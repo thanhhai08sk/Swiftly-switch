@@ -7,13 +7,15 @@
     android:gravity="center"
     >
     <TextView
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/set_required_permissions"
-        android:textSize="24dp"
+        android:textSize="34dp"
         android:fontFamily="sans-serif-bolt"
         android:gravity="center"
-        android:paddingBottom="32dp"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:paddingBottom="48dp"
         />
     <LinearLayout
         android:layout_width="300dp"

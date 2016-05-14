@@ -23,6 +23,7 @@ public class IntroActivity extends AppIntro2 {
     private IntroNaviFragment naviSlide;
     private IntroFavoFragment favoSlide;
     private IntroFirstPageFragment firstSlide;
+    private IntroSettingFragment settingSlide;
 
 
     @Override
@@ -32,10 +33,12 @@ public class IntroActivity extends AppIntro2 {
         recentSlide = IntroRecentFragment.newInstance(1);
         naviSlide = IntroNaviFragment.newInstance(2);
         favoSlide = IntroFavoFragment.newInstance(3);
+        settingSlide = IntroSettingFragment.newInstance(4);
         addSlide(firstSlide);
         addSlide(recentSlide);
         addSlide(naviSlide);
         addSlide(favoSlide);
+        addSlide(settingSlide);
         showStatusBar(false);
         AppIntroViewPager pager = this.pager;
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
