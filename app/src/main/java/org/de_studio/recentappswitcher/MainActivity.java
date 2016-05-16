@@ -247,9 +247,9 @@ public class MainActivity extends Activity {
 //        Switch disableClockSwitch = (Switch) findViewById(R.id.main_disable_clock_switch);
 //        Switch disableAnimationSwitch = (Switch) findViewById(R.id.main_disable_animation_switch);
 //        Switch holdTimeSwitch = (Switch) findViewById(R.id.main_hold_time_switch);
-//        final LinearLayout shareFriendLinearLayout = (LinearLayout) findViewById(R.id.main_share_linear_layout);
-//        LinearLayout reviewLinearLayout = (LinearLayout) findViewById(R.id.main_review_linear_layout);
-//        LinearLayout emailLinearLayout = (LinearLayout) findViewById(R.id.main_email_linear_layout);
+        final LinearLayout shareFriendLinearLayout = (LinearLayout) findViewById(R.id.main_share_linear_layout);
+        LinearLayout reviewLinearLayout = (LinearLayout) findViewById(R.id.main_review_linear_layout);
+        LinearLayout emailLinearLayout = (LinearLayout) findViewById(R.id.main_email_linear_layout);
 //        hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, true));
 //        hapticFeedbackOnItemSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY,false));
 //        disableClockSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY,false));
@@ -954,34 +954,34 @@ public class MainActivity extends Activity {
 //            }
 //        });
 
-//        shareFriendLinearLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                shareFriend();
-//            }
-//        });
-//        emailLinearLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                sendEmail();
-//            }
-//        });
-//
-//        reviewLinearLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Uri uri = Uri.parse("mbarket://details?id=" + getPackageName());
-//                Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
-//                gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-//                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-//                try {
-//                    startActivity(gotoMarket);
-//                } catch (ActivityNotFoundException e) {
-//                    startActivity(new Intent(Intent.ACTION_VIEW,
-//                            Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
-//                }
-//            }
-//        });
+        shareFriendLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareFriend();
+            }
+        });
+        emailLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendEmail();
+            }
+        });
+
+        reviewLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("mbarket://details?id=" + getPackageName());
+                Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+                gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                try {
+                    startActivity(gotoMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+                }
+            }
+        });
 
         checkPermissionOk();
 
