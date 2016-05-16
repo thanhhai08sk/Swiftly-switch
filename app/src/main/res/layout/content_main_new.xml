@@ -5,8 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_background"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
     >
@@ -16,40 +14,397 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-    <android.support.v7.widget.GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:orientation="horizontal"
-        app:columnCount="2"
-        >
-        <TextView
-            android:layout_width="0dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/main_step1_text"
-            android:textColor="@color/black"
-            app:layout_columnSpan="2"
-            android:gravity="center_horizontal"
-            app:layout_gravity="fill_horizontal"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@color/redButton"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:text="@string/one_or_more_permission_are_missing"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="4dp"
+                android:src="@drawable/ic_navigate_next_black_36dp"
+                />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:orientation="horizontal"
+            app:columnCount="2"
+            app:rowCount="2"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+
+            >
+           <TextView
+                android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:text="@string/main_edge1_section_text"
+               android:textSize="20dp"
+               app:layout_columnWeight="1"
+               android:paddingBottom="8dp"
+
+
+
+               />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_column="1"
+                app:layout_row="0"
+                app:layout_rowSpan="2"
+                android:gravity="center"
+                app:layout_rowWeight="1"
+                >
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:id="@+id/edge_1_switch"
+                    android:layout_weight="1"
+
+                    />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_settings_white_36px"
+                    android:background="@color/transparent"
+                    android:tint="@color/grey"
+                    android:id="@+id/edge_1_setting_image_button"
+                    />
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/main_edge1_setting_description"
+                android:paddingRight="16dp"
+                app:layout_column="0"
+                app:layout_row="1"
+                app:layout_columnWeight="1"
+                />
+
+
+
+        </android.support.v7.widget.GridLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
             />
-        <ImageView
-            android:layout_width="0dp"
+
+
+        <android.support.v7.widget.GridLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/round_green_button"
-            android:gravity="center_horizontal"
-            app:layout_columnWeight="1"
+            app:orientation="horizontal"
+            app:columnCount="2"
+            app:rowCount="2"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/main_edge2_section_text"
+                android:paddingBottom="8dp"
+                android:textSize="20dp"
+                app:layout_columnWeight="1"
+
+
+
+                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_column="1"
+                app:layout_row="0"
+                app:layout_rowSpan="2"
+                android:gravity="center"
+                app:layout_rowWeight="1"
+                >
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/edge_2_switch"
+
+                    />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:src="@drawable/ic_settings_white_36px"
+                    android:background="@color/transparent"
+                    android:tint="@color/grey"
+                    android:layout_weight="1"
+                    android:id="@+id/edge_2_setting_image_button"
+                    />
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/main_edge2_setting_description"
+                android:paddingRight="16dp"
+                app:layout_column="0"
+                app:layout_row="1"
+                app:layout_columnWeight="1"
+                />
+
+
+
+        </android.support.v7.widget.GridLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
             />
-        <ImageView
-            android:layout_width="0dp"
+
+
+        <android.support.v7.widget.GridLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/round_green_button"
-            android:gravity="center_horizontal"
-            app:layout_columnWeight="1"
+            app:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            app:rowCount="2"
+            app:columnCount="2"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/main_favorite_app_title"
+                android:textSize="20dp"
+                app:layout_column="0"
+                app:layout_row="0"
+                app:layout_columnWeight="1"
+                />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_settings_white_36px"
+                android:layout_weight="0"
+                app:layout_gravity="fill_vertical"
+                app:layout_rowSpan="2"
+                android:background="@color/transparent"
+                android:tint="@color/grey"
+                android:id="@+id/main_favorite_add_app_image_button"
+
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingRight="16dp"
+                app:layout_columnWeight="1"
+                android:text="@string/main_favorite_shortcut_setting_description"
+
+                />
+
+        </android.support.v7.widget.GridLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
+            />
+
+
+        <android.support.v7.widget.GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            app:rowCount="2"
+            app:columnCount="2"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/main_outer_ring_setting"
+                android:textSize="20dp"
+                app:layout_column="0"
+                app:layout_row="0"
+                app:layout_columnWeight="1"
+                />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_settings_white_36px"
+                android:layout_weight="0"
+                app:layout_gravity="fill_vertical"
+                app:layout_rowSpan="2"
+                android:background="@color/transparent"
+                android:tint="@color/grey"
+                android:id="@+id/main_outter_ring_setting_button"new
+
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingRight="16dp"
+                app:layout_columnWeight="1"
+                android:text="@string/main_quick_actions_setting_description"
+
+                />
+
+        </android.support.v7.widget.GridLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
             />
 
 
 
-    </android.support.v7.widget.GridLayout>
+
+        <android.support.v7.widget.GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            app:rowCount="2"
+            app:columnCount="1"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/main_pin_app"
+                android:textSize="20dp"
+                app:layout_column="0"
+                app:layout_row="0"
+                app:layout_columnWeight="1"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_columnWeight="1"
+                android:text="@string/pin_app_info"
+
+                />
+
+        </android.support.v7.widget.GridLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
+            />
+
+
+        <android.support.v7.widget.GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            app:rowCount="2"
+            app:columnCount="1"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/main_exclude_app_title"
+                android:textSize="20dp"
+                app:layout_column="0"
+                app:layout_row="0"
+                app:layout_columnWeight="1"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_columnWeight="1"
+                android:text="@string/main_exclude_app_info"
+
+                />
+
+        </android.support.v7.widget.GridLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
+            />
+
+
+        <android.support.v7.widget.GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            app:rowCount="2"
+            app:columnCount="1"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/main_more_setting_title"
+                android:textSize="20dp"
+                app:layout_column="0"
+                app:layout_row="0"
+                app:layout_columnWeight="1"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_columnWeight="1"
+                android:text="@string/main_more_setting_description"
+
+                />
+
+        </android.support.v7.widget.GridLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
+            />
+
+
 
 
 

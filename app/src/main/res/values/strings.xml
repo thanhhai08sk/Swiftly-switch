@@ -37,8 +37,8 @@
     <string name="main_favorite_app_info_text">Apps/shortcut that will be listed when you hold on the one of the recent apps icon for 1 second or when there are no recent app</string>
     <string name="limit_for_favorite_app_is_6">The limit for favorite apps is 6!</string>
     <string name="main_exclude_info_title">Blacklist</string>
-    <string name="main_exclude_app_title">Blacklist:</string>
-    <string name="main_exclude_app_info">Apps that will not be listed in the recent apps</string>
+    <string name="main_exclude_app_title">Blacklist</string>
+    <string name="main_exclude_app_info">Set apps that will not be listed in the recent list</string>
     <string name="please_add_favorite_item">Please add your favorite apps in the FAVORITE APP section</string>
     <string name="notification_text">Hide this by tapping then selecting Block notification from the info page</string>
     <string name="notification_title">Swiftly switch is running ...</string>
@@ -156,7 +156,13 @@
     <string name="permission_used_for_getting_recent_apps">Permission used for getting recent apps</string>
     <string name="enable_accessibility">3. Enable Accessibility</string>
     <string name="permission_used_for_back_button_notification_power_menu">Permission used for Back button, notification, power menu</string>
-
+    <string name="main_edge1_setting_description">Click the switch to enable/disable the Edge 1. Click setting button to set Edge 1 position, mode, semi-circle size</string>
+    <string name="main_edge2_setting_description">Click the switch to enable/disable the Edge 2. Click setting button to set Edge 2 position, mode, semi-circle size</string>
+    <string name="main_favorite_shortcut_setting_description">Hold on one of the recent icons for awhile to show Favorite Shortcut section. Click the setting icon
+        to set your favorite items, its position </string>
+    <string name="main_quick_actions_setting_description">Quick actions are placed outside of recent apps semi-circle, click the setting icon to customize it</string>
+    <string name="main_more_setting_description">More customize for look and feel of the app</string>
+    <string name="one_or_more_permission_are_missing">One or more permission are missing</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
