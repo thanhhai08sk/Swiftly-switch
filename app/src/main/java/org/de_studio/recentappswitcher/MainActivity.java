@@ -73,6 +73,7 @@ public class MainActivity extends Activity {
     private boolean isTrial = false, isOutOfTrial = false;
     private long trialTimePass, beginTime;
     private int step = 1;
+    private LinearLayout permissionMissing;
 
 
     @Override
@@ -96,9 +97,9 @@ public class MainActivity extends Activity {
 //        t.start();
 //        Intent i = new Intent(MainActivity.this, IntroActivity.class);
 //        startActivity(i);
-        LinearLayout permissionMissing = (LinearLayout) findViewById(R.id.permission_missing);
         if (getPackageName().equals(FREE_VERSION_PACKAGE_NAME)) isTrial = true;
         setContentView(R.layout.activity_main);
+        permissionMissing = (LinearLayout) findViewById(R.id.permission_missing);
         sharedPreferences1 = getSharedPreferences(EDGE_1_SHAREDPREFERENCE, 0);
         sharedPreferences2 = getSharedPreferences(EDGE_2_SHAREDPREFERENCE, 0);
         sharedPreferencesDefautl = getSharedPreferences(DEFAULT_SHAREDPREFERENCE, 0);
@@ -110,23 +111,23 @@ public class MainActivity extends Activity {
             beginTime = System.currentTimeMillis();
         }
         if (System.currentTimeMillis() - beginTime > trialTime) isOutOfTrial = true;
-        Button buyProButton = (Button) findViewById(R.id.main_buy_pro_button);
-        if (isTrial) buyProButton.setVisibility(View.VISIBLE);
-        buyProButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri uri = Uri.parse("mbarket://details?id=" + PRO_VERSION_PACKAGE_NAME);
-                Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
-                gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                try {
-                    startActivity(gotoMarket);
-                } catch (ActivityNotFoundException e) {
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("http://play.google.com/store/apps/details?id=" + PRO_VERSION_PACKAGE_NAME)));
-                }
-            }
-        });
+//        Button buyProButton = (Button) findViewById(R.id.main_buy_pro_button);
+//        if (isTrial) buyProButton.setVisibility(View.VISIBLE);
+//        buyProButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Uri uri = Uri.parse("mbarket://details?id=" + PRO_VERSION_PACKAGE_NAME);
+//                Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+//                gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+//                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+//                try {
+//                    startActivity(gotoMarket);
+//                } catch (ActivityNotFoundException e) {
+//                    startActivity(new Intent(Intent.ACTION_VIEW,
+//                            Uri.parse("http://play.google.com/store/apps/details?id=" + PRO_VERSION_PACKAGE_NAME)));
+//                }
+//            }
+//        });
         final AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.main_app_bar_layout);
         if (!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, false)) {
             int timeOpen = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.APP_OPEN_TIME_KEY, 0);
@@ -161,6 +162,8 @@ public class MainActivity extends Activity {
                         }
                     }
                 });
+
+
 //                yesButton.setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
@@ -282,6 +285,15 @@ public class MainActivity extends Activity {
                 }
 
 
+            }
+        });
+
+        permissionMissing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, IntroActivity.class);
+                intent.putExtra("page",4);
+                startActivity(intent);
             }
         });
 //        hapticFeedbackOnTriggerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -938,6 +950,8 @@ public class MainActivity extends Activity {
 //            }
 //        });
 
+        checkPermissionOk();
+
 
     }
 
@@ -946,6 +960,7 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
 //        setStepButtonAndDescription();
+        checkPermissionOk();
         if (!(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1)) {
             checkDrawOverlayPermission();
         }
@@ -1057,6 +1072,16 @@ public class MainActivity extends Activity {
             Log.e(LOG_TAG, "Activity not found when share app");
         }
 
+    }
+
+    private boolean checkPermissionOk() {
+        boolean isOk = isStep1Ok() && Settings.canDrawOverlays(this) && Utility.isAccessibilityEnable(this);
+        if (isOk) {
+            permissionMissing.setVisibility(View.GONE);
+        } else {
+            permissionMissing.setVisibility(View.VISIBLE);
+        }
+        return isOk;
     }
 
 

@@ -15,21 +15,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
-            android:paddingBottom="5dp"
+            android:paddingBottom="10dp"
             android:paddingLeft="16dp"
             android:textSize="24sp"
             android:text="@string/app_name"
             android:textColor="@color/white"
             />
-        <Button
-            android:id="@+id/main_buy_pro_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_button_4pt"
-            android:text="@string/main_buy_pro_button_text"
-            android:textAllCaps="false"
-            android:visibility="gone"
-            android:textColor="@color/white" />
 
 
     </android.support.design.widget.AppBarLayout>

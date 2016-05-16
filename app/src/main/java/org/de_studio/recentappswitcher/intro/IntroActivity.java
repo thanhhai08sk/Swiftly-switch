@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.intro;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,11 +25,16 @@ public class IntroActivity extends AppIntro2 {
     private IntroFavoFragment favoSlide;
     private IntroFirstPageFragment firstSlide;
     private IntroSettingFragment settingSlide;
+    private int startPage = 0;
 
 
     @Override
     public void init(@Nullable Bundle savedInstanceState) {
 //        addSlide(new IntroRecentFragment());
+        Intent intent = getIntent();
+        if (intent != null) {
+            startPage = intent.getIntExtra("page",0);
+        }
         firstSlide = IntroFirstPageFragment.newInstance(0);
         recentSlide = IntroRecentFragment.newInstance(1);
         naviSlide = IntroNaviFragment.newInstance(2);
@@ -40,6 +46,7 @@ public class IntroActivity extends AppIntro2 {
         addSlide(favoSlide);
         addSlide(settingSlide);
         showStatusBar(false);
+        pager.setCurrentItem(startPage);
         AppIntroViewPager pager = this.pager;
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

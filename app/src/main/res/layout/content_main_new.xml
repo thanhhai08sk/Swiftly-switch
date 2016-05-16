@@ -20,15 +20,16 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:visibility="gone"
+            android:visibility="visible"
+            android:clickable="true"
             android:background="@color/redButton"
             android:id="@+id/permission_missing"
             >
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="48dp"
                 android:gravity="center"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:text="@string/one_or_more_permission_are_missing"
                 />
