@@ -18,6 +18,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayout;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -100,6 +101,8 @@ public class MainActivity extends Activity {
         if (getPackageName().equals(FREE_VERSION_PACKAGE_NAME)) isTrial = true;
         setContentView(R.layout.activity_main);
         permissionMissing = (LinearLayout) findViewById(R.id.permission_missing);
+        Button getProButton = (Button) findViewById(R.id.get_pro);
+        Switch globalSwitch = (Switch) findViewById(R.id.global_switch);
         sharedPreferences1 = getSharedPreferences(EDGE_1_SHAREDPREFERENCE, 0);
         sharedPreferences2 = getSharedPreferences(EDGE_2_SHAREDPREFERENCE, 0);
         sharedPreferencesDefautl = getSharedPreferences(DEFAULT_SHAREDPREFERENCE, 0);
@@ -129,6 +132,25 @@ public class MainActivity extends Activity {
 //            }
 //        });
         final AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.main_app_bar_layout);
+        if (isTrial) {
+            getProButton.setVisibility(View.VISIBLE);
+        }else getProButton.setVisibility(View.GONE);
+        getProButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("mbarket://details?id=" + PRO_VERSION_PACKAGE_NAME);
+                Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+                gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                try {
+                    startActivity(gotoMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("http://play.google.com/store/apps/details?id=" + PRO_VERSION_PACKAGE_NAME)));
+                }
+            }
+        });
+
         if (!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, false)) {
             int timeOpen = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.APP_OPEN_TIME_KEY, 0);
             sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.APP_OPEN_TIME_KEY, timeOpen + 1).commit();
@@ -954,7 +976,6 @@ public class MainActivity extends Activity {
 
 
     }
-
 
     @Override
     protected void onResume() {

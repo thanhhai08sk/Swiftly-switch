@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:title="@string/main_buy_pro_button_text"
+        android:id="@+id/buy_pro_item"
+        android:titleCondensed="Pro"
+        android:orderInCategory="99"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:title="global switch"
+        android:id="@+id/global_switch_item"
+        android:checkable="true"
+        android:actionLayout="@layout/switch_layout"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"/>
+
+</menu>

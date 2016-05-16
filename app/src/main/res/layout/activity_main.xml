@@ -11,16 +11,39 @@
         android:layout_height="wrap_content"
         android:id="@+id/main_app_bar_layout"
         android:theme="@style/AppTheme.AppBarOverlay">
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="16dp"
-            android:textSize="24sp"
-            android:text="@string/app_name"
-            android:textColor="@color/white"
-            />
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="16dp"
+                android:textSize="24sp"
+                android:text="@string/app_name"
+                android:textColor="@color/white"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get pro"
+                android:id="@+id/get_pro"
+                android:textAllCaps="false"
+                android:background="@color/transparent"
+                />
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/global_switch"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                />
+
+        </LinearLayout>
+
 
 
     </android.support.design.widget.AppBarLayout>
