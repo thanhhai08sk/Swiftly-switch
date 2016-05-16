@@ -20,7 +20,9 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
+            android:visibility="gone"
             android:background="@color/redButton"
+            android:id="@+id/permission_missing"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -69,7 +71,7 @@
                 app:layout_column="1"
                 app:layout_row="0"
                 app:layout_rowSpan="2"
-                android:gravity="center"
+                android:gravity="right"
                 app:layout_rowWeight="1"
                 >
                 <Switch
@@ -140,7 +142,7 @@
                 app:layout_column="1"
                 app:layout_row="0"
                 app:layout_rowSpan="2"
-                android:gravity="center"
+                android:gravity="right"
                 app:layout_rowWeight="1"
                 >
                 <Switch
@@ -264,7 +266,7 @@
                 app:layout_rowSpan="2"
                 android:background="@color/transparent"
                 android:tint="@color/grey"
-                android:id="@+id/main_outter_ring_setting_button"new
+                android:id="@+id/main_outter_ring_setting_button"
 
                 />
             <TextView
@@ -299,6 +301,7 @@
             android:paddingBottom="8dp"
             app:rowCount="2"
             app:columnCount="1"
+            android:id="@+id/main_pin_app_setting_button"
             >
             <TextView
                 android:layout_width="0dp"
@@ -338,6 +341,7 @@
             android:paddingBottom="8dp"
             app:rowCount="2"
             app:columnCount="1"
+            android:id="@+id/main_exclude_edit_image_button"
             >
             <TextView
                 android:layout_width="0dp"
