@@ -382,6 +382,7 @@
             android:paddingBottom="8dp"
             app:rowCount="2"
             app:columnCount="1"
+            android:id="@+id/main_more_setting"
             >
             <TextView
                 android:layout_width="0dp"
