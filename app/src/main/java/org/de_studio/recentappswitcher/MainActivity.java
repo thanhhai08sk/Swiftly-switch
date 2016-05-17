@@ -517,6 +517,7 @@ public class MainActivity extends Activity {
         super.onResume();
 //        setStepButtonAndDescription();
         checkPermissionOk();
+        stopService(new Intent(this, EdgeGestureService.class));
         if (Settings.canDrawOverlays(this) && (edge1Switch.isChecked() || edge1Switch.isChecked())) {
             startService(new Intent(this, EdgeGestureService.class));
         }

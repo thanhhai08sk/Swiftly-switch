@@ -6,18 +6,9 @@
     <string name="edge_gesture_notification_content_text">App running</string>
     <string name="main_step1_text">Step 1: \nUsage stat</string>
     <string name="main_step2_text">Step 2: \nAccessibility</string>
-    <string name="main_step1_information">Step 1: Activate USAGE STAT permission.\nIn order for Swiftly switch to get your recent app, you need to turn on the USAGE STAT permission for this app.</string>
-    <string name="main_step2_information">Step 2: Activate ACCESSIBILITY service.\nTo use the navigation function(HOME, BACK) you need to turn on the Accessibility service for this app.</string>
-    <string name="main_go_to_setting">Go to setting</string>
-    <string name="main_set_the_edge">Set the edge</string>
     <string name="main_edge1_section_text">Edge 1</string>
     <string name="main_edge2_section_text">Edge 2</string>
-    <string name="main_edge1_button_activated">Edge 1\n(activate)</string>
-    <string name="main_edge2_button_not_activated">Edge 2\n(not activate)</string>
     <string name="main_edge2_button_activated">Edge 2\n(activate)</string>
-    <string name="main_step1_text_for_kitkat_and_below">Step 1: Active USAGE STAT permission \nIf your software version is kitkat or below, you done need to care about this setting</string>
-    <string name="main_step1_text_success">You have completed this setting</string>
-    <string name="main_step2_text_success">You have completed this setting</string>
     <string name="edge_dialog_set_position_text">Position</string>
     <string name="edge_dialog_set_sensitive_text">Sensitive</string>
     <string name="edge_dialog_set_length_text">Length</string>
@@ -34,16 +25,11 @@
     <string name="edge_dialog_ok_button">Ok</string>
     <string name="main_favorite_app_title">Favorite shortcut:</string>
     <string name="main_favorite_info_title">Favorite shortcut</string>
-    <string name="main_favorite_app_info_text">Apps/shortcut that will be listed when you hold on the one of the recent apps icon for 1 second or when there are no recent app</string>
-    <string name="limit_for_favorite_app_is_6">The limit for favorite apps is 6!</string>
-    <string name="main_exclude_info_title">Blacklist</string>
     <string name="main_exclude_app_title">Blacklist</string>
     <string name="main_exclude_app_info">Set apps that will not be listed in the recent list</string>
     <string name="please_add_favorite_item">Please add your favorite apps in the FAVORITE APP section</string>
     <string name="notification_text">Hide this by tapping then selecting Block notification from the info page</string>
     <string name="notification_title">Swiftly switch is running ...</string>
-    <string name="main_description_text">You need to complete 2 STEP setting below before you can use this app!</string>
-    <string name="main_configuration">Configuration</string>
     <string name="main_edge_switch_2_trial_dialog_message">The Edge 2 is only available in Pro version</string>
     <string name="main_icon_pack_trial_dialog_message">This feature only available for the Pro version</string>
     <string name="main_edge_switch_2_trial_buy_pro_button">Get Pro version</string>
@@ -114,7 +100,6 @@
     <string name="main_disable_accessibility_title">Disable accessibility</string>
     <string name="main_disable_accessibility_detail_text">Enable accessibility can cause lag in some device when using Chrome. This happen to all
     apps that use accessibility. If the lag is too extreme please disable the Swiftly switch accessibility service, all feature still available except the navigation (home, back, power menu).</string>
-    <string name="main_consider_disable_accessibility_dialog_title">Consider disable Accessibility service</string>
     <string name="main_usage_access_can_not_found">Can not found this setting on your device. Please try grant it manually.</string>
     <string name="batterylife">Battery life:</string>
     <string name="main_disable_clock_text">Disable clock</string>
@@ -127,7 +112,6 @@
     <string name="share">Share</string>
     <string name="main_vibration_duration">Vibration duration</string>
     <string name="main_hold_time">Hold time</string>
-    <string name="main_hold_time_info">Time needed to switch to favorite shortcut when you hold at one of recent apps</string>
     <string name="place_in_the_center">Place it in the center</string>
     <string name="main_pin_app">Pin apps to recent</string>
     <string name="title_activity_pin_app">Pin App</string>

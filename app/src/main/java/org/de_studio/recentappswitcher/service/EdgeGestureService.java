@@ -28,7 +28,6 @@ import android.os.IBinder;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringDef;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
@@ -133,6 +132,7 @@ public class EdgeGestureService extends Service {
     private Set<String> excludeSet;
     private long startDown;
     private String[] savedPackage;
+    private ImageView tempImageView;
 
     @Nullable
     @Override
@@ -180,6 +180,13 @@ public class EdgeGestureService extends Service {
 
         if (isEdge1On) {
             edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
+            edge1View.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Log.e(LOG_TAG, "edge1View ontouch");
+                    return false;
+                }
+            });
             edge1Image = (ImageView) edge1View.findViewById(R.id.edge_image);
             if (sharedPreferences1.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false)) {
                 GradientDrawable shape = new GradientDrawable();
@@ -255,40 +262,53 @@ public class EdgeGestureService extends Service {
                     WindowManager.LayoutParams.TYPE_PHONE,
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     PixelFormat.TRANSLUCENT);
-            switch (edge1Position) {
-                case 10:
-                    paramsEdge1.gravity = Gravity.TOP | Gravity.RIGHT;
-                    break;
-                case 11:
-                    paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-                    break;
-                case 12:
-                    paramsEdge1.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                    break;
-                case 20:
-                    paramsEdge1.gravity = Gravity.TOP | Gravity.LEFT;
-                    break;
-                case 21:
-                    paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-                    break;
-                case 22:
-                    paramsEdge1.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                    break;
-                case 31:
-                    paramsEdge1.gravity = Gravity.BOTTOM | Gravity.CENTER;
-                    break;
-            }
+//            switch (edge1Position) {
+//                case 10:
+//                    paramsEdge1.gravity = Gravity.TOP | Gravity.RIGHT;
+//                    break;
+//                case 11:
+//                    paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+//                    break;
+//                case 12:
+//                    paramsEdge1.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+//                    break;
+//                case 20:
+//                    paramsEdge1.gravity = Gravity.TOP | Gravity.LEFT;
+//                    break;
+//                case 21:
+//                    paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+//                    break;
+//                case 22:
+//                    paramsEdge1.gravity = Gravity.BOTTOM | Gravity.LEFT;
+//                    break;
+//                case 31:
+//                    paramsEdge1.gravity = Gravity.BOTTOM | Gravity.CENTER;
+//                    break;
+//            }
+            paramsEdge1.gravity = Gravity.RIGHT;
+            paramsEdge1.height = edge1HeightPxl;
+            paramsEdge1.width = edge1WidthPxl;
+            paramsEdge1.y = edge1offset;
+//            paramsEdge1.verticalMargin = 500;
+//            paramsEdge1.horizontalMargin= 500;
+            tempImageView = new ImageView(getApplicationContext());
+            tempImageView.setBackgroundResource(R.color.colorAccent);
+
+
             if (isEdge1On) {
                 if (edge1View != null && edge1View.isAttachedToWindow()) {
                     removeView(edge1View);
                 }
-                windowManager.addView(edge1View, paramsEdge1);
+                windowManager.addView(tempImageView, paramsEdge1);
+                tempImageView.setY(50);
+                Log.e(LOG_TAG, "tempImageView y = " + tempImageView.getY() + "\nx = " + tempImageView.getX());
             } else {
                 removeView(edge1View);
             }
             boolean isOnlyFavorite1 = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
             OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, iconImageList1, item1View, iconImageArrayList1, isOnlyFavorite1);
             edge1Image.setOnTouchListener(onTouchListener1);
+            tempImageView.setOnTouchListener(onTouchListener1);
         }
 
 
@@ -1601,6 +1621,13 @@ public class EdgeGestureService extends Service {
     }
 
     public final synchronized void removeAll() {
+        Log.e(LOG_TAG, "remove all view");
+        try {
+            windowManager.removeView(tempImageView);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, " Null when remove tempImageView");
+        }
         try {
             windowManager.removeView(edge1View);
         } catch (Exception e) {
@@ -1647,6 +1674,7 @@ public class EdgeGestureService extends Service {
     }
 
     public final synchronized void removeAllExceptEdgeView() {
+        Log.e(LOG_TAG, "removeAllExceptEdgeView");
         try {
             windowManager.removeView(backgroundFrame);
         } catch (Exception e) {
