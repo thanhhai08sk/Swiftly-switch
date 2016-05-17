@@ -1,19 +1,13 @@
 package org.de_studio.recentappswitcher.intro;
 
-import android.app.FragmentManager;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 import com.github.paolorotolo.appintro.AppIntro2;
-import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.github.paolorotolo.appintro.AppIntroViewPager;
-
-import org.de_studio.recentappswitcher.R;
 
 /**
  * Created by hai on 5/7/2016.
@@ -82,7 +76,9 @@ public class IntroActivity extends AppIntro2 {
 
     @Override
     public void onNextPressed() {
-
+        if (pager.getCurrentItem() == 4 && startPage == 4) {
+            finish();
+        }
     }
 
     @Override
