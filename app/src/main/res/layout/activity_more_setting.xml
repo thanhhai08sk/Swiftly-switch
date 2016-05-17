@@ -1,479 +1,503 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_background"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity"
+    android:fitsSystemWindows="true"
     >
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <android.support.v7.widget.GridLayout
+        android:layout_height="match_parent"
+        android:background="@color/main_background"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".MainActivity"
+        >
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            app:rowCount="1"
-            app:columnCount="2"
-            >
-            <TextView
-                android:layout_width="0dp"
+            android:orientation="vertical">
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="@string/main_haptic_feedback_on_trigger_text"
-                android:textSize="16sp"
-                app:layout_column="0"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_gravity="center_vertical"
+                app:rowCount="1"
+                app:columnCount="2"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:text="@string/main_haptic_feedback_on_trigger_text"
+                    android:textSize="16sp"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="center_vertical"
+                    />
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:checked="false"
+                    android:id="@+id/main_disable_haptic_feedback_switch"
+                    />
+
+
+            </android.support.v7.widget.GridLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
                 />
-            <Switch
-                android:layout_width="wrap_content"
+
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:checked="false"
-                android:id="@+id/main_disable_haptic_feedback_switch"
-                />
-
-
-        </android.support.v7.widget.GridLayout>
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey"
-            />
-
-
-        <android.support.v7.widget.GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            app:rowCount="1"
-            app:columnCount="2"
-            >
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                app:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="@string/main_haptic_feedback_on_move_to_item"
-                android:textSize="16sp"
-                app:layout_column="0"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_gravity="center_vertical"
+                app:rowCount="1"
+                app:columnCount="2"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:text="@string/main_haptic_feedback_on_move_to_item"
+                    android:textSize="16sp"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="center_vertical"
+                    />
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:checked="false"
+                    android:id="@+id/main_haptic_feedback_on_item_switch"
+                    />
+
+
+            </android.support.v7.widget.GridLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
                 />
-            <Switch
-                android:layout_width="wrap_content"
+
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:checked="false"
-                android:id="@+id/main_haptic_feedback_on_item_switch"
-                />
-
-
-        </android.support.v7.widget.GridLayout>
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey"
-            />
-
-
-        <android.support.v7.widget.GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            app:rowCount="1"
-            app:columnCount="2"
-            >
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                app:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="@string/main_disable_clock_text"
-                android:textSize="16sp"
-                app:layout_column="0"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_gravity="center_vertical"
+                app:rowCount="1"
+                app:columnCount="2"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:text="@string/main_disable_clock_text"
+                    android:textSize="16sp"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="center_vertical"
+                    />
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:checked="false"
+                    android:id="@+id/main_disable_clock_switch"
+                    />
+
+
+            </android.support.v7.widget.GridLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
                 />
-            <Switch
-                android:layout_width="wrap_content"
+
+
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:checked="false"
-                android:id="@+id/main_disable_clock_switch"
-                />
-
-
-        </android.support.v7.widget.GridLayout>
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey"
-            />
-
-
-
-        <android.support.v7.widget.GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            app:rowCount="1"
-            app:columnCount="2"
-            >
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                app:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="@string/main_icon_pack_support"
-                android:textSize="16sp"
-                app:layout_column="0"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_gravity="center_vertical"
+                app:rowCount="1"
+                app:columnCount="2"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:text="@string/main_icon_pack_support"
+                    android:textSize="16sp"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="center_vertical"
+                    />
+                <ImageButton
+                    android:id="@+id/main_icon_pack_support_setting_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:background="@color/transparent"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="10dp"
+                    android:tint="@color/grey"
+                    android:src="@drawable/ic_edit_white_24dp" />
+
+            </android.support.v7.widget.GridLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
                 />
-            <ImageButton
-                android:id="@+id/main_icon_pack_support_setting_button"
-                android:layout_width="wrap_content"
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="@color/transparent"
-                android:paddingLeft="16dp"
-                android:paddingRight="10dp"
-                android:tint="@color/grey"
-                android:src="@drawable/ic_edit_white_24dp" />
-
-        </android.support.v7.widget.GridLayout>
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey"
-            />
-
-        <android.support.v7.widget.GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            app:rowCount="1"
-            app:columnCount="2"
-            >
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                app:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="@string/main_vibration_duration"
-                android:textSize="16sp"
-                app:layout_column="0"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_gravity="center_vertical"
+                app:rowCount="1"
+                app:columnCount="2"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:text="@string/main_vibration_duration"
+                    android:textSize="16sp"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="center_vertical"
+                    />
+                <ImageButton
+                    android:id="@+id/main_vibration_duration_setting_image_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:background="@color/transparent"
+                    android:paddingLeft="16dp"
+                    android:tint="@color/grey"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/ic_edit_white_24dp" />
+
+            </android.support.v7.widget.GridLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
                 />
-            <ImageButton
-                android:id="@+id/main_vibration_duration_setting_image_button"
-                android:layout_width="wrap_content"
+
+
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="@color/transparent"
-                android:paddingLeft="16dp"
-                android:tint="@color/grey"
-                android:paddingRight="10dp"
-                android:src="@drawable/ic_edit_white_24dp" />
-
-        </android.support.v7.widget.GridLayout>
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey"
-            />
-
-
-
-        <android.support.v7.widget.GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            app:rowCount="1"
-            app:columnCount="2"
-            >
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                app:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="@string/main_icon_size"
-                android:textSize="16sp"
-                app:layout_column="0"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_gravity="center_vertical"
+                app:rowCount="1"
+                app:columnCount="2"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:text="@string/main_icon_size"
+                    android:textSize="16sp"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="center_vertical"
+                    />
+                <ImageButton
+                    android:id="@+id/main_icon_size_setting_image_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:background="@color/transparent"
+                    android:paddingLeft="16dp"
+                    android:tint="@color/grey"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/ic_edit_white_24dp" />
+
+            </android.support.v7.widget.GridLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
                 />
-            <ImageButton
-                android:id="@+id/main_icon_size_setting_image_button"
-                android:layout_width="wrap_content"
+
+
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="@color/transparent"
-                android:paddingLeft="16dp"
-                android:tint="@color/grey"
-                android:paddingRight="10dp"
-                android:src="@drawable/ic_edit_white_24dp" />
-
-        </android.support.v7.widget.GridLayout>
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey"
-            />
-
-
-
-        <android.support.v7.widget.GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            app:rowCount="1"
-            app:columnCount="2"
-            >
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                app:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="@string/main_set_background_color"
-                android:textSize="16sp"
-                app:layout_column="0"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_gravity="center_vertical"
+                app:rowCount="1"
+                app:columnCount="2"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:text="@string/main_set_background_color"
+                    android:textSize="16sp"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="center_vertical"
+                    />
+                <ImageButton
+                    android:id="@+id/main_background_color_setting_image_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:background="@color/transparent"
+                    android:paddingLeft="16dp"
+                    android:tint="@color/grey"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/ic_edit_white_24dp" />
+
+            </android.support.v7.widget.GridLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
                 />
-            <ImageButton
-                android:id="@+id/main_background_color_setting_image_button"
-                android:layout_width="wrap_content"
+
+
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="@color/transparent"
-                android:paddingLeft="16dp"
-                android:tint="@color/grey"
-                android:paddingRight="10dp"
-                android:src="@drawable/ic_edit_white_24dp" />
-
-        </android.support.v7.widget.GridLayout>
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey"
-            />
-
-
-
-        <android.support.v7.widget.GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            app:rowCount="1"
-            app:columnCount="2"
-            >
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                app:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="@string/main_set_guide_color"
-                android:textSize="16sp"
-                app:layout_column="0"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_gravity="center_vertical"
+                app:rowCount="1"
+                app:columnCount="2"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:text="@string/main_set_guide_color"
+                    android:textSize="16sp"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="center_vertical"
+                    />
+                <ImageButton
+                    android:id="@+id/main_guide_color_setting_image_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:background="@color/transparent"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="10dp"
+                    android:tint="@color/grey"
+                    android:src="@drawable/ic_edit_white_24dp" />
+
+
+            </android.support.v7.widget.GridLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
                 />
-            <ImageButton
-                android:id="@+id/main_guide_color_setting_image_button"
-                android:layout_width="wrap_content"
+
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="@color/transparent"
-                android:paddingLeft="16dp"
-                android:paddingRight="10dp"
-                android:tint="@color/grey"
-                android:src="@drawable/ic_edit_white_24dp" />
-
-
-        </android.support.v7.widget.GridLayout>
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey"
-            />
-
-
-        <android.support.v7.widget.GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            app:rowCount="1"
-            app:columnCount="3"
-            >
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                app:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="@string/main_animation_text"
-                android:textSize="16sp"
-                app:layout_column="0"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_gravity="center_vertical"
+                app:rowCount="1"
+                app:columnCount="3"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:text="@string/main_animation_text"
+                    android:textSize="16sp"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="center_vertical"
+                    />
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:checked="true"
+                    android:paddingRight="8dp"
+                    android:id="@+id/main_disable_animation_switch"
+                    />
+                <ImageButton
+                    android:id="@+id/main_animation_time_setting_image_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:background="@color/transparent"
+                    android:paddingRight="10dp"
+                    android:tint="@color/grey"
+                    android:src="@drawable/ic_edit_white_24dp" />
+
+
+            </android.support.v7.widget.GridLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
                 />
-            <Switch
-                android:layout_width="wrap_content"
+
+
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:checked="true"
-                android:paddingRight="8dp"
-                android:id="@+id/main_disable_animation_switch"
-                />
-            <ImageButton
-                android:id="@+id/main_animation_time_setting_image_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="@color/transparent"
-                android:paddingRight="10dp"
-                android:tint="@color/grey"
-                android:src="@drawable/ic_edit_white_24dp" />
-
-
-        </android.support.v7.widget.GridLayout>
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey"
-            />
-
-
-
-        <android.support.v7.widget.GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            app:rowCount="1"
-            app:columnCount="3"
-            >
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                app:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="@string/main_hold_time"
-                android:textSize="16sp"
-                app:layout_column="0"
-                app:layout_row="0"
-                app:layout_columnWeight="1"
-                app:layout_gravity="center_vertical"
+                app:rowCount="1"
+                app:columnCount="3"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:text="@string/main_hold_time"
+                    android:textSize="16sp"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="center_vertical"
+                    />
+                <Switch
+                    android:id="@+id/main_hold_time_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:paddingRight="8dp"
+                    android:checked="true" />
+
+
+
+                <ImageButton
+                    android:id="@+id/main_hold_time_setting_image_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:background="@color/transparent"
+                    android:paddingRight="10dp"
+                    android:tint="@color/grey"
+                    android:src="@drawable/ic_edit_white_24dp" />
+
+
+            </android.support.v7.widget.GridLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
                 />
-            <Switch
-                android:id="@+id/main_hold_time_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:paddingRight="8dp"
-                android:checked="true" />
 
 
 
-            <ImageButton
-                android:id="@+id/main_hold_time_setting_image_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="@color/transparent"
-                android:paddingRight="10dp"
-                android:tint="@color/grey"
-                android:src="@drawable/ic_edit_white_24dp" />
+        </LinearLayout>
 
 
-        </android.support.v7.widget.GridLayout>
+    </ScrollView>
 
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey"
-            />
-
-
-
-    </LinearLayout>
-
-
-</ScrollView>
+</android.support.design.widget.CoordinatorLayout>

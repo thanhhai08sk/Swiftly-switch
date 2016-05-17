@@ -106,7 +106,14 @@
             android:label="@string/intro_activity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MoreSettingActivity"></activity>
+        <activity android:name=".MoreSettingActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/main_more_setting_title"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+               android:name="android.support.PARENT_ACTIVITY"
+               android:value="org.de_studio.recentappswitcher.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -1,6 +1,5 @@
 package org.de_studio.recentappswitcher;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +7,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -23,7 +24,7 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
-public class MoreSettingActivity extends Activity {
+public class MoreSettingActivity extends AppCompatActivity {
 
     public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.pro";
     public static final String FREE_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.trial";
@@ -36,6 +37,9 @@ public class MoreSettingActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more_setting);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (getPackageName().equals(FREE_VERSION_PACKAGE_NAME)) isTrial = true;
         sharedPreferencesDefautl = getSharedPreferences(DEFAULT_SHAREDPREFERENCE, 0);
 
