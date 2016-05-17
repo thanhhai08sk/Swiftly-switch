@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.intro;
 import android.app.AppOpsManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -47,26 +48,7 @@ public class IntroSettingFragment extends Fragment {
         permission2Layout = (LinearLayout) rootView.findViewById(R.id.ask_permission_2_linear_layout);
         permission3Layout = (LinearLayout) rootView.findViewById(R.id.ask_permission_3_linear_layout);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (Settings.canDrawOverlays(getContext())) {
-                permission1Layout.setBackgroundResource(R.drawable.set_permission_ok_background);
-                permission1Layout.setOnClickListener(null);
-            } else {
-                permission1Layout.setBackgroundResource(R.drawable.set_permission_ask_background);
-            }
-            permission1Layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!Settings.canDrawOverlays(getContext())) {
-                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                Uri.parse("package:" + getContext().getPackageName()));
-                        startActivity(intent);
-                    }
-                }
-            });
-        } else {
-            permission1Layout.setBackgroundResource(R.drawable.set_permission_ok_background);
-        }
+        setPermission1Layout();
         setPermission2Layout();
         setPermission3Layout();
 
@@ -123,12 +105,59 @@ public class IntroSettingFragment extends Fragment {
 
     }
 
+    private void setPermission1Layout() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Settings.canDrawOverlays(getContext())) {
+                permission1Layout.setBackgroundResource(R.drawable.set_permission_ok_background);
+                permission1Layout.setOnClickListener(null);
+            } else {
+                permission1Layout.setBackgroundResource(R.drawable.set_permission_ask_background);
+            }
+            permission1Layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!Settings.canDrawOverlays(getContext())) {
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                Uri.parse("package:" + getContext().getPackageName()));
+                        startActivity(intent);
+                    }
+                }
+            });
+        } else {
+            permission1Layout.setBackgroundResource(R.drawable.set_permission_ok_background);
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+        setPermission1Layout();
         setPermission2Layout();
         setPermission3Layout();
 
 
+    }
+
+    public boolean checkPermissionBeforeFinish() {
+         final boolean isOk = isStep1Ok() && Settings.canDrawOverlays(getContext()) && Utility.isAccessibilityEnable(getContext());
+        final boolean isSkip;
+        if (!isOk) {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
+            builder.setMessage(R.string.you_have_not_finished_all_permission_yet)
+                    .setPositiveButton(R.string.app_tab_fragment_ok_button, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setNegativeButton(R.string.skip, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+            builder.show();
+        }
+        return isOk;
     }
 }

@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentTransaction;
@@ -63,27 +64,32 @@ public class MainActivity extends Activity {
     private long trialTimePass, beginTime;
     private int step = 1;
     private LinearLayout permissionMissing;
+    private Switch edge1Switch;
+    private Switch edge2Switch;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Thread t = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                SharedPreferences getPrefs = PreferenceManager
-//                        .getDefaultSharedPreferences(getBaseContext());
-//                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
-//                if (isFirstStart) {
-//                    Intent i = new Intent(MainActivity.this, IntroActivity.class);
-//                    startActivity(i);
-//                    SharedPreferences.Editor e = getPrefs.edit();
-//                    e.putBoolean("firstStart", true);
-//                    e.apply();
-//                }
-//            }
-//        });
-//        t.start();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e(LOG_TAG, "run Intro");
+                SharedPreferences getPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getBaseContext());
+                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
+                if (isFirstStart) {
+                    SharedPreferences.Editor e = getPrefs.edit();
+                    e.putBoolean("firstStart", false);
+                    e.commit();
+                    Intent i = new Intent(MainActivity.this, IntroActivity.class);
+                    startActivity(i);
+
+                }
+            }
+        });
+        t.start();
+        Log.e(LOG_TAG, "after Intro");
 //        Intent i = new Intent(MainActivity.this, IntroActivity.class);
 //        startActivity(i);
         if (getPackageName().equals(FREE_VERSION_PACKAGE_NAME)) isTrial = true;
@@ -228,8 +234,8 @@ public class MainActivity extends Activity {
         }
 
 //        step1Button = (Button) findViewById(R.id.step1_button);
-        final Switch edge1Switch = (Switch) findViewById(R.id.edge_1_switch);
-        final Switch edge2Switch = (Switch) findViewById(R.id.edge_2_switch);
+        edge1Switch = (Switch) findViewById(R.id.edge_1_switch);
+        edge2Switch = (Switch) findViewById(R.id.edge_2_switch);
 //        Switch hapticFeedbackOnTriggerSwitch = (Switch) findViewById(R.id.main_disable_haptic_feedback_switch);
 //        Switch hapticFeedbackOnItemSwitch = (Switch) findViewById(R.id.main_haptic_feedback_on_item_switch);
 //        Switch disableClockSwitch = (Switch) findViewById(R.id.main_disable_clock_switch);
@@ -424,58 +430,8 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, IntroActivity.class);
                 startActivity(i);
-
-//                android.app.FragmentManager fragmentManager = getFragmentManager();
-//                EdgeSettingDialogFragment newFragment = new EdgeSettingDialogFragment();
-//                Bundle bundle = new Bundle();
-//                bundle.putInt(EdgeSettingDialogFragment.EDGE_NUMBER_KEY, 2);
-//                newFragment.setArguments(bundle);
-//                android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
-//                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//                transaction.add(android.R.id.content, newFragment)
-//                        .addToBackStack(null).commit();
-
             }
         });
-
-//        iconPackSettingButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (isTrial) {
-//                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
-//                    builder.setMessage(R.string.main_icon_pack_trial_dialog_message)
-//                            .setPositiveButton(R.string.main_edge_switch_2_trial_buy_pro_button, new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    Uri uri = Uri.parse("mbarket://details?id=" + PRO_VERSION_PACKAGE_NAME);
-//                                    Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
-//                                    gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-//                                            Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-//                                    try {
-//                                        startActivity(gotoMarket);
-//                                    } catch (ActivityNotFoundException e) {
-//                                        startActivity(new Intent(Intent.ACTION_VIEW,
-//                                                Uri.parse("http://play.google.com/store/apps/details?id=" + PRO_VERSION_PACKAGE_NAME)));
-//                                    }
-//                                }
-//                            })
-//                            .setNegativeButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    // do nothing
-//                                }
-//                            });
-//                    builder.show();
-//
-//
-//                } else {
-//                    android.app.FragmentManager fragmentManager = getFragmentManager();
-//                    IconPackSettingDialogFragment newFragment = new IconPackSettingDialogFragment();
-//                    newFragment.show(fragmentManager, "iconPackDialogFragment");
-//                }
-//
-//            }
-//        });
         outerRingSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -483,368 +439,11 @@ public class MainActivity extends Activity {
             }
         });
 
-//        vibrationDurationSettingButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
-//                View view = View.inflate(MainActivity.this, R.layout.dialog_vibration_duration_setting, null);
-//                SeekBar seekBar = (SeekBar) view.findViewById(R.id.dialog_vibration_duration_seek_bar);
-//                final TextView textView = (TextView) view.findViewById(R.id.dialog_vibration_duration_value);
-//                int currentValue = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.VIBRATION_DURATION_KEY, 15);
-//                textView.setText(currentValue +" ms");
-//                seekBar.setProgress(currentValue - 5);
-//                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//                    int progressChanged;
-//                    @Override
-//                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                        progressChanged = progress +5;
-//                        textView.setText(progressChanged + " ms");
-//                    }
-//
-//                    @Override
-//                    public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onStopTrackingTouch(SeekBar seekBar) {
-//                        sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.VIBRATION_DURATION_KEY,progressChanged).commit();
-//                        stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-//                        startService(new Intent(getApplicationContext(), EdgeGestureService.class));
-//                    }
-//                });
-//                builder.setView(view).
-//                        setTitle(R.string.main_vibration_duration).
-//                        setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                //do nothing
-//                            }
-//                        });
-//                builder.show();
-//            }
-//        });
-
-//        iconSizeSettingButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
-//                View view = View.inflate(MainActivity.this, R.layout.dialog_icon_size_setting, null);
-//                SeekBar seekBar = (SeekBar) view.findViewById(R.id.dialog_icon_size_seek_bar);
-//                final TextView textView = (TextView) view.findViewById(R.id.dialog_icon_size_value);
-//                int currentValue =(int) (sharedPreferencesDefautl.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f) * 100);
-//                textView.setText(currentValue +" %");
-//                seekBar.setProgress(currentValue - 70);
-//                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//                    int progressChanged;
-//                    @Override
-//                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                        progressChanged = progress +70;
-//                        textView.setText(progressChanged + " %");
-//                    }
-//
-//                    @Override
-//                    public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onStopTrackingTouch(SeekBar seekBar) {
-//                        sharedPreferencesDefautl.edit().putFloat(EdgeSettingDialogFragment.ICON_SCALE, ((float) progressChanged) / 100).commit();
-//                        stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-//                        startService(new Intent(getApplicationContext(), EdgeGestureService.class));
-//                    }
-//                });
-//                builder.setView(view).
-//                        setTitle(R.string.main_icon_size).
-//                        setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                //do nothing
-//                            }
-//                        });
-//                builder.show();
-//            }
-//        });
-
-//        backgroundColorSettingButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int currentColor = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY,1879048192);
-//                ColorPickerDialogBuilder
-//                        .with(MainActivity.this)
-//                        .setTitle(getApplicationContext().getString(R.string.main_set_background_color))
-//                        .initialColor(currentColor)
-//                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-//                        .density(12)
-//                        .setOnColorSelectedListener(new OnColorSelectedListener() {
-//                            @Override
-//                            public void onColorSelected(int selectedColor) {
-//                            }
-//                        })
-//                        .setPositiveButton("ok", new ColorPickerClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-//                                sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY,selectedColor).commit();
-//                                stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-//                                startService(new Intent(getApplicationContext(), EdgeGestureService.class));
-//                            }
-//                        })
-//                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                            }
-//                        })
-//                        .build()
-//                        .show();
-//            }
-//        });
-
-//        guideColorSettingButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int currentColor = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY, Color.argb(255, 255, 64, 129));
-//                ColorPickerDialogBuilder
-//                        .with(MainActivity.this)
-//                        .setTitle(getApplicationContext().getString(R.string.main_set_guide_color))
-//                        .initialColor(currentColor)
-//                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-//                        .density(12)
-//                        .setOnColorSelectedListener(new OnColorSelectedListener() {
-//                            @Override
-//                            public void onColorSelected(int selectedColor) {
-//                            }
-//                        })
-//                        .setPositiveButton("ok", new ColorPickerClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-//                                sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY,selectedColor).commit();
-//                                stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-//                                startService(new Intent(getApplicationContext(), EdgeGestureService.class));
-//                            }
-//                        })
-//                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                            }
-//                        })
-//                        .build()
-//                        .show();
-//            }
-//        });
-
-//        holdTimeSettingButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
-//                View view = View.inflate(MainActivity.this, R.layout.dialog_hold_time_setting, null);
-//                SeekBar seekBar = (SeekBar) view.findViewById(R.id.dialog_hold_time_seek_bar);
-//                final TextView textView = (TextView) view.findViewById(R.id.dialog_hold_time_value);
-//                int currentValue = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.HOLD_TIME_KEY, 600);
-//                textView.setText(currentValue +" ms");
-//                seekBar.setProgress(currentValue - 300);
-//                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//                    int progressChanged;
-//
-//                    @Override
-//                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                        progressChanged = progress + 300;
-//                        textView.setText(progressChanged + " ms");
-//                    }
-//
-//                    @Override
-//                    public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onStopTrackingTouch(SeekBar seekBar) {
-//                        sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.HOLD_TIME_KEY, progressChanged).commit();
-//                        stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-//                        startService(new Intent(getApplicationContext(), EdgeGestureService.class));
-//                    }
-//                });
-//
-//                builder.setView(view).
-//                        setTitle(R.string.main_hold_time).
-//                        setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                //do nothing
-//                            }
-//                        });
-//                builder.show();
-//            }
-//        });
-
-//        animationTimeSettingButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
-//                View view = View.inflate(MainActivity.this, R.layout.dialog_ani_time_setting, null);
-//                SeekBar seekBar = (SeekBar) view.findViewById(R.id.dialog_ani_time_seek_bar);
-//                final TextView textView = (TextView) view.findViewById(R.id.dialog_ani_time_value);
-//                int currentValue = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.ANI_TIME_KEY, 100);
-//                textView.setText(currentValue +" ms");
-//                seekBar.setProgress(currentValue);
-//                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//                    int progressChanged;
-//
-//                    @Override
-//                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                        progressChanged = progress;
-//                        textView.setText(progressChanged + " ms");
-//                    }
-//
-//                    @Override
-//                    public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onStopTrackingTouch(SeekBar seekBar) {
-//                        sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.ANI_TIME_KEY, progressChanged).commit();
-//                        stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-//                        startService(new Intent(getApplicationContext(), EdgeGestureService.class));
-//                    }
-//                });
-//
-//                builder.setView(view).
-//                        setTitle(R.string.main_ani_time).
-//                        setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                //do nothing
-//                            }
-//                        });
-//                builder.show();
-//            }
-//        });
-
-//        holdTimeInfoButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//                builder.setTitle(R.string.main_hold_time)
-//                        .setMessage(R.string.main_hold_time_info)
-//                        .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                //do nothing
-//                            }
-//                        });
-//                builder.show();
-//            }
-//        });
-
-//        numberOfRecentButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int current = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.NUM_OF_RECENT_KEY, 6);
-//                int checked = 2;
-//                switch (current) {
-//                    case 4:
-//                        checked = 0;
-//                        break;
-//                    case 5:
-//                        checked = 1;
-//                        break;
-//                    case 6:
-//                        checked = 2;
-//                        break;
-//                }
-//                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//                builder.setTitle(R.string.main_number_of_recent)
-//                        .setSingleChoiceItems(new CharSequence[]{"4", "5", "6"}, checked, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                switch (which) {
-//                                    case 0:
-//                                        sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.NUM_OF_RECENT_KEY, 4).commit();
-//                                        break;
-//                                    case 1:
-//                                        sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.NUM_OF_RECENT_KEY, 5).commit();
-//                                        break;
-//                                    case 2:
-//                                        sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.NUM_OF_RECENT_KEY, 6).commit();
-//                                        break;
-//                                }
-//                            }
-//                        })
-//                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                            @Override
-//                            public void onDismiss(DialogInterface dialog) {
-//                                stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-//                                startService(new Intent(getApplicationContext(), EdgeGestureService.class));
-//                            }
-//                        })
-//                .
-//                setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        //do nothing
-//                    }
-//                });
-//                builder.show();
-//            }
-//        });
-
-
-//        setStepButtonAndDescription();
-
-
-//        step1Button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                step =1;
-//                if (isStep1Ok()) {
-//                    step1Text.setText(R.string.main_step1_text_success);
-//                } else {
-//                    step1Text.setText(R.string.main_step1_information);
-//                }
-//                stepTextFrame.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.text_board_1));
-//            }
-//        });
-//        step2Button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                step = 2;
-//                if (Utility.isAccessibilityEnable(getApplicationContext())) {
-//                    step1Text.setText(R.string.main_step2_text_success);
-//                } else step1Text.setText(R.string.main_step2_information);
-//
-//                stepTextFrame.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.text_board_2_));
-//            }
-//        });
-
-//        step1GoToSettingButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                    if (step == 1) {
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                            try {
-//                                startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-//                            } catch (ActivityNotFoundException e) {
-//                                Log.e(LOG_TAG, "Can not found usage access setting");
-//                                Toast.makeText(MainActivity.this,R.string.main_usage_access_can_not_found,Toast.LENGTH_LONG).show();
-//                            }
-//
-//                        }
-//                    } else {
-//                        startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-//                    }
-//
-//
-//            }
-//        });
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
             stopService(new Intent(this, EdgeGestureService.class));
             startService(new Intent(this, EdgeGestureService.class));
 
         } else {
-            checkDrawOverlayPermission();
-
             if (Settings.canDrawOverlays(this)) {
                 stopService(new Intent(this, EdgeGestureService.class));
                 startService(new Intent(this, EdgeGestureService.class));
@@ -879,77 +478,6 @@ public class MainActivity extends Activity {
                 startActivity(new Intent(MainActivity.this,MoreSettingActivity.class));
             }
         });
-
-
-//        favoriteInfoButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
-////                AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-//                builder.setTitle(getString(R.string.main_favorite_info_title))
-//                        .setMessage(R.string.main_favorite_app_info_text)
-//                        .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                // do nothing
-//                            }
-//                        });
-//                builder.show();
-//            }
-//        });
-//        excludeInfoButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//                builder.setTitle(getString(R.string.main_exclude_info_title))
-//                        .setMessage(R.string.main_exclude_app_info)
-//                        .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                //do nothing
-//                            }
-//                        });
-//                builder.show();
-//            }
-//        });
-//        pinAppInfoButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//                builder.setTitle(getString(R.string.main_pin_app))
-//                        .setMessage(R.string.pin_app_info)
-//                        .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                //do nothing
-//                            }
-//                        });
-//                builder.show();
-//            }
-//        });
-//        disableAccessibilityInfoButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//                builder.setTitle(R.string.main_consider_disable_accessibility_dialog_title)
-//                        .setMessage(R.string.main_disable_accessibility_detail_text)
-//                        .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                //do nothing
-//                            }
-//                        });
-//                builder.show();
-//            }
-//        });
-//        ImageButton disableAccessibilityButton = (ImageButton) findViewById(R.id.main_disable_accessiblity_image_button);
-//        disableAccessibilityButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-//            }
-//        });
-
         shareFriendLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -989,10 +517,9 @@ public class MainActivity extends Activity {
         super.onResume();
 //        setStepButtonAndDescription();
         checkPermissionOk();
-        if (!(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1)) {
-            checkDrawOverlayPermission();
+        if (Settings.canDrawOverlays(this) && (edge1Switch.isChecked() || edge1Switch.isChecked())) {
+            startService(new Intent(this, EdgeGestureService.class));
         }
-
     }
 
 //    public void showDialog() {
@@ -1048,13 +575,13 @@ public class MainActivity extends Activity {
 
     }
 
-    public void checkDrawOverlayPermission() {
-        if (!Settings.canDrawOverlays(this)) {
-            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + getPackageName()));
-            startActivityForResult(intent, REQUEST_CODE);
-        }
-    }
+//    public void checkDrawOverlayPermission() {
+//        if (!Settings.canDrawOverlays(this)) {
+//            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+//                    Uri.parse("package:" + getPackageName()));
+//            startActivityForResult(intent, REQUEST_CODE);
+//        }
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

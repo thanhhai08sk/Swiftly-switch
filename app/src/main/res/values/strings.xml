@@ -163,6 +163,6 @@
     <string name="main_quick_actions_setting_description">Quick actions are placed outside of recent apps semi-circle, click the setting icon to customize it</string>
     <string name="main_more_setting_description">More customize for look and feel of the app</string>
     <string name="one_or_more_permission_are_missing">One or more permission are missing</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="you_have_not_finished_all_permission_yet">You have not finished granting all permission yet. Please try again.</string>
+    <string name="skip">Skip</string>
 </resources>

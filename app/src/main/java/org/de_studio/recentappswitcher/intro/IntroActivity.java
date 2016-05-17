@@ -1,13 +1,21 @@
 package org.de_studio.recentappswitcher.intro;
 
+import android.app.AppOpsManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntroViewPager;
+
+import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 
 /**
  * Created by hai on 5/7/2016.
@@ -83,7 +91,27 @@ public class IntroActivity extends AppIntro2 {
 
     @Override
     public void onDonePressed() {
-        finish();
+        boolean isOk = isStep1Ok() && Settings.canDrawOverlays(this) && Utility.isAccessibilityEnable(this);
+        Log.e(LOG_TAG, "finish Intro");
+        if (isOk) {
+            finish();
+        } else {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(IntroActivity.this);
+            builder.setMessage(R.string.you_have_not_finished_all_permission_yet)
+                    .setPositiveButton(R.string.app_tab_fragment_ok_button, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setNegativeButton(R.string.skip, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+            builder.show();
+        }
 
     }
 
@@ -91,4 +119,15 @@ public class IntroActivity extends AppIntro2 {
     public void onSlideChanged() {
 
     }
+    private boolean isStep1Ok() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AppOpsManager appOps = (AppOpsManager) this.getSystemService(Context.APP_OPS_SERVICE);
+            int mode = appOps.checkOpNoThrow("android:get_usage_stats",
+                    android.os.Process.myUid(), this.getPackageName());
+            return mode == AppOpsManager.MODE_ALLOWED;
+        } else return true;
+
+
+    }
+
 }
