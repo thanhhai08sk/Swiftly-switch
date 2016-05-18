@@ -361,6 +361,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 defaultSharedPreferences.edit().putInt(ICON_DISTANCE_KEY,110).commit();
                 mContext.stopService(new Intent(mContext, EdgeGestureService.class));
                 mContext.startService(new Intent(mContext, EdgeGestureService.class));
+                updateEdgeView();
 
             }
         });
