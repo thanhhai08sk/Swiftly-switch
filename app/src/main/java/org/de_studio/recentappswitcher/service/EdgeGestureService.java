@@ -287,7 +287,14 @@ public class EdgeGestureService extends Service {
             }
             paramsEdge1.height = edge1HeightPxl;
             paramsEdge1.width = edge1WidthPxl;
-            paramsEdge1.y = -(int) (edge1offset * mScale);
+            if (edge1Position == 12 | edge1Position == 22) {
+                paramsEdge1.y = (int) (edge1offset * mScale);
+            } else if (edge1Position == 31) {
+                paramsEdge1.x = -(int) (edge1offset * mScale);
+            } else {
+                paramsEdge1.y = -(int) (edge1offset * mScale);
+            }
+
 //            paramsEdge1.verticalMargin = 500;
 //            paramsEdge1.horizontalMargin= 500;
             tempImageView = new ImageView(getApplicationContext());

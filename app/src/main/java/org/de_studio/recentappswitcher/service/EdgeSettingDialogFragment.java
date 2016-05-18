@@ -453,10 +453,12 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         caculateEdgeInit();
         if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
             edgeImage.setX(edgeInitX - currentOffset*mScale);
+            edgeImage.setY(edgeInitY);
 
         }else {
             Log.e(LOG_TAG,"currentOffet = " + (currentOffset));
             edgeImage.setY(edgeInitY - currentOffset*mScale);
+            edgeImage.setX(edgeInitX);
         }
 
 
