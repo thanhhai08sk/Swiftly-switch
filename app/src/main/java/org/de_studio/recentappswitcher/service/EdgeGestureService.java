@@ -132,7 +132,6 @@ public class EdgeGestureService extends Service {
     private Set<String> excludeSet;
     private long startDown;
     private String[] savedPackage;
-    private ImageView tempImageView;
 
     @Nullable
     @Override
@@ -187,7 +186,7 @@ public class EdgeGestureService extends Service {
                     return false;
                 }
             });
-            edge1Image = (ImageView) edge1View.findViewById(R.id.edge_image);
+            edge1Image = new ImageView(getApplicationContext());
             if (sharedPreferences1.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false)) {
                 GradientDrawable shape = new GradientDrawable();
                 shape.setShape(GradientDrawable.RECTANGLE);
@@ -213,24 +212,25 @@ public class EdgeGestureService extends Service {
 
 //        ViewGroup.LayoutParams edge1ImageLayoutParams = edge1Image.getLayoutParams();
             if (edge1Image != null) {
-                RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1Image.getLayoutParams());
-                if (Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()) >= 30) {
+
+                if (edge1Position >= 30) {
                     edge1HeightPxl = (int) (edge1Sensivite * mScale);
                     edge1WidthPxl = (int) (edge1Length * mScale);
-                    if (edge1offset > 0) {
-                        edge1ImageLayoutParams.rightMargin = (int) (edge1offset * mScale);
-                    } else {
-                        edge1ImageLayoutParams.leftMargin = (int) (-edge1offset * mScale);
-                    }
+//                    if (edge1offset > 0) {
+//                        edge1ImageLayoutParams.rightMargin = (int) (edge1offset * mScale);
+//                    } else {
+//                        edge1ImageLayoutParams.leftMargin = (int) (-edge1offset * mScale);
+//                    }
                 } else {
                     edge1HeightPxl = (int) (edge1Length * mScale);
                     edge1WidthPxl = (int) (edge1Sensivite * mScale);
-                    if (edge1offset > 0) {
-                        edge1ImageLayoutParams.bottomMargin = (int) (edge1offset * mScale);
-                    } else {
-                        edge1ImageLayoutParams.topMargin = (int) (-edge1offset * mScale);
-                    }
+//                    if (edge1offset > 0) {
+//                        edge1ImageLayoutParams.bottomMargin = (int) (edge1offset * mScale);
+//                    } else {
+//                        edge1ImageLayoutParams.topMargin = (int) (-edge1offset * mScale);
+//                    }
                 }
+                RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1WidthPxl,edge1HeightPxl);
                 edge1ImageLayoutParams.height = edge1HeightPxl;
                 edge1ImageLayoutParams.width = edge1WidthPxl;
                 edge1Image.setLayoutParams(edge1ImageLayoutParams);
@@ -297,23 +297,21 @@ public class EdgeGestureService extends Service {
 
 //            paramsEdge1.verticalMargin = 500;
 //            paramsEdge1.horizontalMargin= 500;
-            tempImageView = new ImageView(getApplicationContext());
-            tempImageView.setBackgroundResource(R.color.colorAccent);
+//            tempImageView = new ImageView(getApplicationContext());
+//            tempImageView.setBackgroundResource(R.color.colorAccent);
 
 
             if (isEdge1On) {
                 if (edge1View != null && edge1View.isAttachedToWindow()) {
                     removeView(edge1View);
                 }
-                windowManager.addView(tempImageView, paramsEdge1);
-                Log.e(LOG_TAG, "tempImageView y = " + tempImageView.getY() + "\nx = " + tempImageView.getX());
+                windowManager.addView(edge1Image, paramsEdge1);
             } else {
                 removeView(edge1View);
             }
             boolean isOnlyFavorite1 = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
             OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, iconImageList1, item1View, iconImageArrayList1, isOnlyFavorite1);
             edge1Image.setOnTouchListener(onTouchListener1);
-            tempImageView.setOnTouchListener(onTouchListener1);
         }
 
 
@@ -1628,16 +1626,10 @@ public class EdgeGestureService extends Service {
     public final synchronized void removeAll() {
         Log.e(LOG_TAG, "remove all view");
         try {
-            windowManager.removeView(tempImageView);
+            windowManager.removeView(edge1Image);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove tempImageView");
-        }
-        try {
-            windowManager.removeView(edge1View);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove edge1View");
+            Log.e(LOG_TAG, " Null when remove edge1Image");
         }
         try {
             windowManager.removeView(edge2View);
