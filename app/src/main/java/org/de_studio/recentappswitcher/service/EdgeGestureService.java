@@ -262,33 +262,32 @@ public class EdgeGestureService extends Service {
                     WindowManager.LayoutParams.TYPE_PHONE,
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     PixelFormat.TRANSLUCENT);
-//            switch (edge1Position) {
-//                case 10:
-//                    paramsEdge1.gravity = Gravity.TOP | Gravity.RIGHT;
-//                    break;
-//                case 11:
-//                    paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-//                    break;
-//                case 12:
-//                    paramsEdge1.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-//                    break;
-//                case 20:
-//                    paramsEdge1.gravity = Gravity.TOP | Gravity.LEFT;
-//                    break;
-//                case 21:
-//                    paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-//                    break;
-//                case 22:
-//                    paramsEdge1.gravity = Gravity.BOTTOM | Gravity.LEFT;
-//                    break;
-//                case 31:
-//                    paramsEdge1.gravity = Gravity.BOTTOM | Gravity.CENTER;
-//                    break;
-//            }
-            paramsEdge1.gravity = Gravity.RIGHT;
+            switch (edge1Position) {
+                case 10:
+                    paramsEdge1.gravity = Gravity.TOP | Gravity.RIGHT;
+                    break;
+                case 11:
+                    paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+                    break;
+                case 12:
+                    paramsEdge1.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                    break;
+                case 20:
+                    paramsEdge1.gravity = Gravity.TOP | Gravity.LEFT;
+                    break;
+                case 21:
+                    paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                    break;
+                case 22:
+                    paramsEdge1.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                    break;
+                case 31:
+                    paramsEdge1.gravity = Gravity.BOTTOM | Gravity.CENTER;
+                    break;
+            }
             paramsEdge1.height = edge1HeightPxl;
             paramsEdge1.width = edge1WidthPxl;
-            paramsEdge1.y = edge1offset;
+            paramsEdge1.y = -(int) (edge1offset * mScale);
 //            paramsEdge1.verticalMargin = 500;
 //            paramsEdge1.horizontalMargin= 500;
             tempImageView = new ImageView(getApplicationContext());
@@ -300,7 +299,6 @@ public class EdgeGestureService extends Service {
                     removeView(edge1View);
                 }
                 windowManager.addView(tempImageView, paramsEdge1);
-                tempImageView.setY(50);
                 Log.e(LOG_TAG, "tempImageView y = " + tempImageView.getY() + "\nx = " + tempImageView.getX());
             } else {
                 removeView(edge1View);
