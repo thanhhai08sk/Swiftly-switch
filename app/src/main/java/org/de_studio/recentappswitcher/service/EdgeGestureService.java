@@ -1376,7 +1376,7 @@ public class EdgeGestureService extends Service {
                 ViewGroup.LayoutParams gridParams = shortcutGridView.getLayoutParams();
                 int gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
                 int gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
-                int gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
+                int gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 5);
                 shortcutGridView.setVerticalSpacing((int) (gridGap * mScale));
                 shortcutGridView.setNumColumns(gridColumn);
                 shortcutGridView.setGravity(Gravity.CENTER);
@@ -1496,7 +1496,7 @@ public class EdgeGestureService extends Service {
         numOfRecent = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_RECENT_KEY, 6);
         gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         gridColumn = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
-        gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
+        gridGap = defaultShared.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 5);
         holdTime = defaultShared.getInt(EdgeSettingDialogFragment.HOLD_TIME_KEY, 600);
         vibrationDuration = defaultShared.getInt(EdgeSettingDialogFragment.VIBRATION_DURATION_KEY, 15);
         iconPaddingLeft = (int) (14 * mScale);

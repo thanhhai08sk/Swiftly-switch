@@ -38,7 +38,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         defaultSharedPreference = getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         int gridRow = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         int gridColumn = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
-        int shortcutGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
+        int shortcutGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 5);
         mScale = getResources().getDisplayMetrics().density;
         mIconScale = defaultSharedPreference.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -91,7 +91,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         });
 
 
-        int currentGridGapSeekBarProgress = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY,12);
+        int currentGridGapSeekBarProgress = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY,5);
         gridGapSeekBar.setProgress(currentGridGapSeekBarProgress);
         gridGapValueTextView.setText(currentGridGapSeekBarProgress + 10 + " dp");
         gridGapSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -199,7 +199,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         ViewGroup.LayoutParams gridParams = gridView.getLayoutParams();
         int gridRow = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         int gridColumn = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
-        int gridGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 12);
+        int gridGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 5);
         gridView.setVerticalSpacing((int)( gridGap*mScale));
         gridView.setNumColumns(gridColumn);
         gridParams.height = (int) (mScale * (float) ((EdgeGestureService.GRID_ICON_SIZE * mIconScale + EdgeGestureService.GRID_2_PADDING) * gridRow + gridGap * (gridRow - 1)));
