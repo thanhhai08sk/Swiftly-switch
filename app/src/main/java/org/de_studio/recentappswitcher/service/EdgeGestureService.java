@@ -169,7 +169,7 @@ public class EdgeGestureService extends Service {
 
         if (isEdge1On) {
             edge1Image = new ImageView(getApplicationContext());
-            if (sharedPreferences1.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false)) {
+            if (sharedPreferences1.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, true)) {
                 GradientDrawable shape = new GradientDrawable();
                 shape.setShape(GradientDrawable.RECTANGLE);
                 shape.setCornerRadius(0);
@@ -283,7 +283,7 @@ public class EdgeGestureService extends Service {
 
         if (isEdge2On) {
             edge2Image = new ImageView(getApplicationContext());
-            if (sharedPreferences2.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false)) {
+            if (sharedPreferences2.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, true)) {
                 GradientDrawable shape = new GradientDrawable();
                 shape.setShape(GradientDrawable.RECTANGLE);
                 shape.setCornerRadius(0);
@@ -464,13 +464,13 @@ public class EdgeGestureService extends Service {
                             break;
                     }
                     clearIconBackground();
-                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, true), animationTime);
+                    Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, false), animationTime);
                     excludeSet = sharedPreferences_exclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, new HashSet<String>());
 
 //                    Log.e(LOG_TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
 //                    if (!backgroundFrame.isAttachedToWindow() && (position == edge1Position || position == edge2Position)) {
 //                    if (!backgroundFrame.isAttachedToWindow() && (defaultShared.getInt(EdgeSettingDialogFragment.SERVICE_ID,10) == serviceId )) {
-                    if (defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, true)) {
+                    if (defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, false)) {
                         backgroundFrame.setAlpha(0f);
                         windowManager.addView(backgroundFrame, backgroundParams);
                         backgroundFrame.animate().alpha(1f).setDuration(defaultShared.getInt(EdgeSettingDialogFragment.ANI_TIME_KEY, 100)).setInterpolator(new FastOutSlowInInterpolator());
@@ -1053,7 +1053,7 @@ public class EdgeGestureService extends Service {
 
                     if (!isClockShown && !switched && !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
                         Log.e(LOG_TAG, "Show clock");
-                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, true), defaultShared.getInt(EdgeSettingDialogFragment.ANI_TIME_KEY, 100));
+                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, false), defaultShared.getInt(EdgeSettingDialogFragment.ANI_TIME_KEY, 100));
                         isClockShown = true;
                     }
                     if (switched) {
@@ -1490,7 +1490,7 @@ public class EdgeGestureService extends Service {
         isEdge1On = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true);
         isEdge2On = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, false);
         spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
-        icon_distance = defaultShared.getInt(EdgeSettingDialogFragment.ICON_DISTANCE_KEY, 110);
+        icon_distance = defaultShared.getInt(EdgeSettingDialogFragment.ICON_DISTANCE_KEY, 105);
         ovalOffSet = (int) (ovalOffSetInDp * mScale);
         ovalRadiusPlusPxl = (int) (ovalRadiusPlus * mIconScale * mScale);
         numOfRecent = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_RECENT_KEY, 6);

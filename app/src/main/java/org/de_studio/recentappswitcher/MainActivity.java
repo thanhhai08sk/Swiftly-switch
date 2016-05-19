@@ -428,8 +428,19 @@ public class MainActivity extends Activity {
         edge2SettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, IntroActivity.class);
-                startActivity(i);
+//                Intent i = new Intent(MainActivity.this, IntroActivity.class);
+//                startActivity(i);
+                android.app.FragmentManager fragmentManager = getFragmentManager();
+                EdgeSettingDialogFragment newFragment = new EdgeSettingDialogFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(EdgeSettingDialogFragment.EDGE_NUMBER_KEY, 2);
+                newFragment.setArguments(bundle);
+//                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+//                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                transaction.add(android.R.id.content, newFragment)
+                        .addToBackStack(null).commit();
             }
         });
         outerRingSettingButton.setOnClickListener(new View.OnClickListener() {
@@ -518,9 +529,16 @@ public class MainActivity extends Activity {
 //        setStepButtonAndDescription();
         checkPermissionOk();
         stopService(new Intent(this, EdgeGestureService.class));
-        if (Settings.canDrawOverlays(this) && (edge1Switch.isChecked() || edge1Switch.isChecked())) {
-            startService(new Intent(this, EdgeGestureService.class));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Settings.canDrawOverlays(this) && (edge1Switch.isChecked() || edge1Switch.isChecked())) {
+                startService(new Intent(this, EdgeGestureService.class));
+            }
+        } else {
+            if (edge1Switch.isChecked() || edge1Switch.isChecked()) {
+                startService(new Intent(this, EdgeGestureService.class));
+            }
         }
+
     }
 
 //    public void showDialog() {
@@ -631,12 +649,19 @@ public class MainActivity extends Activity {
     }
 
     private boolean checkPermissionOk() {
-        boolean isOk = isStep1Ok() && Settings.canDrawOverlays(this) && Utility.isAccessibilityEnable(this);
+        boolean isOk;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            isOk = isStep1Ok() && Settings.canDrawOverlays(this) && Utility.isAccessibilityEnable(this);
+
+        } else {
+            isOk = isStep1Ok() && Utility.isAccessibilityEnable(this);
+        }
         if (isOk) {
             permissionMissing.setVisibility(View.GONE);
         } else {
             permissionMissing.setVisibility(View.VISIBLE);
         }
+
         return isOk;
     }
 

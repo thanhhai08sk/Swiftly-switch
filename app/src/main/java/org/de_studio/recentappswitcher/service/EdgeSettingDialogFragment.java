@@ -121,7 +121,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         int currentLength = sharedPreferences.getInt(EDGE_LENGTH_KEY ,150);
         int currentOffset = sharedPreferences.getInt(EDGE_OFFSET_KEY, 0);
         int currentSensitive = sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 12);
-        int currentCircleSize = defaultSharedPreferences.getInt(ICON_DISTANCE_KEY,110);
+        int currentCircleSize = defaultSharedPreferences.getInt(ICON_DISTANCE_KEY,105);
         final TextView sensitiveNumberTextView = (TextView) rootView.findViewById(R.id.edge_dialog_sensitive_number_text);
         final AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
         final AppCompatSpinner modeSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_mode_spinner);
@@ -152,7 +152,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             }
         });
 
-        showGuideCheckBox.setChecked(sharedPreferences.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false));
+        showGuideCheckBox.setChecked(sharedPreferences.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, true));
         showGuideCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -382,14 +382,14 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 offsetSeekBar.setProgress(300);
                 modeSpinner.setSelection(0);
                 showGuideCheckBox.setChecked(false);
-                sharedPreferences.edit().putBoolean(USE_GUIDE_KEY,false).commit();
+                sharedPreferences.edit().putBoolean(USE_GUIDE_KEY,true).commit();
                 sharedPreferences.edit().putBoolean(IS_ONLY_FAVORITE_KEY,false).commit();
                 sensitiveSeekBar.setProgress(7);
                 sharedPreferences.edit().putInt(EDGE_SENSIIVE_KEY, 12).commit();
                 lengthSeekBar.setProgress(110);
                 sharedPreferences.edit().putInt(EDGE_LENGTH_KEY, 150).commit();
                 circleSizeSeekBar.setProgress(15);
-                defaultSharedPreferences.edit().putInt(ICON_DISTANCE_KEY,110).commit();
+                defaultSharedPreferences.edit().putInt(ICON_DISTANCE_KEY,105).commit();
                 mContext.stopService(new Intent(mContext, EdgeGestureService.class));
                 mContext.startService(new Intent(mContext, EdgeGestureService.class));
 //                updateEdgeView();
@@ -423,7 +423,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     private synchronized   void updateEdgeView(){
         Log.e(LOG_TAG, "updateEdgeView");
         edgeParent.removeAllViews();
-        tempEdge = new View(getContext());
+        tempEdge = new View(mContext);
         tempEdge.setBackgroundResource(R.color.colorAccent);
         int spinnerCurrentPosition = 1;
         if (edgeNumber == 2) spinnerCurrentPosition = 5;
@@ -530,13 +530,13 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 edgeInitY = screenHeight - height;
                 break;
         }
-        Log.e(LOG_TAG, "caculate " +
-                "\nedgeInitX = " + edgeInitX+
-                "\nedgeInitY = " + edgeInitY +
-                "\nheight = " + height +
-                "\nwidth = " + width +
-                "\nscreenHeight = " + screenHeight +
-                "\nscreenWidth = " + screenWidth);
+//        Log.e(LOG_TAG, "caculate " +
+//                "\nedgeInitX = " + edgeInitX+
+//                "\nedgeInitY = " + edgeInitY +
+//                "\nheight = " + height +
+//                "\nwidth = " + width +
+//                "\nscreenHeight = " + screenHeight +
+//                "\nscreenWidth = " + screenWidth);
     }
 
 

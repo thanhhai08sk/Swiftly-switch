@@ -512,7 +512,7 @@ public  class Utility {
 
     public static float[] getTriggerPoint(float x_init,float y_init,SharedPreferences sharedPreferences, int edgePosition, int iconToSwitch, float mScale) {
         float[] returnValue = new float[2];
-        float circleSize = mScale * (float) sharedPreferences.getInt(EdgeSettingDialogFragment.ICON_DISTANCE_KEY, 110);
+        float circleSize = mScale * (float) sharedPreferences.getInt(EdgeSettingDialogFragment.ICON_DISTANCE_KEY, 105);
 //        float iconScale = sharedPreferences.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f);
 //        float iconSize24 = iconScale *mScale * 24;
         double alpha, beta, alphaOfIconToSwitch;
