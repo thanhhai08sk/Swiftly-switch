@@ -89,8 +89,6 @@ public class EdgeGestureService extends Service {
     static final String LOG_TAG = EdgeGestureService.class.getSimpleName();
     static final int EDGE_GESTURE_NOTIFICAION_ID = 10;
     private WindowManager windowManager;
-    private RelativeLayout edge1View;
-    private RelativeLayout edge2View;
     private ImageView edge1Image;
     private ImageView edge2Image;
     private FrameLayout item1View, item2View, shortcutView, backgroundFrame;
@@ -152,14 +150,6 @@ public class EdgeGestureService extends Service {
         } else launcherPackagename = "";
         Log.e(LOG_TAG, "Launcher packagename = " + launcherPackagename);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        if (edge1View != null && edge1View.isAttachedToWindow()) {
-            Log.e(LOG_TAG, "edge1View still attached to window");
-            removeView(edge1View);
-        }
-        if (edge2View != null && edge2View.isAttachedToWindow()) {
-            Log.e(LOG_TAG, "edge1View still attached to window");
-            removeView(edge2View);
-        }
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         icon_distance_pxl = icon_distance * mScale;
@@ -178,14 +168,6 @@ public class EdgeGestureService extends Service {
 
 
         if (isEdge1On) {
-            edge1View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
-            edge1View.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    Log.e(LOG_TAG, "edge1View ontouch");
-                    return false;
-                }
-            });
             edge1Image = new ImageView(getApplicationContext());
             if (sharedPreferences1.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false)) {
                 GradientDrawable shape = new GradientDrawable();
@@ -206,29 +188,16 @@ public class EdgeGestureService extends Service {
                 }
 
                 edge1Image.setBackground(drawable);
-
-
             }
 
-//        ViewGroup.LayoutParams edge1ImageLayoutParams = edge1Image.getLayoutParams();
             if (edge1Image != null) {
 
                 if (edge1Position >= 30) {
                     edge1HeightPxl = (int) (edge1Sensivite * mScale);
                     edge1WidthPxl = (int) (edge1Length * mScale);
-//                    if (edge1offset > 0) {
-//                        edge1ImageLayoutParams.rightMargin = (int) (edge1offset * mScale);
-//                    } else {
-//                        edge1ImageLayoutParams.leftMargin = (int) (-edge1offset * mScale);
-//                    }
                 } else {
                     edge1HeightPxl = (int) (edge1Length * mScale);
                     edge1WidthPxl = (int) (edge1Sensivite * mScale);
-//                    if (edge1offset > 0) {
-//                        edge1ImageLayoutParams.bottomMargin = (int) (edge1offset * mScale);
-//                    } else {
-//                        edge1ImageLayoutParams.topMargin = (int) (-edge1offset * mScale);
-//                    }
                 }
                 RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1WidthPxl,edge1HeightPxl);
                 edge1ImageLayoutParams.height = edge1HeightPxl;
@@ -302,12 +271,9 @@ public class EdgeGestureService extends Service {
 
 
             if (isEdge1On) {
-                if (edge1View != null && edge1View.isAttachedToWindow()) {
-                    removeView(edge1View);
-                }
                 windowManager.addView(edge1Image, paramsEdge1);
             } else {
-                removeView(edge1View);
+                removeView(edge1Image);
             }
             boolean isOnlyFavorite1 = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
             OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, iconImageList1, item1View, iconImageArrayList1, isOnlyFavorite1);
@@ -316,8 +282,7 @@ public class EdgeGestureService extends Service {
 
 
         if (isEdge2On) {
-            edge2View = (RelativeLayout) layoutInflater.inflate(R.layout.edge_view, null);
-            edge2Image = (ImageView) edge2View.findViewById(R.id.edge_image);
+            edge2Image = new ImageView(getApplicationContext());
             if (sharedPreferences2.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, false)) {
                 GradientDrawable shape = new GradientDrawable();
                 shape.setShape(GradientDrawable.RECTANGLE);
@@ -338,25 +303,15 @@ public class EdgeGestureService extends Service {
 
                 edge2Image.setBackground(drawable);
             }
-            RelativeLayout.LayoutParams edge2ImageLayoutParams = new RelativeLayout.LayoutParams(edge2Image.getLayoutParams());
             if (Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext()) >= 30) {
                 edge2HeightPxl = (int) (edge2Sensitive * mScale);
                 edge2WidthPxl = (int) (edge2Length * mScale);
-                if (edge2offset > 0) {
-                    edge2ImageLayoutParams.rightMargin = (int) (edge2offset * mScale);
-                } else {
-                    edge2ImageLayoutParams.leftMargin = (int) (-edge2offset * mScale);
-                }
             } else {
 
                 edge2HeightPxl = (int) (edge2Length * mScale);
                 edge2WidthPxl = (int) (edge2Sensitive * mScale);
-                if (edge2offset > 0) {
-                    edge2ImageLayoutParams.bottomMargin = (int) (edge2offset * mScale);
-                } else {
-                    edge2ImageLayoutParams.topMargin = (int) (-edge2offset * mScale);
-                }
             }
+            RelativeLayout.LayoutParams edge2ImageLayoutParams = new RelativeLayout.LayoutParams(edge2WidthPxl,edge2HeightPxl);
             edge2ImageLayoutParams.height = edge2HeightPxl;
             edge2ImageLayoutParams.width = edge2WidthPxl;
             edge2Image.setLayoutParams(edge2ImageLayoutParams);
@@ -389,15 +344,20 @@ public class EdgeGestureService extends Service {
                     paramsEdge2.gravity = Gravity.BOTTOM | Gravity.CENTER;
                     break;
             }
-            if (isEdge2On) {
-                if (edge2View != null && edge2View.isAttachedToWindow()) {
-                    removeView(edge2View);
-                }
-                windowManager.addView(edge2View, paramsEdge2);
+
+            paramsEdge2.height = edge2HeightPxl;
+            paramsEdge2.width = edge2WidthPxl;
+            if (edge2Position == 12 | edge2Position == 22) {
+                paramsEdge2.y = (int) (edge2offset * mScale);
+            } else if (edge2Position == 31) {
+                paramsEdge2.x = -(int) (edge2offset * mScale);
             } else {
-                if (edge2View != null && edge2View.isAttachedToWindow()) {
-                    removeView(edge2View);
-                }
+                paramsEdge2.y = -(int) (edge2offset * mScale);
+            }
+            if (isEdge2On) {
+                windowManager.addView(edge2Image, paramsEdge2);
+            } else {
+                    removeView(edge2Image);
             }
             item2View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
             iconImageList2 = new MyImageView[6];
@@ -1632,10 +1592,10 @@ public class EdgeGestureService extends Service {
             Log.e(LOG_TAG, " Null when remove edge1Image");
         }
         try {
-            windowManager.removeView(edge2View);
+            windowManager.removeView(edge2Image);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove edge2View");
+            Log.e(LOG_TAG, " Null when remove edge2Image");
         }
         try {
             windowManager.removeView(backgroundFrame);
