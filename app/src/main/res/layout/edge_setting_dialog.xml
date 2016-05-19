@@ -4,6 +4,19 @@
     android:layout_height="match_parent"
     android:background="@color/edgeSettingBackground"
     >
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:id="@+id/edge_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="150dp"
+            android:background="@color/colorAccent"
+            android:paddingBottom="150dp"
+            android:layout_gravity="center_vertical|right"
+            android:id="@+id/edge_dialog_edge_image_view"
+            />
+    </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -262,14 +275,6 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="12dp"
-        android:layout_height="150dp"
-        android:background="@color/colorAccent"
-        android:paddingBottom="150dp"
-        android:layout_gravity="center_vertical|right"
-        android:id="@+id/edge_dialog_edge_image_view"
-        />
 
     <android.support.v7.widget.ButtonBarLayout
         android:layout_width="wrap_content"

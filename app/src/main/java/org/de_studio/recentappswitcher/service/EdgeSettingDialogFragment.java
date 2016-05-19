@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.AppCompatSpinner;
@@ -18,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -82,6 +82,9 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     private float edgeInitX,edgeInitY;
     private int screenHeight;
     private int screenWidth;
+    private FrameLayout edgeParent;
+    private View tempEdge;
+    private int statusbarHetght;
 
     @Override
     public void setArguments(Bundle args) {
@@ -100,22 +103,28 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             sharedPreferences = mContext.getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
         }
         defaultSharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE,0);
+        spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
+//        caculateEdgeInit();
         Log.e(LOG_TAG,"edge number = " + edgeNumber);
         if (sharedPreferences == null){
             Log.e(LOG_TAG, "sharedPreference == null at onCreateview");
         }
 
-        View rootView = inflater.inflate(R.layout.edge_setting_dialog, container, false);
+        mScale = getResources().getDisplayMetrics().density;
+        screenHeight = getResources().getDisplayMetrics().heightPixels;
+        screenWidth = getResources().getDisplayMetrics().widthPixels;
 
+
+        View rootView = inflater.inflate(R.layout.edge_setting_dialog, container, false);
+        edgeParent = (FrameLayout) rootView.findViewById(R.id.edge_parent);
         AppCompatButton defaultButton = (AppCompatButton) rootView.findViewById(R.id.edge_dialog_default_button);
         AppCompatButton okButton = (AppCompatButton) rootView.findViewById(R.id.edge_dialog_ok_button);
         edgeImage = (ImageView) rootView.findViewById(R.id.edge_dialog_edge_image_view);
-
+        statusbarHetght = getStatusBarHeight();
         int currentLength = sharedPreferences.getInt(EDGE_LENGTH_KEY ,150);
         int currentOffset = sharedPreferences.getInt(EDGE_OFFSET_KEY, 0);
         int currentSensitive = sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 12);
         int currentCircleSize = defaultSharedPreferences.getInt(ICON_DISTANCE_KEY,110);
-        spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
         final TextView sensitiveNumberTextView = (TextView) rootView.findViewById(R.id.edge_dialog_sensitive_number_text);
         final AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
         final AppCompatSpinner modeSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_mode_spinner);
@@ -164,12 +173,26 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         }
         positionSpinner.setSelection(spinnerCurrentPosition, true);
         positionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(edgeImage.getLayoutParams());
+//            CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(edgeImage.getLayoutParams());
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) parent.getItemAtPosition(position);
                 sharedPreferences.edit().putString(EDGE_POSITION_KEY, item).commit();
+
+
+//                int currentLength = sharedPreferences.getInt(EDGE_LENGTH_KEY ,150);
+//                int currentSensitive = sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 12);
+//
+//                CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(edgeImage.getLayoutParams());
+//
+//                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
+//                    lp.width = (int) (currentLength * mScale);
+//                    lp.height = (int) (currentSensitive* mScale);
+//                }else {
+//                    lp.width = (int) (currentSensitive * mScale);
+//                    lp.height = (int) (currentLength *mScale);
+//                }
 //                switch (position) {
 //                    case 0:
 //                        lp.gravity = Gravity.TOP | Gravity.RIGHT;
@@ -195,8 +218,11 @@ public class EdgeSettingDialogFragment extends DialogFragment {
 //                }
 //                edgeImage.setLayoutParams(lp);
                 updateEdgeView();
+//                edgeImage.setX(100);
+//                edgeImage.setY(2300);
                 mContext.stopService(new Intent(mContext, EdgeGestureService.class));
                 mContext.startService(new Intent(mContext, EdgeGestureService.class));
+//
             }
 
             @Override
@@ -230,7 +256,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 sharedPreferences.edit().putInt(EDGE_SENSIIVE_KEY, progressChanged).commit();
-                updateEdgeView();
+//                updateEdgeView();
                 mContext.stopService(new Intent(mContext, EdgeGestureService.class));
                 mContext.startService(new Intent(mContext, EdgeGestureService.class));
             }
@@ -247,14 +273,16 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChanged = progress + 40;
-                edgeParas = edgeImage.getLayoutParams();
-
-                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30) {
-                    edgeParas.width = (int) (progressChanged * mScale);
-                } else edgeParas.height = (int) (progressChanged * mScale);
-
-                edgeImage.setLayoutParams(edgeParas);
+//                edgeParas = tempEdge.getLayoutParams();
+//
+//                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30) {
+//                    edgeParas.width = (int) (progressChanged * mScale);
+//                } else edgeParas.height = (int) (progressChanged * mScale);
+//
+//                tempEdge.setLayoutParams(edgeParas);
                 edgeLengthNumberText.setText(progressChanged + "dp");
+                sharedPreferences.edit().putInt(EDGE_LENGTH_KEY, progressChanged).commit();
+                updateEdgeView();
             }
 
             @Override
@@ -264,8 +292,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                updateEdgeView();
-                sharedPreferences.edit().putInt(EDGE_LENGTH_KEY, progressChanged).commit();
+//                sharedPreferences.edit().putInt(EDGE_LENGTH_KEY, progressChanged).commit();
                 mContext.stopService(new Intent(mContext, EdgeGestureService.class));
                 mContext.startService(new Intent(mContext, EdgeGestureService.class));
             }
@@ -286,11 +313,16 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 edgeOffsetNumberText.setText(progressChanged + "dp");
                 caculateEdgeInit();
                 if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
-                    edgeImage.setX(edgeInitX - progressChanged*mScale);
+                    tempEdge.setX(edgeInitX - progressChanged*mScale);
+//                    edgeImage.setY(edgeInitY);
                 }else {
                     Log.e(LOG_TAG, "processChanged  = " + progressChanged);
-                    edgeImage.setY(edgeInitY - progressChanged*mScale);
+                    tempEdge.setY(edgeInitY - progressChanged*mScale - statusbarHetght);
+//                    edgeImage.setX(edgeInitX);
                 }
+//                updateEdgeView();
+
+
             }
 
             @Override
@@ -301,7 +333,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 sharedPreferences.edit().putInt(EDGE_OFFSET_KEY, progressChanged).commit();
-                updateEdgeView();
+//                updateEdgeView();
                 mContext.stopService(new Intent(mContext, EdgeGestureService.class));
                 mContext.startService(new Intent(mContext, EdgeGestureService.class));
 //                sharedPreferences.edit().putInt(EDGE_OFFSET_KEY, progressChanged).commit();
@@ -361,7 +393,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 defaultSharedPreferences.edit().putInt(ICON_DISTANCE_KEY,110).commit();
                 mContext.stopService(new Intent(mContext, EdgeGestureService.class));
                 mContext.startService(new Intent(mContext, EdgeGestureService.class));
-                updateEdgeView();
+//                updateEdgeView();
 
             }
         });
@@ -380,9 +412,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         mContext =  getActivity();
 
-        mScale = getResources().getDisplayMetrics().density;
-        screenHeight = getResources().getDisplayMetrics().heightPixels;
-        screenWidth = getResources().getDisplayMetrics().widthPixels;
+
     }
 
     @Override
@@ -391,22 +421,21 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         Log.e(LOG_TAG, sharedPreferences.getString(EDGE_POSITION_KEY, "null") + "\n" + sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 0) + "\n" + sharedPreferences.getInt(EDGE_LENGTH_KEY, 0));
     }
 
-    private  synchronized void updateEdgeView(){
+    private synchronized   void updateEdgeView(){
         Log.e(LOG_TAG, "updateEdgeView");
+        edgeParent.removeAllViews();
+        tempEdge = new View(getContext());
+        tempEdge.setBackgroundResource(R.color.colorAccent);
         int spinnerCurrentPosition = 1;
         if (edgeNumber == 2) spinnerCurrentPosition = 5;
         int currentLength = sharedPreferences.getInt(EDGE_LENGTH_KEY ,150);
         int currentSensitive = sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 12);
         int currentOffset = sharedPreferences.getInt(EDGE_OFFSET_KEY,0);
-
-        for (int i =0; i<spinnerEntries.length; i++) {
-            if (spinnerEntries[i].equals(sharedPreferences.getString(EDGE_POSITION_KEY, spinnerEntries[spinnerCurrentPosition]))) {
-                spinnerCurrentPosition = i;
-            }
-        }
-        CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(edgeImage.getLayoutParams());
-
-        if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
+        int position = Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext);
+//        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) edgeImage.getLayoutParams();
+//        CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(edgeImage.getLayoutParams());
+        ViewGroup.LayoutParams lp = edgeImage.getLayoutParams();
+        if (position >= 30){
             lp.width = (int) (currentLength * mScale);
             lp.height = (int) (currentSensitive* mScale);
 //            if (currentOffset > 0) {
@@ -424,50 +453,76 @@ public class EdgeSettingDialogFragment extends DialogFragment {
 //                lp.topMargin = (int) (-currentOffset * mScale);
 //            }
         }
-
-        switch (spinnerCurrentPosition){
-            case 0:
-                lp.gravity = Gravity.TOP | Gravity.RIGHT;
+        FrameLayout.LayoutParams lp2 = new FrameLayout.LayoutParams(lp.width,lp.height);
+        switch (position){
+            case 10:
+                lp2.gravity =Gravity.RIGHT;
                 break;
-            case 1:
-                lp.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+            case 11:
+                lp2.gravity =Gravity.RIGHT;
                 break;
-            case 2:
-                lp.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+            case 12:
+                lp2.gravity =Gravity.RIGHT;
                 break;
-            case 3:
-                lp.gravity = Gravity.TOP | Gravity.LEFT;
+            case 20:
+                lp2.gravity =Gravity.LEFT;
                 break;
-            case 4:
-                lp.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+            case 21:
+                lp2.gravity =Gravity.LEFT;
                 break;
-            case 5:
-                lp.gravity = Gravity.BOTTOM | Gravity.LEFT;
+            case 22:
+                lp2.gravity =Gravity.LEFT;
                 break;
-            case 6:
-                lp.gravity = Gravity.BOTTOM | Gravity.CENTER;
+            case 31:
+                lp2.gravity = Gravity.BOTTOM;
                 break;
 
         }
-        edgeImage.setLayoutParams(lp);
+
+        Log.e(LOG_TAG, "updateImageView curruntPosition = " + spinnerCurrentPosition);
         caculateEdgeInit();
-        if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
-            edgeImage.setX(edgeInitX - currentOffset*mScale);
-            edgeImage.setY(edgeInitY);
+        edgeParent.addView(tempEdge,lp2);
+        if (position >= 30){
+            tempEdge.setX(edgeInitX - currentOffset*mScale);
+//            edgeImage.setY(edgeInitY - 100);
 
         }else {
-            Log.e(LOG_TAG,"currentOffet = " + (currentOffset));
-            edgeImage.setY(edgeInitY - currentOffset*mScale);
-            edgeImage.setX(edgeInitX);
+            tempEdge.setY(edgeInitY - currentOffset*mScale - statusbarHetght);
+//            edgeImage.setX(edgeInitX);
         }
+//        edgeImage.setLayoutParams(lp2);
+
+        Log.e(LOG_TAG, "update " +
+                "\nedgeImageX = " + edgeImage.getX() +
+                "\nedgeImageY = " + edgeImage.getY() +
+                "\nedgeInitX = " + edgeInitX+
+                "\nedgeInitY = " + edgeInitY +
+                "\nedgeImageHeight = " + edgeImage.getHeight() +
+                "\nedgeImageWidth = " + edgeImage.getWidth() +
+                "\nscreenHeight = " + screenHeight +
+                "\nscreenWidth = " + screenWidth +
+                "\nisVisible = " + edgeImage.isShown() +
+                "\nlp.wdith = " + lp.width +
+                "\nlp.height = " + lp.height);
+
 
 
 
     }
 
     private void caculateEdgeInit() {
-        int width = edgeImage.getWidth();
-        int height = edgeImage.getHeight();
+        int currentLength = sharedPreferences.getInt(EDGE_LENGTH_KEY ,150);
+        int currentSensitive = sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 12);
+        int width,height;
+        if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
+            width = (int) (currentLength * mScale);
+            height = (int) (currentSensitive* mScale);
+
+        }else {
+            width = (int) (currentSensitive * mScale);
+            height = (int) (currentLength *mScale);
+
+        }
         int position = Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext);
         switch (position) {
             case 10:
@@ -497,6 +552,24 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             case 31:
                 edgeInitX = screenWidth/2 - width/2;
                 edgeInitY = screenHeight - height;
+                break;
         }
+        Log.e(LOG_TAG, "caculate " +
+                "\nedgeInitX = " + edgeInitX+
+                "\nedgeInitY = " + edgeInitY +
+                "\nheight = " + height +
+                "\nwidth = " + width +
+                "\nscreenHeight = " + screenHeight +
+                "\nscreenWidth = " + screenWidth);
+    }
+
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 }
