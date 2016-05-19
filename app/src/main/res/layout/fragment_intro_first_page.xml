@@ -14,7 +14,7 @@
         <ImageView
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/icon512"
             android:scaleType="fitCenter"
             android:id="@+id/icon"
             />

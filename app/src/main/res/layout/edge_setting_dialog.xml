@@ -2,8 +2,8 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/edgeSettingBackground"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/edgeSettingBackground">
     <FrameLayout
         android:layout_width="match_parent"
         android:id="@+id/edge_parent"
@@ -70,15 +70,15 @@
                 android:layout_weight="1"
                 android:textColor="@color/white"
                 />
-            <CheckBox
+            <android.support.v7.widget.AppCompatCheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/edge_dialog_show_guide_checkbox"
                 android:layout_weight="0"
-                android:buttonTint="@color/white"
+                app:buttonTint="@color/white"
                 >
 
-            </CheckBox>
+            </android.support.v7.widget.AppCompatCheckBox>
 
         </LinearLayout>
 

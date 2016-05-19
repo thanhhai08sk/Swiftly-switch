@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.AppCompatSpinner;
 import android.util.Log;
@@ -125,7 +126,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         final TextView sensitiveNumberTextView = (TextView) rootView.findViewById(R.id.edge_dialog_sensitive_number_text);
         final AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
         final AppCompatSpinner modeSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_mode_spinner);
-        final CheckBox showGuideCheckBox = (CheckBox) rootView.findViewById(R.id.edge_dialog_show_guide_checkbox);
+        final CheckBox showGuideCheckBox = (AppCompatCheckBox) rootView.findViewById(R.id.edge_dialog_show_guide_checkbox);
         boolean isOnlyFavorite = sharedPreferences.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
         if (isOnlyFavorite) {
             modeSpinner.setSelection(1);
@@ -381,14 +382,14 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 sharedPreferences.edit().putInt(EDGE_OFFSET_KEY, 0).commit();
                 offsetSeekBar.setProgress(300);
                 modeSpinner.setSelection(0);
-                showGuideCheckBox.setChecked(false);
+                showGuideCheckBox.setChecked(true);
                 sharedPreferences.edit().putBoolean(USE_GUIDE_KEY,true).commit();
                 sharedPreferences.edit().putBoolean(IS_ONLY_FAVORITE_KEY,false).commit();
                 sensitiveSeekBar.setProgress(7);
                 sharedPreferences.edit().putInt(EDGE_SENSIIVE_KEY, 12).commit();
                 lengthSeekBar.setProgress(110);
                 sharedPreferences.edit().putInt(EDGE_LENGTH_KEY, 150).commit();
-                circleSizeSeekBar.setProgress(15);
+                circleSizeSeekBar.setProgress(10);
                 defaultSharedPreferences.edit().putInt(ICON_DISTANCE_KEY,105).commit();
                 mContext.stopService(new Intent(mContext, EdgeGestureService.class));
                 mContext.startService(new Intent(mContext, EdgeGestureService.class));

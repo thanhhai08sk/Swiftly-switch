@@ -447,8 +447,8 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    startDown = System.currentTimeMillis();
-                    Log.e(LOG_TAG, "Start action down at " + startDown);
+//                    startDown = System.currentTimeMillis();
+//                    Log.e(LOG_TAG, "Start action down at " + startDown);
                     switch (position / 10) {
                         case 1:
                             x_init_cord = (int) (x_cord - 10 * mScale);
@@ -596,9 +596,9 @@ public class EdgeGestureService extends Service {
                             }
                         }
                     }
-                    long start = System.currentTimeMillis();
-                    long timestart = start - startDown;
-                    Log.e(LOG_TAG, "time from start to get recent = " + timestart);
+//                    long start = System.currentTimeMillis();
+//                    long timestart = start - startDown;
+//                    Log.e(LOG_TAG, "time from start to get recent = " + timestart);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
                         long currentTimeMillis = System.currentTimeMillis() + 5000;
@@ -748,8 +748,8 @@ public class EdgeGestureService extends Service {
                         }
 
                     }
-                    long spendTime = System.currentTimeMillis() - start;
-                    Log.e(LOG_TAG, "time to get recent = " + spendTime);
+//                    long spendTime = System.currentTimeMillis() - start;
+//                    Log.e(LOG_TAG, "time to get recent = " + spendTime);
                     if (isOnlyFavorite) {
                         if (delayToSwitchTask == null) {
                             delayToSwitchTask = new DelayToSwitchTask();
@@ -861,11 +861,11 @@ public class EdgeGestureService extends Service {
                         }
                     }
                     iconIdBackgrounded = -2;
-                    long drawTime = System.currentTimeMillis() - start - spendTime;
-                    long totalTime = System.currentTimeMillis() - startDown;
-                    Log.e(LOG_TAG, " time to draw = " + drawTime);
-                    Log.e(LOG_TAG, "finish action down at " + System.currentTimeMillis());
-                    Log.e(LOG_TAG, "total time in action down = " + totalTime);
+//                    long drawTime = System.currentTimeMillis() - start - spendTime;
+//                    long totalTime = System.currentTimeMillis() - startDown;
+//                    Log.e(LOG_TAG, " time to draw = " + drawTime);
+//                    Log.e(LOG_TAG, "finish action down at " + System.currentTimeMillis());
+//                    Log.e(LOG_TAG, "total time in action down = " + totalTime);
 
                     break;
 
@@ -1508,6 +1508,7 @@ public class EdgeGestureService extends Service {
         backgroundColor = defaultShared.getInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY, 1879048192);
 //        guideColor = defaultShared.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY,16728193);
         guideColor = defaultShared.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY, Color.argb(255, 255, 64, 129));
+//        guideColor = defaultShared.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY, Color.argb(255, 40, 92, 161));
         shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
         Random r = new Random();
         serviceId = r.nextInt(1000);

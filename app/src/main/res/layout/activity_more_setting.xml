@@ -60,12 +60,13 @@
                     app:layout_columnWeight="1"
                     app:layout_gravity="center_vertical"
                     />
-                <Switch
+                <android.support.v7.widget.SwitchCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:checked="false"
                     android:id="@+id/main_disable_haptic_feedback_switch"
+                    app:switchMinWidth="55dp"
                     />
 
 
@@ -102,12 +103,13 @@
                     app:layout_columnWeight="1"
                     app:layout_gravity="center_vertical"
                     />
-                <Switch
+                <android.support.v7.widget.SwitchCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:checked="false"
                     android:id="@+id/main_haptic_feedback_on_item_switch"
+                    app:switchMinWidth="55dp"
                     />
 
 
@@ -144,12 +146,13 @@
                     app:layout_columnWeight="1"
                     app:layout_gravity="center_vertical"
                     />
-                <Switch
+                <android.support.v7.widget.SwitchCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:checked="false"
                     android:id="@+id/main_disable_clock_switch"
+                    app:switchMinWidth="55dp"
                     />
 
 
@@ -410,13 +413,14 @@
                     app:layout_columnWeight="1"
                     app:layout_gravity="center_vertical"
                     />
-                <Switch
+                <android.support.v7.widget.SwitchCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:checked="true"
                     android:paddingRight="8dp"
                     android:id="@+id/main_disable_animation_switch"
+                    app:switchMinWidth="55dp"
                     />
                 <ImageButton
                     android:id="@+id/main_animation_time_setting_image_button"
@@ -463,12 +467,13 @@
                     app:layout_columnWeight="1"
                     app:layout_gravity="center_vertical"
                     />
-                <Switch
+                <android.support.v7.widget.SwitchCompat
                     android:id="@+id/main_hold_time_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:paddingRight="8dp"
+                    app:switchMinWidth="55dp"
                     android:checked="true" />
 
 

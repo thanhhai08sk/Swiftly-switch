@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayout;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -64,8 +65,8 @@ public class MainActivity extends Activity {
     private long trialTimePass, beginTime;
     private int step = 1;
     private LinearLayout permissionMissing;
-    private Switch edge1Switch;
-    private Switch edge2Switch;
+    private SwitchCompat edge1Switch;
+    private SwitchCompat edge2Switch;
 
 
     @Override
@@ -234,8 +235,8 @@ public class MainActivity extends Activity {
         }
 
 //        step1Button = (Button) findViewById(R.id.step1_button);
-        edge1Switch = (Switch) findViewById(R.id.edge_1_switch);
-        edge2Switch = (Switch) findViewById(R.id.edge_2_switch);
+        edge1Switch = (SwitchCompat) findViewById(R.id.edge_1_switch);
+        edge2Switch = (SwitchCompat) findViewById(R.id.edge_2_switch);
 //        Switch hapticFeedbackOnTriggerSwitch = (Switch) findViewById(R.id.main_disable_haptic_feedback_switch);
 //        Switch hapticFeedbackOnItemSwitch = (Switch) findViewById(R.id.main_haptic_feedback_on_item_switch);
 //        Switch disableClockSwitch = (Switch) findViewById(R.id.main_disable_clock_switch);
