@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -30,6 +31,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     private IconPackManager.IconPack iconPack;
     private int iconPadding;
     private float mIconScale;
+    private int dragPosition;
 
     public FavoriteShortcutAdapter(Context context) {
         mContext = context;
@@ -60,7 +62,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ImageView imageView;
         if (convertView == null) {
             imageView = new ImageView(mContext);
@@ -141,7 +143,70 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
             }
 
         }
-
+        imageView.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        // do nothing
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        v.setBackgroundResource(R.color.grey);
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        v.setBackground(null);
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        changePosition(dragPosition,position);
+                        View view = (View) event.getLocalState();
+                        view.setVisibility(View.VISIBLE);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        v.setBackground(null);
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
         return imageView;
     }
+
+    public void setDragPosition(int position) {
+        dragPosition = position;
+    }
+
+    public void changePosition(int dragPosition, int dropPosition) {
+        Realm myRealm = Realm.getInstance(mContext);
+        Shortcut dropTemp = myRealm.where(Shortcut.class).equalTo("id", dropPosition).findFirst();
+        Shortcut dragTemp = myRealm.where(Shortcut.class).equalTo("id", dragPosition).findFirst();
+        Shortcut shortcut5000 = myRealm.where(Shortcut.class).equalTo("id",5000).findFirst();
+        myRealm.beginTransaction();
+        if (shortcut5000 != null) {
+            shortcut5000.removeFromRealm();
+        }
+
+        try {
+            dropTemp.setId(5000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            dragTemp.setId(dropPosition);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            dropTemp.setId(dragPosition);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        myRealm.commitTransaction();
+        notifyDataSetChanged();
+    }
+
 }

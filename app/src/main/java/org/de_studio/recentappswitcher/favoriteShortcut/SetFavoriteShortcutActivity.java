@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -181,6 +182,17 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), ChooseShortcutActivity.class);
                 intent.addFlags(position);
                 startActivity(intent);
+            }
+        });
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                ClipData data = ClipData.newPlainText("","");
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                view.startDrag(data, shadowBuilder, view, 0);
+                view.setVisibility(View.GONE);
+                mAdapter.setDragPosition(position);
+                return true;
             }
         });
 
