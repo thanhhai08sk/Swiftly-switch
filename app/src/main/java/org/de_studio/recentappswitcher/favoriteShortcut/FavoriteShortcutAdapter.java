@@ -163,12 +163,15 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
                         v.setBackground(null);
+                        notifyDataSetChanged();
+
                     default:
                         break;
                 }
                 return true;
             }
         });
+        imageView.setVisibility(View.VISIBLE);
         return imageView;
     }
 
