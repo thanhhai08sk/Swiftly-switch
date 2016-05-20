@@ -149,4 +149,5 @@
     <string name="one_or_more_permission_are_missing">One or more permission are missing</string>
     <string name="you_have_not_finished_all_permission_yet">You have not finished granting all permission yet. Please try again.</string>
     <string name="skip">Skip</string>
+    <string name="hold_icon">Hold icon</string>
 </resources>
