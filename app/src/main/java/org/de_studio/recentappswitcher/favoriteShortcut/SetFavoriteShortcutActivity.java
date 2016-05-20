@@ -9,11 +9,13 @@ import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -30,6 +32,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
     private boolean isTrial = false;
     private GridView gridView;
     private SharedPreferences defaultSharedPreference;
+    private ImageView clearButton;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME)) isTrial = true;
@@ -44,6 +47,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         mIconScale = defaultSharedPreference.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         gridView = (GridView) findViewById(R.id.favorite_shortcut_grid_view);
+        clearButton = (ImageView) findViewById(R.id.clear_button);
         AppCompatSpinner gridRowSpinner = (AppCompatSpinner) findViewById(R.id.set_favorite_shortcut_grid_row_spinner);
         AppCompatSpinner gridColumnSpinner = (AppCompatSpinner) findViewById(R.id.set_favorite_shortcut_grid_column_spinner);
         if (isTrial) {
@@ -191,7 +195,39 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
                 view.startDrag(data, shadowBuilder, view, 0);
                 view.setVisibility(View.GONE);
+                clearButton.setVisibility(View.VISIBLE);
                 mAdapter.setDragPosition(position);
+                return true;
+            }
+        });
+
+        clearButton.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        v.setVisibility(View.VISIBLE);
+                        Log.e(LOG_TAG, "clearbutton receive on Drag");
+                        // do nothing
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        v.setBackgroundResource(R.color.redButton);
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        v.setBackground(null);
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        View view = (View) event.getLocalState();
+                        view.setVisibility(View.VISIBLE);
+                        mAdapter.removeDragItem();
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        v.setBackground(null);
+                        v.setVisibility(View.GONE);
+
+                    default:
+                        break;
+                }
                 return true;
             }
         });

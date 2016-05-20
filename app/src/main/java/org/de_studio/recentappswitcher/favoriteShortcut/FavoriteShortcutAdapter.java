@@ -211,5 +211,24 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         myRealm.commitTransaction();
         notifyDataSetChanged();
     }
+    public void removeDragItem() {
+        Realm myRealm = Realm.getInstance(mContext);
+        myRealm.beginTransaction();
+        Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id", dragPosition).findFirst();
+        if (shortcut != null) {
+            shortcut.setType(Shortcut.TYPE_SETTING);
+            shortcut.setAction(Shortcut.ACTION_NONE);
+        } else {
+            Shortcut shortcut1 = new Shortcut();
+            shortcut1.setType(Shortcut.TYPE_SETTING);
+            shortcut1.setAction(Shortcut.ACTION_NONE);
+            shortcut1.setId(dragPosition);
+            myRealm.copyToRealm(shortcut1);
+
+        }
+
+        myRealm.commitTransaction();
+        notifyDataSetChanged();
+    }
 
 }
