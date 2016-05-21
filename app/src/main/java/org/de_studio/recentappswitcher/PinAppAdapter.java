@@ -41,7 +41,7 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
         packageManager = context.getPackageManager();
         pinRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("pinApp.realm").build());
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
-        String iconPackPacka = sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "com.colechamberlin.stickers");
+        String iconPackPacka = sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "none");
         if (!iconPackPacka.equals("none")) {
             IconPackManager iconPackManager = new IconPackManager();
             iconPackManager.setContext(mContext);

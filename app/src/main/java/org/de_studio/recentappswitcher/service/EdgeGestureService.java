@@ -429,7 +429,7 @@ public class EdgeGestureService extends Service {
         private MyImageView[] iconImageList;
         private List<MyImageView> iconImageArrayList;
         private DelayToSwitchTask delayToSwitchTask;
-        private boolean isOnlyFavorite, isStayPermanent, isShortcutBackgroundNull = true;
+        private boolean isOnlyFavorite, isStayPermanent, isShortcutBackgroundNull = true, isCircleFavorite;
 
         public OnTouchListener(int position, MyImageView[] iconImageList, FrameLayout itemView, List<MyImageView> iconImageArrayList, boolean isOnlyFavorite) {
             this.position = position;
@@ -437,6 +437,7 @@ public class EdgeGestureService extends Service {
             this.itemView = itemView;
             this.iconImageArrayList = iconImageArrayList;
             this.isOnlyFavorite = isOnlyFavorite;
+            this.isCircleFavorite = true;
         }
 
 
@@ -1404,14 +1405,23 @@ public class EdgeGestureService extends Service {
                 if (shortcutView != null && !shortcutView.isAttachedToWindow()) {
                     windowManager.addView(shortcutView, shortcutViewParams);
                 }
-                if (itemView != null && itemView.isAttachedToWindow()) {
-                    removeView(itemView);
-                }
+//                if (itemView != null && itemView.isAttachedToWindow()) {
+//                    removeView(itemView);
+//                }
+                removeView(itemView);
                 switched = true;
-                if (clockView != null && clockView.isAttachedToWindow()) {
-                    removeView(clockView);
-                    isClockShown = false;
-                }
+                removeView(clockView);
+//                if (clockView != null && clockView.isAttachedToWindow()) {
+//                    removeView(clockView);
+//                    isClockShown = false;
+//                }
+            }
+
+            protected void switchCircleShortcut () {
+                clearIconBackground();
+                switched = true;
+
+
             }
         }
 
@@ -1514,14 +1524,6 @@ public class EdgeGestureService extends Service {
         serviceId = r.nextInt(1000);
         mIconScale = defaultShared.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f);
         defaultShared.edit().putInt(EdgeSettingDialogFragment.SERVICE_ID, serviceId).commit();
-//        pinAppRealm.beginTransaction();
-//        Shortcut country1 = pinAppRealm.createObject(Shortcut.class);
-//
-//        // Set its fields
-//        country1.setPackageName(getPackageName());
-//        country1.setId(0);
-//
-//        pinAppRealm.commitTransaction();
         RealmResults<Shortcut> results1 =
                 pinAppRealm.where(Shortcut.class).findAll();
         if (isFreeVersion && isOutOfTrial) {
@@ -1550,29 +1552,6 @@ public class EdgeGestureService extends Service {
     public void onDestroy() {
         removeAll();
         super.onDestroy();
-//        int n = 0;
-//
-//        while (edge1View != null && edge1View.isAttachedToWindow() && n < 20) {
-//            Log.e(LOG_TAG, "remove edge1, n = " + n);
-//            edge1View.setVisibility(View.GONE);
-//            windowManager.removeView(edge1View);
-//            windowManager.removeViewImmediate(edge1View);
-//            n++;
-//        }
-//        while (edge2View != null && edge2View.isAttachedToWindow() && n < 20) {
-//            Log.e(LOG_TAG, "remove edge2, n = " + n);
-//            edge2View.setVisibility(View.GONE);
-//            windowManager.removeView(edge2View);
-//            windowManager.removeViewImmediate(edge2View);
-//            n++;
-//        }
-//        while (backgroundFrame != null && backgroundFrame.isAttachedToWindow() && n <20) {
-//            windowManager.removeView(backgroundFrame);
-//            windowManager.removeViewImmediate(backgroundFrame);
-//            n++;
-//        }
-//        Log.e(LOG_TAG, "onDestroy service, n = " + n);
-//        super.onDestroy();
     }
 
     public final synchronized void removeView(View view) {

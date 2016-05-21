@@ -70,6 +70,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String BACKGROUND_COLOR_KEY = "background_color";
     public static final String GUIDE_COLOR_KEY = "guide_color";
     public static final String USE_GUIDE_KEY = "edge_guide";
+    public static final String CIRCLE_FAVORITE_MODE = "circle_fovorite_mode";
     public static final String SERVICE_ID = "service_id";
     public static final String ICON_SCALE = "icon_scale";
     private static int edgeNumber;
