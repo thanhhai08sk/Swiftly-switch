@@ -207,7 +207,6 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
                 switch (event.getAction()) {
                     case DragEvent.ACTION_DRAG_STARTED:
                         v.setVisibility(View.VISIBLE);
-                        Log.e(LOG_TAG, "clearbutton receive on Drag");
                         // do nothing
                         break;
                     case DragEvent.ACTION_DRAG_ENTERED:
