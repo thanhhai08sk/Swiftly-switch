@@ -22,6 +22,7 @@ import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 import java.util.ArrayList;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 /**
@@ -31,18 +32,24 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
     private Context mContext;
     static private ArrayList<AppInfors> mAppInfosArrayList;
     private static final String LOG_TAG = ChooseAppListViewAdapter.class.getSimpleName();
-    private int mPosition;
+    private int mPosition,mode;
     private String mPackageSelected;
     private AppChangeListener listener = null;
     private SharedPreferences sharedPreferences;
     private IconPackManager.IconPack iconPack;
+    private Realm myRealm;
 
-    public ChooseAppListViewAdapter(Context context, ArrayList<AppInfors> appInforses, int position) {
+    public ChooseAppListViewAdapter(Context context, ArrayList<AppInfors> appInforses, int position, int mode) {
         super();
+        this.mode = mode;
         mPosition = position;
         mContext = context;
         mAppInfosArrayList = appInforses;
-        Realm myRealm = Realm.getDefaultInstance();
+        if (mode == SetFavoriteShortcutActivity.MODE_GRID) {
+            myRealm = Realm.getDefaultInstance();
+        } else {
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
+        }
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         if (shortcut != null ) {
             if (shortcut.getType() == Shortcut.TYPE_APP) {
@@ -60,10 +67,15 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
 
     }
 
-    public void setmPosition(int position) {
+    public void setmPositionAndMode(int position) {
         mPosition = position;
 //        Realm myRealm = Realm.getInstance(mContext);
-        Realm myRealm = Realm.getDefaultInstance();
+//        if (mode == SetFavoriteShortcutActivity.MODE_GRID) {
+//            myRealm = Realm.getDefaultInstance();
+//        } else {
+//            myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
+//        }
+
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         if (shortcut != null ) {
             if (shortcut.getType() == Shortcut.TYPE_APP) {
@@ -99,11 +111,11 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
         ImageView imageView = (ImageView) view.findViewById(R.id.choose_app_image_view);
         TextView textView = (TextView) view.findViewById(R.id.choose_app_title_text_view);
 //        Realm myRealm = Realm.getInstance(mContext);
-        Realm myRealm = Realm.getDefaultInstance();
+//        Realm myRealm = Realm.getDefaultInstance();
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         RadioButton radioButton = (RadioButton) view.findViewById(R.id.choose_app_radio_button);
         if (shortcut != null) {
-            if (shortcut.getType()== Shortcut.TYPE_APP & mPackageSelected !=null & mAppInfosArrayList.get(position).packageName.equalsIgnoreCase(mPackageSelected)){
+            if (shortcut.getType()== Shortcut.TYPE_APP && mPackageSelected !=null && mAppInfosArrayList.get(position).packageName.equalsIgnoreCase(mPackageSelected)){
                 radioButton.setChecked(true);
             }else radioButton.setChecked(false);
         }else radioButton.setChecked(false);
@@ -125,7 +137,13 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 //                Realm myRealm = Realm.getInstance(mContext);
-                Realm myRealm = Realm.getDefaultInstance();
+//                Realm myRealm;
+//                if (mode == SetFavoriteShortcutActivity.MODE_GRID) {
+//                    myRealm = Realm.getDefaultInstance();
+//                } else {
+//                    myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
+//                }
+
                 myRealm.beginTransaction();
                 RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findAll();
                 Log.e(LOG_TAG, "mPosition = " + mPosition);

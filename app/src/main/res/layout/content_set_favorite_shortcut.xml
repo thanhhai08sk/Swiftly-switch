@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:paddingTop="50dp"
+        android:paddingTop="30dp"
         android:paddingBottom="30dp"
         android:orientation="vertical">
 
@@ -34,10 +34,11 @@
 
         </GridView>
         <ListView
-            android:layout_width="300dp"
+            android:layout_width="258dp"
             android:layout_height="wrap_content"
             android:id="@+id/favorite_circle_list_view"
             android:visibility="gone"
+            android:layout_marginBottom="30dp"
 
             >
 

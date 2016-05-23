@@ -43,6 +43,7 @@ public class CircleFavoriteAdapter extends BaseAdapter {
         circleFavoRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         String iconPackPacka = sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "none");
+        packageManager = context.getPackageManager();
         if (!iconPackPacka.equals("none")) {
             IconPackManager iconPackManager = new IconPackManager();
             iconPackManager.setContext(mContext);
@@ -66,15 +67,21 @@ public class CircleFavoriteAdapter extends BaseAdapter {
         shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id",position).findFirst();
         CharSequence title= "";
         try {
-            title = packageManager.getApplicationLabel(packageManager.getApplicationInfo(shortcut.getPackageName(), 0));
-        } catch (PackageManager.NameNotFoundException e) {
-            remove(position);
-            notifyDataSetChanged();
-            Log.e(LOG_TAG, "NamenotFound when get label");
-            return view;
-        } catch (NullPointerException e) {
-            Log.e(LOG_TAG, "Nullpoint when get label " + e);
+            title = shortcut.getLabel();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, "null when get label");
         }
+//        try {
+//            title = packageManager.getApplicationLabel(packageManager.getApplicationInfo(shortcut.getPackageName(), 0));
+//        } catch (PackageManager.NameNotFoundException e) {
+//            remove(position);
+//            notifyDataSetChanged();
+//            Log.e(LOG_TAG, "NamenotFound when get label");
+//            return view;
+//        } catch (NullPointerException e) {
+//            Log.e(LOG_TAG, "Nullpoint when get label " + e);
+//        }
 
         if (shortcut == null) {
             icon.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
@@ -142,7 +149,6 @@ public class CircleFavoriteAdapter extends BaseAdapter {
                         icon.setImageDrawable(null);
                 }
             }
-            label.setText(title);
 
         }
 
@@ -164,6 +170,8 @@ public class CircleFavoriteAdapter extends BaseAdapter {
 //            }
 //            label.setText(title);
 //        }
+        label.setText(title);
+        Log.e(LOG_TAG, "label = " + title);
         return view;
     }
 

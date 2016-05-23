@@ -15,6 +15,7 @@ import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 /**
@@ -24,16 +25,22 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
     private static final String LOG_TAG = ChooseSettingShortcutListViewAdapter.class.getSimpleName();
     private Context mContext;
     private String[] stringArray;
-    private int mPosition;
+    private int mPosition, mode;
     private int mAction;
     private SettingChangeListener listener = null;
+    private Realm myRealm;
 
-    public ChooseSettingShortcutListViewAdapter(Context context, int position) {
+    public ChooseSettingShortcutListViewAdapter(Context context, int position, int mode) {
         super();
         mContext = context;
         stringArray =context.getResources().getStringArray(R.array.setting_shortcut_array);
         mPosition = position;
-        Realm myRealm = Realm.getInstance(mContext);
+        this.mode = mode;
+        if (mode == SetFavoriteShortcutActivity.MODE_GRID) {
+            myRealm = Realm.getInstance(mContext);
+        } else {
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
+        }
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         if (shortcut != null ) {
             if (shortcut.getType() == Shortcut.TYPE_SETTING) {
@@ -44,9 +51,8 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
 
     }
 
-    public void setmPosition(int position) {
+    public void setmPositionAndMode(int position) {
         mPosition = position;
-        Realm myRealm = Realm.getInstance(mContext);
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         if (shortcut != null ) {
             if (shortcut.getType() == Shortcut.TYPE_SETTING) {
@@ -83,10 +89,9 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
         final ImageView icon = (ImageView) view.findViewById(R.id.choose_app_image_view);
         TextView label = (TextView) view.findViewById(R.id.choose_app_title_text_view);
         RadioButton radioButton = (RadioButton) view.findViewById(R.id.choose_app_radio_button);
-        Realm myRealm = Realm.getInstance(mContext);
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         if (shortcut != null) {
-            if (shortcut.getType() == Shortcut.TYPE_SETTING & mAction != -1 & mAction == Utility.getActionFromLabel(mContext, item)) {
+            if (shortcut.getType() == Shortcut.TYPE_SETTING && mAction != -1 && mAction == Utility.getActionFromLabel(mContext, item)) {
                 radioButton.setChecked(true);
             }else radioButton.setChecked(false);
         }else radioButton.setChecked(false);
@@ -121,7 +126,6 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Realm myRealm = Realm.getInstance(mContext);
                 myRealm.beginTransaction();
                 RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findAll();
                 Log.e(LOG_TAG, "mPosition = " + mPosition);

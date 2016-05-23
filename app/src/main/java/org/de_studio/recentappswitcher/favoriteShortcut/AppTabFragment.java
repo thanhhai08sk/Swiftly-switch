@@ -36,7 +36,7 @@ public class AppTabFragment extends Fragment{
     private static final String LOG_TAG = AppTabFragment.class.getSimpleName();
     private ListView mListView;
     private ChooseAppListViewAdapter mAdapter;
-    private int mPosition;
+    private int mPosition, mode;
     private ProgressBar progressBar;
     private Context mContext;
 
@@ -56,11 +56,15 @@ public class AppTabFragment extends Fragment{
         mContext = context;
     }
 
+    public void setMode(int mode) {
+        this.mode = mode;
+    }
+
     public void setmPositioinToNext() {
         if (mPosition < Utility.getSizeOfFavoriteGrid(getContext())-1 &&  mAdapter !=null) {
             mPosition++;
             try {
-                mAdapter.setmPosition(mPosition);
+                mAdapter.setmPositionAndMode(mPosition);
             } catch (NullPointerException e) {
                 Log.e(LOG_TAG, "mAdapter = null");
             }
@@ -71,7 +75,7 @@ public class AppTabFragment extends Fragment{
     public void setmPositionToBack() {
         if (mPosition > 0 && mAdapter != null) {
             mPosition--;
-            mAdapter.setmPosition(mPosition);
+            mAdapter.setmPositionAndMode(mPosition);
         }
     }
 
@@ -129,7 +133,7 @@ public class AppTabFragment extends Fragment{
                 Log.e(LOG_TAG, "getActivity");
                 context = getActivity();
             }
-            mAdapter = new ChooseAppListViewAdapter(app, result, mPosition);
+            mAdapter = new ChooseAppListViewAdapter(app, result, mPosition, mode);
             mListView.setAdapter(mAdapter);
             try {
                 ((ChooseShortcutActivity) mContext).setAppAdapter(mAdapter);

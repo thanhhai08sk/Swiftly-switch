@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
@@ -35,8 +36,8 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
     private GridView gridView;
     private SharedPreferences defaultSharedPreference;
     private ImageView clearButton;
-    private static final int MODE_GRID = 0;
-    private static final int MODE_CIRCLE = 1;
+    public static final int MODE_GRID = 0;
+    public static final int MODE_CIRCLE = 1;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME)) isTrial = true;
@@ -66,9 +67,10 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         final AppCompatSeekBar gridDistanceSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_distance_seek_bar);
         final AppCompatSeekBar gridDistanceVerticalSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_distance_vertical_seek_bar);
         final TextView gridDistanceVerticalValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_distance_vertical_value_text_view);
-        ListView listView = (ListView) findViewById(R.id.favorite_circle_list_view);
+        final ListView listView = (ListView) findViewById(R.id.favorite_circle_list_view);
         CircleFavoriteAdapter listAdapter = new CircleFavoriteAdapter(this);
         listView.setAdapter(listAdapter);
+        Utility.setListViewHeightBasedOnChildren(listView);
         if (modeSpinner != null) {
             modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -76,9 +78,13 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
                     switch (position) {
                         case 0:
                             gridModeLinearLayout.setVisibility(View.VISIBLE);
+                            listView.setVisibility(View.GONE);
+                            gridView.setVisibility(View.VISIBLE);
                             break;
                         case 1:
                             gridModeLinearLayout.setVisibility(View.GONE);
+                            listView.setVisibility(View.VISIBLE);
+                            gridView.setVisibility(View.GONE);
                             break;
                     }
                 }
@@ -212,11 +218,22 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         gridView.setLayoutParams(gridParams);
         mAdapter = new FavoriteShortcutAdapter(this);
         gridView.setAdapter(mAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), ChooseShortcutActivity.class);
+                intent.addFlags(position);
+                intent.putExtra("mode", MODE_CIRCLE);
+                startActivity(intent);
+
+            }
+        });
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), ChooseShortcutActivity.class);
                 intent.addFlags(position);
+                intent.putExtra("mode", MODE_GRID);
                 startActivity(intent);
             }
         });

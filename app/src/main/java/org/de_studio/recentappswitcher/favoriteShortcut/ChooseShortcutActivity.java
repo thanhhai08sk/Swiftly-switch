@@ -11,9 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +20,7 @@ import org.de_studio.recentappswitcher.Utility;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 public class ChooseShortcutActivity extends AppCompatActivity implements ChooseAppListViewAdapter.AppChangeListener, ChooseSettingShortcutListViewAdapter.SettingChangeListener{
@@ -37,6 +36,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
     private ChooseAppListViewAdapter mAppAdapter;
     private ChooseSettingShortcutListViewAdapter mSettingAdapter;
     private Context mContext;
+    private int mode;
 
 
     private ViewPager mViewPager;
@@ -45,6 +45,9 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPosition = getIntent().getFlags();
+//        mode = getIntent().getIntExtra("mode",SetFavoriteShortcutActivity.MODE_CIRCLE);
+        mode = getIntent().getIntExtra("mode", SetFavoriteShortcutActivity.MODE_GRID);
+        Log.e(LOG_TAG, "mode = " + mode);
         mContext = this;
 //        Toast.makeText(getApplicationContext(),"ChooseShortcutActivity position = "+ mPosition,Toast.LENGTH_SHORT).show();
         setContentView(R.layout.activity_choose_shortcut);
@@ -59,7 +62,12 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
         AppCompatButton backButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_back_button);
         AppCompatButton nextButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_next_button);
         AppCompatButton okButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_ok_button);
-        myRealm = Realm.getInstance(getApplicationContext());
+        if (mode == SetFavoriteShortcutActivity.MODE_GRID) {
+            myRealm = Realm.getInstance(getApplicationContext());
+        } else {
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
+        }
+
         final TextView positionText = (TextView) findViewById(R.id.app_tab_fragment_position_text_view);
         positionText.setText(mPosition + 1 + ".");
         currentShortcut = (ImageView) findViewById(R.id.app_tab_fragment_current_shortcut_image_view);
@@ -67,7 +75,19 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPosition < Utility.getSizeOfFavoriteGrid(getApplicationContext())-1) {
+                int max;
+                switch (mode) {
+                    case SetFavoriteShortcutActivity.MODE_GRID:
+                        max = Utility.getSizeOfFavoriteGrid(getApplicationContext())-1;
+                        break;
+                    case SetFavoriteShortcutActivity.MODE_CIRCLE:
+                        max = 5;
+                        break;
+                    default:
+                        max = 5;
+                        break;
+                }
+                if (mPosition < max) {
                     mPosition++;
                     positionText.setText(mPosition + 1 + ".");
                     setCurrentShortcutImageView();
@@ -109,35 +129,6 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
         });
     }
 
-    public static class PlaceholderFragment extends Fragment {
-
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_choose_shortcut, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-//            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -152,15 +143,18 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
                 case 0:
                     mAppTabFragment = AppTabFragment.newInstance(position + 1);
                     mAppTabFragment.setmPosition(mPosition);
+                    mAppTabFragment.setMode(mode);
                     mAppTabFragment.setmContext(mContext);
                     return mAppTabFragment;
                 case 1:
                     mSettingTabFragment = SettingTabFragment.newInstance(position + 1);
                     mSettingTabFragment.setmPosition(mPosition);
+                    mSettingTabFragment.setMode(mode);
                     return mSettingTabFragment;
                 default: mAppTabFragment = AppTabFragment.newInstance(position + 1);
                     mAppTabFragment.setmPosition(mPosition);
                     mAppTabFragment.setmContext(mContext);
+                    mAppTabFragment.setMode(mode);
                     return mAppTabFragment;
             }
 
