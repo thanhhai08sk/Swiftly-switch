@@ -36,6 +36,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
     private GridView gridView;
     private SharedPreferences defaultSharedPreference;
     private ImageView clearButton;
+    private CircleFavoriteAdapter listAdapter;
     public static final int MODE_GRID = 0;
     public static final int MODE_CIRCLE = 1;
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         final AppCompatSeekBar gridDistanceVerticalSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_distance_vertical_seek_bar);
         final TextView gridDistanceVerticalValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_distance_vertical_value_text_view);
         final ListView listView = (ListView) findViewById(R.id.favorite_circle_list_view);
-        CircleFavoriteAdapter listAdapter = new CircleFavoriteAdapter(this);
+        listAdapter = new CircleFavoriteAdapter(this);
         listView.setAdapter(listAdapter);
         Utility.setListViewHeightBasedOnChildren(listView);
         if (modeSpinner != null) {
@@ -289,6 +290,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         super.onResume();
         Log.e(LOG_TAG, "onResume");
         mAdapter.notifyDataSetChanged();
+        listAdapter.notifyDataSetChanged();
     }
 
     private void updateGridView() {
