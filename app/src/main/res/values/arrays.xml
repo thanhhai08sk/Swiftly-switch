@@ -65,4 +65,12 @@
         <item>@string/setting_shortcut_contact</item>
         <item>@string/setting_shortcut_call_log</item>
     </string-array>
+    <integer-array name="favorite_shortcut_mode">
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
+    <string-array name="favorite_shortcut_mode_array">
+        <item>@string/grid_mode</item>
+        <item>@string/semi_circle_mode</item>
+    </string-array>
 </resources>

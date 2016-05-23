@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -33,6 +34,8 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
     private GridView gridView;
     private SharedPreferences defaultSharedPreference;
     private ImageView clearButton;
+    private static final int MODE_GRID = 0;
+    private static final int MODE_CIRCLE = 1;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME)) isTrial = true;
@@ -48,8 +51,10 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         gridView = (GridView) findViewById(R.id.favorite_shortcut_grid_view);
         clearButton = (ImageView) findViewById(R.id.clear_button);
+        AppCompatSpinner modeSpinner = (AppCompatSpinner) findViewById(R.id.favorite_mode_spinner);
         AppCompatSpinner gridRowSpinner = (AppCompatSpinner) findViewById(R.id.set_favorite_shortcut_grid_row_spinner);
         AppCompatSpinner gridColumnSpinner = (AppCompatSpinner) findViewById(R.id.set_favorite_shortcut_grid_column_spinner);
+        final LinearLayout gridModeLinearLayout = (LinearLayout) findViewById(R.id.grid_mode_linear_layout);
         if (isTrial) {
             gridColumnSpinner.setEnabled(false);
             gridRowSpinner.setEnabled(false);
@@ -60,6 +65,29 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         final AppCompatSeekBar gridDistanceSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_distance_seek_bar);
         final AppCompatSeekBar gridDistanceVerticalSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_distance_vertical_seek_bar);
         final TextView gridDistanceVerticalValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_distance_vertical_value_text_view);
+        if (modeSpinner != null) {
+            modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    switch (position) {
+                        case 0:
+                            gridModeLinearLayout.setVisibility(View.VISIBLE);
+                            break;
+                        case 1:
+                            gridModeLinearLayout.setVisibility(View.GONE);
+                            break;
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        } else {
+            Log.e(LOG_TAG, "modeSpinner = null");
+        }
+
 
         int currentRowSpinnerPosition = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY,5)-1;
         gridRowSpinner.setSelection(currentRowSpinnerPosition);
