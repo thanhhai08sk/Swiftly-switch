@@ -44,6 +44,7 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -1260,6 +1261,78 @@ public  class Utility {
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
         listView.requestLayout();
+    }
+
+    public static void setShortcutDrawable(Shortcut shortcut, Context mContext, ImageView imageView, IconPackManager.IconPack iconPack) {
+        if (shortcut == null) {
+            imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+//            imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+        } else {
+            if (shortcut.getType() == Shortcut.TYPE_APP) {
+                imageView.setColorFilter(null);
+                try {
+                    Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
+                    if (iconPack!=null) {
+                        imageView.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
+                    } else {
+                        imageView.setImageDrawable(defaultDrawable);
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    Log.e(LOG_TAG, "NameNotFound " + e);
+                }
+            }else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+                switch (shortcut.getAction()) {
+                    case Shortcut.ACTION_WIFI:
+                        imageView.setImageResource(R.drawable.ic_action_wifi_on);
+//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color. black));
+                        break;
+                    case Shortcut.ACTION_BLUETOOTH:
+                        imageView.setImageResource(R.drawable.ic_action_bluetooth_on);
+//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_ROTATION:
+                        imageView.setImageResource(R.drawable.ic_action_rotate_on);
+//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_POWER_MENU:
+                        imageView.setImageResource(R.drawable.ic_action_power_menu);
+//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_HOME:
+                        imageView.setImageResource(R.drawable.ic_icon_home);
+//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_BACK:
+                        imageView.setImageResource(R.drawable.ic_icon_back);
+//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_NOTI:
+                        imageView.setImageResource(R.drawable.ic_icon_noti);
+//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_LAST_APP:
+                        imageView.setImageResource(R.drawable.ic_icon_last_app);
+//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_CALL_LOGS:
+                        imageView.setImageResource(R.drawable.ic_icon_call_log);
+//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_DIAL:
+                        imageView.setImageResource(R.drawable.ic_icon_dial);
+//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_CONTACT:
+                        imageView.setImageResource(R.drawable.ic_icon_contact);
+//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_NONE:
+                        imageView.setImageDrawable(null);
+                }
+            }
+
+        }
+
     }
 
 

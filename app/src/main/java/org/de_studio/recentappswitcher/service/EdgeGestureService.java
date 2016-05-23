@@ -52,6 +52,7 @@ import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
 import org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 
@@ -120,10 +121,11 @@ public class EdgeGestureService extends Service {
     private String[] spinnerEntries;
     private GridView shortcutGridView;
     private FavoriteShortcutAdapter shortcutAdapter;
+    private CircleFavoriteAdapter circltShortcutAdapter;
     private IconPackManager.IconPack iconPack;
     private boolean isClockShown = false;
     private View clockView;
-    private Realm pinAppRealm, favoriteRealm;
+    private Realm pinAppRealm, favoriteRealm,circleFavoRealm;
     private Set<String> pinnedSet;
     private WindowManager.LayoutParams backgroundParams;
     private int backgroundColor, guideColor, animationTime;
@@ -1419,6 +1421,12 @@ public class EdgeGestureService extends Service {
 
             protected void switchCircleShortcut () {
                 clearIconBackground();
+                Shortcut shortcut;
+                for (int i = 0; i < 6; i++) {
+                    shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", i).findFirst();
+                    Utility.setShortcutDrawable(shortcut,getApplicationContext(),iconImageArrayList.get(i),iconPack);
+
+                }
                 switched = true;
 
 
@@ -1514,12 +1522,14 @@ public class EdgeGestureService extends Service {
         edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
         pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext()).name("pinApp.realm").build());
+        circleFavoRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext()).name("circleFavo.realm").build());
         favoriteRealm = Realm.getInstance(getApplicationContext());
         backgroundColor = defaultShared.getInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY, 1879048192);
 //        guideColor = defaultShared.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY,16728193);
         guideColor = defaultShared.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY, Color.argb(255, 255, 64, 129));
 //        guideColor = defaultShared.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY, Color.argb(255, 40, 92, 161));
         shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
+        circltShortcutAdapter = new CircleFavoriteAdapter(getApplicationContext());
         Random r = new Random();
         serviceId = r.nextInt(1000);
         mIconScale = defaultShared.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f);

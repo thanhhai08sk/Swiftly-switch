@@ -151,7 +151,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                                 .putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 2).commit();
                         break;
                     case 2:
-                        sharedPreferences.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 3);
+                        sharedPreferences.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 3).commit();
                 }
                 mContext.stopService(new Intent(mContext, EdgeGestureService.class));
                 mContext.startService(new Intent(mContext, EdgeGestureService.class));

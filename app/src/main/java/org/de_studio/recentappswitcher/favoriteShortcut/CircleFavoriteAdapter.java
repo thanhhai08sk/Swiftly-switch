@@ -182,6 +182,7 @@ public class CircleFavoriteAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
+        shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id",position).findFirst();
         return null;
     }
     public void remove(int id) {
