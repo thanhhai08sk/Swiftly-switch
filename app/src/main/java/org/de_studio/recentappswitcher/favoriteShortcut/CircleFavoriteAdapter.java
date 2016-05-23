@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,23 +76,94 @@ public class CircleFavoriteAdapter extends BaseAdapter {
             Log.e(LOG_TAG, "Nullpoint when get label " + e);
         }
 
-        if (shortcut != null) {
-            try {
-                defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
-                if (iconPack != null) {
-
-                    icon.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
-                } else {
-                    icon.setImageDrawable(defaultDrawable);
-
+        if (shortcut == null) {
+            icon.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+            icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+        } else {
+            if (shortcut.getType() == Shortcut.TYPE_APP) {
+                icon.setColorFilter(null);
+                try {
+                    Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
+                    if (iconPack!=null) {
+                        icon.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
+                    } else {
+                        icon.setImageDrawable(defaultDrawable);
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    Log.e(LOG_TAG, "NameNotFound " + e);
                 }
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e(LOG_TAG, "NameNotFound when set icon " + e);
-            } catch (NullPointerException e) {
-                Log.e(LOG_TAG, "Nullpoint when set icon " + e);
+            }else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+                switch (shortcut.getAction()) {
+                    case Shortcut.ACTION_WIFI:
+                        icon.setImageResource(R.drawable.ic_action_wifi_on);
+                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color. black));
+                        break;
+                    case Shortcut.ACTION_BLUETOOTH:
+                        icon.setImageResource(R.drawable.ic_action_bluetooth_on);
+                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_ROTATION:
+                        icon.setImageResource(R.drawable.ic_action_rotate_on);
+                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_POWER_MENU:
+                        icon.setImageResource(R.drawable.ic_action_power_menu);
+                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_HOME:
+                        icon.setImageResource(R.drawable.ic_icon_home);
+                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_BACK:
+                        icon.setImageResource(R.drawable.ic_icon_back);
+                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_NOTI:
+                        icon.setImageResource(R.drawable.ic_icon_noti);
+                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_LAST_APP:
+                        icon.setImageResource(R.drawable.ic_icon_last_app);
+                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_CALL_LOGS:
+                        icon.setImageResource(R.drawable.ic_icon_call_log);
+                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_DIAL:
+                        icon.setImageResource(R.drawable.ic_icon_dial);
+                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_CONTACT:
+                        icon.setImageResource(R.drawable.ic_icon_contact);
+                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_NONE:
+                        icon.setImageDrawable(null);
+                }
             }
             label.setText(title);
+
         }
+
+
+//        if (shortcut != null) {
+//            try {
+//                defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
+//                if (iconPack != null) {
+//
+//                    icon.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
+//                } else {
+//                    icon.setImageDrawable(defaultDrawable);
+//
+//                }
+//            } catch (PackageManager.NameNotFoundException e) {
+//                Log.e(LOG_TAG, "NameNotFound when set icon " + e);
+//            } catch (NullPointerException e) {
+//                Log.e(LOG_TAG, "Nullpoint when set icon " + e);
+//            }
+//            label.setText(title);
+//        }
         return view;
     }
 
