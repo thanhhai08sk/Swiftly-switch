@@ -128,21 +128,30 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         final AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
         final AppCompatSpinner modeSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_mode_spinner);
         final CheckBox showGuideCheckBox = (AppCompatCheckBox) rootView.findViewById(R.id.edge_dialog_show_guide_checkbox);
+        int mode = sharedPreferences.getInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 0);
         boolean isOnlyFavorite = sharedPreferences.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
-        if (isOnlyFavorite) {
-            modeSpinner.setSelection(1);
-        } else {
-            modeSpinner.setSelection(0);
+        if (mode == 0) {
+            if (isOnlyFavorite) {
+                mode = 2;
+            } else {
+                mode = 1;
+            }
         }
+        modeSpinner.setSelection(mode-1);
         modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        sharedPreferences.edit().putBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false).commit();
+                        sharedPreferences.edit().putBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false)
+                                .putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE,1).commit();
                         break;
                     case 1:
-                        sharedPreferences.edit().putBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY,true).commit();
+                        sharedPreferences.edit().putBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, true)
+                                .putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 2).commit();
+                        break;
+                    case 2:
+                        sharedPreferences.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 3);
                 }
                 mContext.stopService(new Intent(mContext, EdgeGestureService.class));
                 mContext.startService(new Intent(mContext, EdgeGestureService.class));

@@ -3,6 +3,7 @@
     <string-array name="edge_dialog_mode_setting_spinner_array">
         <item>@string/edge_dialog_mode_array_default</item>
         <item>@string/edge_dialog_mode_array_only_favorite</item>
+        <item>@string/edge_dialog_mode_array_circlt_favorite</item>
     </string-array>
     <string-array name="edge_dialog_spinner_array">
         <item>@string/edge_dialog_array_right_top</item>
