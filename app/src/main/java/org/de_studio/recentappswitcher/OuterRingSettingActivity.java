@@ -26,6 +26,7 @@ public class OuterRingSettingActivity extends AppCompatActivity {
         listAction = new String[]{MainActivity.ACTION_NONE,
                 MainActivity.ACTION_HOME,
                 MainActivity.ACTION_BACK,
+                MainActivity.ACTION_RECENT,
                 MainActivity.ACTION_NOTI,
                 MainActivity.ACTION_WIFI,
                 MainActivity.ACTION_BLUETOOTH,

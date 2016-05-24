@@ -137,6 +137,10 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                         imageView.setImageResource(R.drawable.ic_icon_contact);
                         imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
+                    case Shortcut.ACTION_RECENT:
+                        imageView.setImageResource(R.drawable.ic_action_recent2);
+                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
                     case Shortcut.ACTION_NONE:
                         imageView.setImageDrawable(null);
                 }

@@ -147,6 +147,10 @@ public class CircleFavoriteAdapter extends BaseAdapter {
                         icon.setImageResource(R.drawable.ic_icon_contact);
                         icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
+                    case Shortcut.ACTION_RECENT:
+                        icon.setImageResource(R.drawable.ic_action_recent2);
+                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
                     case Shortcut.ACTION_NONE:
                         icon.setImageDrawable(null);
                 }

@@ -780,7 +780,9 @@ public  class Utility {
             return Shortcut.ACTION_CALL_LOGS;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_contact))) {
             return Shortcut.ACTION_CONTACT;
-        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_dial))) {
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_recent))) {
+            return Shortcut.ACTION_RECENT;
+        } else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_dial))) {
             return Shortcut.ACTION_DIAL;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_none))) {
             return Shortcut.ACTION_NONE;
@@ -843,6 +845,8 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_contact);
             case MainActivity.ACTION_DIAL:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_dial);
+            case MainActivity.ACTION_RECENT:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_icon_recent_5122);
             case MainActivity.ACTION_NONE:
                 return null;
 
@@ -874,6 +878,8 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_contact);
             case MainActivity.ACTION_DIAL:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_dial);
+            case MainActivity.ACTION_RECENT:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_icon_recent_5122);
             case MainActivity.ACTION_NONE:
                 return null;
         }
@@ -904,6 +910,8 @@ public  class Utility {
                 return context.getString(R.string.setting_shortcut_contact);
             case MainActivity.ACTION_DIAL:
                 return context.getString(R.string.setting_shortcut_dial);
+            case MainActivity.ACTION_RECENT:
+                return context.getString(R.string.setting_shortcut_recent);
             case MainActivity.ACTION_NONE:
                 return context.getString(R.string.setting_shortcut_none);
         }
@@ -938,6 +946,21 @@ public  class Utility {
         event1.setClassName(className);
         event1.getText().add("back");
         event1.setAction(2);
+        event1.setPackageName(packageName);
+        event1.setEnabled(true);
+        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+        recordCompat.setSource(v);
+        if (Utility.isAccessibilityEnable(context)) {
+            manager.sendAccessibilityEvent(event1);
+        }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+    }
+
+    public static void recentAction(Context context, View v, String className, String packageName) {
+        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+        event1.setClassName(className);
+        event1.getText().add("recent");
+        event1.setAction(5);
         event1.setPackageName(packageName);
         event1.setEnabled(true);
         AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
@@ -1123,6 +1146,8 @@ public  class Utility {
                 break;
             case MainActivity.ACTION_DIAL:
                 dialAction(context);
+            case MainActivity.ACTION_RECENT:
+                recentAction(context,v,className,packageName);
                 break;
         }
     }
@@ -1326,6 +1351,10 @@ public  class Utility {
                         imageView.setImageResource(R.drawable.ic_icon_contact);
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
+                    case Shortcut.ACTION_RECENT:
+                        imageView.setImageResource(R.drawable.ic_action_recent2);
+//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
                     case Shortcut.ACTION_NONE:
                         imageView.setImageDrawable(null);
                 }
@@ -1411,6 +1440,9 @@ public  class Utility {
                     break;
                 case Shortcut.ACTION_CONTACT:
                     Utility.contactAction(context);
+                    break;
+                case Shortcut.ACTION_RECENT:
+                    Utility.recentAction(context, v, className, packageName);
                     break;
                 case Shortcut.ACTION_NONE:
                     break;

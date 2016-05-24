@@ -29,7 +29,10 @@ public class MyAccessibilityService extends AccessibilityService {
                     Log.e("MyAccessibilityService ", "noti");
                     performGlobalAction(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS);
                     break;
-
+                case 5:
+                    Log.e("MyAccessibilityService ", "recent");
+                    performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS);
+                    break;
             }
 
 

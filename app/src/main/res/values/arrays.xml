@@ -21,6 +21,7 @@
         <item>@string/setting_shortcut_rotation</item>
         <item>@string/setting_shortcut_home</item>
         <item>@string/setting_shortcut_back</item>
+        <item>@string/setting_shortcut_recent</item>
         <item>@string/setting_shortcut_noti</item>
         <item>@string/setting_shortcut_last_app</item>
         <item>@string/setting_shortcut_dial</item>

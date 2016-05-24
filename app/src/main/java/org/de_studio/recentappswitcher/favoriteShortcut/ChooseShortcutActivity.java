@@ -224,6 +224,9 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
                     case Shortcut.ACTION_DIAL:
                         currentShortcut.setImageResource(R.drawable.ic_icon_dial);
                         break;
+                    case Shortcut.ACTION_RECENT:
+                        currentShortcut.setImageResource(R.drawable.ic_action_recent2);
+                        break;
                     case Shortcut.ACTION_NONE:
                         currentShortcut.setImageDrawable(null);
                         break;

@@ -148,4 +148,5 @@
     <string name="semi_circle_mode">Semi-circle mode</string>
     <string name="edge_dialog_mode_array_circlt_favorite">Circle favorite</string>
     <string name="set_circle_favorite_mode_for">Set Circle Favorite mode for:</string>
+    <string name="setting_shortcut_recent">Recent button</string>
 </resources>

@@ -108,6 +108,8 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
             icon.setImageResource(R.drawable.ic_icon_home);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_back))) {
             icon.setImageResource(R.drawable.ic_icon_back);
+        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_recent))) {
+            icon.setImageResource(R.drawable.ic_action_recent2);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_noti))) {
             icon.setImageResource(R.drawable.ic_icon_noti);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_dial))) {
