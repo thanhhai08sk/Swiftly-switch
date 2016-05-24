@@ -897,7 +897,7 @@ public class EdgeGestureService extends Service {
                             Utility.startShortcut(getApplicationContext(),shortcut,v,getClass().getName(),getPackageName(),lastAppPackageName);
                         } else if (shortcutToSwitch != -1) {
                             Toast.makeText(getApplicationContext(), getString(R.string.please_add_favorite_item), Toast.LENGTH_LONG).show();
-                            showAddFavoriteDialog();
+                            showAddFavoriteDialog(mode);
                         }
                     } else {
 //                        int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
@@ -1621,8 +1621,11 @@ public class EdgeGestureService extends Service {
     }
 
 
-    public void showAddFavoriteDialog() {
-        startActivity(new Intent(getApplicationContext(), SetFavoriteShortcutActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    public void showAddFavoriteDialog(int mode) {
+        Intent intent = new Intent(getApplicationContext(),SetFavoriteShortcutActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("mode", mode);
+        startActivity(intent);
     }
 
 

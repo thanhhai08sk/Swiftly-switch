@@ -42,6 +42,15 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME)) isTrial = true;
+        int mode = 1;
+        try {
+            mode = getIntent().getIntExtra("mode", 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, "can not get mode from intent");
+        }
+        Log.e(LOG_TAG, "mode = " + mode);
+
         setContentView(R.layout.activity_set_favorite_shortcut);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -73,6 +82,11 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         listView.setAdapter(listAdapter);
         Utility.setListViewHeightBasedOnChildren(listView);
         if (modeSpinner != null) {
+            if (mode == 3) {
+                modeSpinner.setSelection(1);
+            } else {
+                modeSpinner.setSelection(0);
+            }
             modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
