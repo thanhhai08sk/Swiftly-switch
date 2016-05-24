@@ -63,7 +63,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         gridView = (GridView) findViewById(R.id.favorite_shortcut_grid_view);
         clearButton = (ImageView) findViewById(R.id.clear_button);
-        AppCompatSpinner modeSpinner = (AppCompatSpinner) findViewById(R.id.favorite_mode_spinner);
+        final AppCompatSpinner modeSpinner = (AppCompatSpinner) findViewById(R.id.favorite_mode_spinner);
         AppCompatSpinner gridRowSpinner = (AppCompatSpinner) findViewById(R.id.set_favorite_shortcut_grid_row_spinner);
         AppCompatSpinner gridColumnSpinner = (AppCompatSpinner) findViewById(R.id.set_favorite_shortcut_grid_column_spinner);
         final LinearLayout gridModeLinearLayout = (LinearLayout) findViewById(R.id.grid_mode_linear_layout);
@@ -265,6 +265,19 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
             }
         });
 
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                ClipData data = ClipData.newPlainText("","");
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                view.startDrag(data, shadowBuilder, view, 0);
+                view.setVisibility(View.GONE);
+                clearButton.setVisibility(View.VISIBLE);
+                listAdapter.setDragPosition(position);
+                return true;
+            }
+        });
+
         clearButton.setOnDragListener(new View.OnDragListener() {
             @Override
             public boolean onDrag(View v, DragEvent event) {
@@ -282,7 +295,12 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
                     case DragEvent.ACTION_DROP:
                         View view = (View) event.getLocalState();
                         view.setVisibility(View.VISIBLE);
-                        mAdapter.removeDragItem();
+                        if (modeSpinner.getSelectedItemPosition() == 1) {
+                            listAdapter.removeDragItem();
+                        } else {
+                            mAdapter.removeDragItem();
+                        }
+
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
                         v.setBackground(null);

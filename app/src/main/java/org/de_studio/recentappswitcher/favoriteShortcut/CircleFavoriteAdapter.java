@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class CircleFavoriteAdapter extends BaseAdapter {
     private SharedPreferences sharedPreferences;
     private IconPackManager.IconPack iconPack;
     private static final String LOG_TAG = CircleFavoriteAdapter.class.getSimpleName();
+    private int dragPosition;
 
     public CircleFavoriteAdapter(Context context) {
         super();
@@ -57,7 +59,7 @@ public class CircleFavoriteAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
             view = LayoutInflater.from(mContext).inflate(R.layout.item_circle_favorite, parent, false);
@@ -172,6 +174,37 @@ public class CircleFavoriteAdapter extends BaseAdapter {
 //        }
         label.setText(title);
         Log.e(LOG_TAG, "label = " + title);
+
+
+        view.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        // do nothing
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        v.setBackgroundResource(R.color.grey);
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        v.setBackground(null);
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        changePosition(dragPosition,position);
+                        View view = (View) event.getLocalState();
+                        view.setVisibility(View.VISIBLE);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        v.setBackground(null);
+                        notifyDataSetChanged();
+
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+        view.setVisibility(View.VISIBLE);
         return view;
     }
 
@@ -206,5 +239,60 @@ public class CircleFavoriteAdapter extends BaseAdapter {
         notifyDataSetChanged();
         mContext.stopService(new Intent(mContext, EdgeGestureService.class));
         mContext.startService(new Intent(mContext, EdgeGestureService.class));
+    }
+
+    public void setDragPosition(int position) {
+        this.dragPosition = position;
+    }
+    public void changePosition(int dragPosition, int dropPosition) {
+        Shortcut dropTemp = circleFavoRealm.where(Shortcut.class).equalTo("id", dropPosition).findFirst();
+        Shortcut dragTemp = circleFavoRealm.where(Shortcut.class).equalTo("id", dragPosition).findFirst();
+        Shortcut shortcut5000 = circleFavoRealm.where(Shortcut.class).equalTo("id",5000).findFirst();
+        circleFavoRealm.beginTransaction();
+        if (shortcut5000 != null) {
+            shortcut5000.removeFromRealm();
+        }
+
+        try {
+            dropTemp.setId(5000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            dragTemp.setId(dropPosition);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            dropTemp.setId(dragPosition);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        circleFavoRealm.commitTransaction();
+        notifyDataSetChanged();
+    }
+
+    public void removeDragItem() {
+        circleFavoRealm.beginTransaction();
+        Shortcut shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", dragPosition).findFirst();
+        if (shortcut != null) {
+            shortcut.setType(Shortcut.TYPE_SETTING);
+            shortcut.setAction(Shortcut.ACTION_NONE);
+            shortcut.setLabel("");
+        } else {
+            Shortcut shortcut1 = new Shortcut();
+            shortcut1.setType(Shortcut.TYPE_SETTING);
+            shortcut1.setAction(Shortcut.ACTION_NONE);
+            shortcut1.setId(dragPosition);
+            circleFavoRealm.copyToRealm(shortcut1);
+
+        }
+
+        circleFavoRealm.commitTransaction();
+        notifyDataSetChanged();
     }
 }
