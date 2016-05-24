@@ -1012,9 +1012,13 @@ public class EdgeGestureService extends Service {
 
                             shortcutToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
                             int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
-                            if (moveToHomeBackNoti > 0) {
-                                activateId = moveToHomeBackNoti + 30;
-                            }
+                            if (moveToHomeBackNoti != -1 | shortcutToSwitch != -1) {
+                                if (shortcutToSwitch != -1) {
+                                    activateId = shortcutToSwitch + 1;
+                                } else {
+                                    activateId = moveToHomeBackNoti + 7;
+                                }
+                            }else activateId = 0;
 
 
                             if (shortcutToSwitch == -1) {

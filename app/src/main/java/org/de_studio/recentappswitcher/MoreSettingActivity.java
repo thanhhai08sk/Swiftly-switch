@@ -56,6 +56,11 @@ public class MoreSettingActivity extends AppCompatActivity {
         SwitchCompat disableAnimationSwitch = (SwitchCompat) findViewById(R.id.main_disable_animation_switch);
         SwitchCompat holdTimeSwitch = (SwitchCompat) findViewById(R.id.main_hold_time_switch);
 
+        hapticFeedbackOnItemSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY,false));
+        hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY,true));
+        disableClockSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY,false));
+        holdTimeSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HOLD_TIME_ENABLE_KEY,true));
+
 
         disableAnimationSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY,false));
         iconPackSettingButton.setOnClickListener(new View.OnClickListener() {
