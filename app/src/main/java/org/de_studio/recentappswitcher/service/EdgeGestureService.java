@@ -979,26 +979,64 @@ public class EdgeGestureService extends Service {
                         isClockShown = true;
                     }
                     if (switched) {
-                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
-                        if (shortcutToSwitch != -1) {
-                            activateId = shortcutToSwitch + 1;
-                        } else {
-                            activatedId = 0;
-                            activateId = 0;
-                        }
+                        int shortcutToSwitch;
+                        if (mode == 3) {
+                                if (iconIdBackgrounded == -2) {
+                                    for (int i = 0; i < numOfIcon; i++) {
+                                        x[i] = (int) iconImageArrayList.get(i).getX();
+                                        y[i] = (int) iconImageArrayList.get(i).getY();
+                                    }
+                                }
 
-                        if (shortcutAdapter != null) {
-                            if (shortcutToSwitch != -1 && shortcutToSwitch != preShortcutToSwitch) {
-                                shortcutAdapter.setBackground(shortcutToSwitch);
-                                isShortcutBackgroundNull = true;
-                                preShortcutToSwitch = shortcutToSwitch;
-                            } else if (isShortcutBackgroundNull && shortcutToSwitch == -1) {
-                                shortcutAdapter.setBackground(shortcutToSwitch);
-                                isShortcutBackgroundNull = false;
-                                preShortcutToSwitch = -1;
+                                shortcutToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
+                            if (shortcutToSwitch == -1) {
+                                clearIconBackground();
+                            }
+                            if (shortcutToSwitch != -1 && shortcutToSwitch < iconImageArrayList.size() && iconIdBackgrounded != shortcutToSwitch) {
+                                clearIconBackground();
+                                MyImageView iconHighlight = iconImageArrayList.get(shortcutToSwitch);
+                                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(iconHighlight.getLayoutParams());
+                                float x = iconHighlight.getX();
+                                float y = iconHighlight.getY();
+
+                                layoutParams.height = (int) ((16 + 48 * mIconScale) * mScale);
+                                layoutParams.width = (int) ((28 + 48 * mIconScale) * mScale);
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    iconHighlight.setBackground(getDrawable(R.drawable.icon_background));
+                                } else {
+                                    iconHighlight.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
+                                }
+                                iconHighlight.setX(x - 14 * mScale);
+                                iconHighlight.setY(y - 8 * mScale);
+                                iconHighlight.setLayoutParams(layoutParams);
+                                iconHighlight.setPadding(iconPaddingLeft, iconPaddingTop, iconPaddingLeft, iconPaddingTop);
+                                iconIdBackgrounded = shortcutToSwitch;
+
                             }
 
+                        } else {
+                            shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
+                            if (shortcutToSwitch != -1) {
+                                activateId = shortcutToSwitch + 1;
+                            } else {
+                                activatedId = 0;
+                                activateId = 0;
+                            }
+
+                            if (shortcutAdapter != null) {
+                                if (shortcutToSwitch != -1 && shortcutToSwitch != preShortcutToSwitch) {
+                                    shortcutAdapter.setBackground(shortcutToSwitch);
+                                    isShortcutBackgroundNull = true;
+                                    preShortcutToSwitch = shortcutToSwitch;
+                                } else if (isShortcutBackgroundNull && shortcutToSwitch == -1) {
+                                    shortcutAdapter.setBackground(shortcutToSwitch);
+                                    isShortcutBackgroundNull = false;
+                                    preShortcutToSwitch = -1;
+                                }
+
+                            }
                         }
+
                     } else {
 //                        int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
                         int iconToSwitch = -1;
@@ -1008,6 +1046,7 @@ public class EdgeGestureService extends Service {
                                     x[i] = (int) iconImageArrayList.get(i).getX();
                                     y[i] = (int) iconImageArrayList.get(i).getY();
                                 }
+
                             }
 
                             iconToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
@@ -1019,9 +1058,6 @@ public class EdgeGestureService extends Service {
                         }
                         if (iconToSwitch != -1 && !iconImageArrayList.get(0).isOnAnimation()) {
                             if (iconToSwitch < iconImageArrayList.size() && iconIdBackgrounded != iconToSwitch) {
-
-
-//                                if (!iconImageArrayList.get(0).isOnAnimation()) {
                                 clearIconBackground();
                                 MyImageView iconHighlight = iconImageArrayList.get(iconToSwitch);
                                 FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(iconHighlight.getLayoutParams());
@@ -1037,13 +1073,9 @@ public class EdgeGestureService extends Service {
                                 }
                                 iconHighlight.setX(x - 14 * mScale);
                                 iconHighlight.setY(y - 8 * mScale);
-//                                iconHighlight.setTranslationX(-14 * mScale);
-//                                iconHighlight.setTranslationY(-8 * mScale);
                                 iconHighlight.setLayoutParams(layoutParams);
                                 iconHighlight.setPadding(iconPaddingLeft, iconPaddingTop, iconPaddingLeft, iconPaddingTop);
                                 iconIdBackgrounded = iconToSwitch;
-//                                }
-
 
                             }
                             Log.e(LOG_TAG, "set activateId = icontoswitch + 20 \nonAnimation = " + iconImageArrayList.get(0).isOnAnimation());
