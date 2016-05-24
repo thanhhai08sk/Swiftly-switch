@@ -56,27 +56,29 @@
             android:id="@+id/app_tab_fragment_current_shortcut_image_view"
             android:layout_weight="1"
             />
-        <android.support.v7.widget.AppCompatButton
+        <android.support.v7.widget.AppCompatImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_tab_fragment_back_button"
             android:id="@+id/app_tab_fragment_back_button"
             style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
             android:textColor="@color/white"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_navigate_before_white_36dp"
             />
 
-        <android.support.v7.widget.AppCompatButton
+        <android.support.v7.widget.AppCompatImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_tab_fragment_next_button"
             android:id="@+id/app_tab_fragment_next_button"
             style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
             android:textColor="@color/white"
+            android:src="@drawable/ic_navigate_next_white_36dp"
             />
         <android.support.v7.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_tab_fragment_ok_button"
+            android:layout_marginLeft="16dp"
             android:id="@+id/app_tab_fragment_ok_button"
             style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
             android:textColor="@color/white"

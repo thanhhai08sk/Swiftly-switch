@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatImageButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -59,8 +60,8 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabbar);
         tabLayout.setupWithViewPager(mViewPager);
-        AppCompatButton backButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_back_button);
-        AppCompatButton nextButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_next_button);
+        AppCompatImageButton backButton = (AppCompatImageButton) findViewById(R.id.app_tab_fragment_back_button);
+        AppCompatImageButton nextButton = (AppCompatImageButton) findViewById(R.id.app_tab_fragment_next_button);
         AppCompatButton okButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_ok_button);
         if (mode == SetFavoriteShortcutActivity.MODE_GRID) {
             myRealm = Realm.getInstance(getApplicationContext());
