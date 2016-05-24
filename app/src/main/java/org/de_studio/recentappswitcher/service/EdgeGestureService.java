@@ -61,7 +61,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -128,7 +127,7 @@ public class EdgeGestureService extends Service {
     private Realm pinAppRealm, favoriteRealm,circleFavoRealm;
     private Set<String> pinnedSet;
     private WindowManager.LayoutParams backgroundParams;
-    private int backgroundColor, guideColor, animationTime;
+    private int backgroundColor, guideColor, animationTime, edge1mode, edge2mode;
     private Set<String> excludeSet;
     private long startDown;
     private String[] savedPackage;
@@ -278,7 +277,7 @@ public class EdgeGestureService extends Service {
                 removeView(edge1Image);
             }
             boolean isOnlyFavorite1 = sharedPreferences1.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
-            OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, iconImageList1, item1View, iconImageArrayList1, isOnlyFavorite1);
+            OnTouchListener onTouchListener1 = new OnTouchListener(edge1Position, iconImageList1, item1View, iconImageArrayList1, isOnlyFavorite1, edge1mode);
             edge1Image.setOnTouchListener(onTouchListener1);
         }
 
@@ -384,7 +383,7 @@ public class EdgeGestureService extends Service {
             }
 
             boolean isOnlyFavorite2 = sharedPreferences2.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
-            OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position, iconImageList2, item2View, iconImageArrayList2, isOnlyFavorite2);
+            OnTouchListener onTouchListener2 = new OnTouchListener(edge2Position, iconImageList2, item2View, iconImageArrayList2, isOnlyFavorite2, edge2mode);
             edge2Image.setOnTouchListener(onTouchListener2);
         }
 
@@ -425,7 +424,7 @@ public class EdgeGestureService extends Service {
     }
 
     public class OnTouchListener implements View.OnTouchListener {
-        private int x_init_cord, y_init_cord;
+        private int x_init_cord, y_init_cord, mode;
         private int position, iconIdBackgrounded = -2, preShortcutToSwitch = -1, activateId = 0, activatedId = 0;
         private FrameLayout itemView;
         private MyImageView[] iconImageList;
@@ -433,13 +432,14 @@ public class EdgeGestureService extends Service {
         private DelayToSwitchTask delayToSwitchTask;
         private boolean isOnlyFavorite, isStayPermanent, isShortcutBackgroundNull = true, isCircleFavorite;
 
-        public OnTouchListener(int position, MyImageView[] iconImageList, FrameLayout itemView, List<MyImageView> iconImageArrayList, boolean isOnlyFavorite) {
+        public OnTouchListener(int position, MyImageView[] iconImageList, FrameLayout itemView, List<MyImageView> iconImageArrayList, boolean isOnlyFavorite, int mode) {
             this.position = position;
             this.iconImageList = iconImageList;
             this.itemView = itemView;
             this.iconImageArrayList = iconImageArrayList;
             this.isOnlyFavorite = isOnlyFavorite;
             this.isCircleFavorite = true;
+            this.mode = mode;
         }
 
 
@@ -1367,7 +1367,12 @@ public class EdgeGestureService extends Service {
             @Override
             protected void onPostExecute(Void aVoid) {
                 if (isSleepEnough & touched) {
-                    switchShortcut();
+                    if (mode == 3) {
+                        switchCircleShortcut();
+                    } else {
+                        switchShortcut();
+                    }
+
 
                 }
 
@@ -1530,10 +1535,10 @@ public class EdgeGestureService extends Service {
 //        guideColor = defaultShared.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY, Color.argb(255, 40, 92, 161));
         shortcutAdapter = new FavoriteShortcutAdapter(getApplicationContext());
         circltShortcutAdapter = new CircleFavoriteAdapter(getApplicationContext());
-        Random r = new Random();
-        serviceId = r.nextInt(1000);
+//        Random r = new Random();
+//        serviceId = r.nextInt(1000);
         mIconScale = defaultShared.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f);
-        defaultShared.edit().putInt(EdgeSettingDialogFragment.SERVICE_ID, serviceId).commit();
+//        defaultShared.edit().putInt(EdgeSettingDialogFragment.SERVICE_ID, serviceId).commit();
         RealmResults<Shortcut> results1 =
                 pinAppRealm.where(Shortcut.class).findAll();
         if (isFreeVersion && isOutOfTrial) {
@@ -1553,9 +1558,26 @@ public class EdgeGestureService extends Service {
         }
         pinnedSet = new HashSet<String>(Arrays.asList(pinnedPackageName));
         animationTime = defaultShared.getInt(EdgeSettingDialogFragment.ANI_TIME_KEY, 100);
-        Log.e(LOG_TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
-                "\nEdge1 position = " + edge1Position + "\nEdge2 positon = " + edge2Position);
+        edge1mode = sharedPreferences1.getInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 0);
+        if (edge1mode == 0) {
+            if (sharedPreferences1.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false)) {
+                edge1mode = 2;
+            } else {
+                edge1mode = 1;
+            }
+        }
 
+        edge2mode = sharedPreferences2.getInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 0);
+        if (edge2mode == 0) {
+            if (sharedPreferences2.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false)) {
+                edge2mode = 2;
+            } else {
+                edge2mode = 1;
+            }
+        }
+        Log.e(LOG_TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
+                "\nEdge1 position = " + edge1Position + "\nEdge2 positon = " + edge2Position
+                + "\nMode = " + edge1mode);
     }
 
     @Override
