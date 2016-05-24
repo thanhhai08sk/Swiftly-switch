@@ -1335,6 +1335,90 @@ public  class Utility {
 
     }
 
+    public static void startShortcut(Context context, Shortcut shortcut, View v, String className, String packageName, String lastAppPackageName) {
+        if (shortcut.getType() == Shortcut.TYPE_APP) {
+            Intent extApp;
+            extApp =context.getPackageManager().getLaunchIntentForPackage(shortcut.getPackageName());
+            if (extApp != null) {
+                ComponentName componentName = extApp.getComponent();
+//                                    Intent startApp = new Intent(Intent.ACTION_MAIN, null);
+//                                    startApp.addCategory(Intent.CATEGORY_LAUNCHER);
+//                                    startApp.setComponent(componentName);
+//                                    startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                    extApp.addFlags(805306368);
+                Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
+                startAppIntent.setComponent(componentName);
+                startAppIntent.addFlags(1064960);
+                startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                context.startActivity(startAppIntent);
+//                                    startActivity(extApp);
+            } else {
+                Log.e(LOG_TAG, "extApp of shortcut = null ");
+            }
+        } else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+            switch (shortcut.getAction()) {
+                case Shortcut.ACTION_WIFI:
+                    Utility.toggleWifi(context);
+                    break;
+                case Shortcut.ACTION_BLUETOOTH:
+                    Utility.toggleBluetooth(context);
+                    break;
+                case Shortcut.ACTION_ROTATION:
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                        Utility.setAutorotation(context);
+                    } else {
+                        if (Settings.System.canWrite(context)) {
+                            Utility.setAutorotation(context);
+                        } else {
+                            Intent notiIntent = new Intent();
+                            notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                            PendingIntent notiPending = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+                            builder.setContentTitle(context.getString(R.string.ask_for_write_setting_notification_title)).setContentText(context.getString(R.string.ask_for_write_setting_notification_text)).setSmallIcon(R.drawable.ic_settings_white_36px)
+                                    .setContentIntent(notiPending)
+                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                    .setDefaults(NotificationCompat.DEFAULT_SOUND);
+                            Notification notification = builder.build();
+                            NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+                            notificationManager.notify(22, notification);
+                        }
+                    }
+
+                    break;
+                case Shortcut.ACTION_POWER_MENU:
+                    powerAction(context, v, className, packageName);
+                    break;
+                case Shortcut.ACTION_HOME:
+                    Utility.homeAction(context, v, className, packageName);
+                    break;
+                case Shortcut.ACTION_BACK:
+                    Utility.backAction(context, v, className, packageName);
+                    break;
+                case Shortcut.ACTION_NOTI:
+                    Utility.notiAction(context, v, className, packageName);
+                    break;
+                case Shortcut.ACTION_LAST_APP:
+                    Utility.lastAppAction(context, lastAppPackageName);
+                    break;
+                case Shortcut.ACTION_CALL_LOGS:
+                    Utility.callLogsAction(context);
+                    break;
+                case Shortcut.ACTION_DIAL:
+                    Utility.dialAction(context);
+                    break;
+                case Shortcut.ACTION_CONTACT:
+                    Utility.contactAction(context);
+                    break;
+                case Shortcut.ACTION_NONE:
+                    break;
+
+            }
+        }
+    }
+
 
 
 

@@ -2,7 +2,6 @@ package org.de_studio.recentappswitcher.service;
 
 import android.app.ActivityManager;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.app.usage.UsageStats;
@@ -30,8 +29,6 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.accessibility.AccessibilityEventCompat;
-import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.Log;
 import android.view.Gravity;
@@ -40,8 +37,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -889,105 +884,17 @@ public class EdgeGestureService extends Service {
 
 
                     if (switched) {
-                        int shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
-//                        Log.e(LOG_TAG, "shortcutToSwitch = " + shortcutToSwitch + "\ngrid_x =" + shortcutGridView.getX() + "\ngrid_y = " + shortcutGridView.getY() +
-//                                "\nx_cord = " + x_cord + "\ny_cord = " + y_cord);
-//                        Realm myRealm = Realm.getInstance(getApplicationContext());
-                        Shortcut shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
+                        int shortcutToSwitch;
+                        Shortcut shortcut;
+                        if (mode == 3) {
+                            shortcutToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
+                            shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
+                        } else {
+                            shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
+                            shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
+                        }
                         if (shortcut != null) {
-                            if (shortcut.getType() == Shortcut.TYPE_APP) {
-                                Intent extApp;
-                                extApp = getPackageManager().getLaunchIntentForPackage(shortcut.getPackageName());
-                                if (extApp != null) {
-                                    ComponentName componentName = extApp.getComponent();
-//                                    Intent startApp = new Intent(Intent.ACTION_MAIN, null);
-//                                    startApp.addCategory(Intent.CATEGORY_LAUNCHER);
-//                                    startApp.setComponent(componentName);
-//                                    startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                                    extApp.addFlags(805306368);
-                                    Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
-                                    startAppIntent.setComponent(componentName);
-                                    startAppIntent.addFlags(1064960);
-                                    startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                                    startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                                    startActivity(startAppIntent);
-//                                    startActivity(extApp);
-                                } else {
-                                    Log.e(LOG_TAG, "extApp of shortcut = null ");
-                                }
-                            } else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
-                                switch (shortcut.getAction()) {
-                                    case Shortcut.ACTION_WIFI:
-                                        Utility.toggleWifi(getApplicationContext());
-                                        break;
-                                    case Shortcut.ACTION_BLUETOOTH:
-                                        Utility.toggleBluetooth(getApplicationContext());
-                                        break;
-                                    case Shortcut.ACTION_ROTATION:
-                                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                                            Utility.setAutorotation(getApplicationContext());
-                                        } else {
-                                            if (Settings.System.canWrite(getApplicationContext())) {
-                                                Utility.setAutorotation(getApplicationContext());
-                                            } else {
-                                                Intent notiIntent = new Intent();
-                                                notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-                                                PendingIntent notiPending = PendingIntent.getActivity(getApplicationContext(), 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                                                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
-                                                builder.setContentTitle(getString(R.string.ask_for_write_setting_notification_title)).setContentText(getString(R.string.ask_for_write_setting_notification_text)).setSmallIcon(R.drawable.ic_settings_white_36px)
-                                                        .setContentIntent(notiPending)
-                                                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-                                                        .setDefaults(NotificationCompat.DEFAULT_SOUND);
-                                                Notification notification = builder.build();
-                                                NotificationManager notificationManager = (NotificationManager) getSystemService(getApplicationContext().NOTIFICATION_SERVICE);
-                                                notificationManager.notify(22, notification);
-                                            }
-                                        }
-
-                                        break;
-                                    case Shortcut.ACTION_POWER_MENU:
-                                        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-                                        event1.setClassName(getClass().getName());
-                                        event1.getText().add("power");
-                                        event1.setAction(3);
-                                        event1.setPackageName(getPackageName());
-                                        event1.setEnabled(true);
-                                        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-                                        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-                                        recordCompat.setSource(v);
-                                        if (Utility.isAccessibilityEnable(getApplicationContext())) {
-                                            manager.sendAccessibilityEvent(event1);
-                                        } else
-                                            Toast.makeText(getApplicationContext(), R.string.ask_user_to_turn_on_accessibility_toast, Toast.LENGTH_LONG).show();
-                                        break;
-                                    case Shortcut.ACTION_HOME:
-                                        Utility.homeAction(getApplicationContext(), v, getClass().getName(), getPackageName());
-                                        break;
-                                    case Shortcut.ACTION_BACK:
-                                        Utility.backAction(getApplicationContext(), v, getClass().getName(), getPackageName());
-                                        break;
-                                    case Shortcut.ACTION_NOTI:
-                                        Utility.notiAction(getApplicationContext(), v, getClass().getName(), getPackageName());
-                                        break;
-                                    case Shortcut.ACTION_LAST_APP:
-                                        Utility.lastAppAction(getApplicationContext(), lastAppPackageName);
-                                        break;
-                                    case Shortcut.ACTION_CALL_LOGS:
-                                        Utility.callLogsAction(getApplicationContext());
-                                        break;
-                                    case Shortcut.ACTION_DIAL:
-                                        Utility.dialAction(getApplicationContext());
-                                        break;
-                                    case Shortcut.ACTION_CONTACT:
-                                        Utility.contactAction(getApplicationContext());
-                                        break;
-                                    case Shortcut.ACTION_NONE:
-                                        break;
-
-                                }
-                            }
+                            Utility.startShortcut(getApplicationContext(),shortcut,v,getClass().getName(),getPackageName(),lastAppPackageName);
                         } else if (shortcutToSwitch != -1) {
                             Toast.makeText(getApplicationContext(), getString(R.string.please_add_favorite_item), Toast.LENGTH_LONG).show();
                             showAddFavoriteDialog();
