@@ -838,13 +838,25 @@ public class EdgeGestureService extends Service {
 
 
                     if (packagename!= null && packagename.length == 0) {
-                        if (delayToSwitchTask == null) {
                             delayToSwitchTask = new DelayToSwitchTask();
-                            delayToSwitchTask.switchShortcut();
-                        } else if (delayToSwitchTask.isCancelled()) {
-                            delayToSwitchTask = new DelayToSwitchTask();
-                            delayToSwitchTask.switchShortcut();
-                        }
+                            if (mode == 3) {
+                                numOfIcon = iconImageArrayList.size();
+                                x = new int[numOfIcon];
+                                y = new int[numOfIcon];
+                                try {
+                                    windowManager.addView(itemView, itemViewParameter);
+                                } catch (IllegalStateException e) {
+                                    Log.e(LOG_TAG, " item_view has already been added to the window manager");
+                                }
+                                delayToSwitchTask.switchCircleShortcut();
+                                Log.e(LOG_TAG,"Switch to circle favorite");
+                            } else {
+                                delayToSwitchTask.switchShortcut();
+                            }
+//                        } else if (delayToSwitchTask.isCancelled()) {
+//                            delayToSwitchTask = new DelayToSwitchTask();
+//                            delayToSwitchTask.switchShortcut();
+//                        }
                     } else {
                         numOfIcon = iconImageArrayList.size();
                         x = new int[numOfIcon];
