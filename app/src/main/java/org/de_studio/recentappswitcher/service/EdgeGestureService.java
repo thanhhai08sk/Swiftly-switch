@@ -889,6 +889,28 @@ public class EdgeGestureService extends Service {
                         if (mode == 3) {
                             shortcutToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
                             shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
+                            int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
+                            Log.e(LOG_TAG, "homeBackNoti = " + homeBackNoti);
+                            String action = MainActivity.ACTION_NONE;
+                            switch (homeBackNoti) {
+                                case 1:
+                                    action = defaultShared.getString(EdgeSettingDialogFragment.ACTION_1_KEY, MainActivity.ACTION_HOME);
+                                    break;
+                                case 2:
+                                    action = defaultShared.getString(EdgeSettingDialogFragment.ACTION_2_KEY, MainActivity.ACTION_BACK);
+                                    break;
+                                case 3:
+                                    action = defaultShared.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_LAST_APP);
+                                    break;
+                                case 4:
+                                    action = defaultShared.getString(EdgeSettingDialogFragment.ACTION_4_KEY, MainActivity.ACTION_NOTI);
+                            }
+                            if (action.equals(MainActivity.ACTION_NOTI) & isFreeVersion & isOutOfTrial) {
+                                Toast.makeText(getApplicationContext(), getString(R.string.edge_service_out_of_trial_text_when_homebacknoti), Toast.LENGTH_LONG).show();
+                            } else {
+                                Log.e(LOG_TAG, "Action = " + action);
+                                Utility.executeAction(getApplicationContext(), action, v, getClass().getName(), getPackageName(), lastAppPackageName);
+                            }
                         } else {
                             shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
                             shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
