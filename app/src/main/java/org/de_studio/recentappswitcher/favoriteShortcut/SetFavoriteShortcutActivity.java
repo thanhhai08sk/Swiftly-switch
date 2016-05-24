@@ -13,6 +13,7 @@ import android.view.DragEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -55,6 +56,8 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         defaultSharedPreference = getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
+        final SharedPreferences edge1Shared = getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE,0);
+        final SharedPreferences edge2Shared = getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
         int gridRow = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
         int gridColumn = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
         int shortcutGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 5);
@@ -67,6 +70,7 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         AppCompatSpinner gridRowSpinner = (AppCompatSpinner) findViewById(R.id.set_favorite_shortcut_grid_row_spinner);
         AppCompatSpinner gridColumnSpinner = (AppCompatSpinner) findViewById(R.id.set_favorite_shortcut_grid_column_spinner);
         final LinearLayout gridModeLinearLayout = (LinearLayout) findViewById(R.id.grid_mode_linear_layout);
+        final LinearLayout circleModeLinearLayout = (LinearLayout) findViewById(R.id.circle_mode_linear_layout);
         if (isTrial) {
             gridColumnSpinner.setEnabled(false);
             gridRowSpinner.setEnabled(false);
@@ -78,6 +82,44 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
         final AppCompatSeekBar gridDistanceVerticalSeekBar = (AppCompatSeekBar) findViewById(R.id.favorite_shortcut_grid_distance_vertical_seek_bar);
         final TextView gridDistanceVerticalValueTextView = (TextView) findViewById(R.id.set_favorite_shortcut_grid_distance_vertical_value_text_view);
         final ListView listView = (ListView) findViewById(R.id.favorite_circle_list_view);
+        CheckBox setCircleEdge1 = (CheckBox) findViewById(R.id.set_circle_edge_1_check_box);
+        CheckBox setCircleEdge2 = (CheckBox) findViewById(R.id.set_circle_edge_2_check_box);
+        setCircleEdge1.setChecked(edge1Shared.getInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 1) == 3);
+        setCircleEdge2.setChecked(edge2Shared.getInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 1) == 3);
+        setCircleEdge1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    edge1Shared.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 3).commit();
+                } else {
+                    if (edge1Shared.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false)) {
+                        edge1Shared.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 2).commit();
+                    } else {
+                        edge1Shared.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 1).commit();
+                    }
+                }
+                getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+
+            }
+        });
+        setCircleEdge2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    edge2Shared.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 3).commit();
+                } else {
+                    if (edge2Shared.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false)) {
+                        edge2Shared.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 2).commit();
+                    } else {
+                        edge2Shared.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 1).commit();
+                    }
+                }
+                getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+
+            }
+        });
         listAdapter = new CircleFavoriteAdapter(this);
         listView.setAdapter(listAdapter);
         Utility.setListViewHeightBasedOnChildren(listView);
@@ -93,11 +135,13 @@ public class SetFavoriteShortcutActivity extends AppCompatActivity {
                     switch (position) {
                         case 0:
                             gridModeLinearLayout.setVisibility(View.VISIBLE);
+                            circleModeLinearLayout.setVisibility(View.GONE);
                             listView.setVisibility(View.GONE);
                             gridView.setVisibility(View.VISIBLE);
                             break;
                         case 1:
                             gridModeLinearLayout.setVisibility(View.GONE);
+                            circleModeLinearLayout.setVisibility(View.VISIBLE);
                             listView.setVisibility(View.VISIBLE);
                             gridView.setVisibility(View.GONE);
                             break;

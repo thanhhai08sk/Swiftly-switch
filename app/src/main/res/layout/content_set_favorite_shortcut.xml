@@ -38,7 +38,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/favorite_circle_list_view"
             android:visibility="gone"
-            android:layout_marginBottom="30dp"
 
             >
 
@@ -53,8 +52,67 @@
             android:background="@color/white"
             android:layout_marginStart="52dp"
             android:layout_gravity="start"
+            android:layout_marginTop="32dp"
             >
         </android.support.v7.widget.AppCompatSpinner>
+        <LinearLayout
+            android:layout_width="258dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:id="@+id/circle_mode_linear_layout"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:text="@string/set_circle_favorite_mode_for"
+                android:paddingTop="8dp"
+                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/set_circle_favorite_edge_1"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/main_edge1_section_text"
+                    android:textColor="@color/black"
+                    />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="24dp"
+                    android:id="@+id/set_circle_edge_1_check_box"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/set_circle_favorite_edge_2"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/main_edge2_section_text"
+                    android:textColor="@color/black"
+                    />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="24dp"
+                    android:id="@+id/set_circle_edge_2_check_box"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
