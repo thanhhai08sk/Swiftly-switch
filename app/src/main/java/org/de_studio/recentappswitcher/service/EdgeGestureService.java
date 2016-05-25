@@ -126,6 +126,8 @@ public class EdgeGestureService extends Service {
     private Set<String> excludeSet;
     private long startDown;
     private String[] savedPackage;
+    private int[] instantFavoAction;
+    private boolean useInstantFavo, onInstantFavo;
 
     @Nullable
     @Override
@@ -445,6 +447,7 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    onInstantFavo = false;
 //                    startDown = System.currentTimeMillis();
 //                    Log.e(LOG_TAG, "Start action down at " + startDown);
                     switch (position / 10) {
@@ -887,7 +890,7 @@ public class EdgeGestureService extends Service {
                     if (switched) {
                         int shortcutToSwitch;
                         Shortcut shortcut;
-                        if (mode == 3) {
+                        if (mode == 3 && !onInstantFavo ) {
                             shortcutToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
                             shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
                             int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
@@ -991,7 +994,7 @@ public class EdgeGestureService extends Service {
                     }
                     if (switched) {
                         int shortcutToSwitch;
-                        if (mode == 3) {
+                        if (mode == 3 && ! onInstantFavo) {
                                 if (iconIdBackgrounded == -2) {
                                     for (int i = 0; i < numOfIcon; i++) {
                                         x[i] = (int) iconImageArrayList.get(i).getX();
@@ -1146,6 +1149,11 @@ public class EdgeGestureService extends Service {
 //                            hasOneActive = false;
 //                        }
                         setQuicActionView(moveToHomeBackNoti);
+                        if (useInstantFavo && moveToHomeBackNoti > 0 && instantFavoAction[moveToHomeBackNoti -1] == 1 ) {
+                            delayToSwitchTask = new DelayToSwitchTask();
+                            onInstantFavo = true;
+                            delayToSwitchTask.switchShortcut();
+                        }
                     }
                     if (activateId != 0 && activatedId != activateId) {
                         if (defaultShared.getBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY, false)) {
@@ -1572,6 +1580,25 @@ public class EdgeGestureService extends Service {
         Log.e(LOG_TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
                 "\nEdge1 position = " + edge1Position + "\nEdge2 positon = " + edge2Position
                 + "\nMode = " + edge1mode);
+        useInstantFavo = true;
+        instantFavoAction = new int[4];
+        if (defaultShared.getString(EdgeSettingDialogFragment.ACTION_1_KEY, MainActivity.ACTION_HOME).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
+            instantFavoAction[0] = 1;
+            useInstantFavo = true;
+        }else instantFavoAction[0] = 1;
+        if (defaultShared.getString(EdgeSettingDialogFragment.ACTION_2_KEY, MainActivity.ACTION_BACK).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
+            instantFavoAction[1] = 1;
+            useInstantFavo = true;
+        }else instantFavoAction[1] = -1;
+        if (defaultShared.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_LAST_APP).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
+            instantFavoAction[2] = 1;
+            useInstantFavo = true;
+        }else instantFavoAction[2] = -1;
+        if (defaultShared.getString(EdgeSettingDialogFragment.ACTION_4_KEY, MainActivity.ACTION_NOTI).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
+            instantFavoAction[3] = 1;
+            useInstantFavo = true;
+        }else instantFavoAction[3] = -1;
+
     }
 
     @Override
