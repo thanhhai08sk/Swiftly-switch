@@ -762,7 +762,8 @@ public class EdgeGestureService extends Service {
                     float xForHomeBackNotiView = x_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
                     float yForHomeBackNotiView = y_init_cord - icon_distance_pxl - distance_to_arc_pxl - ovalOffSet - ovalRadiusPlusPxl;
                     int radiusForHomeBackNotiView = (int) icon_distance_pxl + distance_to_arc_pxl + ovalRadiusPlusPxl;
-                    isStayPermanent = defaultShared.getBoolean(EdgeSettingDialogFragment.IS_ACTIONS_STAY_PERMANENT, false);
+//                    isStayPermanent = defaultShared.getBoolean(EdgeSettingDialogFragment.IS_ACTIONS_STAY_PERMANENT, false);
+                    isStayPermanent = false;
                     if (!defaultShared.getString(EdgeSettingDialogFragment.ACTION_4_KEY, MainActivity.ACTION_NOTI).equals(MainActivity.ACTION_NONE)) {
                         action4View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 4);
                         action4View.setX(xForHomeBackNotiView);
@@ -972,19 +973,7 @@ public class EdgeGestureService extends Service {
 
                     }
                     removeAllExceptEdgeView();
-                    if (action1View != null) {
-                        itemView.removeView(action1View);
-                    }
-                    if (action2View != null) {
-                        itemView.removeView(action2View);
-                    }
-                    if (action3View != null) {
-                        itemView.removeView(action3View);
-                    }
-                    if (action4View != null) {
-                        itemView.removeView(action4View);
-                    }
-
+                    clearActionView();
                     switched = false;
                     touched = false;
                     if (delayToSwitchTask != null) {
@@ -1131,9 +1120,8 @@ public class EdgeGestureService extends Service {
                                 }
                             }
 
-                            if (!touched) {
-                                touched = true;
-                            }
+                            touched = true;
+
                         } else {
                             if (moveToHomeBackNoti == 0) {
                                 activatedId = 0;
@@ -1147,16 +1135,16 @@ public class EdgeGestureService extends Service {
                             }
                             touched = false;
                         }
-                        if (iconToSwitch == -1 & moveToHomeBackNoti == 0) {
-                            if (hasOneActive) {
-                                for (ImageView imageView : iconImageArrayList) {
-                                    if (imageView.getColorFilter() != null) {
-                                        imageView.setColorFilter(null);
-                                    }
-                                }
-                            }
-                            hasOneActive = false;
-                        }
+//                        if (iconToSwitch == -1 & moveToHomeBackNoti == 0) {
+//                            if (hasOneActive) {
+//                                for (ImageView imageView : iconImageArrayList) {
+//                                    if (imageView.getColorFilter() != null) {
+//                                        imageView.setColorFilter(null);
+//                                    }
+//                                }
+//                            }
+//                            hasOneActive = false;
+//                        }
                         setQuicActionView(moveToHomeBackNoti);
                     }
                     if (activateId != 0 && activatedId != activateId) {
@@ -1446,6 +1434,21 @@ public class EdgeGestureService extends Service {
                         }
                         break;
                 }
+            }
+        }
+
+        private synchronized void clearActionView() {
+            if (action1View != null) {
+                itemView.removeView(action1View);
+            }
+            if (action2View != null) {
+                itemView.removeView(action2View);
+            }
+            if (action3View != null) {
+                itemView.removeView(action3View);
+            }
+            if (action4View != null) {
+                itemView.removeView(action4View);
             }
         }
     }
