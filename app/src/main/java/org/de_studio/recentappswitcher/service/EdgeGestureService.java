@@ -1039,6 +1039,11 @@ public class EdgeGestureService extends Service {
                             }
                             if (moveToHomeBackNoti != -1) {
                                 setQuicActionView(moveToHomeBackNoti);
+                                if (useInstantFavo && moveToHomeBackNoti > 0 && instantFavoAction[moveToHomeBackNoti -1] == 1 ) {
+                                    delayToSwitchTask = new DelayToSwitchTask();
+                                    onInstantFavo = true;
+                                    delayToSwitchTask.switchShortcut();
+                                }
                             }
 
 
