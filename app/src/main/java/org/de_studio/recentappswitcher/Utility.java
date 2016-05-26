@@ -882,6 +882,8 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_icon_recent_5122);
             case MainActivity.ACTION_NONE:
                 return null;
+            case MainActivity.ACTION_INSTANT_FAVO:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_instant_favorite_512);
         }
         return null;
     }
@@ -914,6 +916,8 @@ public  class Utility {
                 return context.getString(R.string.setting_shortcut_recent);
             case MainActivity.ACTION_NONE:
                 return context.getString(R.string.setting_shortcut_none);
+            case MainActivity.ACTION_INSTANT_FAVO:
+                return context.getString(R.string.setting_shortcut_instant_favorite);
         }
         return context.getString(R.string.setting_shortcut_none);
     }

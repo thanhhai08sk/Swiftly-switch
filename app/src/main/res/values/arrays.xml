@@ -56,6 +56,7 @@
     </string-array>
     <string-array name="outer_ring_list_available_action">
         <item>@string/setting_shortcut_none</item>
+        <item>@string/setting_shortcut_instant_favorite</item>
         <item>@string/setting_shortcut_home</item>
         <item>@string/setting_shortcut_back</item>
         <item>@string/setting_shortcut_noti</item>

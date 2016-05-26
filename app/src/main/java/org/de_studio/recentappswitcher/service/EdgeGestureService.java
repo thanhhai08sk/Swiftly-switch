@@ -447,6 +447,7 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    removeAllExceptEdgeView();
                     onInstantFavo = false;
 //                    startDown = System.currentTimeMillis();
 //                    Log.e(LOG_TAG, "Start action down at " + startDown);
@@ -503,9 +504,6 @@ public class EdgeGestureService extends Service {
                         vibrator.vibrate(vibrationDuration);
                     }
                     isClockShown = false;
-                    removeView(clockView);
-                    removeView(itemView);
-                    removeView(shortcutView);
 //                    try {
 //                        windowManager.removeView(clockView);
 //                        isClockShown = false;
@@ -923,7 +921,12 @@ public class EdgeGestureService extends Service {
                             Utility.startShortcut(getApplicationContext(),shortcut,v,getClass().getName(),getPackageName(),lastAppPackageName);
                         } else if (shortcutToSwitch != -1) {
                             Toast.makeText(getApplicationContext(), getString(R.string.please_add_favorite_item), Toast.LENGTH_LONG).show();
-                            showAddFavoriteDialog(mode);
+                            if (onInstantFavo) {
+                                showAddFavoriteDialog(1);
+                            } else {
+                                showAddFavoriteDialog(mode);
+                            }
+
                         }
                     } else {
 //                        int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
@@ -1585,12 +1588,12 @@ public class EdgeGestureService extends Service {
         Log.e(LOG_TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
                 "\nEdge1 position = " + edge1Position + "\nEdge2 positon = " + edge2Position
                 + "\nMode = " + edge1mode);
-        useInstantFavo = true;
+        useInstantFavo = false;
         instantFavoAction = new int[4];
         if (defaultShared.getString(EdgeSettingDialogFragment.ACTION_1_KEY, MainActivity.ACTION_HOME).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
             instantFavoAction[0] = 1;
             useInstantFavo = true;
-        }else instantFavoAction[0] = 1;
+        }else instantFavoAction[0] = -1;
         if (defaultShared.getString(EdgeSettingDialogFragment.ACTION_2_KEY, MainActivity.ACTION_BACK).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
             instantFavoAction[1] = 1;
             useInstantFavo = true;

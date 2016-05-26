@@ -24,6 +24,7 @@ public class OuterRingSettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         sharedPreferences = getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         listAction = new String[]{MainActivity.ACTION_NONE,
+                MainActivity.ACTION_INSTANT_FAVO,
                 MainActivity.ACTION_HOME,
                 MainActivity.ACTION_BACK,
                 MainActivity.ACTION_RECENT,
