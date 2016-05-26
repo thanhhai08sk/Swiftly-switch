@@ -847,6 +847,8 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_dial);
             case MainActivity.ACTION_RECENT:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_icon_recent_5122);
+            case MainActivity.ACTION_INSTANT_FAVO:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_instant_favorite_512);
             case MainActivity.ACTION_NONE:
                 return null;
 

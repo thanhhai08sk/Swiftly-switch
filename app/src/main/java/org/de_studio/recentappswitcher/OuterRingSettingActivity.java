@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 public class OuterRingSettingActivity extends AppCompatActivity {
@@ -104,6 +106,8 @@ public class OuterRingSettingActivity extends AppCompatActivity {
                                                  @Override
                                                  public void onDismiss(DialogInterface dialog) {
                                                      mAdapter.notifyDataSetChanged();
+                                                     stopService(new Intent(OuterRingSettingActivity.this, EdgeGestureService.class));
+                                                     startService(new Intent(OuterRingSettingActivity.this, EdgeGestureService.class));
                                                  }
                                              }
 
