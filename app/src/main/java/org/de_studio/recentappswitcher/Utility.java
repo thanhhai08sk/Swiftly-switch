@@ -1460,6 +1460,82 @@ public  class Utility {
         }
     }
 
+    public static void setIndicatorForQuickAction(SharedPreferences sharedPreferences, Context context, int homeBackNoti, ImageView imageView) {
+        String action = MainActivity.ACTION_NONE;
+        switch (homeBackNoti) {
+            case 1:
+                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_1_KEY, MainActivity.ACTION_HOME);
+                break;
+            case 2:
+                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_2_KEY, MainActivity.ACTION_BACK);
+                break;
+            case 3:
+                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_LAST_APP);
+                break;
+            case 4:
+                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_4_KEY, MainActivity.ACTION_NOTI);
+                break;
+        }
+
+        switch (action) {
+            case MainActivity.ACTION_WIFI:
+                if (getWifiState(context)) {
+                    imageView.setImageResource(R.drawable.ic_action_wifi_on);
+                } else {
+                    imageView.setImageResource(R.drawable.ic_action_wifi_off);
+                }
+
+                break;
+            case MainActivity.ACTION_BLUETOOTH:
+                if (getBluetoothState(context)) {
+                    imageView.setImageResource(R.drawable.ic_action_bluetooth_on);
+                } else {
+                    imageView.setImageResource(R.drawable.ic_action_bluetooth_off);
+                }
+
+                break;
+            case MainActivity.ACTION_ROTATE:
+                if (getIsRotationAuto(context)) {
+                    imageView.setImageResource(R.drawable.ic_action_rotate_on);
+                } else {
+                    imageView.setImageResource(R.drawable.ic_action_rotate_lock);
+                }
+
+                break;
+            case MainActivity.ACTION_POWER_MENU:
+                imageView.setImageResource(R.drawable.ic_action_power_menu);
+                break;
+            case MainActivity.ACTION_HOME:
+                imageView.setImageResource(R.drawable.ic_icon_home);
+                break;
+            case MainActivity.ACTION_BACK:
+                imageView.setImageResource(R.drawable.ic_icon_back);
+                break;
+            case MainActivity.ACTION_NOTI:
+                imageView.setImageResource(R.drawable.ic_icon_noti);
+                break;
+            case MainActivity.ACTION_LAST_APP:
+                imageView.setImageResource(R.drawable.ic_icon_last_app);
+                break;
+            case MainActivity.ACTION_CALL_LOGS:
+                imageView.setImageResource(R.drawable.ic_icon_call_log);
+                break;
+            case MainActivity.ACTION_DIAL:
+                imageView.setImageResource(R.drawable.ic_icon_dial);
+                break;
+            case MainActivity.ACTION_CONTACT:
+                imageView.setImageResource(R.drawable.ic_icon_contact);
+                break;
+            case MainActivity.ACTION_RECENT:
+                imageView.setImageResource(R.drawable.ic_action_recent2);
+                break;
+            case MainActivity.ACTION_NONE:
+                imageView.setImageDrawable(null);
+        }
+
+
+    }
+
 
 
 

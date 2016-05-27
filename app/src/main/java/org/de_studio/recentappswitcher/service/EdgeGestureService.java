@@ -1019,7 +1019,7 @@ public class EdgeGestureService extends Service {
                                 if (shortcutToSwitch != -1) {
                                     activateId = shortcutToSwitch + 1000;
                                 } else {
-                                    activateId = moveToHomeBackNoti + 7;
+                                    activateId = moveToHomeBackNoti + 2000;
                                 }
                             }else activateId = 0;
 
@@ -1098,7 +1098,7 @@ public class EdgeGestureService extends Service {
 
                         int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
                         if (moveToHomeBackNoti > 0) {
-                            activateId = moveToHomeBackNoti + 30;
+                            activateId = moveToHomeBackNoti + 2000;
                         }
                         if (iconToSwitch != -1 && !iconImageArrayList.get(0).isOnAnimation()) {
                             if (iconToSwitch < iconImageArrayList.size() && iconIdBackgrounded != iconToSwitch) {
@@ -1318,7 +1318,7 @@ public class EdgeGestureService extends Service {
                 indicator.setVisibility(View.VISIBLE);
                 ImageView icon = (ImageView) indicator.findViewById(R.id.indicator_icon);
                 TextView label = (TextView) indicator.findViewById(R.id.indicator_label);
-                if (activateId - 20 >= 0 && activateId - 20 <= 5) {
+                if (activateId - 20 >= 0 && activateId - 20 < packagename.length) {
                     icon.setImageDrawable(iconImageArrayList.get(activateId - 20).getDrawable());
                     try {
                         label.setText(getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(packagename[activateId - 20], 0)));
@@ -1337,6 +1337,8 @@ public class EdgeGestureService extends Service {
                     if (shortcut != null) {
                         label.setText(shortcut.getLabel());
                     }else label.setText("");
+                } else if (activateId - 2000 >= 0 && activateId - 2000 < 10) {
+                    Utility.setIndicatorForQuickAction(defaultShared,getApplicationContext(),activateId-2000,icon);
                 }
             }
 
