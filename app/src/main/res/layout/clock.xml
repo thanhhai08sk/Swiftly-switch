@@ -1,43 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:paddingTop="20dp">
-
-    <TextView
-        android:id="@+id/clock_time_in_hour"
-        android:layout_width="wrap_content"
+    android:layout_gravity="center_horizontal"
+    tools:background="@color/grey"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:singleLine="true"
-        android:textColor="@color/white"
-        android:textSize="24dp"
-         />
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        android:id="@+id/clock_linear_layout"
+        tools:visibility="gone"
+
+        >
+        <TextView
+            android:id="@+id/clock_time_in_hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="24dp"
+            tools:text ="12:33"
+            />
 
 
-    <TextView
-        android:id="@+id/clock_time_in_date"
+        <TextView
+            android:id="@+id/clock_time_in_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="14dp"
+            tools:text="Fri, 27 May"
+
+            />
+
+        <TextView
+            android:id="@+id/clock_battery_life"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:singleLine="true"
+            android:text="55% Battery life"
+            android:textColor="@color/white"
+            android:textSize="14dp"
+
+            />
+    </LinearLayout>
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:singleLine="true"
-        android:textColor="@color/white"
-        android:textSize="14dp"
+        android:layout_height="125dp"
+        android:id="@+id/indicator_frame_layout"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            tools:src="@drawable/icon512"
+            android:id="@+id/indicator_icon"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/indicator_label"
+            tools:text="Swiftly switch"
+            android:textColor="@color/white"
+            android:layout_gravity="center_horizontal|bottom"
+            android:fontFamily="sans-serif-medium"
+            />
 
-        />
 
-    <TextView
-        android:id="@+id/clock_battery_life"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:singleLine="true"
-        android:text="55% Battery life"
-        android:textColor="@color/white"
-        android:textSize="14dp"
 
-        />
+    </FrameLayout>
 
-</LinearLayout>
+
+
+</FrameLayout>

@@ -143,11 +143,12 @@
     <string name="you_have_not_finished_all_permission_yet">You have not finished granting all permission yet. Please try again.</string>
     <string name="skip">Skip</string>
     <string name="hold_icon">Hold icon</string>
-    <string name="main_edge2_button_activated">Edge 2</string>
     <string name="grid_mode">Grid mode</string>
     <string name="semi_circle_mode">Semi-circle mode</string>
     <string name="edge_dialog_mode_array_circlt_favorite">Circle favorite</string>
     <string name="set_circle_favorite_mode_for">Set Circle Favorite mode for:</string>
     <string name="setting_shortcut_recent">Recent button</string>
     <string name="setting_shortcut_instant_favorite">Instant favorite</string>
+    <string name="what_new">What\'s new</string>
+
 </resources>

@@ -77,7 +77,7 @@
             <ImageButton
                 android:id="@+id/edge_1_setting_image_button"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/transparent"
                 android:src="@drawable/ic_settings_white_36px"
@@ -145,7 +145,7 @@
             <ImageButton
                 android:id="@+id/edge_2_setting_image_button"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/transparent"
                 android:src="@drawable/ic_settings_white_36px"

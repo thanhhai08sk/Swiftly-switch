@@ -114,12 +114,15 @@ public  class Utility {
     public static int findIconToSwitchNew(int[] x, int[] y, int x_cord, int y_cord, float radOfIconPxl, float mScale) {
         double distance;
         double distanceNeeded = 35*mScale;
-        for (int i = 0; i < x.length; i++) {
-            distance = Math.sqrt(Math.pow((double)x_cord - (double)(x[i] + radOfIconPxl),2) + Math.pow((double)y_cord - (double)(y[i]+radOfIconPxl), 2));
-            if (distance <= distanceNeeded) {
-                return i;
+        if (x != null && y != null) {
+            for (int i = 0; i < x.length; i++) {
+                distance = Math.sqrt(Math.pow((double)x_cord - (double)(x[i] + radOfIconPxl),2) + Math.pow((double)y_cord - (double)(y[i]+radOfIconPxl), 2));
+                if (distance <= distanceNeeded) {
+                    return i;
+                }
             }
         }
+
         return -1;
     }
 

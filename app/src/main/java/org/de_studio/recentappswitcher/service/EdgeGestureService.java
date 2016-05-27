@@ -1000,6 +1000,12 @@ public class EdgeGestureService extends Service {
                         if (mode == 3 && ! onInstantFavo) {
                                 if (iconIdBackgrounded == -2) {
                                     for (int i = 0; i < numOfIcon; i++) {
+                                        if (x == null) {
+                                            x = new int[numOfIcon];
+                                        }
+                                        if (y == null) {
+                                            y = new int[numOfIcon];
+                                        }
                                         x[i] = (int) iconImageArrayList.get(i).getX();
                                         y[i] = (int) iconImageArrayList.get(i).getY();
                                     }

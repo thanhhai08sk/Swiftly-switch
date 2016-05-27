@@ -15,6 +15,7 @@
         android:fontFamily="sans-serif-bolt"
         android:textSize="24dp"
         android:paddingBottom="32dp"
+        android:gravity="center"
         />
     <ImageView
       android:id="@+id/intro_image"

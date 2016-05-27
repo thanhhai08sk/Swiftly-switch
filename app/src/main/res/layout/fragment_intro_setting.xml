@@ -10,12 +10,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/set_required_permissions"
-        android:textSize="34dp"
+        android:textSize="24dp"
         android:fontFamily="sans-serif-bolt"
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:paddingBottom="48dp"
+        android:paddingBottom="32dp"
         />
     <LinearLayout
         android:layout_width="300dp"
