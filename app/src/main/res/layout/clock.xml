@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     tools:background="@color/grey"
@@ -52,18 +52,22 @@
 
             />
     </LinearLayout>
-    <FrameLayout
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="125dp"
+        android:layout_height="100dp"
         android:id="@+id/indicator_frame_layout"
         android:visibility="gone"
         tools:visibility="visible"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
         >
         <ImageView
-            android:layout_width="96dp"
-            android:layout_height="96dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             tools:src="@drawable/icon512"
             android:id="@+id/indicator_icon"
+            android:layout_gravity="center_horizontal"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -71,13 +75,14 @@
             android:id="@+id/indicator_label"
             tools:text="Swiftly switch"
             android:textColor="@color/white"
-            android:layout_gravity="center_horizontal|bottom"
+            android:layout_gravity="center_horizontal"
             android:fontFamily="sans-serif-medium"
+            android:layout_marginTop="8dp"
             />
 
 
 
-    </FrameLayout>
+    </LinearLayout>
 
 
 

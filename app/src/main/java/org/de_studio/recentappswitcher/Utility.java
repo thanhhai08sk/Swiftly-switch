@@ -45,6 +45,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -1170,6 +1171,8 @@ public  class Utility {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.clock, null);
+        LinearLayout clock = (LinearLayout) view.findViewById(R.id.clock_linear_layout);
+        clock.setVisibility(View.VISIBLE);
         TextView hourTextView = (TextView) view.findViewById(R.id.clock_time_in_hour);
         TextView dateTextView = (TextView) view.findViewById(R.id.clock_time_in_date);
         TextView batteryLifeTextView = (TextView) view.findViewById(R.id.clock_battery_life);
@@ -1195,7 +1198,7 @@ public  class Utility {
             }
         }
         WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
@@ -1317,15 +1320,30 @@ public  class Utility {
             }else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
                 switch (shortcut.getAction()) {
                     case Shortcut.ACTION_WIFI:
-                        imageView.setImageResource(R.drawable.ic_action_wifi_on);
+                        if (getWifiState(mContext)) {
+                            imageView.setImageResource(R.drawable.ic_action_wifi_on);
+                        } else {
+                            imageView.setImageResource(R.drawable.ic_action_wifi_off);
+                        }
+
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color. black));
                         break;
                     case Shortcut.ACTION_BLUETOOTH:
-                        imageView.setImageResource(R.drawable.ic_action_bluetooth_on);
+                        if (getBluetoothState(mContext)) {
+                            imageView.setImageResource(R.drawable.ic_action_bluetooth_on);
+                        } else {
+                            imageView.setImageResource(R.drawable.ic_action_bluetooth_off);
+                        }
+
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                     case Shortcut.ACTION_ROTATION:
-                        imageView.setImageResource(R.drawable.ic_action_rotate_on);
+                        if (getIsRotationAuto(mContext)) {
+                            imageView.setImageResource(R.drawable.ic_action_rotate_on);
+                        } else {
+                            imageView.setImageResource(R.drawable.ic_action_rotate_lock);
+                        }
+
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                     case Shortcut.ACTION_POWER_MENU:
