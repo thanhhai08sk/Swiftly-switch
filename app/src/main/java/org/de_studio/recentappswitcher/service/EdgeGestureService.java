@@ -1017,7 +1017,7 @@ public class EdgeGestureService extends Service {
                             int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
                             if (moveToHomeBackNoti != -1 | shortcutToSwitch != -1) {
                                 if (shortcutToSwitch != -1) {
-                                    activateId = shortcutToSwitch + 1;
+                                    activateId = shortcutToSwitch + 1000;
                                 } else {
                                     activateId = moveToHomeBackNoti + 7;
                                 }
@@ -1061,7 +1061,7 @@ public class EdgeGestureService extends Service {
                         } else {
                             shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
                             if (shortcutToSwitch != -1) {
-                                activateId = shortcutToSwitch + 1;
+                                activateId = shortcutToSwitch + 100;
                             } else {
                                 activatedId = 0;
                                 activateId = 0;
@@ -1266,15 +1266,11 @@ public class EdgeGestureService extends Service {
                 if (shortcutView != null && !shortcutView.isAttachedToWindow()) {
                     windowManager.addView(shortcutView, shortcutViewParams);
                 }
-//                if (itemView != null && itemView.isAttachedToWindow()) {
-//                    removeView(itemView);
-//                }
                 removeView(itemView);
                 switched = true;
-                removeView(clockView);
-//                if (clockView != null && clockView.isAttachedToWindow()) {
-//                    removeView(clockView);
-//                    isClockShown = false;
+//                removeView(clockView);
+//                if (clockView != null) {
+//                    clockView.findViewById(R.id.clock_linear_layout).setVisibility(View.GONE);
 //                }
             }
 
@@ -1315,21 +1311,35 @@ public class EdgeGestureService extends Service {
         }
 
         private void setIndicator(int activateId) {
-            if (activateId - 20 >= 0 && activateId - 20 <= 5) {
-
+            if (activateId != -1) {
                 LinearLayout clock = (LinearLayout) clockView.findViewById(R.id.clock_linear_layout);
                 FrameLayout indicator = (FrameLayout) clockView.findViewById(R.id.indicator_frame_layout);
                 clock.setVisibility(View.GONE);
                 indicator.setVisibility(View.VISIBLE);
                 ImageView icon = (ImageView) indicator.findViewById(R.id.indicator_icon);
                 TextView label = (TextView) indicator.findViewById(R.id.indicator_label);
-                icon.setImageDrawable(iconImageArrayList.get(activateId - 20).getDrawable());
-                try {
-                    label.setText(getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(packagename[activateId - 20], 0)));
-                } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(LOG_TAG, "Namenotfound when setIndicator");
+                if (activateId - 20 >= 0 && activateId - 20 <= 5) {
+                    icon.setImageDrawable(iconImageArrayList.get(activateId - 20).getDrawable());
+                    try {
+                        label.setText(getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(packagename[activateId - 20], 0)));
+                    } catch (PackageManager.NameNotFoundException e) {
+                        Log.e(LOG_TAG, "Namenotfound when setIndicator");
+                    }
+                } else if (activateId - 100 >= 0 && activateId - 100 <= 200) {
+                    Shortcut shortcut = favoriteRealm.where(Shortcut.class).equalTo("id",activateId - 100).findFirst();
+                    Utility.setShortcutDrawable(shortcut,getApplicationContext(),icon,iconPack);
+                    if (shortcut != null) {
+                        label.setText(shortcut.getLabel());
+                    }else label.setText("");
+                } else if (activateId - 1000 >= 0 && activateId - 1000 < 10) {
+                    Shortcut shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", activateId - 1000).findFirst();
+                    Utility.setShortcutDrawable(shortcut,getApplicationContext(),icon,iconPack);
+                    if (shortcut != null) {
+                        label.setText(shortcut.getLabel());
+                    }else label.setText("");
                 }
             }
+
         }
 
         private void setQuicActionView(int moveToHomeBackNoti) {
