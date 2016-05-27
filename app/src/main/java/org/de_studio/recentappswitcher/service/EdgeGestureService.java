@@ -40,7 +40,9 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.IconPackManager;
@@ -1173,6 +1175,7 @@ public class EdgeGestureService extends Service {
                         if (defaultShared.getBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY, false)) {
                             vibrator.vibrate(vibrationDuration);
                         }
+                        setIndicator(activateId);
                         activatedId = activateId;
                         activateId = 0;
                     }
@@ -1306,6 +1309,26 @@ public class EdgeGestureService extends Service {
                     iconResetBackground.setPadding(0, 0, 0, 0);
                     iconIdBackgrounded = -2;
                 } else iconIdBackgrounded = -2;
+            }
+
+
+        }
+
+        private void setIndicator(int activateId) {
+            if (activateId - 20 >= 0 && activateId - 20 <= 5) {
+
+                LinearLayout clock = (LinearLayout) clockView.findViewById(R.id.clock_linear_layout);
+                FrameLayout indicator = (FrameLayout) clockView.findViewById(R.id.indicator_frame_layout);
+                clock.setVisibility(View.GONE);
+                indicator.setVisibility(View.VISIBLE);
+                ImageView icon = (ImageView) indicator.findViewById(R.id.indicator_icon);
+                TextView label = (TextView) indicator.findViewById(R.id.indicator_label);
+                icon.setImageDrawable(iconImageArrayList.get(activateId - 20).getDrawable());
+                try {
+                    label.setText(getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(packagename[activateId - 20], 0)));
+                } catch (PackageManager.NameNotFoundException e) {
+                    Log.e(LOG_TAG, "Namenotfound when setIndicator");
+                }
             }
         }
 
