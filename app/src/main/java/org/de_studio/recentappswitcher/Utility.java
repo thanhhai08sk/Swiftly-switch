@@ -911,7 +911,7 @@ public  class Utility {
             case MainActivity.ACTION_POWER_MENU:
                 return context.getString(R.string.setting_shortcut_power_menu);
             case MainActivity.ACTION_LAST_APP:
-                return context.getString(R.string.last_app);
+                return context.getString(R.string.setting_shortcut_last_app);
             case MainActivity.ACTION_CALL_LOGS:
                 return context.getString(R.string.setting_shortcut_call_log);
             case MainActivity.ACTION_CONTACT:

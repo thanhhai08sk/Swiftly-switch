@@ -53,7 +53,7 @@ public class OuterRingSettingActivity extends AppCompatActivity {
                 CharSequence[] listActionlabel = getResources().getStringArray(R.array.outer_ring_list_available_action);
                 CharSequence currentLabel = ((TextView) view.findViewById(R.id.outer_item_action_label_text_view)).getText();
                 int currentChecked = 0;
-                while (!currentLabel.equals(listActionlabel[currentChecked])) {
+                while (currentChecked < listActionlabel.length && !currentLabel.equals(listActionlabel[currentChecked]) ) {
                     currentChecked++;
                 }
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(OuterRingSettingActivity.this);
