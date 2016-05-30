@@ -29,6 +29,10 @@ public class Shortcut extends RealmObject {
     private String packageName;
     private int action;
     private String label;
+    private String thumbnaiUri;
+    private String number;
+    private String name;
+    private long contactId;
 
     public Shortcut() {}
 
@@ -70,6 +74,35 @@ public class Shortcut extends RealmObject {
 
     public String getLabel() {
         return label;
+    }
+    public void setThumbnaiUri(String thumbnaiUri) {
+        this.thumbnaiUri = thumbnaiUri;
+    }
+
+    public String getThumbnaiUri() {
+        return thumbnaiUri;
+    }
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setContactId(long contactId) {
+        this.contactId = contactId;
+    }
+
+    public long getContactId() {
+        return contactId;
     }
 
 }
