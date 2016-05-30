@@ -45,7 +45,7 @@ public class ContactCursorAdapter extends CursorAdapter {
         if (stringUri != null) {
             Uri uri = Uri.parse(stringUri);
             avatar.setImageURI(uri);
-        }else avatar.setImageDrawable(null);
+        }else avatar.setImageResource(R.drawable.ic_icon_home);
         if (shortcut != null && shortcut.getType() == Shortcut.TYPE_CONTACT && shortcut.getContactId() == contactId) {
             radioButton.setChecked(true);
         }else radioButton.setChecked(false);

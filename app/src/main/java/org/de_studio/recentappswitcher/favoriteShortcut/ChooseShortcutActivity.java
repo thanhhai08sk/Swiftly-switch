@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -94,9 +95,14 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                     mPosition++;
                     positionText.setText(mPosition + 1 + ".");
                     setCurrentShortcutImageView();
-                    mAppTabFragment.setmPositioinToNext();
-                    mSettingTabFragment.setmPositioinToNext();
-                    mContactTabFragment.setmPositioinToNext();
+                    try {
+                        mAppTabFragment.setmPositioinToNext();
+                        mSettingTabFragment.setmPositioinToNext();
+                        mContactTabFragment.setmPositioinToNext();
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+
                 }
 
 
@@ -111,9 +117,14 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                     positionText.setText(mPosition + 1 + ".");
                     setCurrentShortcutImageView();
                 }
+                try {
                     mAppTabFragment.setmPositionToBack();
                     mSettingTabFragment.setmPositionToBack();
                     mContactTabFragment.setmPositionToBack();
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
 
 
             }
@@ -241,6 +252,15 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                     case Shortcut.ACTION_NONE:
                         currentShortcut.setImageDrawable(null);
                         break;
+                }
+            } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
+
+                String thumbnaiUri = shortcut.getThumbnaiUri();
+                if (thumbnaiUri != null) {
+                    Uri uri = Uri.parse(thumbnaiUri);
+                    currentShortcut.setImageURI(uri);
+                } else {
+                    currentShortcut.setImageResource(R.drawable.ic_icon_home);
                 }
             }
         } else {
