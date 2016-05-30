@@ -68,7 +68,7 @@
             android:taskAffinity=""
             android:theme="@style/AudioDialogTheme" />
         <activity
-            android:name=".favoriteShortcut.SetFavoriteShortcutActivity"
+            android:name=".favoriteShortcut.FavoriteSettingActivity"
             android:label="@string/title_activity_set_favorite_shortcut"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -79,11 +79,11 @@
         <activity
             android:name=".favoriteShortcut.ChooseShortcutActivity"
             android:label="@string/title_activity_choose_shortcut"
-            android:parentActivityName=".favoriteShortcut.SetFavoriteShortcutActivity"
+            android:parentActivityName=".favoriteShortcut.FavoriteSettingActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity" />
+                android:value=".favoriteShortcut.FavoriteSettingActivity" />
         </activity>
         <activity
             android:name=".OuterRingSettingActivity"

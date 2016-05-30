@@ -30,7 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity;
+import org.de_studio.recentappswitcher.favoriteShortcut.FavoriteSettingActivity;
 import org.de_studio.recentappswitcher.intro.IntroActivity;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
@@ -473,7 +473,7 @@ public class MainActivity extends Activity {
         addFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), SetFavoriteShortcutActivity.class));
+                startActivity(new Intent(getApplicationContext(), FavoriteSettingActivity.class));
             }
         });
 

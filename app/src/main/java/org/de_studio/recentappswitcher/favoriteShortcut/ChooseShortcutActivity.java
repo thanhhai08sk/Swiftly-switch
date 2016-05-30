@@ -24,7 +24,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
-public class ChooseShortcutActivity extends AppCompatActivity implements ChooseAppListViewAdapter.AppChangeListener, ChooseSettingShortcutListViewAdapter.SettingChangeListener{
+public class ChooseShortcutActivity extends AppCompatActivity implements AppListAdapter.AppChangeListener, SettingListAdapter.SettingChangeListener, ContactCursorAdapter.ContactChangeListener{
 
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -32,10 +32,12 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
     private int mPosition;
     private AppTabFragment mAppTabFragment;
     private SettingTabFragment mSettingTabFragment;
+    private ContactTabFragment mContactTabFragment;
     private ImageView currentShortcut;
     private Realm myRealm;
-    private ChooseAppListViewAdapter mAppAdapter;
-    private ChooseSettingShortcutListViewAdapter mSettingAdapter;
+    private AppListAdapter mAppAdapter;
+    private SettingListAdapter mSettingAdapter;
+    private ContactCursorAdapter mContactAdapter;
     private Context mContext;
     private int mode;
 
@@ -46,8 +48,8 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPosition = getIntent().getFlags();
-//        mode = getIntent().getIntExtra("mode",SetFavoriteShortcutActivity.MODE_CIRCLE);
-        mode = getIntent().getIntExtra("mode", SetFavoriteShortcutActivity.MODE_GRID);
+//        mode = getIntent().getIntExtra("mode",FavoriteSettingActivity.MODE_CIRCLE);
+        mode = getIntent().getIntExtra("mode", FavoriteSettingActivity.MODE_GRID);
         Log.e(LOG_TAG, "mode = " + mode);
         mContext = this;
 //        Toast.makeText(getApplicationContext(),"ChooseShortcutActivity position = "+ mPosition,Toast.LENGTH_SHORT).show();
@@ -63,7 +65,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
         AppCompatImageButton backButton = (AppCompatImageButton) findViewById(R.id.app_tab_fragment_back_button);
         AppCompatImageButton nextButton = (AppCompatImageButton) findViewById(R.id.app_tab_fragment_next_button);
         AppCompatButton okButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_ok_button);
-        if (mode == SetFavoriteShortcutActivity.MODE_GRID) {
+        if (mode == FavoriteSettingActivity.MODE_GRID) {
             myRealm = Realm.getInstance(getApplicationContext());
         } else {
             myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
@@ -78,10 +80,10 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
             public void onClick(View v) {
                 int max;
                 switch (mode) {
-                    case SetFavoriteShortcutActivity.MODE_GRID:
+                    case FavoriteSettingActivity.MODE_GRID:
                         max = Utility.getSizeOfFavoriteGrid(getApplicationContext())-1;
                         break;
-                    case SetFavoriteShortcutActivity.MODE_CIRCLE:
+                    case FavoriteSettingActivity.MODE_CIRCLE:
                         max = 5;
                         break;
                     default:
@@ -92,9 +94,11 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
                     mPosition++;
                     positionText.setText(mPosition + 1 + ".");
                     setCurrentShortcutImageView();
-                }
                     mAppTabFragment.setmPositioinToNext();
                     mSettingTabFragment.setmPositioinToNext();
+                    mContactTabFragment.setmPositioinToNext();
+                }
+
 
 
             }
@@ -109,6 +113,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
                 }
                     mAppTabFragment.setmPositionToBack();
                     mSettingTabFragment.setmPositionToBack();
+                    mContactTabFragment.setmPositionToBack();
 
 
             }
@@ -153,7 +158,9 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
                     mSettingTabFragment.setMode(mode);
                     return mSettingTabFragment;
                 case 2:
-                    return ContactTabFragment.newInstance(position + 1);
+                    mContactTabFragment = ContactTabFragment.newInstance(position + 1);
+                    mContactTabFragment.setmPosition(mPosition);
+                    return mContactTabFragment;
                 default: mAppTabFragment = AppTabFragment.newInstance(position + 1);
                     mAppTabFragment.setmPosition(mPosition);
                     mAppTabFragment.setmContext(mContext);
@@ -243,13 +250,18 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
 
     }
 
-    public void setAppAdapter(ChooseAppListViewAdapter adapter) {
+    public void setAppAdapter(AppListAdapter adapter) {
         mAppAdapter = adapter;
         adapter.registerListener(this);
     }
 
-    public void setSettingAdapter(ChooseSettingShortcutListViewAdapter adapter) {
+    public void setSettingAdapter(SettingListAdapter adapter) {
         mSettingAdapter = adapter;
+        adapter.registerListener(this);
+    }
+
+    public void setContactAdapter(ContactCursorAdapter adapter) {
+        mContactAdapter = adapter;
         adapter.registerListener(this);
     }
 
@@ -268,5 +280,14 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
         if (mAppAdapter != null) {
             mAppAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void onContactChange() {
+        setCurrentShortcutImageView();
+        if (mContactAdapter != null) {
+            mContactAdapter.notifyDataSetChanged();
+        }
+
     }
 }

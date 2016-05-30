@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -70,7 +71,6 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
             return inflater.inflate(R.layout.fragment_contacts,
                     container, false);
 
@@ -86,6 +86,7 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
         mContactsList.setAdapter(mAdapter);
         mContactsList.setOnItemClickListener(this);
         myRealm = Realm.getDefaultInstance();
+        ((ChooseShortcutActivity)getActivity()).setContactAdapter(mAdapter);
 //        mCursorAdapter = new SimpleCursorAdapter(
 //                getActivity(),
 //                R.layout.item_contact_list,
@@ -94,10 +95,30 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
 //                0);
         getLoaderManager().initLoader(0, null, this);
     }
+
+    public void setmPositioinToNext() {
+        if (mPosition < Utility.getSizeOfFavoriteGrid(getContext())-1 &&  mAdapter !=null) {
+            mPosition++;
+            try {
+                mAdapter.setmPositionAndMode(mPosition);
+            } catch (NullPointerException e) {
+                Log.e(LOG_TAG, "mAdapter = null");
+            }
+
+        }
+    }
+
+    public void setmPositionToBack() {
+        if (mPosition > 0 && mAdapter != null) {
+            mPosition--;
+            mAdapter.setmPositionAndMode(mPosition);
+        }
+    }
     @Override
     public void onItemClick(
             AdapterView<?> parent, View item, int position, long rowID) {
-        Cursor cursor =((ContactCursorAdapter) parent.getAdapter()).getCursor();
+        ContactCursorAdapter adapter = (ContactCursorAdapter) parent.getAdapter();
+        Cursor cursor =adapter.getCursor();
         cursor.moveToPosition(position);
         String stringUri = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
         myRealm.beginTransaction();
@@ -114,7 +135,9 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
             shortcut.setThumbnaiUri(stringUri);
         }
         myRealm.commitTransaction();
-        ((ContactCursorAdapter) parent.getAdapter()).notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
+        adapter.getListener().onAppChange();
+
     }
     @Override
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle args) {

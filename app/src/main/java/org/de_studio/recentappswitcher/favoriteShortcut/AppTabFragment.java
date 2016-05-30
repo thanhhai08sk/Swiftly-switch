@@ -35,7 +35,7 @@ public class AppTabFragment extends Fragment{
 
     private static final String LOG_TAG = AppTabFragment.class.getSimpleName();
     private ListView mListView;
-    private ChooseAppListViewAdapter mAdapter;
+    private AppListAdapter mAdapter;
     private int mPosition, mode;
     private ProgressBar progressBar;
     private Context mContext;
@@ -133,7 +133,7 @@ public class AppTabFragment extends Fragment{
                 Log.e(LOG_TAG, "getActivity");
                 context = getActivity();
             }
-            mAdapter = new ChooseAppListViewAdapter(app, result, mPosition, mode);
+            mAdapter = new AppListAdapter(app, result, mPosition, mode);
             mListView.setAdapter(mAdapter);
             try {
                 ((ChooseShortcutActivity) mContext).setAppAdapter(mAdapter);

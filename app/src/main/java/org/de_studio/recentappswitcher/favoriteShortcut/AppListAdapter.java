@@ -28,10 +28,10 @@ import io.realm.RealmResults;
 /**
  * Created by hai on 2/23/2016.
  */
-public class ChooseAppListViewAdapter extends BaseAdapter {
+public class AppListAdapter extends BaseAdapter {
     private Context mContext;
     static private ArrayList<AppInfors> mAppInfosArrayList;
-    private static final String LOG_TAG = ChooseAppListViewAdapter.class.getSimpleName();
+    private static final String LOG_TAG = AppListAdapter.class.getSimpleName();
     private int mPosition,mode;
     private String mPackageSelected;
     private AppChangeListener listener = null;
@@ -39,13 +39,13 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
     private IconPackManager.IconPack iconPack;
     private Realm myRealm;
 
-    public ChooseAppListViewAdapter(Context context, ArrayList<AppInfors> appInforses, int position, int mode) {
+    public AppListAdapter(Context context, ArrayList<AppInfors> appInforses, int position, int mode) {
         super();
         this.mode = mode;
         mPosition = position;
         mContext = context;
         mAppInfosArrayList = appInforses;
-        if (mode == SetFavoriteShortcutActivity.MODE_GRID) {
+        if (mode == FavoriteSettingActivity.MODE_GRID) {
             myRealm = Realm.getDefaultInstance();
         } else {
             myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
@@ -70,7 +70,7 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
     public void setmPositionAndMode(int position) {
         mPosition = position;
 //        Realm myRealm = Realm.getInstance(mContext);
-//        if (mode == SetFavoriteShortcutActivity.MODE_GRID) {
+//        if (mode == FavoriteSettingActivity.MODE_GRID) {
 //            myRealm = Realm.getDefaultInstance();
 //        } else {
 //            myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
@@ -83,7 +83,7 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
             }else mPackageSelected = null;
 
         }else mPackageSelected = null;
-        ChooseAppListViewAdapter.this.notifyDataSetChanged();
+        AppListAdapter.this.notifyDataSetChanged();
     }
 
     @Override
@@ -138,7 +138,7 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
             public void onClick(View v) {
 //                Realm myRealm = Realm.getInstance(mContext);
 //                Realm myRealm;
-//                if (mode == SetFavoriteShortcutActivity.MODE_GRID) {
+//                if (mode == FavoriteSettingActivity.MODE_GRID) {
 //                    myRealm = Realm.getDefaultInstance();
 //                } else {
 //                    myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
@@ -157,7 +157,7 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
                 myRealm.copyToRealm(shortcut);
                 myRealm.commitTransaction();
                 mPackageSelected = mAppInfosArrayList.get(position).packageName;
-                ChooseAppListViewAdapter.this.notifyDataSetChanged();
+                AppListAdapter.this.notifyDataSetChanged();
                 listener.onAppChange();
             }
         });

@@ -20,7 +20,7 @@ public class SettingTabFragment extends Fragment {
 
     private static final String LOG_TAG = SettingTabFragment.class.getSimpleName();
     private ListView mListView;
-    private ChooseSettingShortcutListViewAdapter mAdapter;
+    private SettingListAdapter mAdapter;
     private int mPosition, mode;
 
 
@@ -41,10 +41,12 @@ public class SettingTabFragment extends Fragment {
     }
 
     public void setmPositioinToNext() {
-        if (mPosition < Utility.getSizeOfFavoriteGrid(getContext())-1) {
-            mPosition++;
-            mAdapter.setmPositionAndMode(mPosition);
-        }
+            if (mPosition < Utility.getSizeOfFavoriteGrid(getContext()) - 1) {
+                mPosition++;
+                mAdapter.setmPositionAndMode(mPosition);
+            }
+
+
     }
 
     public void setmPositionToBack() {
@@ -61,7 +63,7 @@ public class SettingTabFragment extends Fragment {
         mListView = (ListView) view.findViewById(R.id.fragment_app_tab_list_view);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        mAdapter = new ChooseSettingShortcutListViewAdapter(getContext(),mPosition, mode);
+        mAdapter = new SettingListAdapter(getContext(),mPosition, mode);
         mListView.setAdapter(mAdapter);
         ((ChooseShortcutActivity)getActivity()).setSettingAdapter(mAdapter);
         Log.e(LOG_TAG, "inflate mListView");
@@ -69,7 +71,7 @@ public class SettingTabFragment extends Fragment {
         return view;
     }
 
-    public ChooseSettingShortcutListViewAdapter getAdapter() {
+    public SettingListAdapter getAdapter() {
         return mAdapter;
     }
 

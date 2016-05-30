@@ -21,8 +21,8 @@ import io.realm.RealmResults;
 /**
  * Created by hai on 2/24/2016.
  */
-public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
-    private static final String LOG_TAG = ChooseSettingShortcutListViewAdapter.class.getSimpleName();
+public class SettingListAdapter extends BaseAdapter {
+    private static final String LOG_TAG = SettingListAdapter.class.getSimpleName();
     private Context mContext;
     private String[] stringArray;
     private int mPosition, mode;
@@ -30,13 +30,13 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
     private SettingChangeListener listener = null;
     private Realm myRealm;
 
-    public ChooseSettingShortcutListViewAdapter(Context context, int position, int mode) {
+    public SettingListAdapter(Context context, int position, int mode) {
         super();
         mContext = context;
         stringArray =context.getResources().getStringArray(R.array.setting_shortcut_array);
         mPosition = position;
         this.mode = mode;
-        if (mode == SetFavoriteShortcutActivity.MODE_GRID) {
+        if (mode == FavoriteSettingActivity.MODE_GRID) {
             myRealm = Realm.getInstance(mContext);
         } else {
             myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
@@ -60,7 +60,7 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
             }else mAction = -1;
 
         }else mAction = -1;
-        ChooseSettingShortcutListViewAdapter.this.notifyDataSetChanged();
+        SettingListAdapter.this.notifyDataSetChanged();
     }
 
     @Override
@@ -141,7 +141,7 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
                 myRealm.copyToRealm(shortcut);
                 myRealm.commitTransaction();
                 mAction = Utility.getActionFromLabel(mContext,item);
-                ChooseSettingShortcutListViewAdapter.this.notifyDataSetChanged();
+                SettingListAdapter.this.notifyDataSetChanged();
                 listener.onSettingChange();
             }
         });

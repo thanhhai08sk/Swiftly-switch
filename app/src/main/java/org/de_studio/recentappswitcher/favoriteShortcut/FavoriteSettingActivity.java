@@ -29,9 +29,9 @@ import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
-public class SetFavoriteShortcutActivity extends AppCompatActivity {
+public class FavoriteSettingActivity extends AppCompatActivity {
     private FavoriteShortcutAdapter mAdapter;
-    private static final String LOG_TAG = SetFavoriteShortcutActivity.class.getSimpleName();
+    private static final String LOG_TAG = FavoriteSettingActivity.class.getSimpleName();
     private float mScale, mIconScale;
     private boolean isTrial = false;
     private GridView gridView;

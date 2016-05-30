@@ -50,7 +50,7 @@ import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
-import org.de_studio.recentappswitcher.favoriteShortcut.SetFavoriteShortcutActivity;
+import org.de_studio.recentappswitcher.favoriteShortcut.FavoriteSettingActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 
 import java.util.ArrayList;
@@ -1799,7 +1799,7 @@ public class EdgeGestureService extends Service {
 
 
     public void showAddFavoriteDialog(int mode) {
-        Intent intent = new Intent(getApplicationContext(),SetFavoriteShortcutActivity.class);
+        Intent intent = new Intent(getApplicationContext(),FavoriteSettingActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("mode", mode);
         startActivity(intent);

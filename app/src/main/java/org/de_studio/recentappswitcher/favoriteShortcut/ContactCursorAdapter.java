@@ -24,6 +24,7 @@ public class ContactCursorAdapter extends CursorAdapter {
     private int mPosition;
     private Realm myRealm;
     private Shortcut shortcut;
+    private AppListAdapter.AppChangeListener listener;
 
     public ContactCursorAdapter(Context context, Cursor c, int flags, int mPosition) {
         super(context, c, flags);
@@ -50,10 +51,24 @@ public class ContactCursorAdapter extends CursorAdapter {
         }else radioButton.setChecked(false);
 
     }
+    public void setmPositionAndMode(int position) {
+        mPosition = position;
+        ContactCursorAdapter.this.notifyDataSetChanged();
+    }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
 
         return LayoutInflater.from(context).inflate(R.layout.item_contact_list, parent, false);
+    }
+    public interface ContactChangeListener{
+        void onContactChange();
+    }
+    public void registerListener(AppListAdapter.AppChangeListener listener) {
+        this.listener = listener;
+    }
+
+    public AppListAdapter.AppChangeListener getListener() {
+        return listener;
     }
 }
