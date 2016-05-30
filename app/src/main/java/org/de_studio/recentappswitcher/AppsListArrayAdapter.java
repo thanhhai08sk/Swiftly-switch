@@ -47,7 +47,7 @@ public class AppsListArrayAdapter extends BaseAdapter {
         final AppInfors appInfors = mAppInfosArrayList.get(position);
         View returnView = convertView;
         if (returnView == null) {
-            returnView = LayoutInflater.from(context).inflate(R.layout.dialog_favorite_app_item, parent, false);
+            returnView = LayoutInflater.from(context).inflate(R.layout.item_dialog_favorite_app, parent, false);
         }
         ImageView icon = (ImageView) returnView.findViewById(R.id.add_favorite_list_item_image_view);
         TextView label = (TextView) returnView.findViewById(R.id.add_favorite_list_item_label_text_view);

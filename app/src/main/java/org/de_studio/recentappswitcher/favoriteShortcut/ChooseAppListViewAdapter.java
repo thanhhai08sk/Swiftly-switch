@@ -106,7 +106,7 @@ public class ChooseAppListViewAdapter extends BaseAdapter {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.choose_shortcut_app_list_item, parent, false);
+            view = inflater.inflate(R.layout.item_choose_shortcut_app_list, parent, false);
         }
         ImageView imageView = (ImageView) view.findViewById(R.id.choose_app_image_view);
         TextView textView = (TextView) view.findViewById(R.id.choose_app_title_text_view);

@@ -60,7 +60,7 @@ public class IconPackListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            view = LayoutInflater.from(mContext).inflate(R.layout.icon_pack_item, parent, false);
+            view = LayoutInflater.from(mContext).inflate(R.layout.item_icon_pack, parent, false);
         }
         ImageView icon = (ImageView) view.findViewById(R.id.icon_pack_icon_image_view);
         final TextView label = (TextView) view.findViewById(R.id.icon_pack_label_text_view);

@@ -9,6 +9,7 @@ import io.realm.annotations.PrimaryKey;
 public class Shortcut extends RealmObject {
     public static final int TYPE_APP = 0;
     public static final int TYPE_SETTING = 1;
+    public static final int TYPE_CONTACT =2;
     public static final int ACTION_WIFI = 0;
     public static final int ACTION_BLUETOOTH = 1;
     public static final int ACTION_POWER_MENU = 2;

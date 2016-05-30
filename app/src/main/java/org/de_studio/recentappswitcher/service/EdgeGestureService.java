@@ -754,10 +754,10 @@ public class EdgeGestureService extends Service {
                     if (isOnlyFavorite) {
                         if (delayToSwitchTask == null) {
                             delayToSwitchTask = new DelayToSwitchTask();
-                            delayToSwitchTask.switchShortcut();
+                            delayToSwitchTask.switchToShortcut();
                         } else if (delayToSwitchTask.isCancelled()) {
                             delayToSwitchTask = new DelayToSwitchTask();
-                            delayToSwitchTask.switchShortcut();
+                            delayToSwitchTask.switchToShortcut();
                         }
                         break;
                     }
@@ -847,14 +847,14 @@ public class EdgeGestureService extends Service {
                                 } catch (IllegalStateException e) {
                                     Log.e(LOG_TAG, " item_view has already been added to the window manager");
                                 }
-                                delayToSwitchTask.switchCircleShortcut();
+                                delayToSwitchTask.switchToCircleShortcut();
                                 Log.e(LOG_TAG,"Switch to circle favorite");
                             } else {
-                                delayToSwitchTask.switchShortcut();
+                                delayToSwitchTask.switchToShortcut();
                             }
 //                        } else if (delayToSwitchTask.isCancelled()) {
 //                            delayToSwitchTask = new DelayToSwitchTask();
-//                            delayToSwitchTask.switchShortcut();
+//                            delayToSwitchTask.switchToShortcut();
 //                        }
                     } else {
                         numOfIcon = iconImageArrayList.size();
@@ -1058,7 +1058,7 @@ public class EdgeGestureService extends Service {
                                 if (useInstantFavo && moveToHomeBackNoti > 0 && instantFavoAction[moveToHomeBackNoti -1] == 1 ) {
                                     delayToSwitchTask = new DelayToSwitchTask();
                                     onInstantFavo = true;
-                                    delayToSwitchTask.switchShortcut();
+                                    delayToSwitchTask.switchToShortcut();
                                 }
                             }
 
@@ -1175,7 +1175,7 @@ public class EdgeGestureService extends Service {
                         if (useInstantFavo && moveToHomeBackNoti > 0 && instantFavoAction[moveToHomeBackNoti -1] == 1 ) {
                             delayToSwitchTask = new DelayToSwitchTask();
                             onInstantFavo = true;
-                            delayToSwitchTask.switchShortcut();
+                            delayToSwitchTask.switchToShortcut();
                         }
                     }
                     if (activateId != 0 && activatedId != activateId) {
@@ -1229,9 +1229,9 @@ public class EdgeGestureService extends Service {
             protected void onPostExecute(Void aVoid) {
                 if (isSleepEnough & touched) {
                     if (mode == 3) {
-                        switchCircleShortcut();
+                        switchToCircleShortcut();
                     } else {
-                        switchShortcut();
+                        switchToShortcut();
                     }
 
 
@@ -1240,7 +1240,7 @@ public class EdgeGestureService extends Service {
                 super.onPostExecute(aVoid);
             }
 
-            protected void switchShortcut() {
+            protected void switchToShortcut() {
                 clearIconBackground();
                 ViewGroup.LayoutParams gridParams = shortcutGridView.getLayoutParams();
                 int gridRow = defaultShared.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
@@ -1281,7 +1281,7 @@ public class EdgeGestureService extends Service {
 //                }
             }
 
-            protected void switchCircleShortcut () {
+            protected void switchToCircleShortcut() {
                 clearIconBackground();
                 Shortcut shortcut;
                 for (int i = 0; i < 6; i++) {

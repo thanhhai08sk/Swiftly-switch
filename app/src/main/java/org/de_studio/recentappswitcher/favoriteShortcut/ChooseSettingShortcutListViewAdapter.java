@@ -83,7 +83,7 @@ public class ChooseSettingShortcutListViewAdapter extends BaseAdapter {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.choose_shortcut_app_list_item, parent, false);
+            view = inflater.inflate(R.layout.item_choose_shortcut_app_list, parent, false);
         }
         final String item = stringArray[position];
         final ImageView icon = (ImageView) view.findViewById(R.id.choose_app_image_view);

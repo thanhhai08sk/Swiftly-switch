@@ -152,6 +152,8 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
                     mSettingTabFragment.setmPosition(mPosition);
                     mSettingTabFragment.setMode(mode);
                     return mSettingTabFragment;
+                case 2:
+                    return ContactTabFragment.newInstance(position + 1);
                 default: mAppTabFragment = AppTabFragment.newInstance(position + 1);
                     mAppTabFragment.setmPosition(mPosition);
                     mAppTabFragment.setmContext(mContext);
@@ -163,7 +165,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -173,6 +175,8 @@ public class ChooseShortcutActivity extends AppCompatActivity implements ChooseA
                     return getString(R.string.choose_shortcut_apps_tab_title);
                 case 1:
                     return getString(R.string.choose_shortcut_actions_tab_title);
+                case 2:
+                    return "Contact";
             }
             return null;
         }
