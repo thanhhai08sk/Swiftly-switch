@@ -40,6 +40,7 @@ public class FavoriteSettingActivity extends AppCompatActivity {
     private CircleFavoriteAdapter listAdapter;
     public static final int MODE_GRID = 0;
     public static final int MODE_CIRCLE = 1;
+    public static final int MODE_FOLDER = 2;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME)) isTrial = true;

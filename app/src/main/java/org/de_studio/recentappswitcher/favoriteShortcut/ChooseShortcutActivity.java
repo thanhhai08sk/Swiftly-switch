@@ -21,9 +21,7 @@ import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
 
 public class ChooseShortcutActivity extends AppCompatActivity implements AppListAdapter.AppChangeListener, SettingListAdapter.SettingChangeListener, ContactCursorAdapter.ContactChangeListener{
 
@@ -49,11 +47,9 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPosition = getIntent().getFlags();
-//        mode = getIntent().getIntExtra("mode",FavoriteSettingActivity.MODE_CIRCLE);
         mode = getIntent().getIntExtra("mode", FavoriteSettingActivity.MODE_GRID);
         Log.e(LOG_TAG, "mode = " + mode);
         mContext = this;
-//        Toast.makeText(getApplicationContext(),"ChooseShortcutActivity position = "+ mPosition,Toast.LENGTH_SHORT).show();
         setContentView(R.layout.activity_choose_shortcut);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -73,62 +69,69 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
         }
 
         final TextView positionText = (TextView) findViewById(R.id.app_tab_fragment_position_text_view);
-        positionText.setText(mPosition + 1 + ".");
+        if (positionText != null) {
+//            positionText.setText(mPosition + 1 + ".");
+            positionText.setText(String.format("%d.",mPosition+1));
+        }
         currentShortcut = (ImageView) findViewById(R.id.app_tab_fragment_current_shortcut_image_view);
         setCurrentShortcutImageView();
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int max;
-                switch (mode) {
-                    case FavoriteSettingActivity.MODE_GRID:
-                        max = Utility.getSizeOfFavoriteGrid(getApplicationContext())-1;
-                        break;
-                    case FavoriteSettingActivity.MODE_CIRCLE:
-                        max = 5;
-                        break;
-                    default:
-                        max = 5;
-                        break;
+        if (nextButton != null) {
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int max;
+                    switch (mode) {
+                        case FavoriteSettingActivity.MODE_GRID:
+                            max = Utility.getSizeOfFavoriteGrid(getApplicationContext())-1;
+                            break;
+                        case FavoriteSettingActivity.MODE_CIRCLE:
+                            max = 5;
+                            break;
+                        default:
+                            max = 5;
+                            break;
+                    }
+                    if (mPosition < max) {
+                        mPosition++;
+                        positionText.setText(mPosition + 1 + ".");
+                        setCurrentShortcutImageView();
+                        try {
+                            mAppTabFragment.setmPositioinToNext();
+                            mSettingTabFragment.setmPositioinToNext();
+                            mContactTabFragment.setmPositioinToNext();
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+
+
                 }
-                if (mPosition < max) {
-                    mPosition++;
-                    positionText.setText(mPosition + 1 + ".");
-                    setCurrentShortcutImageView();
+            });
+        }
+        if (backButton != null) {
+            backButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mPosition > 0) {
+                        mPosition--;
+                        positionText.setText(mPosition + 1 + ".");
+                        setCurrentShortcutImageView();
+                    }
                     try {
-                        mAppTabFragment.setmPositioinToNext();
-                        mSettingTabFragment.setmPositioinToNext();
-                        mContactTabFragment.setmPositioinToNext();
+                        mAppTabFragment.setmPositionToBack();
+                        mSettingTabFragment.setmPositionToBack();
+                        mContactTabFragment.setmPositionToBack();
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
 
+
+
                 }
-
-
-
-            }
-        });
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mPosition > 0) {
-                    mPosition--;
-                    positionText.setText(mPosition + 1 + ".");
-                    setCurrentShortcutImageView();
-                }
-                try {
-                    mAppTabFragment.setmPositionToBack();
-                    mSettingTabFragment.setmPositionToBack();
-                    mContactTabFragment.setmPositionToBack();
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
-
-
-
-            }
-        });
+            });
+        }
 
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,14 +139,14 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                 finish();
             }
         });
-        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).findAll();
-        results.addChangeListener(new RealmChangeListener() {
-            @Override
-            public void onChange() {
-                Log.e(LOG_TAG, "onChange");
-                setCurrentShortcutImageView();
-            }
-        });
+//        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).findAll();
+//        results.addChangeListener(new RealmChangeListener() {
+//            @Override
+//            public void onChange() {
+//                Log.e(LOG_TAG, "onChange");
+//                setCurrentShortcutImageView();
+//            }
+//        });
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -171,6 +174,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                 case 2:
                     mContactTabFragment = ContactTabFragment.newInstance(position + 1);
                     mContactTabFragment.setmPosition(mPosition);
+                    mContactTabFragment.setMode(mode);
                     return mContactTabFragment;
                 default: mAppTabFragment = AppTabFragment.newInstance(position + 1);
                     mAppTabFragment.setmPosition(mPosition);

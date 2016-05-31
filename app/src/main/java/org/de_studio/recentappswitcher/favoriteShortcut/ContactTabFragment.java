@@ -27,7 +27,7 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
             implements android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor>,
         AdapterView.OnItemClickListener{
     private Realm myRealm;
-    private int mPosition;
+    private int mPosition, mode;
     private static final String LOG_TAG = ContactTabFragment.class.getSimpleName();
     private static final String ARG_SECTION_NUMBER = "section_number";
     private final static String[] FROM_COLUMNS = {
@@ -65,6 +65,9 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
     }
     public void setmPosition(int mPosition) {
         this.mPosition = mPosition;
+    }
+    public void setMode(int mode) {
+        this.mode = mode;
     }
 
     @Nullable
