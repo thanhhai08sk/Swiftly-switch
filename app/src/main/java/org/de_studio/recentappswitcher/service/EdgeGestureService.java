@@ -1345,7 +1345,9 @@ public class EdgeGestureService extends Service {
                     Shortcut shortcut = favoriteRealm.where(Shortcut.class).equalTo("id",activateId - 100).findFirst();
                     Utility.setShortcutDrawable(shortcut,getApplicationContext(),icon,iconPack);
                     if (shortcut != null) {
-                        if (shortcut.getAction() != Shortcut.ACTION_NONE) {
+                        if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
+                            label.setText(shortcut.getName());
+                        }else if (shortcut.getAction() != Shortcut.ACTION_NONE) {
                             label.setText(shortcut.getLabel());
                         }else label.setText(null);
 

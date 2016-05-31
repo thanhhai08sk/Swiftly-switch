@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -164,6 +165,14 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                         break;
                     case Shortcut.ACTION_NONE:
                         imageView.setImageDrawable(null);
+                }
+            } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
+                String thumbnaiUri = shortcut.getThumbnaiUri();
+                if (thumbnaiUri != null) {
+                    Uri uri = Uri.parse(thumbnaiUri);
+                    imageView.setImageURI(uri);
+                } else {
+                    imageView.setImageResource(R.drawable.ic_icon_home);
                 }
             }
 
