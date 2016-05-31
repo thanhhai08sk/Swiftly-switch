@@ -1340,7 +1340,6 @@ public class EdgeGestureService extends Service {
                         icon.setImageDrawable(null);
                         label.setText(null);
                     }
-
                 } else if (activateId - 100 >= 0 && activateId - 100 <= 200) {
                     Shortcut shortcut = favoriteRealm.where(Shortcut.class).equalTo("id",activateId - 100).findFirst();
                     Utility.setShortcutDrawable(shortcut,getApplicationContext(),icon,iconPack);

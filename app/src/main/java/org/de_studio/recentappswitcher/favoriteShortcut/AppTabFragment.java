@@ -87,16 +87,11 @@ public class AppTabFragment extends Fragment{
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.VISIBLE);
-        Log.e(LOG_TAG, "inflate mListView");
-//        Toast.makeText(getContext(), "AppTabFragment mPosition = " + mPosition, Toast.LENGTH_SHORT).show();
+        new LoadInstalledApp().execute();
+        Log.e(LOG_TAG, "onCreateView AppTabFragment");
         return view;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        new LoadInstalledApp().execute();
-    }
 
     private class LoadInstalledApp extends AsyncTask<Void, Void, ArrayList<AppInfors>> {
         protected ArrayList<AppInfors> doInBackground(Void... voids) {
