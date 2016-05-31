@@ -1318,6 +1318,9 @@ public class EdgeGestureService extends Service {
         }
 
         private void setIndicator(int activateId) {
+            if (clockView == null) {
+                return;
+            }
             if (activateId != -1) {
                 LinearLayout clock = (LinearLayout) clockView.findViewById(R.id.clock_linear_layout);
                 LinearLayout indicator = (LinearLayout) clockView.findViewById(R.id.indicator_frame_layout);

@@ -1475,6 +1475,11 @@ public  class Utility {
                     break;
 
             }
+        } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
+            String url = "tel:"+ shortcut.getNumber();
+            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         }
     }
 
