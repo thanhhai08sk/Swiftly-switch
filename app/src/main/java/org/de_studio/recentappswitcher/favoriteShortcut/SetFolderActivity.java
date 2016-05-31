@@ -1,8 +1,10 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
@@ -29,10 +31,27 @@ public class SetFolderActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), ChooseShortcutActivity.class);
-                    intent.addFlags(mPosition);
-                    intent.putExtra("mode", FavoriteSettingActivity.MODE_FOLDER);
-                    startActivity(intent);
+                    CharSequence[] items = new CharSequence[]{getString(R.string.apps),
+                            getString(R.string.actions),
+                            getString(R.string.contacts)};
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SetFolderActivity.this);
+                    builder.setItems(items, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case 0:
+                                    FragmentManager fragmentManager = getSupportFragmentManager();
+                                    AddAppToFolderDialogFragment newFragment = new AddAppToFolderDialogFragment();
+                                    newFragment.setmPosition(mPosition);
+                                    newFragment.show(fragmentManager, "addAppToFolder");
+                                    break;
+                                case 1:
+                                    break;
+                                case 2:
+                                    break;
+                            }
+                        }
+                    });
                 }
             });
         }

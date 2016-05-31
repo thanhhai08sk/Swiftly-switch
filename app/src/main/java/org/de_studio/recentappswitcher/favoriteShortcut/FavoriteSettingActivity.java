@@ -291,10 +291,17 @@ public class FavoriteSettingActivity extends AppCompatActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), ChooseShortcutActivity.class);
-                intent.addFlags(position);
-                intent.putExtra("mode", MODE_GRID);
-                startActivity(intent);
+                if (id == 1) {
+                    Intent intent1 = new Intent(getApplicationContext(), SetFolderActivity.class);
+                    intent1.putExtra("position", position);
+                    startActivity(intent1);
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), ChooseShortcutActivity.class);
+                    intent.addFlags(position);
+                    intent.putExtra("mode", MODE_GRID);
+                    startActivity(intent);
+                }
+
             }
         });
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {

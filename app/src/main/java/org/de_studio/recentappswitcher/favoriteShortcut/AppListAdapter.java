@@ -45,7 +45,7 @@ public class AppListAdapter extends BaseAdapter {
         mPosition = position;
         mContext = context;
         mAppInfosArrayList = appInforses;
-        if (mode == FavoriteSettingActivity.MODE_GRID) {
+        if (mode == FavoriteSettingActivity.MODE_GRID || mode == FavoriteSettingActivity.MODE_FOLDER) {
             myRealm = Realm.getDefaultInstance();
         } else {
             myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
@@ -76,6 +76,7 @@ public class AppListAdapter extends BaseAdapter {
 //            myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
 //        }
 
+        
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         if (shortcut != null ) {
             if (shortcut.getType() == Shortcut.TYPE_APP) {

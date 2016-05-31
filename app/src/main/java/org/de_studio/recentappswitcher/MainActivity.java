@@ -484,7 +484,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
 //                FragmentManager fragmentManager = getSupportFragmentManager();
                 android.app.FragmentManager fragmentManager = getFragmentManager();
-                FavoriteOrExcludeDialogFragment newFragment = new FavoriteOrExcludeDialogFragment();
+                BlackListDialogFragment newFragment = new BlackListDialogFragment();
                 newFragment.show(fragmentManager, "excludeDialogFragment");
             }
         });

@@ -33,6 +33,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     private int iconPadding;
     private float mIconScale;
     private int dragPosition;
+    private Realm myRealm;
 
     public FavoriteShortcutAdapter(Context context) {
         mContext = context;
@@ -45,6 +46,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
             iconPack = iconPackManager.getInstance(iconPackPacka);
         }
         iconPadding = (int)mContext.getResources().getDimension(R.dimen.icon_padding);
+        myRealm = Realm.getInstance(mContext);
     }
 
     @Override
@@ -59,6 +61,10 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
+        Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",position).findFirst();
+        if (shortcut != null && shortcut.getType() == Shortcut.TYPE_FOLDER) {
+            return 1;
+        }
         return 0;
     }
 
@@ -74,7 +80,6 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         } else {
             imageView = (ImageView) convertView;
         }
-        Realm myRealm = Realm.getInstance(mContext);
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",position).findFirst();
         if (shortcut == null) {
             imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);

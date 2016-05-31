@@ -150,5 +150,8 @@
     <string name="setting_shortcut_recent">Recent button</string>
     <string name="setting_shortcut_instant_favorite">Instant favorite</string>
     <string name="what_new">What\'s new</string>
+    <string name="apps">Apps</string>
+    <string name="actions">Actions</string>
+    <string name="contacts">Contacts</string>
 
 </resources>
