@@ -10,6 +10,7 @@ public class Shortcut extends RealmObject {
     public static final int TYPE_APP = 0;
     public static final int TYPE_SETTING = 1;
     public static final int TYPE_CONTACT =2;
+    public static final int TYPE_FOLDER = 3;
     public static final int ACTION_WIFI = 0;
     public static final int ACTION_BLUETOOTH = 1;
     public static final int ACTION_POWER_MENU = 2;
@@ -33,6 +34,8 @@ public class Shortcut extends RealmObject {
     private String number;
     private String name;
     private long contactId;
+    private int size;
+    private int startId;
 
     public Shortcut() {}
 
@@ -103,6 +106,22 @@ public class Shortcut extends RealmObject {
 
     public long getContactId() {
         return contactId;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getStartId() {
+        return startId;
+    }
+
+    public void setStartId(int id) {
+        this.startId = id;
     }
 
 }

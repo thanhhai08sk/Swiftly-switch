@@ -132,12 +132,15 @@ public class SettingListAdapter extends BaseAdapter {
                 RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findAll();
                 Log.e(LOG_TAG, "mPosition = " + mPosition);
                 oldShortcut.clear();
-//                Shortcut shortcut = myRealm.createObject(Shortcut.class);
                 Shortcut shortcut = new Shortcut();
-                shortcut.setType(Shortcut.TYPE_SETTING);
+
+                shortcut.setType(Shortcut.TYPE_FOLDER);
+                shortcut.setShortcutArray(new String[]{"app.dsfsdf.fsf","action.fdfs.dfd"});
                 shortcut.setId(mPosition);
-                shortcut.setLabel(item);
-                shortcut.setAction(Utility.getActionFromLabel(mContext, item));
+//                shortcut.setType(Shortcut.TYPE_SETTING);
+//                shortcut.setId(mPosition);
+//                shortcut.setLabel(item);
+//                shortcut.setAction(Utility.getActionFromLabel(mContext, item));
                 myRealm.copyToRealm(shortcut);
                 myRealm.commitTransaction();
                 mAction = Utility.getActionFromLabel(mContext,item);
