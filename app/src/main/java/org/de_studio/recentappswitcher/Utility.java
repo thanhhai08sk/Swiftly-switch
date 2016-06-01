@@ -1564,7 +1564,7 @@ public  class Utility {
     }
 
     public static int[] showFolder(Context context, GridView gridView, WindowManager windowManager, Realm realm,
-                                  SharedPreferences sharedPreferences, int mPosition, float mScale, float mIconScale) {
+                                  SharedPreferences sharedPreferences, int mPosition, float mScale, float mIconScale, FolderAdapter adapter) {
 //        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup viewGroup = (ViewGroup) gridView.getParent();
         float gridX = gridView.getX();
@@ -1594,7 +1594,6 @@ public  class Utility {
         gridParams.height = (int) gridTall;
         gridParams.width = (int) gridWide;
         folderGrid.setLayoutParams(gridParams);
-        FolderAdapter adapter = new FolderAdapter(context,mPosition);
         folderGrid.setAdapter(adapter);
         if (x - gridWide / 2 + gridWide > gridX + gridView.getWidth()) {
             folderGrid.setX(gridX + gridView.getWidth() - gridWide);

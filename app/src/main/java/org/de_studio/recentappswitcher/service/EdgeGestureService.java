@@ -117,6 +117,7 @@ public class EdgeGestureService extends Service {
     private String[] spinnerEntries;
     private GridView shortcutGridView;
     private FavoriteShortcutAdapter shortcutAdapter;
+    private FolderAdapter folderAdapter;
     private CircleFavoriteAdapter circltShortcutAdapter;
     private IconPackManager.IconPack iconPack;
     private boolean isClockShown = false;
@@ -424,12 +425,12 @@ public class EdgeGestureService extends Service {
 
     public class OnTouchListener implements View.OnTouchListener {
         private int x_init_cord, y_init_cord, mode;
-        private int position, iconIdBackgrounded = -2, preShortcutToSwitch = -1, activateId = 0, activatedId = 0;
+        private int position, iconIdBackgrounded = -2, preShortcutToSwitch = -1,preShortcutInFolderToSwitch = -1 , activateId = 0, activatedId = 0;
         private FrameLayout itemView;
         private MyImageView[] iconImageList;
         private List<MyImageView> iconImageArrayList;
         private DelayToSwitchTask delayToSwitchTask;
-        private boolean isOnlyFavorite, isStayPermanent, isShortcutBackgroundNull = true, isCircleFavorite, folderShown;
+        private boolean isOnlyFavorite, isStayPermanent, isShortcutBackgroundNull = true, isShortcutBackgroundInFolderNull = true, isCircleFavorite, folderShown;
 
         public OnTouchListener(int position, MyImageView[] iconImageList, FrameLayout itemView, List<MyImageView> iconImageArrayList, boolean isOnlyFavorite, int mode) {
             this.position = position;
@@ -503,6 +504,8 @@ public class EdgeGestureService extends Service {
 //                    Log.e(LOG_TAG, "position = " + position + "\nEdge1position = " + edge1Position + "\nEdge2Position = " + edge2Position);
                     isShortcutBackgroundNull = true;
                     preShortcutToSwitch = -1;
+                    preShortcutInFolderToSwitch = -1;
+                    isShortcutBackgroundInFolderNull = true;
                     if (!defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, true)) {
                         vibrator.vibrate(vibrationDuration);
                     }
@@ -1071,32 +1074,58 @@ public class EdgeGestureService extends Service {
 
 
                         } else {
-                            shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
-                            if (shortcutToSwitch != -1) {
-                                Shortcut shortcut = favoriteRealm.where(Shortcut.class).equalTo("id",shortcutToSwitch).findFirst();
-                                if (shortcut!=null && shortcut.getType() == Shortcut.TYPE_FOLDER && !folderShown) {
-                                    folderCoor = Utility.showFolder(getApplicationContext(),shortcutGridView,windowManager,favoriteRealm,defaultShared,shortcutToSwitch, mScale, mIconScale);
-                                    folderShown = true;
+                            if (!folderShown) {
+                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
+                                if (shortcutToSwitch != -1) {
+                                    Shortcut shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
+                                    if (shortcut != null && shortcut.getType() == Shortcut.TYPE_FOLDER && !folderShown) {
+                                        folderAdapter = new FolderAdapter(getApplicationContext(),shortcutToSwitch);
+                                        folderCoor = Utility.showFolder(getApplicationContext(), shortcutGridView, windowManager, favoriteRealm, defaultShared, shortcutToSwitch, mScale, mIconScale,folderAdapter);
+                                        folderShown = true;
+                                    }
+                                    activateId = shortcutToSwitch + 100;
+                                } else {
+                                    activateId = 0;
+                                    clearIndicator(activatedId);
+                                    activatedId = 0;
                                 }
-                                activateId = shortcutToSwitch + 100;
+
+                                if (shortcutAdapter != null) {
+                                    if (shortcutToSwitch != -1 && shortcutToSwitch != preShortcutToSwitch) {
+                                        shortcutAdapter.setBackground(shortcutToSwitch);
+                                        isShortcutBackgroundNull = true;
+                                        preShortcutToSwitch = shortcutToSwitch;
+                                    } else if (isShortcutBackgroundNull && shortcutToSwitch == -1) {
+                                        shortcutAdapter.setBackground(shortcutToSwitch);
+                                        isShortcutBackgroundNull = false;
+                                        preShortcutToSwitch = -1;
+                                    }
+
+                                }
                             } else {
-                                activateId = 0;
-                                clearIndicator(activatedId);
-                                activatedId = 0;
-                            }
-
-                            if (shortcutAdapter != null) {
-                                if (shortcutToSwitch != -1 && shortcutToSwitch != preShortcutToSwitch) {
-                                    shortcutAdapter.setBackground(shortcutToSwitch);
-                                    isShortcutBackgroundNull = true;
-                                    preShortcutToSwitch = shortcutToSwitch;
-                                } else if (isShortcutBackgroundNull && shortcutToSwitch == -1) {
-                                    shortcutAdapter.setBackground(shortcutToSwitch);
-                                    isShortcutBackgroundNull = false;
-                                    preShortcutToSwitch = -1;
+                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord,folderCoor[0] , folderCoor[1], (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, folderCoor[2], folderCoor[3], 5);
+                                if (shortcutToSwitch != -1) {
+                                    activateId = shortcutToSwitch + 3000;
+                                } else {
+                                    activateId = 0;
+                                    clearIndicator(activatedId);
+                                    activatedId = 0;
                                 }
 
+                                if (folderAdapter != null) {
+                                    if (shortcutToSwitch != -1 && shortcutToSwitch != preShortcutInFolderToSwitch) {
+                                        folderAdapter.setBackground(shortcutToSwitch);
+                                        isShortcutBackgroundInFolderNull = true;
+                                        preShortcutInFolderToSwitch = shortcutToSwitch;
+                                    } else if (isShortcutBackgroundInFolderNull && shortcutToSwitch == -1) {
+                                        folderAdapter.setBackground(shortcutToSwitch);
+                                        isShortcutBackgroundInFolderNull = false;
+                                        preShortcutInFolderToSwitch = -1;
+                                    }
+
+                                }
                             }
+
                         }
 
                     } else {
