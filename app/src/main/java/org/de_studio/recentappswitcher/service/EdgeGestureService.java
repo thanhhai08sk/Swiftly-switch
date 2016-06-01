@@ -1459,6 +1459,9 @@ public class EdgeGestureService extends Service {
                     }else label.setText("");
                 } else if (activateId - 2000 >= 0 && activateId - 2000 < 10) {
                     Utility.setIndicatorForQuickAction(defaultShared,getApplicationContext(),activateId-2000,icon);
+                } else if (activateId - 3000 >= 0 && activateId - 3000 < 20) {
+                    Shortcut shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", (positionOfFolder +1)* 1000 + (activateId - 3000)).findFirst();
+                    Utility.setShortcutDrawable(shortcut,getApplicationContext(),icon,iconPack);
                 }
             }
 
