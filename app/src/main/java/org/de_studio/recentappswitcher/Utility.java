@@ -132,9 +132,10 @@ public  class Utility {
     }
 
 
-    public static int findShortcutToSwitch(int x_cord, int y_cord, int x_grid, int y_grid, int sizeOfIcon, float mScale,int gird_row, int grid_column, int grid_gap) {
+    public static int findShortcutToSwitch(int x_cord, int y_cord, int x_grid, int y_grid, int sizeOfIcon, float mScale,int gird_row, int grid_column, int grid_gap, boolean folderMode) {
         int item_x,item_y;
         double distance;
+        double smallestDistance = 1000*mScale;
         for (int i = 0; i < grid_column; i++) {
             for (int j = 0; j < gird_row; j++) {
                 item_x = (int)(x_grid + (sizeOfIcon/2)*mScale +i*(sizeOfIcon + grid_gap)*mScale);
@@ -142,7 +143,16 @@ public  class Utility {
                 distance = Math.sqrt(Math.pow((double)x_cord - (double)item_x,2) + Math.pow((double)y_cord - (double) item_y, 2));
                 if (distance <= 35 * mScale) {
                     return j * grid_column + i;
+                } else {
+                    if (smallestDistance > distance) {
+                        smallestDistance = distance;
+                    }
                 }
+            }
+        }
+        if (folderMode) {
+            if (smallestDistance > 80 * mScale) {
+                return -2;
             }
         }
         return -1;

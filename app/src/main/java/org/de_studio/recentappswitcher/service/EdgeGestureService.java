@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.service;
 
+import android.animation.Animator;
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -36,6 +37,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -424,13 +426,15 @@ public class EdgeGestureService extends Service {
     }
 
     public class OnTouchListener implements View.OnTouchListener {
-        private int x_init_cord, y_init_cord, mode;
+        private int x_init_cord, y_init_cord, mode, positionOfFolder;
         private int position, iconIdBackgrounded = -2, preShortcutToSwitch = -1,preShortcutInFolderToSwitch = -1 , activateId = 0, activatedId = 0;
         private FrameLayout itemView;
         private MyImageView[] iconImageList;
         private List<MyImageView> iconImageArrayList;
         private DelayToSwitchTask delayToSwitchTask;
         private boolean isOnlyFavorite, isStayPermanent, isShortcutBackgroundNull = true, isShortcutBackgroundInFolderNull = true, isCircleFavorite, folderShown;
+        private ViewPropertyAnimator folderAnimator;
+        private boolean onFolderAnimator;
 
         public OnTouchListener(int position, MyImageView[] iconImageList, FrameLayout itemView, List<MyImageView> iconImageArrayList, boolean isOnlyFavorite, int mode) {
             this.position = position;
@@ -921,10 +925,10 @@ public class EdgeGestureService extends Service {
                             }
                         } else {
                             if (!folderShown) {
-                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
+                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap, false);
                                 shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
                             } else {
-                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord,folderCoor[0] , folderCoor[1], (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, folderCoor[2], folderCoor[3], 5);
+                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord,folderCoor[0] , folderCoor[1], (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, folderCoor[2], folderCoor[3], 5, true);
                                 shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", (folderCoor[4]+1)*1000 + shortcutToSwitch ).findFirst();
                             }
 
@@ -1009,7 +1013,7 @@ public class EdgeGestureService extends Service {
                         isClockShown = true;
                     }
                     if (switched) {
-                        int shortcutToSwitch;
+                        final int shortcutToSwitch;
                         if (mode == 3 && ! onInstantFavo) {
                                 if (iconIdBackgrounded == -2) {
                                     for (int i = 0; i < numOfIcon; i++) {
@@ -1075,19 +1079,60 @@ public class EdgeGestureService extends Service {
 
                         } else {
                             if (!folderShown) {
-                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
+                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap,false);
                                 if (shortcutToSwitch != -1) {
                                     Shortcut shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
-                                    if (shortcut != null && shortcut.getType() == Shortcut.TYPE_FOLDER && !folderShown) {
+                                    if (shortcut != null && shortcut.getType() == Shortcut.TYPE_FOLDER && !folderShown && !onFolderAnimator) {
+                                        positionOfFolder = shortcutToSwitch;
                                         folderAdapter = new FolderAdapter(getApplicationContext(),shortcutToSwitch);
-                                        folderCoor = Utility.showFolder(getApplicationContext(), shortcutGridView, windowManager, favoriteRealm, defaultShared, shortcutToSwitch, mScale, mIconScale,folderAdapter);
-                                        folderShown = true;
+                                        folderAnimator = shortcutGridView.animate().setDuration(2000).alpha(0f).setListener(new Animator.AnimatorListener() {
+                                            boolean isCancel = false;
+                                            @Override
+                                            public void onAnimationStart(Animator animation) {
+                                                onFolderAnimator = true;
+                                            }
+
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                if (!isCancel) {
+                                                    folderCoor = Utility.showFolder(getApplicationContext(), shortcutGridView, windowManager, favoriteRealm, defaultShared, shortcutToSwitch, mScale, mIconScale,folderAdapter);
+                                                    onFolderAnimator = false;
+                                                    Log.e(LOG_TAG, "onAnimation end");
+                                                    folderShown = true;
+                                                }
+
+                                            }
+
+                                            @Override
+                                            public void onAnimationCancel(Animator animation) {
+                                                shortcutGridView.setVisibility(View.VISIBLE);
+                                                shortcutGridView.setAlpha(1f);
+                                                shortcutView.findViewById(R.id.folder_grid).setVisibility(View.GONE);
+                                                folderShown = false;
+                                                onFolderAnimator = false;
+                                                isCancel = true;
+                                                Log.e(LOG_TAG, "onAnimation cancel");
+
+                                            }
+
+                                            @Override
+                                            public void onAnimationRepeat(Animator animation) {
+
+                                            }
+                                        });
+
+
                                     }
                                     activateId = shortcutToSwitch + 100;
                                 } else {
                                     activateId = 0;
                                     clearIndicator(activatedId);
                                     activatedId = 0;
+                                }
+
+                                if (onFolderAnimator && positionOfFolder != shortcutToSwitch) {
+                                    folderAnimator.cancel();
+                                    Log.e(LOG_TAG, "Cancel opening folder");
                                 }
 
                                 if (shortcutAdapter != null) {
@@ -1100,30 +1145,44 @@ public class EdgeGestureService extends Service {
                                         isShortcutBackgroundNull = false;
                                         preShortcutToSwitch = -1;
                                     }
-
                                 }
                             } else {
-                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord,folderCoor[0] , folderCoor[1], (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, folderCoor[2], folderCoor[3], 5);
-                                if (shortcutToSwitch != -1) {
-                                    activateId = shortcutToSwitch + 3000;
-                                } else {
-                                    activateId = 0;
-                                    clearIndicator(activatedId);
-                                    activatedId = 0;
-                                }
 
-                                if (folderAdapter != null) {
-                                    if (shortcutToSwitch != -1 && shortcutToSwitch != preShortcutInFolderToSwitch) {
-                                        folderAdapter.setBackground(shortcutToSwitch);
-                                        isShortcutBackgroundInFolderNull = true;
-                                        preShortcutInFolderToSwitch = shortcutToSwitch;
-                                    } else if (isShortcutBackgroundInFolderNull && shortcutToSwitch == -1) {
-                                        folderAdapter.setBackground(shortcutToSwitch);
-                                        isShortcutBackgroundInFolderNull = false;
-                                        preShortcutInFolderToSwitch = -1;
+                                if (!onFolderAnimator) {
+                                    shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, folderCoor[0], folderCoor[1], (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, folderCoor[2], folderCoor[3], 5, true);
+                                    if (shortcutToSwitch != -1) {
+                                        activateId = shortcutToSwitch + 3000;
+                                    } else {
+                                        activateId = 0;
+                                        clearIndicator(activatedId);
+                                        activatedId = 0;
                                     }
 
+                                    if (folderAdapter != null) {
+                                        if (shortcutToSwitch != -1 && shortcutToSwitch != preShortcutInFolderToSwitch) {
+                                            folderAdapter.setBackground(shortcutToSwitch);
+                                            isShortcutBackgroundInFolderNull = true;
+                                            preShortcutInFolderToSwitch = shortcutToSwitch;
+                                        } else if (isShortcutBackgroundInFolderNull && shortcutToSwitch == -1) {
+                                            folderAdapter.setBackground(shortcutToSwitch);
+                                            isShortcutBackgroundInFolderNull = false;
+                                            preShortcutInFolderToSwitch = -1;
+                                        }
+
+                                    }
+                                } else {
+//                                    shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap,false);
+//                                    if (onFolderAnimator && positionOfFolder != shortcutToSwitch) {
+//                                        folderAnimator.cancel();
+//                                        Log.e(LOG_TAG, "Cancel opening folder");
+//                                    }
                                 }
+//                                else {
+//                                    if (shortcutToSwitch == -2) {
+//                                        folderAnimator.cancel();
+//                                    }
+//                                }
+
                             }
 
                         }
@@ -1312,6 +1371,7 @@ public class EdgeGestureService extends Service {
                 gridX = (int) shortcutGridView.getX();
                 gridY = (int) shortcutGridView.getY();
                 shortcutGridView.setVisibility(View.VISIBLE);
+                shortcutGridView.setAlpha(1f);
                 GridView folderGrid = (GridView) shortcutView.findViewById(R.id.folder_grid);
                 folderGrid.setVisibility(View.GONE);
                 if (shortcutView != null && !shortcutView.isAttachedToWindow()) {
