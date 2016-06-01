@@ -1170,15 +1170,17 @@ public class EdgeGestureService extends Service {
                                         }
 
                                     }
+                                    if (shortcutToSwitch == -2) {
+                                        Log.e(LOG_TAG, "outside folder zone");
+                                        shortcutGridView.setVisibility(View.VISIBLE);
+                                        shortcutGridView.setAlpha(1f);
+                                        shortcutView.findViewById(R.id.folder_grid).setVisibility(View.GONE);
+                                        folderShown = false;
+                                    }
                                 }
-//                                else {
-//                                    if (shortcutToSwitch == -2) {
-//                                        folderAnimator.cancel();
-//                                    }
-//                                }
+
 
                             }
-
                         }
 
                     } else {
