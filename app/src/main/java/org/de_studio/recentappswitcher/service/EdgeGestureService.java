@@ -100,7 +100,7 @@ public class EdgeGestureService extends Service {
     private List<MyImageView> iconImageArrayList1, iconImageArrayList2;
     private String[] packagename, pinnedPackageName;
     private String launcherPackagename, lastAppPackageName;
-    private int[] x, y;
+    private int[] x, y, folderCoor;
     private int numOfIcon, gridRow, gridColumn, gridGap, gridX, gridY, numOfRecent;
     public static final int GRID_ICON_SIZE = 48, GRID_2_PADDING = 10;
     private boolean hasOneActive = false;
@@ -917,8 +917,14 @@ public class EdgeGestureService extends Service {
                                 Utility.executeAction(getApplicationContext(), action, v, getClass().getName(), getPackageName(), lastAppPackageName);
                             }
                         } else {
-                            shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
-                            shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
+                            if (!folderShown) {
+                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
+                                shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
+                            } else {
+                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord,folderCoor[0] , folderCoor[1], (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, folderCoor[2], folderCoor[3], 5);
+                                shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", (folderCoor[4]+1)*1000 + shortcutToSwitch ).findFirst();
+                            }
+
                         }
                         if (shortcut != null) {
                             Utility.startShortcut(getApplicationContext(),shortcut,v,getClass().getName(),getPackageName(),lastAppPackageName);
@@ -1069,7 +1075,7 @@ public class EdgeGestureService extends Service {
                             if (shortcutToSwitch != -1) {
                                 Shortcut shortcut = favoriteRealm.where(Shortcut.class).equalTo("id",shortcutToSwitch).findFirst();
                                 if (shortcut!=null && shortcut.getType() == Shortcut.TYPE_FOLDER && !folderShown) {
-                                    Utility.showFolder(getApplicationContext(),shortcutGridView,windowManager,favoriteRealm,defaultShared,shortcutToSwitch, mScale, mIconScale);
+                                    folderCoor = Utility.showFolder(getApplicationContext(),shortcutGridView,windowManager,favoriteRealm,defaultShared,shortcutToSwitch, mScale, mIconScale);
                                     folderShown = true;
                                 }
                                 activateId = shortcutToSwitch + 100;

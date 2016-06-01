@@ -1563,7 +1563,8 @@ public  class Utility {
 
     }
 
-    public static void showFolder(Context context, GridView gridView, WindowManager windowManager, Realm realm, SharedPreferences sharedPreferences, int mPosition, float mScale, float mIconScale) {
+    public static int[] showFolder(Context context, GridView gridView, WindowManager windowManager, Realm realm,
+                                  SharedPreferences sharedPreferences, int mPosition, float mScale, float mIconScale) {
 //        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup viewGroup = (ViewGroup) gridView.getParent();
         float gridX = gridView.getX();
@@ -1604,6 +1605,7 @@ public  class Utility {
         folderGrid.setY(y - gridTall + gridTall/gridRow);
         Log.e(LOG_TAG,"gridX = " + gridX + "\nGridY = " + gridY +  "\nfolder x = " + folderGrid.getX() + "\nfolder y= " + folderGrid.getY() );
         folderGrid.setVisibility(View.VISIBLE);
+        return new int[]{(int) folderGrid.getX(), (int) folderGrid.getY(), gridRow, gridColumn, mPosition};
 
 
 
