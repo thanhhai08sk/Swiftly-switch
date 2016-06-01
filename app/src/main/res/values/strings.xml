@@ -153,5 +153,6 @@
     <string name="apps">Apps</string>
     <string name="actions">Actions</string>
     <string name="contacts">Contacts</string>
+    <string name="setting_shortcut_folder">Folder</string>
 
 </resources>

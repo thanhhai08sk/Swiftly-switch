@@ -15,17 +15,17 @@ import org.de_studio.recentappswitcher.Utility;
 /**
  * Created by hai on 2/25/2016.
  */
-public class SettingTabFragment extends Fragment {
+public class ActionTabFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    private static final String LOG_TAG = SettingTabFragment.class.getSimpleName();
+    private static final String LOG_TAG = ActionTabFragment.class.getSimpleName();
     private ListView mListView;
-    private SettingListAdapter mAdapter;
+    private ActionListAdapter mAdapter;
     private int mPosition, mode;
 
 
-    public static SettingTabFragment newInstance(int sectionNumber) {
-        SettingTabFragment fragment = new SettingTabFragment();
+    public static ActionTabFragment newInstance(int sectionNumber) {
+        ActionTabFragment fragment = new ActionTabFragment();
         Bundle agument = new Bundle();
         agument.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(agument);
@@ -63,7 +63,7 @@ public class SettingTabFragment extends Fragment {
         mListView = (ListView) view.findViewById(R.id.fragment_app_tab_list_view);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        mAdapter = new SettingListAdapter(getContext(),mPosition, mode);
+        mAdapter = new ActionListAdapter(getContext(),mPosition, mode);
         mListView.setAdapter(mAdapter);
         ((ChooseShortcutActivity)getActivity()).setSettingAdapter(mAdapter);
         Log.e(LOG_TAG, "inflate mListView");
@@ -71,7 +71,7 @@ public class SettingTabFragment extends Fragment {
         return view;
     }
 
-    public SettingListAdapter getAdapter() {
+    public ActionListAdapter getAdapter() {
         return mAdapter;
     }
 

@@ -204,7 +204,7 @@ public class EdgeGestureService extends Service {
                 edge1ImageLayoutParams.width = edge1WidthPxl;
                 edge1Image.setLayoutParams(edge1ImageLayoutParams);
             }
-            item1View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
+            item1View = (FrameLayout) layoutInflater.inflate(R.layout.items, null);
             iconImageList1 = new MyImageView[6];
             iconImageList1[0] = (MyImageView) item1View.findViewById(R.id.item_0);
             iconImageList1[1] = (MyImageView) item1View.findViewById(R.id.item_1);
@@ -359,7 +359,7 @@ public class EdgeGestureService extends Service {
             } else {
                     removeView(edge2Image);
             }
-            item2View = (FrameLayout) layoutInflater.inflate(R.layout.item, null);
+            item2View = (FrameLayout) layoutInflater.inflate(R.layout.items, null);
             iconImageList2 = new MyImageView[6];
             iconImageList2[0] = (MyImageView) item2View.findViewById(R.id.item_0);
             iconImageList2[1] = (MyImageView) item2View.findViewById(R.id.item_1);
@@ -429,7 +429,7 @@ public class EdgeGestureService extends Service {
         private MyImageView[] iconImageList;
         private List<MyImageView> iconImageArrayList;
         private DelayToSwitchTask delayToSwitchTask;
-        private boolean isOnlyFavorite, isStayPermanent, isShortcutBackgroundNull = true, isCircleFavorite;
+        private boolean isOnlyFavorite, isStayPermanent, isShortcutBackgroundNull = true, isCircleFavorite, folderShown;
 
         public OnTouchListener(int position, MyImageView[] iconImageList, FrameLayout itemView, List<MyImageView> iconImageArrayList, boolean isOnlyFavorite, int mode) {
             this.position = position;
@@ -449,6 +449,7 @@ public class EdgeGestureService extends Service {
             int y_cord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    folderShown = false;
                     removeAllExceptEdgeView();
                     onInstantFavo = false;
 //                    startDown = System.currentTimeMillis();
@@ -1066,6 +1067,10 @@ public class EdgeGestureService extends Service {
                         } else {
                             shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
                             if (shortcutToSwitch != -1) {
+                                if (shortcutToSwitch == 3 && !folderShown) {
+                                    Utility.showFolder(getApplicationContext(),shortcutGridView,windowManager,favoriteRealm,defaultShared,3, mScale);
+                                    folderShown = true;
+                                }
                                 activateId = shortcutToSwitch + 100;
                             } else {
                                 activateId = 0;
@@ -1270,6 +1275,9 @@ public class EdgeGestureService extends Service {
                 Utility.setFavoriteShortcutGridViewPosition(shortcutGridView, gridTall, gridWide, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared, gridDistanceFromEdge, gridDistanceVertical, iconToSwitch);
                 gridX = (int) shortcutGridView.getX();
                 gridY = (int) shortcutGridView.getY();
+                shortcutGridView.setVisibility(View.VISIBLE);
+                GridView folderGrid = (GridView) shortcutView.findViewById(R.id.folder_grid);
+                folderGrid.setVisibility(View.GONE);
                 if (shortcutView != null && !shortcutView.isAttachedToWindow()) {
                     windowManager.addView(shortcutView, shortcutViewParams);
                 }

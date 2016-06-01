@@ -2,6 +2,7 @@
 <resources>
     <string-array name="setting_shortcut_array">
         <item>@string/setting_shortcut_none</item>
+        <item>@string/setting_shortcut_folder</item>
         <item>@string/setting_shortcut_wifi</item>
         <item>@string/setting_shortcut_bluetooth</item>
         <item>@string/setting_shortcut_rotation</item>

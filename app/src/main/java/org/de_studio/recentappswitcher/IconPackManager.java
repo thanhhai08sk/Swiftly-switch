@@ -151,7 +151,7 @@ public class IconPackManager
                                     mFactor = Float.valueOf(xpp.getAttributeValue(0));
                                 }
                             }
-                            else if (xpp.getName().equals("item"))
+                            else if (xpp.getName().equals("items"))
                             {
                                 String componentName = null;
                                 String drawableName = null;

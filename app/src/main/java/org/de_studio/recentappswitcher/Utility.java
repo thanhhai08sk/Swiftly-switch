@@ -54,6 +54,7 @@ import android.widget.Toast;
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
 
 import java.lang.reflect.InvocationTargetException;
@@ -64,6 +65,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import io.realm.Realm;
 
 /**
  * Created by hai on 12/19/2015.
@@ -1556,6 +1559,25 @@ public  class Utility {
                 imageView.setImageDrawable(null);
         }
 
+
+    }
+
+    public static void showFolder(Context context, GridView gridView, WindowManager windowManager, Realm realm, SharedPreferences sharedPreferences, int mPosition, float mScale) {
+//        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ViewGroup viewGroup = (ViewGroup) gridView.getParent();
+        float x = gridView.getChildAt(mPosition).getX();
+        float y = gridView.getChildAt(mPosition).getY();
+        float gridX = gridView.getX();
+        float gridY = gridView.getY();
+
+        gridView.setVisibility(View.GONE);
+        GridView folderGrid = (GridView) viewGroup.findViewById(R.id.folder_grid);
+        folderGrid.setX(gridX );
+        folderGrid.setY(gridY );
+        Log.e(LOG_TAG,"gridX = " + gridX + "\nGridY = " + gridY +  "\nfolder x = " + folderGrid.getX() + "\nfolder y= " + folderGrid.getY() );
+        folderGrid.setVisibility(View.VISIBLE);
+        FolderAdapter adapter = new FolderAdapter(context,mPosition);
+        folderGrid.setAdapter(adapter);
 
     }
 

@@ -23,19 +23,19 @@ import org.de_studio.recentappswitcher.Utility;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-public class ChooseShortcutActivity extends AppCompatActivity implements AppListAdapter.AppChangeListener, SettingListAdapter.SettingChangeListener, ContactCursorAdapter.ContactChangeListener{
+public class ChooseShortcutActivity extends AppCompatActivity implements AppListAdapter.AppChangeListener, ActionListAdapter.SettingChangeListener, ContactCursorAdapter.ContactChangeListener{
 
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private static final String LOG_TAG = ChooseShortcutActivity.class.getSimpleName();
     private int mPosition;
     private AppTabFragment mAppTabFragment;
-    private SettingTabFragment mSettingTabFragment;
+    private ActionTabFragment mActionTabFragment;
     private ContactTabFragment mContactTabFragment;
     private ImageView currentShortcut;
     private Realm myRealm;
     private AppListAdapter mAppAdapter;
-    private SettingListAdapter mSettingAdapter;
+    private ActionListAdapter mSettingAdapter;
     private ContactCursorAdapter mContactAdapter;
     private Context mContext;
     private int mode;
@@ -97,7 +97,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                         setCurrentShortcutImageView();
                         try {
                             mAppTabFragment.setmPositioinToNext();
-                            mSettingTabFragment.setmPositioinToNext();
+                            mActionTabFragment.setmPositioinToNext();
                             mContactTabFragment.setmPositioinToNext();
                         } catch (NullPointerException e) {
                             e.printStackTrace();
@@ -121,7 +121,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                     }
                     try {
                         mAppTabFragment.setmPositionToBack();
-                        mSettingTabFragment.setmPositionToBack();
+                        mActionTabFragment.setmPositionToBack();
                         mContactTabFragment.setmPositionToBack();
                     } catch (NullPointerException e) {
                         e.printStackTrace();
@@ -167,10 +167,10 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                     mAppTabFragment.setmContext(mContext);
                     return mAppTabFragment;
                 case 1:
-                    mSettingTabFragment = SettingTabFragment.newInstance(position + 1);
-                    mSettingTabFragment.setmPosition(mPosition);
-                    mSettingTabFragment.setMode(mode);
-                    return mSettingTabFragment;
+                    mActionTabFragment = ActionTabFragment.newInstance(position + 1);
+                    mActionTabFragment.setmPosition(mPosition);
+                    mActionTabFragment.setMode(mode);
+                    return mActionTabFragment;
                 case 2:
                     mContactTabFragment = ContactTabFragment.newInstance(position + 1);
                     mContactTabFragment.setmPosition(mPosition);
@@ -279,7 +279,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
         adapter.registerListener(this);
     }
 
-    public void setSettingAdapter(SettingListAdapter adapter) {
+    public void setSettingAdapter(ActionListAdapter adapter) {
         mSettingAdapter = adapter;
         adapter.registerListener(this);
     }

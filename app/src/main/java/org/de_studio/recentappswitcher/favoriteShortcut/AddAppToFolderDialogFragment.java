@@ -22,7 +22,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.AppInfors;
-import org.de_studio.recentappswitcher.InstallAppPinAppAdapter;
 import org.de_studio.recentappswitcher.MyApplication;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
@@ -85,6 +84,11 @@ public class AddAppToFolderDialogFragment  extends DialogFragment{
                             newShortcut.setId(startId+ size);
 //                            Log.e(LOG_TAG, "size = " + size);
                             newShortcut.setPackageName(packageName);
+                            try {
+                                newShortcut.setLabel((String) getActivity().getPackageManager().getApplicationLabel(getActivity().getPackageManager().getApplicationInfo(packageName, 0)));
+                            } catch (PackageManager.NameNotFoundException e) {
+                                e.printStackTrace();
+                            }
                             myRealm.beginTransaction();
                             myRealm.copyToRealm(newShortcut);
                             myRealm.commitTransaction();

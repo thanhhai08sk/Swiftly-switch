@@ -21,8 +21,8 @@ import io.realm.RealmResults;
 /**
  * Created by hai on 2/24/2016.
  */
-public class SettingListAdapter extends BaseAdapter {
-    private static final String LOG_TAG = SettingListAdapter.class.getSimpleName();
+public class ActionListAdapter extends BaseAdapter {
+    private static final String LOG_TAG = ActionListAdapter.class.getSimpleName();
     private Context mContext;
     private String[] stringArray;
     private int mPosition, mode;
@@ -30,7 +30,7 @@ public class SettingListAdapter extends BaseAdapter {
     private SettingChangeListener listener = null;
     private Realm myRealm;
 
-    public SettingListAdapter(Context context, int position, int mode) {
+    public ActionListAdapter(Context context, int position, int mode) {
         super();
         mContext = context;
         stringArray =context.getResources().getStringArray(R.array.setting_shortcut_array);
@@ -60,7 +60,7 @@ public class SettingListAdapter extends BaseAdapter {
             }else mAction = -1;
 
         }else mAction = -1;
-        SettingListAdapter.this.notifyDataSetChanged();
+        ActionListAdapter.this.notifyDataSetChanged();
     }
 
     @Override
@@ -118,10 +118,12 @@ public class SettingListAdapter extends BaseAdapter {
             icon.setImageResource(R.drawable.ic_icon_call_log);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_contact))) {
             icon.setImageResource(R.drawable.ic_icon_contact);
-        }if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_last_app))) {
+        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_last_app))) {
             icon.setImageResource(R.drawable.ic_icon_last_app);
-        }if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_none))) {
+        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_none))) {
             icon.setImageDrawable(null);
+        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_folder))) {
+            icon.setImageResource(R.drawable.ic_icon_contact);
         }
         icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
 
@@ -133,15 +135,21 @@ public class SettingListAdapter extends BaseAdapter {
                 Log.e(LOG_TAG, "mPosition = " + mPosition);
                 oldShortcut.clear();
                 Shortcut shortcut = new Shortcut();
+                if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_folder))) {
+                    shortcut.setType(Shortcut.TYPE_FOLDER);
+                    shortcut.setId(mPosition);
+                    shortcut.setSize(0);
+                } else {
+                    shortcut.setType(Shortcut.TYPE_SETTING);
+                    shortcut.setId(mPosition);
+                    shortcut.setLabel(item);
+                    shortcut.setAction(Utility.getActionFromLabel(mContext, item));
+                }
 
-                shortcut.setType(Shortcut.TYPE_SETTING);
-                shortcut.setId(mPosition);
-                shortcut.setLabel(item);
-                shortcut.setAction(Utility.getActionFromLabel(mContext, item));
                 myRealm.copyToRealm(shortcut);
                 myRealm.commitTransaction();
                 mAction = Utility.getActionFromLabel(mContext,item);
-                SettingListAdapter.this.notifyDataSetChanged();
+                ActionListAdapter.this.notifyDataSetChanged();
                 listener.onSettingChange();
             }
         });

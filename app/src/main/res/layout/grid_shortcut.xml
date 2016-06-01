@@ -13,7 +13,22 @@
         android:horizontalSpacing="22dp"
         android:gravity="center"
         android:stretchMode="spacingWidth"
+        android:visibility="visible"
         >
 
     </GridView>
+    <GridView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/folder_grid"
+        android:numColumns="4"
+        android:verticalSpacing="22dp"
+        android:horizontalSpacing="22dp"
+        android:gravity="center"
+        android:stretchMode="spacingWidth"
+        android:visibility="gone"
+        android:background="@drawable/round_green_button"
+        />
+
 </FrameLayout>

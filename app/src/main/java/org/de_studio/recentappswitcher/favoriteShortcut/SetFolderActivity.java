@@ -52,6 +52,7 @@ public class SetFolderActivity extends AppCompatActivity {
                             }
                         }
                     });
+                    builder.create().show();
                 }
             });
         }
