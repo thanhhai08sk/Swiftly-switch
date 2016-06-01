@@ -1314,9 +1314,11 @@ public  class Utility {
         listView.requestLayout();
     }
 
-    public static void setShortcutDrawable(Shortcut shortcut, Context mContext, ImageView imageView, IconPackManager.IconPack iconPack) {
+    public static void setShortcutDrawable(Shortcut shortcut, Context mContext, ImageView imageView, IconPackManager.IconPack iconPack, boolean folderMode) {
         if (shortcut == null) {
-            imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+            if (!folderMode) {
+                imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+            }
 //            imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
         } else {
             if (shortcut.getType() == Shortcut.TYPE_APP) {
