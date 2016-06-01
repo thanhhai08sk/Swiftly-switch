@@ -935,7 +935,7 @@ public class EdgeGestureService extends Service {
                         }
                         if (shortcut != null) {
                             Utility.startShortcut(getApplicationContext(),shortcut,v,getClass().getName(),getPackageName(),lastAppPackageName);
-                        } else if (shortcutToSwitch != -1) {
+                        } else if (shortcutToSwitch >=0) {
                             Toast.makeText(getApplicationContext(), getString(R.string.please_add_favorite_item), Toast.LENGTH_LONG).show();
                             if (onInstantFavo) {
                                 showAddFavoriteDialog(1);
@@ -1170,12 +1170,6 @@ public class EdgeGestureService extends Service {
                                         }
 
                                     }
-                                } else {
-//                                    shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap,false);
-//                                    if (onFolderAnimator && positionOfFolder != shortcutToSwitch) {
-//                                        folderAnimator.cancel();
-//                                        Log.e(LOG_TAG, "Cancel opening folder");
-//                                    }
                                 }
 //                                else {
 //                                    if (shortcutToSwitch == -2) {
