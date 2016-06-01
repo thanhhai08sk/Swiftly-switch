@@ -1068,7 +1068,7 @@ public class EdgeGestureService extends Service {
                             shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap);
                             if (shortcutToSwitch != -1) {
                                 if (shortcutToSwitch == 3 && !folderShown) {
-                                    Utility.showFolder(getApplicationContext(),shortcutGridView,windowManager,favoriteRealm,defaultShared,3, mScale);
+                                    Utility.showFolder(getApplicationContext(),shortcutGridView,windowManager,favoriteRealm,defaultShared,3, mScale, mIconScale);
                                     folderShown = true;
                                 }
                                 activateId = shortcutToSwitch + 100;

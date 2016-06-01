@@ -53,6 +53,7 @@ import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
+import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
@@ -1562,22 +1563,49 @@ public  class Utility {
 
     }
 
-    public static void showFolder(Context context, GridView gridView, WindowManager windowManager, Realm realm, SharedPreferences sharedPreferences, int mPosition, float mScale) {
+    public static void showFolder(Context context, GridView gridView, WindowManager windowManager, Realm realm, SharedPreferences sharedPreferences, int mPosition, float mScale, float mIconScale) {
 //        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup viewGroup = (ViewGroup) gridView.getParent();
-        float x = gridView.getChildAt(mPosition).getX();
-        float y = gridView.getChildAt(mPosition).getY();
         float gridX = gridView.getX();
         float gridY = gridView.getY();
+        float x = gridView.getChildAt(mPosition).getX()+ gridX;
+        float y = gridView.getChildAt(mPosition).getY() + gridY;
+        int size = (int) realm.where(Shortcut.class).greaterThan("id",(mPosition+1)*1000 -1).lessThan("id",(mPosition+2)*1000).count();
+        int gridColumn = size;
+        if (gridColumn > 4) {
+            gridColumn = 4;
+        }
+        int gridRow;
+        if (size % gridColumn == 0) {
+            gridRow = size/gridColumn;
+        }else gridRow = size/gridColumn +1;
+        int gridGap = 5;
+
 
         gridView.setVisibility(View.GONE);
         GridView folderGrid = (GridView) viewGroup.findViewById(R.id.folder_grid);
-        folderGrid.setX(gridX );
-        folderGrid.setY(gridY );
-        Log.e(LOG_TAG,"gridX = " + gridX + "\nGridY = " + gridY +  "\nfolder x = " + folderGrid.getX() + "\nfolder y= " + folderGrid.getY() );
-        folderGrid.setVisibility(View.VISIBLE);
+        ViewGroup.LayoutParams gridParams = folderGrid.getLayoutParams();
+        folderGrid.setVerticalSpacing((int) (gridGap * mScale));
+        folderGrid.setNumColumns(gridColumn);
+        folderGrid.setGravity(Gravity.CENTER);
+        float gridWide = (int) (mScale * (float) (((EdgeGestureService.GRID_ICON_SIZE * mIconScale) + EdgeGestureService.GRID_2_PADDING) * gridColumn + gridGap * (gridColumn - 1)));
+        float gridTall = (int) (mScale * (float) (((EdgeGestureService.GRID_ICON_SIZE * mIconScale) + EdgeGestureService.GRID_2_PADDING) * gridRow + gridGap * (gridRow - 1)));
+        gridParams.height = (int) gridTall;
+        gridParams.width = (int) gridWide;
+        folderGrid.setLayoutParams(gridParams);
         FolderAdapter adapter = new FolderAdapter(context,mPosition);
         folderGrid.setAdapter(adapter);
+        if (x - gridWide / 2 + gridWide > gridX + gridView.getWidth()) {
+            folderGrid.setX(gridX + gridView.getWidth() - gridWide);
+        } else {
+            folderGrid.setX(x - gridWide/2);
+        }
+
+        folderGrid.setY(y - gridTall + gridTall/gridRow);
+        Log.e(LOG_TAG,"gridX = " + gridX + "\nGridY = " + gridY +  "\nfolder x = " + folderGrid.getX() + "\nfolder y= " + folderGrid.getY() );
+        folderGrid.setVisibility(View.VISIBLE);
+
+
 
     }
 
