@@ -128,6 +128,7 @@ public class AddAppToFolderDialogFragment  extends DialogFragment{
 
     @Override
     public void onDismiss(DialogInterface dialog) {
+        Utility.getFolderThumbnail(myRealm, mPosition, getActivity());
         try {
             getActivity().startService(new Intent(getActivity(), EdgeGestureService.class));
         } catch (NullPointerException e) {
