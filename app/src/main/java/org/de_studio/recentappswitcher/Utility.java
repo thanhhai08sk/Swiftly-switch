@@ -1404,6 +1404,21 @@ public  class Utility {
                     case Shortcut.ACTION_NONE:
                         imageView.setImageDrawable(null);
                 }
+            }else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
+                File myDir = mContext.getFilesDir();
+                String fname = "folder-"+ shortcut.getId() +".png";
+                File file = new File (myDir, fname);
+                if (!file.exists()) {
+                    imageView.setImageBitmap(null);
+                } else {
+                    try {
+                        imageView.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "read thumbnail exeption" + e);
+                        e.printStackTrace();
+                    }
+                }
+
             }
 
         }

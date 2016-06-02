@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.service;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
@@ -18,6 +19,8 @@ import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
+
+import java.io.File;
 
 import io.realm.Realm;
 
@@ -174,6 +177,21 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                 } else {
                     imageView.setImageResource(R.drawable.ic_icon_home);
                 }
+            }else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
+                File myDir = mContext.getFilesDir();
+                String fname = "folder-"+ position +".png";
+                File file = new File (myDir, fname);
+                if (!file.exists()) {
+                    imageView.setImageBitmap(Utility.getFolderThumbnail(myRealm, position, mContext));
+                } else {
+                    try {
+                        imageView.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "read thumbnail exeption" + e);
+                        e.printStackTrace();
+                    }
+                }
+
             }
 
         }
