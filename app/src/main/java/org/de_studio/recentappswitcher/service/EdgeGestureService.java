@@ -117,7 +117,8 @@ public class EdgeGestureService extends Service {
     private long holdTime = 450, vibrationDuration;
     private boolean touched = false, switched = false, isOutOfTrial = false, isFreeVersion = false;
     private String[] spinnerEntries;
-    private GridView shortcutGridView;
+    private GridView shortcutGridView, shortcutFolderGrid;
+    private Circle circle;
     private FavoriteShortcutAdapter shortcutAdapter;
     private FolderAdapter folderAdapter;
     private CircleFavoriteAdapter circltShortcutAdapter;
@@ -421,6 +422,7 @@ public class EdgeGestureService extends Service {
 
         shortcutView = (FrameLayout) layoutInflater.inflate(R.layout.grid_shortcut, null);
         shortcutGridView = (GridView) shortcutView.findViewById(R.id.edge_shortcut_grid_view);
+        shortcutFolderGrid = (GridView) shortcutView.findViewById(R.id.folder_grid);
 
         return START_STICKY;
     }
@@ -1007,9 +1009,13 @@ public class EdgeGestureService extends Service {
 
                 case MotionEvent.ACTION_MOVE:
 
-                    if (!isClockShown && !switched && !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
+                    if (!isClockShown && !defaultShared.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY, false)) {
                         Log.e(LOG_TAG, "Show clock");
                         clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY, false), defaultShared.getInt(EdgeSettingDialogFragment.ANI_TIME_KEY, 100));
+                        circle = (Circle) clockView.findViewById(R.id.circle);
+                        if (circle == null) {
+                            Log.e(LOG_TAG, "circle = null");
+                        }
                         isClockShown = true;
                     }
                     if (switched) {
@@ -1090,6 +1096,12 @@ public class EdgeGestureService extends Service {
                                             @Override
                                             public void onAnimationStart(Animator animation) {
                                                 onFolderAnimator = true;
+                                                circle.setVisibility(View.VISIBLE);
+                                                circle.setAngle(0);
+                                                CircleAngleAnimation angleAnimation = new CircleAngleAnimation(circle, 270);
+                                                angleAnimation.setDuration(2000);
+                                                circle.startAnimation(angleAnimation);
+
                                             }
 
                                             @Override
@@ -1099,6 +1111,8 @@ public class EdgeGestureService extends Service {
                                                     onFolderAnimator = false;
                                                     Log.e(LOG_TAG, "onAnimation end");
                                                     folderShown = true;
+                                                    circle.setVisibility(View.GONE);
+                                                    circle.setAngle(0);
                                                 }
 
                                             }
@@ -1107,10 +1121,12 @@ public class EdgeGestureService extends Service {
                                             public void onAnimationCancel(Animator animation) {
                                                 shortcutGridView.setVisibility(View.VISIBLE);
                                                 shortcutGridView.setAlpha(1f);
-                                                shortcutView.findViewById(R.id.folder_grid).setVisibility(View.GONE);
+                                                shortcutFolderGrid.setVisibility(View.GONE);
                                                 folderShown = false;
                                                 onFolderAnimator = false;
                                                 isCancel = true;
+                                                circle.setVisibility(View.GONE);
+                                                circle.setAngle(0);
                                                 Log.e(LOG_TAG, "onAnimation cancel");
 
                                             }
@@ -1423,7 +1439,7 @@ public class EdgeGestureService extends Service {
             }
             if (activateId != -1) {
                 LinearLayout clock = (LinearLayout) clockView.findViewById(R.id.clock_linear_layout);
-                LinearLayout indicator = (LinearLayout) clockView.findViewById(R.id.indicator_frame_layout);
+                FrameLayout indicator = (FrameLayout) clockView.findViewById(R.id.indicator_frame_layout);
                 clock.setVisibility(View.GONE);
                 indicator.setVisibility(View.VISIBLE);
                 ImageView icon = (ImageView) indicator.findViewById(R.id.indicator_icon);
@@ -1474,7 +1490,7 @@ public class EdgeGestureService extends Service {
             if (activatedId != 0 && clockView!=null) {
                 Log.e(LOG_TAG, "clearIndicator");
                 LinearLayout clock = (LinearLayout) clockView.findViewById(R.id.clock_linear_layout);
-                LinearLayout indicator = (LinearLayout) clockView.findViewById(R.id.indicator_frame_layout);
+                FrameLayout indicator = (FrameLayout) clockView.findViewById(R.id.indicator_frame_layout);
                 clock.setVisibility(View.GONE);
                 indicator.setVisibility(View.INVISIBLE);
             }

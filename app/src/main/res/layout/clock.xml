@@ -52,38 +52,39 @@
 
             />
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:id="@+id/indicator_frame_layout"
-        android:visibility="gone"
-        tools:visibility="visible"
-        android:layout_marginTop="30dp"
-        android:orientation="vertical"
-        android:layout_gravity="center_horizontal"
-        >
-        <ImageView
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            tools:src="@drawable/icon512"
-            android:id="@+id/indicator_icon"
-            android:layout_gravity="center_horizontal"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/indicator_label"
-            tools:text="Swiftly switch"
-            android:textColor="@color/white"
-            android:layout_gravity="center_horizontal"
-            android:fontFamily="sans-serif-medium"
+        <FrameLayout
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:visibility="gone"
             android:layout_marginTop="8dp"
-            />
+            tools:visibility="visible"
+            android:id="@+id/indicator_frame_layout"
+            android:layout_gravity="center_horizontal"
+            >
+            <org.de_studio.recentappswitcher.service.Circle
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:id="@+id/circle"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+            <ImageView
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                tools:src="@drawable/icon512"
+                android:id="@+id/indicator_icon"
+                android:layout_gravity="center"
 
-
-
-    </LinearLayout>
-
-
-
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/indicator_label"
+                tools:text="Swiftly switch"
+                android:textColor="@color/white"
+                android:layout_gravity="center_horizontal|bottom"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginTop="8dp"
+                />
+        </FrameLayout>
 </FrameLayout>
