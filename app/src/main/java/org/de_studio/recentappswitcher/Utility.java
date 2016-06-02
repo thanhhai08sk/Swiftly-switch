@@ -18,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
@@ -1620,6 +1621,51 @@ public  class Utility {
 
 
 
+    }
+
+    public static Bitmap getFolderThumbnail(Realm realm, int mPosition, Context context) {
+        Log.e(LOG_TAG, "start getFolderThumnail = " + System.currentTimeMillis());
+        float mScale = context. getResources().getDisplayMetrics().density;
+        int width =(int)( 48*mScale);
+        int height = width;
+        int smallWidth, smallHeight;
+        smallWidth = width/2;
+        smallHeight = height/2;
+        int startId = (mPosition +1)* 1000;
+        PackageManager packageManager = context.getPackageManager();
+        Bitmap.Config config = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap = Bitmap.createBitmap(width, height, config);
+        Canvas canvas = new Canvas(bitmap);
+        Bitmap bitmap1 = null;
+        Bitmap bm1= null;
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Shortcut shortcut;
+
+        for (int i = 0; i < 4; i++) {
+            shortcut = realm.where(Shortcut.class).equalTo("id",startId + i).findFirst();
+            if (shortcut != null && shortcut.getType() == Shortcut.TYPE_APP) {
+                try {
+                    bitmap1 = drawableToBitmap(packageManager.getApplicationIcon(shortcut.getPackageName()));
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+                if (bitmap1 != null) {
+                    bm1 = Bitmap.createScaledBitmap(bitmap1, smallWidth, smallHeight, false);
+                }
+                if (bm1 !=null && i == 0) {
+                    canvas.drawBitmap(bm1,0*mScale,0*mScale,paint);
+                } else if (bm1 != null && i == 1) {
+                    canvas.drawBitmap(bm1,24*mScale,0*mScale,paint);
+                }else if (bm1 != null && i == 2) {
+                    canvas.drawBitmap(bm1,0*mScale,24*mScale,paint);
+                }else if (bm1 != null && i == 3) {
+                    canvas.drawBitmap(bm1,24*mScale,24*mScale,paint);
+                }
+            }
+        }
+        Log.e(LOG_TAG, "finish getFolderThumnail = " + System.currentTimeMillis());
+
+        return bitmap;
     }
 
 

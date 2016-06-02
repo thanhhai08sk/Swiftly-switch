@@ -159,8 +159,8 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                     imageView.setImageResource(R.drawable.ic_icon_home);
                     imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                 }
-
-
+            } else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
+                imageView.setImageBitmap(Utility.getFolderThumbnail(myRealm,position,mContext));
             }
 
         }

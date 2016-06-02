@@ -63,8 +63,9 @@ public class AddAppToFolderDialogFragment  extends DialogFragment{
                 if (checkBox != null) {
                     if (checkBox.isChecked()) {
                         myRealm.beginTransaction();
-                        Shortcut removeShortcut = myRealm.where(Shortcut.class).equalTo("packageName",packageName).findFirst();
+                        Shortcut removeShortcut = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id", startId + 1000) .equalTo("packageName",packageName).findFirst();
                         int removeId = removeShortcut.getId();
+                        Log.e(LOG_TAG, "removeID = " + removeId);
                         removeShortcut.removeFromRealm();
                         RealmResults<Shortcut> results = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id",startId + 1000).findAll();
                         results.sort("id",true);
@@ -79,7 +80,7 @@ public class AddAppToFolderDialogFragment  extends DialogFragment{
                         }
                         myRealm.commitTransaction();
                     } else {
-                        if (size < 6) {
+                        if (size < 16) {
                             Shortcut newShortcut = new Shortcut();
                             newShortcut.setId(startId+ size);
 //                            Log.e(LOG_TAG, "size = " + size);

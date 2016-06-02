@@ -85,6 +85,7 @@
                 android:layout_gravity="center_horizontal|bottom"
                 android:fontFamily="sans-serif-medium"
                 android:layout_marginTop="8dp"
+                android:singleLine="true"
                 />
         </FrameLayout>
 </FrameLayout>
