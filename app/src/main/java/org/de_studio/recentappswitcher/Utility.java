@@ -59,6 +59,8 @@ import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -1664,7 +1666,18 @@ public  class Utility {
             }
         }
         Log.e(LOG_TAG, "finish getFolderThumnail = " + System.currentTimeMillis());
-
+        File myDir = context.getFilesDir();
+        String fname = "folder-"+ mPosition +".png";
+        File file = new File (myDir, fname);
+        if (file.exists ()) file.delete ();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return bitmap;
     }
 

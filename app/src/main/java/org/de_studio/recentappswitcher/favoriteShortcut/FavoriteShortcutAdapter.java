@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.favoriteShortcut;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
@@ -19,6 +20,8 @@ import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+
+import java.io.File;
 
 import io.realm.Realm;
 
@@ -160,7 +163,24 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                     imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                 }
             } else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
-                imageView.setImageBitmap(Utility.getFolderThumbnail(myRealm,position,mContext));
+                Log.e(LOG_TAG, "begin read bimap = " + System.currentTimeMillis());
+                File myDir = mContext.getFilesDir();
+                String fname = "folder-"+ position +".png";
+                File file = new File (myDir, fname);
+                if (!file.exists()) {
+                    Log.e(LOG_TAG, "create bitmap");
+                    imageView.setImageBitmap(Utility.getFolderThumbnail(myRealm, position, mContext));
+                } else {
+                    Log.e(LOG_TAG, "read bitmap");
+                    try {
+                        imageView.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "read thumbnail exeption" + e);
+                        e.printStackTrace();
+                    }
+                }
+                Log.e(LOG_TAG, "finish read bimap = " + System.currentTimeMillis());
+
             }
 
         }
