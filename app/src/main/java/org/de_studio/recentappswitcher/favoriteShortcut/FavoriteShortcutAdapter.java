@@ -24,6 +24,7 @@ import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 import java.io.File;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by hai on 2/14/2016.
@@ -179,6 +180,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                         e.printStackTrace();
                     }
                 }
+                imageView.setColorFilter(null);
                 Log.e(LOG_TAG, "finish read bimap = " + System.currentTimeMillis());
 
             }
@@ -224,14 +226,18 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         Realm myRealm = Realm.getInstance(mContext);
         Shortcut dropTemp = myRealm.where(Shortcut.class).equalTo("id", dropPosition).findFirst();
         Shortcut dragTemp = myRealm.where(Shortcut.class).equalTo("id", dragPosition).findFirst();
-        Shortcut shortcut5000 = myRealm.where(Shortcut.class).equalTo("id",5000).findFirst();
+        Shortcut shortcut5000 = myRealm.where(Shortcut.class).equalTo("id",500).findFirst();
+        Shortcut shortcut1500 = myRealm.where(Shortcut.class).equalTo("id", 1500).findFirst();
         myRealm.beginTransaction();
         if (shortcut5000 != null) {
             shortcut5000.removeFromRealm();
         }
+        if (shortcut1500 != null) {
+            shortcut1500.removeFromRealm();
+        }
 
         try {
-            dropTemp.setId(5000);
+            dropTemp.setId(500);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -247,6 +253,42 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
             dropTemp.setId(dragPosition);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if (dragTemp != null && dragTemp.getType() == Shortcut.TYPE_FOLDER) {
+            int size =(int ) myRealm.where(Shortcut.class).greaterThan("id", (dragPosition + 1) * 1000 - 1).lessThan("id", (dragPosition + 2) * 1000).count();
+            RealmResults realmResults = myRealm.where(Shortcut.class).greaterThan("id",1499).lessThan("id", 2000).findAll();
+            realmResults.clear();
+            Shortcut shortcut;
+            for (int i = 0; i < size; i++) {
+                shortcut = myRealm.where(Shortcut.class).equalTo("id",(1+ dragPosition)*1000 + i).findFirst();
+                if (shortcut != null) {
+                    shortcut.setId(1500+ i);
+                }
+            }
+
+        }
+        if (dropTemp != null && dropTemp.getType() == Shortcut.TYPE_FOLDER) {
+            int size =(int ) myRealm.where(Shortcut.class).greaterThan("id", (dropPosition + 1) * 1000 - 1).lessThan("id", (dropPosition + 2) * 1000).count();
+            Shortcut shortcut;
+            for (int i = 0; i < size; i++) {
+                shortcut = myRealm.where(Shortcut.class).equalTo("id",(1+ dropPosition)*1000 + i).findFirst();
+                if (shortcut != null) {
+                    shortcut.setId((dragPosition + 1) * 1000 + i);
+                }
+            }
+            Utility.getFolderThumbnail(myRealm, dragPosition, mContext);
+        }
+        if (dragTemp != null && dragTemp.getType() == Shortcut.TYPE_FOLDER) {
+            int size =(int ) myRealm.where(Shortcut.class).greaterThan("id", 1499).lessThan("id", 2000).count();
+            Shortcut shortcut;
+            for (int i = 0; i < size; i++) {
+                shortcut = myRealm.where(Shortcut.class).equalTo("id",1500 + i).findFirst();
+                if (shortcut != null) {
+                    shortcut.setId((dropPosition + 1) * 1000 + i);
+                }
+            }
+            Utility.getFolderThumbnail(myRealm, dropPosition, mContext);
         }
 
         myRealm.commitTransaction();
