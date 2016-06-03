@@ -1464,7 +1464,7 @@ public class EdgeGestureService extends Service {
                     if (shortcut != null) {
                         if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
                             label.setText(shortcut.getName());
-                        }else if (shortcut.getAction() != Shortcut.ACTION_NONE) {
+                        }else if (shortcut.getAction() != Shortcut.ACTION_NONE ) {
                             label.setText(shortcut.getLabel());
                         }else label.setText(null);
 
@@ -1482,6 +1482,16 @@ public class EdgeGestureService extends Service {
                     Utility.setShortcutDrawable(shortcut,getApplicationContext(),icon,iconPack, true);
                     if (shortcut == null) {
                         clearIndicator(1);
+                        label.setText("");
+                    } else {
+                            if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
+                                label.setText(shortcut.getName());
+                            }else if (shortcut.getAction() != Shortcut.ACTION_NONE || shortcut.getType() == Shortcut.TYPE_APP ||
+                                    shortcut.getType() == Shortcut.TYPE_ACTION) {
+                                label.setText(shortcut.getLabel());
+                            } else label.setText(null);
+
+
                     }
                 }
             }
