@@ -3,9 +3,13 @@ package org.de_studio.recentappswitcher.favoriteShortcut;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +18,6 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.MyApplication;
@@ -28,21 +31,41 @@ import io.realm.RealmResults;
 /**
  * Created by HaiNguyen on 6/3/16.
  */
-public class AddActionToFolderDialogFragment extends DialogFragment {
-    private static final String LOG_TAG = AddActionToFolderDialogFragment.class.getSimpleName();
+public class AddContactToFolderDialogFragment extends DialogFragment implements android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor>{
+    private static final String LOG_TAG = AddContactToFolderDialogFragment.class.getSimpleName();
     static ListView mListView;
-    private ProgressBar progressBar;
     private Realm myRealm;
     private int mPosition;
-    AddActionToFolderAdapter mAdapter;
+    AddContactToFolderAdapter mAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.add_favorite_app_fragment_list_view, container);
-        mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
+        return inflater.inflate(R.layout.add_favorite_app_fragment_list_view, container);
+    }
+
+    public void setmPosition(int position) {
+        mPosition = position;
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        return dialog;
+    }
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getActivity().stopService(new Intent(getActivity(), EdgeGestureService.class));
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mListView = (ListView) getView(). findViewById(R.id.add_favorite_list_view);
         myRealm = Realm.getDefaultInstance();
-        mAdapter = new AddActionToFolderAdapter(getActivity(), myRealm, mPosition);
+        mAdapter = new AddContactToFolderAdapter(getActivity(),null,0,mPosition);
         mListView.setAdapter(mAdapter);
         final int startId = (mPosition +1)*1000;
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -50,12 +73,15 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CheckBox checkBox = (CheckBox)view.findViewById(R.id.add_favorite_list_item_check_box);
                 int size = (int) myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id",startId + 1000).count();
-                String item =(String) mAdapter.getItem(position);
-                int action = Utility.getActionFromLabel(getActivity(), item);
+                String name = mAdapter.getCursor().getString(mAdapter.getCursor().getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                Long contactId = mAdapter.getCursor().getLong(mAdapter.getCursor().getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+
                 if (checkBox != null) {
                     if (checkBox.isChecked()) {
                         myRealm.beginTransaction();
-                        Shortcut removeShortcut = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id", startId + 1000).equalTo("type",Shortcut.TYPE_ACTION) .equalTo("action",action).findFirst();
+                        Shortcut removeShortcut = myRealm.where(Shortcut.class).greaterThan("id",startId -1).
+                                lessThan("id", startId + 1000).equalTo("type",Shortcut.TYPE_CONTACT) .
+                                equalTo("contactId",contactId).findFirst();
                         int removeId = removeShortcut.getId();
                         Log.e(LOG_TAG, "removeID = " + removeId);
                         removeShortcut.removeFromRealm();
@@ -76,9 +102,9 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
                             Shortcut newShortcut = new Shortcut();
                             newShortcut.setId(startId+ size);
 //                            Log.e(LOG_TAG, "size = " + size);
-                            newShortcut.setAction(action);
-                            newShortcut.setLabel(item);
-                            newShortcut.setType(Shortcut.TYPE_ACTION);
+                            newShortcut.setName(name);
+                            newShortcut.setContactId(contactId);
+                            newShortcut.setType(Shortcut.TYPE_CONTACT);
                             myRealm.beginTransaction();
                             myRealm.copyToRealm(newShortcut);
                             myRealm.commitTransaction();
@@ -92,25 +118,8 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
                 mAdapter.notifyDataSetChanged();
             }
         });
-//        progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
-//        progressBar.setVisibility(View.VISIBLE);
-        return rootView;
-    }
-
-    public void setmPosition(int position) {
-        mPosition = position;
-    }
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        return dialog;
-    }
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getActivity().stopService(new Intent(getActivity(), EdgeGestureService.class));
+        myRealm = Realm.getDefaultInstance();
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -124,5 +133,25 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
         super.onDismiss(dialog);
         ((AddAppToFolderDialogFragment.MyDialogCloseListener) getActivity()).handleDialogClose();
     }
+    @Override
+    public Loader<Cursor> onCreateLoader(int loaderId, Bundle args) {
+        return new CursorLoader(
+                getActivity(),
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+    }
 
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+        mAdapter.swapCursor(null);
+    }
 }

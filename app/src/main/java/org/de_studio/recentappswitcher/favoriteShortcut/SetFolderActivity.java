@@ -53,6 +53,10 @@ public class SetFolderActivity extends AppCompatActivity implements AddAppToFold
                                     newFragment1.show(fragmentManager1, "addActionToFolder");
                                     break;
                                 case 2:
+                                    FragmentManager fragmentManager2 = getSupportFragmentManager();
+                                    AddContactToFolderDialogFragment newFragment2 = new AddContactToFolderDialogFragment();
+                                    newFragment2.setmPosition(mPosition);
+                                    newFragment2.show(fragmentManager2, "addContactToFolder");
                                     break;
                             }
                         }
