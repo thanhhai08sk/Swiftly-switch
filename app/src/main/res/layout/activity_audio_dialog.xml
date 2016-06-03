@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    tools:context="org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity"
+    tools:mContext="org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity"
     >
     <ImageButton
         android:layout_width="wrap_content"

@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/list_app_background"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".favoriteShortcut.FavoriteSettingActivity"
+    tools:mContext=".favoriteShortcut.FavoriteSettingActivity"
     tools:showIn="@layout/activity_set_favorite_shortcut"
 
 

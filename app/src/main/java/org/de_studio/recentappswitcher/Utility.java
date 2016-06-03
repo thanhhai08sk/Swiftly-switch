@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
@@ -1336,7 +1337,7 @@ public  class Utility {
                 } catch (PackageManager.NameNotFoundException e) {
                     Log.e(LOG_TAG, "NameNotFound " + e);
                 }
-            }else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+            }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 switch (shortcut.getAction()) {
                     case Shortcut.ACTION_WIFI:
                         if (getWifiState(mContext)) {
@@ -1448,7 +1449,7 @@ public  class Utility {
             } else {
                 Log.e(LOG_TAG, "extApp of shortcut = null ");
             }
-        } else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+        } else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
             switch (shortcut.getAction()) {
                 case Shortcut.ACTION_WIFI:
                     Utility.toggleWifi(context);
@@ -1593,6 +1594,38 @@ public  class Utility {
 
     }
 
+    public static Drawable getDrawableForAction(Context context, int action) {
+        switch (action) {
+            case Shortcut.ACTION_WIFI:
+                return ContextCompat.getDrawable(context, R.drawable.ic_action_wifi_on);
+            case Shortcut.ACTION_BLUETOOTH:
+                return ContextCompat.getDrawable(context, R.drawable.ic_action_bluetooth_on);
+            case Shortcut.ACTION_ROTATION:
+                return ContextCompat.getDrawable(context, R.drawable.ic_action_rotate_on);
+            case Shortcut.ACTION_POWER_MENU:
+                return ContextCompat.getDrawable(context, R.drawable.ic_action_power_menu);
+            case Shortcut.ACTION_HOME:
+                return ContextCompat.getDrawable(context, R.drawable.ic_icon_home);
+            case Shortcut.ACTION_BACK:
+                return ContextCompat.getDrawable(context, R.drawable.ic_icon_back);
+            case Shortcut.ACTION_NOTI:
+                return ContextCompat.getDrawable(context, R.drawable.ic_icon_noti);
+            case Shortcut.ACTION_LAST_APP:
+                return ContextCompat.getDrawable(context, R.drawable.ic_icon_last_app);
+            case Shortcut.ACTION_CALL_LOGS:
+                return ContextCompat.getDrawable(context, R.drawable.ic_icon_call_log);
+            case Shortcut.ACTION_DIAL:
+                return ContextCompat.getDrawable(context, R.drawable.ic_icon_dial);
+            case Shortcut.ACTION_CONTACT:
+                return ContextCompat.getDrawable(context, R.drawable.ic_icon_contact);
+            case Shortcut.ACTION_RECENT:
+                return ContextCompat.getDrawable(context, R.drawable.ic_action_recent2);
+            case Shortcut.ACTION_NONE:
+                return null;
+        }
+        return null;
+    }
+
     public static int[] showFolder(Context context, GridView gridView, WindowManager windowManager, Realm realm,
                                   SharedPreferences sharedPreferences, int mPosition, float mScale, float mIconScale, FolderAdapter adapter) {
 //        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -1689,18 +1722,28 @@ public  class Utility {
                             break;
                     }
                 }
-//                if (bitmap1 != null) {
-//                    bm1 = Bitmap.createScaledBitmap(bitmap1, smallWidth, smallHeight, false);
-//                }
-//                if (bm1 !=null && i == 0) {
-//                    canvas.drawBitmap(bitmap1,0,0,textPaint);
-//                } else if (bm1 != null && i == 1) {
-//                    canvas.drawBitmap(bm1,24*mScale,0*mScale,textPaint);
-//                }else if (bm1 != null && i == 2) {
-//                    canvas.drawBitmap(bm1,0,coor2,textPaint);
-//                }else if (bm1 != null && i == 3) {
-//                    canvas.drawBitmap(bm1,coor2,coor2,textPaint);
-//                }
+            } else if (shortcut != null && shortcut.getType() == Shortcut.TYPE_ACTION) {
+                drawable = getDrawableForAction(context, shortcut.getAction());
+                if (drawable != null) {
+                    switch (i) {
+                        case 0:
+                            drawable.setBounds(0,0,smallWidth - gap1dp,smallHeight - gap1dp);
+                            drawable.draw(canvas);
+                            break;
+                        case 1:
+                            drawable.setBounds(smallWidth+ gap1dp,0,width,smallHeight - gap1dp);
+                            drawable.draw(canvas);
+                            break;
+                        case 2:
+                            drawable.setBounds(0,smallHeight+ gap1dp,smallWidth - gap1dp,height);
+                            drawable.draw(canvas);
+                            break;
+                        case 3:
+                            drawable.setBounds(smallWidth+ gap1dp,smallHeight + gap1dp,width,height);
+                            drawable.draw(canvas);
+                            break;
+                    }
+                }
             }
         }
         File myDir = context.getFilesDir();

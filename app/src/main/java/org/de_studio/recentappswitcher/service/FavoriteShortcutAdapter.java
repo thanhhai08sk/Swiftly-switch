@@ -113,7 +113,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                 } catch (PackageManager.NameNotFoundException e) {
                     Log.e(LOG_TAG, "NameNotFound " + e);
                 }
-            }else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+            }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 switch (shortcut.getAction()) {
                     case Shortcut.ACTION_WIFI:
                         if (Utility.getWifiState(mContext)) {

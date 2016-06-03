@@ -109,7 +109,7 @@ public class FolderAdapter extends BaseAdapter {
                 } catch (PackageManager.NameNotFoundException e) {
                     Log.e(LOG_TAG, "NameNotFound " + e);
                 }
-            }else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+            }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 switch (shortcut.getAction()) {
                     case Shortcut.ACTION_WIFI:
                         imageView.setImageResource(R.drawable.ic_action_wifi_on);

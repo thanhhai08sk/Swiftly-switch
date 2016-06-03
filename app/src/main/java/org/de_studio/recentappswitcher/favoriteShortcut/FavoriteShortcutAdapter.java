@@ -101,7 +101,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                 } catch (PackageManager.NameNotFoundException e) {
                     Log.e(LOG_TAG, "NameNotFound " + e);
                 }
-            }else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+            }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 switch (shortcut.getAction()) {
                     case Shortcut.ACTION_WIFI:
                         imageView.setImageResource(R.drawable.ic_action_wifi_on);
@@ -164,15 +164,15 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                     imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                 }
             } else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
-                Log.e(LOG_TAG, "begin read bimap = " + System.currentTimeMillis());
+//                Log.e(LOG_TAG, "begin read bimap = " + System.currentTimeMillis());
                 File myDir = mContext.getFilesDir();
                 String fname = "folder-"+ position +".png";
                 File file = new File (myDir, fname);
                 if (!file.exists()) {
-                    Log.e(LOG_TAG, "create bitmap");
+//                    Log.e(LOG_TAG, "create bitmap");
                     imageView.setImageBitmap(Utility.getFolderThumbnail(myRealm, position, mContext));
                 } else {
-                    Log.e(LOG_TAG, "read bitmap");
+//                    Log.e(LOG_TAG, "read bitmap");
                     try {
                         imageView.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
                     } catch (Exception e) {
@@ -181,7 +181,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                     }
                 }
                 imageView.setColorFilter(null);
-                Log.e(LOG_TAG, "finish read bimap = " + System.currentTimeMillis());
+//                Log.e(LOG_TAG, "finish read bimap = " + System.currentTimeMillis());
 
             }
 
@@ -303,11 +303,11 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                 int startId = (shortcut.getId() +1)*1000;
                 myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id",startId + 1000).findAll().clear();
             }
-            shortcut.setType(Shortcut.TYPE_SETTING);
+            shortcut.setType(Shortcut.TYPE_ACTION);
             shortcut.setAction(Shortcut.ACTION_NONE);
         } else {
             Shortcut shortcut1 = new Shortcut();
-            shortcut1.setType(Shortcut.TYPE_SETTING);
+            shortcut1.setType(Shortcut.TYPE_ACTION);
             shortcut1.setAction(Shortcut.ACTION_NONE);
             shortcut1.setId(dragPosition);
             myRealm.copyToRealm(shortcut1);

@@ -43,7 +43,7 @@ public class ActionListAdapter extends BaseAdapter {
         }
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         if (shortcut != null ) {
-            if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+            if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 mAction = shortcut.getAction();
             }else mAction = -1;
 
@@ -55,7 +55,7 @@ public class ActionListAdapter extends BaseAdapter {
         mPosition = position;
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         if (shortcut != null ) {
-            if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+            if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 mAction = shortcut.getAction();
             }else mAction = -1;
 
@@ -91,7 +91,7 @@ public class ActionListAdapter extends BaseAdapter {
         RadioButton radioButton = (RadioButton) view.findViewById(R.id.choose_app_radio_button);
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         if (shortcut != null) {
-            if (shortcut.getType() == Shortcut.TYPE_SETTING && mAction != -1 && mAction == Utility.getActionFromLabel(mContext, item)) {
+            if (shortcut.getType() == Shortcut.TYPE_ACTION && mAction != -1 && mAction == Utility.getActionFromLabel(mContext, item)) {
                 radioButton.setChecked(true);
             }else radioButton.setChecked(false);
         }else radioButton.setChecked(false);
@@ -140,7 +140,7 @@ public class ActionListAdapter extends BaseAdapter {
                     shortcut.setId(mPosition);
                     shortcut.setSize(0);
                 } else {
-                    shortcut.setType(Shortcut.TYPE_SETTING);
+                    shortcut.setType(Shortcut.TYPE_ACTION);
                     shortcut.setId(mPosition);
                     shortcut.setLabel(item);
                     shortcut.setAction(Utility.getActionFromLabel(mContext, item));

@@ -101,7 +101,7 @@ public class CircleFavoriteAdapter extends BaseAdapter {
                 } catch (PackageManager.NameNotFoundException e) {
                     Log.e(LOG_TAG, "NameNotFound " + e);
                 }
-            }else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+            }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 switch (shortcut.getAction()) {
                     case Shortcut.ACTION_WIFI:
                         icon.setImageResource(R.drawable.ic_action_wifi_on);
@@ -284,12 +284,12 @@ public class CircleFavoriteAdapter extends BaseAdapter {
         circleFavoRealm.beginTransaction();
         Shortcut shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", dragPosition).findFirst();
         if (shortcut != null) {
-            shortcut.setType(Shortcut.TYPE_SETTING);
+            shortcut.setType(Shortcut.TYPE_ACTION);
             shortcut.setAction(Shortcut.ACTION_NONE);
             shortcut.setLabel("");
         } else {
             Shortcut shortcut1 = new Shortcut();
-            shortcut1.setType(Shortcut.TYPE_SETTING);
+            shortcut1.setType(Shortcut.TYPE_ACTION);
             shortcut1.setAction(Shortcut.ACTION_NONE);
             shortcut1.setId(dragPosition);
             circleFavoRealm.copyToRealm(shortcut1);

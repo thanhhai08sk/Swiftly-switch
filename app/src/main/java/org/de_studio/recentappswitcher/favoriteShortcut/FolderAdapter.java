@@ -89,7 +89,7 @@ public class FolderAdapter extends BaseAdapter {
                 } catch (PackageManager.NameNotFoundException e) {
                     Log.e(LOG_TAG, "NameNotFound " + e);
                 }
-            }else if (shortcut.getType() == Shortcut.TYPE_SETTING) {
+            }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 label.setText(shortcut.getLabel());
                 switch (shortcut.getAction()) {
                     case Shortcut.ACTION_WIFI:
