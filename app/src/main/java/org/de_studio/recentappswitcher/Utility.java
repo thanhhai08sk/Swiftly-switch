@@ -18,7 +18,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
@@ -709,6 +708,7 @@ public  class Utility {
         if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
             bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
         } else {
+
             bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         }
 
@@ -1641,10 +1641,9 @@ public  class Utility {
     }
 
     public static Bitmap getFolderThumbnail(Realm realm, int mPosition, Context context) {
-        Log.e(LOG_TAG, "start getFolderThumnail = " + System.currentTimeMillis());
         float mScale = context. getResources().getDisplayMetrics().density;
         int width =(int)( 48*mScale);
-        int height = width;
+        int height = (int) (48 * mScale);
         int smallWidth, smallHeight;
         smallWidth = width/2;
         smallHeight = height/2;
@@ -1653,34 +1652,55 @@ public  class Utility {
         Bitmap.Config config = Bitmap.Config.ARGB_8888;
         Bitmap bitmap = Bitmap.createBitmap(width, height, config);
         Canvas canvas = new Canvas(bitmap);
-        Bitmap bitmap1 = null;
-        Bitmap bm1= null;
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Drawable drawable;
         Shortcut shortcut;
+        int gap1dp = (int) (mScale);
 
         for (int i = 0; i < 4; i++) {
+            drawable = null;
             shortcut = realm.where(Shortcut.class).equalTo("id",startId + i).findFirst();
             if (shortcut != null && shortcut.getType() == Shortcut.TYPE_APP) {
                 try {
-                    bitmap1 = drawableToBitmap(packageManager.getApplicationIcon(shortcut.getPackageName()));
+//                    bitmap1 = drawableToBitmap(packageManager.getApplicationIcon(shortcut.getPackageName()));
+                    drawable = packageManager.getApplicationIcon(shortcut.getPackageName());
+//                    bitmap1 = ((BitmapDrawable)(drawable)).getBitmap();
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
-                if (bitmap1 != null) {
-                    bm1 = Bitmap.createScaledBitmap(bitmap1, smallWidth, smallHeight, false);
+                if (drawable != null) {
+                    switch (i) {
+                        case 0:
+                            drawable.setBounds(0,0,smallWidth - gap1dp,smallHeight - gap1dp);
+                            drawable.draw(canvas);
+                            break;
+                        case 1:
+                            drawable.setBounds(smallWidth+ gap1dp,0,width,smallHeight - gap1dp);
+                            drawable.draw(canvas);
+                            break;
+                        case 2:
+                            drawable.setBounds(0,smallHeight+ gap1dp,smallWidth - gap1dp,height);
+                            drawable.draw(canvas);
+                            break;
+                        case 3:
+                            drawable.setBounds(smallWidth+ gap1dp,smallHeight + gap1dp,width,height);
+                            drawable.draw(canvas);
+                            break;
+                    }
                 }
-                if (bm1 !=null && i == 0) {
-                    canvas.drawBitmap(bm1,0*mScale,0*mScale,paint);
-                } else if (bm1 != null && i == 1) {
-                    canvas.drawBitmap(bm1,24*mScale,0*mScale,paint);
-                }else if (bm1 != null && i == 2) {
-                    canvas.drawBitmap(bm1,0*mScale,24*mScale,paint);
-                }else if (bm1 != null && i == 3) {
-                    canvas.drawBitmap(bm1,24*mScale,24*mScale,paint);
-                }
+//                if (bitmap1 != null) {
+//                    bm1 = Bitmap.createScaledBitmap(bitmap1, smallWidth, smallHeight, false);
+//                }
+//                if (bm1 !=null && i == 0) {
+//                    canvas.drawBitmap(bitmap1,0,0,textPaint);
+//                } else if (bm1 != null && i == 1) {
+//                    canvas.drawBitmap(bm1,24*mScale,0*mScale,textPaint);
+//                }else if (bm1 != null && i == 2) {
+//                    canvas.drawBitmap(bm1,0,coor2,textPaint);
+//                }else if (bm1 != null && i == 3) {
+//                    canvas.drawBitmap(bm1,coor2,coor2,textPaint);
+//                }
             }
         }
-        Log.e(LOG_TAG, "finish getFolderThumnail = " + System.currentTimeMillis());
         File myDir = context.getFilesDir();
         String fname = "folder-"+ mPosition +".png";
         File file = new File (myDir, fname);
