@@ -299,6 +299,10 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         myRealm.beginTransaction();
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id", dragPosition).findFirst();
         if (shortcut != null) {
+            if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
+                int startId = (shortcut.getId() +1)*1000;
+                myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id",startId + 1000).findAll().clear();
+            }
             shortcut.setType(Shortcut.TYPE_SETTING);
             shortcut.setAction(Shortcut.ACTION_NONE);
         } else {

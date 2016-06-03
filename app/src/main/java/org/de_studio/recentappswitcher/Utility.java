@@ -1627,8 +1627,10 @@ public  class Utility {
         folderGrid.setAdapter(adapter);
         if (x - gridWide / 2 + gridWide > gridX + gridView.getWidth()) {
             folderGrid.setX(gridX + gridView.getWidth() - gridWide);
+        } else if (x - gridWide / 2 < 10 * mScale) {
+            folderGrid.setX(10*mScale);
         } else {
-            folderGrid.setX(x - gridWide/2);
+            folderGrid.setX(x - gridWide / 2);
         }
 
         folderGrid.setY(y - gridTall + gridTall/gridRow);
