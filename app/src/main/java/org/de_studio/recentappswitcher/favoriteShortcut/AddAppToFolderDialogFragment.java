@@ -63,7 +63,7 @@ public class AddAppToFolderDialogFragment  extends DialogFragment{
                 if (checkBox != null) {
                     if (checkBox.isChecked()) {
                         myRealm.beginTransaction();
-                        Shortcut removeShortcut = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id", startId + 1000) .equalTo("packageName",packageName).findFirst();
+                        Shortcut removeShortcut = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id", startId + 1000).equalTo("type", Shortcut.TYPE_APP) .equalTo("packageName",packageName).findFirst();
                         int removeId = removeShortcut.getId();
                         Log.e(LOG_TAG, "removeID = " + removeId);
                         removeShortcut.removeFromRealm();
@@ -85,6 +85,7 @@ public class AddAppToFolderDialogFragment  extends DialogFragment{
                             newShortcut.setId(startId+ size);
 //                            Log.e(LOG_TAG, "size = " + size);
                             newShortcut.setPackageName(packageName);
+                            newShortcut.setType(Shortcut.TYPE_APP);
                             try {
                                 newShortcut.setLabel((String) getActivity().getPackageManager().getApplicationLabel(getActivity().getPackageManager().getApplicationInfo(packageName, 0)));
                             } catch (PackageManager.NameNotFoundException e) {
@@ -136,6 +137,7 @@ public class AddAppToFolderDialogFragment  extends DialogFragment{
         }
 
         super.onDismiss(dialog);
+        ((MyDialogCloseListener) getActivity()).handleDialogClose();
     }
 
     private class LoadInstalledApp extends AsyncTask<Void, Void, ArrayList<AppInfors>> {
@@ -179,5 +181,9 @@ public class AddAppToFolderDialogFragment  extends DialogFragment{
             }
 
         }
+    }
+    public interface MyDialogCloseListener
+    {
+        public void handleDialogClose();//or whatever args you want
     }
 }

@@ -41,9 +41,9 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.add_favorite_app_fragment_list_view, container);
         mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
+        myRealm = Realm.getDefaultInstance();
         mAdapter = new AddActionToFolderAdapter(getActivity(), myRealm, mPosition);
         mListView.setAdapter(mAdapter);
-        myRealm = Realm.getDefaultInstance();
         final int startId = (mPosition +1)*1000;
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -55,7 +55,7 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
                 if (checkBox != null) {
                     if (checkBox.isChecked()) {
                         myRealm.beginTransaction();
-                        Shortcut removeShortcut = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id", startId + 1000) .equalTo("action",action).findFirst();
+                        Shortcut removeShortcut = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id", startId + 1000).equalTo("type",Shortcut.TYPE_ACTION) .equalTo("action",action).findFirst();
                         int removeId = removeShortcut.getId();
                         Log.e(LOG_TAG, "removeID = " + removeId);
                         removeShortcut.removeFromRealm();
@@ -78,6 +78,7 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
 //                            Log.e(LOG_TAG, "size = " + size);
                             newShortcut.setAction(action);
                             newShortcut.setLabel(item);
+                            newShortcut.setType(Shortcut.TYPE_ACTION);
                             myRealm.beginTransaction();
                             myRealm.copyToRealm(newShortcut);
                             myRealm.commitTransaction();
@@ -123,6 +124,7 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
         }
 
         super.onDismiss(dialog);
+        ((AddAppToFolderDialogFragment.MyDialogCloseListener) getActivity()).handleDialogClose();
     }
 
 }

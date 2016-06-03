@@ -49,9 +49,9 @@ public class AddActionToFolderAdapter extends BaseAdapter {
         label.setText(item);
         int startId = (mPosition +1)* 1000;
         int action = Utility.getActionFromLabel(mContext, item);
-        checkBox.setChecked(myRealm.where(Shortcut.class).greaterThan("id", startId -1).lessThan("id",startId+1000) .equalTo("action",action).findFirst()!=null);
-
-
+        if (action != -1) {
+            checkBox.setChecked(myRealm.where(Shortcut.class).greaterThan("id", startId -1).lessThan("id",startId+1000).equalTo("type",Shortcut.TYPE_ACTION) .equalTo("action",action).findFirst()!=null);
+        }
         if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_wifi))) {
             icon.setImageResource(R.drawable.ic_action_wifi_on);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_bluetooth))) {

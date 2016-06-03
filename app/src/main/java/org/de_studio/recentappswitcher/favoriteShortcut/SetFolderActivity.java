@@ -11,7 +11,8 @@ import android.widget.ListView;
 
 import org.de_studio.recentappswitcher.R;
 
-public class SetFolderActivity extends AppCompatActivity {
+public class SetFolderActivity extends AppCompatActivity implements AddAppToFolderDialogFragment.MyDialogCloseListener{
+    private static final String LOG_TAG = SetFolderActivity.class.getSimpleName();
     private int mPosition;
     private FolderAdapter mAdapter;
 
@@ -46,6 +47,10 @@ public class SetFolderActivity extends AppCompatActivity {
                                     newFragment.show(fragmentManager, "addAppToFolder");
                                     break;
                                 case 1:
+                                    FragmentManager fragmentManager1 = getSupportFragmentManager();
+                                    AddActionToFolderDialogFragment newFragment1 = new AddActionToFolderDialogFragment();
+                                    newFragment1.setmPosition(mPosition);
+                                    newFragment1.show(fragmentManager1, "addActionToFolder");
                                     break;
                                 case 2:
                                     break;
@@ -57,5 +62,14 @@ public class SetFolderActivity extends AppCompatActivity {
             });
         }
 
+    }
+
+
+
+    @Override
+    public void handleDialogClose() {
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 }
