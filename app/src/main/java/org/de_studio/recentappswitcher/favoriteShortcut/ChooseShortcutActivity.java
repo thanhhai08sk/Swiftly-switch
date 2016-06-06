@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,6 +27,7 @@ import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 
 import java.io.IOException;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -34,7 +36,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
 
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private static final String LOG_TAG = ChooseShortcutActivity.class.getSimpleName();
+    private static final String TAG = ChooseShortcutActivity.class.getSimpleName();
     private int mPosition;
     private AppTabFragment mAppTabFragment;
     private ActionTabFragment mActionTabFragment;
@@ -55,7 +57,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
         super.onCreate(savedInstanceState);
         mPosition = getIntent().getFlags();
         mode = getIntent().getIntExtra("mode", FavoriteSettingActivity.MODE_GRID);
-        Log.e(LOG_TAG, "mode = " + mode);
+        Log.e(TAG, "mode = " + mode);
         mContext = this;
         setContentView(R.layout.activity_choose_shortcut);
 
@@ -150,7 +152,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
 //        results.addChangeListener(new RealmChangeListener() {
 //            @Override
 //            public void onChange() {
-//                Log.e(LOG_TAG, "onChange");
+//                Log.e(TAG, "onChange");
 //                setCurrentShortcutImageView();
 //            }
 //        });
@@ -212,7 +214,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
     }
 
     private void setCurrentShortcutImageView() {
-        Log.e(LOG_TAG, "setCurrentShortcutImageView");
+        Log.e(TAG, "setCurrentShortcutImageView");
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst();
         if (shortcut != null) {
             if (shortcut.getType() == Shortcut.TYPE_APP) {
@@ -220,7 +222,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                     currentShortcut.setImageDrawable(getApplicationContext().getPackageManager().getApplicationIcon(myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst().getPackageName()));
 
                 } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(LOG_TAG, "NameNotFound " + e);
+                    Log.e(TAG, "NameNotFound " + e);
                 }
             } else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 switch (shortcut.getAction()) {
@@ -308,7 +310,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
 
     @Override
     public void onAppChange() {
-        Log.e(LOG_TAG, "onAppChange");
+        Log.e(TAG, "onAppChange");
         setCurrentShortcutImageView();
         if (mSettingAdapter != null) {
             mSettingAdapter.notifyDataSetChanged();
@@ -330,5 +332,17 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
             mContactAdapter.notifyDataSetChanged();
         }
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.e(TAG, "onRequestPermissionsResult: ");
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if (fragments != null) {
+            for (Fragment fragment : fragments) {
+                fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            }
+        }
     }
 }

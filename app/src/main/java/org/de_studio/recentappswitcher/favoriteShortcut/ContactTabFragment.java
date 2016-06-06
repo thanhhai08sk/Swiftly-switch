@@ -91,19 +91,28 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
                 ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             permissionLayout.setVisibility(View.VISIBLE);
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.READ_CONTACTS)) {
-
-            } else {
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE,Manifest.permission.SEND_SMS},
-                        MY_PERMISSIONS_REQUEST);
-            }
 
         } else {
             getLoaderManager().initLoader(0, null, this);
             permissionLayout.setVisibility(View.GONE);
         }
+        permissionLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE,Manifest.permission.SEND_SMS},
+                        MY_PERMISSIONS_REQUEST);
+//                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+//                        Manifest.permission.READ_CONTACTS)) {
+//                    Log.e(TAG, "onClick: true");
+//
+//                } else {
+//                    ActivityCompat.requestPermissions(getActivity(),
+//                            new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE,Manifest.permission.SEND_SMS},
+//                            MY_PERMISSIONS_REQUEST);
+//                }
+            }
+        });
 
     }
 
@@ -176,6 +185,7 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.e(TAG, "onRequestPermissionsResult: ");
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST: {
                 Log.e(TAG, "onRequestPermissionsResult: result size = " + grantResults.length);
@@ -183,6 +193,7 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     getLoaderManager().initLoader(0, null, this);
                 }
+                permissionLayout.setVisibility(View.GONE);
             }
 
         }
