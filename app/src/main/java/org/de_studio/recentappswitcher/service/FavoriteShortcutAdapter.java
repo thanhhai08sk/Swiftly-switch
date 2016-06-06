@@ -3,10 +3,14 @@ package org.de_studio.recentappswitcher.service;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +25,7 @@ import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 
 import java.io.File;
+import java.io.IOException;
 
 import io.realm.Realm;
 
@@ -28,7 +33,7 @@ import io.realm.Realm;
  * Created by hai on 2/25/2016.
  */
 public class FavoriteShortcutAdapter extends BaseAdapter {
-    private static final String LOG_TAG = FavoriteShortcutAdapter.class.getSimpleName();
+    private static final String TAG = FavoriteShortcutAdapter.class.getSimpleName();
     private Context mContext;
     private SharedPreferences sharedPreferences;
     private IconPackManager.IconPack iconPack;
@@ -111,7 +116,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
 
                     }
                 } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(LOG_TAG, "NameNotFound " + e);
+                    Log.e(TAG, "NameNotFound " + e);
                 }
             }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 switch (shortcut.getAction()) {
@@ -171,12 +176,26 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                 }
             } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
                 String thumbnaiUri = shortcut.getThumbnaiUri();
+                Log.e(TAG, "getView: uri = " + thumbnaiUri );
                 if (thumbnaiUri != null) {
-                    Uri uri = Uri.parse(thumbnaiUri);
-                    imageView.setImageURI(uri);
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(thumbnaiUri));
+                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);
+                        drawable.setCircular(true);
+                        imageView.setImageDrawable(drawable);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        imageView.setImageResource(R.drawable.ic_icon_home);
+                    }
                 } else {
                     imageView.setImageResource(R.drawable.ic_icon_home);
                 }
+//                if (thumbnaiUri != null) {
+//                    Uri uri = Uri.parse(thumbnaiUri);
+//                    imageView.setImageURI(uri);
+//                } else {
+//                    imageView.setImageResource(R.drawable.ic_icon_home);
+//                }
             }else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
                 File myDir = mContext.getFilesDir();
                 String fname = "folder-"+ position +".png";
@@ -187,7 +206,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                     try {
                         imageView.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "read thumbnail exeption" + e);
+                        Log.e(TAG, "read thumbnail exeption" + e);
                         e.printStackTrace();
                     }
                 }

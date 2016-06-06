@@ -28,7 +28,7 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
         AdapterView.OnItemClickListener{
     private Realm myRealm;
     private int mPosition, mode;
-    private static final String LOG_TAG = ContactTabFragment.class.getSimpleName();
+    private static final String TAG = ContactTabFragment.class.getSimpleName();
     private static final String ARG_SECTION_NUMBER = "section_number";
     private final static String[] FROM_COLUMNS = {
             ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI,
@@ -105,7 +105,7 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
             try {
                 mAdapter.setmPositionAndMode(mPosition);
             } catch (NullPointerException e) {
-                Log.e(LOG_TAG, "mAdapter = null");
+                Log.e(TAG, "mAdapter = null");
             }
 
         }
@@ -126,17 +126,19 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
         String stringUri = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
         myRealm.beginTransaction();
         RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findAll();
-        Log.e(LOG_TAG, "mPosition = " + mPosition);
+        Log.e(TAG, "mPosition = " + mPosition);
         oldShortcut.clear();
         Shortcut shortcut = new Shortcut();
         shortcut.setType(Shortcut.TYPE_CONTACT);
         shortcut.setId(mPosition);
+        shortcut.setNumber(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+//        shortcut.setThumbnaiUri(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI)));
         shortcut.setContactId(cursor.getLong(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)));
         shortcut.setName(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)));
-        myRealm.copyToRealm(shortcut);
         if (stringUri != null) {
             shortcut.setThumbnaiUri(stringUri);
         }
+        myRealm.copyToRealm(shortcut);
         myRealm.commitTransaction();
         adapter.notifyDataSetChanged();
         adapter.getListener().onAppChange();
