@@ -2,8 +2,12 @@ package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.R;
+
+import java.io.IOException;
 
 import io.realm.Realm;
 
@@ -43,9 +49,18 @@ public class ContactCursorAdapter extends CursorAdapter {
         name.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)));
         String stringUri = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
         if (stringUri != null) {
-            Uri uri = Uri.parse(stringUri);
-            avatar.setImageURI(uri);
-        }else avatar.setImageResource(R.drawable.ic_icon_home);
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(stringUri));
+                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+                drawable.setCircular(true);
+                avatar.setImageDrawable(drawable);
+            } catch (IOException e) {
+                e.printStackTrace();
+                avatar.setImageResource(R.drawable.ic_icon_home);
+            }
+        } else {
+            avatar.setImageResource(R.drawable.ic_icon_home);
+        }
         if (shortcut != null && shortcut.getType() == Shortcut.TYPE_CONTACT && shortcut.getContactId() == contactId) {
             radioButton.setChecked(true);
         }else radioButton.setChecked(false);

@@ -3,10 +3,14 @@ package org.de_studio.recentappswitcher.favoriteShortcut;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
@@ -22,6 +26,7 @@ import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 
 import java.io.File;
+import java.io.IOException;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -30,7 +35,7 @@ import io.realm.RealmResults;
  * Created by hai on 2/14/2016.
  */
 public class FavoriteShortcutAdapter extends BaseAdapter {
-    private static final String LOG_TAG = FavoriteShortcutAdapter.class.getSimpleName();
+    private static final String TAG = FavoriteShortcutAdapter.class.getSimpleName();
     private Context mContext;
     private SharedPreferences sharedPreferences;
     private IconPackManager.IconPack iconPack;
@@ -99,7 +104,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                         imageView.setImageDrawable(defaultDrawable);
                     }
                 } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(LOG_TAG, "NameNotFound " + e);
+                    Log.e(TAG, "NameNotFound " + e);
                 }
             }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 switch (shortcut.getAction()) {
@@ -156,33 +161,39 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                 }
             } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
                 String thumbnaiUri = shortcut.getThumbnaiUri();
+                Log.e(TAG, "getView: thumbnail uii = "+ thumbnaiUri);
                 if (thumbnaiUri != null) {
-                    Uri uri = Uri.parse(thumbnaiUri);
-                    imageView.setImageURI(uri);
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(thumbnaiUri));
+                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);
+                        drawable.setCircular(true);
+                        imageView.setImageDrawable(drawable);
+                        imageView.setColorFilter(null);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        imageView.setImageResource(R.drawable.ic_icon_home);
+                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                    }
                 } else {
                     imageView.setImageResource(R.drawable.ic_icon_home);
                     imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+
                 }
             } else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
-//                Log.e(LOG_TAG, "begin read bimap = " + System.currentTimeMillis());
                 File myDir = mContext.getFilesDir();
                 String fname = "folder-"+ position +".png";
                 File file = new File (myDir, fname);
                 if (!file.exists()) {
-//                    Log.e(LOG_TAG, "create bitmap");
                     imageView.setImageBitmap(Utility.getFolderThumbnail(myRealm, position, mContext));
                 } else {
-//                    Log.e(LOG_TAG, "read bitmap");
                     try {
                         imageView.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "read thumbnail exeption" + e);
+                        Log.e(TAG, "read thumbnail exeption" + e);
                         e.printStackTrace();
                     }
                 }
                 imageView.setColorFilter(null);
-//                Log.e(LOG_TAG, "finish read bimap = " + System.currentTimeMillis());
-
             }
 
         }

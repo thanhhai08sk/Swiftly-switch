@@ -2,12 +2,16 @@ package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -19,6 +23,8 @@ import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+
+import java.io.IOException;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -261,10 +267,18 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
 
                 String thumbnaiUri = shortcut.getThumbnaiUri();
                 if (thumbnaiUri != null) {
-                    Uri uri = Uri.parse(thumbnaiUri);
-                    currentShortcut.setImageURI(uri);
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(thumbnaiUri));
+                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);
+                        drawable.setCircular(true);
+                        currentShortcut.setImageDrawable(drawable);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        currentShortcut.setImageResource(R.drawable.ic_icon_home);
+                    }
                 } else {
                     currentShortcut.setImageResource(R.drawable.ic_icon_home);
+
                 }
             }
         } else {

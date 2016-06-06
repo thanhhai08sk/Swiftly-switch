@@ -3,9 +3,13 @@ package org.de_studio.recentappswitcher.service;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +22,15 @@ import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 
+import java.io.IOException;
+
 import io.realm.Realm;
 
 /**
  * Created by HaiNguyen on 6/1/16.
  */
 public class FolderAdapter extends BaseAdapter {
-    private static final String LOG_TAG = FolderAdapter.class.getSimpleName();
+    private static final String TAG = FolderAdapter.class.getSimpleName();
     private Context mContext;
     private int mPosition;
     private Realm myRealm;
@@ -107,7 +113,7 @@ public class FolderAdapter extends BaseAdapter {
                         imageView.setImageDrawable(defaultDrawable);
                     }
                 } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(LOG_TAG, "NameNotFound " + e);
+                    Log.e(TAG, "NameNotFound " + e);
                 }
             }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 switch (shortcut.getAction()) {
@@ -153,8 +159,15 @@ public class FolderAdapter extends BaseAdapter {
             } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
                 String thumbnaiUri = shortcut.getThumbnaiUri();
                 if (thumbnaiUri != null) {
-                    Uri uri = Uri.parse(thumbnaiUri);
-                    imageView.setImageURI(uri);
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(thumbnaiUri));
+                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);
+                        drawable.setCircular(true);
+                        imageView.setImageDrawable(drawable);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        imageView.setImageResource(R.drawable.ic_icon_home);
+                    }
                 } else {
                     imageView.setImageResource(R.drawable.ic_icon_home);
                 }

@@ -3,9 +3,13 @@ package org.de_studio.recentappswitcher.favoriteShortcut;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -19,6 +23,8 @@ import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+
+import java.io.IOException;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -150,14 +156,21 @@ public class FolderAdapter extends BaseAdapter {
                 label.setText(shortcut.getName());
                 String thumbnaiUri = shortcut.getThumbnaiUri();
                 if (thumbnaiUri != null) {
-                    Uri uri = Uri.parse(thumbnaiUri);
-                    imageView.setImageURI(uri);
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(thumbnaiUri));
+                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);
+                        drawable.setCircular(true);
+                        imageView.setImageDrawable(drawable);
+                        imageView.setColorFilter(null);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        imageView.setImageResource(R.drawable.ic_icon_home);
+                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                    }
                 } else {
                     imageView.setImageResource(R.drawable.ic_icon_home);
                     imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                 }
-
-
             }
 
         }

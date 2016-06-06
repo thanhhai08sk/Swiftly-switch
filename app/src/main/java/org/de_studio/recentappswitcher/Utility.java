@@ -28,9 +28,12 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.CallLog;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
@@ -61,6 +64,7 @@ import org.de_studio.recentappswitcher.service.MyImageView;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -76,7 +80,7 @@ import io.realm.Realm;
  * Created by hai on 12/19/2015.
  */
 public  class Utility {
-    private static final String LOG_TAG = Utility.class.getSimpleName();
+    private static final String TAG = Utility.class.getSimpleName();
 //    public static int dpiToPixels (int dp, WindowManager windowManager){
 //        DisplayMetrics metrics =new DisplayMetrics();
 //        windowManager.getDefaultDisplay().getMetrics(metrics);
@@ -162,7 +166,7 @@ public  class Utility {
     }
 
     public static void setIconPositionNew(final MyImageView[] icon, float r, float icon_24_dp_pxl, int position, int x_i, int y_i, int n, boolean isAnimation, int animationTime) {
-        Log.e(LOG_TAG, "setIconPositionNew");
+        Log.e(TAG, "setIconPositionNew");
         double alpha, beta;
         if (animationTime <= 50) {
             isAnimation = false;
@@ -352,7 +356,7 @@ public  class Utility {
                 icon[5].setX((float) (x_init_cord - sin10 * icon_distance_pxl) - icon_24_dp_pxl);
                 icon[5].setY(y_init_cord + (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
                 int distance = x_init_cord - (int)icon[0].getX();
-                Log.e(LOG_TAG,"x_init - x0 = "+distance + "\nx_init = "+ x_init_cord );
+                Log.e(TAG,"x_init - x0 = "+distance + "\nx_init = "+ x_init_cord );
                 break;
             case 12:
                 icon[0].setX((float) (x_init_cord - sin10 * icon_distance_pxl) - icon_24_dp_pxl);
@@ -396,7 +400,7 @@ public  class Utility {
                 icon[5].setX((float) (x_init_cord + sin10 * icon_distance_pxl) - icon_24_dp_pxl);
                 icon[5].setY(y_init_cord + (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
                 int distance2 = x_init_cord - (int)icon[0].getX();
-                Log.e(LOG_TAG, "x_init - x0 = " + distance2 + "\nx_init = "+ x_init_cord);
+                Log.e(TAG, "x_init - x0 = " + distance2 + "\nx_init = "+ x_init_cord);
                 break;
             case 22:
                 icon[0].setX((float) (x_init_cord + sin10 * icon_distance_pxl) - icon_24_dp_pxl);
@@ -1026,7 +1030,7 @@ public  class Utility {
             }
             showsb.invoke(sbservice);
         } catch (ClassNotFoundException e) {
-            Log.e(LOG_TAG, "ClassNotFound " + e);
+            Log.e(TAG, "ClassNotFound " + e);
         } catch (NoSuchMethodException e) {
             AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
             event1.setClassName(className);
@@ -1053,7 +1057,7 @@ public  class Utility {
             if (Utility.isAccessibilityEnable(context)) {
                 manager.sendAccessibilityEvent(event1);
             }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-            Log.e(LOG_TAG, "IllegalAccessException " + e);
+            Log.e(TAG, "IllegalAccessException " + e);
         } catch (InvocationTargetException e) {
             AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
             event1.setClassName(className);
@@ -1067,7 +1071,7 @@ public  class Utility {
             if (Utility.isAccessibilityEnable(context)) {
                 manager.sendAccessibilityEvent(event1);
             }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
-            Log.e(LOG_TAG, "InvocationTargetException " + e);
+            Log.e(TAG, "InvocationTargetException " + e);
         }
     }
 
@@ -1093,8 +1097,8 @@ public  class Utility {
             startAppIntent.setFlags(270532608);
             startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
             context.startActivity(startAppIntent);
-            Log.e(LOG_TAG, "packageToSwitch = " + packageName);
-        } else Log.e(LOG_TAG, "extApp = null ");
+            Log.e(TAG, "packageToSwitch = " + packageName);
+        } else Log.e(TAG, "extApp = null ");
     }
 
     public static void callLogsAction(Context context) {
@@ -1241,7 +1245,7 @@ public  class Utility {
             level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
             scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
         } catch (NullPointerException e) {
-            Log.e(LOG_TAG, "Null when get battery life");
+            Log.e(TAG, "Null when get battery life");
             return 50;
         }
         // Error checking that probably isn't needed but I added just in case.
@@ -1257,7 +1261,7 @@ public  class Utility {
         ActivityManager mActivityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
         List <ActivityManager.RunningAppProcessInfo> l = mActivityManager.getRunningAppProcesses();
         Iterator<ActivityManager.RunningAppProcessInfo> i = l.iterator();
-        Log.e(LOG_TAG, "list size = " + l.size());
+        Log.e(TAG, "list size = " + l.size());
         while(i.hasNext()){
             info = i.next();
             if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
@@ -1266,7 +1270,7 @@ public  class Utility {
                     resultInfo = info;
                     break;
                 } else {
-                    Log.e(LOG_TAG, "info = " + info.processName);
+                    Log.e(TAG, "info = " + info.processName);
                 }
             }
         }
@@ -1335,7 +1339,7 @@ public  class Utility {
                         imageView.setImageDrawable(defaultDrawable);
                     }
                 } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(LOG_TAG, "NameNotFound " + e);
+                    Log.e(TAG, "NameNotFound " + e);
                 }
             }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 switch (shortcut.getAction()) {
@@ -1415,11 +1419,28 @@ public  class Utility {
                     try {
                         imageView.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "read thumbnail exeption" + e);
+                        Log.e(TAG, "read thumbnail exeption" + e);
                         e.printStackTrace();
                     }
                 }
 
+            } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
+                String thumbnaiUri = shortcut.getThumbnaiUri();
+                if (thumbnaiUri != null) {
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(thumbnaiUri));
+                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);
+                        drawable.setCircular(true);
+                        imageView.setImageDrawable(drawable);
+                        imageView.setColorFilter(null);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        imageView.setImageResource(R.drawable.ic_icon_home);
+                    }
+                } else {
+                    imageView.setImageResource(R.drawable.ic_icon_home);
+
+                }
             }
 
         }
@@ -1447,7 +1468,7 @@ public  class Utility {
                 context.startActivity(startAppIntent);
 //                                    startActivity(extApp);
             } else {
-                Log.e(LOG_TAG, "extApp of shortcut = null ");
+                Log.e(TAG, "extApp of shortcut = null ");
             }
         } else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
             switch (shortcut.getAction()) {
@@ -1667,7 +1688,7 @@ public  class Utility {
         }
 
         folderGrid.setY(y - gridTall + gridTall/gridRow);
-        Log.e(LOG_TAG,"gridX = " + gridX + "\nGridY = " + gridY +  "\nfolder x = " + folderGrid.getX() + "\nfolder y= " + folderGrid.getY() );
+        Log.e(TAG,"gridX = " + gridX + "\nGridY = " + gridY +  "\nfolder x = " + folderGrid.getX() + "\nfolder y= " + folderGrid.getY() );
         folderGrid.setVisibility(View.VISIBLE);
         return new int[]{(int) folderGrid.getX(), (int) folderGrid.getY(), gridRow, gridColumn, mPosition};
 
