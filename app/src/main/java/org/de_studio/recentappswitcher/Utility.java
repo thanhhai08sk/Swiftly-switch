@@ -158,7 +158,7 @@ public  class Utility {
             }
         }
         if (folderMode) {
-            if (smallestDistance > 80 * mScale) {
+            if (smallestDistance > 105 * mScale) {
                 return -2;
             }
         }
