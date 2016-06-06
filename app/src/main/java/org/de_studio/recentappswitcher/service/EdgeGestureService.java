@@ -1393,6 +1393,7 @@ public class EdgeGestureService extends Service {
                 }
                 removeView(itemView);
                 switched = true;
+
 //                removeView(clockView);
 //                if (clockView != null) {
 //                    clockView.findViewById(R.id.clock_linear_layout).setVisibility(View.GONE);
@@ -1410,13 +1411,14 @@ public class EdgeGestureService extends Service {
                 switched = true;
 
 
+
             }
         }
 
         private void clearIconBackground() {
             if (iconIdBackgrounded != -2) {
                 if (iconIdBackgrounded < iconImageArrayList.size()) {
-                    Log.e(LOG_TAG, "Clear Icon Background");
+                    Log.e(LOG_TAG, "Clear Icon Background test test2 test3 test4 test5");
                     ImageView iconResetBackground = iconImageArrayList.get(iconIdBackgrounded);
                     FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(iconResetBackground.getLayoutParams());
                     layoutParams1.width = (int) (48 * mScale * mIconScale);

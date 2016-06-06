@@ -17,7 +17,11 @@ android {
             applicationId "org.de_studio.recentappswitcher.pro"
             dimension "version"
         }
-
+        fastbuild {
+            minSdkVersion 21
+            applicationId 'org.de_studio.recentappswitcher.fastbuild'
+            dimension "version"
+        }
     }
     dexOptions {
         maxProcessCount 4 // this is the default value
