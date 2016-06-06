@@ -1091,7 +1091,7 @@ public class EdgeGestureService extends Service {
                                     if (shortcut != null && shortcut.getType() == Shortcut.TYPE_FOLDER && !folderShown && !onFolderAnimator) {
                                         positionOfFolder = shortcutToSwitch;
                                         folderAdapter = new FolderAdapter(getApplicationContext(),shortcutToSwitch);
-                                        folderAnimator = shortcutGridView.animate().setDuration(2000).alpha(0f).setListener(new Animator.AnimatorListener() {
+                                        folderAnimator = shortcutGridView.animate().setDuration(holdTime + 300).alpha(0f).setListener(new Animator.AnimatorListener() {
                                             boolean isCancel = false;
                                             CircleAngleAnimation angleAnimation;
                                             @Override
@@ -1100,7 +1100,7 @@ public class EdgeGestureService extends Service {
                                                 circle.setVisibility(View.VISIBLE);
                                                 circle.setAngle(0);
                                                 angleAnimation = new CircleAngleAnimation(circle, 270);
-                                                angleAnimation.setDuration(2000);
+                                                angleAnimation.setDuration(holdTime + 300);
                                                 circle.startAnimation(angleAnimation);
 
                                             }
