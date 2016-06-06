@@ -339,10 +339,10 @@ public class FavoriteSettingActivity extends AppCompatActivity {
                         // do nothing
                         break;
                     case DragEvent.ACTION_DRAG_ENTERED:
-                        v.setBackgroundResource(R.color.redButton);
+                        v.setBackgroundResource(R.drawable.delete_button_red);
                         break;
                     case DragEvent.ACTION_DRAG_EXITED:
-                        v.setBackground(null);
+                        v.setBackgroundResource(R.drawable.delete_button_normal);
                         break;
                     case DragEvent.ACTION_DROP:
                         View view = (View) event.getLocalState();
@@ -355,7 +355,7 @@ public class FavoriteSettingActivity extends AppCompatActivity {
 
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
-                        v.setBackground(null);
+                        v.setBackgroundResource(R.drawable.delete_button_normal);
                         v.setVisibility(View.GONE);
 
                     default:
