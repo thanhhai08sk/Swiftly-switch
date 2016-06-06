@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
@@ -275,6 +276,8 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                     } catch (IOException e) {
                         e.printStackTrace();
                         currentShortcut.setImageResource(R.drawable.ic_icon_home);
+                    }catch (SecurityException e) {
+                        Toast.makeText(mContext, mContext.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
                     }
                 } else {
                     currentShortcut.setImageResource(R.drawable.ic_icon_home);

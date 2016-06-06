@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
@@ -173,6 +174,8 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                         e.printStackTrace();
                         imageView.setImageResource(R.drawable.ic_icon_home);
                         imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                    } catch (SecurityException e) {
+                        Toast.makeText(mContext, mContext.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
                     }
                 } else {
                     imageView.setImageResource(R.drawable.ic_icon_home);

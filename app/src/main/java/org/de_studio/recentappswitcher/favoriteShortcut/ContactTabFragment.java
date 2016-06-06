@@ -1,10 +1,15 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
@@ -12,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import org.de_studio.recentappswitcher.R;
@@ -30,26 +36,9 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
     private int mPosition, mode;
     private static final String TAG = ContactTabFragment.class.getSimpleName();
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private final static String[] FROM_COLUMNS = {
-            ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI,
-            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
-    };
-    private static final int CONTACT_ID_INDEX = 0;
-    private static final int LOOKUP_KEY_INDEX = 1;
-
-
-    private static final String[] PROJECTION =
-            {
-                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                    ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI,
-                    ContactsContract.CommonDataKinds.Phone.NUMBER
-
-            };
-
-    private final static int[] TO_IDS = {
-            android.R.id.text1
-    };
+    private static final int MY_PERMISSIONS_REQUEST = 222;
     ListView mContactsList;
+    LinearLayout permissionLayout;
     long mContactId;
     String mContactKey;
     Uri mContactUri;
@@ -85,6 +74,7 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
         super.onActivityCreated(savedInstanceState);
         mContactsList =
                 (ListView) getActivity().findViewById(R.id.list_view);
+        permissionLayout = (LinearLayout) getActivity().findViewById(R.id.permission_missing);
         mAdapter = new ContactCursorAdapter(getActivity(), null, 0, mPosition);
         mContactsList.setAdapter(mAdapter);
         mContactsList.setOnItemClickListener(this);
@@ -96,7 +86,25 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
 //                null,
 //                FROM_COLUMNS, TO_IDS,
 //                0);
-        getLoaderManager().initLoader(0, null, this);
+
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            permissionLayout.setVisibility(View.VISIBLE);
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.READ_CONTACTS)) {
+
+            } else {
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE,Manifest.permission.SEND_SMS},
+                        MY_PERMISSIONS_REQUEST);
+            }
+
+        } else {
+            getLoaderManager().initLoader(0, null, this);
+            permissionLayout.setVisibility(View.GONE);
+        }
+
     }
 
     public void setmPositioinToNext() {
@@ -164,5 +172,19 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
     @Override
     public void onLoaderReset(Loader loader) {
         mAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST: {
+                Log.e(TAG, "onRequestPermissionsResult: result size = " + grantResults.length);
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getLoaderManager().initLoader(0, null, this);
+                }
+            }
+
+        }
     }
 }
