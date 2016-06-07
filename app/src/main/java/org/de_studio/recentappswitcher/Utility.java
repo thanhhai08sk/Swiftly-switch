@@ -1,6 +1,5 @@
 package org.de_studio.recentappswitcher;
 
-import android.Manifest;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.animation.Animator;
 import android.app.ActivityManager;
@@ -58,6 +57,7 @@ import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
+import org.de_studio.recentappswitcher.service.ChooseActionDialogActivity;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
 import org.de_studio.recentappswitcher.service.FolderAdapter;
@@ -1534,13 +1534,18 @@ public  class Utility {
             }
         } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
             String url = "tel:"+ shortcut.getNumber();
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            } else {
-                Toast.makeText(context, context.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
-            }
+            Intent intent = new Intent(context, ChooseActionDialogActivity.class);
+            intent.putExtra("number", shortcut.getNumber());
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+
+//            if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+//                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                context.startActivity(intent);
+//            } else {
+//                Toast.makeText(context, context.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
+//            }
         }
     }
 

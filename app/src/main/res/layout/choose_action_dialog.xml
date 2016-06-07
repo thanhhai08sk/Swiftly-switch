@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:columnCount="2"
+    app:rowCount="3">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="@string/choose_action"
+        android:textColor="@color/black"
+        style="@android:style/TextAppearance.DialogWindowTitle"
+        app:layout_columnSpan="2"
+        app:layout_gravity="center_horizontal"
+        />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_icon_home"
+        android:id="@+id/action_call"
+        tools:tint="@color/black"
+        app:layout_columnWeight="1"
+        app:layout_gravity="center"
+        android:padding="8dp"
+        />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_icon_home"
+        android:id="@+id/action_sms"
+        tools:tint="@color/black"
+        app:layout_columnWeight="1"
+        app:layout_gravity="center"
+        android:padding="8dp"
+
+
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_columnSpan="2"
+        >
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/use_as_default_check_box"
+            app:layout_columnWeight="0"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="@string/use_as_default"
+            app:layout_columnWeight="1"
+            app:layout_gravity="start"
+            />
+    </LinearLayout>
+
+
+</android.support.v7.widget.GridLayout>

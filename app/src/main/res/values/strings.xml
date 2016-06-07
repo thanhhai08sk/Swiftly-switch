@@ -157,5 +157,7 @@
     <string name="enable_require_permissions_to_use_this_feature">Enable require permissions to use this feature</string>
     <string name="missing_contact_permission">Missing contact related permissions</string>
     <string name="missing_call_phone_permission">Missing call phone permission</string>
+    <string name="choose_action">Choose action</string>
+    <string name="use_as_default">Use as default</string>
 
 </resources>
