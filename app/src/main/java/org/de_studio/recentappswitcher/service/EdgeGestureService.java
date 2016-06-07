@@ -614,7 +614,7 @@ public class EdgeGestureService extends Service {
                         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
                         long currentTimeMillis = System.currentTimeMillis() + 5000;
 //                        android.os.SystemClock.uptimeMillis()
-                        List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 3000 * 1000, currentTimeMillis);
+                        List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
                         ArrayList<String> tempPackageName = new ArrayList<String>();
                         if (stats != null) {
                             SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(DATE_DECENDING_COMPARATOR);
