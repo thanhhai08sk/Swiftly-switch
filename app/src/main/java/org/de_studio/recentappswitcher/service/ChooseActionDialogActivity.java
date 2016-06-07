@@ -97,6 +97,7 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
 
                         ChooseActionDialogActivity.this.startActivity(callIntent);
                     }
+                    finish();
                 }
             });
         }
@@ -110,6 +111,7 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
                             Toast.makeText(ChooseActionDialogActivity.this,
                                     "SMS faild, please try again later.", Toast.LENGTH_SHORT).show();
                         }
+                    finish();
                     }
 
             });
