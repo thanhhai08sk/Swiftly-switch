@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.service;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -12,10 +13,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 
 public class ChooseActionDialogActivity extends AppCompatActivity {
@@ -50,7 +51,7 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        CheckBox checkBox = (CheckBox) dialog.findViewById(R.id.use_as_default_check_box);
+        final CheckBox checkBox = (CheckBox) dialog.findViewById(R.id.use_as_default_check_box);
         ImageView callImage = (ImageView) dialog.findViewById(R.id.action_call);
         ImageView smsImage = (ImageView) dialog.findViewById(R.id.action_sms);
 
@@ -80,18 +81,14 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
 
 
 
-        if (checkBox != null) {
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    Toast.makeText(ChooseActionDialogActivity.this, "CheckBox clicked", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
         if (callImage != null && canCall) {
             callImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (checkBox.isChecked()) {
+                        SharedPreferences sharedPreferences = ChooseActionDialogActivity.this.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
+                        sharedPreferences.edit().putInt(EdgeSetting.CONTACT_ACTION, EdgeSetting.ACTION_CALL).apply();
+                    }
                     if (ContextCompat.checkSelfPermission(ChooseActionDialogActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
 
                         ChooseActionDialogActivity.this.startActivity(callIntent);
@@ -104,6 +101,10 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
             smsImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (checkBox.isChecked()) {
+                        SharedPreferences sharedPreferences = ChooseActionDialogActivity.this.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
+                        sharedPreferences.edit().putInt(EdgeSetting.CONTACT_ACTION, EdgeSetting.ACTION_SMS).apply();
+                    }
                         try {
                             startActivity(smsIntent);
                         } catch (android.content.ActivityNotFoundException ex) {

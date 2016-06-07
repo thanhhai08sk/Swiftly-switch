@@ -134,7 +134,6 @@ public class EdgeGestureService extends Service {
     private String[] savedPackage;
     private int[] instantFavoAction;
     private boolean useInstantFavo, onInstantFavo;
-    private int contactAction;
 
     @Nullable
     @Override
@@ -937,7 +936,7 @@ public class EdgeGestureService extends Service {
 
                         }
                         if (shortcut != null) {
-                            Utility.startShortcut(getApplicationContext(),shortcut,v,getClass().getName(),getPackageName(),lastAppPackageName, contactAction);
+                            Utility.startShortcut(getApplicationContext(),shortcut,v,getClass().getName(),getPackageName(),lastAppPackageName, defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 0));
                         } else if (shortcutToSwitch >=0 && !folderShown) {
                             Toast.makeText(getApplicationContext(), getString(R.string.please_add_favorite_item), Toast.LENGTH_LONG).show();
                             if (onInstantFavo) {
@@ -1815,7 +1814,6 @@ public class EdgeGestureService extends Service {
             useInstantFavo = true;
         }else instantFavoAction[3] = -1;
 
-        contactAction = defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 2);
 
     }
 
