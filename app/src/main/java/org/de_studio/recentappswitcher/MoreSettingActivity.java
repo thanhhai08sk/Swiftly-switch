@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
@@ -50,6 +51,7 @@ public class MoreSettingActivity extends AppCompatActivity {
         ImageButton holdTimeSettingButton = (ImageButton) findViewById(R.id.main_hold_time_setting_image_button);
         ImageButton animationTimeSettingButton = (ImageButton) findViewById(R.id.main_animation_time_setting_image_button);
         ImageButton iconPackSettingButton = (ImageButton) findViewById(R.id.main_icon_pack_support_setting_button);
+        ImageButton contactActionSettingButton = (ImageButton) findViewById(R.id.main_contact_action_setting_button);
         SwitchCompat hapticFeedbackOnTriggerSwitch = (SwitchCompat) findViewById(R.id.main_disable_haptic_feedback_switch);
         SwitchCompat hapticFeedbackOnItemSwitch = (SwitchCompat) findViewById(R.id.main_haptic_feedback_on_item_switch);
         SwitchCompat disableClockSwitch = (SwitchCompat) findViewById(R.id.main_disable_clock_switch);
@@ -63,46 +65,67 @@ public class MoreSettingActivity extends AppCompatActivity {
 
 
         disableAnimationSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.ANIMATION_KEY,false));
-        iconPackSettingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isTrial) {
-                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MoreSettingActivity.this);
-                    builder.setMessage(R.string.main_icon_pack_trial_dialog_message)
-                            .setPositiveButton(R.string.main_edge_switch_2_trial_buy_pro_button, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Uri uri = Uri.parse("mbarket://details?id=" + PRO_VERSION_PACKAGE_NAME);
-                                    Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
-                                    gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                                            Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                                    try {
-                                        startActivity(gotoMarket);
-                                    } catch (ActivityNotFoundException e) {
-                                        startActivity(new Intent(Intent.ACTION_VIEW,
-                                                Uri.parse("http://play.google.com/store/apps/details?id=" + PRO_VERSION_PACKAGE_NAME)));
+        if (iconPackSettingButton != null) {
+            iconPackSettingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isTrial) {
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MoreSettingActivity.this);
+                        builder.setMessage(R.string.main_icon_pack_trial_dialog_message)
+                                .setPositiveButton(R.string.main_edge_switch_2_trial_buy_pro_button, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Uri uri = Uri.parse("mbarket://details?id=" + PRO_VERSION_PACKAGE_NAME);
+                                        Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+                                        gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                                                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                                        try {
+                                            startActivity(gotoMarket);
+                                        } catch (ActivityNotFoundException e) {
+                                            startActivity(new Intent(Intent.ACTION_VIEW,
+                                                    Uri.parse("http://play.google.com/store/apps/details?id=" + PRO_VERSION_PACKAGE_NAME)));
+                                        }
                                     }
-                                }
-                            })
-                            .setNegativeButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                                })
+                                .setNegativeButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                });
+                        builder.show();
+
+
+                    } else {
+                        android.app.FragmentManager fragmentManager = getFragmentManager();
+                        IconPackSettingDialogFragment newFragment = new IconPackSettingDialogFragment();
+                        newFragment.show(fragmentManager, "iconPackDialogFragment");
+                    }
+
+                }
+            });
+        }
+
+        if (contactActionSettingButton != null) {
+            contactActionSettingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int current = sharedPreferencesDefautl.getInt(EdgeSetting.CONTACT_ACTION, 0);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MoreSettingActivity.this);
+                    builder.setTitle(R.string.default_action_for_contact).
+                            setSingleChoiceItems(R.array.contact_action, current, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // do nothing
+                                    sharedPreferencesDefautl.edit().putInt(EdgeSetting.CONTACT_ACTION, which);
                                 }
-                            });
-                    builder.show();
-
-
-                } else {
-                    android.app.FragmentManager fragmentManager = getFragmentManager();
-                    IconPackSettingDialogFragment newFragment = new IconPackSettingDialogFragment();
-                    newFragment.show(fragmentManager, "iconPackDialogFragment");
+                            }).
+                            setPositiveButton(R.string.app_tab_fragment_ok_button, null);
+                    builder.create().show();
                 }
+            });
+        }
 
-            }
-        });
-
-                hapticFeedbackOnTriggerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        hapticFeedbackOnTriggerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.DISABLE_HAPTIC_FEEDBACK_KEY, !isChecked).commit();

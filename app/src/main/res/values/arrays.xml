@@ -77,4 +77,9 @@
         <item>@string/grid_mode</item>
         <item>@string/semi_circle_mode</item>
     </string-array>
+    <string-array name="contact_action">
+        <item>@string/choose</item>
+        <item>@string/call</item>
+        <item>@string/sms</item>
+    </string-array>
 </resources>

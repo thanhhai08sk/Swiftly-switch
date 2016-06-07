@@ -168,6 +168,49 @@
 
 
             <android.support.v7.widget.GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            app:rowCount="1"
+            app:columnCount="2"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/main_icon_pack_support"
+                android:textSize="16sp"
+                app:layout_column="0"
+                app:layout_row="0"
+                app:layout_columnWeight="1"
+                app:layout_gravity="center_vertical"
+                />
+            <ImageButton
+                android:id="@+id/main_icon_pack_support_setting_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:background="@color/transparent"
+                android:paddingLeft="16dp"
+                android:paddingRight="10dp"
+                android:tint="@color/grey"
+                android:src="@drawable/ic_edit_white_24dp" />
+
+        </android.support.v7.widget.GridLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
+                />
+
+            <android.support.v7.widget.GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:orientation="horizontal"
@@ -183,7 +226,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:paddingBottom="8dp"
-                    android:text="@string/main_icon_pack_support"
+                    android:text="@string/default_action_for_contact"
                     android:textSize="16sp"
                     app:layout_column="0"
                     app:layout_row="0"
@@ -191,7 +234,7 @@
                     app:layout_gravity="center_vertical"
                     />
                 <ImageButton
-                    android:id="@+id/main_icon_pack_support_setting_button"
+                    android:id="@+id/main_contact_action_setting_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"

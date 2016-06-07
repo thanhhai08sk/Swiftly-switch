@@ -159,5 +159,9 @@
     <string name="missing_call_phone_permission">Missing call phone permission</string>
     <string name="choose_action">Choose action</string>
     <string name="use_as_default">Use as default</string>
+    <string name="default_action_for_contact">Default action for contacts</string>
+    <string name="choose">Choose</string>
+    <string name="call">Call</string>
+    <string name="sms">SMS</string>
 
 </resources>
