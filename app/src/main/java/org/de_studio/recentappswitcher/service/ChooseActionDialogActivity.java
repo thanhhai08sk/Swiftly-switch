@@ -89,7 +89,7 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
                 }
             });
         }
-        if (callImage != null) {
+        if (callImage != null && canCall) {
             callImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -100,11 +100,10 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
                 }
             });
         }
-        if (smsImage != null) {
+        if (smsImage != null && canSms) {
             smsImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (ContextCompat.checkSelfPermission(ChooseActionDialogActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
                         try {
                             startActivity(smsIntent);
                         } catch (android.content.ActivityNotFoundException ex) {
@@ -112,7 +111,7 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
                                     "SMS faild, please try again later.", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }
+
             });
         }
 

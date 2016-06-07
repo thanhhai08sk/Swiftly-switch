@@ -88,8 +88,7 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
 //                0);
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             permissionLayout.setVisibility(View.VISIBLE);
 
         } else {
@@ -100,7 +99,7 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
             @Override
             public void onClick(View v) {
                 ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE,Manifest.permission.SEND_SMS},
+                        new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE},
                         MY_PERMISSIONS_REQUEST);
             }
         });

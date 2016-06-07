@@ -3,6 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@color/white"
+    android:padding="16dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:columnCount="2"
@@ -18,9 +19,9 @@
         app:layout_gravity="center_horizontal"
         />
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_icon_home"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        tools:src="@drawable/ic_icon_home"
         android:id="@+id/action_call"
         tools:tint="@color/black"
         app:layout_columnWeight="1"
@@ -28,9 +29,9 @@
         android:padding="8dp"
         />
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_icon_home"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        tools:src="@drawable/ic_icon_home"
         android:id="@+id/action_sms"
         tools:tint="@color/black"
         app:layout_columnWeight="1"
