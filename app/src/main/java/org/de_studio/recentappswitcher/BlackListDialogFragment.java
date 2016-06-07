@@ -22,7 +22,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
-import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,7 +52,7 @@ public class BlackListDialogFragment extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String packageName = appInforsArrayList.get(position).packageName;
-                Set<String> set = sharedPreferenceExclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, null);
+                Set<String> set = sharedPreferenceExclude.getStringSet(EdgeSetting.EXCLUDE_KEY, null);
                 if (set == null) {
                     set = new HashSet<String>();
                 }
@@ -61,7 +61,7 @@ public class BlackListDialogFragment extends DialogFragment {
                 if (setClone.contains(packageName)) {
                     setClone.remove(packageName);
                 }else setClone.add(packageName);
-                sharedPreferenceExclude.edit().putStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, setClone).commit();
+                sharedPreferenceExclude.edit().putStringSet(EdgeSetting.EXCLUDE_KEY, setClone).commit();
                 mAdapter.notifyDataSetChanged();
             }
         });

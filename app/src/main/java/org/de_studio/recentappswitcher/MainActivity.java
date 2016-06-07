@@ -33,7 +33,7 @@ import android.widget.Toast;
 import org.de_studio.recentappswitcher.favoriteShortcut.FavoriteSettingActivity;
 import org.de_studio.recentappswitcher.intro.IntroActivity;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
-import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.util.ArrayList;
 
@@ -112,9 +112,9 @@ public class MainActivity extends Activity {
         sharedPreferencesDefautl = getSharedPreferences(DEFAULT_SHAREDPREFERENCE, 0);
         sharedPreferences_favorite = getSharedPreferences(FAVORITE_SHAREDPREFERENCE, 0);
         sharedPreferences_exclude = getSharedPreferences(EXCLUDE_SHAREDPREFERENCE, 0);
-        beginTime = sharedPreferencesDefautl.getLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY, 0);
+        beginTime = sharedPreferencesDefautl.getLong(EdgeSetting.BEGIN_DAY_KEY, 0);
         if (beginTime == 0) {
-            sharedPreferencesDefautl.edit().putLong(EdgeSettingDialogFragment.BEGIN_DAY_KEY, System.currentTimeMillis()).commit();
+            sharedPreferencesDefautl.edit().putLong(EdgeSetting.BEGIN_DAY_KEY, System.currentTimeMillis()).commit();
             beginTime = System.currentTimeMillis();
         }
         if (System.currentTimeMillis() - beginTime > trialTime) isOutOfTrial = true;
@@ -166,9 +166,9 @@ public class MainActivity extends Activity {
             }
         });
 
-        if (!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, false)) {
-            int timeOpen = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.APP_OPEN_TIME_KEY, 0);
-            sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.APP_OPEN_TIME_KEY, timeOpen + 1).commit();
+        if (!sharedPreferencesDefautl.getBoolean(EdgeSetting.HAS_REACT_FOR_VOTE_KEY, false)) {
+            int timeOpen = sharedPreferencesDefautl.getInt(EdgeSetting.APP_OPEN_TIME_KEY, 0);
+            sharedPreferencesDefautl.edit().putInt(EdgeSetting.APP_OPEN_TIME_KEY, timeOpen + 1).commit();
             if (timeOpen >= 4) {
 
                 final LinearLayout doYouLoveLinearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.do_you_love_this_app, null);
@@ -178,14 +178,14 @@ public class MainActivity extends Activity {
                 noButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, true).commit();
+                        sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.HAS_REACT_FOR_VOTE_KEY, true).commit();
                         appBarLayout.removeView(doYouLoveLinearLayout);
                     }
                 });
                 yesButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, true).commit();
+                        sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.HAS_REACT_FOR_VOTE_KEY, true).commit();
                         appBarLayout.removeView(doYouLoveLinearLayout);
                         Uri uri = Uri.parse("mbarket://details?id=" + getPackageName());
                         Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -209,7 +209,7 @@ public class MainActivity extends Activity {
 //                                .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
 //                                    @Override
 //                                    public void onClick(DialogInterface dialog, int which) {
-//                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, true).commit();
+//                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.HAS_REACT_FOR_VOTE_KEY, true).commit();
 //                                        appBarLayout.removeView(doYouLoveLinearLayout);
 //                                        Uri uri = Uri.parse("mbarket://details?id=" + getPackageName());
 //                                        Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -226,7 +226,7 @@ public class MainActivity extends Activity {
 //                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
 //                                    @Override
 //                                    public void onClick(DialogInterface dialog, int which) {
-//                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAS_REACT_FOR_VOTE_KEY, true).commit();
+//                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.HAS_REACT_FOR_VOTE_KEY, true).commit();
 //                                        appBarLayout.removeView(doYouLoveLinearLayout);
 //                                        // d
 //                                    }
@@ -254,13 +254,13 @@ public class MainActivity extends Activity {
         final LinearLayout shareFriendLinearLayout = (LinearLayout) findViewById(R.id.main_share_linear_layout);
         LinearLayout reviewLinearLayout = (LinearLayout) findViewById(R.id.main_review_linear_layout);
         LinearLayout emailLinearLayout = (LinearLayout) findViewById(R.id.main_email_linear_layout);
-//        hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, true));
-//        hapticFeedbackOnItemSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY,false));
-//        disableClockSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY,false));
-//        disableAnimationSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY,true));
-//        holdTimeSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HOLD_TIME_ENABLE_KEY,true));
-        edge1Switch.setChecked(sharedPreferences1.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, true));
-        edge2Switch.setChecked(sharedPreferences2.getBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, false));
+//        hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferencesDefautl.getBoolean(EdgeSetting.DISABLE_HAPTIC_FEEDBACK_KEY, true));
+//        hapticFeedbackOnItemSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.HAPTIC_ON_ICON_KEY,false));
+//        disableClockSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY,false));
+//        disableAnimationSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.ANIMATION_KEY,true));
+//        holdTimeSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.HOLD_TIME_ENABLE_KEY,true));
+        edge1Switch.setChecked(sharedPreferences1.getBoolean(EdgeSetting.EDGE_ON_KEY, true));
+        edge2Switch.setChecked(sharedPreferences2.getBoolean(EdgeSetting.EDGE_ON_KEY, false));
         if (isTrial) {
             edge2Switch.setChecked(false);
         }
@@ -268,7 +268,7 @@ public class MainActivity extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                sharedPreferences1.edit().putBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, isChecked).commit();
+                sharedPreferences1.edit().putBoolean(EdgeSetting.EDGE_ON_KEY, isChecked).commit();
                 if (!isChecked && !edge2Switch.isChecked()) {
                     stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
                 } else {
@@ -317,7 +317,7 @@ public class MainActivity extends Activity {
                         stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
                         startService(new Intent(getApplicationContext(), EdgeGestureService.class));
                     }
-                    sharedPreferences2.edit().putBoolean(EdgeSettingDialogFragment.EDGE_ON_KEY, isChecked).commit();
+                    sharedPreferences2.edit().putBoolean(EdgeSetting.EDGE_ON_KEY, isChecked).commit();
 
                 }
 
@@ -336,31 +336,31 @@ public class MainActivity extends Activity {
 //        hapticFeedbackOnTriggerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
 //            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, !isChecked).commit();
+//                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.DISABLE_HAPTIC_FEEDBACK_KEY, !isChecked).commit();
 //            }
 //        });
 //        hapticFeedbackOnItemSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
 //            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY,isChecked).commit();
+//                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.HAPTIC_ON_ICON_KEY,isChecked).commit();
 //            }
 //        });
 //        disableClockSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
 //            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY,isChecked).commit();
+//                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.DISABLE_CLOCK_KEY,isChecked).commit();
 //            }
 //        });
 //        disableAnimationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
 //            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.ANIMATION_KEY,isChecked).commit();
+//                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.ANIMATION_KEY,isChecked).commit();
 //            }
 //        });
 //        holdTimeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
 //            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HOLD_TIME_ENABLE_KEY, isChecked).commit();
+//                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.HOLD_TIME_ENABLE_KEY, isChecked).commit();
 //            }
 //        });
 //        step2Button = (Button) findViewById(R.id.step2_button);
@@ -422,9 +422,9 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
 //                FragmentManager fragmentManager = getSupportFragmentManager();
                 android.app.FragmentManager fragmentManager = getFragmentManager();
-                EdgeSettingDialogFragment newFragment = new EdgeSettingDialogFragment();
+                EdgeSetting newFragment = new EdgeSetting();
                 Bundle bundle = new Bundle();
-                bundle.putInt(EdgeSettingDialogFragment.EDGE_NUMBER_KEY, 1);
+                bundle.putInt(EdgeSetting.EDGE_NUMBER_KEY, 1);
                 newFragment.setArguments(bundle);
 //                FragmentTransaction transaction = fragmentManager.beginTransaction();
                 android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -439,9 +439,9 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 android.app.FragmentManager fragmentManager = getFragmentManager();
-                EdgeSettingDialogFragment newFragment = new EdgeSettingDialogFragment();
+                EdgeSetting newFragment = new EdgeSetting();
                 Bundle bundle = new Bundle();
-                bundle.putInt(EdgeSettingDialogFragment.EDGE_NUMBER_KEY, 2);
+                bundle.putInt(EdgeSetting.EDGE_NUMBER_KEY, 2);
                 newFragment.setArguments(bundle);
                 android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -595,7 +595,7 @@ public class MainActivity extends Activity {
 
 //    public void showDialog() {
 ////        FragmentManager fragmentManager = getSupportFragmentManager();
-//        EdgeSettingDialogFragment newFragment = new EdgeSettingDialogFragment();
+//        EdgeSetting newFragment = new EdgeSetting();
 ////        FragmentTransaction transaction = fragmentManager.beginTransaction();
 ////        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 ////        transaction.add(android.R.id.content, newFragment)

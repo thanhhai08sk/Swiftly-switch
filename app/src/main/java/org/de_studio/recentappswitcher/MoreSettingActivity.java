@@ -22,7 +22,7 @@ import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
-import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 public class MoreSettingActivity extends AppCompatActivity {
 
@@ -56,13 +56,13 @@ public class MoreSettingActivity extends AppCompatActivity {
         SwitchCompat disableAnimationSwitch = (SwitchCompat) findViewById(R.id.main_disable_animation_switch);
         SwitchCompat holdTimeSwitch = (SwitchCompat) findViewById(R.id.main_hold_time_switch);
 
-        hapticFeedbackOnItemSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY,false));
-        hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY,true));
-        disableClockSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY,false));
-        holdTimeSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.HOLD_TIME_ENABLE_KEY,true));
+        hapticFeedbackOnItemSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.HAPTIC_ON_ICON_KEY,false));
+        hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferencesDefautl.getBoolean(EdgeSetting.DISABLE_HAPTIC_FEEDBACK_KEY,true));
+        disableClockSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY,false));
+        holdTimeSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.HOLD_TIME_ENABLE_KEY,true));
 
 
-        disableAnimationSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSettingDialogFragment.ANIMATION_KEY,false));
+        disableAnimationSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.ANIMATION_KEY,false));
         iconPackSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,31 +105,31 @@ public class MoreSettingActivity extends AppCompatActivity {
                 hapticFeedbackOnTriggerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.DISABLE_HAPTIC_FEEDBACK_KEY, !isChecked).commit();
+                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.DISABLE_HAPTIC_FEEDBACK_KEY, !isChecked).commit();
             }
         });
         hapticFeedbackOnItemSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HAPTIC_ON_ICON_KEY,isChecked).commit();
+                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.HAPTIC_ON_ICON_KEY,isChecked).commit();
             }
         });
         disableClockSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.DISABLE_CLOCK_KEY,isChecked).commit();
+                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.DISABLE_CLOCK_KEY,isChecked).commit();
             }
         });
         disableAnimationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.ANIMATION_KEY,isChecked).commit();
+                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.ANIMATION_KEY,isChecked).commit();
             }
         });
         holdTimeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferencesDefautl.edit().putBoolean(EdgeSettingDialogFragment.HOLD_TIME_ENABLE_KEY, isChecked).commit();
+                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.HOLD_TIME_ENABLE_KEY, isChecked).commit();
             }
         });
 
@@ -141,7 +141,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                 View view = View.inflate(MoreSettingActivity.this, R.layout.dialog_vibration_duration_setting, null);
                 SeekBar seekBar = (SeekBar) view.findViewById(R.id.dialog_vibration_duration_seek_bar);
                 final TextView textView = (TextView) view.findViewById(R.id.dialog_vibration_duration_value);
-                int currentValue = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.VIBRATION_DURATION_KEY, 15);
+                int currentValue = sharedPreferencesDefautl.getInt(EdgeSetting.VIBRATION_DURATION_KEY, 15);
                 textView.setText(currentValue +" ms");
                 seekBar.setProgress(currentValue - 5);
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -159,7 +159,7 @@ public class MoreSettingActivity extends AppCompatActivity {
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.VIBRATION_DURATION_KEY,progressChanged).commit();
+                        sharedPreferencesDefautl.edit().putInt(EdgeSetting.VIBRATION_DURATION_KEY,progressChanged).commit();
                         stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
                         startService(new Intent(getApplicationContext(), EdgeGestureService.class));
                     }
@@ -183,7 +183,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                 View view = View.inflate(MoreSettingActivity.this, R.layout.dialog_icon_size_setting, null);
                 SeekBar seekBar = (SeekBar) view.findViewById(R.id.dialog_icon_size_seek_bar);
                 final TextView textView = (TextView) view.findViewById(R.id.dialog_icon_size_value);
-                int currentValue =(int) (sharedPreferencesDefautl.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f) * 100);
+                int currentValue =(int) (sharedPreferencesDefautl.getFloat(EdgeSetting.ICON_SCALE, 1f) * 100);
                 textView.setText(currentValue +" %");
                 seekBar.setProgress(currentValue - 70);
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -201,7 +201,7 @@ public class MoreSettingActivity extends AppCompatActivity {
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        sharedPreferencesDefautl.edit().putFloat(EdgeSettingDialogFragment.ICON_SCALE, ((float) progressChanged) / 100).commit();
+                        sharedPreferencesDefautl.edit().putFloat(EdgeSetting.ICON_SCALE, ((float) progressChanged) / 100).commit();
                         stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
                         startService(new Intent(getApplicationContext(), EdgeGestureService.class));
                     }
@@ -221,7 +221,7 @@ public class MoreSettingActivity extends AppCompatActivity {
         backgroundColorSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int currentColor = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY,1879048192);
+                int currentColor = sharedPreferencesDefautl.getInt(EdgeSetting.BACKGROUND_COLOR_KEY,1879048192);
                 ColorPickerDialogBuilder
                         .with(MoreSettingActivity.this)
                         .setTitle(getApplicationContext().getString(R.string.main_set_background_color))
@@ -236,7 +236,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                         .setPositiveButton("ok", new ColorPickerClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-                                sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.BACKGROUND_COLOR_KEY,selectedColor).commit();
+                                sharedPreferencesDefautl.edit().putInt(EdgeSetting.BACKGROUND_COLOR_KEY,selectedColor).commit();
                                 stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
                                 startService(new Intent(getApplicationContext(), EdgeGestureService.class));
                             }
@@ -254,7 +254,7 @@ public class MoreSettingActivity extends AppCompatActivity {
         guideColorSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int currentColor = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY, Color.argb(255, 255, 64, 129));
+                int currentColor = sharedPreferencesDefautl.getInt(EdgeSetting.GUIDE_COLOR_KEY, Color.argb(255, 255, 64, 129));
                 ColorPickerDialogBuilder
                         .with(MoreSettingActivity.this)
                         .setTitle(getApplicationContext().getString(R.string.main_set_guide_color))
@@ -269,7 +269,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                         .setPositiveButton("ok", new ColorPickerClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-                                sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.GUIDE_COLOR_KEY,selectedColor).commit();
+                                sharedPreferencesDefautl.edit().putInt(EdgeSetting.GUIDE_COLOR_KEY,selectedColor).commit();
                                 stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
                                 startService(new Intent(getApplicationContext(), EdgeGestureService.class));
                             }
@@ -291,7 +291,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                 View view = View.inflate(MoreSettingActivity.this, R.layout.dialog_hold_time_setting, null);
                 SeekBar seekBar = (SeekBar) view.findViewById(R.id.dialog_hold_time_seek_bar);
                 final TextView textView = (TextView) view.findViewById(R.id.dialog_hold_time_value);
-                int currentValue = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.HOLD_TIME_KEY, 600);
+                int currentValue = sharedPreferencesDefautl.getInt(EdgeSetting.HOLD_TIME_KEY, 600);
                 textView.setText(currentValue +" ms");
                 seekBar.setProgress(currentValue - 300);
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -310,7 +310,7 @@ public class MoreSettingActivity extends AppCompatActivity {
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.HOLD_TIME_KEY, progressChanged).commit();
+                        sharedPreferencesDefautl.edit().putInt(EdgeSetting.HOLD_TIME_KEY, progressChanged).commit();
                         stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
                         startService(new Intent(getApplicationContext(), EdgeGestureService.class));
                     }
@@ -335,7 +335,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                 View view = View.inflate(MoreSettingActivity.this, R.layout.dialog_ani_time_setting, null);
                 SeekBar seekBar = (SeekBar) view.findViewById(R.id.dialog_ani_time_seek_bar);
                 final TextView textView = (TextView) view.findViewById(R.id.dialog_ani_time_value);
-                int currentValue = sharedPreferencesDefautl.getInt(EdgeSettingDialogFragment.ANI_TIME_KEY, 100);
+                int currentValue = sharedPreferencesDefautl.getInt(EdgeSetting.ANI_TIME_KEY, 100);
                 textView.setText(currentValue +" ms");
                 seekBar.setProgress(currentValue);
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -354,7 +354,7 @@ public class MoreSettingActivity extends AppCompatActivity {
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        sharedPreferencesDefautl.edit().putInt(EdgeSettingDialogFragment.ANI_TIME_KEY, progressChanged).commit();
+                        sharedPreferencesDefautl.edit().putInt(EdgeSetting.ANI_TIME_KEY, progressChanged).commit();
                         stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
                         startService(new Intent(getApplicationContext(), EdgeGestureService.class));
                     }

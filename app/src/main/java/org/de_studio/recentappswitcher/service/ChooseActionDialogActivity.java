@@ -33,9 +33,8 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
 
         final Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
                 + number));
+        smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ResolveInfo calRes = getPackageManager().resolveActivity(callIntent, 0);
-
-
         ResolveInfo smsRes = getPackageManager().resolveActivity(smsIntent, 0);
 
 

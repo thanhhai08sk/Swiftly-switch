@@ -17,7 +17,7 @@ import com.mobeta.android.dslv.DragSortListView;
 
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
-import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -41,7 +41,7 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
         packageManager = context.getPackageManager();
         pinRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("pinApp.realm").build());
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
-        String iconPackPacka = sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "none");
+        String iconPackPacka = sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none");
         if (!iconPackPacka.equals("none")) {
             IconPackManager iconPackManager = new IconPackManager();
             iconPackManager.setContext(mContext);

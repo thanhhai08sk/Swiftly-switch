@@ -24,7 +24,7 @@ import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,8 +48,8 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     public FavoriteShortcutAdapter(Context context) {
         mContext = context;
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
-        mIconScale = sharedPreferences.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f);
-        String iconPackPacka = sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "none");
+        mIconScale = sharedPreferences.getFloat(EdgeSetting.ICON_SCALE, 1f);
+        String iconPackPacka = sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none");
         if (!iconPackPacka.equals("none")) {
             IconPackManager iconPackManager = new IconPackManager();
             iconPackManager.setContext(mContext);

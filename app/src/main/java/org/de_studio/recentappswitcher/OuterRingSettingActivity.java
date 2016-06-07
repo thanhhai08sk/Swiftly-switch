@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
-import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 public class OuterRingSettingActivity extends AppCompatActivity {
     private static final String LOG_TAG = OuterRingSettingActivity.class.getSimpleName();
@@ -63,16 +63,16 @@ public class OuterRingSettingActivity extends AppCompatActivity {
                                 try {
                                     switch (position) {
                                         case 0:
-                                            sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_1_KEY, listAction[which]).commit();
+                                            sharedPreferences.edit().putString(EdgeSetting.ACTION_1_KEY, listAction[which]).commit();
                                             break;
                                         case 1:
-                                            sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_2_KEY, listAction[which]).commit();
+                                            sharedPreferences.edit().putString(EdgeSetting.ACTION_2_KEY, listAction[which]).commit();
                                             break;
                                         case 2:
-                                            sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_3_KEY, listAction[which]).commit();
+                                            sharedPreferences.edit().putString(EdgeSetting.ACTION_3_KEY, listAction[which]).commit();
                                             break;
                                         case 3:
-                                            sharedPreferences.edit().putString(EdgeSettingDialogFragment.ACTION_4_KEY, listAction[which]).commit();
+                                            sharedPreferences.edit().putString(EdgeSetting.ACTION_4_KEY, listAction[which]).commit();
                                             break;
                                     }
                                 } catch (ArrayIndexOutOfBoundsException e) {

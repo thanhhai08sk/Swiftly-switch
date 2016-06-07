@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 /**
  * Created by hai on 3/5/2016.
@@ -65,16 +65,16 @@ public class OuterRingAdapter extends BaseAdapter {
         String cuttentAction= MainActivity.ACTION_NONE;
         switch (position) {
             case 0:
-                cuttentAction = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_1_KEY, MainActivity.ACTION_HOME);
+                cuttentAction = sharedPreferences.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_HOME);
                 break;
             case 1:
-                cuttentAction = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_2_KEY, MainActivity.ACTION_BACK);
+                cuttentAction = sharedPreferences.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_BACK);
                 break;
             case 2:
-                cuttentAction = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_LAST_APP);
+                cuttentAction = sharedPreferences.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_LAST_APP);
                 break;
             case 3:
-                cuttentAction = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_4_KEY, MainActivity.ACTION_NOTI);
+                cuttentAction = sharedPreferences.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
                 break;
         }
         label.setText(Utility.getLabelForOuterSetting(mContext, cuttentAction));

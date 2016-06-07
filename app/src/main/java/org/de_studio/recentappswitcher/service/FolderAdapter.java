@@ -48,13 +48,13 @@ public class FolderAdapter extends BaseAdapter {
         myRealm = Realm.getDefaultInstance();
         folderShortcut = myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst();
         sharedPreferences = context.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
-        String iconPackPacka = sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "none");
+        String iconPackPacka = sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none");
         if (!iconPackPacka.equals("none")) {
             IconPackManager iconPackManager = new IconPackManager();
             iconPackManager.setContext(mContext);
             iconPack = iconPackManager.getInstance(iconPackPacka);
         }
-        mIconScale = sharedPreferences.getFloat(EdgeSettingDialogFragment.ICON_SCALE,1f);
+        mIconScale = sharedPreferences.getFloat(EdgeSetting.ICON_SCALE,1f);
         backgroundMode = false;
         iconPadding =(int) mContext.getResources().getDimension(R.dimen.icon_padding);
     }

@@ -27,7 +27,7 @@ import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
-import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 public class FavoriteSettingActivity extends AppCompatActivity {
     private FavoriteShortcutAdapter mAdapter;
@@ -59,11 +59,11 @@ public class FavoriteSettingActivity extends AppCompatActivity {
         defaultSharedPreference = getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         final SharedPreferences edge1Shared = getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE,0);
         final SharedPreferences edge2Shared = getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
-        int gridRow = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
-        int gridColumn = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
-        int shortcutGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 5);
+        int gridRow = defaultSharedPreference.getInt(EdgeSetting.NUM_OF_GRID_ROW_KEY, 5);
+        int gridColumn = defaultSharedPreference.getInt(EdgeSetting.NUM_OF_GRID_COLUMN_KEY, 4);
+        int shortcutGap = defaultSharedPreference.getInt(EdgeSetting.GAP_OF_SHORTCUT_KEY, 5);
         mScale = getResources().getDisplayMetrics().density;
-        mIconScale = defaultSharedPreference.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f);
+        mIconScale = defaultSharedPreference.getFloat(EdgeSetting.ICON_SCALE, 1f);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         gridView = (GridView) findViewById(R.id.favorite_shortcut_grid_view);
         clearButton = (ImageView) findViewById(R.id.clear_button);
@@ -85,18 +85,18 @@ public class FavoriteSettingActivity extends AppCompatActivity {
         final ListView listView = (ListView) findViewById(R.id.favorite_circle_list_view);
         CheckBox setCircleEdge1 = (CheckBox) findViewById(R.id.set_circle_edge_1_check_box);
         CheckBox setCircleEdge2 = (CheckBox) findViewById(R.id.set_circle_edge_2_check_box);
-        setCircleEdge1.setChecked(edge1Shared.getInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 1) == 3);
-        setCircleEdge2.setChecked(edge2Shared.getInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 1) == 3);
+        setCircleEdge1.setChecked(edge1Shared.getInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 1) == 3);
+        setCircleEdge2.setChecked(edge2Shared.getInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 1) == 3);
         setCircleEdge1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    edge1Shared.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 3).commit();
+                    edge1Shared.edit().putInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 3).commit();
                 } else {
-                    if (edge1Shared.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false)) {
-                        edge1Shared.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 2).commit();
+                    if (edge1Shared.getBoolean(EdgeSetting.IS_ONLY_FAVORITE_KEY, false)) {
+                        edge1Shared.edit().putInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 2).commit();
                     } else {
-                        edge1Shared.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 1).commit();
+                        edge1Shared.edit().putInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 1).commit();
                     }
                 }
                 getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
@@ -108,12 +108,12 @@ public class FavoriteSettingActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    edge2Shared.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 3).commit();
+                    edge2Shared.edit().putInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 3).commit();
                 } else {
-                    if (edge2Shared.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false)) {
-                        edge2Shared.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 2).commit();
+                    if (edge2Shared.getBoolean(EdgeSetting.IS_ONLY_FAVORITE_KEY, false)) {
+                        edge2Shared.edit().putInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 2).commit();
                     } else {
-                        edge2Shared.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 1).commit();
+                        edge2Shared.edit().putInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 1).commit();
                     }
                 }
                 getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
@@ -159,12 +159,12 @@ public class FavoriteSettingActivity extends AppCompatActivity {
         }
 
 
-        int currentRowSpinnerPosition = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY,5)-1;
+        int currentRowSpinnerPosition = defaultSharedPreference.getInt(EdgeSetting.NUM_OF_GRID_ROW_KEY,5)-1;
         gridRowSpinner.setSelection(currentRowSpinnerPosition);
         gridRowSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, position + 1).commit();
+                defaultSharedPreference.edit().putInt(EdgeSetting.NUM_OF_GRID_ROW_KEY, position + 1).commit();
                 updateGridView();
                 getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
                 getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
@@ -176,12 +176,12 @@ public class FavoriteSettingActivity extends AppCompatActivity {
             }
         });
 
-        int currentColumnSpinnerPosition = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY,4)-1;
+        int currentColumnSpinnerPosition = defaultSharedPreference.getInt(EdgeSetting.NUM_OF_GRID_COLUMN_KEY,4)-1;
         gridColumnSpinner.setSelection(currentColumnSpinnerPosition);
         gridColumnSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, position + 1).commit();
+                defaultSharedPreference.edit().putInt(EdgeSetting.NUM_OF_GRID_COLUMN_KEY, position + 1).commit();
                 updateGridView();
                 getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
                 getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
@@ -194,13 +194,13 @@ public class FavoriteSettingActivity extends AppCompatActivity {
         });
 
 
-        int currentGridGapSeekBarProgress = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY,5);
+        int currentGridGapSeekBarProgress = defaultSharedPreference.getInt(EdgeSetting.GAP_OF_SHORTCUT_KEY,5);
         gridGapSeekBar.setProgress(currentGridGapSeekBarProgress);
         gridGapValueTextView.setText(currentGridGapSeekBarProgress + 10 + " dp");
         gridGapSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, progress).commit();
+                defaultSharedPreference.edit().putInt(EdgeSetting.GAP_OF_SHORTCUT_KEY, progress).commit();
                 gridGapValueTextView.setText(progress + 10 + " dp");
             }
 
@@ -217,8 +217,8 @@ public class FavoriteSettingActivity extends AppCompatActivity {
             }
         });
 
-        int currentGridDistanceSeekBarProgress = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GRID_DISTANCE_FROM_EDGE_KEY,20) - 20;
-        int currentGridDistanceVerticalSeekBarProgress = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GRID_DISTANCE_VERTICAL_FROM_EDGE_KEY, 20);
+        int currentGridDistanceSeekBarProgress = defaultSharedPreference.getInt(EdgeSetting.GRID_DISTANCE_FROM_EDGE_KEY,20) - 20;
+        int currentGridDistanceVerticalSeekBarProgress = defaultSharedPreference.getInt(EdgeSetting.GRID_DISTANCE_VERTICAL_FROM_EDGE_KEY, 20);
         gridDistanceSeekBar.setProgress(currentGridDistanceSeekBarProgress);
         gridDistanceVerticalSeekBar.setProgress(currentGridDistanceVerticalSeekBarProgress);
         gridDistanceValueTextView.setText(currentGridDistanceSeekBarProgress + 20 + " dp");
@@ -226,7 +226,7 @@ public class FavoriteSettingActivity extends AppCompatActivity {
         gridDistanceSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.GRID_DISTANCE_FROM_EDGE_KEY, progress + 20).commit();
+                defaultSharedPreference.edit().putInt(EdgeSetting.GRID_DISTANCE_FROM_EDGE_KEY, progress + 20).commit();
                 gridDistanceValueTextView.setText(progress + 20 + " dp");
             }
 
@@ -243,7 +243,7 @@ public class FavoriteSettingActivity extends AppCompatActivity {
         gridDistanceVerticalSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                defaultSharedPreference.edit().putInt(EdgeSettingDialogFragment.GRID_DISTANCE_VERTICAL_FROM_EDGE_KEY,progress).commit();
+                defaultSharedPreference.edit().putInt(EdgeSetting.GRID_DISTANCE_VERTICAL_FROM_EDGE_KEY,progress).commit();
                 gridDistanceVerticalValueTextView.setText(progress + " dp");
             }
 
@@ -257,14 +257,14 @@ public class FavoriteSettingActivity extends AppCompatActivity {
 
             }
         });
-        gridDistanceSeekBar.setEnabled(!defaultSharedPreference.getBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE,false));
-        gridDistanceVerticalSeekBar.setEnabled(!defaultSharedPreference.getBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE,false));
+        gridDistanceSeekBar.setEnabled(!defaultSharedPreference.getBoolean(EdgeSetting.IS_CENTRE_FAVORITE,false));
+        gridDistanceVerticalSeekBar.setEnabled(!defaultSharedPreference.getBoolean(EdgeSetting.IS_CENTRE_FAVORITE,false));
         Switch placeToCenterSwitch = (Switch) findViewById(R.id.set_favorite_place_center);
-        placeToCenterSwitch.setChecked(defaultSharedPreference.getBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE,false));
+        placeToCenterSwitch.setChecked(defaultSharedPreference.getBoolean(EdgeSetting.IS_CENTRE_FAVORITE,false));
         placeToCenterSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                defaultSharedPreference.edit().putBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE,isChecked).commit();
+                defaultSharedPreference.edit().putBoolean(EdgeSetting.IS_CENTRE_FAVORITE,isChecked).commit();
                 gridDistanceSeekBar.setEnabled(!isChecked);
                 gridDistanceVerticalSeekBar.setEnabled(!isChecked);
             }
@@ -379,9 +379,9 @@ public class FavoriteSettingActivity extends AppCompatActivity {
 
     private void updateGridView() {
         ViewGroup.LayoutParams gridParams = gridView.getLayoutParams();
-        int gridRow = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5);
-        int gridColumn = defaultSharedPreference.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
-        int gridGap = defaultSharedPreference.getInt(EdgeSettingDialogFragment.GAP_OF_SHORTCUT_KEY, 5);
+        int gridRow = defaultSharedPreference.getInt(EdgeSetting.NUM_OF_GRID_ROW_KEY, 5);
+        int gridColumn = defaultSharedPreference.getInt(EdgeSetting.NUM_OF_GRID_COLUMN_KEY, 4);
+        int gridGap = defaultSharedPreference.getInt(EdgeSetting.GAP_OF_SHORTCUT_KEY, 5);
         gridView.setVerticalSpacing((int)( gridGap*mScale));
         gridView.setNumColumns(gridColumn);
         gridParams.height = (int) (mScale * (float) ((EdgeGestureService.GRID_ICON_SIZE * mIconScale + EdgeGestureService.GRID_2_PADDING) * gridRow + gridGap * (gridRow - 1)));

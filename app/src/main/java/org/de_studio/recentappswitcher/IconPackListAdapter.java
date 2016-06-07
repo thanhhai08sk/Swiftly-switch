@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -68,7 +68,7 @@ public class IconPackListAdapter extends BaseAdapter {
         if (getItemId(position) == 0) {
             label.setText(mContext.getString(R.string.icon_pack_system_icon_pack_label));
             icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_launcher));
-            if (sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "none").equals("none")) {
+            if (sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none").equals("none")) {
                 radioButton.setChecked(true);
             } else {
                 radioButton.setChecked(false);
@@ -76,7 +76,7 @@ public class IconPackListAdapter extends BaseAdapter {
         } else {
             PackageManager packageManager = mContext.getPackageManager();
             String iconPackPackageName = packageName[position - 1];
-            if (iconPackPackageName.equals(sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "none"))) {
+            if (iconPackPackageName.equals(sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none"))) {
                 radioButton.setChecked(true);
             } else {
                 radioButton.setChecked(false);
@@ -95,10 +95,10 @@ public class IconPackListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (getItemId(position) == 0) {
-                    sharedPreferences.edit().putString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "none").commit();
+                    sharedPreferences.edit().putString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none").commit();
                     IconPackListAdapter.this.notifyDataSetChanged();
                 } else {
-                    sharedPreferences.edit().putString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, packageName[position - 1]).commit();
+                    sharedPreferences.edit().putString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, packageName[position - 1]).commit();
                     IconPackListAdapter.this.notifyDataSetChanged();
                 }
             }

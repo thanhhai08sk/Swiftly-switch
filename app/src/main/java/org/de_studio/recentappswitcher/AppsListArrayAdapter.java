@@ -12,7 +12,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -52,7 +52,7 @@ public class AppsListArrayAdapter extends BaseAdapter {
         ImageView icon = (ImageView) returnView.findViewById(R.id.add_favorite_list_item_image_view);
         TextView label = (TextView) returnView.findViewById(R.id.add_favorite_list_item_label_text_view);
         CheckBox checkBox = (CheckBox) returnView.findViewById(R.id.add_favorite_list_item_check_box);
-        Set<String> excludeSet = sharedPreferenceExclude.getStringSet(EdgeSettingDialogFragment.EXCLUDE_KEY, null);
+        Set<String> excludeSet = sharedPreferenceExclude.getStringSet(EdgeSetting.EXCLUDE_KEY, null);
         if (excludeSet!=null && excludeSet.contains(appInfors.packageName)) {
             checkBox.setChecked(true);
         } else {

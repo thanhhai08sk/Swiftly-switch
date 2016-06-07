@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher;
 
+import android.Manifest;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.animation.Animator;
 import android.app.ActivityManager;
@@ -59,7 +60,7 @@ import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.ChooseActionDialogActivity;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
-import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
 
@@ -439,7 +440,7 @@ public  class Utility {
     public static void setFavoriteShortcutGridViewPosition(GridView gridView,float gridTall, float gridWide, int x_init_cord, int y_init_cord, float mScale, int edgePosition, WindowManager windowManager, SharedPreferences sharedPreferences, int distanceFromEdgeDp, int distanceVertical, int iconToSwitch) {
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
         float distanceVerticalFromEdge = ((float)distanceVertical)* mScale;
-        boolean isCenter = sharedPreferences.getBoolean(EdgeSettingDialogFragment.IS_CENTRE_FAVORITE, false);
+        boolean isCenter = sharedPreferences.getBoolean(EdgeSetting.IS_CENTRE_FAVORITE, false);
         Point point = new Point();
         windowManager.getDefaultDisplay().getSize(point);
         float x = point.x;
@@ -542,8 +543,8 @@ public  class Utility {
 
     public static float[] getTriggerPoint(float x_init,float y_init,SharedPreferences sharedPreferences, int edgePosition, int iconToSwitch, float mScale) {
         float[] returnValue = new float[2];
-        float circleSize = mScale * (float) sharedPreferences.getInt(EdgeSettingDialogFragment.ICON_DISTANCE_KEY, 105);
-//        float iconScale = sharedPreferences.getFloat(EdgeSettingDialogFragment.ICON_SCALE, 1f);
+        float circleSize = mScale * (float) sharedPreferences.getInt(EdgeSetting.ICON_DISTANCE_KEY, 105);
+//        float iconScale = sharedPreferences.getFloat(EdgeSetting.ICON_SCALE, 1f);
 //        float iconSize24 = iconScale *mScale * 24;
         double alpha, beta, alphaOfIconToSwitch;
         alpha = 0.0556 * Math.PI; // 10 degree
@@ -818,23 +819,23 @@ public  class Utility {
 
     public static int getSizeOfFavoriteGrid(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
-        return sharedPreferences.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_ROW_KEY, 5) * sharedPreferences.getInt(EdgeSettingDialogFragment.NUM_OF_GRID_COLUMN_KEY, 4);
+        return sharedPreferences.getInt(EdgeSetting.NUM_OF_GRID_ROW_KEY, 5) * sharedPreferences.getInt(EdgeSetting.NUM_OF_GRID_COLUMN_KEY, 4);
     }
 
     public static Bitmap getBitmapFromAction(Context context,SharedPreferences sharedPreferences, int actionButton) {
         String action = MainActivity.ACTION_NONE;
         switch (actionButton) {
             case 1:
-                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_1_KEY, MainActivity.ACTION_HOME);
+                action = sharedPreferences.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_HOME);
                 break;
             case 2:
-                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_2_KEY, MainActivity.ACTION_BACK);
+                action = sharedPreferences.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_BACK);
                 break;
             case 3:
-                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_LAST_APP);
+                action = sharedPreferences.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_LAST_APP);
                 break;
             case 4:
-                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_4_KEY, MainActivity.ACTION_NOTI);
+                action = sharedPreferences.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
                 break;
         }
         switch (action) {
@@ -1448,7 +1449,7 @@ public  class Utility {
 
     }
 
-    public static void startShortcut(Context context, Shortcut shortcut, View v, String className, String packageName, String lastAppPackageName) {
+    public static void startShortcut(Context context, Shortcut shortcut, View v, String className, String packageName, String lastAppPackageName, int contactAction) {
         if (shortcut.getType() == Shortcut.TYPE_APP) {
             Intent extApp;
             extApp =context.getPackageManager().getLaunchIntentForPackage(shortcut.getPackageName());
@@ -1533,12 +1534,31 @@ public  class Utility {
 
             }
         } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
-            String url = "tel:"+ shortcut.getNumber();
-            Intent intent = new Intent(context, ChooseActionDialogActivity.class);
-            intent.putExtra("number", shortcut.getNumber());
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-            context.startActivity(intent);
+            switch (contactAction) {
+                case EdgeSetting.ACTION_CHOOSE:
+                    Intent intent = new Intent(context, ChooseActionDialogActivity.class);
+                    intent.putExtra("number", shortcut.getNumber());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                    context.startActivity(intent);
+                    break;
+                case EdgeSetting.ACTION_CALL:
+                    String url = "tel:"+ shortcut.getNumber();
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                        Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
+                        callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(callIntent);
+                    } else {
+                        Toast.makeText(context, context.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
+                    }
+                    break;
+                case EdgeSetting.ACTION_SMS:
+                    Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
+                            + shortcut.getNumber()));
+                    smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(smsIntent);
+            }
+
 
 //            if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
 //                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
@@ -1554,16 +1574,16 @@ public  class Utility {
         String action = MainActivity.ACTION_NONE;
         switch (homeBackNoti) {
             case 1:
-                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_1_KEY, MainActivity.ACTION_HOME);
+                action = sharedPreferences.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_HOME);
                 break;
             case 2:
-                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_2_KEY, MainActivity.ACTION_BACK);
+                action = sharedPreferences.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_BACK);
                 break;
             case 3:
-                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_3_KEY, MainActivity.ACTION_LAST_APP);
+                action = sharedPreferences.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_LAST_APP);
                 break;
             case 4:
-                action = sharedPreferences.getString(EdgeSettingDialogFragment.ACTION_4_KEY, MainActivity.ACTION_NOTI);
+                action = sharedPreferences.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
                 break;
         }
 

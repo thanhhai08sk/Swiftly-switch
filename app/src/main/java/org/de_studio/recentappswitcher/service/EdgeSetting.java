@@ -29,8 +29,8 @@ import org.de_studio.recentappswitcher.Utility;
 /**
  * Created by hai on 1/2/2016.
  */
-public class EdgeSettingDialogFragment extends DialogFragment {
-    private static final String LOG_TAG = EdgeSettingDialogFragment.class.getSimpleName();
+public class EdgeSetting extends DialogFragment {
+    private static final String LOG_TAG = EdgeSetting.class.getSimpleName();
     public static final String EDGE_POSITION_KEY = "position";
     public static final String EDGE_SENSIIVE_KEY = "sensitive";
     public static final String EDGE_LENGTH_KEY = "length";
@@ -70,9 +70,13 @@ public class EdgeSettingDialogFragment extends DialogFragment {
     public static final String BACKGROUND_COLOR_KEY = "background_color";
     public static final String GUIDE_COLOR_KEY = "guide_color";
     public static final String USE_GUIDE_KEY = "edge_guide";
+    public static final String CONTACT_ACTION = "contact_action";
     public static final String CIRCLE_FAVORITE_MODE = "circle_fovorite_mode";
     public static final String SERVICE_ID = "service_id";
     public static final String ICON_SCALE = "icon_scale";
+    public static final int ACTION_CHOOSE = 0;
+    public static final int ACTION_CALL = 1;
+    public static final int ACTION_SMS = 2;
     private static int edgeNumber;
     private  float mScale;
     private static SharedPreferences sharedPreferences,defaultSharedPreferences;
@@ -128,8 +132,8 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         final AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
         final AppCompatSpinner modeSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_mode_spinner);
         final CheckBox showGuideCheckBox = (AppCompatCheckBox) rootView.findViewById(R.id.edge_dialog_show_guide_checkbox);
-        int mode = sharedPreferences.getInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 0);
-        boolean isOnlyFavorite = sharedPreferences.getBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false);
+        int mode = sharedPreferences.getInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 0);
+        boolean isOnlyFavorite = sharedPreferences.getBoolean(EdgeSetting.IS_ONLY_FAVORITE_KEY, false);
         if (mode == 0) {
             if (isOnlyFavorite) {
                 mode = 2;
@@ -143,15 +147,15 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        sharedPreferences.edit().putBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, false)
-                                .putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE,1).commit();
+                        sharedPreferences.edit().putBoolean(EdgeSetting.IS_ONLY_FAVORITE_KEY, false)
+                                .putInt(EdgeSetting.CIRCLE_FAVORITE_MODE,1).commit();
                         break;
                     case 1:
-                        sharedPreferences.edit().putBoolean(EdgeSettingDialogFragment.IS_ONLY_FAVORITE_KEY, true)
-                                .putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 2).commit();
+                        sharedPreferences.edit().putBoolean(EdgeSetting.IS_ONLY_FAVORITE_KEY, true)
+                                .putInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 2).commit();
                         break;
                     case 2:
-                        sharedPreferences.edit().putInt(EdgeSettingDialogFragment.CIRCLE_FAVORITE_MODE, 3).commit();
+                        sharedPreferences.edit().putInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 3).commit();
                 }
                 mContext.stopService(new Intent(mContext, EdgeGestureService.class));
                 mContext.startService(new Intent(mContext, EdgeGestureService.class));
@@ -163,7 +167,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             }
         });
 
-        showGuideCheckBox.setChecked(sharedPreferences.getBoolean(EdgeSettingDialogFragment.USE_GUIDE_KEY, true));
+        showGuideCheckBox.setChecked(sharedPreferences.getBoolean(EdgeSetting.USE_GUIDE_KEY, true));
         showGuideCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -194,7 +198,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
 //
 //                CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(edgeImage.getLayoutParams());
 //
-//                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
+//                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSetting.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
 //                    lp.width = (int) (currentLength * mScale);
 //                    lp.height = (int) (currentSensitive* mScale);
 //                }else {
@@ -249,7 +253,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChanged = progress + 5;
 //                edgeParas = edgeImage.getLayoutParams();
-//                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30) {
+//                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSetting.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30) {
 //                    edgeParas.height = (int) (progressChanged * mScale);
 //                } else edgeParas.width = (int) (progressChanged * mScale);
 //                edgeImage.setLayoutParams(edgeParas);
@@ -285,7 +289,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 progressChanged = progress + 40;
 //                edgeParas = tempEdge.getLayoutParams();
 //
-//                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30) {
+//                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSetting.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30) {
 //                    edgeParas.width = (int) (progressChanged * mScale);
 //                } else edgeParas.height = (int) (progressChanged * mScale);
 //
@@ -322,7 +326,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
                 progressChanged = progress - 300;
                 edgeOffsetNumberText.setText(progressChanged + "dp");
                 caculateEdgeInit();
-                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
+                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSetting.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
                     tempEdge.setX(edgeInitX - progressChanged*mScale);
 //                    edgeImage.setY(edgeInitY);
                 }else {
@@ -441,7 +445,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         int currentLength = sharedPreferences.getInt(EDGE_LENGTH_KEY ,150);
         int currentSensitive = sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 12);
         int currentOffset = sharedPreferences.getInt(EDGE_OFFSET_KEY,0);
-        int position = Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext);
+        int position = Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSetting.EDGE_POSITION_KEY, spinnerEntries[1]), mContext);
         int width, height;
         if (position >= 30){
             width = (int) (currentLength * mScale);
@@ -501,7 +505,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
         int currentLength = sharedPreferences.getInt(EDGE_LENGTH_KEY ,150);
         int currentSensitive = sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 12);
         int width,height;
-        if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
+        if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSetting.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
             width = (int) (currentLength * mScale);
             height = (int) (currentSensitive* mScale);
 
@@ -510,7 +514,7 @@ public class EdgeSettingDialogFragment extends DialogFragment {
             height = (int) (currentLength *mScale);
 
         }
-        int position = Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSettingDialogFragment.EDGE_POSITION_KEY, spinnerEntries[1]), mContext);
+        int position = Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSetting.EDGE_POSITION_KEY, spinnerEntries[1]), mContext);
         switch (position) {
             case 10:
                 edgeInitX = screenWidth - width;

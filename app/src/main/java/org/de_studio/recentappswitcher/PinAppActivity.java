@@ -15,7 +15,7 @@ import android.view.View;
 import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
 
-import org.de_studio.recentappswitcher.service.EdgeSettingDialogFragment;
+import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 public class PinAppActivity extends AppCompatActivity {
     private PinAppAdapter adapter;
@@ -64,7 +64,7 @@ public class PinAppActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_pin_app, menu);
-        boolean isPinTop = sharedPreferences.getBoolean(EdgeSettingDialogFragment.IS_PIN_TO_TOP_KEY, false);
+        boolean isPinTop = sharedPreferences.getBoolean(EdgeSetting.IS_PIN_TO_TOP_KEY, false);
         MenuItem istop = menu.findItem(R.id.menu_pin_to_top);
         MenuItem isBottom = menu.findItem(R.id.menu_pin_to_bottom);
         Log.e("PinAppActivity", " isTop = " + isPinTop);
@@ -81,11 +81,11 @@ public class PinAppActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_pin_to_top:
-                sharedPreferences.edit().putBoolean(EdgeSettingDialogFragment.IS_PIN_TO_TOP_KEY,true).commit();
+                sharedPreferences.edit().putBoolean(EdgeSetting.IS_PIN_TO_TOP_KEY,true).commit();
                 item.setChecked(true);
                 return true;
             case R.id.menu_pin_to_bottom:
-                sharedPreferences.edit().putBoolean(EdgeSettingDialogFragment.IS_PIN_TO_TOP_KEY,false).commit();
+                sharedPreferences.edit().putBoolean(EdgeSetting.IS_PIN_TO_TOP_KEY,false).commit();
                 item.setChecked(true);
                 return true;
             default:

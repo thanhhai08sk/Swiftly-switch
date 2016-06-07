@@ -50,8 +50,8 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         iconPadding =(int) mContext.getResources().getDimension(R.dimen.icon_padding);
         myRealm = Realm.getInstance(mContext);
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
-        mIconScale = sharedPreferences.getFloat(EdgeSettingDialogFragment.ICON_SCALE,1f);
-        String iconPackPacka = sharedPreferences.getString(EdgeSettingDialogFragment.ICON_PACK_PACKAGE_NAME_KEY, "com.colechamberlin.stickers");
+        mIconScale = sharedPreferences.getFloat(EdgeSetting.ICON_SCALE,1f);
+        String iconPackPacka = sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "com.colechamberlin.stickers");
         if (!iconPackPacka.equals("none")) {
             IconPackManager iconPackManager = new IconPackManager();
             iconPackManager.setContext(mContext);
