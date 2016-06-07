@@ -102,15 +102,6 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE,Manifest.permission.SEND_SMS},
                         MY_PERMISSIONS_REQUEST);
-//                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-//                        Manifest.permission.READ_CONTACTS)) {
-//                    Log.e(TAG, "onClick: true");
-//
-//                } else {
-//                    ActivityCompat.requestPermissions(getActivity(),
-//                            new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE,Manifest.permission.SEND_SMS},
-//                            MY_PERMISSIONS_REQUEST);
-//                }
             }
         });
 

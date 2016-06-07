@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher;
 
+import android.Manifest;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.animation.Animator;
 import android.app.ActivityManager;
@@ -1533,9 +1534,13 @@ public  class Utility {
             }
         } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
             String url = "tel:"+ shortcut.getNumber();
-            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            } else {
+                Toast.makeText(context, context.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
+            }
         }
     }
 

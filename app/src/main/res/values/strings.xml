@@ -155,6 +155,7 @@
     <string name="contacts">Contacts</string>
     <string name="setting_shortcut_folder">Folder</string>
     <string name="enable_require_permissions_to_use_this_feature">Enable require permissions to use this feature</string>
-    <string name="missing_contact_permission">Missing contact related permission</string>
+    <string name="missing_contact_permission">Missing contact related permissions</string>
+    <string name="missing_call_phone_permission">Missing call phone permission</string>
 
 </resources>
