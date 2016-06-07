@@ -116,7 +116,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                             setSingleChoiceItems(R.array.contact_action, current, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    sharedPreferencesDefautl.edit().putInt(EdgeSetting.CONTACT_ACTION, which);
+                                    sharedPreferencesDefautl.edit().putInt(EdgeSetting.CONTACT_ACTION, which).apply();
                                 }
                             }).
                             setPositiveButton(R.string.app_tab_fragment_ok_button, null);
