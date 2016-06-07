@@ -39,7 +39,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity {
     private static final int VERSION_NUMBER = 51;
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
     public static final String EDGE_1_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_2_shared_preference";
     public static final String DEFAULT_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_sharedpreferences";
@@ -84,7 +84,7 @@ public class MainActivity extends Activity {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.e(LOG_TAG, "run Intro");
+                Log.e(TAG, "run Intro");
                 SharedPreferences getPrefs = PreferenceManager
                         .getDefaultSharedPreferences(getBaseContext());
                 isFirstStart = getPrefs.getBoolean("firstStart", true);
@@ -99,7 +99,7 @@ public class MainActivity extends Activity {
             }
         });
         t.start();
-        Log.e(LOG_TAG, "after Intro");
+        Log.e(TAG, "after Intro");
 //        Intent i = new Intent(MainActivity.this, IntroActivity.class);
 //        startActivity(i);
         if (getPackageName().equals(FREE_VERSION_PACKAGE_NAME)) isTrial = true;
@@ -619,7 +619,7 @@ public class MainActivity extends Activity {
 ////            step1Text.setText(R.string.main_step1_information);
 //        }
 //        boolean isStep2Ok = Utility.isAccessibilityEnable(this);
-//        Log.e(LOG_TAG, "isStep2OK = " + isStep2Ok);
+//        Log.e(TAG, "isStep2OK = " + isStep2Ok);
 //
 //        if (isStep2Ok) {
 //            step2Button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_button_green));
@@ -695,7 +695,7 @@ public class MainActivity extends Activity {
         try {
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
-            Log.e(LOG_TAG, "Activity not found when share app");
+            Log.e(TAG, "Activity not found when share app");
         }
 
     }
@@ -716,6 +716,5 @@ public class MainActivity extends Activity {
 
         return isOk;
     }
-
 
 }

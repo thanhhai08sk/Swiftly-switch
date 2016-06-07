@@ -1537,6 +1537,7 @@ public  class Utility {
             Intent intent = new Intent(context, ChooseActionDialogActivity.class);
             intent.putExtra("number", shortcut.getNumber());
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             context.startActivity(intent);
 
 //            if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
