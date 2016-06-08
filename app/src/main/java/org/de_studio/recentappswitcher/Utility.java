@@ -1187,41 +1187,46 @@ public  class Utility {
         }
     }
 
-    public static View disPlayClock(Context context, WindowManager windowManager, boolean isAnimation, int animationTime) {
+    public static View disPlayClock(Context context, WindowManager windowManager, boolean isAnimation, int animationTime, boolean disableClock) {
         if (animationTime <= 50) {
             isAnimation = false;
         }
-        Calendar c = Calendar.getInstance();
-        int mHour;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.clock, null);
         LinearLayout clock = (LinearLayout) view.findViewById(R.id.clock_linear_layout);
-        clock.setVisibility(View.VISIBLE);
-        TextView hourTextView = (TextView) view.findViewById(R.id.clock_time_in_hour);
-        TextView dateTextView = (TextView) view.findViewById(R.id.clock_time_in_date);
-        TextView batteryLifeTextView = (TextView) view.findViewById(R.id.clock_battery_life);
-        String batteryString = context.getString(R.string.batterylife)+ " "+ getBatteryLevel(context) + "%";
-//        String batteryString =getBatteryLevel(context) + "%";
-        if (batteryLifeTextView != null) {
-            batteryLifeTextView.setText(batteryString);
-        }
-        if (dateTextView != null) {
-            dateTextView.setText(dateFormat.format(c.getTime()));
-        }
-        if (!DateFormat.is24HourFormat(context))
-        {
-            SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm");
-            if (hourTextView != null) {
-                hourTextView.setText(hourFormat.format(c.getTime()));
+
+
+        if (!disableClock) {
+            Calendar c = Calendar.getInstance();
+            int mHour;
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
+            clock.setVisibility(View.VISIBLE);
+            TextView hourTextView = (TextView) view.findViewById(R.id.clock_time_in_hour);
+            TextView dateTextView = (TextView) view.findViewById(R.id.clock_time_in_date);
+            TextView batteryLifeTextView = (TextView) view.findViewById(R.id.clock_battery_life);
+            String batteryString = context.getString(R.string.batterylife) + " " + getBatteryLevel(context) + "%";
+            if (batteryLifeTextView != null) {
+                batteryLifeTextView.setText(batteryString);
             }
-        }
-        else {
-            SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
-            if (hourTextView != null) {
-                hourTextView.setText(hourFormat.format(c.getTime()));
+            if (dateTextView != null) {
+                dateTextView.setText(dateFormat.format(c.getTime()));
             }
+            if (!DateFormat.is24HourFormat(context)) {
+                SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm");
+                if (hourTextView != null) {
+                    hourTextView.setText(hourFormat.format(c.getTime()));
+                }
+            } else {
+                SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
+                if (hourTextView != null) {
+                    hourTextView.setText(hourFormat.format(c.getTime()));
+                }
+            }
+        } else {
+            clock.setVisibility(View.GONE);
         }
+
+
         WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -1230,9 +1235,6 @@ public  class Utility {
                 PixelFormat.TRANSLUCENT);
         paramsEdge1.gravity = Gravity.TOP|Gravity.CENTER_HORIZONTAL;
         windowManager.addView(view, paramsEdge1);
-//        hourTextView.startAnimation(animationSet);
-//        dateTextView.startAnimation(animationSet);
-//        batteryLifeTextView.startAnimation(animationSet);
         if (isAnimation) {
             view.setAlpha(0f);
             view.animate().alpha(1f).setDuration(animationTime).setInterpolator(new FastOutSlowInInterpolator());

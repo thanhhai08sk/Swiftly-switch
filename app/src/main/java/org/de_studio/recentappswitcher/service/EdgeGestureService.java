@@ -1015,12 +1015,11 @@ public class EdgeGestureService extends Service {
 
                 case MotionEvent.ACTION_MOVE:
 
-                    if (!isClockShown && !defaultShared.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY, false)) {
+                    if (!isClockShown) {
                         Log.e(LOG_TAG, "Show clock");
-                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSetting.ANIMATION_KEY, false), defaultShared.getInt(EdgeSetting.ANI_TIME_KEY, 100));
+                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSetting.ANIMATION_KEY, false), defaultShared.getInt(EdgeSetting.ANI_TIME_KEY, 100), defaultShared.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY, false));
                         LinearLayout clock = (LinearLayout) clockView.findViewById(R.id.clock_linear_layout);
                         FrameLayout indicator = (FrameLayout) clockView.findViewById(R.id.indicator_frame_layout);
-                        clock.setVisibility(View.VISIBLE);
                         indicator.setVisibility(View.GONE);
                         circle = (Circle) clockView.findViewById(R.id.circle);
                         if (circle == null) {
