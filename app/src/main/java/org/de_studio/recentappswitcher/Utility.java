@@ -1437,10 +1437,10 @@ public  class Utility {
                         imageView.setColorFilter(null);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        imageView.setImageResource(R.drawable.ic_icon_home);
+                        imageView.setImageResource(R.drawable.ic_contact_default);
                     }
                 } else {
-                    imageView.setImageResource(R.drawable.ic_icon_home);
+                    imageView.setImageResource(R.drawable.ic_contact_default);
 
                 }
             }
@@ -1540,6 +1540,7 @@ public  class Utility {
                     intent.putExtra("number", shortcut.getNumber());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                    Log.e(TAG, "startShortcut: number =" + shortcut.getNumber());
                     context.startActivity(intent);
                     break;
                 case EdgeSetting.ACTION_CALL:

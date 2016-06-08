@@ -164,12 +164,12 @@ public class FolderAdapter extends BaseAdapter {
                         imageView.setColorFilter(null);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        imageView.setImageResource(R.drawable.ic_icon_home);
-                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        imageView.setImageResource(R.drawable.ic_contact_default);
+//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                     }
                 } else {
-                    imageView.setImageResource(R.drawable.ic_icon_home);
-                    imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                    imageView.setImageResource(R.drawable.ic_contact_default);
+//                    imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                 }
             }
 

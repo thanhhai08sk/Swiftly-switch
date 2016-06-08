@@ -76,6 +76,7 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
                 String name = mAdapter.getCursor().getString(mAdapter.getCursor().getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 Long contactId = mAdapter.getCursor().getLong(mAdapter.getCursor().getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
                 String thumbnailUri = mAdapter.getCursor().getString(mAdapter.getCursor().getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
+                String number = mAdapter.getCursor().getString(mAdapter.getCursor().getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
                 if (checkBox != null) {
                     if (checkBox.isChecked()) {
@@ -107,6 +108,7 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
                             newShortcut.setContactId(contactId);
                             newShortcut.setType(Shortcut.TYPE_CONTACT);
                             newShortcut.setThumbnaiUri(thumbnailUri);
+                            newShortcut.setNumber(number);
                             myRealm.beginTransaction();
                             myRealm.copyToRealm(newShortcut);
                             myRealm.commitTransaction();

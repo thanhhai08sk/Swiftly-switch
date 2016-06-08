@@ -52,10 +52,10 @@ public class AddContactToFolderAdapter extends CursorAdapter {
                 icon.setImageDrawable(drawable);
             } catch (IOException e) {
                 e.printStackTrace();
-                icon.setImageResource(R.drawable.ic_icon_home);
+                icon.setImageResource(R.drawable.ic_contact_default);
             }
         } else {
-            icon.setImageResource(R.drawable.ic_icon_home);
+            icon.setImageResource(R.drawable.ic_contact_default);
         }
 
 //        if (stringUri != null) {

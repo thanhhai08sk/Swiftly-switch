@@ -166,10 +166,10 @@ public class FolderAdapter extends BaseAdapter {
                         imageView.setImageDrawable(drawable);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        imageView.setImageResource(R.drawable.ic_icon_home);
+                        imageView.setImageResource(R.drawable.ic_contact_default);
                     }
                 } else {
-                    imageView.setImageResource(R.drawable.ic_icon_home);
+                    imageView.setImageResource(R.drawable.ic_contact_default);
                 }
 
 

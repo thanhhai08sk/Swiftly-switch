@@ -56,10 +56,10 @@ public class ContactCursorAdapter extends CursorAdapter {
                 avatar.setImageDrawable(drawable);
             } catch (IOException e) {
                 e.printStackTrace();
-                avatar.setImageResource(R.drawable.ic_icon_home);
+                avatar.setImageResource(R.drawable.ic_contact_default);
             }
         } else {
-            avatar.setImageResource(R.drawable.ic_icon_home);
+            avatar.setImageResource(R.drawable.ic_contact_default);
         }
         if (shortcut != null && shortcut.getType() == Shortcut.TYPE_CONTACT && shortcut.getContactId() == contactId) {
             radioButton.setChecked(true);

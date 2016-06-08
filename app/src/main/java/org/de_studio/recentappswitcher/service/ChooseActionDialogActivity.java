@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -21,6 +22,8 @@ import org.de_studio.recentappswitcher.R;
 
 public class ChooseActionDialogActivity extends AppCompatActivity {
 
+    private static final String TAG = ChooseActionDialogActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +32,7 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
 
         final String number = getIntent().getStringExtra("number");
         String url = "tel:"+ number;
+        Log.e(TAG, "onCreate: url =" + url);
         final Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
         callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

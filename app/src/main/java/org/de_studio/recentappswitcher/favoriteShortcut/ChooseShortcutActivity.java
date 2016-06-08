@@ -277,12 +277,12 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                         currentShortcut.setImageDrawable(drawable);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        currentShortcut.setImageResource(R.drawable.ic_icon_home);
+                        currentShortcut.setImageResource(R.drawable.ic_contact_default);
                     }catch (SecurityException e) {
                         Toast.makeText(mContext, mContext.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    currentShortcut.setImageResource(R.drawable.ic_icon_home);
+                    currentShortcut.setImageResource(R.drawable.ic_contact_default);
 
                 }
             }

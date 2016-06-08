@@ -172,14 +172,14 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                         imageView.setColorFilter(null);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        imageView.setImageResource(R.drawable.ic_icon_home);
-                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        imageView.setImageResource(R.drawable.ic_contact_default);
+//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                     } catch (SecurityException e) {
                         Toast.makeText(mContext, mContext.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    imageView.setImageResource(R.drawable.ic_icon_home);
-                    imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                    imageView.setImageResource(R.drawable.ic_contact_default);
+//                    imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
 
                 }
             } else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
