@@ -162,6 +162,6 @@
     <string name="default_action_for_contact">Default action for contacts</string>
     <string name="choose">Choose</string>
     <string name="call">Call</string>
-    <string name="sms">SMS</string>
+    <string name="sms">Sms</string>
 
 </resources>

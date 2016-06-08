@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.MainActivity;
@@ -54,8 +55,18 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
         dialog.show();
 
         final CheckBox checkBox = (CheckBox) dialog.findViewById(R.id.use_as_default_check_box);
+        LinearLayout setDefaultLayout = (LinearLayout) dialog.findViewById(R.id.use_as_default_layout);
         ImageView callImage = (ImageView) dialog.findViewById(R.id.action_call);
         ImageView smsImage = (ImageView) dialog.findViewById(R.id.action_sms);
+
+        if (setDefaultLayout != null && checkBox !=null) {
+            setDefaultLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkBox.setChecked(!checkBox.isChecked());
+                }
+            });
+        }
 
 
         if (calRes.activityInfo != null) {
