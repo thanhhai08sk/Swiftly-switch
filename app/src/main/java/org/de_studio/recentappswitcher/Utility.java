@@ -1455,21 +1455,27 @@ public  class Utility {
             Intent extApp;
             extApp =context.getPackageManager().getLaunchIntentForPackage(shortcut.getPackageName());
             if (extApp != null) {
-                ComponentName componentName = extApp.getComponent();
+                if (shortcut.getPackageName().equals("com.devhomc.search")) {
+                    extApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(extApp);
+                } else {
+                    ComponentName componentName = extApp.getComponent();
 //                                    Intent startApp = new Intent(Intent.ACTION_MAIN, null);
 //                                    startApp.addCategory(Intent.CATEGORY_LAUNCHER);
 //                                    startApp.setComponent(componentName);
 //                                    startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
 //                                    extApp.addFlags(805306368);
-                Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
-                startAppIntent.setComponent(componentName);
-                startAppIntent.addFlags(1064960);
-                startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                context.startActivity(startAppIntent);
+                    Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
+                    startAppIntent.setComponent(componentName);
+                    startAppIntent.addFlags(1064960);
+                    startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    context.startActivity(startAppIntent);
 //                                    startActivity(extApp);
+                }
+
             } else {
                 Log.e(TAG, "extApp of shortcut = null ");
             }

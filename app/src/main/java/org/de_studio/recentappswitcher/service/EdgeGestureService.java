@@ -956,16 +956,22 @@ public class EdgeGestureService extends Service {
                             }
 
                             if (extApp != null) {
-                                ComponentName componentName = extApp.getComponent();
-                                Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
-                                startAppIntent.setComponent(componentName);
-                                startAppIntent.addFlags(1064960);
-                                startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                                startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                                startActivity(startAppIntent);
+                                if (packagename[packageToSwitch].equals("com.devhomc.search")) {
+                                    extApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(extApp);
+                                } else {
+                                    ComponentName componentName = extApp.getComponent();
+                                    Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
+                                    startAppIntent.setComponent(componentName);
+                                    startAppIntent.addFlags(1064960);
+                                    startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                    startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                                    startActivity(startAppIntent);
 //                                startActivity(startApp);
+                                }
+
                                 Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
                             } else Log.e(LOG_TAG, "extApp = null ");
 
