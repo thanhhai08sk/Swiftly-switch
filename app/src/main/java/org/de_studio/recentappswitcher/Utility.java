@@ -1540,7 +1540,6 @@ public  class Utility {
                     intent.putExtra("number", shortcut.getNumber());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                    Log.e(TAG, "startShortcut: number =" + shortcut.getNumber());
                     context.startActivity(intent);
                     break;
                 case EdgeSetting.ACTION_CALL:
@@ -1729,6 +1728,7 @@ public  class Utility {
     }
 
     public static Bitmap getFolderThumbnail(Realm realm, int mPosition, Context context) {
+        Log.e(TAG, "getFolderThumbnail: ");
         float mScale = context. getResources().getDisplayMetrics().density;
         int width =(int)( 48*mScale);
         int height = (int) (48 * mScale);
@@ -1743,11 +1743,13 @@ public  class Utility {
         Drawable drawable;
         Shortcut shortcut;
         int gap1dp = (int) (mScale);
+        boolean isFolderEmpty = true;
 
         for (int i = 0; i < 4; i++) {
             drawable = null;
             shortcut = realm.where(Shortcut.class).equalTo("id",startId + i).findFirst();
             if (shortcut != null && shortcut.getType() == Shortcut.TYPE_APP) {
+                isFolderEmpty = false;
                 try {
 //                    bitmap1 = drawableToBitmap(packageManager.getApplicationIcon(shortcut.getPackageName()));
                     drawable = packageManager.getApplicationIcon(shortcut.getPackageName());
@@ -1776,6 +1778,7 @@ public  class Utility {
                     }
                 }
             } else if (shortcut != null && shortcut.getType() == Shortcut.TYPE_ACTION) {
+                isFolderEmpty = false;
                 drawable = getDrawableForAction(context, shortcut.getAction());
                 if (drawable != null) {
                     switch (i) {
@@ -1797,7 +1800,50 @@ public  class Utility {
                             break;
                     }
                 }
+            }else if (shortcut != null && shortcut.getType() == Shortcut.TYPE_CONTACT) {
+                isFolderEmpty = false;
+                String uri = shortcut.getThumbnaiUri();
+                if (uri != null) {
+                    try {
+                        Bitmap bitmap1 = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(uri));
+                        drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap1);
+                        ((RoundedBitmapDrawable) drawable).setCircular(true);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        drawable = context.getDrawable(R.drawable.ic_contact_default);
+                    }
+                } else {
+                    drawable = context.getDrawable(R.drawable.ic_contact_default);
+                }
+                if (drawable != null) {
+                    switch (i) {
+                        case 0:
+                            drawable.setBounds(0,0,smallWidth - gap1dp,smallHeight - gap1dp);
+                            drawable.draw(canvas);
+                            break;
+                        case 1:
+                            drawable.setBounds(smallWidth+ gap1dp,0,width,smallHeight - gap1dp);
+                            drawable.draw(canvas);
+                            break;
+                        case 2:
+                            drawable.setBounds(0,smallHeight+ gap1dp,smallWidth - gap1dp,height);
+                            drawable.draw(canvas);
+                            break;
+                        case 3:
+                            drawable.setBounds(smallWidth+ gap1dp,smallHeight + gap1dp,width,height);
+                            drawable.draw(canvas);
+                            break;
+                    }
+                }
             }
+        }
+        if (isFolderEmpty) {
+            drawable = context.getDrawable(R.drawable.ic_folder);
+            if (drawable != null) {
+                drawable.setBounds(0, 0, width, height);
+                drawable.draw(canvas);
+            }
+
         }
         File myDir = context.getFilesDir();
         String fname = "folder-"+ mPosition +".png";

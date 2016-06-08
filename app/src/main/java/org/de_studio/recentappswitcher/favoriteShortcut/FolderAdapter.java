@@ -22,6 +22,7 @@ import android.widget.TextView;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.io.IOException;
@@ -226,6 +227,7 @@ public class FolderAdapter extends BaseAdapter {
             }
         }
         myRealm.commitTransaction();
+        Utility.getFolderThumbnail(myRealm, mPosition, mContext);
         notifyDataSetChanged();
     }
 
@@ -258,6 +260,7 @@ public class FolderAdapter extends BaseAdapter {
         }
 
         myRealm.commitTransaction();
+        Utility.getFolderThumbnail(myRealm, mPosition, mContext);
         notifyDataSetChanged();
     }
 }

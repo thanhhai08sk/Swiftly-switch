@@ -162,7 +162,6 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                 }
             } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
                 String thumbnaiUri = shortcut.getThumbnaiUri();
-                Log.e(TAG, "getView: thumbnail uii = "+ thumbnaiUri);
                 if (thumbnaiUri != null) {
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(thumbnaiUri));
