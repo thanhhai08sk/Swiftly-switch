@@ -1176,7 +1176,7 @@ public class EdgeGestureService extends Service {
                                 }
                             } else {
 
-                                if (!onFolderAnimator) {
+                                if (!onFolderAnimator && folderCoor !=null) {
                                     shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, folderCoor[0], folderCoor[1], (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, folderCoor[2], folderCoor[3], 5, true);
                                     if (shortcutToSwitch != -1) {
                                         activateId = shortcutToSwitch + 3000;

@@ -96,7 +96,6 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
             imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
         } else {
             if (shortcut.getType() == Shortcut.TYPE_APP) {
-                imageView.setColorFilter(null);
                 try {
                     Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
                     if (iconPack!=null) {
@@ -183,9 +182,8 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                         e.printStackTrace();
                     }
                 }
-                imageView.setColorFilter(null);
             }
-
+            imageView.setColorFilter(null);
         }
         imageView.setOnDragListener(new View.OnDragListener() {
             @Override

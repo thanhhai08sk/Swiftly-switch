@@ -1695,12 +1695,15 @@ public  class Utility {
         float x = gridView.getChildAt(mPosition).getX()+ gridX;
         float y = gridView.getChildAt(mPosition).getY() + gridY;
         int size = (int) realm.where(Shortcut.class).greaterThan("id",(mPosition+1)*1000 -1).lessThan("id",(mPosition+2)*1000).count();
+        if (size == 0) {
+            return new int[5];
+        }
         int gridColumn = size;
         if (gridColumn > 4) {
             gridColumn = 4;
         }
         int gridRow;
-        if (size % gridColumn == 0) {
+        if ( size % gridColumn == 0) {
             gridRow = size/gridColumn;
         }else gridRow = size/gridColumn +1;
         int gridGap = 5;
