@@ -89,6 +89,7 @@ public class CircleFavoriteAdapter extends BaseAdapter {
             icon.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
             icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
         } else {
+            icon.setColorFilter(null);
             if (shortcut.getType() == Shortcut.TYPE_APP) {
                 icon.setColorFilter(null);
                 try {

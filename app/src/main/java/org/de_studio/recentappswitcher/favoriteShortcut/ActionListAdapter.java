@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
@@ -78,7 +79,7 @@ public class ActionListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -129,27 +130,33 @@ public class ActionListAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myRealm.beginTransaction();
-                RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findAll();
-                Log.e(LOG_TAG, "mPosition = " + mPosition);
-                oldShortcut.clear();
-                Shortcut shortcut = new Shortcut();
-                if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_folder))) {
-                    shortcut.setType(Shortcut.TYPE_FOLDER);
-                    shortcut.setId(mPosition);
-                    shortcut.setSize(0);
+                if (mode != FavoriteSettingActivity.MODE_GRID && position == 1) {
+                    Toast.makeText(mContext, "Can't add folder to Circle Favorite", Toast.LENGTH_SHORT).show();
+
                 } else {
-                    shortcut.setType(Shortcut.TYPE_ACTION);
-                    shortcut.setId(mPosition);
-                    shortcut.setLabel(item);
-                    shortcut.setAction(Utility.getActionFromLabel(mContext, item));
+                    myRealm.beginTransaction();
+                    RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findAll();
+                    Log.e(LOG_TAG, "mPosition = " + mPosition);
+                    oldShortcut.clear();
+                    Shortcut shortcut = new Shortcut();
+                    if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_folder))) {
+                        shortcut.setType(Shortcut.TYPE_FOLDER);
+                        shortcut.setId(mPosition);
+                        shortcut.setSize(0);
+                    } else {
+                        shortcut.setType(Shortcut.TYPE_ACTION);
+                        shortcut.setId(mPosition);
+                        shortcut.setLabel(item);
+                        shortcut.setAction(Utility.getActionFromLabel(mContext, item));
+                    }
+
+                    myRealm.copyToRealm(shortcut);
+                    myRealm.commitTransaction();
+                    mAction = Utility.getActionFromLabel(mContext,item);
+                    ActionListAdapter.this.notifyDataSetChanged();
+                    listener.onSettingChange();
                 }
 
-                myRealm.copyToRealm(shortcut);
-                myRealm.commitTransaction();
-                mAction = Utility.getActionFromLabel(mContext,item);
-                ActionListAdapter.this.notifyDataSetChanged();
-                listener.onSettingChange();
             }
         });
 
