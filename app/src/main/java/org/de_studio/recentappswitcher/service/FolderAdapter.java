@@ -118,40 +118,40 @@ public class FolderAdapter extends BaseAdapter {
             }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 switch (shortcut.getAction()) {
                     case Shortcut.ACTION_WIFI:
-                        imageView.setImageResource(R.drawable.ic_action_wifi_on);
+                        imageView.setImageResource(R.drawable.ic_wifi);
                         break;
                     case Shortcut.ACTION_BLUETOOTH:
-                        imageView.setImageResource(R.drawable.ic_action_bluetooth_on);
+                        imageView.setImageResource(R.drawable.ic_bluetooth);
                         break;
                     case Shortcut.ACTION_ROTATION:
-                        imageView.setImageResource(R.drawable.ic_action_rotate_on);
+                        imageView.setImageResource(R.drawable.ic_rotation);
                         break;
                     case Shortcut.ACTION_POWER_MENU:
-                        imageView.setImageResource(R.drawable.ic_action_power_menu);
+                        imageView.setImageResource(R.drawable.ic_power_menu);
                         break;
                     case Shortcut.ACTION_HOME:
-                        imageView.setImageResource(R.drawable.ic_icon_home);
+                        imageView.setImageResource(R.drawable.ic_home);
                         break;
                     case Shortcut.ACTION_BACK:
-                        imageView.setImageResource(R.drawable.ic_icon_back);
+                        imageView.setImageResource(R.drawable.ic_back);
                         break;
                     case Shortcut.ACTION_NOTI:
-                        imageView.setImageResource(R.drawable.ic_icon_noti);
+                        imageView.setImageResource(R.drawable.ic_notification);
                         break;
                     case Shortcut.ACTION_LAST_APP:
-                        imageView.setImageResource(R.drawable.ic_icon_last_app);
+                        imageView.setImageResource(R.drawable.ic_last_app);
                         break;
                     case Shortcut.ACTION_CALL_LOGS:
-                        imageView.setImageResource(R.drawable.ic_icon_call_log);
+                        imageView.setImageResource(R.drawable.ic_call_log);
                         break;
                     case Shortcut.ACTION_DIAL:
-                        imageView.setImageResource(R.drawable.ic_icon_dial);
+                        imageView.setImageResource(R.drawable.ic_dial);
                         break;
                     case Shortcut.ACTION_CONTACT:
-                        imageView.setImageResource(R.drawable.ic_icon_contact);
+                        imageView.setImageResource(R.drawable.ic_contact);
                         break;
                     case Shortcut.ACTION_RECENT:
-                        imageView.setImageResource(R.drawable.ic_action_recent2);
+                        imageView.setImageResource(R.drawable.ic_recent);
                         break;
                     case Shortcut.ACTION_NONE:
                         imageView.setImageDrawable(null);

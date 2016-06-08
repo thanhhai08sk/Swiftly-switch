@@ -227,40 +227,40 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
             } else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 switch (shortcut.getAction()) {
                     case Shortcut.ACTION_WIFI:
-                        currentShortcut.setImageResource(R.drawable.ic_action_wifi_on);
+                        currentShortcut.setImageResource(R.drawable.ic_wifi);
                         break;
                     case Shortcut.ACTION_BLUETOOTH:
-                        currentShortcut.setImageResource(R.drawable.ic_action_bluetooth_on);
+                        currentShortcut.setImageResource(R.drawable.ic_bluetooth);
                         break;
                     case Shortcut.ACTION_ROTATION:
-                        currentShortcut.setImageResource(R.drawable.ic_action_rotate_on);
+                        currentShortcut.setImageResource(R.drawable.ic_rotation);
                         break;
                     case Shortcut.ACTION_POWER_MENU:
-                        currentShortcut.setImageResource(R.drawable.ic_action_power_menu);
+                        currentShortcut.setImageResource(R.drawable.ic_power_menu);
                         break;
                     case Shortcut.ACTION_HOME:
-                        currentShortcut.setImageResource(R.drawable.ic_icon_home);
+                        currentShortcut.setImageResource(R.drawable.ic_home);
                         break;
                     case Shortcut.ACTION_BACK:
-                        currentShortcut.setImageResource(R.drawable.ic_icon_back);
+                        currentShortcut.setImageResource(R.drawable.ic_back);
                         break;
                     case Shortcut.ACTION_NOTI:
-                        currentShortcut.setImageResource(R.drawable.ic_icon_noti);
+                        currentShortcut.setImageResource(R.drawable.ic_notification);
                         break;
                     case Shortcut.ACTION_LAST_APP:
-                        currentShortcut.setImageResource(R.drawable.ic_icon_last_app);
+                        currentShortcut.setImageResource(R.drawable.ic_last_app);
                         break;
                     case Shortcut.ACTION_CALL_LOGS:
-                        currentShortcut.setImageResource(R.drawable.ic_icon_call_log);
+                        currentShortcut.setImageResource(R.drawable.ic_call_log);
                         break;
                     case Shortcut.ACTION_CONTACT:
-                        currentShortcut.setImageResource(R.drawable.ic_icon_contact);
+                        currentShortcut.setImageResource(R.drawable.ic_contact);
                         break;
                     case Shortcut.ACTION_DIAL:
-                        currentShortcut.setImageResource(R.drawable.ic_icon_dial);
+                        currentShortcut.setImageResource(R.drawable.ic_dial);
                         break;
                     case Shortcut.ACTION_RECENT:
-                        currentShortcut.setImageResource(R.drawable.ic_action_recent2);
+                        currentShortcut.setImageResource(R.drawable.ic_recent);
                         break;
                     case Shortcut.ACTION_NONE:
                         currentShortcut.setImageDrawable(null);

@@ -104,52 +104,40 @@ public class CircleFavoriteAdapter extends BaseAdapter {
             }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 switch (shortcut.getAction()) {
                     case Shortcut.ACTION_WIFI:
-                        icon.setImageResource(R.drawable.ic_action_wifi_on);
-                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color. black));
+                        icon.setImageResource(R.drawable.ic_wifi);
                         break;
                     case Shortcut.ACTION_BLUETOOTH:
-                        icon.setImageResource(R.drawable.ic_action_bluetooth_on);
-                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        icon.setImageResource(R.drawable.ic_bluetooth);
                         break;
                     case Shortcut.ACTION_ROTATION:
-                        icon.setImageResource(R.drawable.ic_action_rotate_on);
-                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        icon.setImageResource(R.drawable.ic_rotation);
                         break;
                     case Shortcut.ACTION_POWER_MENU:
-                        icon.setImageResource(R.drawable.ic_action_power_menu);
-                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        icon.setImageResource(R.drawable.ic_power_menu);
                         break;
                     case Shortcut.ACTION_HOME:
-                        icon.setImageResource(R.drawable.ic_icon_home);
-                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        icon.setImageResource(R.drawable.ic_home);
                         break;
                     case Shortcut.ACTION_BACK:
-                        icon.setImageResource(R.drawable.ic_icon_back);
-                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        icon.setImageResource(R.drawable.ic_back);
                         break;
                     case Shortcut.ACTION_NOTI:
-                        icon.setImageResource(R.drawable.ic_icon_noti);
-                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        icon.setImageResource(R.drawable.ic_notification);
                         break;
                     case Shortcut.ACTION_LAST_APP:
-                        icon.setImageResource(R.drawable.ic_icon_last_app);
-                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        icon.setImageResource(R.drawable.ic_last_app);
                         break;
                     case Shortcut.ACTION_CALL_LOGS:
-                        icon.setImageResource(R.drawable.ic_icon_call_log);
-                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        icon.setImageResource(R.drawable.ic_call_log);
                         break;
                     case Shortcut.ACTION_DIAL:
-                        icon.setImageResource(R.drawable.ic_icon_dial);
-                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        icon.setImageResource(R.drawable.ic_dial);
                         break;
                     case Shortcut.ACTION_CONTACT:
-                        icon.setImageResource(R.drawable.ic_icon_contact);
-                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        icon.setImageResource(R.drawable.ic_contact);
                         break;
                     case Shortcut.ACTION_RECENT:
-                        icon.setImageResource(R.drawable.ic_action_recent2);
-                        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        icon.setImageResource(R.drawable.ic_recent);
                         break;
                     case Shortcut.ACTION_NONE:
                         icon.setImageDrawable(null);

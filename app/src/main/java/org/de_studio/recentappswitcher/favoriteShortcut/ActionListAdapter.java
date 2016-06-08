@@ -97,33 +97,33 @@ public class ActionListAdapter extends BaseAdapter {
         }else radioButton.setChecked(false);
         label.setText(item);
         if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_wifi))) {
-            icon.setImageResource(R.drawable.ic_action_wifi_on);
+            icon.setImageResource(R.drawable.ic_wifi);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_bluetooth))) {
-            icon.setImageResource(R.drawable.ic_action_bluetooth_on);
+            icon.setImageResource(R.drawable.ic_bluetooth);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_rotation))) {
-            icon.setImageResource(R.drawable.ic_action_rotate_on);
+            icon.setImageResource(R.drawable.ic_rotation);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_power_menu))) {
-            icon.setImageResource(R.drawable.ic_action_power_menu);
+            icon.setImageResource(R.drawable.ic_power_menu);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_home))) {
-            icon.setImageResource(R.drawable.ic_icon_home);
+            icon.setImageResource(R.drawable.ic_home);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_back))) {
-            icon.setImageResource(R.drawable.ic_icon_back);
+            icon.setImageResource(R.drawable.ic_back);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_recent))) {
-            icon.setImageResource(R.drawable.ic_action_recent2);
+            icon.setImageResource(R.drawable.ic_recent);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_noti))) {
-            icon.setImageResource(R.drawable.ic_icon_noti);
+            icon.setImageResource(R.drawable.ic_notification);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_dial))) {
-            icon.setImageResource(R.drawable.ic_icon_dial);
+            icon.setImageResource(R.drawable.ic_dial);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_call_log))) {
-            icon.setImageResource(R.drawable.ic_icon_call_log);
+            icon.setImageResource(R.drawable.ic_call_log);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_contact))) {
-            icon.setImageResource(R.drawable.ic_icon_contact);
+            icon.setImageResource(R.drawable.ic_contact);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_last_app))) {
-            icon.setImageResource(R.drawable.ic_icon_last_app);
+            icon.setImageResource(R.drawable.ic_last_app);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_none))) {
             icon.setImageDrawable(null);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_folder))) {
-            icon.setImageResource(R.drawable.ic_icon_contact);
+            icon.setImageResource(R.drawable.ic_contact);
         }
         icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
 

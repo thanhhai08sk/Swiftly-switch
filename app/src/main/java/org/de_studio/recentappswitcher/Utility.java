@@ -1347,65 +1347,65 @@ public  class Utility {
                 switch (shortcut.getAction()) {
                     case Shortcut.ACTION_WIFI:
                         if (getWifiState(mContext)) {
-                            imageView.setImageResource(R.drawable.ic_action_wifi_on);
+                            imageView.setImageResource(R.drawable.ic_wifi);
                         } else {
-                            imageView.setImageResource(R.drawable.ic_action_wifi_off);
+                            imageView.setImageResource(R.drawable.ic_wifi_off);
                         }
 
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color. black));
                         break;
                     case Shortcut.ACTION_BLUETOOTH:
                         if (getBluetoothState(mContext)) {
-                            imageView.setImageResource(R.drawable.ic_action_bluetooth_on);
+                            imageView.setImageResource(R.drawable.ic_bluetooth);
                         } else {
-                            imageView.setImageResource(R.drawable.ic_action_bluetooth_off);
+                            imageView.setImageResource(R.drawable.ic_bluetooth_off);
                         }
 
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                     case Shortcut.ACTION_ROTATION:
                         if (getIsRotationAuto(mContext)) {
-                            imageView.setImageResource(R.drawable.ic_action_rotate_on);
+                            imageView.setImageResource(R.drawable.ic_rotation);
                         } else {
-                            imageView.setImageResource(R.drawable.ic_action_rotate_lock);
+                            imageView.setImageResource(R.drawable.ic_rotation_lock);
                         }
 
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                     case Shortcut.ACTION_POWER_MENU:
-                        imageView.setImageResource(R.drawable.ic_action_power_menu);
+                        imageView.setImageResource(R.drawable.ic_power_menu);
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                     case Shortcut.ACTION_HOME:
-                        imageView.setImageResource(R.drawable.ic_icon_home);
+                        imageView.setImageResource(R.drawable.ic_home);
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                     case Shortcut.ACTION_BACK:
-                        imageView.setImageResource(R.drawable.ic_icon_back);
+                        imageView.setImageResource(R.drawable.ic_back);
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                     case Shortcut.ACTION_NOTI:
-                        imageView.setImageResource(R.drawable.ic_icon_noti);
+                        imageView.setImageResource(R.drawable.ic_notification);
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                     case Shortcut.ACTION_LAST_APP:
-                        imageView.setImageResource(R.drawable.ic_icon_last_app);
+                        imageView.setImageResource(R.drawable.ic_last_app);
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                     case Shortcut.ACTION_CALL_LOGS:
-                        imageView.setImageResource(R.drawable.ic_icon_call_log);
+                        imageView.setImageResource(R.drawable.ic_call_log);
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                     case Shortcut.ACTION_DIAL:
-                        imageView.setImageResource(R.drawable.ic_icon_dial);
+                        imageView.setImageResource(R.drawable.ic_dial);
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                     case Shortcut.ACTION_CONTACT:
-                        imageView.setImageResource(R.drawable.ic_icon_contact);
+                        imageView.setImageResource(R.drawable.ic_contact);
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                     case Shortcut.ACTION_RECENT:
-                        imageView.setImageResource(R.drawable.ic_action_recent2);
+                        imageView.setImageResource(R.drawable.ic_recent);
 //                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
                         break;
                     case Shortcut.ACTION_NONE:
@@ -1590,54 +1590,54 @@ public  class Utility {
         switch (action) {
             case MainActivity.ACTION_WIFI:
                 if (getWifiState(context)) {
-                    imageView.setImageResource(R.drawable.ic_action_wifi_on);
+                    imageView.setImageResource(R.drawable.ic_wifi);
                 } else {
-                    imageView.setImageResource(R.drawable.ic_action_wifi_off);
+                    imageView.setImageResource(R.drawable.ic_wifi_off);
                 }
 
                 break;
             case MainActivity.ACTION_BLUETOOTH:
                 if (getBluetoothState(context)) {
-                    imageView.setImageResource(R.drawable.ic_action_bluetooth_on);
+                    imageView.setImageResource(R.drawable.ic_bluetooth);
                 } else {
-                    imageView.setImageResource(R.drawable.ic_action_bluetooth_off);
+                    imageView.setImageResource(R.drawable.ic_bluetooth_off);
                 }
 
                 break;
             case MainActivity.ACTION_ROTATE:
                 if (getIsRotationAuto(context)) {
-                    imageView.setImageResource(R.drawable.ic_action_rotate_on);
+                    imageView.setImageResource(R.drawable.ic_rotation);
                 } else {
-                    imageView.setImageResource(R.drawable.ic_action_rotate_lock);
+                    imageView.setImageResource(R.drawable.ic_rotation_lock);
                 }
 
                 break;
             case MainActivity.ACTION_POWER_MENU:
-                imageView.setImageResource(R.drawable.ic_action_power_menu);
+                imageView.setImageResource(R.drawable.ic_power_menu);
                 break;
             case MainActivity.ACTION_HOME:
-                imageView.setImageResource(R.drawable.ic_icon_home);
+                imageView.setImageResource(R.drawable.ic_home);
                 break;
             case MainActivity.ACTION_BACK:
-                imageView.setImageResource(R.drawable.ic_icon_back);
+                imageView.setImageResource(R.drawable.ic_back);
                 break;
             case MainActivity.ACTION_NOTI:
-                imageView.setImageResource(R.drawable.ic_icon_noti);
+                imageView.setImageResource(R.drawable.ic_notification);
                 break;
             case MainActivity.ACTION_LAST_APP:
-                imageView.setImageResource(R.drawable.ic_icon_last_app);
+                imageView.setImageResource(R.drawable.ic_last_app);
                 break;
             case MainActivity.ACTION_CALL_LOGS:
-                imageView.setImageResource(R.drawable.ic_icon_call_log);
+                imageView.setImageResource(R.drawable.ic_call_log);
                 break;
             case MainActivity.ACTION_DIAL:
-                imageView.setImageResource(R.drawable.ic_icon_dial);
+                imageView.setImageResource(R.drawable.ic_dial);
                 break;
             case MainActivity.ACTION_CONTACT:
-                imageView.setImageResource(R.drawable.ic_icon_contact);
+                imageView.setImageResource(R.drawable.ic_contact);
                 break;
             case MainActivity.ACTION_RECENT:
-                imageView.setImageResource(R.drawable.ic_action_recent2);
+                imageView.setImageResource(R.drawable.ic_recent);
                 break;
             case MainActivity.ACTION_NONE:
                 imageView.setImageDrawable(null);
@@ -1649,29 +1649,29 @@ public  class Utility {
     public static Drawable getDrawableForAction(Context context, int action) {
         switch (action) {
             case Shortcut.ACTION_WIFI:
-                return ContextCompat.getDrawable(context, R.drawable.ic_action_wifi_on);
+                return ContextCompat.getDrawable(context, R.drawable.ic_wifi);
             case Shortcut.ACTION_BLUETOOTH:
-                return ContextCompat.getDrawable(context, R.drawable.ic_action_bluetooth_on);
+                return ContextCompat.getDrawable(context, R.drawable.ic_bluetooth);
             case Shortcut.ACTION_ROTATION:
-                return ContextCompat.getDrawable(context, R.drawable.ic_action_rotate_on);
+                return ContextCompat.getDrawable(context, R.drawable.ic_rotation);
             case Shortcut.ACTION_POWER_MENU:
-                return ContextCompat.getDrawable(context, R.drawable.ic_action_power_menu);
+                return ContextCompat.getDrawable(context, R.drawable.ic_power_menu);
             case Shortcut.ACTION_HOME:
-                return ContextCompat.getDrawable(context, R.drawable.ic_icon_home);
+                return ContextCompat.getDrawable(context, R.drawable.ic_home);
             case Shortcut.ACTION_BACK:
-                return ContextCompat.getDrawable(context, R.drawable.ic_icon_back);
+                return ContextCompat.getDrawable(context, R.drawable.ic_back);
             case Shortcut.ACTION_NOTI:
-                return ContextCompat.getDrawable(context, R.drawable.ic_icon_noti);
+                return ContextCompat.getDrawable(context, R.drawable.ic_notification);
             case Shortcut.ACTION_LAST_APP:
-                return ContextCompat.getDrawable(context, R.drawable.ic_icon_last_app);
+                return ContextCompat.getDrawable(context, R.drawable.ic_last_app);
             case Shortcut.ACTION_CALL_LOGS:
-                return ContextCompat.getDrawable(context, R.drawable.ic_icon_call_log);
+                return ContextCompat.getDrawable(context, R.drawable.ic_call_log);
             case Shortcut.ACTION_DIAL:
-                return ContextCompat.getDrawable(context, R.drawable.ic_icon_dial);
+                return ContextCompat.getDrawable(context, R.drawable.ic_dial);
             case Shortcut.ACTION_CONTACT:
-                return ContextCompat.getDrawable(context, R.drawable.ic_icon_contact);
+                return ContextCompat.getDrawable(context, R.drawable.ic_contact);
             case Shortcut.ACTION_RECENT:
-                return ContextCompat.getDrawable(context, R.drawable.ic_action_recent2);
+                return ContextCompat.getDrawable(context, R.drawable.ic_recent);
             case Shortcut.ACTION_NONE:
                 return null;
         }

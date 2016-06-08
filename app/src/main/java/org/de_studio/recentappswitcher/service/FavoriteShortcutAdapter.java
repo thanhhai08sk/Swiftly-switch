@@ -122,54 +122,54 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                 switch (shortcut.getAction()) {
                     case Shortcut.ACTION_WIFI:
                         if (Utility.getWifiState(mContext)) {
-                            imageView.setImageResource(R.drawable.ic_action_wifi_on);
+                            imageView.setImageResource(R.drawable.ic_wifi);
                         } else {
-                            imageView.setImageResource(R.drawable.ic_action_wifi_off);
+                            imageView.setImageResource(R.drawable.ic_wifi_off);
                         }
 
                         break;
                     case Shortcut.ACTION_BLUETOOTH:
                         if (Utility.getBluetoothState(mContext)) {
-                            imageView.setImageResource(R.drawable.ic_action_bluetooth_on);
+                            imageView.setImageResource(R.drawable.ic_bluetooth);
                         } else {
-                            imageView.setImageResource(R.drawable.ic_action_bluetooth_off);
+                            imageView.setImageResource(R.drawable.ic_bluetooth_off);
                         }
 
                         break;
                     case Shortcut.ACTION_ROTATION:
                         if (Utility.getIsRotationAuto(mContext)) {
-                            imageView.setImageResource(R.drawable.ic_action_rotate_on);
+                            imageView.setImageResource(R.drawable.ic_rotation);
                         } else {
-                            imageView.setImageResource(R.drawable.ic_action_rotate_lock);
+                            imageView.setImageResource(R.drawable.ic_rotation_lock);
                         }
 
                         break;
                     case Shortcut.ACTION_POWER_MENU:
-                        imageView.setImageResource(R.drawable.ic_action_power_menu);
+                        imageView.setImageResource(R.drawable.ic_power_menu);
                         break;
                     case Shortcut.ACTION_HOME:
-                        imageView.setImageResource(R.drawable.ic_icon_home);
+                        imageView.setImageResource(R.drawable.ic_home);
                         break;
                     case Shortcut.ACTION_BACK:
-                        imageView.setImageResource(R.drawable.ic_icon_back);
+                        imageView.setImageResource(R.drawable.ic_back);
                         break;
                     case Shortcut.ACTION_NOTI:
-                        imageView.setImageResource(R.drawable.ic_icon_noti);
+                        imageView.setImageResource(R.drawable.ic_notification);
                         break;
                     case Shortcut.ACTION_LAST_APP:
-                        imageView.setImageResource(R.drawable.ic_icon_last_app);
+                        imageView.setImageResource(R.drawable.ic_last_app);
                         break;
                     case Shortcut.ACTION_CONTACT:
-                        imageView.setImageResource(R.drawable.ic_icon_contact);
+                        imageView.setImageResource(R.drawable.ic_contact);
                         break;
                     case Shortcut.ACTION_RECENT:
-                        imageView.setImageResource(R.drawable.ic_action_recent2);
+                        imageView.setImageResource(R.drawable.ic_recent);
                         break;
                     case Shortcut.ACTION_CALL_LOGS:
-                        imageView.setImageResource(R.drawable.ic_icon_call_log);
+                        imageView.setImageResource(R.drawable.ic_call_log);
                         break;
                     case Shortcut.ACTION_DIAL:
-                        imageView.setImageResource(R.drawable.ic_icon_dial);
+                        imageView.setImageResource(R.drawable.ic_dial);
                         break;
                     case Shortcut.ACTION_NONE:
                         imageView.setImageDrawable(null);
