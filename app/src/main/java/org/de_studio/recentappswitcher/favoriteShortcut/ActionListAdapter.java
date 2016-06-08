@@ -1,7 +1,6 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,7 +90,8 @@ public class ActionListAdapter extends BaseAdapter {
         RadioButton radioButton = (RadioButton) view.findViewById(R.id.choose_app_radio_button);
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         if (shortcut != null) {
-            if (shortcut.getType() == Shortcut.TYPE_ACTION && mAction != -1 && mAction == Utility.getActionFromLabel(mContext, item)) {
+            if ((shortcut.getType() == Shortcut.TYPE_ACTION && mAction != -1 && mAction == Utility.getActionFromLabel(mContext, item)) ||
+                    shortcut.getType() == Shortcut.TYPE_FOLDER && position ==1) {
                 radioButton.setChecked(true);
             }else radioButton.setChecked(false);
         }else radioButton.setChecked(false);
@@ -123,9 +123,8 @@ public class ActionListAdapter extends BaseAdapter {
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_none))) {
             icon.setImageDrawable(null);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_folder))) {
-            icon.setImageResource(R.drawable.ic_contact);
+            icon.setImageResource(R.drawable.ic_folder);
         }
-        icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override

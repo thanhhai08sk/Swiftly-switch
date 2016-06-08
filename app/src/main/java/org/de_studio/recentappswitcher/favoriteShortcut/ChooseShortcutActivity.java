@@ -285,6 +285,8 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                     currentShortcut.setImageResource(R.drawable.ic_contact_default);
 
                 }
+            } else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
+                currentShortcut.setImageResource(R.drawable.ic_folder);
             }
         } else {
             currentShortcut.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
