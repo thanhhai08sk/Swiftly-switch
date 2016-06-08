@@ -139,13 +139,14 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
     }
     @Override
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle args) {
+        String sordOrder = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC";
         return new CursorLoader(
                 getActivity(),
                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 null,
                 null,
                 null,
-                null
+                sordOrder
         );
     }
 
