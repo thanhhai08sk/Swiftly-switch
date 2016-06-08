@@ -1180,6 +1180,7 @@ public  class Utility {
                 break;
             case MainActivity.ACTION_DIAL:
                 dialAction(context);
+                break;
             case MainActivity.ACTION_RECENT:
                 recentAction(context,v,className,packageName);
                 break;
@@ -1521,6 +1522,7 @@ public  class Utility {
                     Utility.callLogsAction(context);
                     break;
                 case Shortcut.ACTION_DIAL:
+                    Log.e(TAG, "startShortcut: Start dial");
                     Utility.dialAction(context);
                     break;
                 case Shortcut.ACTION_CONTACT:
@@ -1570,7 +1572,7 @@ public  class Utility {
         }
     }
 
-    public static void setIndicatorForQuickAction(SharedPreferences sharedPreferences, Context context, int homeBackNoti, ImageView imageView) {
+    public static void setIndicatorForQuickAction(SharedPreferences sharedPreferences, Context context, int homeBackNoti, ImageView imageView, TextView label) {
         String action = MainActivity.ACTION_NONE;
         switch (homeBackNoti) {
             case 1:
@@ -1586,7 +1588,7 @@ public  class Utility {
                 action = sharedPreferences.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
                 break;
         }
-
+        label.setText(getLabelForOuterSetting(context,action));
         switch (action) {
             case MainActivity.ACTION_WIFI:
                 if (getWifiState(context)) {
