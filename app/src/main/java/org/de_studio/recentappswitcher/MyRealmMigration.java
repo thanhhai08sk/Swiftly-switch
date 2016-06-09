@@ -1,5 +1,7 @@
 package org.de_studio.recentappswitcher;
 
+import android.util.Log;
+
 import io.realm.DynamicRealm;
 import io.realm.RealmMigration;
 import io.realm.RealmObjectSchema;
@@ -14,10 +16,16 @@ public class MyRealmMigration implements RealmMigration {
         RealmSchema schema = realm.getSchema();
         if (oldVersion == 0) {
             RealmObjectSchema shortcutSchema =  schema.get("Shortcut");
-            shortcutSchema.addField("thumbnailUri", String.class)
-                    .addField("number", String.class)
-                    .addField("name", String.class)
-                    .addField("contactId", Long.class);
+            try {
+                shortcutSchema.addField("thumbnailUri", String.class)
+                        .addField("number", String.class)
+                        .addField("name", String.class)
+                        .addField("contactId", Long.class);
+            } catch (IllegalArgumentException e) {
+                Log.e("MyRealmMigration", "migrate: " + e);
+                e.printStackTrace();
+            }
+
             oldVersion++;
         }
     }

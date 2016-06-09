@@ -24,6 +24,7 @@ import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by HaiNguyen on 6/3/16.
@@ -58,9 +59,9 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
                         Shortcut removeShortcut = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id", startId + 1000).equalTo("type",Shortcut.TYPE_ACTION) .equalTo("action",action).findFirst();
                         int removeId = removeShortcut.getId();
                         Log.e(LOG_TAG, "removeID = " + removeId);
-                        removeShortcut.removeFromRealm();
+                        removeShortcut.deleteFromRealm();
                         RealmResults<Shortcut> results = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id",startId + 1000).findAll();
-                        results.sort("id",true);
+                        results.sort("id", Sort.ASCENDING);
                         for (int i = startId; i < startId+ results.size(); i++) {
                             Log.e(LOG_TAG, "id = " + results.get(i- startId).getId());
                             if (results.get(i - startId).getId() >= removeId) {

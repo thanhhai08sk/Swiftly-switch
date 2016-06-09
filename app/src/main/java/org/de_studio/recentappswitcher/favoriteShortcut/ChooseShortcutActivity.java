@@ -23,8 +23,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import java.io.IOException;
 import java.util.List;
@@ -72,9 +74,17 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
         AppCompatImageButton nextButton = (AppCompatImageButton) findViewById(R.id.app_tab_fragment_next_button);
         AppCompatButton okButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_ok_button);
         if (mode == FavoriteSettingActivity.MODE_GRID) {
-            myRealm = Realm.getInstance(getApplicationContext());
+            myRealm =Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext())
+                    .name("default.realm")
+                    .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                    .migration(new MyRealmMigration())
+                    .build());
         } else {
-            myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext())
+                    .name("circleFavo.realm")
+                    .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                    .migration(new MyRealmMigration())
+                    .build());
         }
 
         final TextView positionText = (TextView) findViewById(R.id.app_tab_fragment_position_text_view);

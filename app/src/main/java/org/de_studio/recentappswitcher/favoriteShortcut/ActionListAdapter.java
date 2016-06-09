@@ -11,8 +11,10 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -37,9 +39,17 @@ public class ActionListAdapter extends BaseAdapter {
         mPosition = position;
         this.mode = mode;
         if (mode == FavoriteSettingActivity.MODE_GRID) {
-            myRealm = Realm.getInstance(mContext);
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+                    .name("default.realm")
+                    .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                    .migration(new MyRealmMigration())
+                    .build());
         } else {
-            myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+                    .name("circleFavo.realm")
+                    .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                    .migration(new MyRealmMigration())
+                    .build());
         }
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         if (shortcut != null ) {
@@ -142,7 +152,6 @@ public class ActionListAdapter extends BaseAdapter {
                     if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_folder))) {
                         shortcut.setType(Shortcut.TYPE_FOLDER);
                         shortcut.setId(mPosition);
-                        shortcut.setSize(0);
                     } else {
                         shortcut.setType(Shortcut.TYPE_ACTION);
                         shortcut.setId(mPosition);

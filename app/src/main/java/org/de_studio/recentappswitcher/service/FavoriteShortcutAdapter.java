@@ -20,6 +20,7 @@ import android.widget.ImageView;
 
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
+import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
@@ -28,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by hai on 2/25/2016.
@@ -48,7 +50,11 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     public FavoriteShortcutAdapter(Context context) {
         mContext = context;
         iconPadding =(int) mContext.getResources().getDimension(R.dimen.icon_padding);
-        myRealm = Realm.getInstance(mContext);
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+                .name("default.realm")
+                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         mIconScale = sharedPreferences.getFloat(EdgeSetting.ICON_SCALE,1f);
         String iconPackPacka = sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "com.colechamberlin.stickers");

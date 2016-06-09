@@ -31,6 +31,7 @@ import java.util.Set;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by hai on 3/26/2016.
@@ -64,9 +65,9 @@ public class PinAppDialogFragment extends DialogFragment {
                         pinRealm.beginTransaction();
                         Shortcut removeShortcut = pinRealm.where(Shortcut.class).equalTo("packageName",packageName).findFirst();
                         int removeId = removeShortcut.getId();
-                        pinRealm.where(Shortcut.class).equalTo("packageName",packageName).findFirst().removeFromRealm();
+                        pinRealm.where(Shortcut.class).equalTo("packageName",packageName).findFirst().deleteFromRealm();
                         RealmResults<Shortcut> results = pinRealm.where(Shortcut.class).findAll();
-                        results.sort("id",true);
+                        results.sort("id", Sort.ASCENDING);
 //                        for (Shortcut tem : results) {
 //                            Log.e(LOG_TAG, "package clicked = " + packageName);
 //                            Log.e(LOG_TAG, "ori id = " + tem.getId());

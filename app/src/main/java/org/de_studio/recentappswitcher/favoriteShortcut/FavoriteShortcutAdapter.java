@@ -22,14 +22,17 @@ import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
+import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.io.File;
 import java.io.IOException;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 /**
@@ -56,7 +59,11 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
             iconPack = iconPackManager.getInstance(iconPackPacka);
         }
         iconPadding = (int)mContext.getResources().getDimension(R.dimen.icon_padding);
-        myRealm = Realm.getInstance(mContext);
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+                .name("default.realm")
+                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
     }
 
     @Override
@@ -222,17 +229,16 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     }
 
     public void changePosition(int dragPosition, int dropPosition) {
-        Realm myRealm = Realm.getInstance(mContext);
         Shortcut dropTemp = myRealm.where(Shortcut.class).equalTo("id", dropPosition).findFirst();
         Shortcut dragTemp = myRealm.where(Shortcut.class).equalTo("id", dragPosition).findFirst();
         Shortcut shortcut5000 = myRealm.where(Shortcut.class).equalTo("id",500).findFirst();
         Shortcut shortcut1500 = myRealm.where(Shortcut.class).equalTo("id", 1500).findFirst();
         myRealm.beginTransaction();
         if (shortcut5000 != null) {
-            shortcut5000.removeFromRealm();
+            shortcut5000.deleteFromRealm();
         }
         if (shortcut1500 != null) {
-            shortcut1500.removeFromRealm();
+            shortcut1500.deleteFromRealm();
         }
 
         try {
@@ -294,7 +300,6 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
     public void removeDragItem() {
-        Realm myRealm = Realm.getInstance(mContext);
         myRealm.beginTransaction();
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id", dragPosition).findFirst();
         if (shortcut != null) {
