@@ -34,8 +34,6 @@ public class Shortcut extends RealmObject {
     private String number;
     private String name;
     private long contactId;
-    private int size;
-    private int startId;
 
     public Shortcut() {}
 
@@ -108,20 +106,5 @@ public class Shortcut extends RealmObject {
         return contactId;
     }
 
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public int getStartId() {
-        return startId;
-    }
-
-    public void setStartId(int id) {
-        this.startId = id;
-    }
 
 }
