@@ -19,12 +19,14 @@ import android.widget.ImageView;
 
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
+import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 
 import java.io.IOException;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by HaiNguyen on 6/1/16.
@@ -45,7 +47,11 @@ public class FolderAdapter extends BaseAdapter {
     public FolderAdapter(Context context, int mPosition) {
         mContext = context;
         this.mPosition = mPosition;
-        myRealm = Realm.getDefaultInstance();
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+                .name("default.realm")
+                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
         folderShortcut = myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst();
         sharedPreferences = context.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         String iconPackPacka = sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none");

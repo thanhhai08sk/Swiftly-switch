@@ -16,11 +16,14 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import java.io.IOException;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by HaiNguyen on 6/3/16.
@@ -32,7 +35,11 @@ public class AddContactToFolderAdapter extends CursorAdapter {
     public AddContactToFolderAdapter(Context context, Cursor c, int flags, int mPosition) {
         super(context, c, flags);
         this.mPosition = mPosition;
-        myRealm = Realm.getDefaultInstance();
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder(context)
+                .name("default.realm")
+                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
     }
 
     @Override

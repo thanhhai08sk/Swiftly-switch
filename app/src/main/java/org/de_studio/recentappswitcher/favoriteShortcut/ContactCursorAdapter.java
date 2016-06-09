@@ -16,11 +16,14 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import java.io.IOException;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by HaiNguyen on 5/30/16.
@@ -36,7 +39,11 @@ public class ContactCursorAdapter extends CursorAdapter {
         super(context, c, flags);
         this.context = context;
         this.mPosition = mPosition;
-        myRealm = Realm.getDefaultInstance();
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder(context)
+                .name("default.realm")
+                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
     }
 
     @Override

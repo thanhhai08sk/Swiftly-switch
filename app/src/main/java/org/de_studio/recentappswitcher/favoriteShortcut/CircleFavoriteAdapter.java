@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
+import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
@@ -43,7 +44,11 @@ public class CircleFavoriteAdapter extends BaseAdapter {
     public CircleFavoriteAdapter(Context context) {
         super();
         this.mContext = context;
-        circleFavoRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
+        circleFavoRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+                .name("circleFavo.realm")
+                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         String iconPackPacka = sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none");
         packageManager = context.getPackageManager();

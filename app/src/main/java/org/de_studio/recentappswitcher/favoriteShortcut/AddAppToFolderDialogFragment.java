@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.AppInfors;
 import org.de_studio.recentappswitcher.MyApplication;
+import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
@@ -32,6 +33,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -52,7 +54,11 @@ public class AddAppToFolderDialogFragment  extends DialogFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.add_favorite_app_fragment_list_view, container);
         mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
-        myRealm = Realm.getDefaultInstance();
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getActivity())
+                .name("default.realm")
+                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
         final int startId = (mPosition +1)*1000;
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

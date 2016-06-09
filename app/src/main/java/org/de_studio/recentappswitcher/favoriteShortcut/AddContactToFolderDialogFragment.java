@@ -21,11 +21,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.MyApplication;
+import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -65,7 +67,11 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mListView = (ListView) getView(). findViewById(R.id.add_favorite_list_view);
-        myRealm = Realm.getDefaultInstance();
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getActivity())
+                .name("default.realm")
+                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
         mAdapter = new AddContactToFolderAdapter(getActivity(),null,0,mPosition);
         mListView.setAdapter(mAdapter);
         final int startId = (mPosition +1)*1000;

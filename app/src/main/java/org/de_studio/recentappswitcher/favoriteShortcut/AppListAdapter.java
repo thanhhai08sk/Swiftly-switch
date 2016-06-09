@@ -16,7 +16,9 @@ import android.widget.TextView;
 import org.de_studio.recentappswitcher.AppInfors;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
+import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.util.ArrayList;
@@ -46,9 +48,17 @@ public class AppListAdapter extends BaseAdapter {
         mContext = context;
         mAppInfosArrayList = appInforses;
         if (mode == FavoriteSettingActivity.MODE_GRID || mode == FavoriteSettingActivity.MODE_FOLDER) {
-            myRealm = Realm.getDefaultInstance();
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+                    .name("default.realm")
+                    .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                    .migration(new MyRealmMigration())
+                    .build());
         } else {
-            myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("circleFavo.realm").build());
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+                    .name("circleFavo.realm")
+                    .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                    .migration(new MyRealmMigration())
+                    .build());
         }
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         if (shortcut != null ) {

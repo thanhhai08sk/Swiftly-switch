@@ -29,4 +29,9 @@ public class MyRealmMigration implements RealmMigration {
             oldVersion++;
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof MyRealmMigration;
+    }
 }

@@ -40,7 +40,11 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
         super();
         mContext = context;
         packageManager = context.getPackageManager();
-        pinRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext).name("pinApp.realm").build());
+        pinRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+                .name("pinApp.realm")
+                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         String iconPackPacka = sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none");
         if (!iconPackPacka.equals("none")) {

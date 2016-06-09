@@ -20,10 +20,13 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 /**
@@ -78,7 +81,11 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
         mAdapter = new ContactCursorAdapter(getActivity(), null, 0, mPosition);
         mContactsList.setAdapter(mAdapter);
         mContactsList.setOnItemClickListener(this);
-        myRealm = Realm.getDefaultInstance();
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getActivity())
+                .name("default.realm")
+                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
         ((ChooseShortcutActivity)getActivity()).setContactAdapter(mAdapter);
 //        mCursorAdapter = new SimpleCursorAdapter(
 //                getActivity(),
@@ -134,7 +141,7 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
         myRealm.beginTransaction();
         RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findAll();
         Log.e(TAG, "mPosition = " + mPosition);
-        oldShortcut.clear();
+        oldShortcut.deleteAllFromRealm();
         Shortcut shortcut = new Shortcut();
         shortcut.setType(Shortcut.TYPE_CONTACT);
         shortcut.setId(mPosition);
