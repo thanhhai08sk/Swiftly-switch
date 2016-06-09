@@ -147,7 +147,7 @@ public class ActionListAdapter extends BaseAdapter {
                     myRealm.beginTransaction();
                     RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findAll();
                     Log.e(LOG_TAG, "mPosition = " + mPosition);
-                    oldShortcut.clear();
+                    oldShortcut.deleteAllFromRealm();
                     Shortcut shortcut = new Shortcut();
                     if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_folder))) {
                         shortcut.setType(Shortcut.TYPE_FOLDER);

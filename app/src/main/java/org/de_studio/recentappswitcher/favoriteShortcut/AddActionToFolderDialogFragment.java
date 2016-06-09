@@ -18,11 +18,13 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.MyApplication;
+import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -42,7 +44,11 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.add_favorite_app_fragment_list_view, container);
         mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
-        myRealm = Realm.getDefaultInstance();
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getContext())
+                .name("default.realm")
+                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
         mAdapter = new AddActionToFolderAdapter(getActivity(), myRealm, mPosition);
         mListView.setAdapter(mAdapter);
         final int startId = (mPosition +1)*1000;
@@ -60,8 +66,7 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
                         int removeId = removeShortcut.getId();
                         Log.e(LOG_TAG, "removeID = " + removeId);
                         removeShortcut.deleteFromRealm();
-                        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id",startId + 1000).findAll();
-                        results.sort("id", Sort.ASCENDING);
+                        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id",startId + 1000).findAll().sort("id", Sort.ASCENDING);
                         for (int i = startId; i < startId+ results.size(); i++) {
                             Log.e(LOG_TAG, "id = " + results.get(i- startId).getId());
                             if (results.get(i - startId).getId() >= removeId) {

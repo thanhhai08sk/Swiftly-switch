@@ -158,7 +158,7 @@ public class AppListAdapter extends BaseAdapter {
                 myRealm.beginTransaction();
                 RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findAll();
                 Log.e(LOG_TAG, "mPosition = " + mPosition);
-                oldShortcut.clear();
+                oldShortcut.deleteAllFromRealm();
 //                Shortcut shortcut = myRealm.createObject(Shortcut.class);
                 Shortcut shortcut = new Shortcut();
                 shortcut.setType(Shortcut.TYPE_APP);

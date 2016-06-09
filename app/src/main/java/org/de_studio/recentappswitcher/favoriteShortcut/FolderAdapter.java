@@ -38,7 +38,7 @@ import io.realm.Sort;
  * Created by HaiNguyen on 5/31/16.
  */
 public class FolderAdapter extends BaseAdapter {
-    private static final String LOG_TAG = FolderAdapter.class.getSimpleName();
+    private static final String TAG = FolderAdapter.class.getSimpleName();
     private Context mContext;
     private int mPosition,dragPosition, startId;
     private Realm myRealm;
@@ -105,7 +105,7 @@ public class FolderAdapter extends BaseAdapter {
                         imageView.setImageDrawable(defaultDrawable);
                     }
                 } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(LOG_TAG, "NameNotFound " + e);
+                    Log.e(TAG, "NameNotFound " + e);
                 }
             }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
                 label.setText(shortcut.getLabel());
@@ -211,12 +211,15 @@ public class FolderAdapter extends BaseAdapter {
     public void removeDragItem() {
         myRealm.beginTransaction();
         myRealm.where(Shortcut.class).equalTo("id",startId + dragPosition).findFirst().deleteFromRealm();
+
         RealmResults<Shortcut> results = myRealm.where(Shortcut.class).greaterThan("id", (folderShortcut.getId()+1 ) * 1000 -1)
-                .lessThan("id", (folderShortcut.getId() + 2)* 1000).findAll();
-        results.sort("id", Sort.ASCENDING);
+                .lessThan("id", (folderShortcut.getId() + 2)* 1000).findAll().sort("id", Sort.ASCENDING);
+
+
         for (int i = 0; i < results.size(); i++) {
             if (results.get(i).getId() >= startId + dragPosition) {
-                Log.e(LOG_TAG, "when i = " + i + "result id = " + results.get(i).getId());
+                Log.e(TAG, "when i = " + i + "result id = " + results.get(i).getId() +
+                "\nDragPosition = " + dragPosition );
                 Shortcut shortcut = results.get(i);
                 int oldId = shortcut.getId();
                 shortcut.setId(oldId - 1);

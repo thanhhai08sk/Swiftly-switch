@@ -94,8 +94,7 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
                         int removeId = removeShortcut.getId();
                         Log.e(LOG_TAG, "removeID = " + removeId);
                         removeShortcut.deleteFromRealm();
-                        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id",startId + 1000).findAll();
-                        results.sort("id", Sort.ASCENDING);
+                        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id",startId + 1000).findAll().sort("id", Sort.ASCENDING);
                         for (int i = startId; i < startId+ results.size(); i++) {
                             Log.e(LOG_TAG, "id = " + results.get(i- startId).getId());
                             if (results.get(i - startId).getId() >= removeId) {
@@ -129,7 +128,11 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
                 mAdapter.notifyDataSetChanged();
             }
         });
-        myRealm = Realm.getDefaultInstance();
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getContext())
+                .name("default.realm")
+                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
         getLoaderManager().initLoader(0, null, this);
     }
 

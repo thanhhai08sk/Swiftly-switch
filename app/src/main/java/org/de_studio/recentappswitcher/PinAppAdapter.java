@@ -166,8 +166,7 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
         Log.e(LOG_TAG, "remove " + id);
         pinRealm.beginTransaction();
         pinRealm.where(Shortcut.class).equalTo("id",id).findFirst().deleteFromRealm();
-        RealmResults<Shortcut> results = pinRealm.where(Shortcut.class).findAll();
-        results.sort("id", Sort.ASCENDING);
+        RealmResults<Shortcut> results = pinRealm.where(Shortcut.class).findAll().sort("id", Sort.ASCENDING);
         for (int i = 0; i < results.size(); i++) {
             Log.e(LOG_TAG, "id = " + results.get(i).getId());
             if (results.get(i).getId() >= id) {

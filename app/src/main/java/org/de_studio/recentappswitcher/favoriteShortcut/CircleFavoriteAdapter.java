@@ -221,8 +221,7 @@ public class CircleFavoriteAdapter extends BaseAdapter {
         Log.e(LOG_TAG, "remove " + id);
         circleFavoRealm.beginTransaction();
         circleFavoRealm.where(Shortcut.class).equalTo("id",id).findFirst().deleteFromRealm();
-        RealmResults<Shortcut> results = circleFavoRealm.where(Shortcut.class).findAll();
-        results.sort("id", Sort.ASCENDING);
+        RealmResults<Shortcut> results = circleFavoRealm.where(Shortcut.class).findAll().sort("id", Sort.ASCENDING);
         for (int i = 0; i < results.size(); i++) {
             Log.e(LOG_TAG, "id = " + results.get(i).getId());
             if (results.get(i).getId() >= id) {
