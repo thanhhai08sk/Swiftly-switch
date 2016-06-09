@@ -49,6 +49,7 @@ import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
+import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
@@ -84,6 +85,7 @@ public class EdgeGestureService extends Service {
         }
     };
     private static final int NOTIFICATION_ID = 111;
+    public static final int CURRENT_SCHEMA_VERSION = 1;
     float mScale;
     static final String LOG_TAG = EdgeGestureService.class.getSimpleName();
     static final int EDGE_GESTURE_NOTIFICAION_ID = 10;
@@ -1757,9 +1759,21 @@ public class EdgeGestureService extends Service {
         iconPaddingTop = (int) (8 * mScale);
         edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSetting.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSetting.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
-        pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext()).name("pinApp.realm").build());
-        circleFavoRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext()).name("circleFavo.realm").build());
-        favoriteRealm = Realm.getInstance(getApplicationContext());
+        pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext())
+                .name("pinApp.realm")
+                .schemaVersion(CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
+        circleFavoRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext())
+                .name("circleFavo.realm")
+                .schemaVersion(CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
+        favoriteRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext())
+                .name("default.realm")
+                .schemaVersion(CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
         backgroundColor = defaultShared.getInt(EdgeSetting.BACKGROUND_COLOR_KEY, 1879048192);
 //        guideColor = defaultShared.getInt(EdgeSetting.GUIDE_COLOR_KEY,16728193);
         guideColor = defaultShared.getInt(EdgeSetting.GUIDE_COLOR_KEY, Color.argb(255, 255, 64, 129));
