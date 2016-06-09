@@ -1,13 +1,17 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
@@ -133,7 +137,15 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
                 .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
-        getLoaderManager().initLoader(0, null, this);
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            getLoaderManager().initLoader(0, null, this);
+        } else {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE},
+                    121);
+            dismiss();
+        }
+
     }
 
     @Override
