@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
     public static final String ACTION_INSTANT_FAVO = "instant_favo";
     public static final int REQUEST_CODE = 3243;
     public static final int REQUEST_INVITE = 232;
-    public static final long trialTime = 1000 * 60 * 60 * 24 * 7;
+    public static final long trialTime = 1000 * 60 * 60 * 24 * 14;
     private SharedPreferences sharedPreferences1, sharedPreferences2, sharedPreferencesDefautl, sharedPreferences_favorite, sharedPreferences_exclude;
     private ArrayList<AppInfors> mAppInforsArrayList;
 //    private Button step1Button;
@@ -378,7 +378,18 @@ public class MainActivity extends Activity {
         pinAppImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isTrial && isOutOfTrial) {
+                if (isTrial && !sharedPreferencesDefautl.getBoolean(EdgeSetting.HAS_TELL_ABOUT_TRIAL_LIMIT, false) && !isOutOfTrial) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setMessage(R.string.limit_of_free_version).
+                            setPositiveButton(R.string.app_tab_fragment_ok_button, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(getApplicationContext(), PinAppActivity.class));
+                                }
+                            });
+                    sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.HAS_TELL_ABOUT_TRIAL_LIMIT,true).apply();
+                    builder.create().show();
+                }else if (isTrial && isOutOfTrial) {
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
                     builder.setMessage(R.string.edge_service_out_of_trial_text_when_homebacknoti)
                             .setPositiveButton(R.string.main_edge_switch_2_trial_buy_pro_button, new DialogInterface.OnClickListener() {
