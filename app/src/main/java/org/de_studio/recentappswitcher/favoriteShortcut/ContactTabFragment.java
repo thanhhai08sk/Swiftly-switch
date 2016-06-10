@@ -148,7 +148,38 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
         shortcut.setNumber(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)));
 //        shortcut.setThumbnaiUri(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI)));
         shortcut.setContactId(cursor.getLong(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)));
-        shortcut.setName(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)));
+        String defaultName = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+        int type = cursor.getInt(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.TYPE));
+        switch (type) {
+            case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                shortcut.setName(defaultName);
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                shortcut.setName(String.format("%s(%s)", defaultName, getActivity().getString(R.string.contact_type_work)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                shortcut.setName(String.format("%s(%s)", defaultName, getActivity().getString(R.string.contact_type_home)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
+                shortcut.setName(String.format("%s(%s)", defaultName, getActivity().getString(R.string.contact_type_main)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
+                shortcut.setName(String.format("%s(%s)", defaultName, getActivity().getString(R.string.contact_type_work_fax)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
+                shortcut.setName(String.format("%s(%s)", defaultName, getActivity().getString(R.string.contact_type_pager)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
+                shortcut.setName(String.format("%s(%s)", defaultName, getActivity().getString(R.string.contact_type_other)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
+                shortcut.setName(String.format("%s(%s)", defaultName, getActivity().getString(R.string.contact_type_custom)));
+                break;
+            default:
+                shortcut.setName(defaultName);
+                break;
+        }
+
         if (stringUri != null) {
             shortcut.setThumbnaiUri(stringUri);
         }

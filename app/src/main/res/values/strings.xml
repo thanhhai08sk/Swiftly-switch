@@ -163,5 +163,15 @@
     <string name="choose">Choose</string>
     <string name="call">Call</string>
     <string name="sms">Sms</string>
+    <string name="contact_type_work">work</string>
+    <string name="contact_type_home">home</string>
+    <string name="contact_type_main">main</string>
+    <string name="contact_type_work_fax">work fax</string>
+    <string name="contact_type_home_fax">home fax</string>
+    <string name="contact_type_pager">pager</string>
+    <string name="contact_type_other">other</string>
+    <string name="contact_type_custom">custom</string>
+
+
 
 </resources>

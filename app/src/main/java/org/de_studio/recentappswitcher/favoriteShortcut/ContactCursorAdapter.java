@@ -52,8 +52,39 @@ public class ContactCursorAdapter extends CursorAdapter {
         ImageView avatar =(ImageView) view.findViewById(R.id.avatar);
         TextView name = (TextView) view.findViewById(R.id.name);
         long contactId = cursor.getLong(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+        String number = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
         RadioButton radioButton = (RadioButton) view.findViewById(R.id.radio_button);
-        name.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)));
+        String defaultName = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+        int type = cursor.getInt(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.TYPE));
+        switch (type) {
+            case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                name.setText(defaultName);
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                name.setText(String.format("%s(%s)", defaultName, context.getString(R.string.contact_type_work)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                name.setText(String.format("%s(%s)", defaultName, context.getString(R.string.contact_type_home)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
+                name.setText(String.format("%s(%s)", defaultName, context.getString(R.string.contact_type_main)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
+                name.setText(String.format("%s(%s)", defaultName, context.getString(R.string.contact_type_work_fax)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
+                name.setText(String.format("%s(%s)", defaultName, context.getString(R.string.contact_type_pager)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
+                name.setText(String.format("%s(%s)", defaultName, context.getString(R.string.contact_type_other)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
+                name.setText(String.format("%s(%s)", defaultName, context.getString(R.string.contact_type_custom)));
+                break;
+            default:
+                name.setText(defaultName);
+                break;
+        }
         String stringUri = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
         if (stringUri != null) {
             try {
@@ -68,7 +99,7 @@ public class ContactCursorAdapter extends CursorAdapter {
         } else {
             avatar.setImageResource(R.drawable.ic_contact_default);
         }
-        if (shortcut != null && shortcut.getType() == Shortcut.TYPE_CONTACT && shortcut.getContactId() == contactId) {
+        if (shortcut != null && shortcut.getType() == Shortcut.TYPE_CONTACT && shortcut.getNumber().equalsIgnoreCase(number)) {
             radioButton.setChecked(true);
         }else radioButton.setChecked(false);
 
