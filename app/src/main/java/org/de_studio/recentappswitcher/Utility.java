@@ -680,6 +680,9 @@ public  class Utility {
     public static boolean isAccessibilityEnable(Context context){
         AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
         List <AccessibilityServiceInfo> info = manager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK);
+        if (info == null) {
+            return false;
+        }
         for (AccessibilityServiceInfo info1 : info){
             String description = info1.loadDescription(context.getPackageManager());
             if (description!= null){
