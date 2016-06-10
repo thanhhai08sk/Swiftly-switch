@@ -17,10 +17,10 @@ public class MyRealmMigration implements RealmMigration {
         if (oldVersion == 0) {
             RealmObjectSchema shortcutSchema =  schema.get("Shortcut");
             try {
-                shortcutSchema.addField("thumbnailUri", String.class)
+                shortcutSchema.addField("thumbnaiUri", String.class)
                         .addField("number", String.class)
                         .addField("name", String.class)
-                        .addField("contactId", Long.class);
+                        .addField("contactId", long.class);
             } catch (IllegalArgumentException e) {
                 Log.e("MyRealmMigration", "migrate: " + e);
                 e.printStackTrace();
