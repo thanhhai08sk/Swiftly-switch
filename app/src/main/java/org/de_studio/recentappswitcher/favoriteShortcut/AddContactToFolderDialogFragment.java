@@ -39,7 +39,7 @@ import io.realm.Sort;
  * Created by HaiNguyen on 6/3/16.
  */
 public class AddContactToFolderDialogFragment extends DialogFragment implements android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor>{
-    private static final String LOG_TAG = AddContactToFolderDialogFragment.class.getSimpleName();
+    private static final String TAG = AddContactToFolderDialogFragment.class.getSimpleName();
     static ListView mListView;
     private Realm myRealm;
     private int mPosition;
@@ -84,10 +84,11 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CheckBox checkBox = (CheckBox)view.findViewById(R.id.add_favorite_list_item_check_box);
                 int size = (int) myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id",startId + 1000).count();
-                String name = mAdapter.getCursor().getString(mAdapter.getCursor().getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                Long contactId = mAdapter.getCursor().getLong(mAdapter.getCursor().getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-                String thumbnailUri = mAdapter.getCursor().getString(mAdapter.getCursor().getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
-                String number = mAdapter.getCursor().getString(mAdapter.getCursor().getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                Cursor cursor = mAdapter.getCursor();
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                Long contactId = cursor.getLong(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+                String thumbnailUri = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
+                String number = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
                 if (checkBox != null) {
                     if (checkBox.isChecked()) {
@@ -96,13 +97,13 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
                                 lessThan("id", startId + 1000).equalTo("type",Shortcut.TYPE_CONTACT) .
                                 equalTo("contactId",contactId).findFirst();
                         int removeId = removeShortcut.getId();
-                        Log.e(LOG_TAG, "removeID = " + removeId);
+                        Log.e(TAG, "removeID = " + removeId);
                         removeShortcut.deleteFromRealm();
                         RealmResults<Shortcut> results = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id",startId + 1000).findAll().sort("id", Sort.ASCENDING);
                         for (int i = startId; i < startId+ results.size(); i++) {
-                            Log.e(LOG_TAG, "id = " + results.get(i- startId).getId());
+                            Log.e(TAG, "id = " + results.get(i- startId).getId());
                             if (results.get(i - startId).getId() >= removeId) {
-//                                Log.e(LOG_TAG, "when i = " + i + "result id = " + results.get(i - startId).getId());
+//                                Log.e(TAG, "when i = " + i + "result id = " + results.get(i - startId).getId());
                                 Shortcut shortcut = results.get(i - startId);
                                 int oldId = shortcut.getId();
                                 shortcut.setId(oldId - 1);
@@ -113,7 +114,7 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
                         if (size < 16) {
                             Shortcut newShortcut = new Shortcut();
                             newShortcut.setId(startId+ size);
-//                            Log.e(LOG_TAG, "size = " + size);
+//                            Log.e(TAG, "size = " + size);
                             newShortcut.setName(name);
                             newShortcut.setContactId(contactId);
                             newShortcut.setType(Shortcut.TYPE_CONTACT);
@@ -154,7 +155,7 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
         try {
             getActivity().startService(new Intent(getActivity(), EdgeGestureService.class));
         } catch (NullPointerException e) {
-            Log.e(LOG_TAG, "Null when get activity from on dismiss");
+            Log.e(TAG, "Null when get activity from on dismiss");
         }
         super.onDismiss(dialog);
         ((AddAppToFolderDialogFragment.MyDialogCloseListener) getActivity()).handleDialogClose();
@@ -180,5 +181,16 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
     @Override
     public void onLoaderReset(Loader loader) {
         mAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.e(TAG, "onDestroy: close cusor");
+        try {
+            mAdapter.getCursor().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
     }
 }

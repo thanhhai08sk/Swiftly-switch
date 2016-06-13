@@ -48,8 +48,39 @@ public class AddContactToFolderAdapter extends CursorAdapter {
         TextView label = (TextView) view.findViewById(R.id.add_favorite_list_item_label_text_view);
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.add_favorite_list_item_check_box);
         int startId = (mPosition +1)* 1000;
+        String number = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
         long contactId = cursor.getLong(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-        label.setText(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)));
+        int type = cursor.getInt(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.TYPE));
+        String defaultName = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+        switch (type) {
+            case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                label.setText(defaultName);
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                label.setText(String.format("%s(%s)", defaultName, context.getString(R.string.contact_type_work)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                label.setText(String.format("%s(%s)", defaultName, context.getString(R.string.contact_type_home)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
+                label.setText(String.format("%s(%s)", defaultName, context.getString(R.string.contact_type_main)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
+                label.setText(String.format("%s(%s)", defaultName, context.getString(R.string.contact_type_work_fax)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
+                label.setText(String.format("%s(%s)", defaultName, context.getString(R.string.contact_type_pager)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
+                label.setText(String.format("%s(%s)", defaultName, context.getString(R.string.contact_type_other)));
+                break;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
+                label.setText(String.format("%s(%s)", defaultName, context.getString(R.string.contact_type_custom)));
+                break;
+            default:
+                label.setText(defaultName);
+                break;
+        }
         String stringUri = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
         if (stringUri != null) {
             try {
@@ -70,7 +101,7 @@ public class AddContactToFolderAdapter extends CursorAdapter {
 //            icon.setImageURI(uri);
 //        }else icon.setImageResource(R.drawable.ic_icon_home);
         if (myRealm.where(Shortcut.class).equalTo("type",Shortcut.TYPE_CONTACT).
-                equalTo("contactId", contactId).greaterThan("id", startId -1).
+                equalTo("number", number).greaterThan("id", startId -1).
                 lessThan("id",startId + 1000).findFirst() != null) {
             checkBox.setChecked(true);
         }else checkBox.setChecked(false);

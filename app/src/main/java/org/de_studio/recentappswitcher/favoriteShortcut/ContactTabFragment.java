@@ -227,4 +227,15 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
 
         }
     }
+
+    @Override
+    public void onDestroy() {
+        Log.e(TAG, "onDestroy: Close cursor");
+        try {
+            mAdapter.getCursor().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
 }
