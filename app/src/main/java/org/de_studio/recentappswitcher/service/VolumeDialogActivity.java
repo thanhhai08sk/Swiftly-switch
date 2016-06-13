@@ -155,13 +155,13 @@ public class VolumeDialogActivity extends AppCompatActivity {
     private void updateRingtoneImage(ImageView imageView, AudioManager manager) {
         switch (manager.getRingerMode()) {
             case AudioManager.RINGER_MODE_NORMAL:
-                imageView.setImageResource(R.drawable.ic_rotation);
+                imageView.setImageResource(R.drawable.ic_ringer_normal_32dp);
                 break;
             case AudioManager.RINGER_MODE_VIBRATE:
-                imageView.setImageResource(R.drawable.ic_contact);
+                imageView.setImageResource(R.drawable.ic_ringer_vibrate_32dp);
                 break;
             case AudioManager.RINGER_MODE_SILENT:
-                imageView.setImageResource(R.drawable.ic_contact_default);
+                imageView.setImageResource(R.drawable.ic_ringer_silen_32dp);
                 break;
         }
     }

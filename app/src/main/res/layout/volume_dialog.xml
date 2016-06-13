@@ -18,9 +18,9 @@
         android:paddingTop="4dp"
         >
         <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@drawable/ic_rotation"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_ringer_normal_32dp"
             android:id="@+id/ringtone_image"
             />
         <SeekBar
@@ -43,9 +43,9 @@
         android:paddingTop="4dp"
         >
         <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@drawable/ic_rotation"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_notifications_32dp"
             />
         <SeekBar
             android:layout_width="match_parent"
@@ -67,9 +67,9 @@
         android:paddingTop="8dp"
         >
         <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@drawable/ic_rotation"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_system_32dp"
             />
         <SeekBar
             android:layout_width="match_parent"
@@ -91,9 +91,9 @@
         android:paddingTop="4dp"
         >
         <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@drawable/ic_rotation"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_media_32dp"
             />
         <SeekBar
             android:layout_width="match_parent"
