@@ -829,13 +829,13 @@ public  class Utility {
         String action = MainActivity.ACTION_NONE;
         switch (actionButton) {
             case 1:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_HOME);
+                action = sharedPreferences.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO);
                 break;
             case 2:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_BACK);
+                action = sharedPreferences.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_HOME);
                 break;
             case 3:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_LAST_APP);
+                action = sharedPreferences.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_BACK);
                 break;
             case 4:
                 action = sharedPreferences.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
@@ -1587,13 +1587,13 @@ public  class Utility {
         String action = MainActivity.ACTION_NONE;
         switch (homeBackNoti) {
             case 1:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_HOME);
+                action = sharedPreferences.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO);
                 break;
             case 2:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_BACK);
+                action = sharedPreferences.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_HOME);
                 break;
             case 3:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_LAST_APP);
+                action = sharedPreferences.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_BACK);
                 break;
             case 4:
                 action = sharedPreferences.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);

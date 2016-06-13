@@ -172,7 +172,10 @@
     <string name="contact_type_other">other</string>
     <string name="contact_type_custom">custom</string>
     <string name="limit_of_free_version">The free version has some feature that only available within 14 days trial period: Pin apps to recent, Expand status bar.</string>
-
+    <string name="ringtone">Ringtone</string>
+    <string name="notification">Notification</string>
+    <string name="system">System</string>
+    <string name="media">Media</string>
 
 
 </resources>

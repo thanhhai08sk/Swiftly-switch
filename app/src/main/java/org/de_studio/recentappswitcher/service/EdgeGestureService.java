@@ -791,7 +791,7 @@ public class EdgeGestureService extends Service {
                         itemView.addView(action4View);
                     }
 
-                    if (!defaultShared.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_HOME).equals(MainActivity.ACTION_NONE)) {
+                    if (!defaultShared.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO).equals(MainActivity.ACTION_NONE)) {
                         action1View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 1);
                         action1View.setX(xForHomeBackNotiView);
                         action1View.setY(yForHomeBackNotiView);
@@ -804,7 +804,7 @@ public class EdgeGestureService extends Service {
                     }
 
 
-                    if (!defaultShared.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_BACK).equals(MainActivity.ACTION_NONE)) {
+                    if (!defaultShared.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_HOME).equals(MainActivity.ACTION_NONE)) {
                         action2View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 2);
                         action2View.setX(xForHomeBackNotiView);
                         action2View.setY(yForHomeBackNotiView);
@@ -817,7 +817,7 @@ public class EdgeGestureService extends Service {
                     }
 
 
-                    if (!defaultShared.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_LAST_APP).equals(MainActivity.ACTION_NONE)) {
+                    if (!defaultShared.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_BACK).equals(MainActivity.ACTION_NONE)) {
                         action3View = new ExpandStatusBarView(getApplicationContext(), radiusForHomeBackNotiView, ovalOffSet, position, 3);
                         action3View.setX(xForHomeBackNotiView);
                         action3View.setY(yForHomeBackNotiView);
@@ -910,13 +910,13 @@ public class EdgeGestureService extends Service {
                             String action = MainActivity.ACTION_NONE;
                             switch (homeBackNoti) {
                                 case 1:
-                                    action = defaultShared.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_HOME);
+                                    action = defaultShared.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO);
                                     break;
                                 case 2:
-                                    action = defaultShared.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_BACK);
+                                    action = defaultShared.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_HOME);
                                     break;
                                 case 3:
-                                    action = defaultShared.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_LAST_APP);
+                                    action = defaultShared.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_BACK);
                                     break;
                                 case 4:
                                     action = defaultShared.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
@@ -984,13 +984,13 @@ public class EdgeGestureService extends Service {
                         String action = MainActivity.ACTION_NONE;
                         switch (homeBackNoti) {
                             case 1:
-                                action = defaultShared.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_HOME);
+                                action = defaultShared.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO);
                                 break;
                             case 2:
-                                action = defaultShared.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_BACK);
+                                action = defaultShared.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_HOME);
                                 break;
                             case 3:
-                                action = defaultShared.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_LAST_APP);
+                                action = defaultShared.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_BACK);
                                 break;
                             case 4:
                                 action = defaultShared.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
@@ -1825,15 +1825,15 @@ public class EdgeGestureService extends Service {
                 + "\nMode = " + edge1mode);
         useInstantFavo = false;
         instantFavoAction = new int[4];
-        if (defaultShared.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_HOME).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
+        if (defaultShared.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
             instantFavoAction[0] = 1;
             useInstantFavo = true;
         }else instantFavoAction[0] = -1;
-        if (defaultShared.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_BACK).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
+        if (defaultShared.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_HOME).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
             instantFavoAction[1] = 1;
             useInstantFavo = true;
         }else instantFavoAction[1] = -1;
-        if (defaultShared.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_LAST_APP).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
+        if (defaultShared.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_BACK).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
             instantFavoAction[2] = 1;
             useInstantFavo = true;
         }else instantFavoAction[2] = -1;
