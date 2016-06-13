@@ -1570,16 +1570,9 @@ public  class Utility {
                             + shortcut.getNumber()));
                     smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(smsIntent);
+            break;
             }
 
-
-//            if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-//                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                context.startActivity(intent);
-//            } else {
-//                Toast.makeText(context, context.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
-//            }
         }
     }
 
