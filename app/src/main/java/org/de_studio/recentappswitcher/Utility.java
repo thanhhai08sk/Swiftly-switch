@@ -63,6 +63,7 @@ import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
+import org.de_studio.recentappswitcher.service.VolumeDialogActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -813,6 +814,8 @@ public  class Utility {
             return Shortcut.ACTION_CONTACT;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_recent))) {
             return Shortcut.ACTION_RECENT;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_volume))) {
+            return Shortcut.ACTION_VOLUME;
         } else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_dial))) {
             return Shortcut.ACTION_DIAL;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_none))) {
@@ -878,6 +881,8 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_dial);
             case MainActivity.ACTION_RECENT:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_icon_recent_5122);
+            case MainActivity.ACTION_VOLUME:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_volume);
             case MainActivity.ACTION_INSTANT_FAVO:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_instant_favorite_512);
             case MainActivity.ACTION_NONE:
@@ -913,6 +918,8 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_dial);
             case MainActivity.ACTION_RECENT:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_icon_recent_5122);
+            case MainActivity.ACTION_VOLUME:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_volume);
             case MainActivity.ACTION_NONE:
                 return null;
             case MainActivity.ACTION_INSTANT_FAVO:
@@ -947,6 +954,8 @@ public  class Utility {
                 return context.getString(R.string.setting_shortcut_dial);
             case MainActivity.ACTION_RECENT:
                 return context.getString(R.string.setting_shortcut_recent);
+            case MainActivity.ACTION_VOLUME:
+                return context.getString(R.string.setting_shortcut_volume);
             case MainActivity.ACTION_NONE:
                 return context.getString(R.string.setting_shortcut_none);
             case MainActivity.ACTION_INSTANT_FAVO:
@@ -1006,6 +1015,13 @@ public  class Utility {
         if (Utility.isAccessibilityEnable(context)) {
             manager.sendAccessibilityEvent(event1);
         }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+    }
+
+    public static void volumeAction(Context context) {
+        Intent intent = new Intent(context, VolumeDialogActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        context.startActivity(intent);
     }
 
     public static void powerAction(Context context, View v, String className, String packageName) {
@@ -1186,6 +1202,9 @@ public  class Utility {
                 break;
             case MainActivity.ACTION_RECENT:
                 recentAction(context,v,className,packageName);
+                break;
+            case MainActivity.ACTION_VOLUME:
+                volumeAction(context);
                 break;
         }
     }
@@ -1412,7 +1431,9 @@ public  class Utility {
                         break;
                     case Shortcut.ACTION_RECENT:
                         imageView.setImageResource(R.drawable.ic_recent);
-//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                        break;
+                    case Shortcut.ACTION_VOLUME:
+                        imageView.setImageResource(R.drawable.ic_volume);
                         break;
                     case Shortcut.ACTION_NONE:
                         imageView.setImageDrawable(null);
@@ -1542,6 +1563,9 @@ public  class Utility {
                 case Shortcut.ACTION_RECENT:
                     Utility.recentAction(context, v, className, packageName);
                     break;
+                case Shortcut.ACTION_VOLUME:
+                    Utility.volumeAction(context);
+                    break;
                 case Shortcut.ACTION_NONE:
                     break;
 
@@ -1645,6 +1669,9 @@ public  class Utility {
             case MainActivity.ACTION_RECENT:
                 imageView.setImageResource(R.drawable.ic_recent);
                 break;
+            case MainActivity.ACTION_VOLUME:
+                imageView.setImageResource(R.drawable.ic_volume);
+                break;
             case MainActivity.ACTION_NONE:
                 imageView.setImageDrawable(null);
         }
@@ -1678,6 +1705,8 @@ public  class Utility {
                 return ContextCompat.getDrawable(context, R.drawable.ic_contact);
             case Shortcut.ACTION_RECENT:
                 return ContextCompat.getDrawable(context, R.drawable.ic_recent);
+            case Shortcut.ACTION_VOLUME:
+                return ContextCompat.getDrawable(context, R.drawable.ic_volume);
             case Shortcut.ACTION_NONE:
                 return null;
         }

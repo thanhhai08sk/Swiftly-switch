@@ -61,6 +61,7 @@ public class MainActivity extends Activity {
     public static final String ACTION_DIAL = "dial";
     public static final String ACTION_RECENT = "recent";
     public static final String ACTION_INSTANT_FAVO = "instant_favo";
+    public static final String ACTION_VOLUME = "volume";
     public static final int REQUEST_CODE = 3243;
     public static final int REQUEST_INVITE = 232;
     public static final long trialTime = 1000 * 60 * 60 * 24 * 14;

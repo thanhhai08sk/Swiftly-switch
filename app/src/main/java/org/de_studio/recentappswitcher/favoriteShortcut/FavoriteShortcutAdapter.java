@@ -151,6 +151,9 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                     case Shortcut.ACTION_RECENT:
                         imageView.setImageResource(R.drawable.ic_recent);
                         break;
+                    case Shortcut.ACTION_VOLUME:
+                        imageView.setImageResource(R.drawable.ic_volume);
+                        break;
                     case Shortcut.ACTION_NONE:
                         imageView.setImageDrawable(null);
                 }
