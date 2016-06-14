@@ -63,7 +63,7 @@ import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
-import org.de_studio.recentappswitcher.service.VolumeDialogActivity;
+import org.de_studio.recentappswitcher.service.ScreenBrightnessDialogActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -1018,7 +1018,8 @@ public  class Utility {
     }
 
     public static void volumeAction(Context context) {
-        Intent intent = new Intent(context, VolumeDialogActivity.class);
+//        Intent intent = new Intent(context, VolumeDialogActivity.class);
+        Intent intent = new Intent(context, ScreenBrightnessDialogActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         context.startActivity(intent);

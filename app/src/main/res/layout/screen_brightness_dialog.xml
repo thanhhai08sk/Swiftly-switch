@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:gravity="center_vertical"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:background="@drawable/folder_background"
+    >
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_ringer_normal_32dp"
+        />
+    <SeekBar
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:id="@+id/screen_brightness_seek_bar"
+        />
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_ringer_silen_32dp"
+        android:id="@+id/screen_brightness_auto_image_view"
+        />
+
+</LinearLayout>

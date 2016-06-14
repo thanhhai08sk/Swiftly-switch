@@ -133,11 +133,15 @@
             android:excludeFromRecents="true"
             android:label=""
             android:theme="@style/DialogTheme" />
-        <activity android:name=".service.VolumeDialogActivity"
+        <activity
+            android:name=".service.VolumeDialogActivity"
+            android:excludeFromRecents="true"
+            android:label=""
+            android:theme="@style/DialogTheme" />
+        <activity android:name=".service.ScreenBrightnessDialogActivity"
             android:excludeFromRecents="true"
             android:label=""
             android:theme="@style/DialogTheme"
-
             />
     </application>
 
