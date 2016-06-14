@@ -40,8 +40,8 @@ public class VolumeDialogActivity extends AppCompatActivity {
 
 
         final SeekBar ringSeekBar = (SeekBar) dialog.findViewById(R.id.ringtone_seek_bar);
-        SeekBar notiSeekBar = (SeekBar) dialog.findViewById(R.id.notification_seek_bar);
-        SeekBar systemSeekBar = (SeekBar) dialog.findViewById(R.id.system_seek_bar);
+        final SeekBar notiSeekBar = (SeekBar) dialog.findViewById(R.id.notification_seek_bar);
+        final SeekBar systemSeekBar = (SeekBar) dialog.findViewById(R.id.system_seek_bar);
         SeekBar mediaSeekBar = (SeekBar) dialog.findViewById(R.id.media_seek_bar);
 
         final ImageView ringtoneImage = (ImageView) dialog.findViewById(R.id.ringtone_image);
@@ -54,17 +54,17 @@ public class VolumeDialogActivity extends AppCompatActivity {
                         case AudioManager.RINGER_MODE_NORMAL:
                             manager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                             updateRingtoneImage(ringtoneImage, manager);
-                            updateRingSeekBar(ringSeekBar, manager);
+                            updateSeekBar(ringSeekBar,notiSeekBar,systemSeekBar, manager);
                             break;
                         case AudioManager.RINGER_MODE_VIBRATE:
                             manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                             updateRingtoneImage(ringtoneImage,manager);
-                            updateRingSeekBar(ringSeekBar, manager);
+                            updateSeekBar(ringSeekBar,notiSeekBar,systemSeekBar, manager);
                             break;
                         case AudioManager.RINGER_MODE_SILENT:
                             manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                             updateRingtoneImage(ringtoneImage, manager);
-                            updateRingSeekBar(ringSeekBar, manager);
+                            updateSeekBar(ringSeekBar,notiSeekBar,systemSeekBar, manager);
                     }
                 }
             });
@@ -96,7 +96,7 @@ public class VolumeDialogActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 manager.setStreamVolume(AudioManager.STREAM_RING,seekBar.getProgress(),0);
                 updateRingtoneImage(ringtoneImage, manager);
-                updateRingSeekBar(ringSeekBar,manager);
+                updateSeekBar(ringSeekBar,notiSeekBar,systemSeekBar, manager);
             }
         });
 
@@ -166,7 +166,11 @@ public class VolumeDialogActivity extends AppCompatActivity {
         }
     }
 
-    private void updateRingSeekBar(SeekBar seekBar, AudioManager manager) {
-        seekBar.setProgress(manager.getStreamVolume(AudioManager.STREAM_RING));
+    private void updateSeekBar(SeekBar ring, SeekBar noti, SeekBar system, AudioManager manager) {
+        ring.setProgress(manager.getStreamVolume(AudioManager.STREAM_RING));
+        noti.setProgress(manager.getStreamVolume(AudioManager.STREAM_NOTIFICATION));
+        system.setProgress(manager.getStreamVolume(AudioManager.STREAM_SYSTEM));
+        noti.setEnabled(manager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL);
+        system.setEnabled(manager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL);
     }
 }
