@@ -883,6 +883,7 @@ public class EdgeGestureService extends Service {
                                     break;
                                 case 4:
                                     action = defaultShared.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
+                                    break;
                             }
                             if (action.equals(MainActivity.ACTION_NOTI) & isFreeVersion & isOutOfTrial) {
                                 Toast.makeText(getApplicationContext(), getString(R.string.edge_service_out_of_trial_text_when_homebacknoti), Toast.LENGTH_LONG).show();
@@ -957,6 +958,7 @@ public class EdgeGestureService extends Service {
                                 break;
                             case 4:
                                 action = defaultShared.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
+                                break;
                         }
                         if (action.equals(MainActivity.ACTION_NOTI) & isFreeVersion & isOutOfTrial) {
                             Toast.makeText(getApplicationContext(), getString(R.string.edge_service_out_of_trial_text_when_homebacknoti), Toast.LENGTH_LONG).show();
