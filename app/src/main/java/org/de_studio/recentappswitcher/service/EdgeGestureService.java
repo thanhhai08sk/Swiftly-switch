@@ -136,6 +136,7 @@ public class EdgeGestureService extends Service {
     private String[] savedPackage;
     private int[] instantFavoAction;
     private boolean useInstantFavo, onInstantFavo;
+    private WindowManager.LayoutParams paramsEdge1, paramsEdge2;
 
     @Nullable
     @Override
@@ -146,6 +147,7 @@ public class EdgeGestureService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.e(TAG, "onStartCommand: ");
 
         if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME)) isFreeVersion = true;
         Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
@@ -231,7 +233,7 @@ public class EdgeGestureService extends Service {
                 sampleParas1.width = (int) (48 * mIconScale * mScale);
                 image.setLayoutParams(sampleParas1);
             }
-            WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
+            paramsEdge1 = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.TYPE_PHONE,
@@ -275,8 +277,7 @@ public class EdgeGestureService extends Service {
 //            tempImageView = new ImageView(getApplicationContext());
 //            tempImageView.setBackgroundResource(R.color.colorAccent);
 
-
-            if (isEdge1On) {
+            if (isEdge1On && !(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false)) ) {
                 windowManager.addView(edge1Image, paramsEdge1);
             } else {
                 removeView(edge1Image);
@@ -321,7 +322,7 @@ public class EdgeGestureService extends Service {
             edge2ImageLayoutParams.height = edge2HeightPxl;
             edge2ImageLayoutParams.width = edge2WidthPxl;
             edge2Image.setLayoutParams(edge2ImageLayoutParams);
-            WindowManager.LayoutParams paramsEdge2 = new WindowManager.LayoutParams(
+            paramsEdge2 = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.TYPE_PHONE,
@@ -360,7 +361,7 @@ public class EdgeGestureService extends Service {
             } else {
                 paramsEdge2.y = -(int) (edge2offset * mScale);
             }
-            if (isEdge2On) {
+            if (isEdge2On  && !(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false))) {
                 windowManager.addView(edge2Image, paramsEdge2);
             } else {
                     removeView(edge2Image);
@@ -393,13 +394,11 @@ public class EdgeGestureService extends Service {
         }
 
         String iconPackPacka = defaultShared.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none");
-        Log.e(TAG, "onStartCommand: iconpack package = " + iconPackPacka);
         if (!iconPackPacka.equals("none")) {
             IconPackManager iconPackManager = new IconPackManager();
             iconPackManager.setContext(getApplicationContext());
             iconPack = iconPackManager.getInstance(iconPackPacka);
             if (iconPack != null) {
-                Log.e(TAG, "onStartCommand: iconPack != null");
                 iconPack.load();
             }
         }
@@ -1477,7 +1476,6 @@ public class EdgeGestureService extends Service {
 
         private void clearIndicator(int activatedId) {
             if (activatedId != 0 && clockView!=null) {
-                Log.e(TAG, "clearIndicator");
                 LinearLayout clock = (LinearLayout) clockView.findViewById(R.id.clock_linear_layout);
                 FrameLayout indicator = (FrameLayout) clockView.findViewById(R.id.indicator_frame_layout);
                 if (switched) {
@@ -1659,6 +1657,17 @@ public class EdgeGestureService extends Service {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        if (defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE, false) && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            removeEdgeImage();
+        } else {
+            if (isEdge1On && edge1Image !=null && !edge1Image.isAttachedToWindow()) {
+                windowManager.addView(edge1Image,paramsEdge1);
+            }
+            if (isEdge2On && edge2Image !=null && !edge2Image.isAttachedToWindow()) {
+                windowManager.addView(edge2Image,paramsEdge2);
+            }
+        }
+        Log.e(TAG, "onConfigurationChanged: ");
         super.onConfigurationChanged(newConfig);
         if (item1View != null && item1View.isAttachedToWindow()) {
             if (action1View != null) {
@@ -1902,6 +1911,22 @@ public class EdgeGestureService extends Service {
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, " Null when remove item2View");
+        }
+    }
+
+    public final synchronized void removeEdgeImage() {
+        Log.e(TAG, "removeEdgeImage: ");
+        try {
+            windowManager.removeView(edge1Image);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, " Null when remove edge1Image");
+        }
+        try {
+            windowManager.removeView(edge2Image);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, " Null when remove edge2Image");
         }
     }
 

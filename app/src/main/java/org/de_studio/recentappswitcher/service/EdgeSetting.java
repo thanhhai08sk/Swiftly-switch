@@ -54,6 +54,7 @@ public class EdgeSetting extends DialogFragment {
     public static final String NUM_OF_GRID_ROW_KEY = "grid_row";
     public static final String NUM_OF_GRID_COLUMN_KEY = "grid_column";
     public static final String IS_CENTRE_FAVORITE = "is_centre";
+    public static final String IS_DISABLE_IN_LANSCAPE = "disable_in_lanscape";
     public static final String GAP_OF_SHORTCUT_KEY = "shortcut_gap";
     public static final String GRID_DISTANCE_FROM_EDGE_KEY = "grid_distance_from_edge";
     public static final String GRID_DISTANCE_VERTICAL_FROM_EDGE_KEY = "grid_distance_vertical_from_edge";
