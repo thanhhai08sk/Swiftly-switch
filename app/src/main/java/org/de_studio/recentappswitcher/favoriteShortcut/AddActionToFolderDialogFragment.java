@@ -3,9 +3,12 @@ package org.de_studio.recentappswitcher.favoriteShortcut;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +40,7 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
     private ProgressBar progressBar;
     private Realm myRealm;
     private int mPosition;
+    private String[] stringArray;
     AddActionToFolderAdapter mAdapter;
 
     @Nullable
@@ -44,6 +48,7 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.add_favorite_app_fragment_list_view, container);
         mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
+        stringArray = getActivity().getResources().getStringArray(R.array.setting_shortcut_array);
         myRealm = Realm.getInstance(new RealmConfiguration.Builder(getContext())
                 .name("default.realm")
                 .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
@@ -93,6 +98,24 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
                         }
 
                     }
+                }
+                if ((stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_rotation)) ||
+                        stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_brightness))) &&
+                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                        !Settings.System.canWrite(getActivity())) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(R.string.write_setting_permission)
+                            .setMessage(R.string.write_setting_permission_explain)
+                            .setPositiveButton(R.string.go_to_setting, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent notiIntent = new Intent();
+                                    notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                                    getActivity().startActivity(notiIntent);
+
+                                }
+                            });
+                    builder.show();
                 }
 
                 mAdapter.notifyDataSetChanged();
