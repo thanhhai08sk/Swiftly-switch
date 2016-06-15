@@ -55,12 +55,14 @@ public class MoreSettingActivity extends AppCompatActivity {
         SwitchCompat hapticFeedbackOnTriggerSwitch = (SwitchCompat) findViewById(R.id.main_disable_haptic_feedback_switch);
         SwitchCompat hapticFeedbackOnItemSwitch = (SwitchCompat) findViewById(R.id.main_haptic_feedback_on_item_switch);
         SwitchCompat disableClockSwitch = (SwitchCompat) findViewById(R.id.main_disable_clock_switch);
+        SwitchCompat disableInLandscape = (SwitchCompat) findViewById(R.id.main_disable_in_landscape_switch);
         SwitchCompat disableAnimationSwitch = (SwitchCompat) findViewById(R.id.main_disable_animation_switch);
         SwitchCompat holdTimeSwitch = (SwitchCompat) findViewById(R.id.main_hold_time_switch);
 
         hapticFeedbackOnItemSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.HAPTIC_ON_ICON_KEY,false));
         hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferencesDefautl.getBoolean(EdgeSetting.DISABLE_HAPTIC_FEEDBACK_KEY,true));
         disableClockSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY,false));
+        disableInLandscape.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false));
         holdTimeSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.HOLD_TIME_ENABLE_KEY,true));
 
 
@@ -141,6 +143,12 @@ public class MoreSettingActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.DISABLE_CLOCK_KEY,isChecked).commit();
+            }
+        });
+        disableInLandscape.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,isChecked).commit();
             }
         });
         disableAnimationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

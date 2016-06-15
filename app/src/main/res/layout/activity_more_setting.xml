@@ -52,7 +52,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
                     android:text="@string/main_haptic_feedback_on_trigger_text"
                     android:textSize="16sp"
                     app:layout_column="0"
@@ -95,9 +95,9 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
                     android:text="@string/main_haptic_feedback_on_move_to_item"
                     android:textSize="16sp"
+                    android:textColor="@android:color/black"
                     app:layout_column="0"
                     app:layout_row="0"
                     app:layout_columnWeight="1"
@@ -138,7 +138,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
                     android:text="@string/main_disable_clock_text"
                     android:textSize="16sp"
                     app:layout_column="0"
@@ -166,6 +166,50 @@
                 />
 
 
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                app:rowCount="1"
+                app:columnCount="2"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:text="@string/main_disable_in_landscape"
+                    android:textSize="16sp"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="center_vertical"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:checked="false"
+                    android:id="@+id/main_disable_in_landscape_switch"
+                    app:switchMinWidth="55dp"
+                    />
+
+
+            </android.support.v7.widget.GridLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
+                />
+
+
+
 
             <android.support.v7.widget.GridLayout
             android:layout_width="match_parent"
@@ -182,7 +226,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
+                android:textColor="@android:color/black"
                 android:text="@string/main_icon_pack_support"
                 android:textSize="16sp"
                 app:layout_column="0"
@@ -225,7 +269,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
                     android:text="@string/default_action_for_contact"
                     android:textSize="16sp"
                     app:layout_column="0"
@@ -268,7 +312,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
                     android:text="@string/main_vibration_duration"
                     android:textSize="16sp"
                     app:layout_column="0"
@@ -313,7 +357,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
                     android:text="@string/main_icon_size"
                     android:textSize="16sp"
                     app:layout_column="0"
@@ -358,7 +402,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
                     android:text="@string/main_set_background_color"
                     android:textSize="16sp"
                     app:layout_column="0"
@@ -403,7 +447,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
                     android:text="@string/main_set_guide_color"
                     android:textSize="16sp"
                     app:layout_column="0"
@@ -448,7 +492,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
                     android:text="@string/main_animation_text"
                     android:textSize="16sp"
                     app:layout_column="0"
@@ -502,7 +546,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
                     android:text="@string/main_hold_time"
                     android:textSize="16sp"
                     app:layout_column="0"
