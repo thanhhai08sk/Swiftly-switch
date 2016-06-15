@@ -1,27 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:gravity="center_vertical"
     android:layout_height="wrap_content"
     android:padding="8dp"
-    android:background="@drawable/folder_background"
     >
-    <ImageView
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/ic_ringer_normal_32dp"
-        />
-    <SeekBar
-        android:layout_width="200dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:padding="8dp"
-        android:id="@+id/screen_brightness_seek_bar"
-        />
-    <ImageView
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/ic_ringer_silen_32dp"
-        android:id="@+id/screen_brightness_auto_image_view"
-        />
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/brightness"
+            style="@android:style/TextAppearance.Material.Notification.Title"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:id="@+id/percent_text"
+            android:text="55%"
+            tools:text="55%"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="center_vertical"
+
+        >
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_brightness_32dp"
+            />
+        <SeekBar
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:id="@+id/screen_brightness_seek_bar"
+            android:layout_weight="1"
+            />
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_brightness_auto_32dp"
+            android:id="@+id/screen_brightness_auto_image_view"
+            />
+    </LinearLayout>
+
 
 </LinearLayout>
