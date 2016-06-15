@@ -3,7 +3,10 @@ package org.de_studio.recentappswitcher;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -77,6 +80,25 @@ public class OuterRingSettingActivity extends AppCompatActivity {
                                             sharedPreferences.edit().putString(EdgeSetting.ACTION_4_KEY, listAction[which]).commit();
                                             break;
                                     }
+                                    if ((listAction[which].equalsIgnoreCase(MainActivity.ACTION_BRIGHTNESS) ||
+                                            listAction[which].equalsIgnoreCase(MainActivity.ACTION_ROTATE)) &&
+                                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                                            !Settings.System.canWrite(getApplicationContext())) {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(OuterRingSettingActivity.this);
+                                        builder.setTitle(R.string.write_setting_permission)
+                                                .setMessage(R.string.write_setting_permission_explain)
+                                                .setPositiveButton(R.string.go_to_setting, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        Intent notiIntent = new Intent();
+                                                        notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                                                        startActivity(notiIntent);
+
+                                                    }
+                                                });
+                                        builder.show();
+                                    }
+
                                 } catch (ArrayIndexOutOfBoundsException e) {
                                     Log.e(LOG_TAG, "ArrayIndexOutOfBounds when set outer ring action");
                                 }
@@ -87,24 +109,12 @@ public class OuterRingSettingActivity extends AppCompatActivity {
                 );
                 builder.setPositiveButton(
 
-                        getResources()
-
-                                .
-
-                                        getString(R.string.edge_dialog_ok_button),
-
-                        new DialogInterface.OnClickListener()
-
-                        {
+                        getResources().getString(R.string.edge_dialog_ok_button), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
                             }
                         }
-
-                ).
-
-                        setOnDismissListener(new DialogInterface.OnDismissListener() {
+                ).setOnDismissListener(new DialogInterface.OnDismissListener() {
                                                  @Override
                                                  public void onDismiss(DialogInterface dialog) {
                                                      mAdapter.notifyDataSetChanged();
@@ -112,7 +122,6 @@ public class OuterRingSettingActivity extends AppCompatActivity {
                                                      startService(new Intent(OuterRingSettingActivity.this, EdgeGestureService.class));
                                                  }
                                              }
-
                         );
                 builder.create().
 
