@@ -11,7 +11,6 @@
     <style name="DialogTheme" parent="Base.V11.Theme.AppCompat.Light.Dialog">
         <item name="windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:background">@drawable/dialog_background</item>
         <item name="android:backgroundDimEnabled">false</item>
 
     </style>

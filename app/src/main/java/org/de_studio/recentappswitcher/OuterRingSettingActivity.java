@@ -35,6 +35,7 @@ public class OuterRingSettingActivity extends AppCompatActivity {
                 MainActivity.ACTION_BLUETOOTH,
                 MainActivity.ACTION_ROTATE,
                 MainActivity.ACTION_VOLUME,
+                MainActivity.ACTION_BRIGHTNESS,
                 MainActivity.ACTION_LAST_APP,
                 MainActivity.ACTION_DIAL,
                 MainActivity.ACTION_CONTACT,

@@ -7,6 +7,7 @@
         <item>@string/setting_shortcut_bluetooth</item>
         <item>@string/setting_shortcut_rotation</item>
         <item>@string/setting_shortcut_volume</item>
+        <item>@string/setting_shortcut_brightness</item>
         <item>@string/setting_shortcut_power_menu</item>
         <item>@string/setting_shortcut_home</item>
         <item>@string/setting_shortcut_back</item>
@@ -28,6 +29,7 @@
         <item>@string/setting_shortcut_bluetooth</item>
         <item>@string/setting_shortcut_rotation</item>
         <item>@string/setting_shortcut_volume</item>
+        <item>@string/setting_shortcut_brightness</item>
         <item>@string/setting_shortcut_last_app</item>
         <item>@string/setting_shortcut_dial</item>
         <item>@string/setting_shortcut_contact</item>

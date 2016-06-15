@@ -60,6 +60,8 @@ public class AddActionToFolderAdapter extends BaseAdapter {
             icon.setImageResource(R.drawable.ic_rotation);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_volume))) {
             icon.setImageResource(R.drawable.ic_volume);
+        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_brightness))) {
+            icon.setImageResource(R.drawable.ic_screen_brightness);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_power_menu))) {
             icon.setImageResource(R.drawable.ic_power_menu);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_home))) {

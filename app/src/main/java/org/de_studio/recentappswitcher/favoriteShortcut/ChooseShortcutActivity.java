@@ -275,6 +275,9 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                     case Shortcut.ACTION_VOLUME:
                         currentShortcut.setImageResource(R.drawable.ic_volume);
                         break;
+                    case Shortcut.ACTION_BRIGHTNESS:
+                        currentShortcut.setImageResource(R.drawable.ic_screen_brightness);
+                        break;
                     case Shortcut.ACTION_NONE:
                         currentShortcut.setImageDrawable(null);
                         break;

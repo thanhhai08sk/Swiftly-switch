@@ -177,7 +177,9 @@
     <string name="system">System</string>
     <string name="media">Media</string>
     <string name="setting_shortcut_volume">Volume</string>
+    <string name="setting_shortcut_brightness">Screen brightness</string>
     <string name="brightness">Brightness</string>
+    <string name="auto">Auto</string>
 
 
 </resources>

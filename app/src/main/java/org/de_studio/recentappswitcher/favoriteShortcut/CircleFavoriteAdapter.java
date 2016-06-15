@@ -149,6 +149,9 @@ public class CircleFavoriteAdapter extends BaseAdapter {
                     case Shortcut.ACTION_VOLUME:
                         icon.setImageResource(R.drawable.ic_volume);
                         break;
+                    case Shortcut.ACTION_BRIGHTNESS:
+                        icon.setImageResource(R.drawable.ic_screen_brightness);
+                        break;
                     case Shortcut.ACTION_NONE:
                         icon.setImageDrawable(null);
                 }

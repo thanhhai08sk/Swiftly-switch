@@ -64,6 +64,7 @@ import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
 import org.de_studio.recentappswitcher.service.ScreenBrightnessDialogActivity;
+import org.de_studio.recentappswitcher.service.VolumeDialogActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -816,7 +817,9 @@ public  class Utility {
             return Shortcut.ACTION_RECENT;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_volume))) {
             return Shortcut.ACTION_VOLUME;
-        } else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_dial))) {
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_brightness))) {
+            return Shortcut.ACTION_BRIGHTNESS;
+        }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_dial))) {
             return Shortcut.ACTION_DIAL;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_none))) {
             return Shortcut.ACTION_NONE;
@@ -883,6 +886,8 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_icon_recent_5122);
             case MainActivity.ACTION_VOLUME:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_volume);
+            case MainActivity.ACTION_BRIGHTNESS:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_brightness);
             case MainActivity.ACTION_INSTANT_FAVO:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_instant_favorite_512);
             case MainActivity.ACTION_NONE:
@@ -920,6 +925,8 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_icon_recent_5122);
             case MainActivity.ACTION_VOLUME:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_volume);
+            case MainActivity.ACTION_BRIGHTNESS:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_brightness);
             case MainActivity.ACTION_NONE:
                 return null;
             case MainActivity.ACTION_INSTANT_FAVO:
@@ -956,6 +963,8 @@ public  class Utility {
                 return context.getString(R.string.setting_shortcut_recent);
             case MainActivity.ACTION_VOLUME:
                 return context.getString(R.string.setting_shortcut_volume);
+            case MainActivity.ACTION_BRIGHTNESS:
+                return context.getString(R.string.setting_shortcut_brightness);
             case MainActivity.ACTION_NONE:
                 return context.getString(R.string.setting_shortcut_none);
             case MainActivity.ACTION_INSTANT_FAVO:
@@ -1018,7 +1027,14 @@ public  class Utility {
     }
 
     public static void volumeAction(Context context) {
-//        Intent intent = new Intent(context, VolumeDialogActivity.class);
+        Intent intent = new Intent(context, VolumeDialogActivity.class);
+//        Intent intent = new Intent(context, ScreenBrightnessDialogActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        context.startActivity(intent);
+    }
+
+    public static void brightnessAction(Context context) {
         Intent intent = new Intent(context, ScreenBrightnessDialogActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
@@ -1206,6 +1222,9 @@ public  class Utility {
                 break;
             case MainActivity.ACTION_VOLUME:
                 volumeAction(context);
+                break;
+            case MainActivity.ACTION_BRIGHTNESS:
+                brightnessAction(context);
                 break;
         }
     }
@@ -1436,6 +1455,9 @@ public  class Utility {
                     case Shortcut.ACTION_VOLUME:
                         imageView.setImageResource(R.drawable.ic_volume);
                         break;
+                    case Shortcut.ACTION_BRIGHTNESS:
+                        imageView.setImageResource(R.drawable.ic_screen_brightness);
+                        break;
                     case Shortcut.ACTION_NONE:
                         imageView.setImageDrawable(null);
                 }
@@ -1567,6 +1589,9 @@ public  class Utility {
                 case Shortcut.ACTION_VOLUME:
                     Utility.volumeAction(context);
                     break;
+                case Shortcut.ACTION_BRIGHTNESS:
+                    Utility.brightnessAction(context);
+                    break;
                 case Shortcut.ACTION_NONE:
                     break;
 
@@ -1673,6 +1698,9 @@ public  class Utility {
             case MainActivity.ACTION_VOLUME:
                 imageView.setImageResource(R.drawable.ic_volume);
                 break;
+            case MainActivity.ACTION_BRIGHTNESS:
+                imageView.setImageResource(R.drawable.ic_screen_brightness);
+                break;
             case MainActivity.ACTION_NONE:
                 imageView.setImageDrawable(null);
         }
@@ -1708,6 +1736,8 @@ public  class Utility {
                 return ContextCompat.getDrawable(context, R.drawable.ic_recent);
             case Shortcut.ACTION_VOLUME:
                 return ContextCompat.getDrawable(context, R.drawable.ic_volume);
+            case Shortcut.ACTION_BRIGHTNESS:
+                return ContextCompat.getDrawable(context, R.drawable.ic_screen_brightness);
             case Shortcut.ACTION_NONE:
                 return null;
         }
