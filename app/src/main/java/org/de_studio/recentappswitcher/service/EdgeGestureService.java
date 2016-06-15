@@ -87,7 +87,7 @@ public class EdgeGestureService extends Service {
     private static final int NOTIFICATION_ID = 111;
     public static final int CURRENT_SCHEMA_VERSION = 1;
     float mScale;
-    static final String LOG_TAG = EdgeGestureService.class.getSimpleName();
+    static final String TAG = EdgeGestureService.class.getSimpleName();
     static final int EDGE_GESTURE_NOTIFICAION_ID = 10;
     private WindowManager windowManager;
     private ImageView edge1Image;
@@ -154,7 +154,7 @@ public class EdgeGestureService extends Service {
         if (res.activityInfo != null) {
             launcherPackagename = res.activityInfo.packageName;
         } else launcherPackagename = "";
-        Log.e(LOG_TAG, "Launcher packagename = " + launcherPackagename);
+        Log.e(TAG, "Launcher packagename = " + launcherPackagename);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -393,11 +393,13 @@ public class EdgeGestureService extends Service {
         }
 
         String iconPackPacka = defaultShared.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none");
+        Log.e(TAG, "onStartCommand: iconpack package = " + iconPackPacka);
         if (!iconPackPacka.equals("none")) {
             IconPackManager iconPackManager = new IconPackManager();
             iconPackManager.setContext(getApplicationContext());
             iconPack = iconPackManager.getInstance(iconPackPacka);
             if (iconPack != null) {
+                Log.e(TAG, "onStartCommand: iconPack != null");
                 iconPack.load();
             }
         }
@@ -462,7 +464,7 @@ public class EdgeGestureService extends Service {
                     removeAllExceptEdgeView();
                     onInstantFavo = false;
 //                    startDown = System.currentTimeMillis();
-//                    Log.e(LOG_TAG, "Start action down at " + startDown);
+//                    Log.e(TAG, "Start action down at " + startDown);
                     switch (position / 10) {
                         case 1:
                             x_init_cord = (int) (x_cord - 10 * mScale);
@@ -481,7 +483,7 @@ public class EdgeGestureService extends Service {
                     Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSetting.ANIMATION_KEY, false), animationTime);
                     excludeSet = sharedPreferences_exclude.getStringSet(EdgeSetting.EXCLUDE_KEY, new HashSet<String>());
 
-//                    Log.e(LOG_TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
+//                    Log.e(TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
 //                    if (!backgroundFrame.isAttachedToWindow() && (position == edge1Position || position == edge2Position)) {
 //                    if (!backgroundFrame.isAttachedToWindow() && (defaultShared.getInt(EdgeSetting.SERVICE_ID,10) == serviceId )) {
                     if (defaultShared.getBoolean(EdgeSetting.ANIMATION_KEY, false)) {
@@ -492,24 +494,6 @@ public class EdgeGestureService extends Service {
                         windowManager.addView(backgroundFrame, backgroundParams);
                         backgroundFrame.setAlpha(1f);
                     }
-//                    }
-//                    if (position != edge1Position && position != edge2Position) {
-//                    if (defaultShared.getInt(EdgeSetting.SERVICE_ID,10) != serviceId) {
-//                        Log.e(LOG_TAG, "the service id is different");
-//                        if (edge1View != null && edge1View.isAttachedToWindow()) {
-//                            windowManager.removeView(edge1View);
-//                        }
-//                        if (edge2View != null && edge2View.isAttachedToWindow()) {
-//                            windowManager.removeView(edge2View);
-//                        }
-//                        if (backgroundFrame != null && backgroundFrame.isAttachedToWindow()) {
-//                            backgroundFrame.setBackgroundColor(R.color.transparent);
-//                            windowManager.removeView(backgroundFrame);
-//                        }
-//                        stopSelf();
-//                        return false;
-//                    }
-//                    Log.e(LOG_TAG, "position = " + position + "\nEdge1position = " + edge1Position + "\nEdge2Position = " + edge2Position);
                     isShortcutBackgroundNull = true;
                     preShortcutToSwitch = -1;
                     preShortcutInFolderToSwitch = -1;
@@ -518,21 +502,6 @@ public class EdgeGestureService extends Service {
                         vibrator.vibrate(vibrationDuration);
                     }
                     isClockShown = false;
-//                    try {
-//                        windowManager.removeView(clockView);
-//                        isClockShown = false;
-//                    } catch (IllegalArgumentException e) {
-//                        Log.e(LOG_TAG, "clockView is not attacked to the windowManager");
-//                    }
-//                    itemView.removeView(action2View);
-//                    itemView.removeView(action1View);
-//                    itemView.removeView(action4View);
-//                    if (itemView != null && itemView.isAttachedToWindow()) {
-//                        windowManager.removeView(itemView);
-//                    }
-//                    if (shortcutView != null && shortcutView.isAttachedToWindow()) {
-//                        windowManager.removeView(shortcutView);
-//                    }
                     if (isFreeVersion) {
                         isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSetting.BEGIN_DAY_KEY, System.currentTimeMillis())
                                 > MainActivity.trialTime;
@@ -586,16 +555,11 @@ public class EdgeGestureService extends Service {
                             }
                         }
 
-
-//                        packagename = new String[tempPackageName.size()];
-//                        tempPackageName.toArray(packagename);
                         for (int i = 0; i < 6; i++) {
                             if (i >= packagename.length) {
                                 iconImageArrayList.get(i).setImageDrawable(null);
                             } else {
                                 try {
-//                                    Drawable icon = getPackageManager().getApplicationIcon(packagename[i]);
-//                                    ImageView iconi = iconImageArrayList.get(i);
                                     Drawable defaultDrawable = getPackageManager().getApplicationIcon(packagename[i]);
                                     if (iconPack != null) {
                                         iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(packagename[i], defaultDrawable));
@@ -604,14 +568,14 @@ public class EdgeGestureService extends Service {
 
                                     }
                                 } catch (PackageManager.NameNotFoundException e) {
-                                    Log.e(LOG_TAG, "NameNotFound" + e);
+                                    Log.e(TAG, "NameNotFound" + e);
                                 }
                             }
                         }
                     }
 //                    long start = System.currentTimeMillis();
 //                    long timestart = start - startDown;
-//                    Log.e(LOG_TAG, "time from start to get recent = " + timestart);
+//                    Log.e(TAG, "time from start to get recent = " + timestart);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
                         long currentTimeMillis = System.currentTimeMillis() + 5000;
@@ -624,7 +588,7 @@ public class EdgeGestureService extends Service {
                                 mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
                             }
                             Set<Long> setKey = mySortedMap.keySet();
-                            Log.e(LOG_TAG, "mySortedMap size = " + mySortedMap.size());
+                            Log.e(TAG, "mySortedMap size = " + mySortedMap.size());
                             UsageStats usageStats;
                             String packa;
                             boolean isSystem = false;
@@ -633,18 +597,18 @@ public class EdgeGestureService extends Service {
                             for (Long key : setKey) {
                                 if (key >= currentTimeMillis) {
                                     hasKeyInFuture = true;
-                                    Log.e(LOG_TAG, "key is in future");
+                                    Log.e(TAG, "key is in future");
                                 } else {
                                     usageStats = mySortedMap.get(key);
                                     if (usageStats == null) {
-                                        Log.e(LOG_TAG, " usageStats is null");
+                                        Log.e(TAG, " usageStats is null");
                                     } else {
                                         packa = usageStats.getPackageName();
                                         try {
                                             try {
                                                 isSystem = packageManager.getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/");
                                             } catch (NullPointerException e) {
-                                                Log.e(LOG_TAG, "isSystem = null");
+                                                Log.e(TAG, "isSystem = null");
                                             }
                                             if (isSystem) {
                                                 //do nothing
@@ -657,11 +621,11 @@ public class EdgeGestureService extends Service {
                                                 // do nothing
                                             } else tempPackageName.add(packa);
                                             if (tempPackageName.size() >= 8) {
-                                                Log.e(LOG_TAG, "tempackage >= 8");
+                                                Log.e(TAG, "tempackage >= 8");
                                                 break;
                                             }
                                         } catch (PackageManager.NameNotFoundException e) {
-                                            Log.e(LOG_TAG, "name not found" + e);
+                                            Log.e(TAG, "name not found" + e);
                                         }
                                     }
 
@@ -741,7 +705,7 @@ public class EdgeGestureService extends Service {
 
 //                            packagename = new String[tempPackageName.size()];
 //                            tempPackageName.toArray(packagename);
-                        } else Log.e(LOG_TAG, "erros in mySortedMap");
+                        } else Log.e(TAG, "erros in mySortedMap");
                         for (int i = 0; i < 6; i++) {
                             if (i >= packagename.length) {
                                 iconImageArrayList.get(i).setImageDrawable(null);
@@ -755,14 +719,14 @@ public class EdgeGestureService extends Service {
 
                                     }
                                 } catch (PackageManager.NameNotFoundException e) {
-                                    Log.e(LOG_TAG, "NameNotFound" + e);
+                                    Log.e(TAG, "NameNotFound" + e);
                                 }
                             }
                         }
 
                     }
 //                    long spendTime = System.currentTimeMillis() - start;
-//                    Log.e(LOG_TAG, "time to get recent = " + spendTime);
+//                    Log.e(TAG, "time to get recent = " + spendTime);
                     if (isOnlyFavorite) {
                         if (delayToSwitchTask == null) {
                             delayToSwitchTask = new DelayToSwitchTask();
@@ -843,7 +807,7 @@ public class EdgeGestureService extends Service {
 //                        windowManager.addView(itemView, itemViewParameter);
 //
 //                    }catch (IllegalStateException e){
-//                        Log.e(LOG_TAG," item_view has already been added to the window manager");
+//                        Log.e(TAG," item_view has already been added to the window manager");
 //                    }
 //                    Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
 
@@ -857,10 +821,10 @@ public class EdgeGestureService extends Service {
                                 try {
                                     windowManager.addView(itemView, itemViewParameter);
                                 } catch (IllegalStateException e) {
-                                    Log.e(LOG_TAG, " item_view has already been added to the window manager");
+                                    Log.e(TAG, " item_view has already been added to the window manager");
                                 }
                                 delayToSwitchTask.switchToCircleShortcut();
-                                Log.e(LOG_TAG,"Switch to circle favorite");
+                                Log.e(TAG,"Switch to circle favorite");
                             } else {
                                 delayToSwitchTask.switchToShortcut();
                             }
@@ -883,15 +847,15 @@ public class EdgeGestureService extends Service {
 //                                icon.animate().alpha(1f).setDuration(150);
 //                            }
                         } catch (IllegalStateException e) {
-                            Log.e(LOG_TAG, " item_view has already been added to the window manager");
+                            Log.e(TAG, " item_view has already been added to the window manager");
                         }
                     }
                     iconIdBackgrounded = -2;
 //                    long drawTime = System.currentTimeMillis() - start - spendTime;
 //                    long totalTime = System.currentTimeMillis() - startDown;
-//                    Log.e(LOG_TAG, " time to draw = " + drawTime);
-//                    Log.e(LOG_TAG, "finish action down at " + System.currentTimeMillis());
-//                    Log.e(LOG_TAG, "total time in action down = " + totalTime);
+//                    Log.e(TAG, " time to draw = " + drawTime);
+//                    Log.e(TAG, "finish action down at " + System.currentTimeMillis());
+//                    Log.e(TAG, "total time in action down = " + totalTime);
 
                     break;
 
@@ -906,7 +870,7 @@ public class EdgeGestureService extends Service {
                             shortcutToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
                             shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
                             int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
-                            Log.e(LOG_TAG, "homeBackNoti = " + homeBackNoti);
+                            Log.e(TAG, "homeBackNoti = " + homeBackNoti);
                             String action = MainActivity.ACTION_NONE;
                             switch (homeBackNoti) {
                                 case 1:
@@ -924,7 +888,7 @@ public class EdgeGestureService extends Service {
                             if (action.equals(MainActivity.ACTION_NOTI) & isFreeVersion & isOutOfTrial) {
                                 Toast.makeText(getApplicationContext(), getString(R.string.edge_service_out_of_trial_text_when_homebacknoti), Toast.LENGTH_LONG).show();
                             } else {
-                                Log.e(LOG_TAG, "Action = " + action);
+                                Log.e(TAG, "Action = " + action);
                                 Utility.executeAction(getApplicationContext(), action, v, getClass().getName(), getPackageName(), lastAppPackageName);
                             }
                         } else {
@@ -974,13 +938,13 @@ public class EdgeGestureService extends Service {
 //                                startActivity(startApp);
                                 }
 
-                                Log.e(LOG_TAG, "packageToSwitch = " + packageToSwitch);
-                            } else Log.e(LOG_TAG, "extApp = null ");
+                                Log.e(TAG, "packageToSwitch = " + packageToSwitch);
+                            } else Log.e(TAG, "extApp = null ");
 
                         }
                         packagename = null;
                         int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
-                        Log.e(LOG_TAG, "homeBackNoti = " + homeBackNoti);
+                        Log.e(TAG, "homeBackNoti = " + homeBackNoti);
                         String action = MainActivity.ACTION_NONE;
                         switch (homeBackNoti) {
                             case 1:
@@ -998,7 +962,7 @@ public class EdgeGestureService extends Service {
                         if (action.equals(MainActivity.ACTION_NOTI) & isFreeVersion & isOutOfTrial) {
                             Toast.makeText(getApplicationContext(), getString(R.string.edge_service_out_of_trial_text_when_homebacknoti), Toast.LENGTH_LONG).show();
                         } else {
-                            Log.e(LOG_TAG, "Action = " + action);
+                            Log.e(TAG, "Action = " + action);
                             Utility.executeAction(getApplicationContext(), action, v, getClass().getName(), getPackageName(), lastAppPackageName);
                         }
 
@@ -1018,14 +982,14 @@ public class EdgeGestureService extends Service {
                 case MotionEvent.ACTION_MOVE:
 
                     if (!isClockShown) {
-                        Log.e(LOG_TAG, "Show clock");
+                        Log.e(TAG, "Show clock");
                         clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSetting.ANIMATION_KEY, false), defaultShared.getInt(EdgeSetting.ANI_TIME_KEY, 100), defaultShared.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY, false));
                         LinearLayout clock = (LinearLayout) clockView.findViewById(R.id.clock_linear_layout);
                         FrameLayout indicator = (FrameLayout) clockView.findViewById(R.id.indicator_frame_layout);
                         indicator.setVisibility(View.GONE);
                         circle = (Circle) clockView.findViewById(R.id.circle);
                         if (circle == null) {
-                            Log.e(LOG_TAG, "circle = null");
+                            Log.e(TAG, "circle = null");
                         }
                         isClockShown = true;
                     }
@@ -1121,7 +1085,7 @@ public class EdgeGestureService extends Service {
                                                 if (!isCancel) {
                                                     folderCoor = Utility.showFolder(getApplicationContext(), shortcutGridView, windowManager, favoriteRealm, defaultShared, shortcutToSwitch, mScale, mIconScale,folderAdapter);
                                                     onFolderAnimator = false;
-                                                    Log.e(LOG_TAG, "onAnimation end");
+                                                    Log.e(TAG, "onAnimation end");
                                                     folderShown = true;
                                                     circle.setVisibility(View.GONE);
                                                     circle.setAngle(0);
@@ -1140,7 +1104,7 @@ public class EdgeGestureService extends Service {
                                                 angleAnimation.cancel();
                                                 circle.setAngle(0);
                                                 circle.setVisibility(View.GONE);
-                                                Log.e(LOG_TAG, "onAnimation cancel");
+                                                Log.e(TAG, "onAnimation cancel");
 
                                             }
 
@@ -1161,7 +1125,7 @@ public class EdgeGestureService extends Service {
 
                                 if (onFolderAnimator && positionOfFolder != shortcutToSwitch) {
                                     folderAnimator.cancel();
-                                    Log.e(LOG_TAG, "Cancel opening folder");
+                                    Log.e(TAG, "Cancel opening folder");
                                 }
 
                                 if (shortcutAdapter != null) {
@@ -1200,7 +1164,7 @@ public class EdgeGestureService extends Service {
 
                                     }
                                     if (shortcutToSwitch == -2) {
-                                        Log.e(LOG_TAG, "outside folder zone");
+                                        Log.e(TAG, "outside folder zone");
                                         shortcutGridView.setVisibility(View.VISIBLE);
                                         shortcutGridView.setAlpha(1f);
                                         shortcutView.findViewById(R.id.folder_grid).setVisibility(View.GONE);
@@ -1253,7 +1217,7 @@ public class EdgeGestureService extends Service {
                                 iconIdBackgrounded = iconToSwitch;
 
                             }
-                            Log.e(LOG_TAG, "set activateId = icontoswitch + 20 \nonAnimation = " + iconImageArrayList.get(0).isOnAnimation());
+                            Log.e(TAG, "set activateId = icontoswitch + 20 \nonAnimation = " + iconImageArrayList.get(0).isOnAnimation());
 
                             activateId = iconToSwitch + 20;
 
@@ -1338,7 +1302,7 @@ public class EdgeGestureService extends Service {
                     Thread.sleep(holdTime);
                     isSleepEnough = true;
                 } catch (InterruptedException e) {
-                    Log.e(LOG_TAG, "interrupt sleeping");
+                    Log.e(TAG, "interrupt sleeping");
                 }
 
                 return null;
@@ -1429,7 +1393,7 @@ public class EdgeGestureService extends Service {
         private void clearIconBackground() {
             if (iconIdBackgrounded != -2) {
                 if (iconIdBackgrounded < iconImageArrayList.size()) {
-                    Log.e(LOG_TAG, "Clear Icon Background test test2 test3 test4 test5");
+                    Log.e(TAG, "Clear Icon Background test test2 test3 test4 test5");
                     ImageView iconResetBackground = iconImageArrayList.get(iconIdBackgrounded);
                     FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(iconResetBackground.getLayoutParams());
                     layoutParams1.width = (int) (48 * mScale * mIconScale);
@@ -1465,7 +1429,7 @@ public class EdgeGestureService extends Service {
                         try {
                             label.setText(getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(packagename[activateId - 20], 0)));
                         } catch (PackageManager.NameNotFoundException e) {
-                            Log.e(LOG_TAG, "Namenotfound when setIndicator");
+                            Log.e(TAG, "Namenotfound when setIndicator");
                         }
                     } else {
                         icon.setImageDrawable(null);
@@ -1513,7 +1477,7 @@ public class EdgeGestureService extends Service {
 
         private void clearIndicator(int activatedId) {
             if (activatedId != 0 && clockView!=null) {
-                Log.e(LOG_TAG, "clearIndicator");
+                Log.e(TAG, "clearIndicator");
                 LinearLayout clock = (LinearLayout) clockView.findViewById(R.id.clock_linear_layout);
                 FrameLayout indicator = (FrameLayout) clockView.findViewById(R.id.indicator_frame_layout);
                 if (switched) {
@@ -1795,9 +1759,9 @@ public class EdgeGestureService extends Service {
         } else {
             pinnedPackageName = new String[results1.size()];
             for (Shortcut shortcut : results1) {
-                Log.e(LOG_TAG, "result = " + shortcut.getPackageName());
+                Log.e(TAG, "result = " + shortcut.getPackageName());
                 pinnedPackageName[i] = shortcut.getPackageName();
-                Log.e(LOG_TAG, "pinnedPack = " + pinnedPackageName[0]);
+                Log.e(TAG, "pinnedPack = " + pinnedPackageName[0]);
                 i++;
             }
         }
@@ -1820,7 +1784,7 @@ public class EdgeGestureService extends Service {
                 edge2mode = 1;
             }
         }
-        Log.e(LOG_TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
+        Log.e(TAG, "onCreate service" + "\nEdge1 on = " + isEdge1On + "\nEdge2 on = " + isEdge2On +
                 "\nEdge1 position = " + edge1Position + "\nEdge2 positon = " + edge2Position
                 + "\nMode = " + edge1mode);
         useInstantFavo = false;
@@ -1856,88 +1820,88 @@ public class EdgeGestureService extends Service {
             windowManager.removeView(view);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove View");
+            Log.e(TAG, " Null when remove View");
         }
     }
 
     public final synchronized void removeAll() {
-        Log.e(LOG_TAG, "remove all view");
+        Log.e(TAG, "remove all view");
         try {
             windowManager.removeView(edge1Image);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove edge1Image");
+            Log.e(TAG, " Null when remove edge1Image");
         }
         try {
             windowManager.removeView(edge2Image);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove edge2Image");
+            Log.e(TAG, " Null when remove edge2Image");
         }
         try {
             windowManager.removeView(backgroundFrame);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove backgroundFrame");
+            Log.e(TAG, " Null when remove backgroundFrame");
         }
         try {
             windowManager.removeView(clockView);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove clockView");
+            Log.e(TAG, " Null when remove clockView");
         }
         try {
             windowManager.removeView(shortcutView);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove shortcutView");
+            Log.e(TAG, " Null when remove shortcutView");
         }
         try {
             windowManager.removeView(item1View);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove item1View");
+            Log.e(TAG, " Null when remove item1View");
         }
         try {
             windowManager.removeView(item2View);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove item2View");
+            Log.e(TAG, " Null when remove item2View");
         }
 
     }
 
     public final synchronized void removeAllExceptEdgeView() {
-        Log.e(LOG_TAG, "removeAllExceptEdgeView");
+        Log.e(TAG, "removeAllExceptEdgeView");
         try {
             windowManager.removeView(backgroundFrame);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove backgroundFrame");
+            Log.e(TAG, " Null when remove backgroundFrame");
         }
         try {
             windowManager.removeView(clockView);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove clockView");
+            Log.e(TAG, " Null when remove clockView");
         }
         try {
             windowManager.removeView(shortcutView);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove shortcutView");
+            Log.e(TAG, " Null when remove shortcutView");
         }
         try {
             windowManager.removeView(item1View);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove item1View");
+            Log.e(TAG, " Null when remove item1View");
         }
         try {
             windowManager.removeView(item2View);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(LOG_TAG, " Null when remove item2View");
+            Log.e(TAG, " Null when remove item2View");
         }
     }
 

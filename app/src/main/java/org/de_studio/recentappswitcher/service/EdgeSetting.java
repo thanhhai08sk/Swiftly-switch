@@ -547,7 +547,7 @@ public class EdgeSetting extends DialogFragment {
                 edgeInitY = screenHeight - height;
                 break;
         }
-//        Log.e(LOG_TAG, "caculate " +
+//        Log.e(TAG, "caculate " +
 //                "\nedgeInitX = " + edgeInitX+
 //                "\nedgeInitY = " + edgeInitY +
 //                "\nheight = " + height +

@@ -35,6 +35,7 @@ public class IconPackManager
     //private android.app.Application mContext;
 
     private Context mContext;
+    private static final String TAG = "IconPackManager";
 
     public void setContext (Context c) {
         mContext = c;
@@ -151,7 +152,7 @@ public class IconPackManager
                                     mFactor = Float.valueOf(xpp.getAttributeValue(0));
                                 }
                             }
-                            else if (xpp.getName().equals("items"))
+                            else if (xpp.getName().equals("item"))
                             {
                                 String componentName = null;
                                 String drawableName = null;
@@ -217,7 +218,6 @@ public class IconPackManager
         public Drawable getDrawableIconForPackage(String appPackageName, Drawable defaultDrawable) {
             if (!mLoaded)
                 load();
-
             PackageManager pm = mContext.getPackageManager();
 
             Intent launchIntent = pm.getLaunchIntentForPackage(appPackageName);
