@@ -1,6 +1,11 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -144,7 +149,7 @@ public class ActionListAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mode != FavoriteSettingActivity.MODE_GRID && position == 1) {
+                if (mode != FavoriteSettingActivity.MODE_GRID && stringArray[position].equalsIgnoreCase(mContext.getString(R.string.setting_shortcut_folder))) {
                     Toast.makeText(mContext, "Can't add folder to Circle Favorite", Toast.LENGTH_SHORT).show();
 
                 } else {
@@ -169,6 +174,25 @@ public class ActionListAdapter extends BaseAdapter {
                     ActionListAdapter.this.notifyDataSetChanged();
                     listener.onSettingChange();
                 }
+                if ((stringArray[position].equalsIgnoreCase(mContext.getString(R.string.setting_shortcut_rotation)) ||
+                        stringArray[position].equalsIgnoreCase(mContext.getString(R.string.setting_shortcut_brightness))) &&
+                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                        !Settings.System.canWrite(mContext)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle(R.string.write_setting_permission)
+                            .setMessage(R.string.write_setting_permission_explain)
+                            .setPositiveButton(R.string.go_to_setting, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent notiIntent = new Intent();
+                                    notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                                    mContext.startActivity(notiIntent);
+
+                                }
+                            });
+                    builder.show();
+                }
+
 
             }
         });
