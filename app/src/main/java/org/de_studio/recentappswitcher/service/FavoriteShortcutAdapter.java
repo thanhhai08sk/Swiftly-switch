@@ -177,6 +177,20 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                     case Shortcut.ACTION_BRIGHTNESS:
                         imageView.setImageResource(R.drawable.ic_screen_brightness);
                         break;
+                    case Shortcut.ACTION_RINGER_MODE:
+                        switch (Utility.getRingerMode(mContext)) {
+                            case 0:
+                                imageView.setImageResource(R.drawable.ic_sound_normal);
+                                break;
+                            case 1:
+                                imageView.setImageResource(R.drawable.ic_sound_vibrate);
+                                break;
+                            case 2:
+                                imageView.setImageResource(R.drawable.ic_sound_silent);
+                                break;
+                        }
+
+                        break;
                     case Shortcut.ACTION_CALL_LOGS:
                         imageView.setImageResource(R.drawable.ic_call_log);
                         break;

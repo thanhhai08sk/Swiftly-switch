@@ -122,6 +122,8 @@ public class ActionListAdapter extends BaseAdapter {
             icon.setImageResource(R.drawable.ic_volume);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_brightness))) {
             icon.setImageResource(R.drawable.ic_screen_brightness);
+        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_ringer_mode))) {
+            icon.setImageResource(R.drawable.ic_sound_normal);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_power_menu))) {
             icon.setImageResource(R.drawable.ic_power_menu);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_home))) {

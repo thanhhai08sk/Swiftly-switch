@@ -26,6 +26,7 @@ public class Shortcut extends RealmObject {
     public static final int ACTION_RECENT = 12;
     public static final int ACTION_VOLUME = 13;
     public static final int ACTION_BRIGHTNESS = 14;
+    public static final int ACTION_RINGER_MODE = 15;
     @PrimaryKey
     private int id;
     private int type;

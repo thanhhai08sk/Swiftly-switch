@@ -23,6 +23,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
@@ -819,6 +820,8 @@ public  class Utility {
             return Shortcut.ACTION_VOLUME;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_brightness))) {
             return Shortcut.ACTION_BRIGHTNESS;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_ringer_mode))) {
+            return Shortcut.ACTION_RINGER_MODE;
         }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_dial))) {
             return Shortcut.ACTION_DIAL;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_none))) {
@@ -888,6 +891,8 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_volume);
             case MainActivity.ACTION_BRIGHTNESS:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_brightness);
+            case MainActivity.ACTION_RINGER_MODE:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_sound_normal);
             case MainActivity.ACTION_INSTANT_FAVO:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_instant_favorite_512);
             case MainActivity.ACTION_NONE:
@@ -927,6 +932,8 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_volume);
             case MainActivity.ACTION_BRIGHTNESS:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_brightness);
+            case MainActivity.ACTION_RINGER_MODE:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_sound_normal);
             case MainActivity.ACTION_NONE:
                 return null;
             case MainActivity.ACTION_INSTANT_FAVO:
@@ -965,6 +972,8 @@ public  class Utility {
                 return context.getString(R.string.setting_shortcut_volume);
             case MainActivity.ACTION_BRIGHTNESS:
                 return context.getString(R.string.setting_shortcut_brightness);
+            case MainActivity.ACTION_RINGER_MODE:
+                return context.getString(R.string.setting_shortcut_ringer_mode);
             case MainActivity.ACTION_NONE:
                 return context.getString(R.string.setting_shortcut_none);
             case MainActivity.ACTION_INSTANT_FAVO:
@@ -1153,6 +1162,35 @@ public  class Utility {
         context.startActivity(launchContact);
     }
 
+    public static int getRingerMode(Context context) {
+        AudioManager manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        switch (manager.getRingerMode()) {
+            case AudioManager.RINGER_MODE_NORMAL:
+                return 0;
+            case AudioManager.RINGER_MODE_VIBRATE:
+                return 1;
+            case AudioManager.RINGER_MODE_SILENT:
+                return 2;
+            default:
+                return 0;
+        }
+    }
+
+    public static void setRinggerMode(Context context) {
+        AudioManager manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        switch (getRingerMode(context)) {
+            case 0:
+                manager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                break;
+            case 1:
+                manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                break;
+            case 2:
+                manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                break;
+        }
+    }
+
     public static void dialAction(Context context) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -1224,6 +1262,9 @@ public  class Utility {
                 break;
             case MainActivity.ACTION_BRIGHTNESS:
                 brightnessAction(context);
+                break;
+            case MainActivity.ACTION_RINGER_MODE:
+                setRinggerMode(context);
                 break;
         }
     }
@@ -1457,6 +1498,19 @@ public  class Utility {
                     case Shortcut.ACTION_BRIGHTNESS:
                         imageView.setImageResource(R.drawable.ic_screen_brightness);
                         break;
+                    case Shortcut.ACTION_RINGER_MODE:
+                        switch (getRingerMode(mContext)) {
+                            case 0:
+                                imageView.setImageResource(R.drawable.ic_sound_normal);
+                                break;
+                            case 1:
+                                imageView.setImageResource(R.drawable.ic_sound_vibrate);
+                                break;
+                            case 2:
+                                imageView.setImageResource(R.drawable.ic_sound_silent);
+                                break;
+                        }
+                        break;
                     case Shortcut.ACTION_NONE:
                         imageView.setImageDrawable(null);
                 }
@@ -1591,6 +1645,9 @@ public  class Utility {
                 case Shortcut.ACTION_BRIGHTNESS:
                     Utility.brightnessAction(context);
                     break;
+                case Shortcut.ACTION_RINGER_MODE:
+                    Utility.setRinggerMode(context);
+                    break;
                 case Shortcut.ACTION_NONE:
                     break;
 
@@ -1700,6 +1757,9 @@ public  class Utility {
             case MainActivity.ACTION_BRIGHTNESS:
                 imageView.setImageResource(R.drawable.ic_screen_brightness);
                 break;
+            case MainActivity.ACTION_RINGER_MODE:
+                imageView.setImageResource(R.drawable.ic_sound_normal);
+                break;
             case MainActivity.ACTION_NONE:
                 imageView.setImageDrawable(null);
         }
@@ -1737,6 +1797,8 @@ public  class Utility {
                 return ContextCompat.getDrawable(context, R.drawable.ic_volume);
             case Shortcut.ACTION_BRIGHTNESS:
                 return ContextCompat.getDrawable(context, R.drawable.ic_screen_brightness);
+            case Shortcut.ACTION_RINGER_MODE:
+                return ContextCompat.getDrawable(context, R.drawable.ic_sound_normal);
             case Shortcut.ACTION_NONE:
                 return null;
         }

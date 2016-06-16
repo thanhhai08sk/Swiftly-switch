@@ -178,6 +178,7 @@
     <string name="media">Media</string>
     <string name="setting_shortcut_volume">Volume</string>
     <string name="setting_shortcut_brightness">Screen brightness</string>
+    <string name="setting_shortcut_ringer_mode">Ringer mode</string>
     <string name="brightness">Brightness</string>
     <string name="auto">Auto</string>
     <string name="main_disable_in_landscape">Disable in landscape</string>
