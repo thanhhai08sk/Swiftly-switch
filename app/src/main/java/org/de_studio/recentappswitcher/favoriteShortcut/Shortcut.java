@@ -11,6 +11,7 @@ public class Shortcut extends RealmObject {
     public static final int TYPE_ACTION = 1;
     public static final int TYPE_CONTACT =2;
     public static final int TYPE_FOLDER = 3;
+    public static final int TYPE_SHORTCUT = 4;
     public static final int ACTION_WIFI = 0;
     public static final int ACTION_BLUETOOTH = 1;
     public static final int ACTION_POWER_MENU = 2;

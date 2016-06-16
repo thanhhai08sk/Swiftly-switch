@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.de_studio.recentappswitcher.favoriteShortcut.MyCheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:id="@+id/icon"
+        android:layout_marginLeft="10dp"
+        tools:src="@drawable/ic_contact"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:layout_weight="1"
+        android:textColor="@color/black"
+        android:id="@+id/label"
+        tools:text="Example app name text"
+        />
+</org.de_studio.recentappswitcher.favoriteShortcut.MyCheckableLinearLayout>

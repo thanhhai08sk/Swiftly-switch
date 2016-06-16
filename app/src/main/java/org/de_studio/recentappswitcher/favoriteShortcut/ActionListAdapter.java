@@ -30,7 +30,7 @@ import io.realm.RealmResults;
  */
 public class ActionListAdapter extends BaseAdapter {
     private static final String LOG_TAG = ActionListAdapter.class.getSimpleName();
-    private Context mContext;
+    private Context context;
     private String[] stringArray;
     private int mPosition, mode;
     private int mAction;
@@ -39,18 +39,18 @@ public class ActionListAdapter extends BaseAdapter {
 
     public ActionListAdapter(Context context, int position, int mode) {
         super();
-        mContext = context;
+        this.context = context;
         stringArray =context.getResources().getStringArray(R.array.setting_shortcut_array);
         mPosition = position;
         this.mode = mode;
         if (mode == FavoriteSettingActivity.MODE_GRID) {
-            myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder(this.context)
                     .name("default.realm")
                     .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())
                     .build());
         } else {
-            myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder(this.context)
                     .name("circleFavo.realm")
                     .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())
@@ -97,7 +97,7 @@ public class ActionListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.item_choose_shortcut_app_list, parent, false);
         }
         final String item = stringArray[position];
@@ -106,53 +106,53 @@ public class ActionListAdapter extends BaseAdapter {
         RadioButton radioButton = (RadioButton) view.findViewById(R.id.choose_app_radio_button);
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findFirst();
         if (shortcut != null) {
-            if ((shortcut.getType() == Shortcut.TYPE_ACTION && mAction != -1 && mAction == Utility.getActionFromLabel(mContext, item)) ||
+            if ((shortcut.getType() == Shortcut.TYPE_ACTION && mAction != -1 && mAction == Utility.getActionFromLabel(context, item)) ||
                     shortcut.getType() == Shortcut.TYPE_FOLDER && position ==1) {
                 radioButton.setChecked(true);
             }else radioButton.setChecked(false);
         }else radioButton.setChecked(false);
         label.setText(item);
-        if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_wifi))) {
+        if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_wifi))) {
             icon.setImageResource(R.drawable.ic_wifi);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_bluetooth))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_bluetooth))) {
             icon.setImageResource(R.drawable.ic_bluetooth);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_rotation))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_rotation))) {
             icon.setImageResource(R.drawable.ic_rotation);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_volume))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_volume))) {
             icon.setImageResource(R.drawable.ic_volume);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_brightness))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_brightness))) {
             icon.setImageResource(R.drawable.ic_screen_brightness);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_ringer_mode))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_ringer_mode))) {
             icon.setImageResource(R.drawable.ic_sound_normal);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_power_menu))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_power_menu))) {
             icon.setImageResource(R.drawable.ic_power_menu);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_home))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_home))) {
             icon.setImageResource(R.drawable.ic_home);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_back))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_back))) {
             icon.setImageResource(R.drawable.ic_back);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_recent))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_recent))) {
             icon.setImageResource(R.drawable.ic_recent);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_noti))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_noti))) {
             icon.setImageResource(R.drawable.ic_notification);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_dial))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_dial))) {
             icon.setImageResource(R.drawable.ic_dial);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_call_log))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_call_log))) {
             icon.setImageResource(R.drawable.ic_call_log);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_contact))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_contact))) {
             icon.setImageResource(R.drawable.ic_contact);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_last_app))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_last_app))) {
             icon.setImageResource(R.drawable.ic_last_app);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_none))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_none))) {
             icon.setImageDrawable(null);
-        }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_folder))) {
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_folder))) {
             icon.setImageResource(R.drawable.ic_folder);
         }
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mode != FavoriteSettingActivity.MODE_GRID && stringArray[position].equalsIgnoreCase(mContext.getString(R.string.setting_shortcut_folder))) {
-                    Toast.makeText(mContext, "Can't add folder to Circle Favorite", Toast.LENGTH_SHORT).show();
+                if (mode != FavoriteSettingActivity.MODE_GRID && stringArray[position].equalsIgnoreCase(context.getString(R.string.setting_shortcut_folder))) {
+                    Toast.makeText(context, "Can't add folder to Circle Favorite", Toast.LENGTH_SHORT).show();
 
                 } else {
                     myRealm.beginTransaction();
@@ -160,27 +160,27 @@ public class ActionListAdapter extends BaseAdapter {
                     Log.e(LOG_TAG, "mPosition = " + mPosition);
                     oldShortcut.deleteAllFromRealm();
                     Shortcut shortcut = new Shortcut();
-                    if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_folder))) {
+                    if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_folder))) {
                         shortcut.setType(Shortcut.TYPE_FOLDER);
                         shortcut.setId(mPosition);
                     } else {
                         shortcut.setType(Shortcut.TYPE_ACTION);
                         shortcut.setId(mPosition);
                         shortcut.setLabel(item);
-                        shortcut.setAction(Utility.getActionFromLabel(mContext, item));
+                        shortcut.setAction(Utility.getActionFromLabel(context, item));
                     }
 
                     myRealm.copyToRealm(shortcut);
                     myRealm.commitTransaction();
-                    mAction = Utility.getActionFromLabel(mContext,item);
+                    mAction = Utility.getActionFromLabel(context,item);
                     ActionListAdapter.this.notifyDataSetChanged();
                     listener.onSettingChange();
                 }
-                if ((stringArray[position].equalsIgnoreCase(mContext.getString(R.string.setting_shortcut_rotation)) ||
-                        stringArray[position].equalsIgnoreCase(mContext.getString(R.string.setting_shortcut_brightness))) &&
+                if ((stringArray[position].equalsIgnoreCase(context.getString(R.string.setting_shortcut_rotation)) ||
+                        stringArray[position].equalsIgnoreCase(context.getString(R.string.setting_shortcut_brightness))) &&
                         Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                        !Settings.System.canWrite(mContext)) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        !Settings.System.canWrite(context)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle(R.string.write_setting_permission)
                             .setMessage(R.string.write_setting_permission_explain)
                             .setPositiveButton(R.string.go_to_setting, new DialogInterface.OnClickListener() {
@@ -188,7 +188,7 @@ public class ActionListAdapter extends BaseAdapter {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent notiIntent = new Intent();
                                     notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-                                    mContext.startActivity(notiIntent);
+                                    context.startActivity(notiIntent);
 
                                 }
                             });
