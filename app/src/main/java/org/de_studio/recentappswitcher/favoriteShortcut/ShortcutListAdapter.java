@@ -68,7 +68,7 @@ public class ShortcutListAdapter extends BaseAdapter {
         }
         ImageView icon = (ImageView) view.findViewById(R.id.icon);
         TextView label = (TextView) view.findViewById(R.id.label);
-        icon.setImageResource(resolveInfos.get(position).getIconResource());
+        icon.setImageDrawable(resolveInfos.get(position).loadIcon(packageManager));
         label.setText(resolveInfos.get(position).loadLabel(packageManager));
         return view;
     }
