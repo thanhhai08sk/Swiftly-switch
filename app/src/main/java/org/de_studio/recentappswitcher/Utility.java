@@ -1679,6 +1679,16 @@ public  class Utility {
             break;
             }
 
+        } else if (shortcut.getType() == Shortcut.TYPE_SHORTCUT) {
+            try {
+                Intent intent = Intent.parseUri(shortcut.getNumber(), 0);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG, "startShortcut: exception when start Shortcut shortcut");
+            }
+
         }
     }
 
