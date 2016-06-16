@@ -198,6 +198,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                 case 3:
                     ShortcutTabFragment shortcutTabFragment = ShortcutTabFragment.newInstance(position + 1);
                     shortcutTabFragment.setMode(mode);
+                    shortcutTabFragment.setmPosition(mPosition);
                     return shortcutTabFragment;
                 default: mAppTabFragment = AppTabFragment.newInstance(position + 1);
                     mAppTabFragment.setmPosition(mPosition);
