@@ -1412,148 +1412,148 @@ public  class Utility {
         listView.requestLayout();
     }
 
-    public static void setShortcutDrawable(Shortcut shortcut, Context mContext, ImageView imageView, IconPackManager.IconPack iconPack, boolean folderMode) {
-        if (shortcut == null) {
-            if (!folderMode) {
-                imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
-            }
-//            imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
-        } else {
-            if (shortcut.getType() == Shortcut.TYPE_APP) {
-                imageView.setColorFilter(null);
-                try {
-                    Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
-                    if (iconPack!=null) {
-                        imageView.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
-                    } else {
-                        imageView.setImageDrawable(defaultDrawable);
-                    }
-                } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(TAG, "NameNotFound " + e);
-                }
-            }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
-                switch (shortcut.getAction()) {
-                    case Shortcut.ACTION_WIFI:
-                        if (getWifiState(mContext)) {
-                            imageView.setImageResource(R.drawable.ic_wifi);
-                        } else {
-                            imageView.setImageResource(R.drawable.ic_wifi_off);
-                        }
-
-//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color. black));
-                        break;
-                    case Shortcut.ACTION_BLUETOOTH:
-                        if (getBluetoothState(mContext)) {
-                            imageView.setImageResource(R.drawable.ic_bluetooth);
-                        } else {
-                            imageView.setImageResource(R.drawable.ic_bluetooth_off);
-                        }
-
-//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
-                        break;
-                    case Shortcut.ACTION_ROTATION:
-                        if (getIsRotationAuto(mContext)) {
-                            imageView.setImageResource(R.drawable.ic_rotation);
-                        } else {
-                            imageView.setImageResource(R.drawable.ic_rotation_lock);
-                        }
-
-//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
-                        break;
-                    case Shortcut.ACTION_POWER_MENU:
-                        imageView.setImageResource(R.drawable.ic_power_menu);
-//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
-                        break;
-                    case Shortcut.ACTION_HOME:
-                        imageView.setImageResource(R.drawable.ic_home);
-//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
-                        break;
-                    case Shortcut.ACTION_BACK:
-                        imageView.setImageResource(R.drawable.ic_back);
-//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
-                        break;
-                    case Shortcut.ACTION_NOTI:
-                        imageView.setImageResource(R.drawable.ic_notification);
-//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
-                        break;
-                    case Shortcut.ACTION_LAST_APP:
-                        imageView.setImageResource(R.drawable.ic_last_app);
-//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
-                        break;
-                    case Shortcut.ACTION_CALL_LOGS:
-                        imageView.setImageResource(R.drawable.ic_call_log);
-//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
-                        break;
-                    case Shortcut.ACTION_DIAL:
-                        imageView.setImageResource(R.drawable.ic_dial);
-//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
-                        break;
-                    case Shortcut.ACTION_CONTACT:
-                        imageView.setImageResource(R.drawable.ic_contact);
-//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
-                        break;
-                    case Shortcut.ACTION_RECENT:
-                        imageView.setImageResource(R.drawable.ic_recent);
-                        break;
-                    case Shortcut.ACTION_VOLUME:
-                        imageView.setImageResource(R.drawable.ic_volume);
-                        break;
-                    case Shortcut.ACTION_BRIGHTNESS:
-                        imageView.setImageResource(R.drawable.ic_screen_brightness);
-                        break;
-                    case Shortcut.ACTION_RINGER_MODE:
-                        switch (getRingerMode(mContext)) {
-                            case 0:
-                                imageView.setImageResource(R.drawable.ic_sound_normal);
-                                break;
-                            case 1:
-                                imageView.setImageResource(R.drawable.ic_sound_vibrate);
-                                break;
-                            case 2:
-                                imageView.setImageResource(R.drawable.ic_sound_silent);
-                                break;
-                        }
-                        break;
-                    case Shortcut.ACTION_NONE:
-                        imageView.setImageDrawable(null);
-                }
-            }else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
-                File myDir = mContext.getFilesDir();
-                String fname = "folder-"+ shortcut.getId() +".png";
-                File file = new File (myDir, fname);
-                if (!file.exists()) {
-                    imageView.setImageBitmap(null);
-                } else {
-                    try {
-                        imageView.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
-                    } catch (Exception e) {
-                        Log.e(TAG, "read thumbnail exeption" + e);
-                        e.printStackTrace();
-                    }
-                }
-
-            } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
-                String thumbnaiUri = shortcut.getThumbnaiUri();
-                if (thumbnaiUri != null) {
-                    try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(thumbnaiUri));
-                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);
-                        drawable.setCircular(true);
-                        imageView.setImageDrawable(drawable);
-                        imageView.setColorFilter(null);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        imageView.setImageResource(R.drawable.ic_contact_default);
-                    }
-                } else {
-                    imageView.setImageResource(R.drawable.ic_contact_default);
-
-                }
-            }
-
-        }
-
-    }
+//    public static void setShortcutDrawable(Shortcut shortcut, Context mContext, ImageView imageView, IconPackManager.IconPack iconPack, boolean folderMode) {
+//        if (shortcut == null) {
+//            if (!folderMode) {
+//                imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+//            }
+////            imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+//        } else {
+//            if (shortcut.getType() == Shortcut.TYPE_APP) {
+//                imageView.setColorFilter(null);
+//                try {
+//                    Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
+//                    if (iconPack!=null) {
+//                        imageView.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
+//                    } else {
+//                        imageView.setImageDrawable(defaultDrawable);
+//                    }
+//                } catch (PackageManager.NameNotFoundException e) {
+//                    Log.e(TAG, "NameNotFound " + e);
+//                }
+//            }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
+//                switch (shortcut.getAction()) {
+//                    case Shortcut.ACTION_WIFI:
+//                        if (getWifiState(mContext)) {
+//                            imageView.setImageResource(R.drawable.ic_wifi);
+//                        } else {
+//                            imageView.setImageResource(R.drawable.ic_wifi_off);
+//                        }
+//
+////                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color. black));
+//                        break;
+//                    case Shortcut.ACTION_BLUETOOTH:
+//                        if (getBluetoothState(mContext)) {
+//                            imageView.setImageResource(R.drawable.ic_bluetooth);
+//                        } else {
+//                            imageView.setImageResource(R.drawable.ic_bluetooth_off);
+//                        }
+//
+////                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+//                        break;
+//                    case Shortcut.ACTION_ROTATION:
+//                        if (getIsRotationAuto(mContext)) {
+//                            imageView.setImageResource(R.drawable.ic_rotation);
+//                        } else {
+//                            imageView.setImageResource(R.drawable.ic_rotation_lock);
+//                        }
+//
+////                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+//                        break;
+//                    case Shortcut.ACTION_POWER_MENU:
+//                        imageView.setImageResource(R.drawable.ic_power_menu);
+////                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+//                        break;
+//                    case Shortcut.ACTION_HOME:
+//                        imageView.setImageResource(R.drawable.ic_home);
+////                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+//                        break;
+//                    case Shortcut.ACTION_BACK:
+//                        imageView.setImageResource(R.drawable.ic_back);
+////                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+//                        break;
+//                    case Shortcut.ACTION_NOTI:
+//                        imageView.setImageResource(R.drawable.ic_notification);
+////                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+//                        break;
+//                    case Shortcut.ACTION_LAST_APP:
+//                        imageView.setImageResource(R.drawable.ic_last_app);
+////                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+//                        break;
+//                    case Shortcut.ACTION_CALL_LOGS:
+//                        imageView.setImageResource(R.drawable.ic_call_log);
+////                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+//                        break;
+//                    case Shortcut.ACTION_DIAL:
+//                        imageView.setImageResource(R.drawable.ic_dial);
+////                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+//                        break;
+//                    case Shortcut.ACTION_CONTACT:
+//                        imageView.setImageResource(R.drawable.ic_contact);
+////                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+//                        break;
+//                    case Shortcut.ACTION_RECENT:
+//                        imageView.setImageResource(R.drawable.ic_recent);
+//                        break;
+//                    case Shortcut.ACTION_VOLUME:
+//                        imageView.setImageResource(R.drawable.ic_volume);
+//                        break;
+//                    case Shortcut.ACTION_BRIGHTNESS:
+//                        imageView.setImageResource(R.drawable.ic_screen_brightness);
+//                        break;
+//                    case Shortcut.ACTION_RINGER_MODE:
+//                        switch (getRingerMode(mContext)) {
+//                            case 0:
+//                                imageView.setImageResource(R.drawable.ic_sound_normal);
+//                                break;
+//                            case 1:
+//                                imageView.setImageResource(R.drawable.ic_sound_vibrate);
+//                                break;
+//                            case 2:
+//                                imageView.setImageResource(R.drawable.ic_sound_silent);
+//                                break;
+//                        }
+//                        break;
+//                    case Shortcut.ACTION_NONE:
+//                        imageView.setImageDrawable(null);
+//                }
+//            }else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
+//                File myDir = mContext.getFilesDir();
+//                String fname = "folder-"+ shortcut.getId() +".png";
+//                File file = new File (myDir, fname);
+//                if (!file.exists()) {
+//                    imageView.setImageBitmap(null);
+//                } else {
+//                    try {
+//                        imageView.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
+//                    } catch (Exception e) {
+//                        Log.e(TAG, "read thumbnail exeption" + e);
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//            } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
+//                String thumbnaiUri = shortcut.getThumbnaiUri();
+//                if (thumbnaiUri != null) {
+//                    try {
+//                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(thumbnaiUri));
+//                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);
+//                        drawable.setCircular(true);
+//                        imageView.setImageDrawable(drawable);
+//                        imageView.setColorFilter(null);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                        imageView.setImageResource(R.drawable.ic_contact_default);
+//                    }
+//                } else {
+//                    imageView.setImageResource(R.drawable.ic_contact_default);
+//
+//                }
+//            }
+//
+//        }
+//
+//    }
 
     public static void startShortcut(Context context, Shortcut shortcut, View v, String className, String packageName, String lastAppPackageName, int contactAction) {
         if (shortcut.getType() == Shortcut.TYPE_APP) {
@@ -2056,7 +2056,7 @@ public  class Utility {
         }
     }
 
-    public static void setImageForShortcut(Shortcut shortcut, PackageManager packageManager, ImageView imageView, Context mContext, IconPackManager.IconPack iconPack, int position, Realm myRealm, boolean showOnOff) {
+    public static void setImageForShortcut(Shortcut shortcut, PackageManager packageManager, ImageView imageView, Context mContext, IconPackManager.IconPack iconPack, Realm myRealm, boolean showOnOff) {
 
         if (shortcut.getType() == Shortcut.TYPE_APP) {
             try {
@@ -2182,10 +2182,10 @@ public  class Utility {
             }
         } else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
             File myDir = mContext.getFilesDir();
-            String fname = "folder-"+ position +".png";
+            String fname = "folder-"+ shortcut.getId() +".png";
             File file = new File (myDir, fname);
             if (!file.exists()) {
-                imageView.setImageBitmap(Utility.getFolderThumbnail(myRealm, position, mContext));
+                imageView.setImageBitmap(Utility.getFolderThumbnail(myRealm, shortcut.getId(), mContext));
             } else {
                 try {
                     imageView.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));

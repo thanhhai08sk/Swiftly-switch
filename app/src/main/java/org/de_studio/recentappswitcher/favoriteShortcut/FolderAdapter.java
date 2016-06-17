@@ -94,7 +94,7 @@ public class FolderAdapter extends BaseAdapter {
                 label.setText(shortcut.getLabel());
             }
 
-            Utility.setImageForShortcut(shortcut, packageManager, imageView, mContext, iconPack, position, myRealm, false);
+            Utility.setImageForShortcut(shortcut, packageManager, imageView, mContext, iconPack, myRealm, false);
             }
 
         view.setOnDragListener(new View.OnDragListener() {

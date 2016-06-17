@@ -1383,7 +1383,7 @@ public class EdgeGestureService extends Service {
                     shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", i).findFirst();
 //                    Utility.setShortcutDrawable(shortcut,getApplicationContext(),iconImageArrayList.get(i),iconPack, false);
                     if (shortcut != null) {
-                        Utility.setImageForShortcut(shortcut, getPackageManager(), iconImageArrayList.get(i), getApplicationContext(), iconPack, position, circleFavoRealm, true);
+                        Utility.setImageForShortcut(shortcut, getPackageManager(), iconImageArrayList.get(i), getApplicationContext(), iconPack, circleFavoRealm, true);
                     } else {
                         iconImageArrayList.get(i).setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
                     }
@@ -1443,7 +1443,10 @@ public class EdgeGestureService extends Service {
                     }
                 } else if (activateId - 100 >= 0 && activateId - 100 <= 200) {
                     Shortcut shortcut = favoriteRealm.where(Shortcut.class).equalTo("id",activateId - 100).findFirst();
-                    Utility.setShortcutDrawable(shortcut,getApplicationContext(),icon,iconPack, false);
+//                    Utility.setShortcutDrawable(shortcut,getApplicationContext(),icon,iconPack, false);
+                    if (shortcut != null) {
+                        Utility.setImageForShortcut(shortcut,getPackageManager(),icon,getApplicationContext(),iconPack,favoriteRealm,true);
+                    }else icon.setImageDrawable(null);
                     if (shortcut != null) {
                         if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
                             label.setText(shortcut.getName());
@@ -1454,7 +1457,11 @@ public class EdgeGestureService extends Service {
                     }else label.setText("");
                 } else if (activateId - 1000 >= 0 && activateId - 1000 < 10) {
                     Shortcut shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", activateId - 1000).findFirst();
-                    Utility.setShortcutDrawable(shortcut,getApplicationContext(),icon,iconPack, false);
+//                    Utility.setShortcutDrawable(shortcut,getApplicationContext(),icon,iconPack, false);
+                    if (shortcut != null) {
+                        Utility.setImageForShortcut(shortcut,getPackageManager(),icon,getApplicationContext(),iconPack,circleFavoRealm,true);
+                    }else icon.setImageDrawable(null);
+
                     if (shortcut != null) {
                         label.setText(shortcut.getLabel());
                     }else label.setText("");
@@ -1462,7 +1469,11 @@ public class EdgeGestureService extends Service {
                     Utility.setIndicatorForQuickAction(defaultShared,getApplicationContext(),activateId-2000,icon, label);
                 } else if (activateId - 3000 >= 0 && activateId - 3000 < 20) {
                     Shortcut shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", (positionOfFolder +1)* 1000 + (activateId - 3000)).findFirst();
-                    Utility.setShortcutDrawable(shortcut,getApplicationContext(),icon,iconPack, true);
+//                    Utility.setShortcutDrawable(shortcut,getApplicationContext(),icon,iconPack, true);
+                    if (shortcut != null) {
+                        Utility.setImageForShortcut(shortcut, getPackageManager(), icon, getApplicationContext(), iconPack, favoriteRealm, true);
+                    }else icon.setImageDrawable(null);
+
                     if (shortcut == null) {
                         clearIndicator(1);
                         label.setText("");

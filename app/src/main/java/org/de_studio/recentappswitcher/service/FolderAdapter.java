@@ -103,7 +103,7 @@ public class FolderAdapter extends BaseAdapter {
             imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
 
         } else {
-            Utility.setImageForShortcut(shortcut,packageManager,imageView,mContext,iconPack,position,myRealm,true);
+            Utility.setImageForShortcut(shortcut,packageManager,imageView,mContext,iconPack,myRealm,true);
         }
 
 

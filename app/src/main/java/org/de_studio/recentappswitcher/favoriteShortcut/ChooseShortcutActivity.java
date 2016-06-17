@@ -240,7 +240,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
         Log.e(TAG, "setCurrentShortcutImageView");
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst();
         if (shortcut != null) {
-            Utility.setImageForShortcut(shortcut,getPackageManager(),currentShortcut,mContext,iconPack,mPosition,myRealm,false);
+            Utility.setImageForShortcut(shortcut,getPackageManager(),currentShortcut,mContext,iconPack,myRealm,false);
         } else {
             currentShortcut.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
         }
