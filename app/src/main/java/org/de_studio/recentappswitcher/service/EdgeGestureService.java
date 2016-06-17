@@ -1012,7 +1012,7 @@ public class EdgeGestureService extends Service {
 
                             shortcutToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
                             int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
-                            if (moveToHomeBackNoti != -1 | shortcutToSwitch != -1) {
+                            if (moveToHomeBackNoti != 0 | shortcutToSwitch != -1) {
                                 if (shortcutToSwitch != -1) {
                                     activateId = shortcutToSwitch + 1000;
                                 } else {
@@ -1399,7 +1399,6 @@ public class EdgeGestureService extends Service {
         private void clearIconBackground() {
             if (iconIdBackgrounded != -2) {
                 if (iconIdBackgrounded < iconImageArrayList.size()) {
-                    Log.e(TAG, "Clear Icon Background test test2 test3 test4 test5");
                     ImageView iconResetBackground = iconImageArrayList.get(iconIdBackgrounded);
                     FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(iconResetBackground.getLayoutParams());
                     layoutParams1.width = (int) (48 * mScale * mIconScale);
@@ -1459,8 +1458,10 @@ public class EdgeGestureService extends Service {
                     Shortcut shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", activateId - 1000).findFirst();
 //                    Utility.setShortcutDrawable(shortcut,getApplicationContext(),icon,iconPack, false);
                     if (shortcut != null) {
-                        Utility.setImageForShortcut(shortcut,getPackageManager(),icon,getApplicationContext(),iconPack,circleFavoRealm,true);
-                    }else icon.setImageDrawable(null);
+                        Utility.setImageForShortcut(shortcut, getPackageManager(), icon, getApplicationContext(), iconPack, circleFavoRealm, true);
+                    } else {
+                        icon.setImageDrawable(null);
+                    }
 
                     if (shortcut != null) {
                         label.setText(shortcut.getLabel());

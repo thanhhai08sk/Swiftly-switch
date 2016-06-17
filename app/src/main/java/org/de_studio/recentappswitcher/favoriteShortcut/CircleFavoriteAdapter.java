@@ -19,6 +19,7 @@ import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
@@ -95,72 +96,74 @@ public class CircleFavoriteAdapter extends BaseAdapter {
             icon.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
             icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
         } else {
-            icon.setColorFilter(null);
-            if (shortcut.getType() == Shortcut.TYPE_APP) {
-                icon.setColorFilter(null);
-                try {
-                    Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
-                    if (iconPack!=null) {
-                        icon.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
-                    } else {
-                        icon.setImageDrawable(defaultDrawable);
-                    }
-                } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(LOG_TAG, "NameNotFound " + e);
-                }
-            }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
-                switch (shortcut.getAction()) {
-                    case Shortcut.ACTION_WIFI:
-                        icon.setImageResource(R.drawable.ic_wifi);
-                        break;
-                    case Shortcut.ACTION_BLUETOOTH:
-                        icon.setImageResource(R.drawable.ic_bluetooth);
-                        break;
-                    case Shortcut.ACTION_ROTATION:
-                        icon.setImageResource(R.drawable.ic_rotation);
-                        break;
-                    case Shortcut.ACTION_POWER_MENU:
-                        icon.setImageResource(R.drawable.ic_power_menu);
-                        break;
-                    case Shortcut.ACTION_HOME:
-                        icon.setImageResource(R.drawable.ic_home);
-                        break;
-                    case Shortcut.ACTION_BACK:
-                        icon.setImageResource(R.drawable.ic_back);
-                        break;
-                    case Shortcut.ACTION_NOTI:
-                        icon.setImageResource(R.drawable.ic_notification);
-                        break;
-                    case Shortcut.ACTION_LAST_APP:
-                        icon.setImageResource(R.drawable.ic_last_app);
-                        break;
-                    case Shortcut.ACTION_CALL_LOGS:
-                        icon.setImageResource(R.drawable.ic_call_log);
-                        break;
-                    case Shortcut.ACTION_DIAL:
-                        icon.setImageResource(R.drawable.ic_dial);
-                        break;
-                    case Shortcut.ACTION_CONTACT:
-                        icon.setImageResource(R.drawable.ic_contact);
-                        break;
-                    case Shortcut.ACTION_RECENT:
-                        icon.setImageResource(R.drawable.ic_recent);
-                        break;
-                    case Shortcut.ACTION_VOLUME:
-                        icon.setImageResource(R.drawable.ic_volume);
-                        break;
-                    case Shortcut.ACTION_BRIGHTNESS:
-                        icon.setImageResource(R.drawable.ic_screen_brightness);
-                        break;
-                    case Shortcut.ACTION_RINGER_MODE:
-                        icon.setImageResource(R.drawable.ic_sound_normal);
-                        break;
-                    case Shortcut.ACTION_NONE:
-                        icon.setImageDrawable(null);
-                }
-            }
-
+            Utility.setImageForShortcut(shortcut,packageManager,icon,mContext,iconPack,circleFavoRealm,false);
         }
+//            icon.setColorFilter(null);
+//            if (shortcut.getType() == Shortcut.TYPE_APP) {
+//                icon.setColorFilter(null);
+//                try {
+//                    Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
+//                    if (iconPack!=null) {
+//                        icon.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
+//                    } else {
+//                        icon.setImageDrawable(defaultDrawable);
+//                    }
+//                } catch (PackageManager.NameNotFoundException e) {
+//                    Log.e(LOG_TAG, "NameNotFound " + e);
+//                }
+//            }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
+//                switch (shortcut.getAction()) {
+//                    case Shortcut.ACTION_WIFI:
+//                        icon.setImageResource(R.drawable.ic_wifi);
+//                        break;
+//                    case Shortcut.ACTION_BLUETOOTH:
+//                        icon.setImageResource(R.drawable.ic_bluetooth);
+//                        break;
+//                    case Shortcut.ACTION_ROTATION:
+//                        icon.setImageResource(R.drawable.ic_rotation);
+//                        break;
+//                    case Shortcut.ACTION_POWER_MENU:
+//                        icon.setImageResource(R.drawable.ic_power_menu);
+//                        break;
+//                    case Shortcut.ACTION_HOME:
+//                        icon.setImageResource(R.drawable.ic_home);
+//                        break;
+//                    case Shortcut.ACTION_BACK:
+//                        icon.setImageResource(R.drawable.ic_back);
+//                        break;
+//                    case Shortcut.ACTION_NOTI:
+//                        icon.setImageResource(R.drawable.ic_notification);
+//                        break;
+//                    case Shortcut.ACTION_LAST_APP:
+//                        icon.setImageResource(R.drawable.ic_last_app);
+//                        break;
+//                    case Shortcut.ACTION_CALL_LOGS:
+//                        icon.setImageResource(R.drawable.ic_call_log);
+//                        break;
+//                    case Shortcut.ACTION_DIAL:
+//                        icon.setImageResource(R.drawable.ic_dial);
+//                        break;
+//                    case Shortcut.ACTION_CONTACT:
+//                        icon.setImageResource(R.drawable.ic_contact);
+//                        break;
+//                    case Shortcut.ACTION_RECENT:
+//                        icon.setImageResource(R.drawable.ic_recent);
+//                        break;
+//                    case Shortcut.ACTION_VOLUME:
+//                        icon.setImageResource(R.drawable.ic_volume);
+//                        break;
+//                    case Shortcut.ACTION_BRIGHTNESS:
+//                        icon.setImageResource(R.drawable.ic_screen_brightness);
+//                        break;
+//                    case Shortcut.ACTION_RINGER_MODE:
+//                        icon.setImageResource(R.drawable.ic_sound_normal);
+//                        break;
+//                    case Shortcut.ACTION_NONE:
+//                        icon.setImageDrawable(null);
+//                }
+//            }
+//
+//        }
 
 
 //        if (shortcut != null) {
