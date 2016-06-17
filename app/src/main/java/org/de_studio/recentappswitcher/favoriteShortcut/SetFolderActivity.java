@@ -40,7 +40,8 @@ public class SetFolderActivity extends AppCompatActivity implements AddAppToFold
                 public void onClick(View v) {
                     CharSequence[] items = new CharSequence[]{getString(R.string.apps),
                             getString(R.string.actions),
-                            getString(R.string.contacts)};
+                            getString(R.string.contacts),
+                            getString(R.string.shortcut)};
                     AlertDialog.Builder builder = new AlertDialog.Builder(SetFolderActivity.this);
                     builder.setItems(items, new DialogInterface.OnClickListener() {
                         @Override
@@ -63,6 +64,12 @@ public class SetFolderActivity extends AppCompatActivity implements AddAppToFold
                                     AddContactToFolderDialogFragment newFragment2 = new AddContactToFolderDialogFragment();
                                     newFragment2.setmPosition(mPosition);
                                     newFragment2.show(fragmentManager2, "addContactToFolder");
+                                    break;
+                                case 3:
+                                    FragmentManager fragmentManager3 = getSupportFragmentManager();
+                                    AddShortcutToFolderDialogFragment newFragment3 = new AddShortcutToFolderDialogFragment();
+                                    newFragment3.setmPosition(mPosition);
+                                    newFragment3.show(fragmentManager3, "addShortcutToFolder");
                                     break;
                             }
                         }
