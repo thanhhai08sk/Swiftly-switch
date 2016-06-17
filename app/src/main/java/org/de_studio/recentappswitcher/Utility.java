@@ -20,6 +20,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
@@ -1883,6 +1885,9 @@ public  class Utility {
         Canvas canvas = new Canvas(bitmap);
         Drawable drawable;
         Shortcut shortcut;
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setColor(Color.WHITE);
         int gap1dp = (int) (mScale);
         boolean isFolderEmpty = true;
 
@@ -1977,6 +1982,8 @@ public  class Utility {
                     }
                 }
             } else if (shortcut != null && shortcut.getType() == Shortcut.TYPE_SHORTCUT) {
+                Log.e(TAG, "getFolderThumbnail: draw shortcut");
+                isFolderEmpty = false;
                 byte[] byteArray = shortcut.getBitmap();
                 try {
                     Bitmap bmp;
@@ -1987,20 +1994,19 @@ public  class Utility {
                         bmp =BitmapFactory.decodeResource(resources,shortcut.getResId());
                     }
                     if (bmp != null) {
-                        bmp.setHeight(smallHeight);
-                        bmp.setWidth(smallWidth);
+                        bmp = Bitmap.createScaledBitmap(bmp, smallWidth - gap1dp, smallHeight - gap1dp, false);
                         switch (i) {
                             case 0:
-                                canvas.drawBitmap(bmp,0,0,null);
+                                canvas.drawBitmap(bmp,0,0,paint);
                                 break;
                             case 1:
-                                canvas.drawBitmap(bmp,smallWidth + gap1dp, 0,null);
+                                canvas.drawBitmap(bmp,smallWidth + gap1dp, 0,paint);
                                 break;
                             case 2:
-                                canvas.drawBitmap(bmp, 0,smallHeight + gap1dp,null);
+                                canvas.drawBitmap(bmp, 0,smallHeight + gap1dp,paint);
                                 break;
                             case 3:
-                                canvas.drawBitmap(bmp,smallWidth + gap1dp, smallHeight +gap1dp,null);
+                                canvas.drawBitmap(bmp,smallWidth + gap1dp, smallHeight +gap1dp,paint);
                                 break;
                         }
                     }

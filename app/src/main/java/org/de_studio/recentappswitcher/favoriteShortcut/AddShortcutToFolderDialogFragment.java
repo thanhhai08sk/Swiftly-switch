@@ -149,8 +149,8 @@ public class AddShortcutToFolderDialogFragment extends DialogFragment {
             }
 
         }else
-
             super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     public void setmPosition(int position) {
