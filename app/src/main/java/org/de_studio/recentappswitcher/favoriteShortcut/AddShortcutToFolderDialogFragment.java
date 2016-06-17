@@ -1,7 +1,9 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -11,14 +13,17 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import org.de_studio.recentappswitcher.MyApplication;
 import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
@@ -32,67 +37,37 @@ import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 /**
- * Created by HaiNguyen on 6/16/16.
+ * Created by HaiNguyen on 6/17/16.
  */
-public class ShortcutTabFragment extends Fragment {
-    private static final String ARG_SECTION_NUMBER = "section_number";
-
-    private static final String TAG = ShortcutTabFragment.class.getSimpleName();
+public class AddShortcutToFolderDialogFragment extends DialogFragment {
+    private static final String TAG = AddShortcutToFolderDialogFragment.class.getSimpleName();
     private ListView mListView;
-    private ShortcutListAdapter mAdapter;
-    private int mode,mPosition;
     private Realm myRealm;
+    private AddShortcutToFolderAdapter mAdapter;
     private PackageManager packageManager;
     private List<ResolveInfo> resolveInfos;
     private ResolveInfo mResolveInfo;
-
-
-    public static ShortcutTabFragment newInstance(int sectionNumber) {
-        ShortcutTabFragment fragment = new ShortcutTabFragment();
-        Bundle agument = new Bundle();
-        agument.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        fragment.setArguments(agument);
-        return fragment;
-    }
-    public void setmPosition(int mPosition) {
-        this.mPosition = mPosition;
-    }
-    public void setMode(int mode) {
-        this.mode = mode;
-    }
+    private int mPosition;
 
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_app_tab, container, false);
-        mListView = (ListView) view.findViewById(R.id.fragment_app_tab_list_view);
-        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.add_favorite_app_fragment_list_view, container);
+        mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getContext())
+                .name("default.realm")
+                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
 
 
-        if (mode == FavoriteSettingActivity.MODE_GRID) {
-            myRealm = Realm.getInstance(new RealmConfiguration.Builder(getContext())
-                    .name("default.realm")
-                    .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
-                    .migration(new MyRealmMigration())
-                    .build());
-        } else {
-            myRealm = Realm.getInstance(new RealmConfiguration.Builder(getContext())
-                    .name("circleFavo.realm")
-                    .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
-                    .migration(new MyRealmMigration())
-                    .build());
-        }
-
-
-//        ((ChooseShortcutActivity)getActivity()).setSettingAdapter(mAdapter);
         Intent shortcutsIntent = new Intent(Intent.ACTION_CREATE_SHORTCUT);
-
         packageManager=getActivity().getPackageManager();
         resolveInfos =  packageManager.queryIntentActivities(shortcutsIntent, 0);
 
 
-        mAdapter = new ShortcutListAdapter(getContext(), mode, resolveInfos);
+        mAdapter = new AddShortcutToFolderAdapter(getContext(),resolveInfos);
         mListView.setAdapter(mAdapter);
 
 
@@ -110,20 +85,18 @@ public class ShortcutTabFragment extends Fragment {
         });
 
 
-        return view;
-    }
-
-    public ShortcutListAdapter getAdapter() {
-        return mAdapter;
+        return rootView;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode==1 && resultCode == Activity.RESULT_OK) {
             try {
-//                Log.e(TAG, "onActivityResult: res = " + data.getExtras().get(Intent.EXTRA_SHORTCUT_ICON));
+                int startId = (mPosition +1)*1000;
+                int size = (int) myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id",startId + 1000).count();
+
+
                 String label = (String) data.getExtras().get(Intent.EXTRA_SHORTCUT_NAME);
-//                int iconRes = (int) data.getExtras().get(Intent.EXTRA_SHORTCUT_ICON);
                 String stringIntent = ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0);
                 String packageName =  mResolveInfo.activityInfo.packageName;
                 int id = 0;
@@ -145,28 +118,31 @@ public class ShortcutTabFragment extends Fragment {
                     }
                 }
 
+                if (size < 16) {
+                    myRealm.beginTransaction();
+                    RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id", startId + size).findAll();
+                    oldShortcut.deleteAllFromRealm();
 
-                myRealm.beginTransaction();
-                RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findAll();
-                Log.e(TAG, "mPosition = " + mPosition);
-                oldShortcut.deleteAllFromRealm();
-                Shortcut shortcut = new Shortcut();
+                    Shortcut shortcut = new Shortcut();
+                    shortcut.setType(Shortcut.TYPE_SHORTCUT);
+                    shortcut.setId(startId + size);
+                    shortcut.setLabel(label);
+                    shortcut.setPackageName(packageName);
+                    shortcut.setIntent(stringIntent);
 
-                shortcut.setType(Shortcut.TYPE_SHORTCUT);
-                shortcut.setId(mPosition);
-                shortcut.setLabel(label);
-                shortcut.setPackageName(packageName);
-                shortcut.setIntent(stringIntent);
-
-                if (bmp != null) {
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    shortcut.setBitmap(stream.toByteArray());
+                    if (bmp != null) {
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        shortcut.setBitmap(stream.toByteArray());
+                    } else {
+                        shortcut.setResId(id);
+                    }
+                    myRealm.copyToRealm(shortcut);
+                    myRealm.commitTransaction();
                 } else {
-                    shortcut.setResId(id);
+                    Toast.makeText(MyApplication.getContext(),getString(R.string.out_of_limit),Toast.LENGTH_SHORT).show();
                 }
-                myRealm.copyToRealm(shortcut);
-                myRealm.commitTransaction();
+
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(TAG, "onActivityResult: exception when add shortcut");
@@ -174,18 +150,34 @@ public class ShortcutTabFragment extends Fragment {
 
         }else
 
-        super.onActivityResult(requestCode, resultCode, data);
+            super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void setmPositioinToNext() {
-        if (mPosition < Utility.getSizeOfFavoriteGrid(getContext())-1) {
-            mPosition++;
-        }
+    public void setmPosition(int position) {
+        mPosition = position;
     }
 
-    public void setmPositionToBack() {
-        if (mPosition > 0 && mAdapter != null) {
-            mPosition--;
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        return dialog;
+    }
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getActivity().stopService(new Intent(getActivity(), EdgeGestureService.class));
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        Utility.getFolderThumbnail(myRealm, mPosition, getActivity());
+        try {
+            getActivity().startService(new Intent(getActivity(), EdgeGestureService.class));
+        } catch (NullPointerException e) {
+            Log.e(TAG, "Null when get activity from on dismiss");
         }
+        super.onDismiss(dialog);
+        ((AddAppToFolderDialogFragment.MyDialogCloseListener) getActivity()).handleDialogClose();
     }
 }

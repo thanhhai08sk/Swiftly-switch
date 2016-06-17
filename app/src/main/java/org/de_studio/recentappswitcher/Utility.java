@@ -1976,6 +1976,38 @@ public  class Utility {
                             break;
                     }
                 }
+            } else if (shortcut != null && shortcut.getType() == Shortcut.TYPE_SHORTCUT) {
+                byte[] byteArray = shortcut.getBitmap();
+                try {
+                    Bitmap bmp;
+                    if (byteArray != null) {
+                        bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                    } else {
+                        Resources resources = packageManager.getResourcesForApplication(shortcut.getPackageName());
+                        bmp =BitmapFactory.decodeResource(resources,shortcut.getResId());
+                    }
+                    if (bmp != null) {
+                        bmp.setHeight(smallHeight);
+                        bmp.setWidth(smallWidth);
+                        switch (i) {
+                            case 0:
+                                canvas.drawBitmap(bmp,0,0,null);
+                                break;
+                            case 1:
+                                canvas.drawBitmap(bmp,smallWidth + gap1dp, 0,null);
+                                break;
+                            case 2:
+                                canvas.drawBitmap(bmp, 0,smallHeight + gap1dp,null);
+                                break;
+                            case 3:
+                                canvas.drawBitmap(bmp,smallWidth + gap1dp, smallHeight +gap1dp,null);
+                                break;
+                        }
+                    }
+
+                } catch (Exception e) {
+                    Log.e(TAG, "getView: can not set imageview for shortcut shortcut");
+                }
             }
         }
         if (isFolderEmpty) {
