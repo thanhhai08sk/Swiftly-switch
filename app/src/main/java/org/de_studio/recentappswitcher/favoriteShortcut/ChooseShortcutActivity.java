@@ -1,18 +1,13 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -21,14 +16,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import org.de_studio.recentappswitcher.IconPackManager;
+import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
+import org.de_studio.recentappswitcher.service.EdgeSetting;
 
-import java.io.IOException;
 import java.util.List;
 
 import io.realm.Realm;
@@ -50,6 +46,8 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
     private ContactCursorAdapter mContactAdapter;
     private Context mContext;
     private int mode;
+    private SharedPreferences sharedPreferences;
+    private IconPackManager.IconPack iconPack;
 
 
     private ViewPager mViewPager;
@@ -61,6 +59,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
         mode = getIntent().getIntExtra("mode", FavoriteSettingActivity.MODE_GRID);
         Log.e(TAG, "mode = " + mode);
         mContext = this;
+        sharedPreferences = getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         setContentView(R.layout.activity_choose_shortcut);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -73,6 +72,13 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
         AppCompatImageButton backButton = (AppCompatImageButton) findViewById(R.id.app_tab_fragment_back_button);
         AppCompatImageButton nextButton = (AppCompatImageButton) findViewById(R.id.app_tab_fragment_next_button);
         AppCompatButton okButton = (AppCompatButton) findViewById(R.id.app_tab_fragment_ok_button);
+
+        String iconPackPacka = sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none");
+        if (!iconPackPacka.equals("none")) {
+            IconPackManager iconPackManager = new IconPackManager();
+            iconPackManager.setContext(mContext);
+            iconPack = iconPackManager.getInstance(iconPackPacka);
+        }
         if (mode == FavoriteSettingActivity.MODE_GRID) {
             myRealm =Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext())
                     .name("default.realm")
@@ -234,86 +240,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
         Log.e(TAG, "setCurrentShortcutImageView");
         Shortcut shortcut = myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst();
         if (shortcut != null) {
-            if (shortcut.getType() == Shortcut.TYPE_APP) {
-                try {
-                    currentShortcut.setImageDrawable(getApplicationContext().getPackageManager().getApplicationIcon(myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst().getPackageName()));
-
-                } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(TAG, "NameNotFound " + e);
-                }
-            } else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
-                switch (shortcut.getAction()) {
-                    case Shortcut.ACTION_WIFI:
-                        currentShortcut.setImageResource(R.drawable.ic_wifi);
-                        break;
-                    case Shortcut.ACTION_BLUETOOTH:
-                        currentShortcut.setImageResource(R.drawable.ic_bluetooth);
-                        break;
-                    case Shortcut.ACTION_ROTATION:
-                        currentShortcut.setImageResource(R.drawable.ic_rotation);
-                        break;
-                    case Shortcut.ACTION_POWER_MENU:
-                        currentShortcut.setImageResource(R.drawable.ic_power_menu);
-                        break;
-                    case Shortcut.ACTION_HOME:
-                        currentShortcut.setImageResource(R.drawable.ic_home);
-                        break;
-                    case Shortcut.ACTION_BACK:
-                        currentShortcut.setImageResource(R.drawable.ic_back);
-                        break;
-                    case Shortcut.ACTION_NOTI:
-                        currentShortcut.setImageResource(R.drawable.ic_notification);
-                        break;
-                    case Shortcut.ACTION_LAST_APP:
-                        currentShortcut.setImageResource(R.drawable.ic_last_app);
-                        break;
-                    case Shortcut.ACTION_CALL_LOGS:
-                        currentShortcut.setImageResource(R.drawable.ic_call_log);
-                        break;
-                    case Shortcut.ACTION_CONTACT:
-                        currentShortcut.setImageResource(R.drawable.ic_contact);
-                        break;
-                    case Shortcut.ACTION_DIAL:
-                        currentShortcut.setImageResource(R.drawable.ic_dial);
-                        break;
-                    case Shortcut.ACTION_RECENT:
-                        currentShortcut.setImageResource(R.drawable.ic_recent);
-                        break;
-                    case Shortcut.ACTION_VOLUME:
-                        currentShortcut.setImageResource(R.drawable.ic_volume);
-                        break;
-                    case Shortcut.ACTION_BRIGHTNESS:
-                        currentShortcut.setImageResource(R.drawable.ic_screen_brightness);
-                        break;
-                    case Shortcut.ACTION_RINGER_MODE:
-                        currentShortcut.setImageResource(R.drawable.ic_sound_normal);
-                        break;
-                    case Shortcut.ACTION_NONE:
-                        currentShortcut.setImageDrawable(null);
-                        break;
-                }
-            } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
-
-                String thumbnaiUri = shortcut.getThumbnaiUri();
-                if (thumbnaiUri != null) {
-                    try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(thumbnaiUri));
-                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);
-                        drawable.setCircular(true);
-                        currentShortcut.setImageDrawable(drawable);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        currentShortcut.setImageResource(R.drawable.ic_contact_default);
-                    }catch (SecurityException e) {
-                        Toast.makeText(mContext, mContext.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    currentShortcut.setImageResource(R.drawable.ic_contact_default);
-
-                }
-            } else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
-                currentShortcut.setImageResource(R.drawable.ic_folder);
-            }
+            Utility.setImageForShortcut(shortcut,getPackageManager(),currentShortcut,mContext,iconPack,mPosition,myRealm,false);
         } else {
             currentShortcut.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
         }
