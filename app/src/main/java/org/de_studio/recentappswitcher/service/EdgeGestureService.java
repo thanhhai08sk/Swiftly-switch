@@ -1381,7 +1381,12 @@ public class EdgeGestureService extends Service {
                 Shortcut shortcut;
                 for (int i = 0; i < 6; i++) {
                     shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", i).findFirst();
-                    Utility.setShortcutDrawable(shortcut,getApplicationContext(),iconImageArrayList.get(i),iconPack, false);
+//                    Utility.setShortcutDrawable(shortcut,getApplicationContext(),iconImageArrayList.get(i),iconPack, false);
+                    if (shortcut != null) {
+                        Utility.setImageForShortcut(shortcut, getPackageManager(), iconImageArrayList.get(i), getApplicationContext(), iconPack, position, circleFavoRealm, true);
+                    } else {
+                        iconImageArrayList.get(i).setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+                    }
 
                 }
                 switched = true;
