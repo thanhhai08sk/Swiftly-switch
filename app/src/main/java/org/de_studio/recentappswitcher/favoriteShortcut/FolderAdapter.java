@@ -3,13 +3,7 @@ package org.de_studio.recentappswitcher.favoriteShortcut;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -27,8 +21,6 @@ import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
-import java.io.IOException;
-
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
@@ -44,6 +36,7 @@ public class FolderAdapter extends BaseAdapter {
     private Realm myRealm;
     private Shortcut folderShortcut;
     private IconPackManager.IconPack iconPack;
+    private PackageManager packageManager;
 
     public FolderAdapter(Context context, int mPosition) {
         mContext = context;
@@ -54,6 +47,7 @@ public class FolderAdapter extends BaseAdapter {
                 .migration(new MyRealmMigration())
                 .build());
         folderShortcut = myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst();
+        packageManager = mContext.getPackageManager();
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         String iconPackPacka = sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none");
         if (!iconPackPacka.equals("none")) {
@@ -94,92 +88,14 @@ public class FolderAdapter extends BaseAdapter {
             imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
             imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
         } else {
-            if (shortcut.getType() == Shortcut.TYPE_APP) {
-                label.setText(shortcut.getLabel());
-                imageView.setColorFilter(null);
-                try {
-                    Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
-                    if (iconPack!=null) {
-                        imageView.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
-                    } else {
-                        imageView.setImageDrawable(defaultDrawable);
-                    }
-                } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(TAG, "NameNotFound " + e);
-                }
-            }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
-                label.setText(shortcut.getLabel());
-                switch (shortcut.getAction()) {
-                    case Shortcut.ACTION_WIFI:
-                        imageView.setImageResource(R.drawable.ic_wifi);
-                        break;
-                    case Shortcut.ACTION_BLUETOOTH:
-                        imageView.setImageResource(R.drawable.ic_bluetooth);
-                        break;
-                    case Shortcut.ACTION_ROTATION:
-                        imageView.setImageResource(R.drawable.ic_rotation);
-                        break;
-                    case Shortcut.ACTION_POWER_MENU:
-                        imageView.setImageResource(R.drawable.ic_power_menu);
-                        break;
-                    case Shortcut.ACTION_HOME:
-                        imageView.setImageResource(R.drawable.ic_home);
-                        break;
-                    case Shortcut.ACTION_BACK:
-                        imageView.setImageResource(R.drawable.ic_back);
-                        break;
-                    case Shortcut.ACTION_NOTI:
-                        imageView.setImageResource(R.drawable.ic_notification);
-                        break;
-                    case Shortcut.ACTION_LAST_APP:
-                        imageView.setImageResource(R.drawable.ic_last_app);
-                        break;
-                    case Shortcut.ACTION_CALL_LOGS:
-                        imageView.setImageResource(R.drawable.ic_call_log);
-                        break;
-                    case Shortcut.ACTION_DIAL:
-                        imageView.setImageResource(R.drawable.ic_dial);
-                        break;
-                    case Shortcut.ACTION_CONTACT:
-                        imageView.setImageResource(R.drawable.ic_contact);
-                        break;
-                    case Shortcut.ACTION_RECENT:
-                        imageView.setImageResource(R.drawable.ic_recent);
-                        break;
-                    case Shortcut.ACTION_VOLUME:
-                        imageView.setImageResource(R.drawable.ic_volume);
-                        break;
-                    case Shortcut.ACTION_BRIGHTNESS:
-                        imageView.setImageResource(R.drawable.ic_screen_brightness);
-                        break;
-                    case Shortcut.ACTION_RINGER_MODE:
-                        imageView.setImageResource(R.drawable.ic_sound_normal);
-                        break;
-                    case Shortcut.ACTION_NONE:
-                        imageView.setImageDrawable(null);
-                }
-            } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
+            if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
                 label.setText(shortcut.getName());
-                String thumbnaiUri = shortcut.getThumbnaiUri();
-                if (thumbnaiUri != null) {
-                    try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(thumbnaiUri));
-                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);
-                        drawable.setCircular(true);
-                        imageView.setImageDrawable(drawable);
-                        imageView.setColorFilter(null);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        imageView.setImageResource(R.drawable.ic_contact_default);
-//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
-                    }
-                } else {
-                    imageView.setImageResource(R.drawable.ic_contact_default);
-//                    imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
-                }
+            } else {
+                label.setText(shortcut.getLabel());
             }
 
-        }
+            Utility.setImageForShortcut(shortcut, packageManager, imageView, mContext, iconPack, position, myRealm, false);
+            }
 
         view.setOnDragListener(new View.OnDragListener() {
             @Override
