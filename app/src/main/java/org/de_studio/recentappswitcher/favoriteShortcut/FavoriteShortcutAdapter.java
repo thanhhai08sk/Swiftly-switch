@@ -92,7 +92,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
             imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
             imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
         } else {
-            Utility.setImageForShortcut(shortcut,packageManager,imageView,mContext,iconPack,position,myRealm);
+            Utility.setImageForShortcut(shortcut,packageManager,imageView,mContext,iconPack,position,myRealm, false);
         }
         imageView.setOnDragListener(new View.OnDragListener() {
             @Override

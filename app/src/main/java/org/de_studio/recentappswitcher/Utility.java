@@ -2018,7 +2018,7 @@ public  class Utility {
         }
     }
 
-    public static void setImageForShortcut(Shortcut shortcut, PackageManager packageManager, ImageView imageView, Context mContext, IconPackManager.IconPack iconPack, int position, Realm myRealm) {
+    public static void setImageForShortcut(Shortcut shortcut, PackageManager packageManager, ImageView imageView, Context mContext, IconPackManager.IconPack iconPack, int position, Realm myRealm, boolean showOnOff) {
 
         if (shortcut.getType() == Shortcut.TYPE_APP) {
             try {
@@ -2034,13 +2034,38 @@ public  class Utility {
         }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
             switch (shortcut.getAction()) {
                 case Shortcut.ACTION_WIFI:
-                    imageView.setImageResource(R.drawable.ic_wifi);
+                    if (showOnOff) {
+                        if (Utility.getWifiState(mContext)) {
+                            imageView.setImageResource(R.drawable.ic_wifi);
+                        } else {
+                            imageView.setImageResource(R.drawable.ic_wifi_off);
+                        }
+                    } else {
+                        imageView.setImageResource(R.drawable.ic_wifi);
+                    }
                     break;
                 case Shortcut.ACTION_BLUETOOTH:
-                    imageView.setImageResource(R.drawable.ic_bluetooth);
+                    if (showOnOff) {
+                        if (Utility.getBluetoothState(mContext)) {
+                            imageView.setImageResource(R.drawable.ic_bluetooth);
+                        } else {
+                            imageView.setImageResource(R.drawable.ic_bluetooth_off);
+                        }
+                    } else {
+                        imageView.setImageResource(R.drawable.ic_bluetooth);
+                    }
+
                     break;
                 case Shortcut.ACTION_ROTATION:
-                    imageView.setImageResource(R.drawable.ic_rotation);
+                    if (showOnOff) {
+                        if (Utility.getIsRotationAuto(mContext)) {
+                            imageView.setImageResource(R.drawable.ic_rotation);
+                        } else {
+                            imageView.setImageResource(R.drawable.ic_rotation_lock);
+                        }
+                    } else {
+                        imageView.setImageResource(R.drawable.ic_rotation);
+                    }
                     break;
                 case Shortcut.ACTION_POWER_MENU:
                     imageView.setImageResource(R.drawable.ic_power_menu);
@@ -2076,7 +2101,22 @@ public  class Utility {
                     imageView.setImageResource(R.drawable.ic_screen_brightness);
                     break;
                 case Shortcut.ACTION_RINGER_MODE:
-                    imageView.setImageResource(R.drawable.ic_sound_normal);
+                    if (showOnOff) {
+                        switch (Utility.getRingerMode(mContext)) {
+                            case 0:
+                                imageView.setImageResource(R.drawable.ic_sound_normal);
+                                break;
+                            case 1:
+                                imageView.setImageResource(R.drawable.ic_sound_vibrate);
+                                break;
+                            case 2:
+                                imageView.setImageResource(R.drawable.ic_sound_silent);
+                                break;
+                        }
+                    } else {
+                        imageView.setImageResource(R.drawable.ic_sound_normal);
+                    }
+
                     break;
                 case Shortcut.ACTION_NONE:
                     imageView.setImageDrawable(null);
