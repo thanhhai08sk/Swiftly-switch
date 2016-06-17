@@ -31,7 +31,9 @@ public class MyRealmMigration implements RealmMigration {
         if (oldVersion == 1) {
             RealmObjectSchema shortcutSchema =  schema.get("Shortcut");
             try {
-                shortcutSchema.addField("bitmap", byte[].class);
+                shortcutSchema.addField("bitmap", byte[].class)
+                        .addField("resId", int.class)
+                        .addField("intent", String.class);
             } catch (IllegalArgumentException e) {
                 Log.e("MyRealmMigration", "migrate: oldVersion = 1 " + e);
                 e.printStackTrace();

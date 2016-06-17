@@ -39,6 +39,8 @@ public class Shortcut extends RealmObject {
     private String name;
     private byte[] bitmap;
     private long contactId;
+    private int resId;
+    private String intent;
 
     public Shortcut() {}
 
@@ -117,6 +119,22 @@ public class Shortcut extends RealmObject {
 
     public void setBitmap(byte[] bitmap) {
         this.bitmap = bitmap;
+    }
+
+    public void setResId(int resId) {
+        this.resId = resId;
+    }
+
+    public int getResId() {
+        return resId;
+    }
+
+    public void setIntent(String intent) {
+        this.intent = intent;
+    }
+
+    public String getIntent() {
+        return intent;
     }
 
 

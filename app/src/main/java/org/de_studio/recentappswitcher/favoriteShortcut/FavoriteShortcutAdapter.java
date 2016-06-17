@@ -1,7 +1,6 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -9,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -33,7 +31,6 @@ import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -205,46 +202,19 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                     }
                 }
             } else if (shortcut.getType() == Shortcut.TYPE_SHORTCUT) {
-                Log.e(TAG, "getView: set drawable for shortcut shortcut");
-                Intent data =  null;
-                try {
-                    data = Intent.parseUri(shortcut.getThumbnaiUri(), 0);
-                } catch (URISyntaxException e) {
-                    Log.e(TAG, "getView: fail to get intent");
-                } catch (NullPointerException e) {
-                    Log.e(TAG, "getView: null data");
-                }
-                if (data != null) {
-                    Log.e(TAG, "getView: data = " + data.hashCode());
-                    Bitmap bmp = null;
-                    Parcelable extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON);
-                    if (extra != null && extra instanceof Bitmap)
-                        bmp = (Bitmap) extra;
-                    if (bmp == null) {
-                        extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
-                        if (extra != null && extra instanceof Intent.ShortcutIconResource) {
-                            try {
-                                Intent.ShortcutIconResource iconResource = (Intent.ShortcutIconResource) extra;
-                                Resources resources = packageManager.getResourcesForApplication(iconResource.packageName);
-                                final int id = resources.getIdentifier(iconResource.resourceName, null, null);
-                                bmp = BitmapFactory.decodeResource(resources, id);
-                            } catch (Exception e) {
-                                Log.e(TAG, "getView: \"ROMControl.ShortcutPicker\", \"Could not load shortcut icon: \" + extra");
-                            }
-                        }
-                    }
-                    imageView.setImageBitmap(bmp);
-                } else {
-                    Log.e(TAG, "getView: data = null");
-                }
+                byte[] byteArray = shortcut.getBitmap();
 
-//                try {
-//                    Resources resources = packageManager.getResourcesForApplication(shortcut.getPackageName());
-//                    imageView.setImageBitmap(BitmapFactory.decodeResource(resources,shortcut.getAction()));
-//                    Log.e(TAG, "getView: res = " + shortcut.getAction() + "\npackagename = " + shortcut.getPackageName());
-//                } catch (Exception e) {
-//                    Log.e(TAG, "getView: Name not found when set icon for shortcut shortcut");
-//                }
+                try {
+                    if (byteArray != null) {
+                        imageView.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
+                    } else {
+                        Resources resources = packageManager.getResourcesForApplication(shortcut.getPackageName());
+                        imageView.setImageBitmap(BitmapFactory.decodeResource(resources,shortcut.getResId()));
+                    }
+
+                } catch (Exception e) {
+                    Log.e(TAG, "getView: can not set imageview for shortcut shortcut");
+                }
             }
             imageView.setColorFilter(null);
         }

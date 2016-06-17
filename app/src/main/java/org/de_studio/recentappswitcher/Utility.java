@@ -1681,7 +1681,7 @@ public  class Utility {
 
         } else if (shortcut.getType() == Shortcut.TYPE_SHORTCUT) {
             try {
-                Intent intent = Intent.parseUri(shortcut.getNumber(), 0);
+                Intent intent = Intent.parseUri(shortcut.getIntent(), 0);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             } catch (Exception e) {

@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import io.realm.Realm;
@@ -125,18 +127,24 @@ public class ShortcutTabFragment extends Fragment {
                 String stringIntent = ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0);
                 String stringIntentData = data.toUri(0);
                 String packageName =  mResolveInfo.activityInfo.packageName;
-                Parcelable shortcutIconRes = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
                 int id = 0;
 
-                if (shortcutIconRes != null && shortcutIconRes instanceof Intent.ShortcutIconResource) {
-
-                    Intent.ShortcutIconResource iconResource = (Intent.ShortcutIconResource) shortcutIconRes;
-                    Resources resources = packageManager.getResourcesForApplication(packageName);
-                    id = resources.getIdentifier(iconResource.resourceName, null, null);
-                    Log.e(TAG, "onActivityResult: shortcutIconRes != null, id = " + id);
+                Bitmap bmp = null;
+                Parcelable extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON);
+                if (extra != null && extra instanceof Bitmap)
+                    bmp = (Bitmap) extra;
+                if (bmp == null) {
+                    extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
+                    if (extra != null && extra instanceof Intent.ShortcutIconResource) {
+                        try {
+                            Intent.ShortcutIconResource iconResource = (Intent.ShortcutIconResource) extra;
+                            Resources resources = packageManager.getResourcesForApplication(iconResource.packageName);
+                            id = resources.getIdentifier(iconResource.resourceName, null, null);
+                        } catch (Exception e) {
+                            Log.e(TAG, "onActivityResult: Could not load shortcut icon:");
+                        }
+                    }
                 }
-                Log.e(TAG, "onActivityResult: shortcutIconRes = " + shortcutIconRes);
-                Log.e(TAG, "onActivityResult: data = " + data.hashCode());
 
 
                 myRealm.beginTransaction();
@@ -149,9 +157,15 @@ public class ShortcutTabFragment extends Fragment {
                 shortcut.setId(mPosition);
                 shortcut.setLabel(label);
                 shortcut.setPackageName(packageName);
-                shortcut.setAction(id);
-                shortcut.setNumber(stringIntent);
-                shortcut.setThumbnaiUri(stringIntentData);
+                shortcut.setIntent(stringIntent);
+
+                if (bmp != null) {
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    shortcut.setBitmap(stream.toByteArray());
+                } else {
+                    shortcut.setResId(id);
+                }
                 myRealm.copyToRealm(shortcut);
                 myRealm.commitTransaction();
             } catch (Exception e) {
