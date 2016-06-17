@@ -108,6 +108,7 @@ public class ShortcutTabFragment extends Fragment {
                 startActivityForResult(i, 1);
             }
         });
+        ((ChooseShortcutActivity)getActivity()).setShortcutShortcutAdapter(mAdapter);
 
 
         return view;
@@ -167,6 +168,7 @@ public class ShortcutTabFragment extends Fragment {
                 }
                 myRealm.copyToRealm(shortcut);
                 myRealm.commitTransaction();
+                mAdapter.getListener().onAppChange();
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(TAG, "onActivityResult: exception when add shortcut");

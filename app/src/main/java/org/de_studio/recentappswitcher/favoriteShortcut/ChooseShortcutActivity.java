@@ -39,11 +39,13 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
     private AppTabFragment mAppTabFragment;
     private ActionTabFragment mActionTabFragment;
     private ContactTabFragment mContactTabFragment;
+    private ShortcutTabFragment mShortcutTabFragment;
     private ImageView currentShortcut;
     private Realm myRealm;
     private AppListAdapter mAppAdapter;
     private ActionListAdapter mSettingAdapter;
     private ContactCursorAdapter mContactAdapter;
+    private ShortcutListAdapter mShortcutListAdapter;
     private Context mContext;
     private int mode;
     private SharedPreferences sharedPreferences;
@@ -124,6 +126,8 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                             mAppTabFragment.setmPositioinToNext();
                             mActionTabFragment.setmPositioinToNext();
                             mContactTabFragment.setmPositioinToNext();
+                            mShortcutTabFragment.setmPositioinToNext();
+
                         } catch (NullPointerException e) {
                             e.printStackTrace();
                         }
@@ -148,6 +152,7 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                         mAppTabFragment.setmPositionToBack();
                         mActionTabFragment.setmPositionToBack();
                         mContactTabFragment.setmPositionToBack();
+                        mShortcutTabFragment.setmPositionToBack();
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
@@ -202,10 +207,10 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
                     mContactTabFragment.setMode(mode);
                     return mContactTabFragment;
                 case 3:
-                    ShortcutTabFragment shortcutTabFragment = ShortcutTabFragment.newInstance(position + 1);
-                    shortcutTabFragment.setMode(mode);
-                    shortcutTabFragment.setmPosition(mPosition);
-                    return shortcutTabFragment;
+                    mShortcutTabFragment = ShortcutTabFragment.newInstance(position + 1);
+                    mShortcutTabFragment.setMode(mode);
+                    mShortcutTabFragment.setmPosition(mPosition);
+                    return mShortcutTabFragment;
                 default: mAppTabFragment = AppTabFragment.newInstance(position + 1);
                     mAppTabFragment.setmPosition(mPosition);
                     mAppTabFragment.setmContext(mContext);
@@ -260,6 +265,11 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
 
     public void setContactAdapter(ContactCursorAdapter adapter) {
         mContactAdapter = adapter;
+        adapter.registerListener(this);
+    }
+
+    public void setShortcutShortcutAdapter(ShortcutListAdapter adapter) {
+        mShortcutListAdapter = adapter;
         adapter.registerListener(this);
     }
 

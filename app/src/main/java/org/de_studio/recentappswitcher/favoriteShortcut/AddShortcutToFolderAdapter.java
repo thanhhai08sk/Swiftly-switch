@@ -31,8 +31,6 @@ public class AddShortcutToFolderAdapter extends BaseAdapter {
         packageManager = context.getPackageManager();
 
     }
-
-
     @Override
     public int getCount() {
         return resolveInfos.size();

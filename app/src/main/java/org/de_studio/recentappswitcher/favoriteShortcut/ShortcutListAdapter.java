@@ -27,7 +27,7 @@ public class ShortcutListAdapter extends BaseAdapter {
     private Context context;
     private List<ResolveInfo> resolveInfos;
     private int mode;
-    private ShortcutChangeListener listener;
+    private AppListAdapter.AppChangeListener listener;
     private Realm myRealm;
     private PackageManager packageManager;
 
@@ -87,7 +87,11 @@ public class ShortcutListAdapter extends BaseAdapter {
         void onSettingChange();
     }
 
-    public void registerListener(ShortcutChangeListener listener) {
+    public void registerListener(AppListAdapter.AppChangeListener listener) {
         this.listener = listener;
+    }
+
+    public AppListAdapter.AppChangeListener getListener() {
+        return listener;
     }
 }
