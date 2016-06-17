@@ -16,6 +16,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -2015,6 +2016,121 @@ public  class Utility {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void setImageForShortcut(Shortcut shortcut, PackageManager packageManager, ImageView imageView, Context mContext, IconPackManager.IconPack iconPack, int position, Realm myRealm) {
+
+        if (shortcut.getType() == Shortcut.TYPE_APP) {
+            try {
+                Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
+                if (iconPack!=null) {
+                    imageView.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
+                } else {
+                    imageView.setImageDrawable(defaultDrawable);
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                Log.e(TAG, "NameNotFound " + e);
+            }
+        }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
+            switch (shortcut.getAction()) {
+                case Shortcut.ACTION_WIFI:
+                    imageView.setImageResource(R.drawable.ic_wifi);
+                    break;
+                case Shortcut.ACTION_BLUETOOTH:
+                    imageView.setImageResource(R.drawable.ic_bluetooth);
+                    break;
+                case Shortcut.ACTION_ROTATION:
+                    imageView.setImageResource(R.drawable.ic_rotation);
+                    break;
+                case Shortcut.ACTION_POWER_MENU:
+                    imageView.setImageResource(R.drawable.ic_power_menu);
+                    break;
+                case Shortcut.ACTION_HOME:
+                    imageView.setImageResource(R.drawable.ic_home);
+                    break;
+                case Shortcut.ACTION_BACK:
+                    imageView.setImageResource(R.drawable.ic_back);
+                    break;
+                case Shortcut.ACTION_NOTI:
+                    imageView.setImageResource(R.drawable.ic_notification);
+                    break;
+                case Shortcut.ACTION_LAST_APP:
+                    imageView.setImageResource(R.drawable.ic_last_app);
+                    break;
+                case Shortcut.ACTION_CALL_LOGS:
+                    imageView.setImageResource(R.drawable.ic_call_log);
+                    break;
+                case Shortcut.ACTION_DIAL:
+                    imageView.setImageResource(R.drawable.ic_dial);
+                    break;
+                case Shortcut.ACTION_CONTACT:
+                    imageView.setImageResource(R.drawable.ic_contact);
+                    break;
+                case Shortcut.ACTION_RECENT:
+                    imageView.setImageResource(R.drawable.ic_recent);
+                    break;
+                case Shortcut.ACTION_VOLUME:
+                    imageView.setImageResource(R.drawable.ic_volume);
+                    break;
+                case Shortcut.ACTION_BRIGHTNESS:
+                    imageView.setImageResource(R.drawable.ic_screen_brightness);
+                    break;
+                case Shortcut.ACTION_RINGER_MODE:
+                    imageView.setImageResource(R.drawable.ic_sound_normal);
+                    break;
+                case Shortcut.ACTION_NONE:
+                    imageView.setImageDrawable(null);
+            }
+        } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
+            String thumbnaiUri = shortcut.getThumbnaiUri();
+            if (thumbnaiUri != null) {
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(thumbnaiUri));
+                    RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);
+                    drawable.setCircular(true);
+                    imageView.setImageDrawable(drawable);
+                    imageView.setColorFilter(null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    imageView.setImageResource(R.drawable.ic_contact_default);
+//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+                } catch (SecurityException e) {
+                    Toast.makeText(mContext, mContext.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
+                }
+            } else {
+                imageView.setImageResource(R.drawable.ic_contact_default);
+//                    imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+
+            }
+        } else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
+            File myDir = mContext.getFilesDir();
+            String fname = "folder-"+ position +".png";
+            File file = new File (myDir, fname);
+            if (!file.exists()) {
+                imageView.setImageBitmap(Utility.getFolderThumbnail(myRealm, position, mContext));
+            } else {
+                try {
+                    imageView.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
+                } catch (Exception e) {
+                    Log.e(TAG, "read thumbnail exeption" + e);
+                    e.printStackTrace();
+                }
+            }
+        } else if (shortcut.getType() == Shortcut.TYPE_SHORTCUT) {
+            byte[] byteArray = shortcut.getBitmap();
+            try {
+                if (byteArray != null) {
+                    imageView.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
+                } else {
+                    Resources resources = packageManager.getResourcesForApplication(shortcut.getPackageName());
+                    imageView.setImageBitmap(BitmapFactory.decodeResource(resources,shortcut.getResId()));
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, "getView: can not set imageview for shortcut shortcut");
+            }
+        }
+        imageView.setColorFilter(null);
     }
 
 
