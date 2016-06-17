@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -117,10 +119,25 @@ public class ShortcutTabFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode==1 && resultCode == Activity.RESULT_OK) {
             try {
+//                Log.e(TAG, "onActivityResult: res = " + data.getExtras().get(Intent.EXTRA_SHORTCUT_ICON));
                 String label = (String) data.getExtras().get(Intent.EXTRA_SHORTCUT_NAME);
-                String iconRes = (String) data.getExtras().get(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
+//                int iconRes = (int) data.getExtras().get(Intent.EXTRA_SHORTCUT_ICON);
                 String stringIntent = ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0);
+                String stringIntentData = data.toUri(0);
                 String packageName =  mResolveInfo.activityInfo.packageName;
+                Parcelable shortcutIconRes = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
+                int id = 0;
+
+                if (shortcutIconRes != null && shortcutIconRes instanceof Intent.ShortcutIconResource) {
+
+                    Intent.ShortcutIconResource iconResource = (Intent.ShortcutIconResource) shortcutIconRes;
+                    Resources resources = packageManager.getResourcesForApplication(packageName);
+                    id = resources.getIdentifier(iconResource.resourceName, null, null);
+                    Log.e(TAG, "onActivityResult: shortcutIconRes != null, id = " + id);
+                }
+                Log.e(TAG, "onActivityResult: shortcutIconRes = " + shortcutIconRes);
+                Log.e(TAG, "onActivityResult: data = " + data.hashCode());
+
 
                 myRealm.beginTransaction();
                 RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findAll();
@@ -132,8 +149,9 @@ public class ShortcutTabFragment extends Fragment {
                 shortcut.setId(mPosition);
                 shortcut.setLabel(label);
                 shortcut.setPackageName(packageName);
-                shortcut.setThumbnaiUri(iconRes);
+                shortcut.setAction(id);
                 shortcut.setNumber(stringIntent);
+                shortcut.setThumbnaiUri(stringIntentData);
                 myRealm.copyToRealm(shortcut);
                 myRealm.commitTransaction();
             } catch (Exception e) {

@@ -2001,6 +2001,22 @@ public  class Utility {
     }
 
 
+    public static void saveShortcutBitmap(Bitmap bmp, int mPosition, Context context) {
+        Log.e(TAG, "getShortcutBitmap: ");
+        File myDir = context.getFilesDir();
+        String fname = "shortcut-"+ mPosition +".png";
+        File file = new File (myDir, fname);
+        if (file.exists ()) file.delete ();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 

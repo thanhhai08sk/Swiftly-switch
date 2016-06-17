@@ -28,6 +28,16 @@ public class MyRealmMigration implements RealmMigration {
 
             oldVersion++;
         }
+        if (oldVersion == 1) {
+            RealmObjectSchema shortcutSchema =  schema.get("Shortcut");
+            try {
+                shortcutSchema.addField("bitmap", byte[].class);
+            } catch (IllegalArgumentException e) {
+                Log.e("MyRealmMigration", "migrate: oldVersion = 1 " + e);
+                e.printStackTrace();
+            }
+            oldVersion++;
+        }
     }
 
     @Override

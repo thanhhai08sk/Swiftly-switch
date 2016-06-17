@@ -37,6 +37,7 @@ public class Shortcut extends RealmObject {
     private String thumbnaiUri;
     private String number;
     private String name;
+    private byte[] bitmap;
     private long contactId;
 
     public Shortcut() {}
@@ -108,6 +109,14 @@ public class Shortcut extends RealmObject {
 
     public long getContactId() {
         return contactId;
+    }
+
+    public byte[] getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(byte[] bitmap) {
+        this.bitmap = bitmap;
     }
 
 
