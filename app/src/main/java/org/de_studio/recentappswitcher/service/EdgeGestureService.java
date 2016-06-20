@@ -1012,7 +1012,7 @@ public class EdgeGestureService extends Service {
 
                             shortcutToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
                             int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
-                            if (moveToHomeBackNoti != 0 | shortcutToSwitch != -1) {
+                            if ((moveToHomeBackNoti != 0 | shortcutToSwitch != -1)&& !iconImageArrayList.get(0).isOnAnimation()) {
                                 if (shortcutToSwitch != -1) {
                                     activateId = shortcutToSwitch + 1000;
                                 } else {
@@ -1028,7 +1028,7 @@ public class EdgeGestureService extends Service {
                             if (shortcutToSwitch == -1) {
                                 clearIconBackground();
                             }
-                            if (shortcutToSwitch != -1 && shortcutToSwitch < iconImageArrayList.size() && iconIdBackgrounded != shortcutToSwitch) {
+                            if (shortcutToSwitch != -1 && shortcutToSwitch < iconImageArrayList.size() && iconIdBackgrounded != shortcutToSwitch && !iconImageArrayList.get(0).isOnAnimation()) {
                                 clearIconBackground();
                                 MyImageView iconHighlight = iconImageArrayList.get(shortcutToSwitch);
                                 FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(iconHighlight.getLayoutParams());
