@@ -76,6 +76,9 @@ public class VolumeDialogActivity extends AppCompatActivity {
         systemSeekBar.setMax(maxSystem);
         mediaSeekBar.setMax(maxMedia);
 
+        notiSeekBar.setEnabled(manager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL);
+        systemSeekBar.setEnabled(manager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL);
+
         ringSeekBar.setProgress(currentRing);
         notiSeekBar.setProgress(currentNoti);
         systemSeekBar.setProgress(currentSystem);
