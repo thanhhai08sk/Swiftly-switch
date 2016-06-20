@@ -604,7 +604,22 @@ public class MainActivity extends Activity {
                 );
         builder.setTitle(R.string.what_new)
                 .setMessage(finalText)
-                .setPositiveButton("Ok", null);
+                .setPositiveButton("Ok", null)
+                .setNegativeButton(R.string.vote_now, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Uri uri = Uri.parse("mbarket://details?id=" + getPackageName());
+                        Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+                        gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                        try {
+                            startActivity(gotoMarket);
+                        } catch (ActivityNotFoundException e) {
+                            startActivity(new Intent(Intent.ACTION_VIEW,
+                                    Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+                        }
+                    }
+                });
         builder.create().show();
     }
 

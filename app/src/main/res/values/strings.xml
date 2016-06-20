@@ -186,6 +186,7 @@
     <string name="write_setting_permission_explain">Swiftly Switch need the "Write setting" permission to take this action. Please find Swiftly Switch in the setting then enable the permission.</string>
     <string name="go_to_setting">Go to setting</string>
     <string name="shortcut">Shortcuts</string>
+    <string name="vote_now">Vote now</string>
 
 
 </resources>

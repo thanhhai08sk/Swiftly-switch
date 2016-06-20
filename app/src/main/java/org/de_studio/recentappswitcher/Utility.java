@@ -1987,29 +1987,57 @@ public  class Utility {
                 byte[] byteArray = shortcut.getBitmap();
                 try {
                     Bitmap bmp;
+                    Resources resources = packageManager.getResourcesForApplication(shortcut.getPackageName());
                     if (byteArray != null) {
+
                         bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                        drawable = new BitmapDrawable(resources, bmp);
+
                     } else {
-                        Resources resources = packageManager.getResourcesForApplication(shortcut.getPackageName());
-                        bmp =BitmapFactory.decodeResource(resources,shortcut.getResId());
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        drawable =  resources.getDrawable(shortcut.getResId(), null);
+//                        options.inMutable = true;
+//                        bmp =BitmapFactory.decodeResource(resources,shortcut.getResId(), options);
+//                        Log.e(TAG, "getFolderThumbnail: resource");
                     }
-                    if (bmp != null) {
-                        bmp = Bitmap.createScaledBitmap(bmp, smallWidth - gap1dp, smallHeight - gap1dp, false);
+                    if (drawable != null) {
                         switch (i) {
                             case 0:
-                                canvas.drawBitmap(bmp,0,0,paint);
+                                drawable.setBounds(0,0,smallWidth - gap1dp,smallHeight - gap1dp);
+                                drawable.draw(canvas);
                                 break;
                             case 1:
-                                canvas.drawBitmap(bmp,smallWidth + gap1dp, 0,paint);
+                                drawable.setBounds(smallWidth+ gap1dp,0,width,smallHeight - gap1dp);
+                                drawable.draw(canvas);
                                 break;
                             case 2:
-                                canvas.drawBitmap(bmp, 0,smallHeight + gap1dp,paint);
+                                drawable.setBounds(0,smallHeight+ gap1dp,smallWidth - gap1dp,height);
+                                drawable.draw(canvas);
                                 break;
                             case 3:
-                                canvas.drawBitmap(bmp,smallWidth + gap1dp, smallHeight +gap1dp,paint);
+                                drawable.setBounds(smallWidth+ gap1dp,smallHeight + gap1dp,width,height);
+                                drawable.draw(canvas);
                                 break;
                         }
                     }
+//                    if (bmp != null) {
+//
+//                        bmp = Bitmap.createScaledBitmap(bmp, smallWidth - gap1dp, smallHeight - gap1dp, false);
+//                        switch (i) {
+//                            case 0:
+//                                canvas.drawBitmap(bmp,0,0,paint);
+//                                break;
+//                            case 1:
+//                                canvas.drawBitmap(bmp,smallWidth + gap1dp, 0,paint);
+//                                break;
+//                            case 2:
+//                                canvas.drawBitmap(bmp, 0,smallHeight + gap1dp,paint);
+//                                break;
+//                            case 3:
+//                                canvas.drawBitmap(bmp,smallWidth + gap1dp, smallHeight +gap1dp,paint);
+//                                break;
+//                        }
+//                    }
 
                 } catch (Exception e) {
                     Log.e(TAG, "getView: can not set imageview for shortcut shortcut");
