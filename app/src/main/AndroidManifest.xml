@@ -135,7 +135,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.de_studio.recentappswitcher.MainActivity" />
         </activity>
-        <activity android:name=".favoriteShortcut.SetFolderActivity" />
+        <activity android:name=".favoriteShortcut.SetFolderActivity"
+                  android:label="@string/setting_shortcut_folder"
+            />
         <activity
             android:name=".service.ChooseActionDialogActivity"
             android:excludeFromRecents="true"

@@ -31,6 +31,7 @@ public class SetFolderActivity extends AppCompatActivity implements AddAppToFold
         mAdapter = new FolderAdapter(this, mPosition);
         deleteButton = (ImageButton) findViewById(R.id.delete_image_button);
         if (listView != null) {
+            listView.setDivider(null);
             listView.setAdapter(mAdapter);
         }
 

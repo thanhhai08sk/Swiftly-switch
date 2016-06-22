@@ -18,9 +18,8 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/tabbar"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:tabTextAppearance="@style/tablayout_text_appearacnce"
             app:layout_scrollFlags="scroll" />
 
     </android.support.design.widget.AppBarLayout>
