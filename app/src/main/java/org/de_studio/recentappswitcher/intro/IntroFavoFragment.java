@@ -24,7 +24,6 @@ public class IntroFavoFragment extends Fragment {
     private float imageX, imageY, imageHeight, imageWidth;
     private TextView introTitle;
     private ViewPropertyAnimator[] propertyAnimators = new ViewPropertyAnimator[5];
-    private TextView textGuide;
 
     public static IntroFavoFragment newInstance(int index) {
         IntroFavoFragment f = new IntroFavoFragment();
@@ -47,8 +46,6 @@ public class IntroFavoFragment extends Fragment {
         introTitle =(TextView) rootView.findViewById(R.id.title);
         introTitle.setText(R.string.access_your_favorite_app_and_system_setting_anywhere);
         hand = (ImageView) rootView.findViewById(R.id.intro_hand);
-        textGuide = (TextView) rootView.findViewById(R.id.textGuide);
-        textGuide.setText(R.string.hold_icon);
         return rootView;
     }
 
@@ -58,7 +55,6 @@ public class IntroFavoFragment extends Fragment {
                 p.cancel();
             }
         }
-        textGuide.setVisibility(View.GONE);
         hand.setAlpha(1f);
         imageX = introImage.getX();
         imageY = introImage.getY();
@@ -103,7 +99,6 @@ public class IntroFavoFragment extends Fragment {
 
         @Override
         public void onAnimationEnd(Animator animation) {
-            textGuide.setVisibility(View.VISIBLE);
             introImage.setImageResource(R.drawable.screenshot_3);
             propertyAnimators[2] = hand.animate().setDuration(ANIMATION_DURATION)
                     .x(hand.getX() + 10)
@@ -130,7 +125,6 @@ public class IntroFavoFragment extends Fragment {
         @Override
         public void onAnimationEnd(Animator animation) {
             introImage.setImageResource(R.drawable.screenshot_11);
-            textGuide.setVisibility(View.GONE);
             propertyAnimators[3] = hand.animate().x(hand.getX() - imageWidth/4)
                     .y(hand.getY() + imageHeight/7)
                     .setDuration(ANIMATION_DURATION).setListener(new Animation4());

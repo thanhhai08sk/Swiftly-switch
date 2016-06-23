@@ -47,22 +47,5 @@
         android:src="@drawable/hand_resized"
         android:layout_alignParentEnd="true"
         />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAllCaps="false"
-        android:textSize="16sp"
-        android:fontFamily="sans-serif-bold"
-        android:id="@+id/textGuide"
-        android:textColor="@color/white"
-        tools:text="Home"
-        android:visibility="gone"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:gravity="center"
-        android:background="@drawable/round_red_button"
-        android:layout_marginTop="20dp"
-        android:layout_alignTop="@+id/intro_image"
-        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
