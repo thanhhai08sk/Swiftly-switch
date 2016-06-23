@@ -77,7 +77,7 @@ public class IntroFavoFragment extends Fragment {
         @Override
         public void onAnimationEnd(Animator animation) {
             introImage.setImageResource(R.drawable.screenshot_2);
-            propertyAnimators[1] = hand.animate().setDuration(ANIMATION_DURATION).y(hand.getY() - imageHeight/6).setListener(new Animation2());
+            propertyAnimators[1] = hand.animate().setDuration(ANIMATION_DURATION).y(hand.getY() - imageHeight/4).setListener(new Animation2());
         }
 
         @Override
@@ -99,8 +99,8 @@ public class IntroFavoFragment extends Fragment {
 
         @Override
         public void onAnimationEnd(Animator animation) {
-            introImage.setImageResource(R.drawable.screenshot_3);
-            propertyAnimators[2] = hand.animate().setDuration(ANIMATION_DURATION)
+            introImage.setImageResource(R.drawable.screenshot_7);
+            propertyAnimators[2] = hand.animate().setDuration(500)
                     .x(hand.getX() + 10)
                     .setListener(new Animation3());
         }
@@ -126,7 +126,7 @@ public class IntroFavoFragment extends Fragment {
         public void onAnimationEnd(Animator animation) {
             introImage.setImageResource(R.drawable.screenshot_11);
             propertyAnimators[3] = hand.animate().x(hand.getX() - imageWidth/4)
-                    .y(hand.getY() + imageHeight/7)
+                    .y(hand.getY() + imageHeight/5)
                     .setDuration(ANIMATION_DURATION).setListener(new Animation4());
 
 
