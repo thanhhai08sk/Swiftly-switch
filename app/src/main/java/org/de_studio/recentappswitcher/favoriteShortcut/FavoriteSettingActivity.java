@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
@@ -99,8 +100,8 @@ public class FavoriteSettingActivity extends AppCompatActivity {
                         edge1Shared.edit().putInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 1).commit();
                     }
                 }
-                getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                restartService();
+
 
             }
         });
@@ -116,8 +117,7 @@ public class FavoriteSettingActivity extends AppCompatActivity {
                         edge2Shared.edit().putInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 1).commit();
                     }
                 }
-                getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                restartService();
 
             }
         });
@@ -166,8 +166,7 @@ public class FavoriteSettingActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 defaultSharedPreference.edit().putInt(EdgeSetting.NUM_OF_GRID_ROW_KEY, position + 1).commit();
                 updateGridView();
-                getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                restartService();
             }
 
             @Override
@@ -183,8 +182,7 @@ public class FavoriteSettingActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 defaultSharedPreference.edit().putInt(EdgeSetting.NUM_OF_GRID_COLUMN_KEY, position + 1).commit();
                 updateGridView();
-                getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                restartService();
             }
 
             @Override
@@ -212,8 +210,7 @@ public class FavoriteSettingActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 updateGridView();
-                getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                restartService();
             }
         });
 
@@ -387,6 +384,13 @@ public class FavoriteSettingActivity extends AppCompatActivity {
         gridParams.height = (int) (mScale * (float) ((EdgeGestureService.GRID_ICON_SIZE * mIconScale + EdgeGestureService.GRID_2_PADDING) * gridRow + gridGap * (gridRow - 1)));
         gridParams.width = (int) (mScale * (float) ((EdgeGestureService.GRID_ICON_SIZE *mIconScale + EdgeGestureService.GRID_2_PADDING) * gridColumn + gridGap * (gridColumn - 1)));
         gridView.setLayoutParams(gridParams);
+    }
+
+    private void restartService() {
+        if (Utility.checkDrawPermission(getApplicationContext())) {
+            getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+            getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+        }else Toast.makeText(FavoriteSettingActivity.this, "Lack of Draw over other apps permission", Toast.LENGTH_SHORT).show();
     }
 
 }

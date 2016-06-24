@@ -626,11 +626,13 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.e(TAG, "onResume: ");
 //        setStepButtonAndDescription();
         checkPermissionOk();
         stopService(new Intent(this, EdgeGestureService.class));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (Settings.canDrawOverlays(this) && (edge1Switch.isChecked() || edge1Switch.isChecked())) {
+                Log.e(TAG, "onResume: startService");
                 startService(new Intent(this, EdgeGestureService.class));
             }
         } else {

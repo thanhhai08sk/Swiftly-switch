@@ -2240,6 +2240,11 @@ public  class Utility {
     }
 
 
+    public static boolean checkDrawPermission(Context context) {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
+    }
+
+
 
 
 }
