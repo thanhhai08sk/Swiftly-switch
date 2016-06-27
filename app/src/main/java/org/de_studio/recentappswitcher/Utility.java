@@ -1956,10 +1956,12 @@ public  class Utility {
                         ((RoundedBitmapDrawable) drawable).setCircular(true);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        drawable = context.getDrawable(R.drawable.ic_contact_default);
+                        drawable = ContextCompat. getDrawable(context , R.drawable.ic_contact_default);
+//                        drawable = context.getDrawable(R.drawable.ic_contact_default);
                     }
                 } else {
-                    drawable = context.getDrawable(R.drawable.ic_contact_default);
+                    drawable = ContextCompat. getDrawable(context , R.drawable.ic_contact_default);
+//                    drawable = context.getDrawable(R.drawable.ic_contact_default);
                 }
                 if (drawable != null) {
                     switch (i) {
@@ -2045,7 +2047,8 @@ public  class Utility {
             }
         }
         if (isFolderEmpty) {
-            drawable = context.getDrawable(R.drawable.ic_folder);
+//            drawable = context.getDrawable(R.drawable.ic_folder);
+            drawable = ContextCompat. getDrawable(context , R.drawable.ic_folder);
             if (drawable != null) {
                 drawable.setBounds(0, 0, width, height);
                 drawable.draw(canvas);

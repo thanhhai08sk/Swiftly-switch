@@ -38,7 +38,7 @@ import org.de_studio.recentappswitcher.service.EdgeSetting;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
-    private static final int VERSION_NUMBER = 57;
+    private static final int VERSION_NUMBER = 58;
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final String EDGE_1_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_2_shared_preference";
@@ -562,6 +562,9 @@ public class MainActivity extends Activity {
     private void showWhatNew() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         int titleSize = getResources().getDimensionPixelSize(R.dimen.what_new_title_size);
+        String title2_2_11 = "Version 2.2.11";
+        String text2_2_11 = " - Fix bugs" +
+                "\n - Add Hebrew language (Thanks Elior!)";
         String title2_2_10 = "Version 2.2.10";
         String text2_2_10 = " - Support Shortcut (include Tasker action)" +
                 "\n - Add Sound/Vibrate shortcut" +
@@ -575,17 +578,9 @@ public class MainActivity extends Activity {
                 "\n - Support folder" +
                 "\n - Indicator" +
                 "\n - Change the default setting for Quick Action";
-        String title2_2_3 = "Version 2.2.3";
-        String text2_2_3 = " - New Quick Action: Instant favorite. Now you don't have to wait to show the Favorite Grid. Enable this feature in Quick Action setting" +
-                "  \n - New mode: Favorite in circle - show favorite shortcuts in semi-circle pattern. Enable this feature in Edge setting" +
-                "\n - Added the Recent Button to list of Action" +
-                "\n - Updated languages";
-        String title2_2_2 = "Version 2.2.2";
-        String text2_2_2 = " - Added the Czech language " + "\n - Updated the Spanish language" +
-                "\n - Small improvement";
-        String title2_2_1 = "Version 2.2.1";
-        String text2_2_1 = " - New UI" + "\n - Added App introduction" + "\n - Drag and drop in Favorite Setting to move/delete shortcut";
 
+        SpannableString span2_2_11 = new SpannableString(title2_2_11);
+        span2_2_11.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_11.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         SpannableString span2_2_10 = new SpannableString(title2_2_10);
         span2_2_10.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_10.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
@@ -593,14 +588,8 @@ public class MainActivity extends Activity {
         span2_2_9.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_9.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         SpannableString span2_2_8 = new SpannableString(title2_2_8);
         span2_2_8.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_8.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        SpannableString span2_2_3 = new SpannableString(title2_2_3);
-        span2_2_3.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_3.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        SpannableString span2_2_2 = new SpannableString(title2_2_2);
-        span2_2_2.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_2.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        SpannableString span2_2_1 = new SpannableString(title2_2_1);
-        span2_2_1.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_1.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
-        CharSequence finalText = TextUtils.concat(span2_2_10,"\n\n",text2_2_10, "\n\n",span2_2_9,"\n\n",text2_2_9,"\n\n",span2_2_8,"\n\n",text2_2_8,"\n\n", "\n\n", span2_2_3 , "\n\n" , text2_2_3 , "\n\n" , span2_2_2 , "\n\n" , text2_2_2
+        CharSequence finalText = TextUtils.concat(span2_2_11,"\n\n",text2_2_11, "\n\n",span2_2_10,"\n\n",text2_2_10, "\n\n",span2_2_9,"\n\n",text2_2_9,"\n\n",span2_2_8,"\n\n",text2_2_8
                 );
         builder.setTitle(R.string.what_new)
                 .setMessage(finalText)
