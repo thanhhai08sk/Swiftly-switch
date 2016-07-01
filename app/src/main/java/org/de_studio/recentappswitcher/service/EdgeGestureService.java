@@ -932,28 +932,28 @@ public class EdgeGestureService extends Service {
                         if (packageToSwitch != -1) {
                             Intent extApp = null;
                             if (packageToSwitch < recentShortcut.length) {
-                                extApp = getPackageManager().getLaunchIntentForPackage(recentShortcut[packageToSwitch].getPackageName());
+                                Utility.startShortcut(getApplicationContext(),recentShortcut[packageToSwitch],v,getClass().getName(),getPackageName(),lastAppPackageName,defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 0));
+//                                extApp = getPackageManager().getLaunchIntentForPackage(recentShortcut[packageToSwitch].getPackageName());
                             }
 
-                            if (extApp != null) {
-                                if (recentShortcut[packageToSwitch].equals("com.devhomc.search")) {
-                                    extApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(extApp);
-                                } else {
-                                    ComponentName componentName = extApp.getComponent();
-                                    Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
-                                    startAppIntent.setComponent(componentName);
-                                    startAppIntent.addFlags(1064960);
-                                    startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                                    startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                                    startActivity(startAppIntent);
-//                                startActivity(startApp);
-                                }
-
-                                Log.e(TAG, "packageToSwitch = " + packageToSwitch);
-                            } else Log.e(TAG, "extApp = null ");
+//                            if (extApp != null) {
+//                                if (recentShortcut[packageToSwitch].equals("com.devhomc.search")) {
+//                                    extApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                    startActivity(extApp);
+//                                } else {
+//                                    ComponentName componentName = extApp.getComponent();
+//                                    Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
+//                                    startAppIntent.setComponent(componentName);
+//                                    startAppIntent.addFlags(1064960);
+//                                    startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                    startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                                    startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                                    startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+//                                    startActivity(startAppIntent);
+//                                }
+//
+//                                Log.e(TAG, "packageToSwitch = " + packageToSwitch);
+//                            } else Log.e(TAG, "extApp = null ");
 
                         }
                         recentShortcut = null;
