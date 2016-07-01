@@ -29,6 +29,7 @@ import io.realm.Sort;
  */
 public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropListener ,DragSortListView.RemoveListener{
     private Context mContext;
+    private static final String TAG = PinAppAdapter.class.getSimpleName();
     private Realm pinRealm;
     private Shortcut shortcut;
     private Drawable defaultDrawable;
@@ -89,6 +90,8 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
                     title = shortcut.getLabel();
                     break;
             }
+
+
             Utility.setImageForShortcut(shortcut,packageManager,icon,mContext,iconPack,pinRealm,false);
             label.setText(title);
         }
@@ -111,11 +114,11 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
     @Override
     public void drop(int from, int to) {
         RealmResults<Shortcut> results = pinRealm.where(Shortcut.class).findAll();
-        String[] shortcuts = new String[results.size()];
-        String tem;
+        Shortcut[] shortcuts = new Shortcut[results.size()];
+        Shortcut tem;
         int i = 0;
         for (Shortcut shortcut : results) {
-            shortcuts[i] = shortcut.getPackageName();
+            shortcuts[i] = pinRealm.copyFromRealm(shortcut);
             i++;
         }
         if (from > to) {
@@ -134,12 +137,14 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
         pinRealm.beginTransaction();
         pinRealm.delete(Shortcut.class);
         int m = 0;
-        for (String packageName : shortcuts) {
-            Shortcut shortcut1 = new Shortcut();
-            shortcut1.setPackageName(packageName);
-            shortcut1.setId(m);
+        for (Shortcut shortcut : shortcuts) {
+//            Shortcut shortcut1 = new Shortcut();
+//            shortcut1.setPackageName(shortcut);
+//            shortcut1.setId(m);
+            Log.e(TAG,  "\nm = " + m);
+            shortcut.setId(m);
             m++;
-            pinRealm.copyToRealm(shortcut1);
+            pinRealm.copyToRealm(shortcut);
         }
         pinRealm.commitTransaction();
         notifyDataSetChanged();
