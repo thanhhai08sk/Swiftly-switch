@@ -102,7 +102,7 @@ public class EdgeGestureService extends Service {
     public int edge1WidthPxl, edge2WidthPxl;
     public int edge1Sensivite, edge2Sensitive;
     private List<MyImageView> iconImageArrayList1, iconImageArrayList2;
-    private String[] packagename, pinnedPackageName;
+    private Shortcut[] recentShortcut, pinnedShortcut;
     private String launcherPackagename, lastAppPackageName;
     private int[] x, y, folderCoor;
     private int numOfIcon, gridRow, gridColumn, gridGap, gridX, gridY, numOfRecent;
@@ -128,12 +128,12 @@ public class EdgeGestureService extends Service {
     private boolean isClockShown = false;
     private View clockView;
     private Realm pinAppRealm, favoriteRealm,circleFavoRealm;
-    private Set<String> pinnedSet;
+    private Set<Shortcut> pinnedSet;
     private WindowManager.LayoutParams backgroundParams;
     private int backgroundColor, guideColor, animationTime, edge1mode, edge2mode;
     private Set<String> excludeSet;
     private long startDown;
-    private String[] savedPackage;
+    private Shortcut[] savedRecentShortcut;
     private int[] instantFavoAction;
     private boolean useInstantFavo, onInstantFavo;
     private WindowManager.LayoutParams paramsEdge1, paramsEdge2;
@@ -156,7 +156,7 @@ public class EdgeGestureService extends Service {
         if (res.activityInfo != null) {
             launcherPackagename = res.activityInfo.packageName;
         } else launcherPackagename = "";
-        Log.e(TAG, "Launcher packagename = " + launcherPackagename);
+        Log.e(TAG, "Launcher recentShortcut = " + launcherPackagename);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -526,28 +526,35 @@ public class EdgeGestureService extends Service {
                         if (tempPackageName.size() >= 1) {
                             lastAppPackageName = tempPackageName.get(0);
                         }
-                        if (6 - tempPackageName.size() - pinnedPackageName.length > 0) {
-                            packagename = new String[tempPackageName.size() + pinnedPackageName.length];
+                        if (6 - tempPackageName.size() - pinnedShortcut.length > 0) {
+                            recentShortcut = new Shortcut[tempPackageName.size() + pinnedShortcut.length];
                         } else {
-                            packagename = new String[6];
+                            recentShortcut = new Shortcut[6];
                         }
                         int n = 0;
+                        Shortcut tempShortcut;
                         if (defaultShared.getBoolean(EdgeSetting.IS_PIN_TO_TOP_KEY, false)) {
-                            for (int t = 0; t < packagename.length; t++) {
-                                if (t < pinnedPackageName.length) {
-                                    packagename[t] = pinnedPackageName[t];
+                            for (int t = 0; t < recentShortcut.length; t++) {
+                                if (t < pinnedShortcut.length) {
+                                    recentShortcut[t] = pinnedShortcut[t];
                                 } else {
-                                    packagename[t] = tempPackageName.get(t - pinnedPackageName.length);
+                                    tempShortcut = new Shortcut();
+                                    tempShortcut.setType(Shortcut.TYPE_APP);
+                                    tempShortcut.setPackageName(tempPackageName.get(t - pinnedShortcut.length));
+                                    recentShortcut[t] = tempShortcut;
                                 }
 
                             }
 
                         } else {
-                            for (int t = 0; t < packagename.length; t++) {
-                                if (t + pinnedPackageName.length < packagename.length) {
-                                    packagename[t] = tempPackageName.get(t);
+                            for (int t = 0; t < recentShortcut.length; t++) {
+                                if (t + pinnedShortcut.length < recentShortcut.length) {
+                                    tempShortcut = new Shortcut();
+                                    tempShortcut.setType(Shortcut.TYPE_APP);
+                                    tempShortcut.setPackageName(tempPackageName.get(t));
+                                    recentShortcut[t] = tempShortcut;
                                 } else {
-                                    packagename[t] = pinnedPackageName[n];
+                                    recentShortcut[t] = pinnedShortcut[n];
                                     n++;
                                 }
 
@@ -555,13 +562,13 @@ public class EdgeGestureService extends Service {
                         }
 
                         for (int i = 0; i < 6; i++) {
-                            if (i >= packagename.length) {
+                            if (i >= recentShortcut.length) {
                                 iconImageArrayList.get(i).setImageDrawable(null);
                             } else {
                                 try {
-                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(packagename[i]);
+                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(recentShortcut[i].getPackageName());
                                     if (iconPack != null) {
-                                        iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(packagename[i], defaultDrawable));
+                                        iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(recentShortcut[i].getPackageName(), defaultDrawable));
                                     } else {
                                         iconImageArrayList.get(i).setImageDrawable(defaultDrawable);
 
@@ -643,10 +650,10 @@ public class EdgeGestureService extends Service {
                                 }
                             }
 
-                            if (tempPackageName.size() < 6 && savedPackage !=null) {
-                                for (int i = 0; i < savedPackage.length; i++) {
-                                    if (!tempPackageName.contains(savedPackage[i]) && tempPackageName.size() < 6) {
-                                        tempPackageName.add(savedPackage[i]);
+                            if (tempPackageName.size() < 6 && savedRecentShortcut !=null) {
+                                for (int i = 0; i < savedRecentShortcut.length; i++) {
+                                    if (!tempPackageName.contains(savedRecentShortcut[i]) && tempPackageName.size() < 6) {
+                                        tempPackageName.add(savedRecentShortcut[i].getPackageName());
                                     }
                                 }
 
@@ -666,32 +673,39 @@ public class EdgeGestureService extends Service {
                             if (tempPackageName.size() >= 1) {
                                 lastAppPackageName = tempPackageName.get(0);
                             }
-                            for (String t : pinnedSet) {
-                                if (tempPackageName.contains(t)) {
-                                    tempPackageName.remove(t);
+                            for (Shortcut t : pinnedSet) {
+                                if (tempPackageName.contains(t.getPackageName())) {
+                                    tempPackageName.remove(t.getPackageName());
                                 }
                             }
-                            if (6 - tempPackageName.size() - pinnedPackageName.length > 0) {
-                                packagename = new String[tempPackageName.size() + pinnedPackageName.length];
+                            if (6 - tempPackageName.size() - pinnedShortcut.length > 0) {
+                                recentShortcut = new Shortcut[tempPackageName.size() + pinnedShortcut.length];
                             } else {
-                                packagename = new String[6];
+                                recentShortcut = new Shortcut[6];
                             }
                             int n = 0;
+                            Shortcut tempShortcut;
                             if (defaultShared.getBoolean(EdgeSetting.IS_PIN_TO_TOP_KEY, false)) {
-                                for (int t = 0; t < packagename.length; t++) {
-                                    if (t < pinnedPackageName.length) {
-                                        packagename[t] = pinnedPackageName[t];
+                                for (int t = 0; t < recentShortcut.length; t++) {
+                                    if (t < pinnedShortcut.length) {
+                                        recentShortcut[t] = pinnedShortcut[t];
                                     } else {
-                                        packagename[t] = tempPackageName.get(t - pinnedPackageName.length);
+                                        tempShortcut = new Shortcut();
+                                        tempShortcut.setType(Shortcut.TYPE_APP);
+                                        tempShortcut.setPackageName(tempPackageName.get(t - pinnedShortcut.length));
+                                        recentShortcut[t] = tempShortcut;
                                     }
 
                                 }
                             } else {
-                                for (int t = 0; t < packagename.length; t++) {
-                                    if (t + pinnedPackageName.length < packagename.length) {
-                                        packagename[t] = tempPackageName.get(t);
+                                for (int t = 0; t < recentShortcut.length; t++) {
+                                    if (t + pinnedShortcut.length < recentShortcut.length) {
+                                        tempShortcut = new Shortcut();
+                                        tempShortcut.setType(Shortcut.TYPE_APP);
+                                        tempShortcut.setPackageName(tempPackageName.get(t));
+                                        recentShortcut[t] = tempShortcut;
                                     } else {
-                                        packagename[t] = pinnedPackageName[n];
+                                        recentShortcut[t] = pinnedShortcut[n];
                                         n++;
                                     }
 
@@ -699,20 +713,20 @@ public class EdgeGestureService extends Service {
                             }
 
 
-                            savedPackage = packagename;
+                            savedRecentShortcut = recentShortcut;
 
 
-//                            packagename = new String[tempPackageName.size()];
-//                            tempPackageName.toArray(packagename);
+//                            recentShortcut = new String[tempPackageName.size()];
+//                            tempPackageName.toArray(recentShortcut);
                         } else Log.e(TAG, "erros in mySortedMap");
                         for (int i = 0; i < 6; i++) {
-                            if (i >= packagename.length) {
+                            if (i >= recentShortcut.length) {
                                 iconImageArrayList.get(i).setImageDrawable(null);
                             } else {
                                 try {
-                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(packagename[i]);
+                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(recentShortcut[i].getPackageName());
                                     if (iconPack != null) {
-                                        iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(packagename[i], defaultDrawable));
+                                        iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(recentShortcut[i].getPackageName(), defaultDrawable));
                                     } else {
                                         iconImageArrayList.get(i).setImageDrawable(defaultDrawable);
 
@@ -811,7 +825,7 @@ public class EdgeGestureService extends Service {
 //                    Utility.setIconsPosition(iconImageList, x_init_cord, y_init_cord, icon_distance_pxl, icon_24dp_in_pxls, position);
 
 
-                    if (packagename!= null && packagename.length == 0) {
+                    if (recentShortcut != null && recentShortcut.length == 0) {
                             delayToSwitchTask = new DelayToSwitchTask();
                             if (mode == 3) {
                                 numOfIcon = iconImageArrayList.size();
@@ -917,12 +931,12 @@ public class EdgeGestureService extends Service {
                         int packageToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
                         if (packageToSwitch != -1) {
                             Intent extApp = null;
-                            if (packageToSwitch < packagename.length) {
-                                extApp = getPackageManager().getLaunchIntentForPackage(packagename[packageToSwitch]);
+                            if (packageToSwitch < recentShortcut.length) {
+                                extApp = getPackageManager().getLaunchIntentForPackage(recentShortcut[packageToSwitch].getPackageName());
                             }
 
                             if (extApp != null) {
-                                if (packagename[packageToSwitch].equals("com.devhomc.search")) {
+                                if (recentShortcut[packageToSwitch].equals("com.devhomc.search")) {
                                     extApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(extApp);
                                 } else {
@@ -942,7 +956,7 @@ public class EdgeGestureService extends Service {
                             } else Log.e(TAG, "extApp = null ");
 
                         }
-                        packagename = null;
+                        recentShortcut = null;
                         int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
                         Log.e(TAG, "homeBackNoti = " + homeBackNoti);
                         String action = MainActivity.ACTION_NONE;
@@ -1429,10 +1443,10 @@ public class EdgeGestureService extends Service {
                 ImageView icon = (ImageView) indicator.findViewById(R.id.indicator_icon);
                 TextView label = (TextView) indicator.findViewById(R.id.indicator_label);
                 if (activateId - 20 >= 0 && activateId - 20 < 6) {
-                    if (activateId - 20 < packagename.length) {
+                    if (activateId - 20 < recentShortcut.length) {
                         icon.setImageDrawable(iconImageArrayList.get(activateId - 20).getDrawable());
                         try {
-                            label.setText(getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(packagename[activateId - 20], 0)));
+                            label.setText(getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(recentShortcut[activateId - 20].getPackageName(), 0)));
                         } catch (PackageManager.NameNotFoundException e) {
                             Log.e(TAG, "Namenotfound when setIndicator");
                         }
@@ -1783,17 +1797,16 @@ public class EdgeGestureService extends Service {
         }
         int i = 0;
         if (results1 == null) {
-            pinnedPackageName = new String[0];
+            pinnedShortcut = new Shortcut[0];
         } else {
-            pinnedPackageName = new String[results1.size()];
+            pinnedShortcut = new Shortcut[results1.size()];
             for (Shortcut shortcut : results1) {
                 Log.e(TAG, "result = " + shortcut.getPackageName());
-                pinnedPackageName[i] = shortcut.getPackageName();
-                Log.e(TAG, "pinnedPack = " + pinnedPackageName[0]);
+                pinnedShortcut[i] = shortcut;
                 i++;
             }
         }
-        pinnedSet = new HashSet<String>(Arrays.asList(pinnedPackageName));
+        pinnedSet = new HashSet<Shortcut>(Arrays.asList(pinnedShortcut));
         animationTime = defaultShared.getInt(EdgeSetting.ANI_TIME_KEY, 100);
         edge1mode = sharedPreferences1.getInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 0);
         if (edge1mode == 0) {
