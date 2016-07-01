@@ -1,4 +1,4 @@
-package org.de_studio.recentappswitcher.favoriteShortcut;
+package org.de_studio.recentappswitcher;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -21,11 +21,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.de_studio.recentappswitcher.AppInfors;
-import org.de_studio.recentappswitcher.MyApplication;
-import org.de_studio.recentappswitcher.MyRealmMigration;
-import org.de_studio.recentappswitcher.R;
-import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import java.util.ArrayList;
@@ -38,64 +34,64 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 /**
- * Created by HaiNguyen on 5/31/16.
+ * Created by HaiNguyen on 7/1/16.
  */
-public class AddAppToFolderDialogFragment  extends DialogFragment{
-    private static final String LOG_TAG = AddAppToFolderDialogFragment.class.getSimpleName();
+public class PinRecentAddAppDialogFragment extends DialogFragment {
+
+    private static final String TAG = PinRecentAddAppDialogFragment.class.getSimpleName();
     static ListView mListView;
     private ProgressBar progressBar;
     private ArrayList<AppInfors> appInforsArrayList;
     private Realm myRealm;
-    private int mPosition;
-    AddAppToFolderAdapter mAdapter;
+    PinRecentAddAppAdapter mAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.add_favorite_app_fragment_list_view, container);
         mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
-        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getActivity())
-                .name("default.realm")
-                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getContext())
+                .name("pinApp.realm")
+                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
-        final int startId = (mPosition +1)*1000;
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String packageName = appInforsArrayList.get(position).packageName;
                 CheckBox checkBox = (CheckBox)view.findViewById(R.id.add_favorite_list_item_check_box);
-                int size = (int) myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id",startId + 1000).count();
-                Log.e(LOG_TAG, "pinApp count = " + size);
+                int size = (int) myRealm.where(Shortcut.class).count();
+                Log.e(TAG, "pinApp count = " + size);
                 if (checkBox != null) {
                     if (checkBox.isChecked()) {
                         myRealm.beginTransaction();
-                        Shortcut removeShortcut = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id", startId + 1000).equalTo("type", Shortcut.TYPE_APP) .equalTo("packageName",packageName).findFirst();
+                        Shortcut removeShortcut = myRealm.where(Shortcut.class).equalTo("packageName",packageName).findFirst();
                         int removeId = removeShortcut.getId();
-                        Log.e(LOG_TAG, "removeID = " + removeId);
-                        removeShortcut.deleteFromRealm();
-                        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id",startId + 1000).findAll().sort("id", Sort.ASCENDING);
-                        for (int i = startId; i < startId+ results.size(); i++) {
-                            Log.e(LOG_TAG, "id = " + results.get(i- startId).getId());
-                            if (results.get(i - startId).getId() >= removeId) {
-//                                Log.e(LOG_TAG, "when i = " + i + "result id = " + results.get(i - startId).getId());
-                                Shortcut shortcut = results.get(i - startId);
+                        myRealm.where(Shortcut.class).equalTo("packageName",packageName).findFirst().deleteFromRealm();
+                        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).findAll().sort("id", Sort.ASCENDING);
+
+                        for (int i = 0; i < results.size(); i++) {
+                            Log.e(TAG, "id = " + results.get(i).getId());
+                            if (results.get(i).getId() >= removeId) {
+                                Log.e(TAG, "when i = " + i + "result id = " + results.get(i).getId());
+                                Shortcut shortcut = results.get(i);
                                 int oldId = shortcut.getId();
                                 shortcut.setId(oldId - 1);
                             }
                         }
                         myRealm.commitTransaction();
                     } else {
-                        if (size < 16) {
+                        if (size < 6) {
                             Shortcut newShortcut = new Shortcut();
-                            newShortcut.setId(startId+ size);
-//                            Log.e(LOG_TAG, "size = " + size);
-                            newShortcut.setPackageName(packageName);
+                            newShortcut.setId(size);
                             newShortcut.setType(Shortcut.TYPE_APP);
+                            Log.e(TAG, "size = " + size);
+                            newShortcut.setPackageName(packageName);
                             try {
-                                newShortcut.setLabel((String) getActivity().getPackageManager().getApplicationLabel(getActivity().getPackageManager().getApplicationInfo(packageName, 0)));
+                                newShortcut.setLabel((String) getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)));
                             } catch (PackageManager.NameNotFoundException e) {
                                 e.printStackTrace();
+                                Log.e(TAG, "onItemClick: NameNotFound");
                             }
                             myRealm.beginTransaction();
                             myRealm.copyToRealm(newShortcut);
@@ -115,10 +111,6 @@ public class AddAppToFolderDialogFragment  extends DialogFragment{
         return rootView;
     }
 
-    public void setmPosition(int position) {
-        mPosition = position;
-    }
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
@@ -135,15 +127,14 @@ public class AddAppToFolderDialogFragment  extends DialogFragment{
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-        Utility.getFolderThumbnail(myRealm, mPosition, getActivity());
         try {
             getActivity().startService(new Intent(getActivity(), EdgeGestureService.class));
         } catch (NullPointerException e) {
-            Log.e(LOG_TAG, "Null when get activity from on dismiss");
+            Log.e(TAG, "Null when get activity from on dismiss");
         }
 
         super.onDismiss(dialog);
-        ((MyDialogCloseListener) getActivity()).handleDialogClose();
+//        ((AddAppToFolderDialogFragment.MyDialogCloseListener) getActivity()).handleDialogClose();
     }
 
     private class LoadInstalledApp extends AsyncTask<Void, Void, ArrayList<AppInfors>> {
@@ -174,14 +165,11 @@ public class AddAppToFolderDialogFragment  extends DialogFragment{
             progressBar.setVisibility(View.GONE);
             if (getActivity() != null) {
                 appInforsArrayList = result;
-                mAdapter = new AddAppToFolderAdapter(getActivity(),result, myRealm, mPosition);
+                mAdapter = new PinRecentAddAppAdapter(getActivity(),result, myRealm);
                 mListView.setAdapter(mAdapter);
             }
 
         }
     }
-    public interface MyDialogCloseListener
-    {
-        public void handleDialogClose();//or whatever args you want
-    }
+
 }

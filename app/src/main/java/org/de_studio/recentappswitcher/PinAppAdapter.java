@@ -79,32 +79,17 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
         TextView label = (TextView) view.findViewById(R.id.pin_app_list_item_label_text_view);
         shortcut = pinRealm.where(Shortcut.class).equalTo("id",position).findFirst();
         CharSequence title= "";
-        try {
-            title = packageManager.getApplicationLabel(packageManager.getApplicationInfo(shortcut.getPackageName(), 0));
-        } catch (PackageManager.NameNotFoundException e) {
-            remove(position);
-            notifyDataSetChanged();
-            Log.e(LOG_TAG, "NamenotFound when get label");
-            return view;
-        } catch (NullPointerException e) {
-            Log.e(LOG_TAG, "Nullpoint when get label " + e);
-        }
 
         if (shortcut != null) {
-            try {
-                defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
-                if (iconPack != null) {
-
-                    icon.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
-                } else {
-                    icon.setImageDrawable(defaultDrawable);
-
-                }
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e(LOG_TAG, "NameNotFound when set icon " + e);
-            } catch (NullPointerException e) {
-                Log.e(LOG_TAG, "Nullpoint when set icon " + e);
+            switch (shortcut.getType()) {
+                case Shortcut.TYPE_CONTACT:
+                    title = shortcut.getName();
+                    break;
+                default:
+                    title = shortcut.getLabel();
+                    break;
             }
+            Utility.setImageForShortcut(shortcut,packageManager,icon,mContext,iconPack,pinRealm,false);
             label.setText(title);
         }
 //        view.setOnLongClickListener(new View.OnLongClickListener() {

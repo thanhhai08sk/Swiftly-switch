@@ -71,12 +71,7 @@ public class PinAppDialogFragment extends DialogFragment {
                         int removeId = removeShortcut.getId();
                         pinRealm.where(Shortcut.class).equalTo("packageName",packageName).findFirst().deleteFromRealm();
                         RealmResults<Shortcut> results = pinRealm.where(Shortcut.class).findAll().sort("id", Sort.ASCENDING);
-//                        for (Shortcut tem : results) {
-//                            Log.e(LOG_TAG, "package clicked = " + packageName);
-//                            Log.e(LOG_TAG, "ori id = " + tem.getId());
-//                            tem.setId(tem.getId() - 1);
-//
-//                        }
+
                         for (int i = 0; i < results.size(); i++) {
                             Log.e(LOG_TAG, "id = " + results.get(i).getId());
                             if (results.get(i).getId() >= removeId) {
@@ -85,8 +80,6 @@ public class PinAppDialogFragment extends DialogFragment {
                                 int oldId = shortcut.getId();
                                 shortcut.setId(oldId - 1);
                             }
-
-//                            results.get(i).setId(results.get(i).getId() - 1);
                         }
                         pinRealm.commitTransaction();
                     } else {
