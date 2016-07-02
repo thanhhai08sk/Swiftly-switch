@@ -46,7 +46,7 @@ public class PinRecentAddActionDialogFragment extends DialogFragment{
                 .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
-        stringArray = getActivity().getResources().getStringArray(R.array.setting_shortcut_array);
+        stringArray = getActivity().getResources().getStringArray(R.array.setting_shortcut_array_no_folder);
         mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
         mAdapter = new PinRecentAddActionAdapter(getActivity(), myRealm);
         mListView.setAdapter(mAdapter);
@@ -78,6 +78,10 @@ public class PinRecentAddActionDialogFragment extends DialogFragment{
                         }
                         myRealm.commitTransaction();
                     } else {
+//                        if (stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_folder))) {
+//                            checkBox.setChecked(false);
+//                            Toast.makeText(getContext(), getString(R.string.out_of_limit), Toast.LENGTH_SHORT).show();
+//                        }
                         if (size < 6) {
                             Shortcut newShortcut = new Shortcut();
                             newShortcut.setId(size);

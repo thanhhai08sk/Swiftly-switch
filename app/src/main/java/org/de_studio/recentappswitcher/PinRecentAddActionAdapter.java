@@ -25,7 +25,7 @@ public class PinRecentAddActionAdapter extends BaseAdapter{
         super();
         this.mContext = mContext;
         myRealm = realm;
-        stringArray = mContext.getResources().getStringArray(R.array.setting_shortcut_array);
+        stringArray = mContext.getResources().getStringArray(R.array.setting_shortcut_array_no_folder);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class PinRecentAddActionAdapter extends BaseAdapter{
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_none))) {
             icon.setImageDrawable(null);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_folder))) {
-            icon.setImageResource(R.drawable.ic_contact);
+            icon.setImageResource(R.drawable.ic_folder);
         }
 
         return returnView;

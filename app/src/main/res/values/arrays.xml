@@ -32,6 +32,22 @@
         <item>@string/setting_shortcut_contact</item>
         <item>@string/setting_shortcut_call_log</item>
     </string-array>
+    <string-array name="setting_shortcut_array_no_folder">
+        <item>@string/setting_shortcut_wifi</item>
+        <item>@string/setting_shortcut_bluetooth</item>
+        <item>@string/setting_shortcut_rotation</item>
+        <item>@string/setting_shortcut_volume</item>
+        <item>@string/setting_shortcut_brightness</item>
+        <item>@string/setting_shortcut_ringer_mode</item>
+        <item>@string/setting_shortcut_home</item>
+        <item>@string/setting_shortcut_back</item>
+        <item>@string/setting_shortcut_recent</item>
+        <item>@string/setting_shortcut_noti</item>
+        <item>@string/setting_shortcut_last_app</item>
+        <item>@string/setting_shortcut_dial</item>
+        <item>@string/setting_shortcut_contact</item>
+        <item>@string/setting_shortcut_call_log</item>
+    </string-array>
     <string-array name="grid_row">
         <item>@string/grid_1_row</item>
         <item>@string/grid_2_row</item>
