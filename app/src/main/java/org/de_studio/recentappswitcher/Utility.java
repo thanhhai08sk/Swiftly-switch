@@ -982,7 +982,7 @@ public  class Utility {
             case MainActivity.ACTION_INSTANT_FAVO:
                 return context.getString(R.string.setting_shortcut_instant_favorite);
         }
-        return context.getString(R.string.setting_shortcut_none);
+        return "";
     }
 
     public static void homeAction(Context context, View v,String className, String packageName) {
@@ -1711,7 +1711,11 @@ public  class Utility {
                 action = sharedPreferences.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
                 break;
         }
-        label.setText(getLabelForOuterSetting(context,action));
+        if (action.equalsIgnoreCase(MainActivity.ACTION_NONE)) {
+            label.setText("");
+        } else {
+            label.setText(getLabelForOuterSetting(context,action));
+        }
         switch (action) {
             case MainActivity.ACTION_WIFI:
                 if (getWifiState(context)) {
