@@ -653,7 +653,7 @@ public class EdgeGestureService extends Service {
 
                             if (tempPackageName.size() < 6 && savedRecentShortcut !=null) {
                                 for (int i = 0; i < savedRecentShortcut.length; i++) {
-                                    if (!tempPackageName.contains(savedRecentShortcut[i]) && tempPackageName.size() < 6) {
+                                    if (!tempPackageName.contains(savedRecentShortcut[i].getPackageName()) && tempPackageName.size() < 6) {
                                         tempPackageName.add(savedRecentShortcut[i].getPackageName());
                                     }
                                 }
@@ -674,11 +674,14 @@ public class EdgeGestureService extends Service {
                             if (tempPackageName.size() >= 1) {
                                 lastAppPackageName = tempPackageName.get(0);
                             }
+                            Log.e(TAG, "onTouch: tem size =" + tempPackageName.size());
                             for (Shortcut t : pinnedSet) {
                                 if (tempPackageName.contains(t.getPackageName())) {
+                                    Log.e(TAG, "onTouch: remove tempPackageName =" + t.getPackageName());
                                     tempPackageName.remove(t.getPackageName());
                                 }
                             }
+                            Log.e(TAG, "onTouch: tem size =" + tempPackageName.size());
                             if (6 - tempPackageName.size() - pinnedShortcut.length > 0) {
                                 recentShortcut = new Shortcut[tempPackageName.size() + pinnedShortcut.length];
                             } else {

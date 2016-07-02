@@ -1780,8 +1780,6 @@ public  class Utility {
             case MainActivity.ACTION_NONE:
                 imageView.setImageDrawable(null);
         }
-
-
     }
 
     public static Drawable getDrawableForAction(Context context, int action) {
