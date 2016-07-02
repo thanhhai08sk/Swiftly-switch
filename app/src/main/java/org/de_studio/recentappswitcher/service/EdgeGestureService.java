@@ -565,17 +565,18 @@ public class EdgeGestureService extends Service {
                             if (i >= recentShortcut.length) {
                                 iconImageArrayList.get(i).setImageDrawable(null);
                             } else {
-                                try {
-                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(recentShortcut[i].getPackageName());
-                                    if (iconPack != null) {
-                                        iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(recentShortcut[i].getPackageName(), defaultDrawable));
-                                    } else {
-                                        iconImageArrayList.get(i).setImageDrawable(defaultDrawable);
-
-                                    }
-                                } catch (PackageManager.NameNotFoundException e) {
-                                    Log.e(TAG, "NameNotFound" + e);
-                                }
+                                Utility.setImageForShortcut(recentShortcut[i],getPackageManager(),iconImageArrayList.get(i),getApplicationContext(),iconPack,null,true);
+//                                try {
+//                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(recentShortcut[i].getPackageName());
+//                                    if (iconPack != null) {
+//                                        iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(recentShortcut[i].getPackageName(), defaultDrawable));
+//                                    } else {
+//                                        iconImageArrayList.get(i).setImageDrawable(defaultDrawable);
+//
+//                                    }
+//                                } catch (PackageManager.NameNotFoundException e) {
+//                                    Log.e(TAG, "NameNotFound" + e);
+//                                }
                             }
                         }
                     }
@@ -723,17 +724,18 @@ public class EdgeGestureService extends Service {
                             if (i >= recentShortcut.length) {
                                 iconImageArrayList.get(i).setImageDrawable(null);
                             } else {
-                                try {
-                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(recentShortcut[i].getPackageName());
-                                    if (iconPack != null) {
-                                        iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(recentShortcut[i].getPackageName(), defaultDrawable));
-                                    } else {
-                                        iconImageArrayList.get(i).setImageDrawable(defaultDrawable);
-
-                                    }
-                                } catch (PackageManager.NameNotFoundException e) {
-                                    Log.e(TAG, "NameNotFound" + e);
-                                }
+                                Utility.setImageForShortcut(recentShortcut[i],getPackageManager(),iconImageArrayList.get(i),getApplicationContext(),iconPack,null,true);
+//                                try {
+//                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(recentShortcut[i].getPackageName());
+//                                    if (iconPack != null) {
+//                                        iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(recentShortcut[i].getPackageName(), defaultDrawable));
+//                                    } else {
+//                                        iconImageArrayList.get(i).setImageDrawable(defaultDrawable);
+//
+//                                    }
+//                                } catch (PackageManager.NameNotFoundException e) {
+//                                    Log.e(TAG, "NameNotFound" + e);
+//                                }
                             }
                         }
 
