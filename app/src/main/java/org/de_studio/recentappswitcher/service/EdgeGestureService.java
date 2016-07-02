@@ -1446,12 +1446,9 @@ public class EdgeGestureService extends Service {
                 TextView label = (TextView) indicator.findViewById(R.id.indicator_label);
                 if (activateId - 20 >= 0 && activateId - 20 < 6) {
                     if (activateId - 20 < recentShortcut.length) {
+                        Shortcut shortcut = recentShortcut[activateId- 20];
                         icon.setImageDrawable(iconImageArrayList.get(activateId - 20).getDrawable());
-                        try {
-                            label.setText(getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(recentShortcut[activateId - 20].getPackageName(), 0)));
-                        } catch (PackageManager.NameNotFoundException e) {
-                            Log.e(TAG, "Namenotfound when setIndicator");
-                        }
+                        label.setText(Utility.getLabelForShortcut(getApplicationContext(),shortcut));
                     } else {
                         icon.setImageDrawable(null);
                         label.setText(null);

@@ -2247,6 +2247,23 @@ public  class Utility {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
     }
 
+    public static String getLabelForShortcut(Context context, Shortcut shortcut) {
+        if (shortcut != null) {
+            if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
+                return shortcut.getName();
+            } else if (shortcut.getType() == Shortcut.TYPE_APP) {
+                try {
+                    return(String) context.getPackageManager().getApplicationLabel(context.getPackageManager().getApplicationInfo(shortcut.getPackageName(), 0));
+                } catch (PackageManager.NameNotFoundException e) {
+                    return "";
+                }
+            } else if (shortcut.getAction() != Shortcut.ACTION_NONE) {
+                return shortcut.getLabel();
+            } else return "";
+
+        } else return "";
+    }
+
 
 
 
