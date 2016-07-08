@@ -300,7 +300,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp"
-                android:text="@string/main_pin_app"
+                android:text="@string/pin_shortcuts_to_recent"
                 android:textSize="20dp"
                 app:layout_column="0"
                 app:layout_columnWeight="1"

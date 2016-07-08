@@ -187,6 +187,7 @@
     <string name="go_to_setting">Go to setting</string>
     <string name="shortcut">Shortcuts</string>
     <string name="vote_now">Vote now</string>
+    <string name="pin_shortcuts_to_recent">Pin shortcuts to recent</string>
 
 
 </resources>
