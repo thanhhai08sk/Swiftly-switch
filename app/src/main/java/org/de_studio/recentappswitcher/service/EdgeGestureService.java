@@ -1886,12 +1886,14 @@ public class EdgeGestureService extends Service {
     public final synchronized void removeAll() {
         Log.e(TAG, "remove all view");
         try {
+            edge1Image.setOnTouchListener(null);
             windowManager.removeView(edge1Image);
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, " Null when remove edge1Image");
         }
         try {
+            edge2Image.setOnTouchListener(null);
             windowManager.removeView(edge2Image);
         } catch (Exception e) {
             e.printStackTrace();
