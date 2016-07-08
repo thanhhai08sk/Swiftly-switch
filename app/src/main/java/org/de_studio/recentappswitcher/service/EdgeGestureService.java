@@ -513,21 +513,28 @@ public class EdgeGestureService extends Service {
                             numOfTask = 8;
                         } else numOfTask = 7;
                         List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
-                        ArrayList<String> tempPackageName = new ArrayList<String>();
+                        ArrayList<String> tempPackageNameKK = new ArrayList<String>();
                         for (int i = 0; i < list.size(); i++) {
                             ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                             ComponentName componentName = taskInfo.baseActivity;
                             String packName = componentName.getPackageName();
                             if (i != 0 && !packName.equals(launcherPackagename) && !excludeSet.contains(packName) && !packName.contains("launcher") && !pinnedSet.contains(packName)) {
-                                tempPackageName.add(packName);
+                                tempPackageNameKK.add(packName);
                             }
                         }
 
-                        if (tempPackageName.size() >= 1) {
-                            lastAppPackageName = tempPackageName.get(0);
+                        if (tempPackageNameKK.size() >= 1) {
+                            lastAppPackageName = tempPackageNameKK.get(0);
                         }
-                        if (6 - tempPackageName.size() - pinnedShortcut.length > 0) {
-                            recentShortcut = new Shortcut[tempPackageName.size() + pinnedShortcut.length];
+
+                        for (Shortcut t : pinnedSet) {
+                            if (tempPackageNameKK.contains(t.getPackageName())) {
+                                tempPackageNameKK.remove(t.getPackageName());
+                            }
+                        }
+
+                        if (6 - tempPackageNameKK.size() - pinnedShortcut.length > 0) {
+                            recentShortcut = new Shortcut[tempPackageNameKK.size() + pinnedShortcut.length];
                         } else {
                             recentShortcut = new Shortcut[6];
                         }
@@ -540,7 +547,7 @@ public class EdgeGestureService extends Service {
                                 } else {
                                     tempShortcut = new Shortcut();
                                     tempShortcut.setType(Shortcut.TYPE_APP);
-                                    tempShortcut.setPackageName(tempPackageName.get(t - pinnedShortcut.length));
+                                    tempShortcut.setPackageName(tempPackageNameKK.get(t - pinnedShortcut.length));
                                     recentShortcut[t] = tempShortcut;
                                 }
 
@@ -551,7 +558,7 @@ public class EdgeGestureService extends Service {
                                 if (t + pinnedShortcut.length < recentShortcut.length) {
                                     tempShortcut = new Shortcut();
                                     tempShortcut.setType(Shortcut.TYPE_APP);
-                                    tempShortcut.setPackageName(tempPackageName.get(t));
+                                    tempShortcut.setPackageName(tempPackageNameKK.get(t));
                                     recentShortcut[t] = tempShortcut;
                                 } else {
                                     recentShortcut[t] = pinnedShortcut[n];
@@ -674,14 +681,11 @@ public class EdgeGestureService extends Service {
                             if (tempPackageName.size() >= 1) {
                                 lastAppPackageName = tempPackageName.get(0);
                             }
-                            Log.e(TAG, "onTouch: tem size =" + tempPackageName.size());
                             for (Shortcut t : pinnedSet) {
                                 if (tempPackageName.contains(t.getPackageName())) {
-                                    Log.e(TAG, "onTouch: remove tempPackageName =" + t.getPackageName());
                                     tempPackageName.remove(t.getPackageName());
                                 }
                             }
-                            Log.e(TAG, "onTouch: tem size =" + tempPackageName.size());
                             if (6 - tempPackageName.size() - pinnedShortcut.length > 0) {
                                 recentShortcut = new Shortcut[tempPackageName.size() + pinnedShortcut.length];
                             } else {
@@ -1696,10 +1700,20 @@ public class EdgeGestureService extends Service {
             removeEdgeImage();
         } else {
             if (isEdge1On && edge1Image !=null && !edge1Image.isAttachedToWindow()) {
-                windowManager.addView(edge1Image,paramsEdge1);
+                try {
+                    windowManager.addView(edge1Image,paramsEdge1);
+                } catch (IllegalStateException e) {
+                    Log.e(TAG, "onConfigurationChanged: fail when add edge1Image");
+                }
+
             }
             if (isEdge2On && edge2Image !=null && !edge2Image.isAttachedToWindow()) {
-                windowManager.addView(edge2Image,paramsEdge2);
+                try {
+                    windowManager.addView(edge2Image,paramsEdge2);
+                } catch (IllegalStateException e) {
+                    Log.e(TAG, "onConfigurationChanged: fail when add edge2Image");
+                }
+
             }
         }
         Log.e(TAG, "onConfigurationChanged: ");
@@ -1782,6 +1796,8 @@ public class EdgeGestureService extends Service {
                 .schemaVersion(CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
+
+        RealmResults<Shortcut> results = pinAppRealm.where(Shortcut.class).findAll();
         backgroundColor = defaultShared.getInt(EdgeSetting.BACKGROUND_COLOR_KEY, 1879048192);
 //        guideColor = defaultShared.getInt(EdgeSetting.GUIDE_COLOR_KEY,16728193);
         guideColor = defaultShared.getInt(EdgeSetting.GUIDE_COLOR_KEY, Color.argb(255, 255, 64, 129));

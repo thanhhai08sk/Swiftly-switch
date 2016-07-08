@@ -680,6 +680,16 @@ public  class Utility {
             }
         }
 
+
+
+//        Intent i = new Intent(Intent.ACTION_MAIN, null);
+//        i.addCategory(Intent.CATEGORY_LAUNCHER);
+//
+//        List<ResolveInfo> availableActivities = packageManager.queryIntentActivities(i, 0);
+//        for(ResolveInfo ri:availableActivities){
+//
+//        }
+
         return filteredPackages;
     }
 
