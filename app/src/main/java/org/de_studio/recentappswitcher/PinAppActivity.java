@@ -1,10 +1,14 @@
 package org.de_studio.recentappswitcher;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +28,8 @@ public class PinAppActivity extends AppCompatActivity {
     private PinAppAdapter adapter;
     private MenuItem spinnerMenu;
     private SharedPreferences sharedPreferences;
+    private static final int MY_PERMISSIONS_REQUEST = 22;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +81,16 @@ public class PinAppActivity extends AppCompatActivity {
                                     newFragment1.show(fragmentManager1, "pinAction");
                                     break;
                                 case 2:
-                                    FragmentManager fragmentManager2 = getSupportFragmentManager();
-                                    PinRecentAddContactDialogFragment newFragment2 = new PinRecentAddContactDialogFragment();
-                                    newFragment2.show(fragmentManager2, "pinContact");
+                                    if (Utility.checkContactPermission(getApplicationContext())) {
+                                        FragmentManager fragmentManager2 = getSupportFragmentManager();
+                                        PinRecentAddContactDialogFragment newFragment2 = new PinRecentAddContactDialogFragment();
+                                        newFragment2.show(fragmentManager2, "pinContact");
+                                    } else {
+                                        ActivityCompat.requestPermissions(PinAppActivity.this,
+                                                new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE},
+                                                MY_PERMISSIONS_REQUEST);
+                                    }
+
                                     break;
                                 case 3:
                                     FragmentManager fragmentManager3 = getSupportFragmentManager();
@@ -87,7 +100,8 @@ public class PinAppActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    builder.create().show();
+                    dialog = builder.create();
+                    dialog.show();
                 }
             });
         }
@@ -133,5 +147,17 @@ public class PinAppActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    dialog.show();
+                }
+            }
+        }
     }
 }

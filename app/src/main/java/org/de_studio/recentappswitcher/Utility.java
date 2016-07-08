@@ -2276,6 +2276,10 @@ public  class Utility {
         } else return "";
     }
 
+    public static boolean checkContactPermission(Context context) {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
+    }
+
 
 
 
