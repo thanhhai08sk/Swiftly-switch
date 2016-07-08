@@ -462,8 +462,6 @@ public class EdgeGestureService extends Service {
                     folderShown = false;
                     removeAllExceptEdgeView();
                     onInstantFavo = false;
-//                    startDown = System.currentTimeMillis();
-//                    Log.e(TAG, "Start action down at " + startDown);
                     switch (position / 10) {
                         case 1:
                             x_init_cord = (int) (x_cord - 10 * mScale);
@@ -482,9 +480,6 @@ public class EdgeGestureService extends Service {
                     Utility.setIconPositionNew(iconImageList, icon_distance_pxl, icon_24dp_in_pxls * mIconScale, position, x_init_cord, y_init_cord, 6, defaultShared.getBoolean(EdgeSetting.ANIMATION_KEY, false), animationTime);
                     excludeSet = sharedPreferences_exclude.getStringSet(EdgeSetting.EXCLUDE_KEY, new HashSet<String>());
 
-//                    Log.e(TAG, "foreGroundApp is " + Utility.getForegroundApp(getApplicationContext()));
-//                    if (!backgroundFrame.isAttachedToWindow() && (position == edge1Position || position == edge2Position)) {
-//                    if (!backgroundFrame.isAttachedToWindow() && (defaultShared.getInt(EdgeSetting.SERVICE_ID,10) == serviceId )) {
                     if (defaultShared.getBoolean(EdgeSetting.ANIMATION_KEY, false)) {
                         backgroundFrame.setAlpha(0f);
                         windowManager.addView(backgroundFrame, backgroundParams);
@@ -501,10 +496,8 @@ public class EdgeGestureService extends Service {
                         vibrator.vibrate(vibrationDuration);
                     }
                     isClockShown = false;
-                    if (isFreeVersion) {
-                        isOutOfTrial = System.currentTimeMillis() - defaultShared.getLong(EdgeSetting.BEGIN_DAY_KEY, System.currentTimeMillis())
-                                > MainActivity.trialTime;
-                    } else isOutOfTrial = false;
+                    isOutOfTrial = isFreeVersion && System.currentTimeMillis() - defaultShared.getLong(EdgeSetting.BEGIN_DAY_KEY, System.currentTimeMillis()) > MainActivity.trialTime;
+
                     switched = isOnlyFavorite;
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -572,7 +565,7 @@ public class EdgeGestureService extends Service {
                             if (i >= recentShortcut.length) {
                                 iconImageArrayList.get(i).setImageDrawable(null);
                             } else {
-                                Utility.setImageForShortcut(recentShortcut[i],getPackageManager(),iconImageArrayList.get(i),getApplicationContext(),iconPack,null,true);
+                                Utility.setImageForShortcut(recentShortcut[i], getPackageManager(), iconImageArrayList.get(i), getApplicationContext(), iconPack, null, true);
 //                                try {
 //                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(recentShortcut[i].getPackageName());
 //                                    if (iconPack != null) {
@@ -658,7 +651,7 @@ public class EdgeGestureService extends Service {
                                 }
                             }
 
-                            if (tempPackageName.size() < 6 && savedRecentShortcut !=null) {
+                            if (tempPackageName.size() < 6 && savedRecentShortcut != null) {
                                 for (int i = 0; i < savedRecentShortcut.length; i++) {
                                     if (!tempPackageName.contains(savedRecentShortcut[i].getPackageName()) && tempPackageName.size() < 6) {
                                         tempPackageName.add(savedRecentShortcut[i].getPackageName());
@@ -666,7 +659,6 @@ public class EdgeGestureService extends Service {
                                 }
 
                             }
-
 
 
 //                            if (hasKeyInFuture) {
@@ -731,7 +723,7 @@ public class EdgeGestureService extends Service {
                             if (i >= recentShortcut.length) {
                                 iconImageArrayList.get(i).setImageDrawable(null);
                             } else {
-                                Utility.setImageForShortcut(recentShortcut[i],getPackageManager(),iconImageArrayList.get(i),getApplicationContext(),iconPack,null,true);
+                                Utility.setImageForShortcut(recentShortcut[i], getPackageManager(), iconImageArrayList.get(i), getApplicationContext(), iconPack, null, true);
 //                                try {
 //                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(recentShortcut[i].getPackageName());
 //                                    if (iconPack != null) {
@@ -835,21 +827,21 @@ public class EdgeGestureService extends Service {
 
 
                     if (recentShortcut != null && recentShortcut.length == 0) {
-                            delayToSwitchTask = new DelayToSwitchTask();
-                            if (mode == 3) {
-                                numOfIcon = iconImageArrayList.size();
-                                x = new int[numOfIcon];
-                                y = new int[numOfIcon];
-                                try {
-                                    windowManager.addView(itemView, itemViewParameter);
-                                } catch (IllegalStateException e) {
-                                    Log.e(TAG, " item_view has already been added to the window manager");
-                                }
-                                delayToSwitchTask.switchToCircleShortcut();
-                                Log.e(TAG,"Switch to circle favorite");
-                            } else {
-                                delayToSwitchTask.switchToShortcut();
+                        delayToSwitchTask = new DelayToSwitchTask();
+                        if (mode == 3) {
+                            numOfIcon = iconImageArrayList.size();
+                            x = new int[numOfIcon];
+                            y = new int[numOfIcon];
+                            try {
+                                windowManager.addView(itemView, itemViewParameter);
+                            } catch (IllegalStateException e) {
+                                Log.e(TAG, " item_view has already been added to the window manager");
                             }
+                            delayToSwitchTask.switchToCircleShortcut();
+                            Log.e(TAG, "Switch to circle favorite");
+                        } else {
+                            delayToSwitchTask.switchToShortcut();
+                        }
 //                        } else if (delayToSwitchTask.isCancelled()) {
 //                            delayToSwitchTask = new DelayToSwitchTask();
 //                            delayToSwitchTask.switchToShortcut();
@@ -888,7 +880,7 @@ public class EdgeGestureService extends Service {
                     if (switched) {
                         int shortcutToSwitch;
                         Shortcut shortcut;
-                        if (mode == 3 && !onInstantFavo ) {
+                        if (mode == 3 && !onInstantFavo) {
                             shortcutToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
                             shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
                             int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
@@ -919,14 +911,14 @@ public class EdgeGestureService extends Service {
                                 shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap, false);
                                 shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
                             } else {
-                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord,folderCoor[0] , folderCoor[1], (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, folderCoor[2], folderCoor[3], 5, true);
-                                shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", (folderCoor[4]+1)*1000 + shortcutToSwitch ).findFirst();
+                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, folderCoor[0], folderCoor[1], (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, folderCoor[2], folderCoor[3], 5, true);
+                                shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", (folderCoor[4] + 1) * 1000 + shortcutToSwitch).findFirst();
                             }
 
                         }
                         if (shortcut != null) {
-                            Utility.startShortcut(getApplicationContext(),shortcut,v,getClass().getName(),getPackageName(),lastAppPackageName, defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 0));
-                        } else if (shortcutToSwitch >=0 && !folderShown) {
+                            Utility.startShortcut(getApplicationContext(), shortcut, v, getClass().getName(), getPackageName(), lastAppPackageName, defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 0));
+                        } else if (shortcutToSwitch >= 0 && !folderShown) {
                             Toast.makeText(getApplicationContext(), getString(R.string.please_add_favorite_item), Toast.LENGTH_LONG).show();
                             if (onInstantFavo) {
                                 showAddFavoriteDialog(1);
@@ -941,7 +933,7 @@ public class EdgeGestureService extends Service {
                         if (packageToSwitch != -1) {
                             Intent extApp = null;
                             if (packageToSwitch < recentShortcut.length) {
-                                Utility.startShortcut(getApplicationContext(),recentShortcut[packageToSwitch],v,getClass().getName(),getPackageName(),lastAppPackageName,defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 0));
+                                Utility.startShortcut(getApplicationContext(), recentShortcut[packageToSwitch], v, getClass().getName(), getPackageName(), lastAppPackageName, defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 0));
 //                                extApp = getPackageManager().getLaunchIntentForPackage(recentShortcut[packageToSwitch].getPackageName());
                             }
 
@@ -1019,23 +1011,23 @@ public class EdgeGestureService extends Service {
                     }
                     if (switched) {
                         final int shortcutToSwitch;
-                        if (mode == 3 && ! onInstantFavo) {
-                                if (iconIdBackgrounded == -2) {
-                                    for (int i = 0; i < numOfIcon; i++) {
-                                        if (x == null) {
-                                            x = new int[numOfIcon];
-                                        }
-                                        if (y == null) {
-                                            y = new int[numOfIcon];
-                                        }
-                                        x[i] = (int) iconImageArrayList.get(i).getX();
-                                        y[i] = (int) iconImageArrayList.get(i).getY();
+                        if (mode == 3 && !onInstantFavo) {
+                            if (iconIdBackgrounded == -2) {
+                                for (int i = 0; i < numOfIcon; i++) {
+                                    if (x == null) {
+                                        x = new int[numOfIcon];
                                     }
+                                    if (y == null) {
+                                        y = new int[numOfIcon];
+                                    }
+                                    x[i] = (int) iconImageArrayList.get(i).getX();
+                                    y[i] = (int) iconImageArrayList.get(i).getY();
                                 }
+                            }
 
                             shortcutToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
                             int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
-                            if ((moveToHomeBackNoti != 0 | shortcutToSwitch != -1)&& !iconImageArrayList.get(0).isOnAnimation()) {
+                            if ((moveToHomeBackNoti != 0 | shortcutToSwitch != -1) && !iconImageArrayList.get(0).isOnAnimation()) {
                                 if (shortcutToSwitch != -1) {
                                     activateId = shortcutToSwitch + 1000;
                                 } else {
@@ -1074,7 +1066,7 @@ public class EdgeGestureService extends Service {
                             }
                             if (moveToHomeBackNoti != -1) {
                                 setQuicActionView(moveToHomeBackNoti);
-                                if (useInstantFavo && moveToHomeBackNoti > 0 && instantFavoAction[moveToHomeBackNoti -1] == 1 ) {
+                                if (useInstantFavo && moveToHomeBackNoti > 0 && instantFavoAction[moveToHomeBackNoti - 1] == 1) {
                                     delayToSwitchTask = new DelayToSwitchTask();
                                     onInstantFavo = true;
                                     delayToSwitchTask.switchToShortcut();
@@ -1084,15 +1076,16 @@ public class EdgeGestureService extends Service {
 
                         } else {
                             if (!folderShown) {
-                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap,false);
+                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap, false);
                                 if (shortcutToSwitch != -1) {
                                     Shortcut shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
                                     if (shortcut != null && shortcut.getType() == Shortcut.TYPE_FOLDER && !folderShown && !onFolderAnimator) {
                                         positionOfFolder = shortcutToSwitch;
-                                        folderAdapter = new FolderAdapter(getApplicationContext(),shortcutToSwitch);
+                                        folderAdapter = new FolderAdapter(getApplicationContext(), shortcutToSwitch);
                                         folderAnimator = shortcutGridView.animate().setDuration(holdTime + 200).alpha(0f).setListener(new Animator.AnimatorListener() {
                                             boolean isCancel = false;
                                             CircleAngleAnimation angleAnimation;
+
                                             @Override
                                             public void onAnimationStart(Animator animation) {
                                                 onFolderAnimator = true;
@@ -1107,7 +1100,7 @@ public class EdgeGestureService extends Service {
                                             @Override
                                             public void onAnimationEnd(Animator animation) {
                                                 if (!isCancel) {
-                                                    folderCoor = Utility.showFolder(getApplicationContext(), shortcutGridView, windowManager, favoriteRealm, defaultShared, shortcutToSwitch, mScale, mIconScale,folderAdapter);
+                                                    folderCoor = Utility.showFolder(getApplicationContext(), shortcutGridView, windowManager, favoriteRealm, defaultShared, shortcutToSwitch, mScale, mIconScale, folderAdapter);
                                                     onFolderAnimator = false;
                                                     Log.e(TAG, "onAnimation end");
                                                     folderShown = true;
@@ -1165,7 +1158,7 @@ public class EdgeGestureService extends Service {
                                 }
                             } else {
 
-                                if (!onFolderAnimator && folderCoor !=null) {
+                                if (!onFolderAnimator && folderCoor != null) {
                                     shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, folderCoor[0], folderCoor[1], (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, folderCoor[2], folderCoor[3], 5, true);
                                     if (shortcutToSwitch != -1) {
                                         activateId = shortcutToSwitch + 3000;
@@ -1285,7 +1278,7 @@ public class EdgeGestureService extends Service {
 //                            hasOneActive = false;
 //                        }
                         setQuicActionView(moveToHomeBackNoti);
-                        if (useInstantFavo && moveToHomeBackNoti > 0 && instantFavoAction[moveToHomeBackNoti -1] == 1 ) {
+                        if (useInstantFavo && moveToHomeBackNoti > 0 && instantFavoAction[moveToHomeBackNoti - 1] == 1) {
                             delayToSwitchTask = new DelayToSwitchTask();
                             onInstantFavo = true;
                             delayToSwitchTask.switchToShortcut();
