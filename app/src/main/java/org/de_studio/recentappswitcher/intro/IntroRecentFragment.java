@@ -6,13 +6,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import org.de_studio.recentappswitcher.R;
@@ -51,7 +49,9 @@ public class IntroRecentFragment extends Fragment {
                 p.cancel();
             }
         }
-        hand.setAlpha(1f);
+        if (hand != null) {
+            hand.setAlpha(1f);
+        }
         imageX = introImage.getX();
         imageY = introImage.getY();
         imageHeight = introImage.getHeight();
