@@ -38,7 +38,7 @@ import org.de_studio.recentappswitcher.service.EdgeSetting;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
-    private static final int VERSION_NUMBER = 60;
+    private static final int VERSION_NUMBER = 61;
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final String EDGE_1_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_2_shared_preference";
@@ -562,6 +562,9 @@ public class MainActivity extends Activity {
     private void showWhatNew() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         int titleSize = getResources().getDimensionPixelSize(R.dimen.what_new_title_size);
+        String title2_2_13 = "Version 2.2.13";
+        String text2_2_13 = " - App on sale 50%" +
+                "\n - Fix minor bugs";
         String title2_2_12 = "Version 2.2.12";
         String text2_2_12 = " - Fix bugs" +
                 "\n - Support Portuguese" +
@@ -582,6 +585,11 @@ public class MainActivity extends Activity {
                 "\n - Support folder" +
                 "\n - Indicator" +
                 "\n - Change the default setting for Quick Action";
+
+        SpannableString span2_2_13 = new SpannableString(title2_2_13);
+        span2_2_13.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_13.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+
         SpannableString span2_2_11_1 = new SpannableString(title2_2_12);
         span2_2_11_1.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_12.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
@@ -596,7 +604,7 @@ public class MainActivity extends Activity {
         SpannableString span2_2_8 = new SpannableString(title2_2_8);
         span2_2_8.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_8.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
-        CharSequence finalText = TextUtils.concat(span2_2_11_1,"\n\n",text2_2_12, "\n\n",span2_2_11,"\n\n",text2_2_11, "\n\n",span2_2_10,"\n\n",text2_2_10, "\n\n",span2_2_9,"\n\n",text2_2_9,"\n\n",span2_2_8,"\n\n",text2_2_8
+        CharSequence finalText = TextUtils.concat(span2_2_13,"\n\n",text2_2_13, "\n\n",span2_2_11_1,"\n\n",text2_2_12, "\n\n",span2_2_11,"\n\n",text2_2_11, "\n\n",span2_2_10,"\n\n",text2_2_10, "\n\n",span2_2_9,"\n\n",text2_2_9,"\n\n",span2_2_8,"\n\n",text2_2_8
                 );
         builder.setTitle(R.string.what_new)
                 .setMessage(finalText)
