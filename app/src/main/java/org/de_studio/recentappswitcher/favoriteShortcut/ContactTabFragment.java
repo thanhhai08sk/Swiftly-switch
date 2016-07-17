@@ -204,9 +204,8 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (!mAdapter.getCursor().isClosed()) {
-            mAdapter.swapCursor(data);
-        }
+        mAdapter.swapCursor(data);
+
     }
 
     @Override

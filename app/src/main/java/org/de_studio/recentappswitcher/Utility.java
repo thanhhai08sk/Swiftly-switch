@@ -37,6 +37,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
@@ -2009,7 +2010,9 @@ public  class Utility {
 
                     } else {
                         BitmapFactory.Options options = new BitmapFactory.Options();
-                        drawable =  resources.getDrawable(shortcut.getResId(), null);
+//                        drawable =  resources.getDrawable(shortcut.getResId(), null);
+                        Log.e(TAG, "getFolderThumbnail: resourcesCompat");
+                        drawable = ResourcesCompat.getDrawable(resources, shortcut.getResId(), null);
 //                        options.inMutable = true;
 //                        bmp =BitmapFactory.decodeResource(resources,shortcut.getResId(), options);
 //                        Log.e(TAG, "getFolderThumbnail: resource");
