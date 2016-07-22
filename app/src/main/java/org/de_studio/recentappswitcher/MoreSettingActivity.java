@@ -59,7 +59,7 @@ public class MoreSettingActivity extends AppCompatActivity {
         SwitchCompat disableAnimationSwitch = (SwitchCompat) findViewById(R.id.main_disable_animation_switch);
         SwitchCompat holdTimeSwitch = (SwitchCompat) findViewById(R.id.main_hold_time_switch);
         SwitchCompat avoidKeyboardSwitch = (SwitchCompat) findViewById(R.id.main_avoid_keyboard_switch);
-        ImageButton avoidKeyboardSettingButton = (ImageButton) findViewById(R.id.main_avoid_keyboard_image_button);
+//        ImageButton avoidKeyboardSettingButton = (ImageButton) findViewById(R.id.main_avoid_keyboard_image_button);
 
         hapticFeedbackOnItemSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.HAPTIC_ON_ICON_KEY,false));
         hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferencesDefautl.getBoolean(EdgeSetting.DISABLE_HAPTIC_FEEDBACK_KEY,true));
@@ -132,26 +132,26 @@ public class MoreSettingActivity extends AppCompatActivity {
             });
         }
 
-        if (avoidKeyboardSettingButton != null) {
-            avoidKeyboardSettingButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int current = sharedPreferencesDefautl.getInt(EdgeSetting.AVOID_KEYBOARD_OPTION_KEY, EdgeSetting.OPTION_PLACE_UNDER);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MoreSettingActivity.this);
-                    builder.setTitle(R.string.avoid_keyboard).
-                            setSingleChoiceItems(R.array.avoid_keyboard_option, current, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    sharedPreferencesDefautl.edit().putInt(EdgeSetting.AVOID_KEYBOARD_OPTION_KEY, which).commit();
-                                    stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                                    startService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                                }
-                            }).
-                            setPositiveButton(R.string.app_tab_fragment_ok_button, null);
-                    builder.create().show();
-                }
-            });
-        }
+//        if (avoidKeyboardSettingButton != null) {
+//            avoidKeyboardSettingButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    int current = sharedPreferencesDefautl.getInt(EdgeSetting.AVOID_KEYBOARD_OPTION_KEY, EdgeSetting.OPTION_PLACE_UNDER);
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(MoreSettingActivity.this);
+//                    builder.setTitle(R.string.avoid_keyboard).
+//                            setSingleChoiceItems(R.array.avoid_keyboard_option, current, new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    sharedPreferencesDefautl.edit().putInt(EdgeSetting.AVOID_KEYBOARD_OPTION_KEY, which).commit();
+//                                    stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+//                                    startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+//                                }
+//                            }).
+//                            setPositiveButton(R.string.app_tab_fragment_ok_button, null);
+//                    builder.create().show();
+//                }
+//            });
+//        }
 
         hapticFeedbackOnTriggerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -188,6 +188,8 @@ public class MoreSettingActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.AVOID_KEYBOARD_KEY, isChecked).commit();
+                stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                startService(new Intent(getApplicationContext(), EdgeGestureService.class));
             }
         });
         holdTimeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

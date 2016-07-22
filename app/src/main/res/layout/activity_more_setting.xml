@@ -236,19 +236,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:checked="true"
-                    android:paddingRight="8dp"
                     android:id="@+id/main_avoid_keyboard_switch"
                     app:switchMinWidth="55dp"
                     />
-                <ImageButton
-                    android:id="@+id/main_avoid_keyboard_image_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:background="@color/transparent"
-                    android:paddingRight="10dp"
-                    android:tint="@color/grey"
-                    android:src="@drawable/ic_edit_white_24dp" />
+
 
 
             </android.support.v7.widget.GridLayout>
