@@ -2107,8 +2107,13 @@ public  class Utility {
         if (shortcut.getType() == Shortcut.TYPE_APP) {
             try {
                 Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
+                Drawable iconPackDrawable;
                 if (iconPack!=null) {
-                    imageView.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
+                    iconPackDrawable = iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable);
+                    if (iconPackDrawable == null) {
+                        iconPackDrawable = defaultDrawable;
+                    }
+                    imageView.setImageDrawable(iconPackDrawable);
                 } else {
                     imageView.setImageDrawable(defaultDrawable);
                 }
