@@ -38,6 +38,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -276,6 +277,7 @@ public class EdgeGestureService extends Service {
 //            paramsEdge1.horizontalMargin= 500;
 //            tempImageView = new ImageView(getApplicationContext());
 //            tempImageView.setBackgroundResource(R.color.colorAccent);
+            paramsEdge1.flags |=131072;
 
             if (isEdge1On && !(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false)) ) {
                 windowManager.addView(edge1Image, paramsEdge1);
@@ -322,12 +324,23 @@ public class EdgeGestureService extends Service {
             edge2ImageLayoutParams.height = edge2HeightPxl;
             edge2ImageLayoutParams.width = edge2WidthPxl;
             edge2Image.setLayoutParams(edge2ImageLayoutParams);
-            paramsEdge2 = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.TYPE_PHONE,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    PixelFormat.TRANSLUCENT);
+//            paramsEdge2 = new WindowManager.LayoutParams(
+//                    WindowManager.LayoutParams.WRAP_CONTENT,
+//                    WindowManager.LayoutParams.WRAP_CONTENT,
+//                    WindowManager.LayoutParams.TYPE_WALLPAPER,
+//                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+//                            | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
+//                            | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+//                            | WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
+//                    PixelFormat.TRANSLUCENT);
+
+            paramsEdge2 = new WindowManager.LayoutParams();
+            paramsEdge2.type = 2002;
+            paramsEdge2.gravity = 53;
+            paramsEdge2.flags = 40;
+            paramsEdge2.width = 1;
+            paramsEdge2.height = -1;
+            paramsEdge2.format = - 2;
             switch (edge2Position) {
                 case 10:
                     paramsEdge2.gravity = Gravity.TOP | Gravity.RIGHT;
@@ -361,8 +374,15 @@ public class EdgeGestureService extends Service {
             } else {
                 paramsEdge2.y = -(int) (edge2offset * mScale);
             }
+            paramsEdge2.flags |=131072;
             if (isEdge2On  && !(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false))) {
                 windowManager.addView(edge2Image, paramsEdge2);
+                edge2Image.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        Log.e(TAG, "onGlobalLayout: ");
+                    }
+                });
             } else {
                     removeView(edge2Image);
             }
@@ -595,7 +615,7 @@ public class EdgeGestureService extends Service {
                                 mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
                             }
                             Set<Long> setKey = mySortedMap.keySet();
-                            Log.e(TAG, "mySortedMap size = " + mySortedMap.size());
+                            Log.e(TAG, "mySortedMap size   = " + mySortedMap.size());
                             UsageStats usageStats;
                             String packa;
                             boolean isSystem = false;

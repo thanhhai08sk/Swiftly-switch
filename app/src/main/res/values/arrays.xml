@@ -104,4 +104,8 @@
         <item>@string/call</item>
         <item>@string/sms</item>
     </string-array>
+    <string-array name="avoid_keyboard_option">
+        <item>@string/avoid_keyboard_place_under</item>
+        <item>@string/avoid_keyboard_step_aside</item>
+    </string-array>
 </resources>

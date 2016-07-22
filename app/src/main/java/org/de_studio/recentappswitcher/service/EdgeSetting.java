@@ -31,6 +31,10 @@ import org.de_studio.recentappswitcher.Utility;
  */
 public class EdgeSetting extends DialogFragment {
     private static final String LOG_TAG = EdgeSetting.class.getSimpleName();
+    public static final String AVOID_KEYBOARD_KEY = "avoid_keyboard";
+    public static final String AVOID_KEYBOARD_OPTION_KEY = "avoid_keyboard_option";
+    public static final int OPTION_STEP_ASIDE = 1;
+    public static final int OPTION_PLACE_UNDER = 0;
     public static final String EDGE_POSITION_KEY = "position";
     public static final String EDGE_SENSIIVE_KEY = "sensitive";
     public static final String EDGE_LENGTH_KEY = "length";

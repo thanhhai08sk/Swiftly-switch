@@ -189,6 +189,9 @@
     <string name="vote_now">Vote now</string>
     <string name="pin_shortcuts_to_recent">Pin shortcuts to recent</string>
     <string name="sale_50">Pro -50%</string>
+    <string name="avoid_keyboard">Avoid keyboard</string>
+    <string name="avoid_keyboard_step_aside">Step aside keyboard</string>
+    <string name="avoid_keyboard_place_under">Place under keyboard</string>
 
 
 </resources>

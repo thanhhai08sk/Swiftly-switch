@@ -208,6 +208,57 @@
                 android:background="@color/grey"
                 />
 
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                app:rowCount="1"
+                app:columnCount="3"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:text="@string/avoid_keyboard"
+                    android:textSize="16sp"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="center_vertical"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:checked="true"
+                    android:paddingRight="8dp"
+                    android:id="@+id/main_avoid_keyboard_switch"
+                    app:switchMinWidth="55dp"
+                    />
+                <ImageButton
+                    android:id="@+id/main_avoid_keyboard_image_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:background="@color/transparent"
+                    android:paddingRight="10dp"
+                    android:tint="@color/grey"
+                    android:src="@drawable/ic_edit_white_24dp" />
+
+
+            </android.support.v7.widget.GridLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
+                />
+
 
 
 
