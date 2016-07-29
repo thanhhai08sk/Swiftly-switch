@@ -911,6 +911,12 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_brightness);
             case MainActivity.ACTION_RINGER_MODE:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_sound_normal);
+            case MainActivity.ACTION_FLASH_LIGHT:
+                if (EdgeGestureService.FLASH_LIGHT_ON) {
+                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_flash_light_on);
+                } else {
+                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_flash_light_off);
+                }
             case MainActivity.ACTION_INSTANT_FAVO:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_instant_favorite_512);
             case MainActivity.ACTION_NONE:
@@ -952,6 +958,8 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_brightness);
             case MainActivity.ACTION_RINGER_MODE:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_sound_normal);
+            case MainActivity.ACTION_FLASH_LIGHT:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_flash_light_on);
             case MainActivity.ACTION_NONE:
                 return null;
             case MainActivity.ACTION_INSTANT_FAVO:
@@ -992,6 +1000,8 @@ public  class Utility {
                 return context.getString(R.string.setting_shortcut_brightness);
             case MainActivity.ACTION_RINGER_MODE:
                 return context.getString(R.string.setting_shortcut_ringer_mode);
+            case MainActivity.ACTION_FLASH_LIGHT:
+                return context.getString(R.string.setting_shortcut_flash_light);
             case MainActivity.ACTION_NONE:
                 return context.getString(R.string.setting_shortcut_none);
             case MainActivity.ACTION_INSTANT_FAVO:
@@ -1065,8 +1075,11 @@ public  class Utility {
         Intent i = new Intent(context, Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? FlashServiceM.class : FlashService.class);
         if (actionOn) {
             context.startService(i);
+            EdgeGestureService.FLASH_LIGHT_ON = true;
         } else {
+            Log.e(TAG, "flashLightAction: actionOn = " + actionOn + "\nstop flash service");
             context.stopService(i);
+            EdgeGestureService.FLASH_LIGHT_ON = false;
         }
     }
 
@@ -1292,6 +1305,8 @@ public  class Utility {
                 break;
             case MainActivity.ACTION_RINGER_MODE:
                 setRinggerMode(context);
+            case MainActivity.ACTION_FLASH_LIGHT:
+                flashLightAction(context,EdgeGestureService.FLASH_LIGHT_ON);
                 break;
         }
     }
@@ -1804,6 +1819,9 @@ public  class Utility {
             case MainActivity.ACTION_RINGER_MODE:
                 imageView.setImageResource(R.drawable.ic_sound_normal);
                 break;
+            case MainActivity.ACTION_FLASH_LIGHT:
+                imageView.setImageResource(R.drawable.ic_flash_light);
+                break;
             case MainActivity.ACTION_NONE:
                 imageView.setImageDrawable(null);
         }
@@ -1841,6 +1859,8 @@ public  class Utility {
                 return ContextCompat.getDrawable(context, R.drawable.ic_screen_brightness);
             case Shortcut.ACTION_RINGER_MODE:
                 return ContextCompat.getDrawable(context, R.drawable.ic_sound_normal);
+            case Shortcut.ACTION_FLASH_LIGHT:
+                return ContextCompat.getDrawable(context, R.drawable.ic_flash_light);
             case Shortcut.ACTION_NONE:
                 return null;
         }
@@ -2222,6 +2242,13 @@ public  class Utility {
                         imageView.setImageResource(R.drawable.ic_sound_normal);
                     }
 
+                    break;
+                case Shortcut.ACTION_FLASH_LIGHT:
+                    if (EdgeGestureService.FLASH_LIGHT_ON) {
+                        imageView.setImageResource(R.drawable.ic_flash_light);
+                    } else {
+                        imageView.setImageResource(R.drawable.ic_flash_light_off);
+                    }
                     break;
                 case Shortcut.ACTION_NONE:
                     imageView.setImageDrawable(null);

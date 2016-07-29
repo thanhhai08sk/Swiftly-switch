@@ -20,6 +20,7 @@
         <item>@string/setting_shortcut_wifi</item>
         <item>@string/setting_shortcut_bluetooth</item>
         <item>@string/setting_shortcut_rotation</item>
+        <item>@string/setting_shortcut_flash_light</item>
         <item>@string/setting_shortcut_volume</item>
         <item>@string/setting_shortcut_brightness</item>
         <item>@string/setting_shortcut_ringer_mode</item>
@@ -36,6 +37,7 @@
         <item>@string/setting_shortcut_wifi</item>
         <item>@string/setting_shortcut_bluetooth</item>
         <item>@string/setting_shortcut_rotation</item>
+        <item>@string/setting_shortcut_flash_light</item>
         <item>@string/setting_shortcut_volume</item>
         <item>@string/setting_shortcut_brightness</item>
         <item>@string/setting_shortcut_ringer_mode</item>
@@ -83,6 +85,7 @@
         <item>@string/setting_shortcut_wifi</item>
         <item>@string/setting_shortcut_bluetooth</item>
         <item>@string/setting_shortcut_rotation</item>
+        <item>@string/setting_shortcut_flash_light</item>
         <item>@string/setting_shortcut_volume</item>
         <item>@string/setting_shortcut_brightness</item>
         <item>@string/setting_shortcut_ringer_mode</item>

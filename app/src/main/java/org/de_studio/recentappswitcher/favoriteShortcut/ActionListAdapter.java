@@ -142,6 +142,8 @@ public class ActionListAdapter extends BaseAdapter {
             icon.setImageResource(R.drawable.ic_contact);
         }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_last_app))) {
             icon.setImageResource(R.drawable.ic_last_app);
+        }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_flash_light))) {
+            icon.setImageResource(R.drawable.ic_flash_light);
         }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_none))) {
             icon.setImageDrawable(null);
         }else if (item.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_folder))) {
