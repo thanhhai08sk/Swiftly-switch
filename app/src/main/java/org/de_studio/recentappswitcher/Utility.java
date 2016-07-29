@@ -1113,6 +1113,8 @@ public  class Utility {
             Handler handler = new Handler();
             handler.post(lockRunnable);
 
+        } else {
+            Toast.makeText(context.getApplicationContext(), context.getString(R.string.admin_permission_missing_toast), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -165,7 +165,7 @@
         <receiver
             android:name=".shortcut.LockAdmin"
             android:description="@string/admin_desc"
-            android:label="@string/setting_shortcut_screen_lock"
+            android:label="@string/swiftly_switch_screen_lock"
             android:permission="android.permission.BIND_DEVICE_ADMIN" >
             <meta-data
                 android:name="android.app.device_admin"
