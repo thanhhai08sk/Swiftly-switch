@@ -21,7 +21,9 @@
     <uses-permission
         android:name="android.permission.CAMERA"
         android:maxSdkVersion="22" />
-
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
     <uses-feature
         android:name="android.hardware.bluetooth"
         android:required="false" />
@@ -160,6 +162,19 @@
             />
         <service android:name=".shortcut.FlashService"/>
         <service android:name=".shortcut.FlashServiceM" />
+        <receiver
+            android:name=".shortcut.LockAdmin"
+            android:description="@string/admin_desc"
+            android:label="@string/setting_shortcut_screen_lock"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/lock_admin" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

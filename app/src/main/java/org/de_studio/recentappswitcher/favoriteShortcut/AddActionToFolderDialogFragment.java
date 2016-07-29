@@ -1,6 +1,9 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.app.Dialog;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -25,6 +28,7 @@ import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
+import org.de_studio.recentappswitcher.shortcut.LockAdmin;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -118,7 +122,33 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
                     builder.show();
                 }
 
-                mAdapter.notifyDataSetChanged();
+                if (stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_screen_lock))) {
+                    final ComponentName cm = new ComponentName(getContext(), LockAdmin.class);
+                    final DevicePolicyManager pm = (DevicePolicyManager) getContext().getSystemService(Context.DEVICE_POLICY_SERVICE);
+                    if (!pm.isAdminActive(cm)) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle(R.string.admin_permission)
+                                .setMessage(R.string.admin_permission_explain)
+                                .setPositiveButton(R.string.go_to_setting, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                                        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cm);
+                                        intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                                                getActivity().getString(R.string.admin_desc));
+                                        startActivity(intent);
+
+                                    }
+                                });
+                        builder.show();
+                    }
+
+
+                }
+
+
+
+                    mAdapter.notifyDataSetChanged();
             }
         });
 //        progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);

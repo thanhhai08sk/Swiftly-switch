@@ -7,10 +7,12 @@ import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -32,6 +34,7 @@ import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.CallLog;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -43,6 +46,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -72,6 +76,7 @@ import org.de_studio.recentappswitcher.service.ScreenBrightnessDialogActivity;
 import org.de_studio.recentappswitcher.service.VolumeDialogActivity;
 import org.de_studio.recentappswitcher.shortcut.FlashService;
 import org.de_studio.recentappswitcher.shortcut.FlashServiceM;
+import org.de_studio.recentappswitcher.shortcut.LockAdmin;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -842,6 +847,8 @@ public  class Utility {
             return Shortcut.ACTION_DIAL;
         }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_flash_light))) {
             return Shortcut.ACTION_FLASH_LIGHT;
+        }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_screen_lock))) {
+            return Shortcut.ACTION_SCREEN_LOCK;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_none))) {
             return Shortcut.ACTION_NONE;
         }else return -1;
@@ -917,6 +924,8 @@ public  class Utility {
                 } else {
                     return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_flash_light_off);
                 }
+            case MainActivity.ACTION_SCREEN_LOCK:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_lock);
             case MainActivity.ACTION_INSTANT_FAVO:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_instant_favorite_512);
             case MainActivity.ACTION_NONE:
@@ -960,6 +969,8 @@ public  class Utility {
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_sound_normal);
             case MainActivity.ACTION_FLASH_LIGHT:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_flash_light_on);
+            case MainActivity.ACTION_SCREEN_LOCK:
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_lock);
             case MainActivity.ACTION_NONE:
                 return null;
             case MainActivity.ACTION_INSTANT_FAVO:
@@ -1002,6 +1013,8 @@ public  class Utility {
                 return context.getString(R.string.setting_shortcut_ringer_mode);
             case MainActivity.ACTION_FLASH_LIGHT:
                 return context.getString(R.string.setting_shortcut_flash_light);
+            case MainActivity.ACTION_SCREEN_LOCK:
+                return context.getString(R.string.setting_shortcut_screen_lock);
             case MainActivity.ACTION_NONE:
                 return context.getString(R.string.setting_shortcut_none);
             case MainActivity.ACTION_INSTANT_FAVO:
@@ -1080,6 +1093,26 @@ public  class Utility {
             Log.e(TAG, "flashLightAction: actionOn = " + actionOn + "\nstop flash service");
             context.stopService(i);
             EdgeGestureService.FLASH_LIGHT_ON = false;
+        }
+    }
+
+    public static void screenLockAction(Context context) {
+        final DevicePolicyManager pm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        ComponentName cm = new ComponentName(context, LockAdmin.class);
+        Log.e(TAG, "screenLockAction: ");
+
+        if (pm.isAdminActive(cm)) {
+            Log.e(TAG, "screenLockAction: permission ok");
+            Runnable lockRunnable = new Runnable() {
+
+                @Override
+                public void run() {
+                    pm.lockNow();
+                }
+            };
+            Handler handler = new Handler();
+            handler.post(lockRunnable);
+
         }
     }
 
@@ -1307,6 +1340,9 @@ public  class Utility {
                 setRinggerMode(context);
             case MainActivity.ACTION_FLASH_LIGHT:
                 flashLightAction(context,EdgeGestureService.FLASH_LIGHT_ON);
+                break;
+            case MainActivity.ACTION_SCREEN_LOCK:
+                screenLockAction(context);
                 break;
         }
     }
@@ -1693,6 +1729,9 @@ public  class Utility {
                 case Shortcut.ACTION_FLASH_LIGHT:
                     Utility.flashLightAction(context,!flashLightOn);
                     break;
+                case Shortcut.ACTION_SCREEN_LOCK:
+                    Utility.screenLockAction(context);
+                    break;
                 case Shortcut.ACTION_NONE:
                     break;
 
@@ -1822,6 +1861,9 @@ public  class Utility {
             case MainActivity.ACTION_FLASH_LIGHT:
                 imageView.setImageResource(R.drawable.ic_flash_light);
                 break;
+            case MainActivity.ACTION_SCREEN_LOCK:
+                imageView.setImageResource(R.drawable.ic_screen_lock);
+                break;
             case MainActivity.ACTION_NONE:
                 imageView.setImageDrawable(null);
         }
@@ -1861,6 +1903,8 @@ public  class Utility {
                 return ContextCompat.getDrawable(context, R.drawable.ic_sound_normal);
             case Shortcut.ACTION_FLASH_LIGHT:
                 return ContextCompat.getDrawable(context, R.drawable.ic_flash_light);
+            case Shortcut.ACTION_SCREEN_LOCK:
+                return ContextCompat.getDrawable(context, R.drawable.ic_screen_lock);
             case Shortcut.ACTION_NONE:
                 return null;
         }
@@ -2138,11 +2182,11 @@ public  class Utility {
         }
     }
 
-    public static void setImageForShortcut(Shortcut shortcut, PackageManager packageManager, ImageView imageView, Context mContext, IconPackManager.IconPack iconPack, Realm myRealm, boolean showOnOff) {
+    public static void setImageForShortcut(Shortcut shortcut, PackageManager packageManager, ImageView imageView, Context context, IconPackManager.IconPack iconPack, Realm myRealm, boolean showOnOff) {
 
         if (shortcut.getType() == Shortcut.TYPE_APP) {
             try {
-                Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
+                Drawable defaultDrawable = context.getPackageManager().getApplicationIcon(shortcut.getPackageName());
                 Drawable iconPackDrawable;
                 if (iconPack!=null) {
                     iconPackDrawable = iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable);
@@ -2160,7 +2204,7 @@ public  class Utility {
             switch (shortcut.getAction()) {
                 case Shortcut.ACTION_WIFI:
                     if (showOnOff) {
-                        if (Utility.getWifiState(mContext)) {
+                        if (Utility.getWifiState(context)) {
                             imageView.setImageResource(R.drawable.ic_wifi);
                         } else {
                             imageView.setImageResource(R.drawable.ic_wifi_off);
@@ -2171,7 +2215,7 @@ public  class Utility {
                     break;
                 case Shortcut.ACTION_BLUETOOTH:
                     if (showOnOff) {
-                        if (Utility.getBluetoothState(mContext)) {
+                        if (Utility.getBluetoothState(context)) {
                             imageView.setImageResource(R.drawable.ic_bluetooth);
                         } else {
                             imageView.setImageResource(R.drawable.ic_bluetooth_off);
@@ -2183,7 +2227,7 @@ public  class Utility {
                     break;
                 case Shortcut.ACTION_ROTATION:
                     if (showOnOff) {
-                        if (Utility.getIsRotationAuto(mContext)) {
+                        if (Utility.getIsRotationAuto(context)) {
                             imageView.setImageResource(R.drawable.ic_rotation);
                         } else {
                             imageView.setImageResource(R.drawable.ic_rotation_lock);
@@ -2227,7 +2271,7 @@ public  class Utility {
                     break;
                 case Shortcut.ACTION_RINGER_MODE:
                     if (showOnOff) {
-                        switch (Utility.getRingerMode(mContext)) {
+                        switch (Utility.getRingerMode(context)) {
                             case 0:
                                 imageView.setImageResource(R.drawable.ic_sound_normal);
                                 break;
@@ -2250,6 +2294,9 @@ public  class Utility {
                         imageView.setImageResource(R.drawable.ic_flash_light_off);
                     }
                     break;
+                case Shortcut.ACTION_SCREEN_LOCK:
+                    imageView.setImageResource(R.drawable.ic_screen_lock);
+                    break;
                 case Shortcut.ACTION_NONE:
                     imageView.setImageDrawable(null);
             }
@@ -2257,29 +2304,29 @@ public  class Utility {
             String thumbnaiUri = shortcut.getThumbnaiUri();
             if (thumbnaiUri != null) {
                 try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(thumbnaiUri));
-                    RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(thumbnaiUri));
+                    RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
                     drawable.setCircular(true);
                     imageView.setImageDrawable(drawable);
                     imageView.setColorFilter(null);
                 } catch (IOException e) {
                     e.printStackTrace();
                     imageView.setImageResource(R.drawable.ic_contact_default);
-//                        imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+//                        imageView.setColorFilter(ContextCompat.getColor(context, R.color.black));
                 } catch (SecurityException e) {
-                    Toast.makeText(mContext, mContext.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, context.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
                 }
             } else {
                 imageView.setImageResource(R.drawable.ic_contact_default);
-//                    imageView.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+//                    imageView.setColorFilter(ContextCompat.getColor(context, R.color.black));
 
             }
         } else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
-            File myDir = mContext.getFilesDir();
+            File myDir = context.getFilesDir();
             String fname = "folder-"+ shortcut.getId() +".png";
             File file = new File (myDir, fname);
             if (!file.exists()) {
-                imageView.setImageBitmap(Utility.getFolderThumbnail(myRealm, shortcut.getId(), mContext));
+                imageView.setImageBitmap(Utility.getFolderThumbnail(myRealm, shortcut.getId(), context));
             } else {
                 try {
                     imageView.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
@@ -2329,6 +2376,29 @@ public  class Utility {
 
     public static boolean checkContactPermission(Context context) {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static void askForAdminPermission(final Context context) {
+            final ComponentName cm = new ComponentName(context, LockAdmin.class);
+            final DevicePolicyManager pm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+            if (!pm.isAdminActive(cm)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle(R.string.admin_permission)
+                        .setMessage(R.string.admin_permission_explain)
+                        .setPositiveButton(R.string.go_to_setting, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cm);
+                                intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                                        context.getString(R.string.admin_desc));
+                                context.startActivity(intent);
+
+                            }
+                        });
+                builder.show();
+            }
+
     }
 
 

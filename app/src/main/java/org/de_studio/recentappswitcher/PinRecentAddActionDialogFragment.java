@@ -115,6 +115,9 @@ public class PinRecentAddActionDialogFragment extends DialogFragment{
                             });
                     builder.show();
                 }
+                if (stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_screen_lock))) {
+                    Utility.askForAdminPermission(getActivity());
+                }
 
                 mAdapter.notifyDataSetChanged();
             }

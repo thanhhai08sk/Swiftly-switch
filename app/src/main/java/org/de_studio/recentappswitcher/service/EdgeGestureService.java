@@ -38,7 +38,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -406,12 +405,6 @@ public class EdgeGestureService extends Service {
             }
             if (isEdge2On  && !(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false))) {
                 windowManager.addView(edge2Image, paramsEdge2);
-                edge2Image.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        Log.e(TAG, "onGlobalLayout: ");
-                    }
-                });
             } else {
                     removeView(edge2Image);
             }
