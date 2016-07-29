@@ -924,8 +924,8 @@ public class EdgeGestureService extends Service {
 
 
                 case MotionEvent.ACTION_UP:
-
-
+                    removeAllExceptEdgeView();
+                    clearActionView();
                     if (switched) {
                         int shortcutToSwitch;
                         Shortcut shortcut;
@@ -1033,8 +1033,7 @@ public class EdgeGestureService extends Service {
 
 
                     }
-                    removeAllExceptEdgeView();
-                    clearActionView();
+
                     switched = false;
                     touched = false;
                     if (delayToSwitchTask != null) {
