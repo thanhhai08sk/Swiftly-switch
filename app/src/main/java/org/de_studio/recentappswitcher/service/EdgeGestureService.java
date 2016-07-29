@@ -138,6 +138,7 @@ public class EdgeGestureService extends Service {
     private int[] instantFavoAction;
     private boolean useInstantFavo, onInstantFavo;
     private WindowManager.LayoutParams paramsEdge1, paramsEdge2;
+    private boolean flashLightOn = false;
 
     @Nullable
     @Override
@@ -965,7 +966,7 @@ public class EdgeGestureService extends Service {
 
                         }
                         if (shortcut != null) {
-                            Utility.startShortcut(getApplicationContext(), shortcut, v, getClass().getName(), getPackageName(), lastAppPackageName, defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 0));
+                            Utility.startShortcut(getApplicationContext(), shortcut, v, getClass().getName(), getPackageName(), lastAppPackageName, defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 0), flashLightOn);
                         } else if (shortcutToSwitch >= 0 && !folderShown) {
                             Toast.makeText(getApplicationContext(), getString(R.string.please_add_favorite_item), Toast.LENGTH_LONG).show();
                             if (onInstantFavo) {
@@ -981,7 +982,7 @@ public class EdgeGestureService extends Service {
                         if (packageToSwitch != -1) {
                             Intent extApp = null;
                             if (packageToSwitch < recentShortcut.length) {
-                                Utility.startShortcut(getApplicationContext(), recentShortcut[packageToSwitch], v, getClass().getName(), getPackageName(), lastAppPackageName, defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 0));
+                                Utility.startShortcut(getApplicationContext(), recentShortcut[packageToSwitch], v, getClass().getName(), getPackageName(), lastAppPackageName, defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 0), flashLightOn);
 //                                extApp = getPackageManager().getLaunchIntentForPackage(recentShortcut[packageToSwitch].getPackageName());
                             }
 

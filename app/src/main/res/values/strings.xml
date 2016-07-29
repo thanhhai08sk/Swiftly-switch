@@ -192,6 +192,8 @@
     <string name="avoid_keyboard">Avoid keyboard</string>
     <string name="avoid_keyboard_step_aside">Step aside keyboard</string>
     <string name="avoid_keyboard_place_under">Place under keyboard</string>
+    <string name="setting_shortcut_flash_light">Flash light</string>
+    <string name="setting_shortcut_screen_lock">Screen lock</string>
 
 
 </resources>

@@ -21,9 +21,6 @@ import android.view.WindowManager;
     public class FlashService extends Service implements Runnable, SurfaceHolder.Callback {
         private static final String TAG = FlashService.class.getSimpleName();
 
-        public FlashService() {
-        }
-
         public static boolean FLASH_ON = false;
 
         private Camera camera;

@@ -69,6 +69,8 @@ import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
 import org.de_studio.recentappswitcher.service.ScreenBrightnessDialogActivity;
+import org.de_studio.recentappswitcher.service.VolumeDialogActivity;
+import org.de_studio.recentappswitcher.shortcut.FlashService;
 import org.de_studio.recentappswitcher.shortcut.FlashServiceM;
 
 import java.io.File;
@@ -838,6 +840,8 @@ public  class Utility {
             return Shortcut.ACTION_RINGER_MODE;
         }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_dial))) {
             return Shortcut.ACTION_DIAL;
+        }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_flash_light))) {
+            return Shortcut.ACTION_FLASH_LIGHT;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_none))) {
             return Shortcut.ACTION_NONE;
         }else return -1;
@@ -1050,12 +1054,20 @@ public  class Utility {
     }
 
     public static void volumeAction(Context context) {
-//        Intent intent = new Intent(context, VolumeDialogActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-//        context.startActivity(intent);
-        Log.e(TAG, "volumeAction: flashLight");
-        context.startService(new Intent(context, FlashServiceM.class));
+        Intent intent = new Intent(context, VolumeDialogActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        context.startActivity(intent);
+
+    }
+
+    public static void flashLightAction(Context context, boolean actionOn) {
+        Intent i = new Intent(context, Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? FlashServiceM.class : FlashService.class);
+        if (actionOn) {
+            context.startService(i);
+        } else {
+            context.stopService(i);
+        }
     }
 
     public static void brightnessAction(Context context) {
@@ -1567,7 +1579,7 @@ public  class Utility {
 //
 //    }
 
-    public static void startShortcut(Context context, Shortcut shortcut, View v, String className, String packageName, String lastAppPackageName, int contactAction) {
+    public static void startShortcut(Context context, Shortcut shortcut, View v, String className, String packageName, String lastAppPackageName, int contactAction, boolean flashLightOn) {
         if (shortcut.getType() == Shortcut.TYPE_APP) {
             Intent extApp;
             extApp =context.getPackageManager().getLaunchIntentForPackage(shortcut.getPackageName());
@@ -1662,6 +1674,9 @@ public  class Utility {
                     break;
                 case Shortcut.ACTION_RINGER_MODE:
                     Utility.setRinggerMode(context);
+                    break;
+                case Shortcut.ACTION_FLASH_LIGHT:
+                    Utility.flashLightAction(context,!flashLightOn);
                     break;
                 case Shortcut.ACTION_NONE:
                     break;
