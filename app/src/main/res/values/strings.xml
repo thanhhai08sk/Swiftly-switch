@@ -31,12 +31,12 @@
     <string name="main_icon_pack_trial_dialog_message">This feature only available for the Pro version</string>
     <string name="main_edge_switch_2_trial_buy_pro_button">Get Pro version</string>
     <string name="main_buy_pro_button_text">Upgrade to Pro</string>
-    <string name="edge_service_out_of_trial_text_when_homebacknoti">You are out of 7 day trial time of this application. Upgrade to Pro version to use this feature</string>
+    <string name="edge_service_out_of_trial_text_when_homebacknoti">You are out of trial time of this application. Upgrade to Pro version to use this feature</string>
     <string name="action_settings">Setting</string>
     <string name="accessibility_service_description">Please turn on this setting.This is for navigation(home,back,power menu) and on some Samsung device for expand status bar.
     Enable accessibility can cause lag in some device when using Chrome. This happen to all
     apps that use accessibility. If the lag is too extreme please disable this setting, all feature still available except the navigation (home, back, power menu).</string>
-    <string name="ask_user_to_turn_on_accessibility_toast">Please turn on the Accessibility setting for this app</string>
+    <string name="ask_user_to_turn_on_accessibility_toast">Please turn on the Accessibility setting for Swiftly Switch</string>
     <string name="main_haptic_feedback_on_trigger_text">Haptic feedback on trigger</string>
     <string name="main_haptic_feedback_on_move_to_item">Haptic feedback on icons</string>
     <string name="main_do_you_love_this_app">If you like this app, please consider take time review it on Play store</string>
@@ -199,6 +199,7 @@
     <string name="admin_permission">Phone administrator permission</string>
     <string name="admin_desc">Required for lock screen action</string>
     <string name="admin_permission_missing_toast">Miss Phone Admin permission. Enable this permission in Setting - Security - Phone administrators</string>
-
+    <string name="out_of_trial">Out of trial time</string>
+    <string name="enable_accessibility_permission">Enable accessibility permission</string>
 
 </resources>

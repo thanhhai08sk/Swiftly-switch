@@ -4,9 +4,6 @@ import android.Manifest;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.animation.Animator;
 import android.app.ActivityManager;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -38,7 +35,6 @@ import android.os.Handler;
 import android.provider.CallLog;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -72,6 +68,7 @@ import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
+import org.de_studio.recentappswitcher.service.NotiDialog;
 import org.de_studio.recentappswitcher.service.ScreenBrightnessDialogActivity;
 import org.de_studio.recentappswitcher.service.VolumeDialogActivity;
 import org.de_studio.recentappswitcher.shortcut.FlashService;
@@ -1058,7 +1055,7 @@ public  class Utility {
         recordCompat.setSource(v);
         if (Utility.isAccessibilityEnable(context)) {
             manager.sendAccessibilityEvent(event1);
-        }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+        }else startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
     }
 
     public static void recentAction(Context context, View v, String className, String packageName) {
@@ -1082,6 +1079,14 @@ public  class Utility {
         intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         context.startActivity(intent);
 
+    }
+
+    public static void startNotiDialog(Context context, int type) {
+        Intent intent = new Intent(context, NotiDialog.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        intent.putExtra(NotiDialog.TYPE_KEY, type);
+        context.startActivity(intent);
     }
 
     public static void flashLightAction(Context context, boolean actionOn) {
@@ -1114,15 +1119,20 @@ public  class Utility {
             handler.post(lockRunnable);
 
         } else {
-            Toast.makeText(context.getApplicationContext(), context.getString(R.string.admin_permission_missing_toast), Toast.LENGTH_SHORT).show();
+            startNotiDialog(context,NotiDialog.PHONE_ADMIN_PERMISSION);
         }
     }
 
     public static void brightnessAction(Context context) {
-        Intent intent = new Intent(context, ScreenBrightnessDialogActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        context.startActivity(intent);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.System.canWrite(context)) {
+            Intent intent = new Intent(context, ScreenBrightnessDialogActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            context.startActivity(intent);
+        } else {
+            startNotiDialog(context, NotiDialog.WRITE_SETTING_PERMISSION);
+        }
+
     }
 
     public static void powerAction(Context context, View v, String className, String packageName) {
@@ -1297,17 +1307,18 @@ public  class Utility {
                     if (Settings.System.canWrite(context)) {
                         Utility.setAutorotation(context);
                     } else {
-                        Intent notiIntent = new Intent();
-                        notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-                        PendingIntent notiPending = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-                        builder.setContentTitle(context.getString(R.string.ask_for_write_setting_notification_title)).setContentText(context.getString(R.string.ask_for_write_setting_notification_text)).setSmallIcon(R.drawable.ic_settings_white_36px)
-                                .setContentIntent(notiPending)
-                                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                                .setDefaults(NotificationCompat.DEFAULT_SOUND);
-                        Notification notification = builder.build();
-                        NotificationManager notificationManager = (NotificationManager)context.getSystemService(context.NOTIFICATION_SERVICE);
-                        notificationManager.notify(22, notification);
+                        startNotiDialog(context, NotiDialog.WRITE_SETTING_PERMISSION);
+//                        Intent notiIntent = new Intent();
+//                        notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+//                        PendingIntent notiPending = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+//                        builder.setContentTitle(context.getString(R.string.ask_for_write_setting_notification_title)).setContentText(context.getString(R.string.ask_for_write_setting_notification_text)).setSmallIcon(R.drawable.ic_settings_white_36px)
+//                                .setContentIntent(notiPending)
+//                                .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                                .setDefaults(NotificationCompat.DEFAULT_SOUND);
+//                        Notification notification = builder.build();
+//                        NotificationManager notificationManager = (NotificationManager)context.getSystemService(context.NOTIFICATION_SERVICE);
+//                        notificationManager.notify(22, notification);
                     }
                 }
                 break;
@@ -1676,17 +1687,18 @@ public  class Utility {
                         if (Settings.System.canWrite(context)) {
                             Utility.setAutorotation(context);
                         } else {
-                            Intent notiIntent = new Intent();
-                            notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-                            PendingIntent notiPending = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-                            builder.setContentTitle(context.getString(R.string.ask_for_write_setting_notification_title)).setContentText(context.getString(R.string.ask_for_write_setting_notification_text)).setSmallIcon(R.drawable.ic_settings_white_36px)
-                                    .setContentIntent(notiPending)
-                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                                    .setDefaults(NotificationCompat.DEFAULT_SOUND);
-                            Notification notification = builder.build();
-                            NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
-                            notificationManager.notify(22, notification);
+                            startNotiDialog(context, NotiDialog.WRITE_SETTING_PERMISSION);
+//                            Intent notiIntent = new Intent();
+//                            notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+//                            PendingIntent notiPending = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//                            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+//                            builder.setContentTitle(context.getString(R.string.ask_for_write_setting_notification_title)).setContentText(context.getString(R.string.ask_for_write_setting_notification_text)).setSmallIcon(R.drawable.ic_settings_white_36px)
+//                                    .setContentIntent(notiPending)
+//                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                                    .setDefaults(NotificationCompat.DEFAULT_SOUND);
+//                            Notification notification = builder.build();
+//                            NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+//                            notificationManager.notify(22, notification);
                         }
                     }
 

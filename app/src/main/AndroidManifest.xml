@@ -175,6 +175,12 @@
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".service.NotiDialog"
+            android:excludeFromRecents="true"
+            android:label=""
+            android:theme="@style/DialogTheme" />
     </application>
 
 </manifest>
