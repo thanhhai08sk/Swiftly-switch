@@ -29,7 +29,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sale_50"
+                android:text="Get Pro"
                 android:id="@+id/get_pro"
                 android:textAllCaps="false"
                 android:paddingRight="8dp"
