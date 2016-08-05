@@ -47,6 +47,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.MyRealmMigration;
@@ -2061,7 +2062,18 @@ public class EdgeGestureService extends Service {
     public static class BootCompleteReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            context.startService(new Intent(context, EdgeGestureService.class));
+            switch (intent.getAction()) {
+                case Intent.ACTION_BOOT_COMPLETED:
+                    context.startService(new Intent(context, EdgeGestureService.class));
+                    break;
+                case "android.intent.action.QUICKBOOT_POWERON":
+                    context.startService(new Intent(context, EdgeGestureService.class));
+                    break;
+                case Cons.ACTION_TOGGLE_EDGES:
+                    Log.e(TAG, "onReceive: receive broadbast success");
+                    break;
+            }
+
         }
     }
 
