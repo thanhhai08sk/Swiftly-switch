@@ -11,6 +11,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -139,6 +140,7 @@ public class EdgeGestureService extends Service {
     private boolean useInstantFavo, onInstantFavo;
     private WindowManager.LayoutParams paramsEdge1, paramsEdge2;
     public static boolean FLASH_LIGHT_ON = false;
+    private boolean working = true;
 
     @Nullable
     @Override
@@ -149,6 +151,9 @@ public class EdgeGestureService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Cons.ACTION_TOGGLE_EDGES);
+        this.registerReceiver(new EdgesToggleReceiver(), filter);
         Log.e(TAG, "onStartCommand: ");
 
         if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME)) isFreeVersion = true;
@@ -1735,22 +1740,7 @@ public class EdgeGestureService extends Service {
         if (defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE, false) && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             removeEdgeImage();
         } else {
-            if (isEdge1On && edge1Image !=null && !edge1Image.isAttachedToWindow()) {
-                try {
-                    windowManager.addView(edge1Image,paramsEdge1);
-                } catch (IllegalStateException e) {
-                    Log.e(TAG, "onConfigurationChanged: fail when add edge1Image");
-                }
-
-            }
-            if (isEdge2On && edge2Image !=null && !edge2Image.isAttachedToWindow()) {
-                try {
-                    windowManager.addView(edge2Image,paramsEdge2);
-                } catch (IllegalStateException e) {
-                    Log.e(TAG, "onConfigurationChanged: fail when add edge2Image");
-                }
-
-            }
+            addEdgeImage();
         }
         Log.e(TAG, "onConfigurationChanged: ");
         super.onConfigurationChanged(newConfig);
@@ -2018,6 +2008,25 @@ public class EdgeGestureService extends Service {
         }
     }
 
+    public final synchronized void addEdgeImage() {
+        if (isEdge1On && edge1Image !=null && !edge1Image.isAttachedToWindow()) {
+            try {
+                windowManager.addView(edge1Image,paramsEdge1);
+            } catch (IllegalStateException e) {
+                Log.e(TAG, "addEdgeImage: fail when add edge1Image");
+            }
+
+        }
+        if (isEdge2On && edge2Image !=null && !edge2Image.isAttachedToWindow()) {
+            try {
+                windowManager.addView(edge2Image,paramsEdge2);
+            } catch (IllegalStateException e) {
+                Log.e(TAG, "addEdgeImage: fail when add edge2Image");
+            }
+
+        }
+    }
+
 
     private int getYOffset(int y_init) {
         Point point = new Point();
@@ -2069,11 +2078,27 @@ public class EdgeGestureService extends Service {
                 case "android.intent.action.QUICKBOOT_POWERON":
                     context.startService(new Intent(context, EdgeGestureService.class));
                     break;
-                case Cons.ACTION_TOGGLE_EDGES:
-                    Log.e(TAG, "onReceive: receive broadbast success");
-                    break;
             }
 
+        }
+    }
+
+    public class EdgesToggleReceiver extends BroadcastReceiver {
+        public EdgesToggleReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Cons.ACTION_TOGGLE_EDGES)) {
+                Log.e(TAG, "onReceive: receive broadbast success");
+                    if (working) {
+                        removeEdgeImage();
+                        working = !working;
+                    } else {
+                        addEdgeImage();
+                        working = !working;
+                    }
+            }
         }
     }
 
