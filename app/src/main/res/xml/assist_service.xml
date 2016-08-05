@@ -1,0 +1,9 @@
+<voice-interaction-service
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:recognitionService="org.de_studio.recentappswitcher.assist.AssistLoggerService"
+  android:sessionService="org.de_studio.recentappswitcher.assist.MyInteractionService"
+  android:supportsAssist="true"/>
+
+<!--
+  android:settingsActivity="com.android.test.voiceinteraction.SettingsActivity"
+-->
