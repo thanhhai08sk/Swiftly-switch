@@ -141,6 +141,7 @@ public class EdgeGestureService extends Service {
     private WindowManager.LayoutParams paramsEdge1, paramsEdge2;
     public static boolean FLASH_LIGHT_ON = false;
     private boolean working = true;
+    private NotificationCompat.Builder notificationBuilder;
 
     @Nullable
     @Override
@@ -461,13 +462,26 @@ public class EdgeGestureService extends Service {
             hideNotiIntent.setData(Uri.parse("package:" + getPackageName()));
         }
 
+        Intent remoteIntent = new Intent();
+        remoteIntent.setAction(Cons.ACTION_TOGGLE_EDGES);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, remoteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        NotificationCompat.Action remoteAction=
+                new NotificationCompat.Action.Builder(
+                        android.R.drawable.ic_media_pause,
+                        getString(R.string.pause),
+                        pendingIntent).build();
+
         PendingIntent notiPending = PendingIntent.getActivity(getApplicationContext(), 0, hideNotiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.drawable.ic_stat_ic_looks_white_48dp1)
+        notificationBuilder = new NotificationCompat.Builder(this);
+        notificationBuilder.setSmallIcon(R.drawable.ic_stat_ic_looks_white_48dp1)
                 .setContentIntent(notiPending)
+                .addAction(remoteAction)
                 .setPriority(Notification.PRIORITY_MIN)
                 .setContentText(getString(R.string.notification_text)).setContentTitle(getString(R.string.notification_title));
-        Notification notificationCompat = builder.build();
+        Notification notificationCompat = notificationBuilder.build();
         startForeground(NOTIFICATION_ID, notificationCompat);
 
 
@@ -2091,13 +2105,37 @@ public class EdgeGestureService extends Service {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Cons.ACTION_TOGGLE_EDGES)) {
                 Log.e(TAG, "onReceive: receive broadbast success");
+                Intent remoteIntent = new Intent();
+                remoteIntent.setAction(Cons.ACTION_TOGGLE_EDGES);
+                NotificationCompat.Action remoteAction;
+
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(EdgeGestureService.this, 0, remoteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                     if (working) {
                         removeEdgeImage();
                         working = !working;
+
+
+                        remoteAction=
+                                new NotificationCompat.Action.Builder(
+                                        android.R.drawable.ic_media_play,
+                                        getString(R.string.resume),
+                                        pendingIntent).build();
                     } else {
                         addEdgeImage();
                         working = !working;
+
+
+                        remoteAction=
+                                new NotificationCompat.Action.Builder(
+                                        android.R.drawable.ic_media_pause,
+                                        getString(R.string.pause),
+                                        pendingIntent).build();
                     }
+
+                notificationBuilder.mActions = new ArrayList<>();
+                notificationBuilder.addAction(remoteAction);
+                startForeground(NOTIFICATION_ID,notificationBuilder.build());
+
             }
         }
     }

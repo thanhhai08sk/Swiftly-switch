@@ -206,4 +206,6 @@
     <string name="enable_assist_app">Enable assist app</string>
     <string name="on"> (ON)</string>
     <string name="off"> (OFF)</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
 </resources>
