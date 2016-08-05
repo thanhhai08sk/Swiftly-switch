@@ -290,9 +290,10 @@ public class CircleFavoriteAdapter extends BaseAdapter {
         circleFavoRealm.beginTransaction();
         Shortcut shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", dragPosition).findFirst();
         if (shortcut != null) {
-            shortcut.setType(Shortcut.TYPE_ACTION);
-            shortcut.setAction(Shortcut.ACTION_NONE);
-            shortcut.setLabel("");
+            shortcut.deleteFromRealm();
+//            shortcut.setType(Shortcut.TYPE_ACTION);
+//            shortcut.setAction(Shortcut.ACTION_NONE);
+//            shortcut.setLabel("");
         } else {
             Shortcut shortcut1 = new Shortcut();
             shortcut1.setType(Shortcut.TYPE_ACTION);
