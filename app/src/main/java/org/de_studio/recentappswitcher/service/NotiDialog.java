@@ -52,7 +52,9 @@ public class NotiDialog extends AppCompatActivity {
                 buttonTextRes = R.string.go_to_setting;
                 buttonIntent = new Intent();
                 buttonIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+//                buttonIntent.setAction(Settings.ACTION_VOICE_INPUT_SETTINGS);
                 buttonIntent.setData(Uri.parse("package:" + getPackageName()));
+
                 break;
             case PHONE_ADMIN_PERMISSION:
                 titleRes = R.string.admin_permission;

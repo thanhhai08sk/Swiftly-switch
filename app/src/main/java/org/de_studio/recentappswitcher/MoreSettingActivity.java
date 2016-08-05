@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
@@ -32,6 +33,7 @@ public class MoreSettingActivity extends AppCompatActivity {
     public static final String DEFAULT_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_sharedpreferences";
     private boolean isTrial = false, isOutOfTrial = false;
     private SharedPreferences sharedPreferencesDefautl;
+    private TextView assistAppTextView;
 
 
     @Override
@@ -52,6 +54,7 @@ public class MoreSettingActivity extends AppCompatActivity {
         ImageButton animationTimeSettingButton = (ImageButton) findViewById(R.id.main_animation_time_setting_image_button);
         ImageButton iconPackSettingButton = (ImageButton) findViewById(R.id.main_icon_pack_support_setting_button);
         ImageButton contactActionSettingButton = (ImageButton) findViewById(R.id.main_contact_action_setting_button);
+        ImageButton enableAssistAppButton = (ImageButton) findViewById(R.id.main_enable_diable_by_long_press_home_setting_button);
         SwitchCompat hapticFeedbackOnTriggerSwitch = (SwitchCompat) findViewById(R.id.main_disable_haptic_feedback_switch);
         SwitchCompat hapticFeedbackOnItemSwitch = (SwitchCompat) findViewById(R.id.main_haptic_feedback_on_item_switch);
         SwitchCompat disableClockSwitch = (SwitchCompat) findViewById(R.id.main_disable_clock_switch);
@@ -66,6 +69,13 @@ public class MoreSettingActivity extends AppCompatActivity {
         disableClockSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY,false));
         disableInLandscape.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false));
         holdTimeSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.HOLD_TIME_ENABLE_KEY,true));
+
+        assistAppTextView = (TextView) findViewById(R.id.main_enabe_assist_app_text_view);
+        setAssistTextView();
+
+
+
+
 
 
         disableAnimationSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.ANIMATION_KEY,false));
@@ -127,6 +137,26 @@ public class MoreSettingActivity extends AppCompatActivity {
                                 }
                             }).
                             setPositiveButton(R.string.app_tab_fragment_ok_button, null);
+                    builder.create().show();
+                }
+            });
+        }
+
+        if (enableAssistAppButton != null) {
+            enableAssistAppButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MoreSettingActivity.this);
+                    builder.setTitle(R.string.enable_assist_app)
+                            .setMessage(R.string.enable_long_press_to_toggle_swiftly_switch)
+                            .setPositiveButton(R.string.go_to_setting, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent();
+                                    intent.setAction(Settings.ACTION_VOICE_INPUT_SETTINGS);
+                                    startActivity(intent);
+                                }
+                            });
                     builder.create().show();
                 }
             });
@@ -442,5 +472,27 @@ public class MoreSettingActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setAssistTextView();
+
+    }
+
+    public void setAssistTextView() {
+        if (assistAppTextView != null) {
+            String assistant=
+                    Settings.Secure.getString(getContentResolver(),
+                            "voice_interaction_service");
+            String text;
+            if (assistant.contains("de_studio")) {
+                text = getString(R.string.main_enable_disable_by_long_press_home_button) + getString(R.string.on);
+            } else {
+                text = getString(R.string.main_enable_disable_by_long_press_home_button) + getString(R.string.off);
+            }
+            assistAppTextView.setText(text);
+        }
     }
 }

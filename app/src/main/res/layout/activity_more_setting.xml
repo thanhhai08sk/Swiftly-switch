@@ -65,6 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:checked="false"
+                    app:layout_gravity="center_vertical"
                     android:id="@+id/main_disable_haptic_feedback_switch"
                     app:switchMinWidth="55dp"
                     />
@@ -108,6 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:checked="false"
+                    app:layout_gravity="center_vertical"
                     android:id="@+id/main_haptic_feedback_on_item_switch"
                     app:switchMinWidth="55dp"
                     />
@@ -151,6 +153,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:checked="false"
+                    app:layout_gravity="center_vertical"
                     android:id="@+id/main_disable_clock_switch"
                     app:switchMinWidth="55dp"
                     />
@@ -158,6 +161,56 @@
 
             </android.support.v7.widget.GridLayout>
 
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
+                />
+
+
+
+
+
+
+
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                app:rowCount="1"
+                app:columnCount="3"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:text="@string/avoid_keyboard"
+                    android:textSize="16sp"
+                    app:layout_column="0"
+                    app:layout_row="0"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="center_vertical"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:checked="true"
+                    app:layout_gravity="center_vertical"
+                    android:id="@+id/main_avoid_keyboard_switch"
+                    app:switchMinWidth="55dp"
+                    />
+
+
+
+            </android.support.v7.widget.GridLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -194,6 +247,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:checked="false"
+                    app:layout_gravity="center_vertical"
                     android:id="@+id/main_disable_in_landscape_switch"
                     app:switchMinWidth="55dp"
                     />
@@ -218,39 +272,41 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 app:rowCount="1"
-                app:columnCount="3"
+                app:columnCount="2"
                 >
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
-                    android:text="@string/avoid_keyboard"
+                    android:text="@string/main_enable_disable_by_long_press_home_button"
                     android:textSize="16sp"
                     app:layout_column="0"
                     app:layout_row="0"
                     app:layout_columnWeight="1"
                     app:layout_gravity="center_vertical"
+                    android:id="@+id/main_enabe_assist_app_text_view"
                     />
-                <android.support.v7.widget.SwitchCompat
+                <ImageButton
+                    android:id="@+id/main_enable_diable_by_long_press_home_setting_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:checked="true"
-                    android:id="@+id/main_avoid_keyboard_switch"
-                    app:switchMinWidth="55dp"
-                    />
-
+                    android:background="@color/transparent"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="10dp"
+                    app:layout_gravity="center_vertical"
+                    android:tint="@color/grey"
+                    android:src="@drawable/ic_edit_white_24dp" />
 
 
             </android.support.v7.widget.GridLayout>
+
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/grey"
                 />
-
-
 
 
             <android.support.v7.widget.GridLayout
@@ -284,6 +340,7 @@
                 android:background="@color/transparent"
                 android:paddingLeft="16dp"
                 android:paddingRight="10dp"
+                app:layout_gravity="center_vertical"
                 android:tint="@color/grey"
                 android:src="@drawable/ic_edit_white_24dp" />
 
@@ -328,6 +385,7 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="10dp"
                     android:tint="@color/grey"
+                    app:layout_gravity="center_vertical"
                     android:src="@drawable/ic_edit_white_24dp" />
 
             </android.support.v7.widget.GridLayout>
@@ -370,6 +428,7 @@
                     android:background="@color/transparent"
                     android:paddingLeft="16dp"
                     android:tint="@color/grey"
+                    app:layout_gravity="center_vertical"
                     android:paddingRight="10dp"
                     android:src="@drawable/ic_edit_white_24dp" />
 
@@ -415,6 +474,7 @@
                     android:background="@color/transparent"
                     android:paddingLeft="16dp"
                     android:tint="@color/grey"
+                    app:layout_gravity="center_vertical"
                     android:paddingRight="10dp"
                     android:src="@drawable/ic_edit_white_24dp" />
 
@@ -460,6 +520,7 @@
                     android:background="@color/transparent"
                     android:paddingLeft="16dp"
                     android:tint="@color/grey"
+                    app:layout_gravity="center_vertical"
                     android:paddingRight="10dp"
                     android:src="@drawable/ic_edit_white_24dp" />
 
@@ -506,6 +567,7 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="10dp"
                     android:tint="@color/grey"
+                    app:layout_gravity="center_vertical"
                     android:src="@drawable/ic_edit_white_24dp" />
 
 
@@ -547,6 +609,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:checked="true"
+                    app:layout_gravity="center_vertical"
                     android:paddingRight="8dp"
                     android:id="@+id/main_disable_animation_switch"
                     app:switchMinWidth="55dp"
@@ -556,6 +619,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
+                    app:layout_gravity="center_vertical"
                     android:background="@color/transparent"
                     android:paddingRight="10dp"
                     android:tint="@color/grey"
@@ -601,6 +665,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
+                    app:layout_gravity="center_vertical"
                     android:paddingRight="8dp"
                     app:switchMinWidth="55dp"
                     android:checked="true" />
@@ -613,6 +678,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:background="@color/transparent"
+                    app:layout_gravity="center_vertical"
                     android:paddingRight="10dp"
                     android:tint="@color/grey"
                     android:src="@drawable/ic_edit_white_24dp" />
