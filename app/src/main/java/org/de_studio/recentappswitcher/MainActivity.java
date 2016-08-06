@@ -38,7 +38,7 @@ import org.de_studio.recentappswitcher.service.EdgeSetting;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
-    private static final int VERSION_NUMBER = 64;
+    private static final int VERSION_NUMBER = 65;
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final String EDGE_1_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_2_shared_preference";
@@ -564,6 +564,13 @@ public class MainActivity extends Activity {
     private void showWhatNew() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         int titleSize = getResources().getDimensionPixelSize(R.dimen.what_new_title_size);
+        AbsoluteSizeSpan span = new AbsoluteSizeSpan(titleSize);
+
+        String title2_3_2 = "Version 2.3.2";
+        String text2_3_2 = " - For Android 6.0 and above: you can disable/enable trigger Edges by long press home button. Enable this feature in More Setting -> Enable/Disable Edges By Long Press Home Button" +
+                "\n - For all Android version: you can disable/enable trigger Edges from the persistent Notification."
+                + "\n - Support new language: Polish and update new translations. Thanks for your contribution! You can contribute your translation for Swiftly switch at: http://ackuna.com/translate-/swiftly-switch .Thanks!"
+                + "\n - Some small improvement and bugs fixed";
 
         String title2_3_1 = "Version 2.3.1";
         String text2_3_1 = " - Add Flash light and Screen Lock shortcuts" +
@@ -598,6 +605,7 @@ public class MainActivity extends Activity {
                 "\n - Indicator" +
                 "\n - Change the default setting for Quick Action";
 
+        SpannableString span2_3_2 = getSpanString(title2_3_2, span);
         SpannableString span2_3_1 = new SpannableString(title2_3_1);
         span2_3_1.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_3_1.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
@@ -622,7 +630,7 @@ public class MainActivity extends Activity {
         SpannableString span2_2_8 = new SpannableString(title2_2_8);
         span2_2_8.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_8.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
-        CharSequence finalText = TextUtils.concat(span2_3_1,"\n\n",text2_3_1, "\n\n",span2_2_14,"\n\n",text2_3_0, "\n\n",span2_2_13,"\n\n",text2_2_13, "\n\n",span2_2_11_1,"\n\n",text2_2_12, "\n\n",span2_2_11,"\n\n",text2_2_11, "\n\n",span2_2_10,"\n\n",text2_2_10, "\n\n",span2_2_9,"\n\n",text2_2_9,"\n\n",span2_2_8,"\n\n",text2_2_8
+        CharSequence finalText = TextUtils.concat(span2_3_2,"\n\n",text2_3_2, "\n\n",span2_3_1,"\n\n",text2_3_1, "\n\n",span2_2_14,"\n\n",text2_3_0, "\n\n",span2_2_13,"\n\n",text2_2_13, "\n\n",span2_2_11_1,"\n\n",text2_2_12, "\n\n",span2_2_11,"\n\n",text2_2_11, "\n\n",span2_2_10,"\n\n",text2_2_10, "\n\n",span2_2_9,"\n\n",text2_2_9,"\n\n",span2_2_8,"\n\n",text2_2_8
                 );
         builder.setTitle(R.string.what_new)
                 .setMessage(finalText)
@@ -643,6 +651,12 @@ public class MainActivity extends Activity {
                     }
                 });
         builder.create().show();
+    }
+
+    public static SpannableString getSpanString(String title, AbsoluteSizeSpan span) {
+        SpannableString spanString = new SpannableString(title);
+        spanString.setSpan(span,0,title.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        return spanString;
     }
 
     @Override
