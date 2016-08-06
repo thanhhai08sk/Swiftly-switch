@@ -204,6 +204,7 @@
     <string name="main_enable_disable_by_long_press_home_button">Enable/disable Edges by long press home button</string>
     <string name="enable_long_press_to_toggle_swiftly_switch">By set Swiftly Switch to your Assist app (instead of Google Now On Tap), you can enable/disable trigger edges at any time by long press home button.</string>
     <string name="enable_assist_app">Enable assist app</string>
+    <string name="assist_app_is_only_available_for_mashmallow_and_above">This feature is only available for Android 6.0 and above. For lower Android system, you can enable/disable the Edges from the notification.</string>
     <string name="on"> (ON)</string>
     <string name="off"> (OFF)</string>
     <string name="pause">Pause</string>

@@ -142,6 +142,7 @@ public class EdgeGestureService extends Service {
     public static boolean FLASH_LIGHT_ON = false;
     private boolean working = true;
     private NotificationCompat.Builder notificationBuilder;
+    private EdgesToggleReceiver receiver;
 
     @Nullable
     @Override
@@ -154,7 +155,8 @@ public class EdgeGestureService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Cons.ACTION_TOGGLE_EDGES);
-        this.registerReceiver(new EdgesToggleReceiver(), filter);
+        receiver = new EdgesToggleReceiver();
+        this.registerReceiver(receiver, filter);
         Log.e(TAG, "onStartCommand: ");
 
         if (getPackageName().equals(MainActivity.FREE_VERSION_PACKAGE_NAME)) isFreeVersion = true;
@@ -1911,6 +1913,12 @@ public class EdgeGestureService extends Service {
     @Override
     public void onDestroy() {
         removeAll();
+        try {
+            this.unregisterReceiver(receiver);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "onDestroy: cannot unregister receiver");
+        }
         super.onDestroy();
     }
 

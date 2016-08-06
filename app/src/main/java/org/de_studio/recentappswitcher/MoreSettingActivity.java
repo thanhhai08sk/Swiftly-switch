@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
@@ -147,16 +148,26 @@ public class MoreSettingActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MoreSettingActivity.this);
-                    builder.setTitle(R.string.enable_assist_app)
-                            .setMessage(R.string.enable_long_press_to_toggle_swiftly_switch)
-                            .setPositiveButton(R.string.go_to_setting, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent();
-                                    intent.setAction(Settings.ACTION_VOICE_INPUT_SETTINGS);
-                                    startActivity(intent);
-                                }
-                            });
+                    builder.setTitle(R.string.enable_assist_app);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        builder.setMessage(R.string.enable_long_press_to_toggle_swiftly_switch)
+                                .setPositiveButton(R.string.go_to_setting, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent();
+                                        intent.setAction(Settings.ACTION_VOICE_INPUT_SETTINGS);
+                                        startActivity(intent);
+                                    }
+                                });
+                    } else {
+                        builder.setMessage(R.string.assist_app_is_only_available_for_mashmallow_and_above)
+                                .setPositiveButton(R.string.app_tab_fragment_ok_button, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // nothing
+                                    }
+                                });
+                    }
                     builder.create().show();
                 }
             });
@@ -483,15 +494,17 @@ public class MoreSettingActivity extends AppCompatActivity {
 
     public void setAssistTextView() {
         if (assistAppTextView != null) {
-            String assistant=
-                    Settings.Secure.getString(getContentResolver(),
-                            "voice_interaction_service");
             String text;
-            if (assistant.contains("de_studio")) {
-                text = getString(R.string.main_enable_disable_by_long_press_home_button) + getString(R.string.on);
-            } else {
-                text = getString(R.string.main_enable_disable_by_long_press_home_button) + getString(R.string.off);
-            }
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                String assistant=
+                        Settings.Secure.getString(getContentResolver(),
+                                "voice_interaction_service");
+                if (assistant.contains("de_studio")) {
+                    text = getString(R.string.main_enable_disable_by_long_press_home_button) + getString(R.string.on);
+                } else {
+                    text = getString(R.string.main_enable_disable_by_long_press_home_button) + getString(R.string.off);
+                }
+            }else text = getString(R.string.main_enable_disable_by_long_press_home_button);
             assistAppTextView.setText(text);
         }
     }
