@@ -77,8 +77,7 @@
         </service>
 
         <receiver
-            android:name=".service.EdgeGestureService$BootCompleteReceiver"
-            android:enabled="true"
+            android:name=".BootCompleteReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

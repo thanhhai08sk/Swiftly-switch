@@ -2089,21 +2089,21 @@ public class EdgeGestureService extends Service {
 //            context.startService(new Intent(context, EdgeGestureService.class));
 //        }
 //    }
-
-    public static class BootCompleteReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case Intent.ACTION_BOOT_COMPLETED:
-                    context.startService(new Intent(context, EdgeGestureService.class));
-                    break;
-                case "android.intent.action.QUICKBOOT_POWERON":
-                    context.startService(new Intent(context, EdgeGestureService.class));
-                    break;
-            }
-
-        }
-    }
+//
+//    public static class BootCompleteReceiver extends BroadcastReceiver {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            switch (intent.getAction()) {
+//                case Intent.ACTION_BOOT_COMPLETED:
+//                    context.startService(new Intent(context, EdgeGestureService.class));
+//                    break;
+//                case "android.intent.action.QUICKBOOT_POWERON":
+//                    context.startService(new Intent(context, EdgeGestureService.class));
+//                    break;
+//            }
+//
+//        }
+//    }
 
     public class EdgesToggleReceiver extends BroadcastReceiver {
         public EdgesToggleReceiver() {
