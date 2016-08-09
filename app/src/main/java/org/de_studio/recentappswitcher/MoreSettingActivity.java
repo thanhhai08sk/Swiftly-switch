@@ -499,7 +499,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                 String assistant=
                         Settings.Secure.getString(getContentResolver(),
                                 "voice_interaction_service");
-                if (assistant.contains("de_studio")) {
+                if (assistant!=null && assistant.contains("de_studio")) {
                     text = getString(R.string.main_enable_disable_by_long_press_home_button) + getString(R.string.on);
                 } else {
                     text = getString(R.string.main_enable_disable_by_long_press_home_button) + getString(R.string.off);
