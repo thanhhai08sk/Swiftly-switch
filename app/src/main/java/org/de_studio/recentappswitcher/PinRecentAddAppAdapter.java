@@ -7,11 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 
 import java.util.ArrayList;
 
@@ -45,12 +42,12 @@ public class PinRecentAddAppAdapter extends BaseAdapter {
         final AppInfors appInfors = mAppInfosArrayList.get(position);
         View returnView = convertView;
         if (returnView == null) {
-            returnView = LayoutInflater.from(context).inflate(R.layout.item_dialog_favorite_app, parent, false);
+            returnView = LayoutInflater.from(context).inflate(R.layout.item_circle_favorite, parent, false);
         }
-        ImageView icon = (ImageView) returnView.findViewById(R.id.add_favorite_list_item_image_view);
-        TextView label = (TextView) returnView.findViewById(R.id.add_favorite_list_item_label_text_view);
-        CheckBox checkBox = (CheckBox) returnView.findViewById(R.id.add_favorite_list_item_check_box);
-        checkBox.setChecked(myRealm.where(Shortcut.class).equalTo("packageName",appInfors.packageName).findFirst()!=null);
+        ImageView icon = (ImageView) returnView.findViewById(R.id.item_icon);
+        TextView label = (TextView) returnView.findViewById(R.id.item_label);
+//        CheckBox checkBox = (CheckBox) returnView.findViewById(R.id.add_favorite_list_item_check_box);
+//        checkBox.setChecked(myRealm.where(Shortcut.class).equalTo("packageName",appInfors.packageName).findFirst()!=null);
         try {
             icon.setImageDrawable(packageManager.getApplicationIcon(appInfors.packageName));
 
