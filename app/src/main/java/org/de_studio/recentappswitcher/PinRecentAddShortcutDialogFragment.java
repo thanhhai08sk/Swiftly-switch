@@ -45,7 +45,18 @@ public class PinRecentAddShortcutDialogFragment extends DialogFragment {
     private PackageManager packageManager;
     private List<ResolveInfo> resolveInfos;
     private ResolveInfo mResolveInfo;
+    private int position;
     private int mPosition;
+    public static final String POSITION_KEY = "position";
+
+    public static PinRecentAddShortcutDialogFragment newInstance(int position) {
+
+        Bundle args = new Bundle();
+        args.putInt(POSITION_KEY, position);
+        PinRecentAddShortcutDialogFragment fragment = new PinRecentAddShortcutDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
 
     @Nullable
@@ -121,35 +132,57 @@ public class PinRecentAddShortcutDialogFragment extends DialogFragment {
                     }
                 }
 
-                if (size < 6) {
-                    myRealm.beginTransaction();
-                    RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id", size).findAll();
-                    oldShortcut.deleteAllFromRealm();
+                myRealm.beginTransaction();
+                RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id", PinRecentAddShortcutDialogFragment.this.position).findAll();
+                oldShortcut.deleteAllFromRealm();
 
-                    Shortcut shortcut = new Shortcut();
-                    shortcut.setType(Shortcut.TYPE_SHORTCUT);
-                    shortcut.setId(size);
-                    shortcut.setLabel(label);
-                    shortcut.setPackageName(packageName);
-                    shortcut.setIntent(stringIntent);
+                Shortcut shortcut = new Shortcut();
+                shortcut.setType(Shortcut.TYPE_SHORTCUT);
+                shortcut.setId(PinRecentAddShortcutDialogFragment.this.position);
+                shortcut.setLabel(label);
+                shortcut.setPackageName(packageName);
+                shortcut.setIntent(stringIntent);
 
-                    if (bmp != null) {
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        shortcut.setBitmap(stream.toByteArray());
-                    } else {
-                        shortcut.setResId(id);
-                    }
-                    myRealm.copyToRealm(shortcut);
-                    myRealm.commitTransaction();
+                if (bmp != null) {
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    shortcut.setBitmap(stream.toByteArray());
                 } else {
-                    Toast.makeText(MyApplication.getContext(),getString(R.string.out_of_limit),Toast.LENGTH_SHORT).show();
+                    shortcut.setResId(id);
                 }
+                myRealm.copyToRealm(shortcut);
+                myRealm.commitTransaction();
+
+//                if (size < 6) {
+//                    myRealm.beginTransaction();
+//                    RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id", size).findAll();
+//                    oldShortcut.deleteAllFromRealm();
+//
+//                    Shortcut shortcut = new Shortcut();
+//                    shortcut.setType(Shortcut.TYPE_SHORTCUT);
+//                    shortcut.setId(size);
+//                    shortcut.setLabel(label);
+//                    shortcut.setPackageName(packageName);
+//                    shortcut.setIntent(stringIntent);
+//
+//                    if (bmp != null) {
+//                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                        shortcut.setBitmap(stream.toByteArray());
+//                    } else {
+//                        shortcut.setResId(id);
+//                    }
+//                    myRealm.copyToRealm(shortcut);
+//                    myRealm.commitTransaction();
+//                } else {
+//                    Toast.makeText(MyApplication.getContext(),getString(R.string.out_of_limit),Toast.LENGTH_SHORT).show();
+//                }
 
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(TAG, "onActivityResult: exception when add shortcut");
             }
+            dismiss();
 
         }else
             super.onActivityResult(requestCode, resultCode, data);
@@ -166,12 +199,13 @@ public class PinRecentAddShortcutDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        position = getArguments().getInt(POSITION_KEY);
         getActivity().stopService(new Intent(getActivity(), EdgeGestureService.class));
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-        Utility.getFolderThumbnail(myRealm, mPosition, getActivity());
+//        Utility.getFolderThumbnail(myRealm, mPosition, getActivity());
         try {
             getActivity().startService(new Intent(getActivity(), EdgeGestureService.class));
         } catch (NullPointerException e) {

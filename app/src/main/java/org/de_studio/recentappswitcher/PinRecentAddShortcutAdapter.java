@@ -40,10 +40,10 @@ public class PinRecentAddShortcutAdapter extends BaseAdapter {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.item_choose_shortcut_shortcut_list, parent, false);
+            view = inflater.inflate(R.layout.item_circle_favorite, parent, false);
         }
-        ImageView icon = (ImageView) view.findViewById(R.id.icon);
-        TextView label = (TextView) view.findViewById(R.id.label);
+        ImageView icon = (ImageView) view.findViewById(R.id.item_icon);
+        TextView label = (TextView) view.findViewById(R.id.item_label);
         icon.setImageDrawable(resolveInfos.get(position).loadIcon(packageManager));
         label.setText(resolveInfos.get(position).loadLabel(packageManager));
         return view;

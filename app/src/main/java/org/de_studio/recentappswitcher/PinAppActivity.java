@@ -78,7 +78,7 @@ public class PinAppActivity extends AppCompatActivity {
                                 break;
                             case 3:
                                 FragmentManager fragmentManager3 = getSupportFragmentManager();
-                                PinRecentAddShortcutDialogFragment newFragment3 = new PinRecentAddShortcutDialogFragment();
+                                PinRecentAddShortcutDialogFragment newFragment3 = PinRecentAddShortcutDialogFragment.newInstance(i);
                                 newFragment3.show(fragmentManager3, "pinShortcut");
                                 break;
                         }
