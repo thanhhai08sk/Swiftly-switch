@@ -22,15 +22,12 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
-import io.realm.Sort;
 
 /**
  * Created by HaiNguyen on 7/1/16.
@@ -41,6 +38,17 @@ public class PinRecentAddContactDialogFragment extends DialogFragment implements
     static ListView mListView;
     private Realm myRealm;
     private PinRecentAddContactAdapter mAdapter;
+    public static final String POSITION_KEY = "position";
+    private int position;
+
+    public static PinRecentAddContactDialogFragment newInstance(int position) {
+
+        Bundle args = new Bundle();
+        args.putInt(POSITION_KEY, position);
+        PinRecentAddContactDialogFragment fragment = new PinRecentAddContactDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -77,46 +85,64 @@ public class PinRecentAddContactDialogFragment extends DialogFragment implements
                 String thumbnailUri = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
                 String number = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                if (checkBox != null) {
-                    if (checkBox.isChecked()) {
-                        myRealm.beginTransaction();
-                        Shortcut removeShortcut = myRealm.where(Shortcut.class).equalTo("type", Shortcut.TYPE_CONTACT).
-                                equalTo("contactId", contactId).findFirst();
-                        int removeId = removeShortcut.getId();
-                        Log.e(TAG, "removeID = " + removeId);
-                        removeShortcut.deleteFromRealm();
-                        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).findAll().sort("id", Sort.ASCENDING);
-                        for (int i = 0; i < results.size(); i++) {
-                            Log.e(TAG, "id = " + results.get(i).getId());
-                            if (results.get(i).getId() >= removeId) {
-                                Log.e(TAG, "when i = " + i + "result id = " + results.get(i).getId());
-                                Shortcut shortcut = results.get(i);
-                                int oldId = shortcut.getId();
-                                shortcut.setId(oldId - 1);
-                            }
-                        }
-                        myRealm.commitTransaction();
-                    } else {
-                        if (size < 6) {
-                            Shortcut newShortcut = new Shortcut();
-                            newShortcut.setId(size);
-//                            Log.e(TAG, "size = " + size);
-                            newShortcut.setName(name);
-                            newShortcut.setContactId(contactId);
-                            newShortcut.setType(Shortcut.TYPE_CONTACT);
-                            newShortcut.setThumbnaiUri(thumbnailUri);
-                            newShortcut.setNumber(number);
-                            myRealm.beginTransaction();
-                            myRealm.copyToRealm(newShortcut);
-                            myRealm.commitTransaction();
-                        } else {
-                            Toast.makeText(MyApplication.getContext(), getString(R.string.out_of_limit), Toast.LENGTH_SHORT).show();
-                        }
+                Shortcut removeShortcut = myRealm.where(Shortcut.class).equalTo("id", PinRecentAddContactDialogFragment.this.position).findFirst();
 
-                    }
+                Shortcut newShortcut = new Shortcut();
+                newShortcut.setId(PinRecentAddContactDialogFragment.this.position);
+//                            Log.e(TAG, "size = " + size);
+                newShortcut.setName(name);
+                newShortcut.setContactId(contactId);
+                newShortcut.setType(Shortcut.TYPE_CONTACT);
+                newShortcut.setThumbnaiUri(thumbnailUri);
+                newShortcut.setNumber(number);
+                myRealm.beginTransaction();
+                if (removeShortcut != null) {
+                    removeShortcut.deleteFromRealm();
                 }
+                myRealm.copyToRealm(newShortcut);
+                myRealm.commitTransaction();
+
+//                if (checkBox != null) {
+//                    if (checkBox.isChecked()) {
+//                        myRealm.beginTransaction();
+//                        Shortcut removeShortcut = myRealm.where(Shortcut.class).equalTo("type", Shortcut.TYPE_CONTACT).
+//                                equalTo("contactId", contactId).findFirst();
+//                        int removeId = removeShortcut.getId();
+//                        Log.e(TAG, "removeID = " + removeId);
+//                        removeShortcut.deleteFromRealm();
+//                        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).findAll().sort("id", Sort.ASCENDING);
+//                        for (int i = 0; i < results.size(); i++) {
+//                            Log.e(TAG, "id = " + results.get(i).getId());
+//                            if (results.get(i).getId() >= removeId) {
+//                                Log.e(TAG, "when i = " + i + "result id = " + results.get(i).getId());
+//                                Shortcut shortcut = results.get(i);
+//                                int oldId = shortcut.getId();
+//                                shortcut.setId(oldId - 1);
+//                            }
+//                        }
+//                        myRealm.commitTransaction();
+//                    } else {
+//                        if (size < 6) {
+//                            Shortcut newShortcut = new Shortcut();
+//                            newShortcut.setId(size);
+////                            Log.e(TAG, "size = " + size);
+//                            newShortcut.setName(name);
+//                            newShortcut.setContactId(contactId);
+//                            newShortcut.setType(Shortcut.TYPE_CONTACT);
+//                            newShortcut.setThumbnaiUri(thumbnailUri);
+//                            newShortcut.setNumber(number);
+//                            myRealm.beginTransaction();
+//                            myRealm.copyToRealm(newShortcut);
+//                            myRealm.commitTransaction();
+//                        } else {
+//                            Toast.makeText(MyApplication.getContext(), getString(R.string.out_of_limit), Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                    }
+//                }
 
                 mAdapter.notifyDataSetChanged();
+                dismiss();
             }
             });
         return rootView;
@@ -132,6 +158,7 @@ public class PinRecentAddContactDialogFragment extends DialogFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        position = getArguments().getInt(POSITION_KEY);
         getActivity().stopService(new Intent(getActivity(), EdgeGestureService.class));
     }
 

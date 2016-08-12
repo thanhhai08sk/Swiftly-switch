@@ -11,12 +11,10 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import java.io.IOException;
@@ -42,9 +40,9 @@ public class PinRecentAddContactAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        ImageView icon = (ImageView) view.findViewById(R.id.add_favorite_list_item_image_view);
-        TextView label = (TextView) view.findViewById(R.id.add_favorite_list_item_label_text_view);
-        CheckBox checkBox = (CheckBox) view.findViewById(R.id.add_favorite_list_item_check_box);
+        ImageView icon = (ImageView) view.findViewById(R.id.item_icon);
+        TextView label = (TextView) view.findViewById(R.id.item_label);
+//        CheckBox checkBox = (CheckBox) view.findViewById(R.id.add_favorite_list_item_check_box);
         String number = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
         long contactId = cursor.getLong(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
         int type = cursor.getInt(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.TYPE));
@@ -93,17 +91,17 @@ public class PinRecentAddContactAdapter extends CursorAdapter {
             icon.setImageResource(R.drawable.ic_contact_default);
         }
 
-        if (myRealm.where(Shortcut.class).equalTo("type",Shortcut.TYPE_CONTACT).
-                equalTo("number", number).findFirst() != null) {
-            checkBox.setChecked(true);
-        }else checkBox.setChecked(false);
+//        if (myRealm.where(Shortcut.class).equalTo("type",Shortcut.TYPE_CONTACT).
+//                equalTo("number", number).findFirst() != null) {
+//            checkBox.setChecked(true);
+//        }else checkBox.setChecked(false);
 
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
 
-        return LayoutInflater.from(context).inflate(R.layout.item_dialog_favorite_app, parent, false);
+        return LayoutInflater.from(context).inflate(R.layout.item_circle_favorite, parent, false);
     }
 
 }

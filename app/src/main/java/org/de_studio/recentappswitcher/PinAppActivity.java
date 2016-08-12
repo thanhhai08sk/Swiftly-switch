@@ -67,7 +67,7 @@ public class PinAppActivity extends AppCompatActivity {
                             case 2:
                                 if (Utility.checkContactPermission(getApplicationContext())) {
                                     FragmentManager fragmentManager2 = getSupportFragmentManager();
-                                    PinRecentAddContactDialogFragment newFragment2 = new PinRecentAddContactDialogFragment();
+                                    PinRecentAddContactDialogFragment newFragment2 = PinRecentAddContactDialogFragment.newInstance(i);
                                     newFragment2.show(fragmentManager2, "pinContact");
                                 } else {
                                     ActivityCompat.requestPermissions(PinAppActivity.this,
