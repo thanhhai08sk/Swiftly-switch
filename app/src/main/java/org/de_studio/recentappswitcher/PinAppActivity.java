@@ -61,7 +61,7 @@ public class PinAppActivity extends AppCompatActivity {
                                 break;
                             case 1:
                                 FragmentManager fragmentManager1 = getSupportFragmentManager();
-                                PinRecentAddActionDialogFragment newFragment1 = new PinRecentAddActionDialogFragment();
+                                PinRecentAddActionDialogFragment newFragment1 = PinRecentAddActionDialogFragment.newInstance(i);
                                 newFragment1.show(fragmentManager1, "pinAction");
                                 break;
                             case 2:

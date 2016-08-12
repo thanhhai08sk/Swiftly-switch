@@ -15,17 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
-import io.realm.Sort;
 
 /**
  * Created by HaiNguyen on 7/1/16.
@@ -36,6 +32,17 @@ public class PinRecentAddActionDialogFragment extends DialogFragment{
     private Realm myRealm;
     private PinRecentAddActionAdapter mAdapter;
     private String[] stringArray;
+    private int position;
+    public static final String POSITION_KEY = "position";
+
+    public static PinRecentAddActionDialogFragment newInstance(int position) {
+
+        Bundle args = new Bundle();
+        args.putInt(POSITION_KEY, position);
+        PinRecentAddActionDialogFragment fragment = new PinRecentAddActionDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -55,48 +62,60 @@ public class PinRecentAddActionDialogFragment extends DialogFragment{
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CheckBox checkBox = (CheckBox)view.findViewById(R.id.add_favorite_list_item_check_box);
+//                CheckBox checkBox = (CheckBox)view.findViewById(R.id.add_favorite_list_item_check_box);
                 int size = (int) myRealm.where(Shortcut.class).count();
                 String item =(String) mAdapter.getItem(position);
                 int action = Utility.getActionFromLabel(getActivity(), item);
-                if (checkBox != null) {
-                    if (checkBox.isChecked()) {
-                        myRealm.beginTransaction();
-                        Shortcut removeShortcut = myRealm.where(Shortcut.class).equalTo("type",Shortcut.TYPE_ACTION) .equalTo("action",action).findFirst();
-                        int removeId = removeShortcut.getId();
-                        Log.e(TAG, "removeID = " + removeId);
-                        removeShortcut.deleteFromRealm();
-                        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).findAll().sort("id", Sort.ASCENDING);
-                        for (int i = 0; i < results.size(); i++) {
-                            Log.e(TAG, "id = " + results.get(i).getId());
-                            if (results.get(i).getId() >= removeId) {
-                                Log.e(TAG, "when i = " + i + "result id = " + results.get(i).getId());
-                                Shortcut shortcut = results.get(i);
-                                int oldId = shortcut.getId();
-                                shortcut.setId(oldId - 1);
-                            }
-                        }
-                        myRealm.commitTransaction();
-                    } else {
-//                        if (stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_folder))) {
-//                            checkBox.setChecked(false);
-//                            Toast.makeText(getContext(), getString(R.string.out_of_limit), Toast.LENGTH_SHORT).show();
-//                        }
-                        if (size < 6) {
-                            Shortcut newShortcut = new Shortcut();
-                            newShortcut.setId(size);
-                            newShortcut.setAction(action);
-                            newShortcut.setLabel(item);
-                            newShortcut.setType(Shortcut.TYPE_ACTION);
-                            myRealm.beginTransaction();
-                            myRealm.copyToRealm(newShortcut);
-                            myRealm.commitTransaction();
-                        } else {
-                            Toast.makeText(MyApplication.getContext(),getString(R.string.out_of_limit),Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
+                Shortcut removeShortcut = myRealm.where(Shortcut.class).equalTo("id",PinRecentAddActionDialogFragment.this.position).findFirst();
+                Shortcut newShortcut = new Shortcut();
+                newShortcut.setId(PinRecentAddActionDialogFragment.this.position);
+                newShortcut.setAction(action);
+                newShortcut.setLabel(item);
+                newShortcut.setType(Shortcut.TYPE_ACTION);
+                myRealm.beginTransaction();
+                if (removeShortcut != null) {
+                    removeShortcut.deleteFromRealm();
                 }
+                myRealm.copyToRealm(newShortcut);
+                myRealm.commitTransaction();
+//                if (checkBox != null) {
+//                    if (checkBox.isChecked()) {
+//                        myRealm.beginTransaction();
+//                        Shortcut removeShortcut = myRealm.where(Shortcut.class).equalTo("type",Shortcut.TYPE_ACTION) .equalTo("action",action).findFirst();
+//                        int removeId = removeShortcut.getId();
+//                        Log.e(TAG, "removeID = " + removeId);
+//                        removeShortcut.deleteFromRealm();
+//                        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).findAll().sort("id", Sort.ASCENDING);
+//                        for (int i = 0; i < results.size(); i++) {
+//                            Log.e(TAG, "id = " + results.get(i).getId());
+//                            if (results.get(i).getId() >= removeId) {
+//                                Log.e(TAG, "when i = " + i + "result id = " + results.get(i).getId());
+//                                Shortcut shortcut = results.get(i);
+//                                int oldId = shortcut.getId();
+//                                shortcut.setId(oldId - 1);
+//                            }
+//                        }
+//                        myRealm.commitTransaction();
+//                    } else {
+////                        if (stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_folder))) {
+////                            checkBox.setChecked(false);
+////                            Toast.makeText(getContext(), getString(R.string.out_of_limit), Toast.LENGTH_SHORT).show();
+////                        }
+//                        if (size < 6) {
+//                            Shortcut newShortcut = new Shortcut();
+//                            newShortcut.setId(size);
+//                            newShortcut.setAction(action);
+//                            newShortcut.setLabel(item);
+//                            newShortcut.setType(Shortcut.TYPE_ACTION);
+//                            myRealm.beginTransaction();
+//                            myRealm.copyToRealm(newShortcut);
+//                            myRealm.commitTransaction();
+//                        } else {
+//                            Toast.makeText(MyApplication.getContext(),getString(R.string.out_of_limit),Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                    }
+//                }
                 if ((stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_rotation)) ||
                         stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_brightness))) &&
                         Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
@@ -120,6 +139,7 @@ public class PinRecentAddActionDialogFragment extends DialogFragment{
                 }
 
                 mAdapter.notifyDataSetChanged();
+                dismiss();
             }
         });
         return rootView;
@@ -135,6 +155,7 @@ public class PinRecentAddActionDialogFragment extends DialogFragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        position = getArguments().getInt(POSITION_KEY);
         getActivity().stopService(new Intent(getActivity(), EdgeGestureService.class));
     }
 

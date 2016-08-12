@@ -5,11 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 
 import io.realm.Realm;
 
@@ -37,17 +34,14 @@ public class PinRecentAddActionAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         View returnView = convertView;
         if (returnView == null) {
-            returnView = LayoutInflater.from(mContext).inflate(R.layout.item_dialog_favorite_app, parent, false);
+            returnView = LayoutInflater.from(mContext).inflate(R.layout.item_circle_favorite, parent, false);
         }
-        ImageView icon = (ImageView) returnView.findViewById(R.id.add_favorite_list_item_image_view);
-        TextView label = (TextView) returnView.findViewById(R.id.add_favorite_list_item_label_text_view);
-        CheckBox checkBox = (CheckBox) returnView.findViewById(R.id.add_favorite_list_item_check_box);
+        ImageView icon = (ImageView) returnView.findViewById(R.id.item_icon);
+        TextView label = (TextView) returnView.findViewById(R.id.item_label);
         final String item = stringArray[position];
         label.setText(item);
-        int action = Utility.getActionFromLabel(mContext, item);
-        if (action != -1) {
-            checkBox.setChecked(myRealm.where(Shortcut.class).equalTo("type",Shortcut.TYPE_ACTION) .equalTo("action",action).findFirst()!=null);
-        }
+//        int action = Utility.getActionFromLabel(mContext, item);
+
         if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_wifi))) {
             icon.setImageResource(R.drawable.ic_wifi);
         }else if (item.equalsIgnoreCase(mContext.getResources().getString(R.string.setting_shortcut_bluetooth))) {

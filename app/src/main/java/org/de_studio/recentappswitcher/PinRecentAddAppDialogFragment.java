@@ -83,7 +83,9 @@ public class PinRecentAddAppDialogFragment extends DialogFragment {
                     Log.e(TAG, "onItemClick: NameNotFound");
                 }
                 myRealm.beginTransaction();
-                removeShortcut.deleteFromRealm();
+                if (removeShortcut != null) {
+                    removeShortcut.deleteFromRealm();
+                }
                 myRealm.copyToRealm(newShortcut);
                 myRealm.commitTransaction();
 //                if (checkBox != null) {
