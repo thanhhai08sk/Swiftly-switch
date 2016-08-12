@@ -566,6 +566,9 @@ public class MainActivity extends Activity {
         int titleSize = getResources().getDimensionPixelSize(R.dimen.what_new_title_size);
         AbsoluteSizeSpan span = new AbsoluteSizeSpan(titleSize);
 
+        String title2_3_3 = "Version 2.3.3";
+        String text2_3_3 = " - Now you can ";
+
         String title2_3_2 = "Version 2.3.2";
         String text2_3_2 = " - For Android 6.0 and above: you can disable/enable trigger Edges by long press home button. Enable this feature in More Setting -> Enable/Disable Edges By Long Press Home Button" +
                 "\n - For all Android version: you can disable/enable trigger Edges from the persistent Notification."

@@ -121,7 +121,7 @@
         </activity>
         <activity
             android:name=".PinAppActivity"
-            android:label="@string/title_activity_pin_app"
+            android:label="@string/title_activity_pin_shortcuts"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
