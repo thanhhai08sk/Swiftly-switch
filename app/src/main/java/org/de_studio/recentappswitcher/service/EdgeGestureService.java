@@ -747,34 +747,52 @@ public class EdgeGestureService extends Service {
                             } else {
                                 recentShortcut = new Shortcut[6];
                             }
-                            int n = 0;
+                            int n = 0; //count for pin
+                            int m = 0; //count for temp
                             Shortcut tempShortcut;
-                            if (defaultShared.getBoolean(EdgeSetting.IS_PIN_TO_TOP_KEY, false)) {
-                                for (int t = 0; t < recentShortcut.length; t++) {
-                                    if (t < pinnedShortcut.length) {
-                                        recentShortcut[t] = pinnedShortcut[t];
-                                    } else {
-                                        tempShortcut = new Shortcut();
-                                        tempShortcut.setType(Shortcut.TYPE_APP);
-                                        tempShortcut.setPackageName(tempPackageName.get(t - pinnedShortcut.length));
-                                        recentShortcut[t] = tempShortcut;
-                                    }
-
-                                }
-                            } else {
-                                for (int t = 0; t < recentShortcut.length; t++) {
-                                    if (t + pinnedShortcut.length < recentShortcut.length) {
-                                        tempShortcut = new Shortcut();
-                                        tempShortcut.setType(Shortcut.TYPE_APP);
-                                        tempShortcut.setPackageName(tempPackageName.get(t));
-                                        recentShortcut[t] = tempShortcut;
-                                    } else {
-                                        recentShortcut[t] = pinnedShortcut[n];
-                                        n++;
-                                    }
-
+                            for (int t = 0; t <recentShortcut.length; t++) {
+                                if (pinnedShortcut.length > n && pinnedShortcut[n].getId() == t) {
+                                    recentShortcut[t] = pinnedShortcut[n];
+                                    n++;
+                                } else if (pinnedShortcut.length > n && m >= tempPackageName.size()) {
+                                    recentShortcut[t] = pinnedShortcut[n];
+                                    n++;
+                                } else {
+                                    tempShortcut = new Shortcut();
+                                    tempShortcut.setType(Shortcut.TYPE_APP);
+                                    tempShortcut.setPackageName(tempPackageName.get(m));
+                                    m++;
+                                    recentShortcut[t] = tempShortcut;
                                 }
                             }
+
+
+//                            if (defaultShared.getBoolean(EdgeSetting.IS_PIN_TO_TOP_KEY, false)) {
+//                                for (int t = 0; t < recentShortcut.length; t++) {
+//                                    if (t < pinnedShortcut.length) {
+//                                        recentShortcut[t] = pinnedShortcut[t];
+//                                    } else {
+//                                        tempShortcut = new Shortcut();
+//                                        tempShortcut.setType(Shortcut.TYPE_APP);
+//                                        tempShortcut.setPackageName(tempPackageName.get(t - pinnedShortcut.length));
+//                                        recentShortcut[t] = tempShortcut;
+//                                    }
+//
+//                                }
+//                            } else {
+//                                for (int t = 0; t < recentShortcut.length; t++) {
+//                                    if (t + pinnedShortcut.length < recentShortcut.length) {
+//                                        tempShortcut = new Shortcut();
+//                                        tempShortcut.setType(Shortcut.TYPE_APP);
+//                                        tempShortcut.setPackageName(tempPackageName.get(t));
+//                                        recentShortcut[t] = tempShortcut;
+//                                    } else {
+//                                        recentShortcut[t] = pinnedShortcut[n];
+//                                        n++;
+//                                    }
+//
+//                                }
+//                            }
 
 
                             savedRecentShortcut = recentShortcut;
