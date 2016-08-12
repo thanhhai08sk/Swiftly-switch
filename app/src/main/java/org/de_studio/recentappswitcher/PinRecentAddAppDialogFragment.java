@@ -19,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
@@ -30,8 +29,6 @@ import java.util.Set;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
-import io.realm.Sort;
 
 /**
  * Created by HaiNguyen on 7/1/16.
@@ -43,7 +40,18 @@ public class PinRecentAddAppDialogFragment extends DialogFragment {
     private ProgressBar progressBar;
     private ArrayList<AppInfors> appInforsArrayList;
     private Realm myRealm;
+    public static final String POSITION_KEY = "position";
     PinRecentAddAppAdapter mAdapter;
+    private int position;
+
+    public static PinRecentAddAppDialogFragment newInstance(int position) {
+
+        Bundle args = new Bundle();
+        args.putInt(POSITION_KEY, position);
+        PinRecentAddAppDialogFragment fragment = new PinRecentAddAppDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -62,48 +70,65 @@ public class PinRecentAddAppDialogFragment extends DialogFragment {
                 CheckBox checkBox = (CheckBox)view.findViewById(R.id.add_favorite_list_item_check_box);
                 int size = (int) myRealm.where(Shortcut.class).count();
                 Log.e(TAG, "pinApp count = " + size);
-                if (checkBox != null) {
-                    if (checkBox.isChecked()) {
-                        myRealm.beginTransaction();
-                        Shortcut removeShortcut = myRealm.where(Shortcut.class).equalTo("packageName",packageName).findFirst();
-                        int removeId = removeShortcut.getId();
-                        myRealm.where(Shortcut.class).equalTo("packageName",packageName).findFirst().deleteFromRealm();
-                        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).findAll().sort("id", Sort.ASCENDING);
-
-                        for (int i = 0; i < results.size(); i++) {
-                            Log.e(TAG, "id = " + results.get(i).getId());
-                            if (results.get(i).getId() >= removeId) {
-                                Log.e(TAG, "when i = " + i + "result id = " + results.get(i).getId());
-                                Shortcut shortcut = results.get(i);
-                                int oldId = shortcut.getId();
-                                shortcut.setId(oldId - 1);
-                            }
-                        }
-                        myRealm.commitTransaction();
-                    } else {
-                        if (size < 6) {
-                            Shortcut newShortcut = new Shortcut();
-                            newShortcut.setId(size);
-                            newShortcut.setType(Shortcut.TYPE_APP);
-                            Log.e(TAG, "size = " + size);
-                            newShortcut.setPackageName(packageName);
-                            try {
-                                newShortcut.setLabel((String) getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)));
-                            } catch (PackageManager.NameNotFoundException e) {
-                                e.printStackTrace();
-                                Log.e(TAG, "onItemClick: NameNotFound");
-                            }
-                            myRealm.beginTransaction();
-                            myRealm.copyToRealm(newShortcut);
-                            myRealm.commitTransaction();
-                        } else {
-                            Toast.makeText(MyApplication.getContext(),getString(R.string.out_of_limit),Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
+                Shortcut removeShortcut = myRealm.where(Shortcut.class).equalTo("id",PinRecentAddAppDialogFragment.this.position).findFirst();
+                Shortcut newShortcut = new Shortcut();
+                newShortcut.setId(PinRecentAddAppDialogFragment.this.position);
+                newShortcut.setType(Shortcut.TYPE_APP);
+                Log.e(TAG, "size = " + size);
+                newShortcut.setPackageName(packageName);
+                try {
+                    newShortcut.setLabel((String) getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)));
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "onItemClick: NameNotFound");
                 }
+                myRealm.beginTransaction();
+                removeShortcut.deleteFromRealm();
+                myRealm.copyToRealm(newShortcut);
+                myRealm.commitTransaction();
+//                if (checkBox != null) {
+//                    if (checkBox.isChecked()) {
+//                        myRealm.beginTransaction();
+//                        Shortcut removeShortcut = myRealm.where(Shortcut.class).equalTo("packageName",packageName).findFirst();
+//                        int removeId = removeShortcut.getId();
+//                        myRealm.where(Shortcut.class).equalTo("packageName",packageName).findFirst().deleteFromRealm();
+//                        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).findAll().sort("id", Sort.ASCENDING);
+//
+//                        for (int i = 0; i < results.size(); i++) {
+//                            Log.e(TAG, "id = " + results.get(i).getId());
+//                            if (results.get(i).getId() >= removeId) {
+//                                Log.e(TAG, "when i = " + i + "result id = " + results.get(i).getId());
+//                                Shortcut shortcut = results.get(i);
+//                                int oldId = shortcut.getId();
+//                                shortcut.setId(oldId - 1);
+//                            }
+//                        }
+//                        myRealm.commitTransaction();
+//                    } else {
+//                        if (size < 6) {
+//                            Shortcut newShortcut = new Shortcut();
+//                            newShortcut.setId(size);
+//                            newShortcut.setType(Shortcut.TYPE_APP);
+//                            Log.e(TAG, "size = " + size);
+//                            newShortcut.setPackageName(packageName);
+//                            try {
+//                                newShortcut.setLabel((String) getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)));
+//                            } catch (PackageManager.NameNotFoundException e) {
+//                                e.printStackTrace();
+//                                Log.e(TAG, "onItemClick: NameNotFound");
+//                            }
+//                            myRealm.beginTransaction();
+//                            myRealm.copyToRealm(newShortcut);
+//                            myRealm.commitTransaction();
+//                        } else {
+//                            Toast.makeText(MyApplication.getContext(),getString(R.string.out_of_limit),Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                    }
+//                }
 
                 mAdapter.notifyDataSetChanged();
+                dismiss();
             }
         });
         progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
@@ -122,6 +147,7 @@ public class PinRecentAddAppDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().stopService(new Intent(getActivity(), EdgeGestureService.class));
+        position = getArguments().getInt(POSITION_KEY);
         new LoadInstalledApp().execute();
     }
 
@@ -170,6 +196,10 @@ public class PinRecentAddAppDialogFragment extends DialogFragment {
             }
 
         }
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
 }

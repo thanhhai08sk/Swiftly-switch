@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.de_studio.recentappswitcher.service.EdgeSetting;
@@ -40,17 +41,59 @@ public class PinAppActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view,final int i, long l) {
+                CharSequence[] items = new CharSequence[]{getString(R.string.apps),
+                        getString(R.string.actions),
+                        getString(R.string.contacts),
+                        getString(R.string.shortcut)};
+                AlertDialog.Builder builder = new AlertDialog.Builder(PinAppActivity.this);
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                PinRecentAddAppDialogFragment newFragment = PinRecentAddAppDialogFragment.newInstance(i);
+                                newFragment.show(fragmentManager, "pinApp");
+                                break;
+                            case 1:
+                                FragmentManager fragmentManager1 = getSupportFragmentManager();
+                                PinRecentAddActionDialogFragment newFragment1 = new PinRecentAddActionDialogFragment();
+                                newFragment1.show(fragmentManager1, "pinAction");
+                                break;
+                            case 2:
+                                if (Utility.checkContactPermission(getApplicationContext())) {
+                                    FragmentManager fragmentManager2 = getSupportFragmentManager();
+                                    PinRecentAddContactDialogFragment newFragment2 = new PinRecentAddContactDialogFragment();
+                                    newFragment2.show(fragmentManager2, "pinContact");
+                                } else {
+                                    ActivityCompat.requestPermissions(PinAppActivity.this,
+                                            new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE},
+                                            MY_PERMISSIONS_REQUEST);
+                                }
+
+                                break;
+                            case 3:
+                                FragmentManager fragmentManager3 = getSupportFragmentManager();
+                                PinRecentAddShortcutDialogFragment newFragment3 = new PinRecentAddShortcutDialogFragment();
+                                newFragment3.show(fragmentManager3, "pinShortcut");
+                                break;
+                        }
+                    }
+                });
+                dialog = builder.create();
+                dialog.show();
+            }
+        });
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    android.app.FragmentManager fragmentManager = getFragmentManager();
-//                    PinAppDialogFragment newFragment = new PinAppDialogFragment();
-//                    newFragment.show(fragmentManager, "pinAppDialogFragment");
-
-
-
                     CharSequence[] items = new CharSequence[]{getString(R.string.apps),
                             getString(R.string.actions),
                             getString(R.string.contacts),
