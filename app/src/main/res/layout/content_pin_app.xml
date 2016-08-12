@@ -12,14 +12,12 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:mContext="org.de_studio.recentappswitcher.PinAppActivity"
     tools:showIn="@layout/activity_pin_app">
-    <com.mobeta.android.dslv.DragSortListView
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/drag_list_view"
-        dslv:drag_enabled = "true"
-        dslv:drag_handle_id= "@drawable/ic_edit_white_24dp"
+        android:id="@+id/pinned_shortcut_list_view"
         >
 
-    </com.mobeta.android.dslv.DragSortListView>
+    </ListView>
 
 </RelativeLayout>

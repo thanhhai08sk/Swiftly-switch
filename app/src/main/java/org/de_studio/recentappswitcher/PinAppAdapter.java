@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +58,7 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
     }
     @Override
     public int getCount() {
-        return (int)pinRealm.where(Shortcut.class).count();
+        return 6;
     }
 
     @Override
@@ -74,10 +75,12 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            view = LayoutInflater.from(mContext).inflate(R.layout.pin_app_list_view_item, parent, false);
+            view = LayoutInflater.from(mContext).inflate(R.layout.item_circle_favorite, parent, false);
         }
-        ImageView icon = (ImageView) view.findViewById(R.id.pin_app_list_item_icon_image_view);
-        TextView label = (TextView) view.findViewById(R.id.pin_app_list_item_label_text_view);
+        ImageView icon = (ImageView) view.findViewById(R.id.item_icon);
+        TextView label = (TextView) view.findViewById(R.id.item_label);
+
+
         shortcut = pinRealm.where(Shortcut.class).equalTo("id",position).findFirst();
         CharSequence title= "";
 
@@ -92,22 +95,13 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
             }
 
 
-            Utility.setImageForShortcut(shortcut,packageManager,icon,mContext,iconPack,pinRealm,false);
+            Utility.setImageForShortcut(shortcut, packageManager, icon, mContext, iconPack, pinRealm, false);
             label.setText(title);
+        } else {
+            icon.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+            icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
+            label.setText(R.string.recent_app);
         }
-//        view.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//                Toast.makeText(mContext, "id = " + shortcut.getId(), Toast.LENGTH_SHORT).show();
-//                return true;
-//            }
-//        });
-//        icon.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(mContext, "id = " + pinRealm.where(Shortcut.class).equalTo("id", position).findFirst().getId(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
         return view;
     }
 

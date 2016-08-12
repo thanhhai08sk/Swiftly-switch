@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -18,9 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.mobeta.android.dslv.DragSortController;
-import com.mobeta.android.dslv.DragSortListView;
+import android.widget.ListView;
 
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
@@ -36,16 +33,9 @@ public class PinAppActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         sharedPreferences = getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         setContentView(R.layout.activity_pin_app);
-        DragSortListView listView = (DragSortListView) findViewById(R.id.drag_list_view);
-        DragSortController controller = new DragSortController(listView);
-        controller.setDragHandleId(R.id.pin_app_list_item_dragger);
-        controller.setRemoveEnabled(true);
-        controller.setBackgroundColor(Color.TRANSPARENT);
-        listView.setFloatViewManager(controller);
-        listView.setOnTouchListener(controller);
-        listView.setFloatViewManager(controller);
-        listView.setOnTouchListener(controller);
-        listView.setDragEnabled(true);
+        ListView listView = (ListView) findViewById(R.id.pinned_shortcut_list_view);
+
+
         adapter = new PinAppAdapter(this);
         listView.setAdapter(adapter);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

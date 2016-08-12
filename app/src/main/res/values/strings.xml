@@ -209,4 +209,5 @@
     <string name="off"> (OFF)</string>
     <string name="pause">Pause</string>
     <string name="resume">Resume</string>
+    <string name="recent_app">Recent app</string>
 </resources>
