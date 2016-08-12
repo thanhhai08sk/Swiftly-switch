@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mobeta.android.dslv.DragSortListView;
 
@@ -120,6 +121,7 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
                         break;
                     case DragEvent.ACTION_DROP:
                         changePosition(dragPosition,position);
+                        restartService();
                         View view = (View) event.getLocalState();
                         view.setVisibility(View.VISIBLE);
                         break;
@@ -255,5 +257,11 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
 
         pinRealm.commitTransaction();
         notifyDataSetChanged();
+    }
+    private void restartService() {
+        if (Utility.checkDrawPermission(mContext.getApplicationContext())) {
+            mContext.getApplicationContext().stopService(new Intent(mContext.getApplicationContext(), EdgeGestureService.class));
+            mContext.getApplicationContext().startService(new Intent(mContext.getApplicationContext(), EdgeGestureService.class));
+        }else Toast.makeText(mContext, "Lack of Draw over other apps permission", Toast.LENGTH_SHORT).show();
     }
 }
