@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
     private SharedPreferences sharedPreferences;
     private IconPackManager.IconPack iconPack;
     private PackageManager packageManager;
+    private int dragPosition;
     private static final String LOG_TAG = PinAppAdapter.class.getSimpleName();
     public PinAppAdapter(Context context) {
         super();
@@ -102,6 +104,35 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
             icon.setColorFilter(ContextCompat.getColor(mContext, R.color.black));
             label.setText(R.string.recent_app);
         }
+
+        view.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        // do nothing
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        v.setBackgroundResource(R.color.grey);
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        v.setBackground(null);
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        changePosition(dragPosition,position);
+                        View view = (View) event.getLocalState();
+                        view.setVisibility(View.VISIBLE);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        v.setBackground(null);
+                        notifyDataSetChanged();
+
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
         return view;
     }
 
@@ -166,5 +197,63 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
         notifyDataSetChanged();
         mContext.stopService(new Intent(mContext, EdgeGestureService.class));
         mContext.startService(new Intent(mContext, EdgeGestureService.class));
+    }
+
+    public void setDragPosition(int dragPosition) {
+        this.dragPosition = dragPosition;
+    }
+
+    public void changePosition(int dragPosition, int dropPosition) {
+        Shortcut dropTemp = pinRealm.where(Shortcut.class).equalTo("id", dropPosition).findFirst();
+        Shortcut dragTemp = pinRealm.where(Shortcut.class).equalTo("id", dragPosition).findFirst();
+        Shortcut shortcut5000 = pinRealm.where(Shortcut.class).equalTo("id",5000).findFirst();
+        pinRealm.beginTransaction();
+        if (shortcut5000 != null) {
+            shortcut5000.deleteFromRealm();
+        }
+
+        try {
+            dropTemp.setId(5000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            dragTemp.setId(dropPosition);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            dropTemp.setId(dragPosition);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        pinRealm.commitTransaction();
+        notifyDataSetChanged();
+    }
+
+    public void removeDragItem() {
+        pinRealm.beginTransaction();
+        Shortcut shortcut = pinRealm.where(Shortcut.class).equalTo("id", dragPosition).findFirst();
+        if (shortcut != null) {
+            shortcut.deleteFromRealm();
+//            shortcut.setType(Shortcut.TYPE_ACTION);
+//            shortcut.setAction(Shortcut.ACTION_NONE);
+//            shortcut.setLabel("");
+        }
+//        else {
+//            Shortcut shortcut1 = new Shortcut();
+//            shortcut1.setType(Shortcut.TYPE_ACTION);
+//            shortcut1.setAction(Shortcut.ACTION_NONE);
+//            shortcut1.setId(dragPosition);
+//            pinRealm.copyToRealm(shortcut1);
+//
+//        }
+
+        pinRealm.commitTransaction();
+        notifyDataSetChanged();
     }
 }

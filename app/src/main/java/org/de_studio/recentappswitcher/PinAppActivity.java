@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher;
 
 import android.Manifest;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,11 +14,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import org.de_studio.recentappswitcher.service.EdgeSetting;
@@ -28,6 +31,7 @@ public class PinAppActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private static final int MY_PERMISSIONS_REQUEST = 22;
     private AlertDialog dialog;
+    private ImageView clearButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,7 @@ public class PinAppActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         setContentView(R.layout.activity_pin_app);
         ListView listView = (ListView) findViewById(R.id.pinned_shortcut_list_view);
+        clearButton = (ImageView) findViewById(R.id.clear_button);
 
 
         adapter = new PinAppAdapter(this);
@@ -139,6 +144,52 @@ public class PinAppActivity extends AppCompatActivity {
             });
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ClipData data = ClipData.newPlainText("","");
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                view.startDrag(data, shadowBuilder, view, 0);
+                view.setVisibility(View.GONE);
+                clearButton.setVisibility(View.VISIBLE);
+                adapter.setDragPosition(i);
+                return true;
+            }
+        });
+
+        clearButton.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        v.setVisibility(View.VISIBLE);
+                        // do nothing
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        v.setBackgroundResource(R.drawable.delete_button_red);
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        v.setBackgroundResource(R.drawable.delete_button_normal);
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        View view = (View) event.getLocalState();
+                        view.setVisibility(View.VISIBLE);
+                        adapter.removeDragItem();
+
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        v.setBackgroundResource(R.drawable.delete_button_normal);
+                        v.setVisibility(View.GONE);
+                        View view1 = (View) event.getLocalState();
+                        view1.setVisibility(View.VISIBLE);
+
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     @Override
