@@ -751,18 +751,20 @@ public class EdgeGestureService extends Service {
                             int m = 0; //count for temp
                             Shortcut tempShortcut;
                             for (int t = 0; t <recentShortcut.length; t++) {
+                                Log.e(TAG, "onTouch:  n = " + n + "\nm = " + m + "\nt = "+ t);
+//                                Log.e(TAG, "onTouch: pin.n.id = " + pinnedShortcut[n].getId());
                                 if (pinnedShortcut.length > n && pinnedShortcut[n].getId() == t) {
                                     recentShortcut[t] = pinnedShortcut[n];
                                     n++;
-                                } else if (pinnedShortcut.length > n && m >= tempPackageName.size()) {
-                                    recentShortcut[t] = pinnedShortcut[n];
-                                    n++;
-                                } else {
+                                } else if (m < tempPackageName.size()) {
                                     tempShortcut = new Shortcut();
                                     tempShortcut.setType(Shortcut.TYPE_APP);
                                     tempShortcut.setPackageName(tempPackageName.get(m));
                                     m++;
                                     recentShortcut[t] = tempShortcut;
+                                } else {
+                                    recentShortcut[t] = pinnedShortcut[n];
+                                    n++;
                                 }
                             }
 
@@ -1869,7 +1871,7 @@ public class EdgeGestureService extends Service {
         mIconScale = defaultShared.getFloat(EdgeSetting.ICON_SCALE, 1f);
 //        defaultShared.edit().putInt(EdgeSetting.SERVICE_ID, serviceId).commit();
         RealmResults<Shortcut> results1 =
-                pinAppRealm.where(Shortcut.class).findAll();
+                pinAppRealm.where(Shortcut.class).findAll().sort("id");
         if (isFreeVersion && isOutOfTrial) {
             results1 = null;
         }

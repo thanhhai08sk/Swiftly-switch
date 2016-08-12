@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,21 +15,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mobeta.android.dslv.DragSortListView;
-
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
-import io.realm.Sort;
 
 /**
  * Created by hai on 3/25/2016.
  */
-public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropListener ,DragSortListView.RemoveListener{
+public class PinAppAdapter extends BaseAdapter{
     private Context mContext;
     private static final String TAG = PinAppAdapter.class.getSimpleName();
     private Realm pinRealm;
@@ -138,68 +133,66 @@ public class PinAppAdapter extends BaseAdapter implements DragSortListView.DropL
         return view;
     }
 
-    @Override
-    public void drop(int from, int to) {
-        RealmResults<Shortcut> results = pinRealm.where(Shortcut.class).findAll();
-        Shortcut[] shortcuts = new Shortcut[results.size()];
-        Shortcut tem;
-        int i = 0;
-        for (Shortcut shortcut : results) {
-            shortcuts[i] = pinRealm.copyFromRealm(shortcut);
-            i++;
-        }
-        if (from > to) {
-            tem = shortcuts[from];
-            for (int j = from; j > to; j--) {
-                shortcuts[j] = shortcuts[j -1];
-            }
-            shortcuts[to]= tem;
-        }else if (from < to) {
-            tem = shortcuts[from];
-            for (int k = from; k < to; k++) {
-                shortcuts[k] = shortcuts[k + 1];
-            }
-            shortcuts[to] = tem;
-        }
-        pinRealm.beginTransaction();
-        pinRealm.delete(Shortcut.class);
-        int m = 0;
-        for (Shortcut shortcut : shortcuts) {
-//            Shortcut shortcut1 = new Shortcut();
-//            shortcut1.setPackageName(shortcut);
-//            shortcut1.setId(m);
-            Log.e(TAG,  "\nm = " + m);
-            shortcut.setId(m);
-            m++;
-            pinRealm.copyToRealm(shortcut);
-        }
-        pinRealm.commitTransaction();
-        notifyDataSetChanged();
-        mContext.stopService(new Intent(mContext, EdgeGestureService.class));
-        mContext.startService(new Intent(mContext, EdgeGestureService.class));
-    }
+//    @Override
+//    public void drop(int from, int to) {
+//        RealmResults<Shortcut> results = pinRealm.where(Shortcut.class).findAll().sort("id",Sort.ASCENDING);
+//        Shortcut[] copyOfResultShortcut = new Shortcut[results.size()];
+//        Shortcut tem;
+//
+//        int i = 0;
+//        for (Shortcut shortcut : results) {
+//            copyOfResultShortcut[i] = pinRealm.copyFromRealm(shortcut);
+//            i++;
+//        }
+//        if (from > to) {
+//            tem = copyOfResultShortcut[from];
+//            for (int j = from; j > to; j--) {
+//                copyOfResultShortcut[j] = copyOfResultShortcut[j -1];
+//            }
+//            copyOfResultShortcut[to]= tem;
+//        }else if (from < to) {
+//            tem = copyOfResultShortcut[from];
+//            for (int k = from; k < to; k++) {
+//                copyOfResultShortcut[k] = copyOfResultShortcut[k + 1];
+//            }
+//            copyOfResultShortcut[to] = tem;
+//        }
+//        pinRealm.beginTransaction();
+//        pinRealm.delete(Shortcut.class);
+//        int m = 0;
+//        for (Shortcut shortcut : copyOfResultShortcut) {
+//            Log.e(TAG,  "\nm = " + m);
+//            shortcut.setId(m);
+//            m++;
+//            pinRealm.copyToRealm(shortcut);
+//        }
+//        pinRealm.commitTransaction();
+//        notifyDataSetChanged();
+//        mContext.stopService(new Intent(mContext, EdgeGestureService.class));
+//        mContext.startService(new Intent(mContext, EdgeGestureService.class));
+//    }
 
-    public void remove(int id) {
-        Log.e(LOG_TAG, "remove " + id);
-        pinRealm.beginTransaction();
-        pinRealm.where(Shortcut.class).equalTo("id",id).findFirst().deleteFromRealm();
-        RealmResults<Shortcut> results = pinRealm.where(Shortcut.class).findAll().sort("id", Sort.ASCENDING);
-        for (int i = 0; i < results.size(); i++) {
-            Log.e(LOG_TAG, "id = " + results.get(i).getId());
-            if (results.get(i).getId() >= id) {
-                Log.e(LOG_TAG, "when i = " + i + "result id = " + results.get(i).getId());
-                Shortcut shortcut = results.get(i);
-                int oldId = shortcut.getId();
-                shortcut.setId(oldId - 1);
-            }
-
-//                            results.get(i).setId(results.get(i).getId() - 1);
-        }
-        pinRealm.commitTransaction();
-        notifyDataSetChanged();
-        mContext.stopService(new Intent(mContext, EdgeGestureService.class));
-        mContext.startService(new Intent(mContext, EdgeGestureService.class));
-    }
+//    public void remove(int id) {
+//        Log.e(LOG_TAG, "remove " + id);
+//        pinRealm.beginTransaction();
+//        pinRealm.where(Shortcut.class).equalTo("id",id).findFirst().deleteFromRealm();
+//        RealmResults<Shortcut> results = pinRealm.where(Shortcut.class).findAll().sort("id", Sort.ASCENDING);
+//        for (int i = 0; i < results.size(); i++) {
+//            Log.e(LOG_TAG, "id = " + results.get(i).getId());
+//            if (results.get(i).getId() >= id) {
+//                Log.e(LOG_TAG, "when i = " + i + "result id = " + results.get(i).getId());
+//                Shortcut shortcut = results.get(i);
+//                int oldId = shortcut.getId();
+//                shortcut.setId(oldId - 1);
+//            }
+//
+////                            results.get(i).setId(results.get(i).getId() - 1);
+//        }
+//        pinRealm.commitTransaction();
+//        notifyDataSetChanged();
+//        mContext.stopService(new Intent(mContext, EdgeGestureService.class));
+//        mContext.startService(new Intent(mContext, EdgeGestureService.class));
+//    }
 
     public void setDragPosition(int dragPosition) {
         this.dragPosition = dragPosition;
