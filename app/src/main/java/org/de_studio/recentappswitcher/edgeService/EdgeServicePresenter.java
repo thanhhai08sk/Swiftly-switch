@@ -10,6 +10,7 @@ public class EdgeServicePresenter {
     EdgeServiceView view;
     int edge1Position, edge2Position;
     int xInit, yInit;
+    boolean isEdge1On, isEdge2On;
 
     public EdgeServicePresenter(EdgeServiceModel model, EdgeServiceView view) {
         this.model = model;
@@ -19,6 +20,10 @@ public class EdgeServicePresenter {
     public void onViewAttach() {
         edge1Position = view.getEdge1Position();
         edge2Position = view.getEdge2Position();
+        view.createRecentIconsList();
+        isEdge1On = view.isEdge1On();
+        isEdge2On = view.isEdge2On();
+
 
     }
 
