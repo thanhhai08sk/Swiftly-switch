@@ -17,6 +17,8 @@ public class Cons {
     public static final int POSITION_BOTTOM = 3;
 
     public static final int QUICK_ACTION_GAP_DP = 35;
+    public static final int DEFAULT_ICON_SIZE = 48;
+    public static final int DEFAULT_ICON_GAP_IN_GRID = 10;
 
 
 }
