@@ -2274,6 +2274,18 @@ public  class Utility {
 
     }
 
+    public static int rightLeftOrBottom(int position) {
+        switch (position / 10) {
+            case 1:
+                return Cons.POSITION_RIGHT;
+            case 2:
+                return Cons.POSITION_LEFT;
+            case 3:
+                return Cons.POSITION_BOTTOM;
+        }
+        return -1;
+    }
+
 
 
 

@@ -39,7 +39,7 @@ public class edgeServiceModel {
         setPinnedShortcut();
     }
 
-    public int getSemiCircleModeActivatedId(int[] itemXs, int[] itemYs, int x_init, int y_init, int x, int y) {
+    public int getSemiCircleModeActivatedId(int[] itemXs, int[] itemYs, int x_init, int y_init, int x, int y, int position) {
 
 
         double distance;
