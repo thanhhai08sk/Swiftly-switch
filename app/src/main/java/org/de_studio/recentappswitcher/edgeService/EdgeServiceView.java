@@ -1,16 +1,24 @@
 package org.de_studio.recentappswitcher.edgeService;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
@@ -23,11 +31,13 @@ import org.de_studio.recentappswitcher.service.MyImageView;
  */
 public class EdgeServiceView extends Service implements View.OnTouchListener {
     WindowManager windowManager;
+    Vibrator vibrator;
     SharedPreferences defaultShared, edge1Shared, edge2Shared;
     FrameLayout itemsView;
     MyImageView[] recentIcons;
     FrameLayout backgroundFrame;
     WindowManager.LayoutParams backgroundParams;
+    View edge1View, edge2View;
 
 
     public IBinder onBind(Intent intent) {
@@ -93,6 +103,79 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     public int getBackgroundColor() {
         return  defaultShared.getInt(EdgeSetting.BACKGROUND_COLOR_KEY, 1879048192);
     }
+
+    public String getLauncherPackagename() {
+        Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
+        launcherIntent.addCategory(Intent.CATEGORY_HOME);
+        ResolveInfo res = getPackageManager().resolveActivity(launcherIntent, 0);
+        if (res.activityInfo != null) {
+            return res.activityInfo.packageName;
+        } else return  "";
+    }
+
+    public void setWindowManager() {
+        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+    }
+
+    public void setVibrator() {
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+    }
+
+    public void setEdge1View(int edge1Position, float mScale) {
+        edge1View = new View(getApplicationContext());
+        if (edge1Shared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true)) {
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.RECTANGLE);
+            shape.setCornerRadius(0);
+            shape.setStroke((int) (2 * mScale), getGuideColor());
+            LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
+            switch (edge1Position / 10) {
+                case 1:
+                    drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), 0, (int) (-5 * mScale));
+                    break;
+                case 2:
+                    drawable.setLayerInset(0, 0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale));
+                    break;
+                case 3:
+                    drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale), 0);
+                    break;
+            }
+
+            edge1View.setBackground(drawable);
+        }
+    }
+
+    public void setEdge2View(int edge2Position, float mScale) {
+        edge2View = new ImageView(getApplicationContext());
+        if (edge2Shared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true)) {
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.RECTANGLE);
+            shape.setCornerRadius(0);
+            shape.setStroke((int) (2 * mScale), getGuideColor());
+            LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
+            switch (edge2Position / 10) {
+                case 1:
+                    drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), 0, (int) (-5 * mScale));
+                    break;
+                case 2:
+                    drawable.setLayerInset(0, 0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale));
+                    break;
+                case 3:
+                    drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale), 0);
+                    break;
+            }
+
+            edge2View.setBackground(drawable);
+        }
+    }
+
+
+
+    private int getGuideColor() {
+        return defaultShared.getInt(EdgeSetting.GUIDE_COLOR_KEY, Color.argb(255, 255, 64, 129));
+    }
+
+
 
 
 
