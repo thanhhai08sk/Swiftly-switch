@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
@@ -143,6 +144,20 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
             edge1View.setBackground(drawable);
         }
+        int edge1HeightPxl;
+        int edge1WidthPxl;
+        if (Utility.rightLeftOrBottom(edge1Position) == Cons.POSITION_BOTTOM) {
+            edge1HeightPxl = (int) (edge1Sensivite * mScale);
+            edge1WidthPxl = (int) (edge1Length * mScale);
+        } else {
+            edge1HeightPxl = (int) (edge1Length * mScale);
+            edge1WidthPxl = (int) (edge1Sensivite * mScale);
+        }
+        RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1WidthPxl,edge1HeightPxl);
+        edge1ImageLayoutParams.height = edge1HeightPxl;
+        edge1ImageLayoutParams.width = edge1WidthPxl;
+        edge1View.setLayoutParams(edge1ImageLayoutParams);
+
     }
 
     public void setEdge2View(int edge2Position, float mScale) {
@@ -173,6 +188,13 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     private int getGuideColor() {
         return defaultShared.getInt(EdgeSetting.GUIDE_COLOR_KEY, Color.argb(255, 255, 64, 129));
+    }
+
+    private int getEdgeSensitive(String edgeTag) {
+        switch (edgeTag) {
+            case Cons.TAG_EDGE_1:
+                return edge1Shared.getInt(Cons.EDGE_SENSIIVE_KEY, Cons.EDGE_SENSITIVE_DEFAULT);
+        }
     }
 
 

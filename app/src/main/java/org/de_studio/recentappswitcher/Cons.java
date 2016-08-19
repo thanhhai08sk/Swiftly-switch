@@ -38,6 +38,8 @@ public class Cons {
     public static final String TAG_EDGE_1 = "edge1";
     public static final String TAG_EDGE_2 = "edge2";
 
+    public static final int EDGE_SENSITIVE_DEFAULT = 12;
+
 
 //    edge setting
     public static final String AVOID_KEYBOARD_KEY = "avoid_keyboard";
