@@ -16,5 +16,7 @@ public class Cons {
     public static final int POSITION_LEFT = 2;
     public static final int POSITION_BOTTOM = 3;
 
+    public static final int QUICK_ACTION_GAP_DP = 35;
+
 
 }
