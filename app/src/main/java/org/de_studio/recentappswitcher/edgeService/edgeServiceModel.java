@@ -23,16 +23,35 @@ public class edgeServiceModel {
     Set<Shortcut> pinnedSet;
     String lastAppPackageName;
     boolean isFreeAndOutOfTrial;
+    float mScale;
+    float haftIconWidthPxl;
 
 
     private static final String TAG = edgeServiceModel.class.getSimpleName();
 
-    public edgeServiceModel(Set<String> blackListSet, Realm pinRealm, String launcherPackagename, boolean isFreeAndOutOfTrial) {
+    public edgeServiceModel(Set<String> blackListSet, Realm pinRealm, String launcherPackagename, boolean isFreeAndOutOfTrial, float mScale, float haftIconWidthPxl) {
         this.blackListSet = blackListSet;
         this.pinRealm = pinRealm;
         this.launcherPackagename = launcherPackagename;
         this.isFreeAndOutOfTrial = isFreeAndOutOfTrial;
+        this.mScale = mScale;
+        this.haftIconWidthPxl = haftIconWidthPxl;
         setPinnedShortcut();
+    }
+
+    public int getSemiCircleModeActivatedId(int[] itemXs, int[] itemYs, int x_init, int y_init, int x, int y) {
+
+
+        double distance;
+        double distanceNeeded = 35*mScale;
+            for (int i = 0; i < itemXs.length; i++) {
+                distance = Math.sqrt(Math.pow((double)x - (double)(itemXs[i] + haftIconWidthPxl),2) + Math.pow((double)y - (double)(itemYs[i]+ haftIconWidthPxl), 2));
+                if (distance <= distanceNeeded) {
+                    return i;
+                }
+            }
+        return -1;
+
     }
 
     public Shortcut[] getRecentList(ArrayList<String> tempPackageName) {
@@ -112,4 +131,5 @@ public class edgeServiceModel {
         }
         pinnedSet = new HashSet<Shortcut>(Arrays.asList(pinnedShortcut));
     }
+
 }
