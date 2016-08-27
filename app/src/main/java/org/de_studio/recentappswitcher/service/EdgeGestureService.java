@@ -1844,7 +1844,7 @@ public class EdgeGestureService extends Service {
         isEdge1On = sharedPreferences1.getBoolean(EdgeSetting.EDGE_ON_KEY, true);
         isEdge2On = sharedPreferences2.getBoolean(EdgeSetting.EDGE_ON_KEY, false);
         spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
-        icon_distance = defaultShared.getInt(EdgeSetting.ICON_DISTANCE_KEY, 105);
+        icon_distance = defaultShared.getInt(EdgeSetting.CIRCLE_SIZE_KEY, 105);
         ovalOffSet = (int) (ovalOffSetInDp * mScale);
         ovalRadiusPlusPxl = (int) (ovalRadiusPlus * mIconScale * mScale);
         numOfRecent = defaultShared.getInt(EdgeSetting.NUM_OF_RECENT_KEY, 6);

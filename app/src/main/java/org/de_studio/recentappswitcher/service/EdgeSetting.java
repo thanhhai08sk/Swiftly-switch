@@ -53,7 +53,7 @@ public class EdgeSetting extends DialogFragment {
     public static final String HOLD_TIME_ENABLE_KEY = "hold_time_enable";
     public static final String APP_OPEN_TIME_KEY = "app_open_time";
     public static final String HAS_REACT_FOR_VOTE_KEY = "has_react_for_vote";
-    public static final String ICON_DISTANCE_KEY = "icon_distance";
+    public static final String CIRCLE_SIZE_KEY = "icon_distance";
     public static final String NUM_OF_RECENT_KEY = "num_of_recent";
     public static final String NUM_OF_GRID_ROW_KEY = "grid_row";
     public static final String NUM_OF_GRID_COLUMN_KEY = "grid_column";
@@ -134,7 +134,7 @@ public class EdgeSetting extends DialogFragment {
         int currentLength = sharedPreferences.getInt(EDGE_LENGTH_KEY ,150);
         int currentOffset = sharedPreferences.getInt(EDGE_OFFSET_KEY, 0);
         int currentSensitive = sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 12);
-        int currentCircleSize = defaultSharedPreferences.getInt(ICON_DISTANCE_KEY,105);
+        int currentCircleSize = defaultSharedPreferences.getInt(CIRCLE_SIZE_KEY,105);
         final TextView sensitiveNumberTextView = (TextView) rootView.findViewById(R.id.edge_dialog_sensitive_number_text);
         final AppCompatSpinner positionSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_position_spinner);
         final AppCompatSpinner modeSpinner = (AppCompatSpinner) rootView.findViewById(R.id.edge_dialog_mode_spinner);
@@ -383,7 +383,7 @@ public class EdgeSetting extends DialogFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                defaultSharedPreferences.edit().putInt(ICON_DISTANCE_KEY,progressChanged).commit();
+                defaultSharedPreferences.edit().putInt(CIRCLE_SIZE_KEY,progressChanged).commit();
                 mContext.stopService(new Intent(mContext, EdgeGestureService.class));
                 mContext.startService(new Intent(mContext, EdgeGestureService.class));
             }
@@ -411,7 +411,7 @@ public class EdgeSetting extends DialogFragment {
                 lengthSeekBar.setProgress(110);
                 sharedPreferences.edit().putInt(EDGE_LENGTH_KEY, 150).commit();
                 circleSizeSeekBar.setProgress(30);
-                defaultSharedPreferences.edit().putInt(ICON_DISTANCE_KEY,105).commit();
+                defaultSharedPreferences.edit().putInt(CIRCLE_SIZE_KEY,105).commit();
                 mContext.stopService(new Intent(mContext, EdgeGestureService.class));
                 mContext.startService(new Intent(mContext, EdgeGestureService.class));
 //                updateEdgeView();

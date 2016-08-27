@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -148,14 +147,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         return  defaultShared.getInt(EdgeSetting.BACKGROUND_COLOR_KEY, 1879048192);
     }
 
-    public String getLauncherPackagename() {
-        Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
-        launcherIntent.addCategory(Intent.CATEGORY_HOME);
-        ResolveInfo res = getPackageManager().resolveActivity(launcherIntent, 0);
-        if (res.activityInfo != null) {
-            return res.activityInfo.packageName;
-        } else return  "";
-    }
 
     public void setWindowManager() {
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);

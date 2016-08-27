@@ -18,6 +18,19 @@ public class Cons {
         }
     };
 
+    public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.pro";
+    public static final String FREE_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.trial";
+    public static final int TRIAL_TIME =  1000 * 60 * 60 * 24 * 14;
+
+
+    public static final String EDGE_1_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_edge_1_shared_preference";
+    public static final String EDGE_2_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_edge_2_shared_preference";
+    public static final String DEFAULT_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_sharedpreferences";
+    public static final String FAVORITE_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_favorite_shared_preferences";
+    public static final String EXCLUDE_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_exclude_shared_preferences";
+
+
+    public static final int RAD_ICON_DEFAULT_DP = 24;
     public static final String ACTION_TOGGLE_EDGES = "org.de_studio.recentappswitcher.action.toggle_edges";
     public static final int POSITION_RIGHT_TOP = 10;
     public static final int POSITION_RIGHT_CENTRE = 11;
@@ -34,6 +47,7 @@ public class Cons {
     public static final int DEFAULT_ICON_SIZE = 48;
     public static final int DEFAULT_ICON_GAP_IN_GRID = 10;
     public static final int INIT_OFFSET = 10;
+    public static final int CIRCLE_SIZE_DEFAULT = 105;
 
     public static final String TAG_EDGE_1 = "edge1";
     public static final String TAG_EDGE_2 = "edge2";
@@ -83,7 +97,7 @@ public class Cons {
     public static final String HOLD_TIME_ENABLE_KEY = "hold_time_enable";
     public static final String APP_OPEN_TIME_KEY = "app_open_time";
     public static final String HAS_REACT_FOR_VOTE_KEY = "has_react_for_vote";
-    public static final String ICON_DISTANCE_KEY = "icon_distance";
+    public static final String CIRCLE_SIZE_KEY = "icon_distance";
     public static final String NUM_OF_RECENT_KEY = "num_of_recent";
     public static final String NUM_OF_GRID_ROW_KEY = "grid_row";
     public static final String NUM_OF_GRID_COLUMN_KEY = "grid_column";
