@@ -1,9 +1,14 @@
 package org.de_studio.recentappswitcher.edgeService;
 
+import android.app.ActivityManager;
 import android.app.Service;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -12,8 +17,10 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,10 +35,18 @@ import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.MyImageView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
 /**
  * Created by HaiNguyen on 8/19/16.
  */
 public class EdgeServiceView extends Service implements View.OnTouchListener {
+
+    private static final String TAG = EdgeServiceView.class.getSimpleName();
     WindowManager windowManager;
     Vibrator vibrator;
     SharedPreferences defaultShared, edge1Shared, edge2Shared;
@@ -133,6 +148,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     public void setEdge1View(int edge1Position, float mScale) {
         edge1View = new View(getApplicationContext());
+        edge1View.setTag(Cons.TAG_EDGE_1);
         if (edge1Shared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true)) {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
@@ -175,6 +191,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     public void setEdge2View(int edge2Position, float mScale) {
         edge2View = new View(getApplicationContext());
+        edge2View.setTag(Cons.TAG_EDGE_2);
         if (edge2Shared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true)) {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
@@ -345,6 +362,84 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 return edge2Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
             default:
                 return Cons.EDGE_OFFSET_DEFAULT;
+        }
+    }
+
+    public ArrayList<String> getRecentApps(String launcherPackagename, Set<String> excludeSet) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+            int numOfTask;
+            if (launcherPackagename != null) {
+                numOfTask = 8;
+            } else numOfTask = 7;
+            List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
+            ArrayList<String> tempPackageNameKK = new ArrayList<String>();
+            for (int i = 0; i < list.size(); i++) {
+                ActivityManager.RunningTaskInfo taskInfo = list.get(i);
+                ComponentName componentName = taskInfo.baseActivity;
+                String packName = componentName.getPackageName();
+                if (i != 0 && !packName.equals(launcherPackagename) && !excludeSet.contains(packName) && !packName.contains("launcher")) {
+                    tempPackageNameKK.add(packName);
+                }
+            }
+            return tempPackageNameKK;
+        } else {
+            UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
+            long currentTimeMillis = System.currentTimeMillis() + 5000;
+            List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
+            ArrayList<String> tempPackageName = new ArrayList<String>();
+            if (stats != null) {
+                SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(Cons.DATE_DECENDING_COMPARATOR);
+                for (UsageStats usageStats : stats) {
+                    mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
+                }
+                Set<Long> setKey = mySortedMap.keySet();
+                Log.e(TAG, "mySortedMap size   = " + mySortedMap.size());
+                UsageStats usageStats;
+                String packa;
+                boolean isSystem = false;
+                PackageManager packageManager = getPackageManager();
+                boolean hasKeyInFuture = false;
+                for (Long key : setKey) {
+                    if (key >= currentTimeMillis) {
+                        hasKeyInFuture = true;
+                        Log.e(TAG, "key is in future");
+                    } else {
+                        usageStats = mySortedMap.get(key);
+                        if (usageStats == null) {
+                            Log.e(TAG, " usageStats is null");
+                        } else {
+                            packa = usageStats.getPackageName();
+                            try {
+                                try {
+                                    isSystem = packageManager.getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/");
+                                } catch (NullPointerException e) {
+                                    Log.e(TAG, "isSystem = null");
+                                }
+                                if (isSystem) {
+                                    //do nothing
+                                } else if (packageManager.getLaunchIntentForPackage(packa) == null ||
+                                        packa.contains("systemui") ||
+                                        packa.contains("googlequicksearchbox") ||
+                                        excludeSet.contains(packa) ||
+                                        tempPackageName.contains(packa)
+                                        ) {
+                                    // do nothing
+                                } else tempPackageName.add(packa);
+                                if (tempPackageName.size() >= 8) {
+                                    Log.e(TAG, "tempackage >= 8");
+                                    break;
+                                }
+                            } catch (PackageManager.NameNotFoundException e) {
+                                Log.e(TAG, "name not found" + e);
+                            }
+                        }
+
+                    }
+
+                }
+            }
+            return tempPackageName;
         }
     }
 
