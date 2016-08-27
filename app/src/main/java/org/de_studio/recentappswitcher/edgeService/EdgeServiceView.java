@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
@@ -13,6 +14,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -209,6 +211,152 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             edge2ImageLayoutParams.height = edge2HeightPxl;
             edge2ImageLayoutParams.width = edge2WidthPxl;
             edge2View.setLayoutParams(edge2ImageLayoutParams);
+        }
+    }
+
+    public void addEdge1View(int edge1Position, float mScale) {
+        WindowManager.LayoutParams paramsEdge1;
+        switch (defaultShared.getInt(EdgeSetting.AVOID_KEYBOARD_OPTION_KEY, EdgeSetting.OPTION_PLACE_UNDER)) {
+            case EdgeSetting.OPTION_PLACE_UNDER:
+                paramsEdge1 = new WindowManager.LayoutParams(
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.TYPE_PHONE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                        PixelFormat.TRANSLUCENT);
+                break;
+            case EdgeSetting.OPTION_STEP_ASIDE:
+                paramsEdge1 = new WindowManager.LayoutParams();
+                paramsEdge1.type = 2002;
+                paramsEdge1.gravity = 53;
+                paramsEdge1.flags = 40;
+                paramsEdge1.width = 1;
+                paramsEdge1.height = -1;
+                paramsEdge1.format = - 2;
+                break;
+            default:
+                paramsEdge1 = new WindowManager.LayoutParams(
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.TYPE_PHONE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                        PixelFormat.TRANSLUCENT);
+                break;
+        }
+
+        if (defaultShared.getBoolean(EdgeSetting.AVOID_KEYBOARD_KEY, true)) {
+            paramsEdge1.flags |=131072;
+        }
+        switch (edge1Position) {
+            case 10:
+                paramsEdge1.gravity = Gravity.TOP | Gravity.RIGHT;
+                break;
+            case 11:
+                paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+                break;
+            case 12:
+                paramsEdge1.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                break;
+            case 20:
+                paramsEdge1.gravity = Gravity.TOP | Gravity.LEFT;
+                break;
+            case 21:
+                paramsEdge1.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                break;
+            case 22:
+                paramsEdge1.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                break;
+            case 31:
+                paramsEdge1.gravity = Gravity.BOTTOM | Gravity.CENTER;
+                break;
+        }
+
+        int edge1offset = edge1Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
+
+        if (edge1Position == 12 | edge1Position == 22) {
+            paramsEdge1.y = (int) (edge1offset * mScale);
+        } else if (edge1Position == 31) {
+            paramsEdge1.x = -(int) (edge1offset * mScale);
+        } else {
+            paramsEdge1.y = -(int) (edge1offset * mScale);
+        }
+
+
+        if (!(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false)) ) {
+            windowManager.addView(edge1View, paramsEdge1);
+        }
+    }
+
+    public void addEdge2View(int edge2Position, float mScale) {
+        WindowManager.LayoutParams paramsEdge2;
+        switch (defaultShared.getInt(EdgeSetting.AVOID_KEYBOARD_OPTION_KEY, EdgeSetting.OPTION_PLACE_UNDER)) {
+            case EdgeSetting.OPTION_PLACE_UNDER:
+                paramsEdge2 = new WindowManager.LayoutParams(
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.TYPE_PHONE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                        PixelFormat.TRANSLUCENT);
+                break;
+            case EdgeSetting.OPTION_STEP_ASIDE:
+                paramsEdge2 = new WindowManager.LayoutParams();
+                paramsEdge2.type = 2002;
+                paramsEdge2.gravity = 53;
+                paramsEdge2.flags = 40;
+                paramsEdge2.width = 1;
+                paramsEdge2.height = -1;
+                paramsEdge2.format = - 2;
+                break;
+            default:
+                paramsEdge2 = new WindowManager.LayoutParams(
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.TYPE_PHONE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                        PixelFormat.TRANSLUCENT);
+                break;
+        }
+
+        if (defaultShared.getBoolean(EdgeSetting.AVOID_KEYBOARD_KEY, true)) {
+            paramsEdge2.flags |=131072;
+        }
+        switch (edge2Position) {
+            case 10:
+                paramsEdge2.gravity = Gravity.TOP | Gravity.RIGHT;
+                break;
+            case 11:
+                paramsEdge2.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+                break;
+            case 12:
+                paramsEdge2.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                break;
+            case 20:
+                paramsEdge2.gravity = Gravity.TOP | Gravity.LEFT;
+                break;
+            case 21:
+                paramsEdge2.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                break;
+            case 22:
+                paramsEdge2.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                break;
+            case 31:
+                paramsEdge2.gravity = Gravity.BOTTOM | Gravity.CENTER;
+                break;
+        }
+
+        int edge2offset = edge2Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
+
+        if (edge2Position == 12 | edge2Position == 22) {
+            paramsEdge2.y = (int) (edge2offset * mScale);
+        } else if (edge2Position == 31) {
+            paramsEdge2.x = -(int) (edge2offset * mScale);
+        } else {
+            paramsEdge2.y = -(int) (edge2offset * mScale);
+        }
+
+
+        if (!(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false)) ) {
+            windowManager.addView(edge2View, paramsEdge2);
         }
     }
 

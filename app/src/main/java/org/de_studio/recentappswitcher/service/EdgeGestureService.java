@@ -300,11 +300,6 @@ public class EdgeGestureService extends Service {
                 paramsEdge1.y = -(int) (edge1offset * mScale);
             }
 
-//            paramsEdge1.verticalMargin = 500;
-//            paramsEdge1.horizontalMargin= 500;
-//            tempImageView = new ImageView(getApplicationContext());
-//            tempImageView.setBackgroundResource(R.color.colorAccent);
-
 
             if (isEdge1On && !(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false)) ) {
                 windowManager.addView(edge1Image, paramsEdge1);

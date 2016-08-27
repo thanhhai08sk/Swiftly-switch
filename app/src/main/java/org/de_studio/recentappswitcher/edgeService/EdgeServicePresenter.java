@@ -30,11 +30,14 @@ public class EdgeServicePresenter {
         laucherPackageName = view.getLauncherPackagename();
         if (isEdge1On) {
             view.setEdge1View(edge1Position, model.mScale);
+            view.addEdge1View(edge1Position, model.mScale);
         }
 
         if (isEdge2On) {
             view.setEdge2View(edge2Position, model.mScale);
+            view.addEdge2View(edge2Position, model.mScale);
         }
+
 
     }
 
