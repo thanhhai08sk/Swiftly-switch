@@ -66,7 +66,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     }
 
-    public void createRecentIconsList() {
+    public void createRecentIconsList(float mScale) {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         itemsView = (FrameLayout) layoutInflater.inflate(R.layout.items, null);
         recentIcons = new MyImageView[6];
@@ -76,6 +76,14 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         recentIcons[3] = (MyImageView) itemsView.findViewById(R.id.item_3);
         recentIcons[4] = (MyImageView) itemsView.findViewById(R.id.item_4);
         recentIcons[5] = (MyImageView) itemsView.findViewById(R.id.item_5);
+
+        FrameLayout.LayoutParams sampleParas1 = new FrameLayout.LayoutParams(recentIcons[0].getLayoutParams());
+        float mIconScale = defaultShared.getFloat(Cons.ICON_SCALE, Cons.ICON_SCALE_DEFAULT);
+        for (MyImageView image : recentIcons) {
+            sampleParas1.height = (int) (48 * mIconScale * mScale);
+            sampleParas1.width = (int) (48 * mIconScale * mScale);
+            image.setLayoutParams(sampleParas1);
+        }
     }
 
     public boolean isEdge1On() {

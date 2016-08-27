@@ -40,6 +40,7 @@ public class Cons {
 
     public static final int EDGE_SENSITIVE_DEFAULT = 12;
     public static final int EDGE_LENGTH_DEFAULT = 150;
+    public static final float ICON_SCALE_DEFAULT = 1f;
 
 
 //    edge setting

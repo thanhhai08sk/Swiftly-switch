@@ -23,7 +23,7 @@ public class EdgeServicePresenter {
         view.setVibrator();
         edge1Position = view.getEdge1Position();
         edge2Position = view.getEdge2Position();
-        view.createRecentIconsList();
+        view.createRecentIconsList(model.mScale);
         view.createBackgroundFrame();
         isEdge1On = view.isEdge1On();
         isEdge2On = view.isEdge2On();
