@@ -25,7 +25,10 @@ import io.realm.Realm;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DP_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_KEY;
-import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHAREDPREFERENCE_NAME;
+import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
+import static org.de_studio.recentappswitcher.Cons.GRID_GAP_DEFAULT;
+import static org.de_studio.recentappswitcher.Cons.GRID_GAP_KEY;
+import static org.de_studio.recentappswitcher.Cons.GRID_GAP_NAME;
 import static org.de_studio.recentappswitcher.Cons.HALF_ICON_WIDTH_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
@@ -96,7 +99,7 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(IS_FREE_AND_OUT_OF_TRIAL_NAME)
-    boolean isFreeAndOutOfTrial(@Named(Cons.DEFAULT_SHAREDPREFERENCE_NAME) SharedPreferences defaultShared) {
+    boolean isFreeAndOutOfTrial(@Named(Cons.DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
 
         return context.getPackageName().equals(Cons.FREE_VERSION_PACKAGE_NAME)
                 && System.currentTimeMillis() - defaultShared.getLong(EdgeSetting.BEGIN_DAY_KEY, System.currentTimeMillis()) > MainActivity.trialTime;
@@ -122,15 +125,22 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(CIRCLE_SIZE_DP_NAME)
-    int circleSizeDp(@Named(DEFAULT_SHAREDPREFERENCE_NAME) SharedPreferences defaultShared) {
+    int circleSizeDp(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
         return defaultShared.getInt(CIRCLE_SIZE_KEY, CIRCLE_SIZE_DEFAULT);
     }
 
     @Provides
     @Singleton
     @Named(ICON_SCALE_NAME)
-    float iconScale(@Named(DEFAULT_SHAREDPREFERENCE_NAME) SharedPreferences defaultShared){
+    float iconScale(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
             return defaultShared.getFloat(ICON_SCALE,1f);
+    }
+
+    @Provides
+    @Singleton
+    @Named(GRID_GAP_NAME)
+    int gridGap(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
+        return defaultShared.getInt(GRID_GAP_KEY, GRID_GAP_DEFAULT);
     }
 
 

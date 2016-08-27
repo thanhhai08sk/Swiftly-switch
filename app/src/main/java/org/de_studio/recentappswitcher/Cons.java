@@ -23,9 +23,9 @@ public class Cons {
     public static final int TRIAL_TIME =  1000 * 60 * 60 * 24 * 14;
 
 
-    public static final String EDGE_1_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_edge_1_shared_preference";
-    public static final String EDGE_2_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_edge_2_shared_preference";
-    public static final String DEFAULT_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_sharedpreferences";
+    public static final String EDGE_1_SHARED_NAME = "org.de_studio.recentappswitcher_edge_1_shared_preference";
+    public static final String EDGE_2_SHARED_NAME = "org.de_studio.recentappswitcher_edge_2_shared_preference";
+    public static final String DEFAULT_SHARED_NAME = "org.de_studio.recentappswitcher_sharedpreferences";
     public static final String FAVORITE_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_favorite_shared_preferences";
     public static final String EXCLUDE_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_exclude_shared_preferences";
 
@@ -48,6 +48,7 @@ public class Cons {
     public static final int DEFAULT_ICON_GAP_IN_GRID = 10;
     public static final int INIT_OFFSET = 10;
     public static final int CIRCLE_SIZE_DEFAULT = 105;
+    public static final int GRID_GAP_DEFAULT = 5;
 
     public static final String TAG_EDGE_1 = "edge1";
     public static final String TAG_EDGE_2 = "edge2";
@@ -103,7 +104,7 @@ public class Cons {
     public static final String NUM_OF_GRID_COLUMN_KEY = "grid_column";
     public static final String IS_CENTRE_FAVORITE = "is_centre";
     public static final String IS_DISABLE_IN_LANSCAPE = "disable_in_lanscape";
-    public static final String GAP_OF_SHORTCUT_KEY = "shortcut_gap";
+    public static final String GRID_GAP_KEY = "shortcut_gap";
     public static final String GRID_DISTANCE_FROM_EDGE_KEY = "grid_distance_from_edge";
     public static final String GRID_DISTANCE_VERTICAL_FROM_EDGE_KEY = "grid_distance_vertical_from_edge";
     public static final String IS_ONLY_FAVORITE_KEY = "is_only_favorite";
