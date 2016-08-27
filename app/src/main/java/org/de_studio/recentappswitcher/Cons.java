@@ -52,6 +52,7 @@ public class Cons {
     public static final int CIRCLE_SIZE_DEFAULT = 105;
     public static final int GRID_GAP_DEFAULT = 5;
     public static final int GUIDE_COLOR_DEFAULT = Color.argb(255, 255, 64, 129);
+    public static final int BACKGROUND_COLOR_DEFAULT = 1879048192;
 
     public static final String TAG_EDGE_1 = "edge1";
     public static final String TAG_EDGE_2 = "edge2";
@@ -72,6 +73,7 @@ public class Cons {
     public static final String GRID_PARENT_VIEW_PARA_NAME = "grid_parent_view_para";
     public static final String CIRCLE_SHORTCUT_VIEW_PARA_NAME = "circle_shortcut_view_para";
     public static final String GUIDE_COLOR_NAME = "guide_color";
+    public static final String BACKGROUND_COLOR_NAME = "background_color";
     public static final String CIRCLE_PARENTS_VIEW_NAME = "circle_shortcuts_view";
     public static final String GRID_PARENTS_VIEW_NAME = "grid_parents_view";
     public static final String EDGE_1_POSITION_NAME = "edge_1_position";
@@ -79,6 +81,8 @@ public class Cons {
     public static final String EDGE_1_VIEW_NAME = "edge_1_view";
     public static final String EDGE_2_VIEW_NAME = "edge_2_view";
     public static final String EDGE_POSITIONS_ARRAY_NAME = "edge_position_array";
+    public static final String BACKGROUND_FRAME_NAME = "background_frame";
+    public static final String BACKGROUND_FRAME_PARA_NAME = "background_frame_para";
 
 
     public static final int CURRENT_SCHEMA_VERSION = 2;

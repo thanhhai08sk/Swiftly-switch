@@ -42,6 +42,9 @@ import java.util.TreeMap;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_NAME;
+import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_NAME;
+import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 
@@ -55,8 +58,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     Vibrator vibrator;
     SharedPreferences defaultShared, edge1Shared, edge2Shared;
     GridView shortcutGridView, shortcutFolderGridView;
-    FrameLayout backgroundFrame;
-    WindowManager.LayoutParams backgroundParams, edge1Para, edge2Para;
+    WindowManager.LayoutParams edge1Para, edge2Para;
     @Inject
     @Named(Cons.CIRCLE_SHORTCUT_VIEW_PARA_NAME)
     WindowManager.LayoutParams circleShortcutsViewPara;
@@ -90,6 +92,15 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(Cons.EDGE_2_POSITION_NAME)
     int edge2Position;
+    @Inject
+    @Named(BACKGROUND_COLOR_NAME)
+    int backgroundColor;
+    @Inject
+    @Named(BACKGROUND_FRAME_PARA_NAME)
+    WindowManager.LayoutParams backgroundPara;
+    @Inject
+    @Named(BACKGROUND_FRAME_NAME)
+    FrameLayout backgroundFrame;
 
 
     @Override
@@ -134,24 +145,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     public boolean isEdge2On() {
         return edge2Shared.getBoolean(Cons.EDGE_ON_KEY, false);
-    }
-
-    public void createBackgroundFrame() {
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        backgroundFrame = (FrameLayout) layoutInflater.inflate(R.layout.background, null);
-        backgroundFrame.setBackgroundColor(getBackgroundColor());
-        backgroundParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
-                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                PixelFormat.TRANSLUCENT);
-    }
-
-    public int getBackgroundColor() {
-        return  defaultShared.getInt(EdgeSetting.BACKGROUND_COLOR_KEY, 1879048192);
     }
 
 

@@ -35,6 +35,10 @@ import dagger.Module;
 import dagger.Provides;
 import io.realm.Realm;
 
+import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_DEFAULT;
+import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_NAME;
+import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_NAME;
+import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SHORTCUT_VIEW_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DEFAULT;
@@ -373,6 +377,41 @@ public class EdgeServiceModule {
             edge2View.setLayoutParams(edge2ImageLayoutParams);
         }
         return edge2View;
+    }
+
+
+    @Provides
+    @Singleton
+    @Named(BACKGROUND_COLOR_NAME)
+    int backgroundColor(@Named(DEFAULT_SHARED_NAME)SharedPreferences shared){
+        return shared.getInt(Cons.BACKGROUND_COLOR_KEY, BACKGROUND_COLOR_DEFAULT);
+    }
+
+    @Provides
+    @Singleton
+    @Named(BACKGROUND_FRAME_NAME)
+    FrameLayout backgroundFrame(@Named(BACKGROUND_COLOR_NAME) int backgroundColor) {
+
+        FrameLayout backgroundFrame;
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        backgroundFrame = (FrameLayout) layoutInflater.inflate(R.layout.background, null);
+        backgroundFrame.setBackgroundColor(backgroundColor);
+        return backgroundFrame;
+
+    }
+
+    @Provides
+    @Singleton
+    @Named(BACKGROUND_FRAME_PARA_NAME)
+    WindowManager.LayoutParams backgroundFramePara(){
+        return new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                PixelFormat.TRANSLUCENT);
     }
 
 
