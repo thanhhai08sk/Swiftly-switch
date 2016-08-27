@@ -114,7 +114,7 @@ public class EdgeSetting extends DialogFragment {
             sharedPreferences = mContext.getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
         }
         defaultSharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE,0);
-        spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
+        spinnerEntries = getResources().getStringArray(R.array.edge_positions_array);
 //        caculateEdgeInit();
         Log.e(LOG_TAG,"edge number = " + edgeNumber);
         if (sharedPreferences == null){
@@ -254,7 +254,7 @@ public class EdgeSetting extends DialogFragment {
         sensitiveSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChanged;  //5 to 25
             ViewGroup.LayoutParams edgeParas;
-            String[] spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
+            String[] spinnerEntries = getResources().getStringArray(R.array.edge_positions_array);
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -289,7 +289,7 @@ public class EdgeSetting extends DialogFragment {
         lengthSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChanged; // 40 to 200
             ViewGroup.LayoutParams edgeParas;
-            String[] spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
+            String[] spinnerEntries = getResources().getStringArray(R.array.edge_positions_array);
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

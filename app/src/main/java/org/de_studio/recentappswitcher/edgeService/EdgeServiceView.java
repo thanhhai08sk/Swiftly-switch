@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
@@ -45,6 +44,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Created by HaiNguyen on 8/19/16.
@@ -55,15 +55,38 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     WindowManager windowManager;
     Vibrator vibrator;
     SharedPreferences defaultShared, edge1Shared, edge2Shared;
-    FrameLayout circleShortcutsView, gridParentView;
     GridView shortcutGridView, shortcutFolderGridView;
-    MyImageView[] recentIcons;
     FrameLayout backgroundFrame;
-    WindowManager.LayoutParams backgroundParams, edge1Para, edge2Para, circleShortcutsViewPara, gridShortcutParentViewPara;
+    WindowManager.LayoutParams backgroundParams, edge1Para, edge2Para;
+    @Inject
+    @Named(Cons.CIRCLE_SHORTCUT_VIEW_PARA_NAME)
+    WindowManager.LayoutParams circleShortcutsViewPara;
+
     View edge1View, edge2View;
-    private IconPackManager.IconPack iconPack;
+    @Inject
+    @Named(Cons.GRID_PARENT_VIEW_PARA_NAME)
+    WindowManager.LayoutParams gridShortcutParentViewPara;
     @Inject
     FavoriteShortcutAdapter gridShortcutsAdapter;
+    @Inject
+    IconPackManager.IconPack iconPack;
+    @Inject
+    @Named(Cons.GUIDE_COLOR_NAME)
+    int guideColor;
+    @Inject
+    @Named(Cons.CIRCLE_PARENTS_VIEW_NAME)
+    FrameLayout circleParentsView;
+    @Inject
+    @Named(Cons.GRID_PARENTS_VIEW_NAME)
+    FrameLayout gridParentsView;
+    @Inject
+    MyImageView[] circleIcons;
+    @Inject
+    @Named(Cons.EDGE_1_POSITION_NAME)
+    int edge1Position;
+    @Inject
+    @Named(Cons.EDGE_2_POSITION_NAME)
+    int edge2Position;
 
 
     @Override
@@ -87,35 +110,16 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
 
     public int getEdge1Position() {
-        String edge1Default = getResources().getStringArray(R.array.edge_dialog_spinner_array)[1];
+        String edge1Default = getResources().getStringArray(R.array.edge_positions_array)[1];
         return Utility.getPositionIntFromString(edge1Shared.getString(EdgeSetting.EDGE_POSITION_KEY, edge1Default), getApplicationContext());
     }
 
     public int getEdge2Position() {
-        String edge2Default = getResources().getStringArray(R.array.edge_dialog_spinner_array)[5];
+        String edge2Default = getResources().getStringArray(R.array.edge_positions_array)[5];
         return Utility.getPositionIntFromString(edge2Shared.getString(EdgeSetting.EDGE_POSITION_KEY, edge2Default), getApplicationContext());
 
     }
 
-    public void createRecentIconsList(float mScale) {
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        circleShortcutsView = (FrameLayout) layoutInflater.inflate(R.layout.items, null);
-        recentIcons = new MyImageView[6];
-        recentIcons[0] = (MyImageView) circleShortcutsView.findViewById(R.id.item_0);
-        recentIcons[1] = (MyImageView) circleShortcutsView.findViewById(R.id.item_1);
-        recentIcons[2] = (MyImageView) circleShortcutsView.findViewById(R.id.item_2);
-        recentIcons[3] = (MyImageView) circleShortcutsView.findViewById(R.id.item_3);
-        recentIcons[4] = (MyImageView) circleShortcutsView.findViewById(R.id.item_4);
-        recentIcons[5] = (MyImageView) circleShortcutsView.findViewById(R.id.item_5);
-
-        FrameLayout.LayoutParams sampleParas1 = new FrameLayout.LayoutParams(recentIcons[0].getLayoutParams());
-        float mIconScale = defaultShared.getFloat(Cons.ICON_SCALE, Cons.ICON_SCALE_DEFAULT);
-        for (MyImageView image : recentIcons) {
-            sampleParas1.height = (int) (48 * mIconScale * mScale);
-            sampleParas1.width = (int) (48 * mIconScale * mScale);
-            image.setLayoutParams(sampleParas1);
-        }
-    }
 
     public LayoutInflater getLayoutInflater() {
         return (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -163,7 +167,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
             shape.setCornerRadius(0);
-            shape.setStroke((int) (2 * mScale), getGuideColor());
+            shape.setStroke((int) (2 * mScale), guideColor);
             LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
             switch (edge1Position / 10) {
                 case 1:
@@ -206,7 +210,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
             shape.setCornerRadius(0);
-            shape.setStroke((int) (2 * mScale), getGuideColor());
+            shape.setStroke((int) (2 * mScale), guideColor);
             LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
             switch (edge2Position / 10) {
                 case 1:
@@ -352,9 +356,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
 
 
-    private int getGuideColor() {
-        return defaultShared.getInt(EdgeSetting.GUIDE_COLOR_KEY, Color.argb(255, 255, 64, 129));
-    }
 
     private int getEdgeSensitive(String edgeTag) {
         switch (edgeTag) {
@@ -457,30 +458,20 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     public void showCircleShortcutsView(Shortcut[] shortcuts) {
         for (int i = 0; i < 6; i++) {
             if (i >= shortcuts.length) {
-                recentIcons[i].setImageDrawable(null);
+                circleIcons[i].setImageDrawable(null);
             } else {
-                Utility.setImageForShortcut(shortcuts[i], getPackageManager(), recentIcons[i], getApplicationContext(), getIconPack(), null, true);
+                Utility.setImageForShortcut(shortcuts[i], getPackageManager(), circleIcons[i], getApplicationContext(), iconPack, null, true);
 
             }
         }
         try {
-            windowManager.addView(circleShortcutsView, getCircleShortcutsViewPara());
+            windowManager.addView(circleParentsView, circleShortcutsViewPara);
         } catch (IllegalStateException e) {
             Log.e(TAG, " item_view has already been added to the window manager");
         }
     }
 
-    public void setCircleShortcutsViewPara() {
-        circleShortcutsViewPara = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
-                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                PixelFormat.TRANSLUCENT);
-        circleShortcutsViewPara.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-    }
+
 
     public void showGridShortcutsView() {
 
@@ -493,60 +484,13 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
 
 
-    private WindowManager.LayoutParams getGridShortcutParentViewPara() {
-        if (gridShortcutParentViewPara != null) {
-            return gridShortcutParentViewPara;
-        }
-        setGridShortcutParentViewPara();
-        return gridShortcutParentViewPara;
-    }
 
-    public void setGridShortcutParentViewPara() {
-        gridShortcutParentViewPara = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
-                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                PixelFormat.TRANSLUCENT);
-    }
 
-    private WindowManager.LayoutParams getCircleShortcutsViewPara() {
-        if (circleShortcutsViewPara != null) {
-            return circleShortcutsViewPara;
-        }
-
-        setCircleShortcutsViewPara();
-        return circleShortcutsViewPara;
-    }
-
-    private IconPackManager.IconPack getIconPack() {
-        if (iconPack != null) {
-            return iconPack;
-        }
-
-        setIconPack();
-        return iconPack;
-
-    }
-
-    private void setIconPack() {
-        String iconPackPacka = defaultShared.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none");
-        if (!iconPackPacka.equals("none")) {
-            IconPackManager iconPackManager = new IconPackManager();
-            iconPackManager.setContext(getApplicationContext());
-            iconPack = iconPackManager.getInstance(iconPackPacka);
-            if (iconPack != null) {
-                iconPack.load();
-            }
-        }
-    }
 
     public void setupGridView() {
-        gridParentView = (FrameLayout) getLayoutInflater().inflate(R.layout.grid_shortcut, null);
-        shortcutGridView = (GridView) gridParentView.findViewById(R.id.edge_shortcut_grid_view);
-        shortcutFolderGridView = (GridView) gridParentView.findViewById(R.id.folder_grid);
+        gridParentsView = (FrameLayout) getLayoutInflater().inflate(R.layout.grid_shortcut, null);
+        shortcutGridView = (GridView) gridParentsView.findViewById(R.id.edge_shortcut_grid_view);
+        shortcutFolderGridView = (GridView) gridParentsView.findViewById(R.id.folder_grid);
     }
 
 

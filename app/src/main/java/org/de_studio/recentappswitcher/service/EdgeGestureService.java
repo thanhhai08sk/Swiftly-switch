@@ -120,7 +120,7 @@ public class EdgeGestureService extends Service {
     private int ovalOffSet, ovalRadiusPlus = 17, ovalRadiusPlusPxl, ovalOffSetInDp = 70;
     private long holdTime = 450, vibrationDuration;
     private boolean touched = false, switched = false, isOutOfTrial = false, isFreeVersion = false;
-    private String[] spinnerEntries;
+    private String[] edgePositionsArray;
     private GridView shortcutGridView, shortcutFolderGrid;
     private Circle circle;
     private FavoriteShortcutAdapter shortcutAdapter;
@@ -334,7 +334,7 @@ public class EdgeGestureService extends Service {
 
                 edge2Image.setBackground(drawable);
             }
-            if (Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSetting.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext()) >= 30) {
+            if (Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSetting.EDGE_POSITION_KEY, edgePositionsArray[5]), getApplicationContext()) >= 30) {
                 edge2HeightPxl = (int) (edge2Sensitive * mScale);
                 edge2WidthPxl = (int) (edge2Length * mScale);
             } else {
@@ -1843,7 +1843,7 @@ public class EdgeGestureService extends Service {
         edge2Sensitive = sharedPreferences2.getInt(EdgeSetting.EDGE_SENSIIVE_KEY, 12);
         isEdge1On = sharedPreferences1.getBoolean(EdgeSetting.EDGE_ON_KEY, true);
         isEdge2On = sharedPreferences2.getBoolean(EdgeSetting.EDGE_ON_KEY, false);
-        spinnerEntries = getResources().getStringArray(R.array.edge_dialog_spinner_array);
+        edgePositionsArray = getResources().getStringArray(R.array.edge_positions_array);
         icon_distance = defaultShared.getInt(EdgeSetting.CIRCLE_SIZE_KEY, 105);
         ovalOffSet = (int) (ovalOffSetInDp * mScale);
         ovalRadiusPlusPxl = (int) (ovalRadiusPlus * mIconScale * mScale);
@@ -1855,8 +1855,8 @@ public class EdgeGestureService extends Service {
         vibrationDuration = defaultShared.getInt(EdgeSetting.VIBRATION_DURATION_KEY, 15);
         iconPaddingLeft = (int) (14 * mScale);
         iconPaddingTop = (int) (8 * mScale);
-        edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSetting.EDGE_POSITION_KEY, spinnerEntries[1]), getApplicationContext()); // default =1
-        edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSetting.EDGE_POSITION_KEY, spinnerEntries[5]), getApplicationContext());
+        edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSetting.EDGE_POSITION_KEY, edgePositionsArray[1]), getApplicationContext()); // default =1
+        edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSetting.EDGE_POSITION_KEY, edgePositionsArray[5]), getApplicationContext());
         pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext())
                 .name("pinApp.realm")
                 .schemaVersion(CURRENT_SCHEMA_VERSION)

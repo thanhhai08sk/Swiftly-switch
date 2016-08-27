@@ -635,7 +635,7 @@ public  class Utility {
 //    }
 
     public static int getPositionIntFromString(String position, Context context){
-        String[] array = context.getResources().getStringArray(R.array.edge_dialog_spinner_array);
+        String[] array = context.getResources().getStringArray(R.array.edge_positions_array);
         if (position.equals(array[0])){
             return 10;
         }else if (position.equals(array[1])){

@@ -5,7 +5,7 @@
         <item>@string/edge_dialog_mode_array_only_favorite</item>
         <item>@string/edge_dialog_mode_array_circlt_favorite</item>
     </string-array>
-    <string-array name="edge_dialog_spinner_array">
+    <string-array name="edge_positions_array">
         <item>@string/edge_dialog_array_right_top</item>
         <item>@string/edge_dialog_array_right_centre</item>
         <item>@string/edge_dialog_array_right_bottom</item>

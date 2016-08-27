@@ -1,5 +1,7 @@
 package org.de_studio.recentappswitcher;
 
+import android.graphics.Color;
+
 import java.util.Comparator;
 
 /**
@@ -49,6 +51,7 @@ public class Cons {
     public static final int INIT_OFFSET = 10;
     public static final int CIRCLE_SIZE_DEFAULT = 105;
     public static final int GRID_GAP_DEFAULT = 5;
+    public static final int GUIDE_COLOR_DEFAULT = Color.argb(255, 255, 64, 129);
 
     public static final String TAG_EDGE_1 = "edge1";
     public static final String TAG_EDGE_2 = "edge2";
@@ -66,6 +69,16 @@ public class Cons {
     public static final String CIRCLE_SIZE_DP_NAME = "circle_size_dp";
     public static final String GRID_GAP_NAME = "grid_gap_name";
     public static final String ICON_SCALE_NAME = "icon_scale";
+    public static final String GRID_PARENT_VIEW_PARA_NAME = "grid_parent_view_para";
+    public static final String CIRCLE_SHORTCUT_VIEW_PARA_NAME = "circle_shortcut_view_para";
+    public static final String GUIDE_COLOR_NAME = "guide_color";
+    public static final String CIRCLE_PARENTS_VIEW_NAME = "circle_shortcuts_view";
+    public static final String GRID_PARENTS_VIEW_NAME = "grid_parents_view";
+    public static final String EDGE_1_POSITION_NAME = "edge_1_position";
+    public static final String EDGE_2_POSITION_NAME = "edge_2_position";
+    public static final String EDGE_1_VIEW_NAME = "edge_1_view";
+    public static final String EDGE_2_VIEW_NAME = "edge_2_view";
+    public static final String EDGE_POSITIONS_ARRAY_NAME = "edge_position_array";
 
 
     public static final int CURRENT_SCHEMA_VERSION = 2;
@@ -109,6 +122,7 @@ public class Cons {
     public static final String GRID_DISTANCE_VERTICAL_FROM_EDGE_KEY = "grid_distance_vertical_from_edge";
     public static final String IS_ONLY_FAVORITE_KEY = "is_only_favorite";
     public static final String ICON_PACK_PACKAGE_NAME_KEY = "icon_pack_packa";
+    public static final String ICON_PACK_NONE = "none";
     public static final String ACTION_1_KEY = "action_1";
     public static final String ACTION_2_KEY = "action_2";
     public static final String ACTION_3_KEY = "action_3";
