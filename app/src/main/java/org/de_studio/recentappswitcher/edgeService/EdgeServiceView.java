@@ -12,9 +12,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
@@ -26,7 +23,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.RelativeLayout;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
@@ -46,6 +42,9 @@ import java.util.TreeMap;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
+
 /**
  * Created by HaiNguyen on 8/19/16.
  */
@@ -61,8 +60,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(Cons.CIRCLE_SHORTCUT_VIEW_PARA_NAME)
     WindowManager.LayoutParams circleShortcutsViewPara;
-
-    View edge1View, edge2View;
+    @Inject
+    @Named(EDGE_1_VIEW_NAME)
+    View edge1View;
+    @Inject
+    @Named(EDGE_2_VIEW_NAME)
+    View edge2View;
     @Inject
     @Named(Cons.GRID_PARENT_VIEW_PARA_NAME)
     WindowManager.LayoutParams gridShortcutParentViewPara;
@@ -158,91 +161,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     public void setVibrator() {
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-    }
-
-    public void setEdge1View(int edge1Position, float mScale) {
-        edge1View = new View(getApplicationContext());
-        edge1View.setTag(Cons.TAG_EDGE_1);
-        if (edge1Shared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true)) {
-            GradientDrawable shape = new GradientDrawable();
-            shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setCornerRadius(0);
-            shape.setStroke((int) (2 * mScale), guideColor);
-            LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
-            switch (edge1Position / 10) {
-                case 1:
-                    drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), 0, (int) (-5 * mScale));
-                    break;
-                case 2:
-                    drawable.setLayerInset(0, 0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale));
-                    break;
-                case 3:
-                    drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale), 0);
-                    break;
-            }
-            edge1View.setBackground(drawable);
-
-
-            int edge1Sensivite = edge1Shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.EDGE_SENSITIVE_DEFAULT);
-            int edge1Length = edge1Shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.EDGE_LENGTH_DEFAULT);
-            int edge1HeightPxl;
-            int edge1WidthPxl;
-
-
-            if (Utility.rightLeftOrBottom(edge1Position) == Cons.POSITION_BOTTOM) {
-                edge1HeightPxl = (int) (edge1Sensivite * mScale);
-                edge1WidthPxl = (int) (edge1Length * mScale);
-            } else {
-                edge1HeightPxl = (int) (edge1Length * mScale);
-                edge1WidthPxl = (int) (edge1Sensivite * mScale);
-            }
-            RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1WidthPxl,edge1HeightPxl);
-            edge1ImageLayoutParams.height = edge1HeightPxl;
-            edge1ImageLayoutParams.width = edge1WidthPxl;
-            edge1View.setLayoutParams(edge1ImageLayoutParams);
-        }
-    }
-
-    public void setEdge2View(int edge2Position, float mScale) {
-        edge2View = new View(getApplicationContext());
-        edge2View.setTag(Cons.TAG_EDGE_2);
-        if (edge2Shared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true)) {
-            GradientDrawable shape = new GradientDrawable();
-            shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setCornerRadius(0);
-            shape.setStroke((int) (2 * mScale), guideColor);
-            LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
-            switch (edge2Position / 10) {
-                case 1:
-                    drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), 0, (int) (-5 * mScale));
-                    break;
-                case 2:
-                    drawable.setLayerInset(0, 0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale));
-                    break;
-                case 3:
-                    drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale), 0);
-                    break;
-            }
-            edge2View.setBackground(drawable);
-
-            int edge2Sensivite = edge2Shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.EDGE_SENSITIVE_DEFAULT);
-            int edge2Length = edge2Shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.EDGE_LENGTH_DEFAULT);
-            int edge2HeightPxl;
-            int edge2WidthPxl;
-
-
-            if (Utility.rightLeftOrBottom(edge2Position) == Cons.POSITION_BOTTOM) {
-                edge2HeightPxl = (int) (edge2Sensivite * mScale);
-                edge2WidthPxl = (int) (edge2Length * mScale);
-            } else {
-                edge2HeightPxl = (int) (edge2Length * mScale);
-                edge2WidthPxl = (int) (edge2Sensivite * mScale);
-            }
-            RelativeLayout.LayoutParams edge2ImageLayoutParams = new RelativeLayout.LayoutParams(edge2WidthPxl,edge2HeightPxl);
-            edge2ImageLayoutParams.height = edge2HeightPxl;
-            edge2ImageLayoutParams.width = edge2WidthPxl;
-            edge2View.setLayoutParams(edge2ImageLayoutParams);
-        }
     }
 
 

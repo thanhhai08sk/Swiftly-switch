@@ -5,10 +5,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.MainActivity;
@@ -38,8 +43,10 @@ import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_KEY;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_POSITION_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SHARED_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_POSITION_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_POSITIONS_ARRAY_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_GAP_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GRID_GAP_KEY;
@@ -263,6 +270,109 @@ public class EdgeServiceModule {
     @Named(EDGE_POSITIONS_ARRAY_NAME)
     String[] edgePositionsArray(){
             return  context.getResources().getStringArray(R.array.edge_positions_array);
+    }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_1_VIEW_NAME)
+    View edge1View(@Named(EDGE_1_POSITION_NAME) int edge1Position
+            , @Named(M_SCALE_NAME) float mScale
+            , @Named(EDGE_1_SHARED_NAME) SharedPreferences edge1Shared
+            , @Named(GUIDE_COLOR_NAME) int guideColor) {
+
+        View edge1View = new View(context);
+        edge1View.setTag(Cons.TAG_EDGE_1);
+        if (edge1Shared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true)) {
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.RECTANGLE);
+            shape.setCornerRadius(0);
+            shape.setStroke((int) (2 * mScale), guideColor);
+            LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
+            switch (edge1Position / 10) {
+                case 1:
+                    drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), 0, (int) (-5 * mScale));
+                    break;
+                case 2:
+                    drawable.setLayerInset(0, 0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale));
+                    break;
+                case 3:
+                    drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale), 0);
+                    break;
+            }
+            edge1View.setBackground(drawable);
+
+
+            int edge1Sensivite = edge1Shared.getInt(Cons.EDGE_SENSIIVE_KEY, Cons.EDGE_SENSITIVE_DEFAULT);
+            int edge1Length = edge1Shared.getInt(Cons.EDGE_LENGTH_KEY, Cons.EDGE_LENGTH_DEFAULT);
+            int edge1HeightPxl;
+            int edge1WidthPxl;
+
+
+            if (Utility.rightLeftOrBottom(edge1Position) == Cons.POSITION_BOTTOM) {
+                edge1HeightPxl = (int) (edge1Sensivite * mScale);
+                edge1WidthPxl = (int) (edge1Length * mScale);
+            } else {
+                edge1HeightPxl = (int) (edge1Length * mScale);
+                edge1WidthPxl = (int) (edge1Sensivite * mScale);
+            }
+            RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1WidthPxl, edge1HeightPxl);
+            edge1ImageLayoutParams.height = edge1HeightPxl;
+            edge1ImageLayoutParams.width = edge1WidthPxl;
+            edge1View.setLayoutParams(edge1ImageLayoutParams);
+        }
+        return edge1View;
+    }
+
+
+    @Provides
+    @Singleton
+    @Named(EDGE_2_VIEW_NAME)
+    View edge2View(@Named(EDGE_2_POSITION_NAME) int edge2Position
+            , @Named(M_SCALE_NAME) float mScale
+            , @Named(EDGE_2_SHARED_NAME) SharedPreferences edge2Shared
+            , @Named(GUIDE_COLOR_NAME) int guideColor) {
+
+
+        View edge2View = new View(context);
+        edge2View.setTag(Cons.TAG_EDGE_2);
+        if (edge2Shared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true)) {
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.RECTANGLE);
+            shape.setCornerRadius(0);
+            shape.setStroke((int) (2 * mScale), guideColor);
+            LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
+            switch (edge2Position / 10) {
+                case 1:
+                    drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), 0, (int) (-5 * mScale));
+                    break;
+                case 2:
+                    drawable.setLayerInset(0, 0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale));
+                    break;
+                case 3:
+                    drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale), 0);
+                    break;
+            }
+            edge2View.setBackground(drawable);
+
+            int edge2Sensivite = edge2Shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.EDGE_SENSITIVE_DEFAULT);
+            int edge2Length = edge2Shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.EDGE_LENGTH_DEFAULT);
+            int edge2HeightPxl;
+            int edge2WidthPxl;
+
+
+            if (Utility.rightLeftOrBottom(edge2Position) == Cons.POSITION_BOTTOM) {
+                edge2HeightPxl = (int) (edge2Sensivite * mScale);
+                edge2WidthPxl = (int) (edge2Length * mScale);
+            } else {
+                edge2HeightPxl = (int) (edge2Length * mScale);
+                edge2WidthPxl = (int) (edge2Sensivite * mScale);
+            }
+            RelativeLayout.LayoutParams edge2ImageLayoutParams = new RelativeLayout.LayoutParams(edge2WidthPxl,edge2HeightPxl);
+            edge2ImageLayoutParams.height = edge2HeightPxl;
+            edge2ImageLayoutParams.width = edge2WidthPxl;
+            edge2View.setLayoutParams(edge2ImageLayoutParams);
+        }
+        return edge2View;
     }
 
 
