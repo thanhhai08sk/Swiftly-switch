@@ -27,6 +27,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.RelativeLayout;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -35,6 +36,7 @@ import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
+import org.de_studio.recentappswitcher.service.FavoriteShortcutAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
 
 import java.util.ArrayList;
@@ -42,6 +44,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import javax.inject.Inject;
 
 /**
  * Created by HaiNguyen on 8/19/16.
@@ -52,13 +56,21 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     WindowManager windowManager;
     Vibrator vibrator;
     SharedPreferences defaultShared, edge1Shared, edge2Shared;
-    FrameLayout circleShortcutsView;
+    FrameLayout circleShortcutsView, gridParentView;
+    GridView shortcutGridView, shortcutFolderGridView;
     MyImageView[] recentIcons;
     FrameLayout backgroundFrame;
-    WindowManager.LayoutParams backgroundParams, edge1Para, edge2Para, circleShortcutsViewPara;
+    WindowManager.LayoutParams backgroundParams, edge1Para, edge2Para, circleShortcutsViewPara, gridShortcutParentViewPara;
     View edge1View, edge2View;
     private IconPackManager.IconPack iconPack;
+    @Inject
+    FavoriteShortcutAdapter gridShortcutsAdapter;
 
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
 
     public IBinder onBind(Intent intent) {
         return null;
@@ -104,6 +116,10 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             sampleParas1.width = (int) (48 * mIconScale * mScale);
             image.setLayoutParams(sampleParas1);
         }
+    }
+
+    public LayoutInflater getLayoutInflater() {
+        return (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
     }
 
     public boolean isEdge1On() {
@@ -475,7 +491,35 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         circleShortcutsViewPara.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
     }
 
+    public void showGridShortcutsView() {
 
+
+    }
+
+    public void setupShortcutsGridView() {
+
+    }
+
+
+
+    private WindowManager.LayoutParams getGridShortcutParentViewPara() {
+        if (gridShortcutParentViewPara != null) {
+            return gridShortcutParentViewPara;
+        }
+        setGridShortcutParentViewPara();
+        return gridShortcutParentViewPara;
+    }
+
+    public void setGridShortcutParentViewPara() {
+        gridShortcutParentViewPara = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                PixelFormat.TRANSLUCENT);
+    }
 
     private WindowManager.LayoutParams getCircleShortcutsViewPara() {
         if (circleShortcutsViewPara != null) {
@@ -506,6 +550,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 iconPack.load();
             }
         }
+    }
+
+    public void setupGridView() {
+        gridParentView = (FrameLayout) getLayoutInflater().inflate(R.layout.grid_shortcut, null);
+        shortcutGridView = (GridView) gridParentView.findViewById(R.id.edge_shortcut_grid_view);
+        shortcutFolderGridView = (GridView) gridParentView.findViewById(R.id.folder_grid);
     }
 
 
