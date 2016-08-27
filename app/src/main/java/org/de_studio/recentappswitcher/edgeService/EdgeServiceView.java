@@ -360,6 +360,16 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
+    public void setOnTouchListener(boolean edge1On, boolean edge2On) {
+        if (edge1On) {
+            edge1View.setOnTouchListener(this);
+        }
+
+        if (edge2On) {
+            edge2View.setOnTouchListener(this);
+        }
+    }
+
 
 
     private int getGuideColor() {

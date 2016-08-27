@@ -38,6 +38,8 @@ public class EdgeServicePresenter {
             view.addEdge2View(edge2Position, model.mScale);
         }
 
+        view.setOnTouchListener(isEdge1On, isEdge2On);
+
 
     }
 
