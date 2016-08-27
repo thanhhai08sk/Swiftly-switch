@@ -18,7 +18,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -141,27 +140,31 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                     drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale), 0);
                     break;
             }
-
             edge1View.setBackground(drawable);
-        }
-        int edge1HeightPxl;
-        int edge1WidthPxl;
-        if (Utility.rightLeftOrBottom(edge1Position) == Cons.POSITION_BOTTOM) {
-            edge1HeightPxl = (int) (edge1Sensivite * mScale);
-            edge1WidthPxl = (int) (edge1Length * mScale);
-        } else {
-            edge1HeightPxl = (int) (edge1Length * mScale);
-            edge1WidthPxl = (int) (edge1Sensivite * mScale);
-        }
-        RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1WidthPxl,edge1HeightPxl);
-        edge1ImageLayoutParams.height = edge1HeightPxl;
-        edge1ImageLayoutParams.width = edge1WidthPxl;
-        edge1View.setLayoutParams(edge1ImageLayoutParams);
 
+
+            int edge1Sensivite = edge1Shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.EDGE_SENSITIVE_DEFAULT);
+            int edge1Length = edge1Shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.EDGE_LENGTH_DEFAULT);
+            int edge1HeightPxl;
+            int edge1WidthPxl;
+
+
+            if (Utility.rightLeftOrBottom(edge1Position) == Cons.POSITION_BOTTOM) {
+                edge1HeightPxl = (int) (edge1Sensivite * mScale);
+                edge1WidthPxl = (int) (edge1Length * mScale);
+            } else {
+                edge1HeightPxl = (int) (edge1Length * mScale);
+                edge1WidthPxl = (int) (edge1Sensivite * mScale);
+            }
+            RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1WidthPxl,edge1HeightPxl);
+            edge1ImageLayoutParams.height = edge1HeightPxl;
+            edge1ImageLayoutParams.width = edge1WidthPxl;
+            edge1View.setLayoutParams(edge1ImageLayoutParams);
+        }
     }
 
     public void setEdge2View(int edge2Position, float mScale) {
-        edge2View = new ImageView(getApplicationContext());
+        edge2View = new View(getApplicationContext());
         if (edge2Shared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true)) {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
@@ -179,8 +182,25 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                     drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale), 0);
                     break;
             }
-
             edge2View.setBackground(drawable);
+
+            int edge2Sensivite = edge2Shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.EDGE_SENSITIVE_DEFAULT);
+            int edge2Length = edge2Shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.EDGE_LENGTH_DEFAULT);
+            int edge2HeightPxl;
+            int edge2WidthPxl;
+
+
+            if (Utility.rightLeftOrBottom(edge2Position) == Cons.POSITION_BOTTOM) {
+                edge2HeightPxl = (int) (edge2Sensivite * mScale);
+                edge2WidthPxl = (int) (edge2Length * mScale);
+            } else {
+                edge2HeightPxl = (int) (edge2Length * mScale);
+                edge2WidthPxl = (int) (edge2Sensivite * mScale);
+            }
+            RelativeLayout.LayoutParams edge2ImageLayoutParams = new RelativeLayout.LayoutParams(edge2WidthPxl,edge2HeightPxl);
+            edge2ImageLayoutParams.height = edge2HeightPxl;
+            edge2ImageLayoutParams.width = edge2WidthPxl;
+            edge2View.setLayoutParams(edge2ImageLayoutParams);
         }
     }
 
@@ -195,6 +215,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             case Cons.TAG_EDGE_1:
                 return edge1Shared.getInt(Cons.EDGE_SENSIIVE_KEY, Cons.EDGE_SENSITIVE_DEFAULT);
         }
+        return 0;
     }
 
 

@@ -44,7 +44,6 @@ public class Shortcut extends RealmObject {
     private long contactId;
     private int resId;
     private String intent;
-
     public Shortcut() {}
 
     public void setId(int id) {

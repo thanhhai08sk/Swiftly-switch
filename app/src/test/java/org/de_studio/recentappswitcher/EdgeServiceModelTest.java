@@ -15,7 +15,7 @@ public class EdgeServiceModelTest {
 
     @Before
     public void init() {
-        model = new EdgeServiceModel(null, null, null, false, 3f, 24 * 3, 100);
+//        model = new EdgeServiceModel(null, null, null, false, 3f, 24 * 3, 100);
     }
     @Test
     public void getCircleActivatedId() {
