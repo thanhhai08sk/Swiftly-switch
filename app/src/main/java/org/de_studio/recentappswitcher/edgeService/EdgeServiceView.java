@@ -30,8 +30,10 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.MyImageView;
 
@@ -50,11 +52,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     WindowManager windowManager;
     Vibrator vibrator;
     SharedPreferences defaultShared, edge1Shared, edge2Shared;
-    FrameLayout itemsView;
+    FrameLayout circleShortcutsView;
     MyImageView[] recentIcons;
     FrameLayout backgroundFrame;
-    WindowManager.LayoutParams backgroundParams, edge1Para, edge2Para;
+    WindowManager.LayoutParams backgroundParams, edge1Para, edge2Para, circleShortcutsViewPara;
     View edge1View, edge2View;
+    private IconPackManager.IconPack iconPack;
 
 
     public IBinder onBind(Intent intent) {
@@ -85,14 +88,14 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     public void createRecentIconsList(float mScale) {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        itemsView = (FrameLayout) layoutInflater.inflate(R.layout.items, null);
+        circleShortcutsView = (FrameLayout) layoutInflater.inflate(R.layout.items, null);
         recentIcons = new MyImageView[6];
-        recentIcons[0] = (MyImageView) itemsView.findViewById(R.id.item_0);
-        recentIcons[1] = (MyImageView) itemsView.findViewById(R.id.item_1);
-        recentIcons[2] = (MyImageView) itemsView.findViewById(R.id.item_2);
-        recentIcons[3] = (MyImageView) itemsView.findViewById(R.id.item_3);
-        recentIcons[4] = (MyImageView) itemsView.findViewById(R.id.item_4);
-        recentIcons[5] = (MyImageView) itemsView.findViewById(R.id.item_5);
+        recentIcons[0] = (MyImageView) circleShortcutsView.findViewById(R.id.item_0);
+        recentIcons[1] = (MyImageView) circleShortcutsView.findViewById(R.id.item_1);
+        recentIcons[2] = (MyImageView) circleShortcutsView.findViewById(R.id.item_2);
+        recentIcons[3] = (MyImageView) circleShortcutsView.findViewById(R.id.item_3);
+        recentIcons[4] = (MyImageView) circleShortcutsView.findViewById(R.id.item_4);
+        recentIcons[5] = (MyImageView) circleShortcutsView.findViewById(R.id.item_5);
 
         FrameLayout.LayoutParams sampleParas1 = new FrameLayout.LayoutParams(recentIcons[0].getLayoutParams());
         float mIconScale = defaultShared.getFloat(Cons.ICON_SCALE, Cons.ICON_SCALE_DEFAULT);
@@ -443,6 +446,67 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
+
+    public void showCircleShortcutsView(Shortcut[] shortcuts) {
+        for (int i = 0; i < 6; i++) {
+            if (i >= shortcuts.length) {
+                recentIcons[i].setImageDrawable(null);
+            } else {
+                Utility.setImageForShortcut(shortcuts[i], getPackageManager(), recentIcons[i], getApplicationContext(), getIconPack(), null, true);
+
+            }
+        }
+        try {
+            windowManager.addView(circleShortcutsView, getCircleShortcutsViewPara());
+        } catch (IllegalStateException e) {
+            Log.e(TAG, " item_view has already been added to the window manager");
+        }
+    }
+
+    public void setCircleShortcutsViewPara() {
+        circleShortcutsViewPara = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                PixelFormat.TRANSLUCENT);
+        circleShortcutsViewPara.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+    }
+
+
+
+    private WindowManager.LayoutParams getCircleShortcutsViewPara() {
+        if (circleShortcutsViewPara != null) {
+            return circleShortcutsViewPara;
+        }
+
+        setCircleShortcutsViewPara();
+        return circleShortcutsViewPara;
+    }
+
+    private IconPackManager.IconPack getIconPack() {
+        if (iconPack != null) {
+            return iconPack;
+        }
+
+        setIconPack();
+        return iconPack;
+
+    }
+
+    private void setIconPack() {
+        String iconPackPacka = defaultShared.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none");
+        if (!iconPackPacka.equals("none")) {
+            IconPackManager iconPackManager = new IconPackManager();
+            iconPackManager.setContext(getApplicationContext());
+            iconPack = iconPackManager.getInstance(iconPackPacka);
+            if (iconPack != null) {
+                iconPack.load();
+            }
+        }
+    }
 
 
 
