@@ -30,12 +30,12 @@ public class EdgeServicePresenter {
         laucherPackageName = view.getLauncherPackagename();
         if (isEdge1On) {
             view.setEdge1View(edge1Position, model.mScale);
-            view.addEdge1View(edge1Position, model.mScale);
+            view.addEdgeToWindowManager(Cons.TAG_EDGE_1, view.getEdgePara(edge1Position, Cons.TAG_EDGE_1, model.mScale));
         }
 
         if (isEdge2On) {
             view.setEdge2View(edge2Position, model.mScale);
-            view.addEdge2View(edge2Position, model.mScale);
+            view.addEdgeToWindowManager(Cons.TAG_EDGE_2, view.getEdgePara(edge2Position, Cons.TAG_EDGE_2, model.mScale));
         }
 
         view.setOnTouchListener(isEdge1On, isEdge2On);
