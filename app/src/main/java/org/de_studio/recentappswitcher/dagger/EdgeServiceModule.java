@@ -47,6 +47,8 @@ import static org.de_studio.recentappswitcher.Cons.CIRCLE_SHORTCUT_VIEW_PARA_NAM
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DP_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_KEY;
+import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL;
+import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_VERTICAL;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_GAP_IN_GRID;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_SIZE;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
@@ -64,6 +66,8 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_POSITIONS_ARRAY_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_ADAPTER_NAME;
+import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_HORIZONTAL_NAME;
+import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_VERTICAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.FOLDER_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_GAP_DEFAULT;
@@ -536,6 +540,20 @@ public class EdgeServiceModule {
     @Singleton
     CircleFavoriteAdapter circleFavoriteAdapter(){
         return new CircleFavoriteAdapter(context);
+    }
+
+    @Provides
+    @Singleton
+    @Named(FAVORITE_GRID_PADDING_HORIZONTAL_NAME)
+    int favoritePaddingHorizontal(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
+        return defaultShared.getInt(Cons.FAVORITE_GRID_PADDING_HORIZONTAL_KEY, DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL);
+    }
+
+    @Provides
+    @Singleton
+    @Named(FAVORITE_GRID_PADDING_VERTICAL_NAME)
+    int favoritePaddingVertical(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
+        return defaultShared.getInt(Cons.FAVORITE_GRID_PADDING_VERTICAL_NAME, DEFAULT_FAVORITE_GRID_PADDING_VERTICAL);
     }
 
 

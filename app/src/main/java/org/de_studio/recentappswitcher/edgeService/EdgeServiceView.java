@@ -57,6 +57,8 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.FOLDER_GRID_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
+import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
 
 /**
  * Created by HaiNguyen on 8/19/16.
@@ -144,11 +146,21 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(BACKGROUND_FRAME_NAME)
     FrameLayout backgroundFrame;
-
+    @Inject
+    @Named(M_SCALE_NAME)
+    float mScalse;
+    @Inject
+    @Named(ICON_SCALE_NAME)
+    float iconScale;
     @Inject
     FavoriteShortcutAdapter gridFavoriteAdapter;
     @Inject
     CircleFavoriteAdapter circleFavoriteAdapter;
+    @Inject
+    int favoriteGridPaddingHorizontal;
+    @Inject
+    int favoriteGridPaddingVertical;
+
 
 
     @Override
@@ -343,8 +355,19 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    public void showGridShortcutsView() {
-
+    public void showGridShortcutsView(int xInit, int yInit, int edgePosition, int iconToSwitch) {
+        Utility.setFavoriteGridViewPosition(favoriteGridView
+                ,favoriteGridView.getHeight()
+                ,favoriteGridView.getWidth()
+                ,xInit
+                ,yInit
+                ,mScalse
+                ,edgePosition
+                ,windowManager
+                ,defaultShared
+                ,favoriteGridPaddingHorizontal
+                ,favoriteGridPaddingVertical
+                ,iconToSwitch);
     }
 
     public void setupShortcutsGridView() {

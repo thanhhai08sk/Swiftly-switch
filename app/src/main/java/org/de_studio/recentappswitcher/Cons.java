@@ -48,6 +48,8 @@ public class Cons {
     public static final int QUICK_ACTION_GAP_DP = 35;
     public static final int DEFAULT_ICON_SIZE = 48;
     public static final int DEFAULT_ICON_GAP_IN_GRID = 10;
+    public static final int DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL = 20;
+    public static final int DEFAULT_FAVORITE_GRID_PADDING_VERTICAL = 20;
     public static final int INIT_OFFSET = 10;
     public static final int CIRCLE_SIZE_DEFAULT = 105;
     public static final int GRID_GAP_DEFAULT = 5;
@@ -93,6 +95,8 @@ public class Cons {
     public static final String EDGE_2_OFFSET_NAME = "edge2Offset";
     public static final String FAVORITE_GRID_ADAPTER_NAME = "favoriteGirdAdapter";
     public static final String FAVORITE_CIRCLE_ADAPTER_NAME = "favoriteCircleAdapter";
+    public static final String FAVORITE_GRID_PADDING_HORIZONTAL_NAME = "favoritePaddingHorizontal";
+    public static final String FAVORITE_GRID_PADDING_VERTICAL_NAME = "favoritePaddingVertical";
 
 
 
@@ -133,7 +137,7 @@ public class Cons {
     public static final String IS_CENTRE_FAVORITE = "is_centre";
     public static final String IS_DISABLE_IN_LANSCAPE = "disable_in_lanscape";
     public static final String GRID_GAP_KEY = "shortcut_gap";
-    public static final String GRID_DISTANCE_FROM_EDGE_KEY = "grid_distance_from_edge";
+    public static final String FAVORITE_GRID_PADDING_HORIZONTAL_KEY = "grid_distance_from_edge";
     public static final String GRID_DISTANCE_VERTICAL_FROM_EDGE_KEY = "grid_distance_vertical_from_edge";
     public static final String IS_ONLY_FAVORITE_KEY = "is_only_favorite";
     public static final String ICON_PACK_PACKAGE_NAME_KEY = "icon_pack_packa";
