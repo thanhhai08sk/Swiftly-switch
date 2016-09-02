@@ -55,6 +55,8 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.FOLDER_GRID_VIEW_NAME;
 
 /**
  * Created by HaiNguyen on 8/19/16.
@@ -88,7 +90,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(DEFAULT_SHARED_NAME)
     SharedPreferences defaultShared;
-    GridView shortcutGridView, shortcutFolderGridView;
+    @Inject
+    @Named(FAVORITE_GRID_VIEW_NAME)
+    GridView favoriteGridView;
+    @Inject
+    @Named(FOLDER_GRID_VIEW_NAME)
+    GridView folderGridView;
     @Inject
     @Named(EDGE_1_PARA_NAME)
     WindowManager.LayoutParams edge1Para;
@@ -345,8 +352,8 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
     public void setupGridView() {
         gridParentsView = (FrameLayout) layoutInflater.inflate(R.layout.grid_shortcut, null);
-        shortcutGridView = (GridView) gridParentsView.findViewById(R.id.edge_shortcut_grid_view);
-        shortcutFolderGridView = (GridView) gridParentsView.findViewById(R.id.folder_grid);
+        favoriteGridView = (GridView) gridParentsView.findViewById(R.id.edge_shortcut_grid_view);
+        folderGridView = (GridView) gridParentsView.findViewById(R.id.folder_grid);
     }
 
 

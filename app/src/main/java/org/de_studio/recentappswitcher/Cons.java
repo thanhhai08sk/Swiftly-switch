@@ -76,6 +76,8 @@ public class Cons {
     public static final String BACKGROUND_COLOR_NAME = "background_color";
     public static final String CIRCLE_PARENTS_VIEW_NAME = "circle_shortcuts_view";
     public static final String GRID_PARENTS_VIEW_NAME = "grid_parents_view";
+    public static final String FAVORITE_GRID_VIEW_NAME = "favoriteGridView";
+    public static final String FOLDER_GRID_VIEW_NAME = "folderGridView";
     public static final String EDGE_1_POSITION_NAME = "edge_1_position";
     public static final String EDGE_2_POSITION_NAME = "edge_2_position";
     public static final String EDGE_1_VIEW_NAME = "edge_1_view";

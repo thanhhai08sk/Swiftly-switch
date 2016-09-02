@@ -11,8 +11,10 @@ import android.graphics.drawable.LayerDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.RelativeLayout;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -45,6 +47,8 @@ import static org.de_studio.recentappswitcher.Cons.CIRCLE_SHORTCUT_VIEW_PARA_NAM
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DP_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_KEY;
+import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_GAP_IN_GRID;
+import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_SIZE;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
@@ -59,6 +63,9 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_POSITIONS_ARRAY_NAME;
+import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_ADAPTER_NAME;
+import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.FOLDER_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_GAP_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GRID_GAP_KEY;
 import static org.de_studio.recentappswitcher.Cons.GRID_GAP_NAME;
@@ -234,6 +241,42 @@ public class EdgeServiceModule {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         return  (FrameLayout) layoutInflater.inflate(R.layout.grid_shortcut, null);
     }
+
+    @Provides
+    @Singleton
+    @Named(FAVORITE_GRID_VIEW_NAME)
+    GridView favoriteGridView(@Named(GRID_PARENTS_VIEW_NAME) FrameLayout parent
+            , @Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+            , @Named(M_SCALE_NAME) float mScale
+            , @Named(FAVORITE_GRID_ADAPTER_NAME) FavoriteShortcutAdapter adapter
+            , @Named(ICON_SCALE_NAME) float mIconScale) {
+
+        GridView gridView = (GridView) parent.findViewById(R.id.edge_shortcut_grid_view);
+        ViewGroup.LayoutParams gridParams = gridView.getLayoutParams();
+        int gridRow = defaultShared.getInt(EdgeSetting.NUM_OF_GRID_ROW_KEY, 5);
+        int gridColumn = defaultShared.getInt(EdgeSetting.NUM_OF_GRID_COLUMN_KEY, 4);
+        int gridGap = defaultShared.getInt(EdgeSetting.GAP_OF_SHORTCUT_KEY, 5);
+        gridView.setVerticalSpacing((int) (gridGap * mScale));
+        gridView.setNumColumns(gridColumn);
+        gridView.setGravity(Gravity.CENTER);
+
+        float gridWide = (int) (mScale *  (((DEFAULT_ICON_SIZE * mIconScale) + DEFAULT_ICON_GAP_IN_GRID) * gridColumn + gridGap * (gridColumn - 1)));
+        float gridTall = (int) (mScale *  (((DEFAULT_ICON_SIZE * mIconScale) + DEFAULT_ICON_GAP_IN_GRID) * gridRow + gridGap * (gridRow - 1)));
+        gridParams.height = (int) gridTall;
+        gridParams.width = (int) gridWide;
+        gridView.setLayoutParams(gridParams);
+        gridView.setAdapter(adapter);
+        return gridView;
+    }
+
+    @Provides
+    @Singleton
+    @Named(FOLDER_GRID_VIEW_NAME)
+    GridView folderGridView(@Named(GRID_PARENTS_VIEW_NAME) FrameLayout parent){
+        return (GridView) parent.findViewById(R.id.folder_grid);
+    }
+
+
 
     @Provides
     @Singleton
