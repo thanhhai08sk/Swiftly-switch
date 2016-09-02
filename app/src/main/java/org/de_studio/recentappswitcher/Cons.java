@@ -44,6 +44,7 @@ public class Cons {
     public static final int POSITION_RIGHT = 1;
     public static final int POSITION_LEFT = 2;
     public static final int POSITION_BOTTOM = 3;
+    public static final int CIRCLE_ICON_NUMBER_DEFAULT = 6;
 
     public static final int QUICK_ACTION_GAP_DP = 35;
     public static final int DEFAULT_ICON_SIZE = 48;
