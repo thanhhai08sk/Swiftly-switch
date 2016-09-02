@@ -45,7 +45,9 @@ import javax.inject.Named;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_PARA_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 
 /**
@@ -58,7 +60,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     Vibrator vibrator;
     SharedPreferences defaultShared, edge1Shared, edge2Shared;
     GridView shortcutGridView, shortcutFolderGridView;
-    WindowManager.LayoutParams edge1Para, edge2Para;
+    @Inject
+    @Named(EDGE_1_PARA_NAME)
+    WindowManager.LayoutParams edge1Para;
+    @Inject
+    @Named(EDGE_2_PARA_NAME)
+    WindowManager.LayoutParams edge2Para;
     @Inject
     @Named(Cons.CIRCLE_SHORTCUT_VIEW_PARA_NAME)
     WindowManager.LayoutParams circleShortcutsViewPara;
@@ -123,16 +130,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         return point;
     }
 
-    public int getEdge1Position() {
-        String edge1Default = getResources().getStringArray(R.array.edge_positions_array)[1];
-        return Utility.getPositionIntFromString(edge1Shared.getString(EdgeSetting.EDGE_POSITION_KEY, edge1Default), getApplicationContext());
-    }
 
-    public int getEdge2Position() {
-        String edge2Default = getResources().getStringArray(R.array.edge_positions_array)[5];
-        return Utility.getPositionIntFromString(edge2Shared.getString(EdgeSetting.EDGE_POSITION_KEY, edge2Default), getApplicationContext());
-
-    }
 
 
     public LayoutInflater getLayoutInflater() {

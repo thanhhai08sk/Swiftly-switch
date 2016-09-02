@@ -2286,6 +2286,77 @@ public  class Utility {
         return -1;
     }
 
+    public static WindowManager.LayoutParams getEdgeLayoutPara(SharedPreferences defaultShared, SharedPreferences edge1Shared
+            , float mScale, int edgePosition) {
+        WindowManager.LayoutParams edgePara;
+        switch (defaultShared.getInt(EdgeSetting.AVOID_KEYBOARD_OPTION_KEY, EdgeSetting.OPTION_PLACE_UNDER)) {
+            case EdgeSetting.OPTION_PLACE_UNDER:
+                edgePara = new WindowManager.LayoutParams(
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.TYPE_PHONE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                        PixelFormat.TRANSLUCENT);
+                break;
+            case EdgeSetting.OPTION_STEP_ASIDE:
+                edgePara = new WindowManager.LayoutParams();
+                edgePara.type = 2002;
+                edgePara.gravity = 53;
+                edgePara.flags = 40;
+                edgePara.width = 1;
+                edgePara.height = -1;
+                edgePara.format = -2;
+                break;
+            default:
+                edgePara = new WindowManager.LayoutParams(
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.TYPE_PHONE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                        PixelFormat.TRANSLUCENT);
+                break;
+        }
+
+        if (defaultShared.getBoolean(EdgeSetting.AVOID_KEYBOARD_KEY, true)) {
+            edgePara.flags |= 131072;
+        }
+        switch (edgePosition) {
+            case 10:
+                edgePara.gravity = Gravity.TOP | Gravity.RIGHT;
+                break;
+            case 11:
+                edgePara.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+                break;
+            case 12:
+                edgePara.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                break;
+            case 20:
+                edgePara.gravity = Gravity.TOP | Gravity.LEFT;
+                break;
+            case 21:
+                edgePara.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                break;
+            case 22:
+                edgePara.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                break;
+            case 31:
+                edgePara.gravity = Gravity.BOTTOM | Gravity.CENTER;
+                break;
+        }
+
+        int edge1offset = edge1Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
+
+        if (edgePosition == 12 | edgePosition == 22) {
+            edgePara.y = (int) (edge1offset * mScale);
+        } else if (edgePosition == 31) {
+            edgePara.x = -(int) (edge1offset * mScale);
+        } else {
+            edgePara.y = -(int) (edge1offset * mScale);
+        }
+        return edgePara;
+
+    }
+
 
 
 

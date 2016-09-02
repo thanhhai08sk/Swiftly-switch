@@ -83,6 +83,8 @@ public class Cons {
     public static final String EDGE_POSITIONS_ARRAY_NAME = "edge_position_array";
     public static final String BACKGROUND_FRAME_NAME = "background_frame";
     public static final String BACKGROUND_FRAME_PARA_NAME = "background_frame_para";
+    public static final String EDGE_1_PARA_NAME = "edge1Para";
+    public static final String EDGE_2_PARA_NAME = "edge2Para";
 
 
     public static final int CURRENT_SCHEMA_VERSION = 2;

@@ -45,9 +45,11 @@ import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DP_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_KEY;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_POSITION_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_POSITION_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
@@ -413,6 +415,29 @@ public class EdgeServiceModule {
                         WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 PixelFormat.TRANSLUCENT);
     }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_1_PARA_NAME)
+    WindowManager.LayoutParams edge1Para(@Named(EDGE_1_POSITION_NAME) int edge1Position
+            , @Named(M_SCALE_NAME) float mScale
+            , @Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+            , @Named(EDGE_1_SHARED_NAME) SharedPreferences edge1Shared) {
+        return Utility.getEdgeLayoutPara(defaultShared, edge1Shared, mScale, edge1Position);
+
+    }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_2_PARA_NAME)
+    WindowManager.LayoutParams edge2Para(@Named(EDGE_2_POSITION_NAME) int edge2Position
+            , @Named(M_SCALE_NAME) float mScale
+            , @Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+            , @Named(EDGE_2_SHARED_NAME) SharedPreferences edge2Shared) {
+        return Utility.getEdgeLayoutPara(defaultShared, edge2Shared, mScale, edge2Position);
+    }
+
+
 
 
 
