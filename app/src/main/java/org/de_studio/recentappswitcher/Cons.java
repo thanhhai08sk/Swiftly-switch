@@ -70,6 +70,7 @@ public class Cons {
     public static final int EDGE_LENGTH_DEFAULT = 150;
     public static final float ICON_SCALE_DEFAULT = 1f;
     public static final int EDGE_OFFSET_DEFAULT = 0;
+    public static final boolean USE_ANIMATION_DEFAULT = false;
 
     public static final String LAUNCHER_PACKAGENAME_NAME = "launcher_packagename";
     public static final String IS_FREE_AND_OUT_OF_TRIAL_NAME = "is_free_and_out_of_trial";
@@ -113,6 +114,7 @@ public class Cons {
     public static final String HOLD_TIME_ENABLE_NAME = "holdTimeEnable";
     public static final String VIBRATION_DURATION_NAME = "vibrationDuration";
     public static final String ANIMATION_TIME_NAME = "animationTime";
+    public static final String USE_ANIMATION_NAME = "useAnimation";
     public static final String EDGE_1_MODE_NAME = "edge1Mode";
     public static final String EDGE_2_MODE_NAME = "edge2Mode";
     public static final String QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME = "quickActionWithInstant";
@@ -149,7 +151,7 @@ public class Cons {
     public static final String HAPTIC_ON_ICON_KEY = "haptic_on_icon";
     public static final String DISABLE_CLOCK_KEY = "disable_clock";
     public static final String DISABLE_INDICATOR = "disable_indicator";
-    public static final String ANIMATION_KEY = "disable_background_animation";
+    public static final String USE_ANIMATION_KEY = "disable_background_animation";
     public static final String HOLD_TIME_ENABLE_KEY = "hold_time_enable";
     public static final String APP_OPEN_TIME_KEY = "app_open_time";
     public static final String HAS_REACT_FOR_VOTE_KEY = "has_react_for_vote";

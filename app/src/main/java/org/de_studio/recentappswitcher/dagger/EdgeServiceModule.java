@@ -40,6 +40,7 @@ import dagger.Module;
 import dagger.Provides;
 import io.realm.Realm;
 
+import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_KEY;
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ANI_TIME_KEY;
@@ -106,6 +107,8 @@ import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
 import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_VIEW_RADIUS_NAME;
 import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME;
 import static org.de_studio.recentappswitcher.Cons.RAD_ICON_DEFAULT_DP;
+import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_DEFAULT;
+import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_INSTANT_FAVORITE_NAME;
 import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_KEY;
@@ -674,6 +677,13 @@ public class EdgeServiceModule {
     @Named(ANIMATION_TIME_NAME)
     int animationTime(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
         return shared.getInt(ANI_TIME_KEY, ANIMATION_TIME_DEFAULT);
+    }
+
+    @Provides
+    @Singleton
+    @Named(USE_ANIMATION_NAME)
+    boolean useAnimation(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
+        return defaultShared.getBoolean(USE_ANIMATION_KEY, USE_ANIMATION_DEFAULT);
     }
 
     @Provides

@@ -262,7 +262,7 @@ public class MainActivity extends Activity {
 //        hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferencesDefautl.getBoolean(EdgeSetting.DISABLE_HAPTIC_FEEDBACK_KEY, true));
 //        hapticFeedbackOnItemSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.HAPTIC_ON_ICON_KEY,false));
 //        disableClockSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY,false));
-//        disableAnimationSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.ANIMATION_KEY,true));
+//        disableAnimationSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.USE_ANIMATION_KEY,true));
 //        holdTimeSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.HOLD_TIME_ENABLE_KEY,true));
         edge1Switch.setChecked(sharedPreferences1.getBoolean(EdgeSetting.EDGE_ON_KEY, true));
         edge2Switch.setChecked(sharedPreferences2.getBoolean(EdgeSetting.EDGE_ON_KEY, false));
@@ -359,7 +359,7 @@ public class MainActivity extends Activity {
 //        disableAnimationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
 //            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.ANIMATION_KEY,isChecked).commit();
+//                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.USE_ANIMATION_KEY,isChecked).commit();
 //            }
 //        });
 //        holdTimeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

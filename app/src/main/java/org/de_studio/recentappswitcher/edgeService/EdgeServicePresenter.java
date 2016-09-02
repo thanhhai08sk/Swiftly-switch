@@ -34,6 +34,9 @@ public class EdgeServicePresenter {
         xInit = model.getXInit(position, x, view.getWindowSize().x);
         yInit = model.getYInit(position, y, view.getWindowSize().y);
 
+        view.removeAllExceptEdgeView();
+
+
 
 
     }
