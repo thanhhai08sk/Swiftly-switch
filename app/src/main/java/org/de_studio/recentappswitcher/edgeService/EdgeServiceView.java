@@ -24,7 +24,6 @@ import android.widget.GridView;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
-import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
@@ -115,7 +114,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     View edge2View;
     @Inject
     @Named(Cons.GRID_PARENT_VIEW_PARA_NAME)
-    WindowManager.LayoutParams gridShortcutParentViewPara;
+    WindowManager.LayoutParams gridParentViewPara;
     @Inject
     FavoriteShortcutAdapter gridShortcutsAdapter;
     @Inject
@@ -351,11 +350,20 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             windowManager.removeView(circleParentsView);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(TAG, " Null when remove View");
+            Log.e(TAG, " cannot remove circleParentsView");
         }
     }
 
-    public void showGridShortcutsView(int xInit, int yInit, int edgePosition, int iconToSwitch) {
+    public synchronized void removeGridParentsView() {
+        try {
+            windowManager.removeView(gridParentsView);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "removeGridParentsView: cannot remove gridParentsView");
+        }
+    }
+
+    public void showFavoriteGridView(int xInit, int yInit, int edgePosition, int iconToSwitch) {
         Utility.setFavoriteGridViewPosition(favoriteGridView
                 ,favoriteGridView.getHeight()
                 ,favoriteGridView.getWidth()
@@ -368,16 +376,15 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 ,favoriteGridPaddingHorizontal
                 ,favoriteGridPaddingVertical
                 ,iconToSwitch);
+        favoriteGridView.setVisibility(View.VISIBLE);
+        favoriteGridView.setAlpha(1f);
+        folderGridView.setVisibility(View.GONE);
+        if (!gridParentsView.isAttachedToWindow()) {
+            windowManager.addView(gridParentsView, gridParentViewPara);
+        }
     }
 
-    public void setupShortcutsGridView() {
 
-    }
-    public void setupGridView() {
-        gridParentsView = (FrameLayout) layoutInflater.inflate(R.layout.grid_shortcut, null);
-        favoriteGridView = (GridView) gridParentsView.findViewById(R.id.edge_shortcut_grid_view);
-        folderGridView = (GridView) gridParentsView.findViewById(R.id.folder_grid);
-    }
 
 
 
