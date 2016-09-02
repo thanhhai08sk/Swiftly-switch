@@ -8,6 +8,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Vibrator;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,6 +86,8 @@ import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.HALF_ICON_WIDTH_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
+import static org.de_studio.recentappswitcher.Cons.IS_EDGE_1_ON_NAME;
+import static org.de_studio.recentappswitcher.Cons.IS_EDGE_2_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_FREE_AND_OUT_OF_TRIAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
@@ -606,6 +609,26 @@ public class EdgeServiceModule {
     float circleSizePxl(@Named(CIRCLE_SIZE_DP_NAME) int circleSize
             , @Named(M_SCALE_NAME) float mScale) {
         return mScale * circleSize;
+    }
+
+    @Provides
+    @Singleton
+    Vibrator vibrator(){
+        return (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+    }
+
+    @Provides
+    @Singleton
+    @Named(IS_EDGE_1_ON_NAME)
+    boolean isEdge1On(@Named(EDGE_1_SHARED_NAME) SharedPreferences edge1Shared){
+        return edge1Shared.getBoolean(Cons.EDGE_ON_KEY, true);
+    }
+
+    @Provides
+    @Singleton
+    @Named(IS_EDGE_2_ON_NAME)
+    boolean isEdge2On(@Named(EDGE_2_SHARED_NAME) SharedPreferences edge2shared) {
+        return edge2shared.getBoolean(Cons.EDGE_ON_KEY, false);
     }
 
 

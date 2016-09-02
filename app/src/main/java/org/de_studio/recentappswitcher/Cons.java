@@ -104,6 +104,8 @@ public class Cons {
     public static final String EDGE_1_QUICK_ACTION_VIEWS_NAME = "edge1QuickActionViews";
     public static final String EDGE_2_QUICK_ACTION_VIEWS_NAME = "edge2QuickActionViews";
     public static final String QUICK_ACTION_VIEW_RADIUS_NAME = "quickActionViewRadius";
+    public static final String IS_EDGE_1_ON_NAME = "isEdge1On";
+    public static final String IS_EDGE_2_ON_NAME = "isEdge2On";
 
 
 

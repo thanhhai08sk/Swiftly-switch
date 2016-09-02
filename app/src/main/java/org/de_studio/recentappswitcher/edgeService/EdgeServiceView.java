@@ -5,7 +5,6 @@ import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -66,6 +65,8 @@ import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_REALM_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.FOLDER_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
+import static org.de_studio.recentappswitcher.Cons.IS_EDGE_1_ON_NAME;
+import static org.de_studio.recentappswitcher.Cons.IS_EDGE_2_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
 import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
@@ -94,6 +95,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(EDGE_2_OFFSET_NAME)
     int edge2Offset;
+    @Inject
     Vibrator vibrator;
     @Inject
     @Named(EDGE_1_SHARED_NAME)
@@ -175,7 +177,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(FAVORITE_GRID_REALM_NAME)
     Realm favoriteRealm;
-
     @Inject
     @Named(EDGE_1_QUICK_ACTION_VIEWS_NAME)
     ExpandStatusBarView[] edge1QuickActionViews;
@@ -185,6 +186,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(CIRCLE_SIZE_PXL_NAME)
     float circleSizePxl;
+    @Inject
+    @Named(IS_EDGE_1_ON_NAME)
+    boolean isEdge1On;
+    @Inject
+    @Named(IS_EDGE_2_ON_NAME)
+    boolean isEdge2On;
 
 
 
@@ -208,21 +215,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         return point;
     }
 
-
-    public boolean isEdge1On() {
-        return edge1Shared.getBoolean(Cons.EDGE_ON_KEY, true);
-    }
-
-    public boolean isEdge2On() {
-        return edge2Shared.getBoolean(Cons.EDGE_ON_KEY, false);
-    }
-
-
-    public void setVibrator() {
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-    }
-
-
     public void addEdgeToWindowManager(String edgeTag) {
         if (!(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false)) ) {
             switch (edgeTag) {
@@ -236,9 +228,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-
-
-
     public void setOnTouchListener(boolean edge1On, boolean edge2On) {
         if (edge1On) {
             edge1View.setOnTouchListener(this);
@@ -248,9 +237,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             edge2View.setOnTouchListener(this);
         }
     }
-
-
-
 
     private int getEdgeSensitive(String edgeTag) {
         switch (edgeTag) {
@@ -350,7 +336,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             return tempPackageName;
         }
     }
-
 
     public void showCircleShortcutsView(Shortcut[] shortcuts) {
         for (int i = 0; i < 6; i++) {
