@@ -85,6 +85,10 @@ public class Cons {
     public static final String BACKGROUND_FRAME_PARA_NAME = "background_frame_para";
     public static final String EDGE_1_PARA_NAME = "edge1Para";
     public static final String EDGE_2_PARA_NAME = "edge2Para";
+    public static final String EDGE_1_SENSITIVE_NAME = "edge1Sensitive";
+    public static final String EDGE_2_SENSITIVE_NAME = "edge2Sensitive";
+    public static final String EDGE_1_OFFSET_NAME = "edge1Offset";
+    public static final String EDGE_2_OFFSET_NAME = "edge2Offset";
 
 
     public static final int CURRENT_SCHEMA_VERSION = 2;

@@ -10,13 +10,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,8 +44,10 @@ import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 
 /**
@@ -56,7 +56,16 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     private static final String TAG = EdgeServiceView.class.getSimpleName();
+    @Inject
     WindowManager windowManager;
+    @Inject
+    LayoutInflater layoutInflater;
+    @Inject
+    @Named(EDGE_1_SENSITIVE_NAME)
+    int edge1Sensitive;
+    @Inject
+    @Named(EDGE_2_SENSITIVE_NAME)
+    int edge2Sensitive;
     Vibrator vibrator;
     SharedPreferences defaultShared, edge1Shared, edge2Shared;
     GridView shortcutGridView, shortcutFolderGridView;
@@ -131,12 +140,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
 
 
-
-
-    public LayoutInflater getLayoutInflater() {
-        return (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-    }
-
     public boolean isEdge1On() {
         return edge1Shared.getBoolean(Cons.EDGE_ON_KEY, true);
     }
@@ -146,111 +149,25 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
 
 
-    public void setWindowManager() {
-        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-    }
-
     public void setVibrator() {
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
 
 
-    public void addEdgeToWindowManager(String edgeTag, WindowManager.LayoutParams edgePara) {
+    public void addEdgeToWindowManager(String edgeTag) {
         if (!(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false)) ) {
             switch (edgeTag) {
                 case Cons.TAG_EDGE_1:
-                    windowManager.addView(edge1View, edgePara);
+                    windowManager.addView(edge1View, edge1Para);
                     break;
                 case Cons.TAG_EDGE_2:
-                    windowManager.addView(edge2View, edgePara);
+                    windowManager.addView(edge2View, edge2Para);
+                    break;
             }
         }
     }
 
-    public WindowManager.LayoutParams getEdgePara(int edgePosition,String edgeTag, float mScale) {
-        if (edgeTag.equals(Cons.TAG_EDGE_1) && edge1Para != null) {
-            return edge1Para;
-        }
 
-        if (edgeTag.equals(Cons.TAG_EDGE_2) && edge2Para != null) {
-            return edge2Para;
-        }
-
-        WindowManager.LayoutParams edgePara;
-        switch (defaultShared.getInt(EdgeSetting.AVOID_KEYBOARD_OPTION_KEY, EdgeSetting.OPTION_PLACE_UNDER)) {
-            case EdgeSetting.OPTION_PLACE_UNDER:
-                edgePara = new WindowManager.LayoutParams(
-                        WindowManager.LayoutParams.WRAP_CONTENT,
-                        WindowManager.LayoutParams.WRAP_CONTENT,
-                        WindowManager.LayoutParams.TYPE_PHONE,
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                        PixelFormat.TRANSLUCENT);
-                break;
-            case EdgeSetting.OPTION_STEP_ASIDE:
-                edgePara = new WindowManager.LayoutParams();
-                edgePara.type = 2002;
-                edgePara.gravity = 53;
-                edgePara.flags = 40;
-                edgePara.width = 1;
-                edgePara.height = -1;
-                edgePara.format = -2;
-                break;
-            default:
-                edgePara = new WindowManager.LayoutParams(
-                        WindowManager.LayoutParams.WRAP_CONTENT,
-                        WindowManager.LayoutParams.WRAP_CONTENT,
-                        WindowManager.LayoutParams.TYPE_PHONE,
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                        PixelFormat.TRANSLUCENT);
-                break;
-        }
-
-        if (defaultShared.getBoolean(EdgeSetting.AVOID_KEYBOARD_KEY, true)) {
-            edgePara.flags |= 131072;
-        }
-        switch (edgePosition) {
-            case 10:
-                edgePara.gravity = Gravity.TOP | Gravity.RIGHT;
-                break;
-            case 11:
-                edgePara.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-                break;
-            case 12:
-                edgePara.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                break;
-            case 20:
-                edgePara.gravity = Gravity.TOP | Gravity.LEFT;
-                break;
-            case 21:
-                edgePara.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-                break;
-            case 22:
-                edgePara.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                break;
-            case 31:
-                edgePara.gravity = Gravity.BOTTOM | Gravity.CENTER;
-                break;
-        }
-
-        int edge1offset = edge1Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
-
-        if (edgePosition == 12 | edgePosition == 22) {
-            edgePara.y = (int) (edge1offset * mScale);
-        } else if (edgePosition == 31) {
-            edgePara.x = -(int) (edge1offset * mScale);
-        } else {
-            edgePara.y = -(int) (edge1offset * mScale);
-        }
-        switch (edgeTag) {
-            case Cons.TAG_EDGE_1:
-                edge1Para = edgePara;
-                break;
-            case Cons.TAG_EDGE_2:
-                edge2Para = edgePara;
-        }
-        return edgePara;
-
-    }
 
 
     public void setOnTouchListener(boolean edge1On, boolean edge2On) {
@@ -269,7 +186,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     private int getEdgeSensitive(String edgeTag) {
         switch (edgeTag) {
             case Cons.TAG_EDGE_1:
-                return edge1Shared.getInt(Cons.EDGE_SENSIIVE_KEY, Cons.EDGE_SENSITIVE_DEFAULT);
+                return edge2Sensitive;
+            case Cons.TAG_EDGE_2:
+                return edge2Sensitive;
         }
         return 0;
     }
@@ -380,24 +299,15 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-
-
     public void showGridShortcutsView() {
-
 
     }
 
     public void setupShortcutsGridView() {
 
     }
-
-
-
-
-
-
     public void setupGridView() {
-        gridParentsView = (FrameLayout) getLayoutInflater().inflate(R.layout.grid_shortcut, null);
+        gridParentsView = (FrameLayout) layoutInflater.inflate(R.layout.grid_shortcut, null);
         shortcutGridView = (GridView) gridParentsView.findViewById(R.id.edge_shortcut_grid_view);
         shortcutFolderGridView = (GridView) gridParentsView.findViewById(R.id.folder_grid);
     }

@@ -45,12 +45,16 @@ import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DP_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_KEY;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_POSITION_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_POSITION_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_POSITIONS_ARRAY_NAME;
@@ -436,6 +440,49 @@ public class EdgeServiceModule {
             , @Named(EDGE_2_SHARED_NAME) SharedPreferences edge2Shared) {
         return Utility.getEdgeLayoutPara(defaultShared, edge2Shared, mScale, edge2Position);
     }
+
+
+    @Provides
+    @Singleton
+    WindowManager windowManager(){
+        return (WindowManager) view.getSystemService(Context.WINDOW_SERVICE);
+    }
+
+    @Provides
+    @Singleton
+    LayoutInflater layoutInflater(){
+        return (LayoutInflater) view.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_1_SENSITIVE_NAME)
+    int edge1Sensitive(@Named(EDGE_1_SHARED_NAME) SharedPreferences edge1Shared){
+        return edge1Shared.getInt(Cons.EDGE_SENSIIVE_KEY, Cons.EDGE_SENSITIVE_DEFAULT);
+    }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_2_SENSITIVE_NAME)
+    int edge2Sensitive(@Named(EDGE_2_SHARED_NAME) SharedPreferences edge2Shared){
+        return edge2Shared.getInt(Cons.EDGE_SENSIIVE_KEY, Cons.EDGE_SENSITIVE_DEFAULT);
+    }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_1_OFFSET_NAME)
+    int edge1offset(@Named(EDGE_1_SHARED_NAME) SharedPreferences edge1Shared){
+        return edge1Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
+    }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_2_OFFSET_NAME)
+    int edge2Offset(@Named(EDGE_2_SHARED_NAME) SharedPreferences edge2Shared){
+        return edge2Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
+    }
+
+
 
 
 
