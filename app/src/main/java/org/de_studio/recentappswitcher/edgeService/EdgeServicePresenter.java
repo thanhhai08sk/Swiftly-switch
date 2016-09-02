@@ -10,7 +10,6 @@ public class EdgeServicePresenter {
     EdgeServiceView view;
     int edge1Position, edge2Position;
     int xInit, yInit;
-    boolean isEdge1On, isEdge2On;
     String laucherPackageName;
 
     public EdgeServicePresenter(EdgeServiceModel model, EdgeServiceView view) {
@@ -19,27 +18,6 @@ public class EdgeServicePresenter {
     }
 
     public void onViewAttach() {
-        view.setWindowManager();
-        view.setVibrator();
-        edge1Position = view.getEdge1Position();
-        edge2Position = view.getEdge2Position();
-        view.createRecentIconsList(model.mScale);
-        view.createBackgroundFrame();
-        isEdge1On = view.isEdge1On();
-        isEdge2On = view.isEdge2On();
-        laucherPackageName = view.getLauncherPackagename();
-        if (isEdge1On) {
-            view.setEdge1View(edge1Position, model.mScale);
-            view.addEdgeToWindowManager(Cons.TAG_EDGE_1, view.getEdgePara(edge1Position, Cons.TAG_EDGE_1, model.mScale));
-        }
-
-        if (isEdge2On) {
-            view.setEdge2View(edge2Position, model.mScale);
-            view.addEdgeToWindowManager(Cons.TAG_EDGE_2, view.getEdgePara(edge2Position, Cons.TAG_EDGE_2, model.mScale));
-        }
-
-        view.setOnTouchListener(isEdge1On, isEdge2On);
-
 
     }
 

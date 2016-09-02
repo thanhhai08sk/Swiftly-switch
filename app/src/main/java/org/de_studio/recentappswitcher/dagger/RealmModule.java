@@ -8,17 +8,20 @@ import org.de_studio.recentappswitcher.MyRealmMigration;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import dagger.Module;
 import dagger.Provides;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 import static org.de_studio.recentappswitcher.Cons.CURRENT_SCHEMA_VERSION;
+import static org.de_studio.recentappswitcher.Cons.FAVORITE_CIRCLE_REALM_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_REALM_NAME;
 import static org.de_studio.recentappswitcher.Cons.PIN_REALM_NAME;
 
 /**
  * Created by HaiNguyen on 8/27/16.
  */
+@Module
 public class RealmModule {
     Context context;
 
@@ -50,7 +53,7 @@ public class RealmModule {
 
     @Provides
     @Singleton
-    @Named(FAVORITE_GRID_REALM_NAME)
+    @Named(FAVORITE_CIRCLE_REALM_NAME)
     Realm favoriteCircleRealm() {
         return Realm.getInstance(new RealmConfiguration.Builder(context)
                 .name("circleFavo.realm")

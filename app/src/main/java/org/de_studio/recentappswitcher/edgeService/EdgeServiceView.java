@@ -61,6 +61,8 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_QUICK_ACTION_VIEWS_NAM
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_HORIZONTAL_NAME;
+import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_VERTICAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_REALM_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.FOLDER_GRID_VIEW_NAME;
@@ -171,8 +173,10 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     CircleFavoriteAdapter circleFavoriteAdapter;
     @Inject
+    @Named(FAVORITE_GRID_PADDING_HORIZONTAL_NAME)
     int favoriteGridPaddingHorizontal;
     @Inject
+    @Named(FAVORITE_GRID_PADDING_VERTICAL_NAME)
     int favoriteGridPaddingVertical;
     @Inject
     @Named(FAVORITE_GRID_REALM_NAME)

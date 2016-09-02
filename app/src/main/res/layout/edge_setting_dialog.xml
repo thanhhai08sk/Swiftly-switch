@@ -105,7 +105,7 @@
                 android:id="@+id/edge_dialog_position_spinner"
                 android:layout_weight="0"
                 android:spinnerMode="dropdown"
-                android:entries="@array/edge_dialog_spinner_array"
+                android:entries="@array/edge_positions_array"
                 android:background="@color/white"
                 >
 

@@ -117,6 +117,7 @@ public class EdgeServiceModule {
     }
 
     @Provides
+    @Named(FAVORITE_GRID_ADAPTER_NAME)
     @Singleton
     FavoriteShortcutAdapter gridAdapter() {
         return new FavoriteShortcutAdapter(context);
@@ -283,6 +284,7 @@ public class EdgeServiceModule {
         gridView.setAdapter(adapter);
         return gridView;
     }
+
 
     @Provides
     @Singleton
