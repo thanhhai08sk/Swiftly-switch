@@ -26,6 +26,7 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.FavoriteShortcutAdapter;
@@ -136,6 +137,11 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(BACKGROUND_FRAME_NAME)
     FrameLayout backgroundFrame;
+
+    @Inject
+    FavoriteShortcutAdapter gridFavoriteAdapter;
+    @Inject
+    CircleFavoriteAdapter circleFavoriteAdapter;
 
 
     @Override

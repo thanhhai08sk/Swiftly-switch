@@ -22,6 +22,7 @@ import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.edgeService.EdgeServiceModel;
 import org.de_studio.recentappswitcher.edgeService.EdgeServicePresenter;
 import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
+import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.FavoriteShortcutAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
@@ -481,6 +482,20 @@ public class EdgeServiceModule {
     int edge2Offset(@Named(EDGE_2_SHARED_NAME) SharedPreferences edge2Shared){
         return edge2Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
     }
+
+    @Provides
+    @Singleton
+    FavoriteShortcutAdapter GridFavoriteAdapter(){
+        return new FavoriteShortcutAdapter(context);
+    }
+
+    @Provides
+    @Singleton
+    CircleFavoriteAdapter circleFavoriteAdapter(){
+        return new CircleFavoriteAdapter(context);
+    }
+
+
 
 
 
