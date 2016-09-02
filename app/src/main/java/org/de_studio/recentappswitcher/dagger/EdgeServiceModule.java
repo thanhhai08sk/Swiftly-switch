@@ -40,6 +40,9 @@ import dagger.Module;
 import dagger.Provides;
 import io.realm.Realm;
 
+import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_DEFAULT;
+import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_NAME;
+import static org.de_studio.recentappswitcher.Cons.ANI_TIME_KEY;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_NAME;
@@ -56,6 +59,7 @@ import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_GAP_IN_GRID;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_SIZE;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_POSITION_NAME;
@@ -63,6 +67,7 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_1_QUICK_ACTION_VIEWS_NAM
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_POSITION_NAME;
@@ -84,6 +89,9 @@ import static org.de_studio.recentappswitcher.Cons.GRID_PARENT_VIEW_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.HALF_ICON_WIDTH_PXL_NAME;
+import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_DEFAULT;
+import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_ENABLE_NAME;
+import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_1_ON_NAME;
@@ -94,7 +102,12 @@ import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
 import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
 import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_VIEW_RADIUS_NAME;
+import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME;
 import static org.de_studio.recentappswitcher.Cons.RAD_ICON_DEFAULT_DP;
+import static org.de_studio.recentappswitcher.Cons.USE_INSTANT_FAVORITE_NAME;
+import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_DEFAULT;
+import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_KEY;
+import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_NAME;
 
 /**
  * Created by HaiNguyen on 8/27/16.
@@ -633,8 +646,96 @@ public class EdgeServiceModule {
         return edge2shared.getBoolean(Cons.EDGE_ON_KEY, false);
     }
 
+    @Provides
+    @Singleton
+    @Named(HOLD_TIME_NAME)
+    int holdTime(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared){
+        return shared.getInt(Cons.HOLD_TIME_KEY, HOLD_TIME_DEFAULT);
+    }
 
+    @Provides
+    @Singleton
+    @Named(HOLD_TIME_ENABLE_NAME)
+    boolean holdTimeEnable(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared){
+        return shared.getBoolean(Cons.HOLD_TIME_ENABLE_KEY, true);
+    }
 
+    @Provides
+    @Singleton
+    @Named(VIBRATION_DURATION_NAME)
+    int vibrationDuration(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
+        return shared.getInt(VIBRATION_DURATION_KEY, VIBRATION_DURATION_DEFAULT);
+    }
+
+    @Provides
+    @Singleton
+    @Named(ANIMATION_TIME_NAME)
+    int animationTime(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
+        return shared.getInt(ANI_TIME_KEY, ANIMATION_TIME_DEFAULT);
+    }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_1_MODE_NAME)
+    int edge1Mode(@Named(EDGE_1_SHARED_NAME) SharedPreferences shared) {
+        int edge1mode;
+        edge1mode = shared.getInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 0);
+        if (edge1mode == 0) {
+            if (shared.getBoolean(EdgeSetting.IS_ONLY_FAVORITE_KEY, false)) {
+                edge1mode = 2;
+            } else {
+                edge1mode = 1;
+            }
+        }
+        return edge1mode;
+    }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_2_MODE_NAME)
+    int edge2Mode(@Named(EDGE_2_SHARED_NAME) SharedPreferences shared) {
+        int edge2mode = shared.getInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 0);
+        if (edge2mode == 0) {
+            if (shared.getBoolean(EdgeSetting.IS_ONLY_FAVORITE_KEY, false)) {
+                edge2mode = 2;
+            } else {
+                edge2mode = 1;
+            }
+        }
+        return edge2mode;
+    }
+
+    @Provides
+    @Singleton
+    @Named(QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME)
+    int[] quickActionWithInstant(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
+        int[] returnArray = new int[4];
+        if (defaultShared.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
+            returnArray[0] = 1;
+        }else returnArray[0] = -1;
+        if (defaultShared.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_HOME).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
+            returnArray[1] = 1;
+        }else returnArray[1] = -1;
+        if (defaultShared.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_BACK).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
+            returnArray[2] = 1;
+        }else returnArray[2] = -1;
+        if (defaultShared.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
+            returnArray[3] = 1;
+        }else returnArray[3] = -1;
+        return returnArray;
+    }
+
+    @Provides
+    @Singleton
+    @Named(USE_INSTANT_FAVORITE_NAME)
+    boolean useInstantFavorite(@Named(QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME) int[] array) {
+        for (int i : array) {
+            if (i == 1) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 

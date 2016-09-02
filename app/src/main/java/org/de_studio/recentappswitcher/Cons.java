@@ -58,6 +58,9 @@ public class Cons {
     public static final int GRID_GAP_DEFAULT = 5;
     public static final int GUIDE_COLOR_DEFAULT = Color.argb(255, 255, 64, 129);
     public static final int BACKGROUND_COLOR_DEFAULT = 1879048192;
+    public static final int HOLD_TIME_DEFAULT = 800;
+    public static final int VIBRATION_DURATION_DEFAULT = 15;
+    public static final int ANIMATION_TIME_DEFAULT = 100;
 
     public static final String TAG_EDGE_1 = "edge1";
     public static final String TAG_EDGE_2 = "edge2";
@@ -106,6 +109,15 @@ public class Cons {
     public static final String QUICK_ACTION_VIEW_RADIUS_NAME = "quickActionViewRadius";
     public static final String IS_EDGE_1_ON_NAME = "isEdge1On";
     public static final String IS_EDGE_2_ON_NAME = "isEdge2On";
+    public static final String HOLD_TIME_NAME = "holdTime";
+    public static final String HOLD_TIME_ENABLE_NAME = "holdTimeEnable";
+    public static final String VIBRATION_DURATION_NAME = "vibrationDuration";
+    public static final String ANIMATION_TIME_NAME = "animationTime";
+    public static final String EDGE_1_MODE_NAME = "edge1Mode";
+    public static final String EDGE_2_MODE_NAME = "edge2Mode";
+    public static final String QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME = "quickActionWithInstant";
+    public static final String USE_INSTANT_FAVORITE_NAME = "useInstant";
+
 
 
 

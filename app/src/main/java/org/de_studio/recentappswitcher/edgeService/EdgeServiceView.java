@@ -24,6 +24,10 @@ import android.widget.GridView;
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.dagger.AppModule;
+import org.de_studio.recentappswitcher.dagger.DaggerEdgeServiceComponent;
+import org.de_studio.recentappswitcher.dagger.EdgeServiceModule;
+import org.de_studio.recentappswitcher.dagger.RealmModule;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
@@ -43,18 +47,21 @@ import javax.inject.Named;
 
 import io.realm.Realm;
 
+import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_AND_QUICK_ACTION_GAP;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_QUICK_ACTION_VIEWS_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_QUICK_ACTION_VIEWS_NAME;
@@ -66,14 +73,19 @@ import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_VERTICA
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_REALM_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.FOLDER_GRID_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_ENABLE_NAME;
+import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_1_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_2_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
 import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
+import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME;
 import static org.de_studio.recentappswitcher.Cons.TAG_EDGE_1;
 import static org.de_studio.recentappswitcher.Cons.TAG_EDGE_2;
+import static org.de_studio.recentappswitcher.Cons.USE_INSTANT_FAVORITE_NAME;
+import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_NAME;
 
 /**
  * Created by HaiNguyen on 8/19/16.
@@ -196,12 +208,37 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(IS_EDGE_2_ON_NAME)
     boolean isEdge2On;
+    @Inject
+    @Named(HOLD_TIME_NAME)
+    int holdTime;
+    @Inject
+    @Named(HOLD_TIME_ENABLE_NAME)
+    boolean holdTimeEnable;
+    @Inject
+    @Named(VIBRATION_DURATION_NAME)
+    int vibrationDuration;
+    @Inject
+    @Named(ANIMATION_TIME_NAME)
+    int animationTime;
+    @Inject
+    @Named(EDGE_1_MODE_NAME)
+    int edge1Mode;
+    @Inject
+    @Named(EDGE_2_MODE_NAME)
+    int edge2Mode;
+    @Inject
+    @Named(QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME)
+    int[] quickActionWithInstantFavorite;
+    @Inject
+    @Named(USE_INSTANT_FAVORITE_NAME)
+    boolean useInstantFavorite;
 
 
 
     @Override
     public void onCreate() {
         super.onCreate();
+        inject();
     }
 
     public IBinder onBind(Intent intent) {
@@ -447,6 +484,16 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 }
                 break;
         }
+    }
+
+    private void inject() {
+        DaggerEdgeServiceComponent.builder()
+                .appModule(new AppModule(getApplicationContext()))
+                .edgeServiceModule(new EdgeServiceModule(this))
+                .realmModule(new RealmModule(getApplicationContext()))
+                .build()
+                .inject(this);
+
     }
 
 
