@@ -445,6 +445,21 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
+    public void hideAllQuickAction(String edgeTag) {
+        switch (edgeTag) {
+            case TAG_EDGE_1:
+                for (ExpandStatusBarView edge1QuickActionView : edge1QuickActionViews) {
+                    edge1QuickActionView.setVisibility(View.GONE);
+                }
+                break;
+            case TAG_EDGE_2:
+                for (ExpandStatusBarView edge2QuickActionView : edge2QuickActionViews) {
+                    edge2QuickActionView.setVisibility(View.GONE);
+                }
+                break;
+        }
+    }
+
 
 
 
