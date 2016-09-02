@@ -62,8 +62,8 @@ public class Cons {
     public static final int VIBRATION_DURATION_DEFAULT = 15;
     public static final int ANIMATION_TIME_DEFAULT = 100;
 
-    public static final String TAG_EDGE_1 = "edge1";
-    public static final String TAG_EDGE_2 = "edge2";
+    public static final int EDGE_1_ID = 11;
+    public static final int EDGE_2_ID = 22;
 
 
     public static final int EDGE_SENSITIVE_DEFAULT = 12;
@@ -117,6 +117,7 @@ public class Cons {
     public static final String EDGE_2_MODE_NAME = "edge2Mode";
     public static final String QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME = "quickActionWithInstant";
     public static final String USE_INSTANT_FAVORITE_NAME = "useInstant";
+    public static final String CLOCK_PARENTS_VIEW_NAME = "clockParentsView";
 
 
 

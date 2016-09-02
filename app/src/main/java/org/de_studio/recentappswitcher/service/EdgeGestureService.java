@@ -128,7 +128,7 @@ public class EdgeGestureService extends Service {
     private CircleFavoriteAdapter circltShortcutAdapter;
     private IconPackManager.IconPack iconPack;
     private boolean isClockShown = false;
-    private View clockView;
+    private View clockParentsView;
     private Realm pinAppRealm, favoriteRealm,circleFavoRealm;
     private Set<Shortcut> pinnedSet;
     private WindowManager.LayoutParams backgroundParams;
@@ -515,8 +515,8 @@ public class EdgeGestureService extends Service {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
 
-            int x_cord = (int) event.getRawX();
-            int y_cord = (int) event.getRawY();
+            int xCord = (int) event.getRawX();
+            int yCord = (int) event.getRawY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     folderShown = false;
@@ -524,16 +524,16 @@ public class EdgeGestureService extends Service {
                     onInstantFavo = false;
                     switch (position / 10) {
                         case 1:
-                            x_init_cord = (int) (x_cord - 10 * mScale);
-                            y_init_cord = y_cord - getYOffset(y_cord);
+                            x_init_cord = (int) (xCord - 10 * mScale);
+                            y_init_cord = yCord - getYOffset(yCord);
                             break;
                         case 2:
-                            x_init_cord = (int) (x_cord + 10 * mScale);
-                            y_init_cord = y_cord - getYOffset(y_cord);
+                            x_init_cord = (int) (xCord + 10 * mScale);
+                            y_init_cord = yCord - getYOffset(yCord);
                             break;
                         case 3:
-                            x_init_cord = x_cord - getXOffset(x_cord);
-                            y_init_cord = (int) (y_cord - 10 * mScale);
+                            x_init_cord = xCord - getXOffset(xCord);
+                            y_init_cord = (int) (yCord - 10 * mScale);
                             break;
                     }
                     clearIconBackground();
@@ -941,9 +941,9 @@ public class EdgeGestureService extends Service {
                         int shortcutToSwitch;
                         Shortcut shortcut;
                         if (mode == 3 && !onInstantFavo) {
-                            shortcutToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
+                            shortcutToSwitch = Utility.findIconToSwitchNew(x, y, xCord, yCord, icon_24dp_in_pxls * mIconScale, mScale);
                             shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
-                            int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, circleSize, mScale, position);
+                            int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, xCord, yCord, circleSize, mScale, position);
                             Log.e(TAG, "homeBackNoti = " + homeBackNoti);
                             String action = MainActivity.ACTION_NONE;
                             switch (homeBackNoti) {
@@ -969,10 +969,10 @@ public class EdgeGestureService extends Service {
                             }
                         } else {
                             if (!folderShown) {
-                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap, false);
+                                shortcutToSwitch = Utility.findShortcutToSwitch(xCord, yCord, (int) shortcutGridView.getX(), (int) shortcutGridView.getY(), (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap, false);
                                 shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
                             } else {
-                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, folderCoor[0], folderCoor[1], (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, folderCoor[2], folderCoor[3], 5, true);
+                                shortcutToSwitch = Utility.findShortcutToSwitch(xCord, yCord, folderCoor[0], folderCoor[1], (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, folderCoor[2], folderCoor[3], 5, true);
                                 shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", (folderCoor[4] + 1) * 1000 + shortcutToSwitch).findFirst();
                             }
 
@@ -989,8 +989,8 @@ public class EdgeGestureService extends Service {
 
                         }
                     } else {
-//                        int packageToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
-                        int packageToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
+//                        int packageToSwitch = Utility.findIconToSwitch(x, y, xCord, yCord, numOfIcon, icon_rad, mScale);
+                        int packageToSwitch = Utility.findIconToSwitchNew(x, y, xCord, yCord, icon_24dp_in_pxls * mIconScale, mScale);
                         if (packageToSwitch != -1) {
                             Intent extApp = null;
                             if (packageToSwitch < recentShortcut.length) {
@@ -1019,7 +1019,7 @@ public class EdgeGestureService extends Service {
 
                         }
                         recentShortcut = null;
-                        int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, circleSize, mScale, position);
+                        int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, xCord, yCord, circleSize, mScale, position);
                         Log.e(TAG, "homeBackNoti = " + homeBackNoti);
                         String action = MainActivity.ACTION_NONE;
                         switch (homeBackNoti) {
@@ -1059,11 +1059,11 @@ public class EdgeGestureService extends Service {
 
                     if (!isClockShown) {
                         Log.e(TAG, "Show clock");
-                        clockView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSetting.ANIMATION_KEY, false), defaultShared.getInt(EdgeSetting.ANI_TIME_KEY, 100), defaultShared.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY, false));
-                        LinearLayout clock = (LinearLayout) clockView.findViewById(R.id.clock_linear_layout);
-                        FrameLayout indicator = (FrameLayout) clockView.findViewById(R.id.indicator_frame_layout);
+                        clockParentsView = Utility.disPlayClock(getApplicationContext(), windowManager, defaultShared.getBoolean(EdgeSetting.ANIMATION_KEY, false), defaultShared.getInt(EdgeSetting.ANI_TIME_KEY, 100), defaultShared.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY, false));
+                        LinearLayout clock = (LinearLayout) clockParentsView.findViewById(R.id.clock_linear_layout);
+                        FrameLayout indicator = (FrameLayout) clockParentsView.findViewById(R.id.indicator_frame_layout);
                         indicator.setVisibility(View.GONE);
-                        circle = (Circle) clockView.findViewById(R.id.circle);
+                        circle = (Circle) clockParentsView.findViewById(R.id.circle);
                         if (circle == null) {
                             Log.e(TAG, "circle = null");
                         }
@@ -1085,8 +1085,8 @@ public class EdgeGestureService extends Service {
                                 }
                             }
 
-                            shortcutToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
-                            int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, circleSize, mScale, position);
+                            shortcutToSwitch = Utility.findIconToSwitchNew(x, y, xCord, yCord, icon_24dp_in_pxls * mIconScale, mScale);
+                            int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, xCord, yCord, circleSize, mScale, position);
                             if ((moveToHomeBackNoti != 0 | shortcutToSwitch != -1) && !iconImageArrayList.get(0).isOnAnimation()) {
                                 if (shortcutToSwitch != -1) {
                                     activateId = shortcutToSwitch + 1000;
@@ -1136,7 +1136,7 @@ public class EdgeGestureService extends Service {
 
                         } else {
                             if (!folderShown) {
-                                shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap, false);
+                                shortcutToSwitch = Utility.findShortcutToSwitch(xCord, yCord, gridX, gridY, (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, gridRow, gridColumn, gridGap, false);
                                 if (shortcutToSwitch != -1) {
                                     Shortcut shortcut = favoriteRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
                                     if (shortcut != null && shortcut.getType() == Shortcut.TYPE_FOLDER && !folderShown && !onFolderAnimator) {
@@ -1219,7 +1219,7 @@ public class EdgeGestureService extends Service {
                             } else {
 
                                 if (!onFolderAnimator && folderCoor != null) {
-                                    shortcutToSwitch = Utility.findShortcutToSwitch(x_cord, y_cord, folderCoor[0], folderCoor[1], (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, folderCoor[2], folderCoor[3], 5, true);
+                                    shortcutToSwitch = Utility.findShortcutToSwitch(xCord, yCord, folderCoor[0], folderCoor[1], (int) (GRID_ICON_SIZE * mIconScale) + GRID_2_PADDING, mScale, folderCoor[2], folderCoor[3], 5, true);
                                     if (shortcutToSwitch != -1) {
                                         activateId = shortcutToSwitch + 3000;
                                     } else {
@@ -1254,7 +1254,7 @@ public class EdgeGestureService extends Service {
                         }
 
                     } else {
-//                        int iconToSwitch = Utility.findIconToSwitch(x, y, x_cord, y_cord, numOfIcon, icon_rad, mScale);
+//                        int iconToSwitch = Utility.findIconToSwitch(x, y, xCord, yCord, numOfIcon, icon_rad, mScale);
                         int iconToSwitch = -1;
                         if (!iconImageArrayList.get(0).isOnAnimation()) {
                             if (iconIdBackgrounded == -2) {
@@ -1265,10 +1265,10 @@ public class EdgeGestureService extends Service {
 
                             }
 
-                            iconToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
+                            iconToSwitch = Utility.findIconToSwitchNew(x, y, xCord, yCord, icon_24dp_in_pxls * mIconScale, mScale);
                         }
 
-                        int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, circleSize, mScale, position);
+                        int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, xCord, yCord, circleSize, mScale, position);
                         if (moveToHomeBackNoti > 0) {
                             activateId = moveToHomeBackNoti + 2000;
                         }
@@ -1446,9 +1446,9 @@ public class EdgeGestureService extends Service {
                 removeView(itemView);
                 switched = true;
 
-//                removeView(clockView);
-//                if (clockView != null) {
-//                    clockView.findViewById(R.id.clock_linear_layout).setVisibility(View.GONE);
+//                removeView(clockParentsView);
+//                if (clockParentsView != null) {
+//                    clockParentsView.findViewById(R.id.clock_linear_layout).setVisibility(View.GONE);
 //                }
             }
 
@@ -1494,12 +1494,12 @@ public class EdgeGestureService extends Service {
         }
 
         private void setIndicator(int activateId) {
-            if (clockView == null) {
+            if (clockParentsView == null) {
                 return;
             }
             if (activateId != -1) {
-                LinearLayout clock = (LinearLayout) clockView.findViewById(R.id.clock_linear_layout);
-                FrameLayout indicator = (FrameLayout) clockView.findViewById(R.id.indicator_frame_layout);
+                LinearLayout clock = (LinearLayout) clockParentsView.findViewById(R.id.clock_linear_layout);
+                FrameLayout indicator = (FrameLayout) clockParentsView.findViewById(R.id.indicator_frame_layout);
                 clock.setVisibility(View.GONE);
                 indicator.setVisibility(View.VISIBLE);
                 ImageView icon = (ImageView) indicator.findViewById(R.id.indicator_icon);
@@ -1567,9 +1567,9 @@ public class EdgeGestureService extends Service {
         }
 
         private void clearIndicator(int activatedId) {
-            if (activatedId != 0 && clockView!=null) {
-                LinearLayout clock = (LinearLayout) clockView.findViewById(R.id.clock_linear_layout);
-                FrameLayout indicator = (FrameLayout) clockView.findViewById(R.id.indicator_frame_layout);
+            if (activatedId != 0 && clockParentsView !=null) {
+                LinearLayout clock = (LinearLayout) clockParentsView.findViewById(R.id.clock_linear_layout);
+                FrameLayout indicator = (FrameLayout) clockParentsView.findViewById(R.id.indicator_frame_layout);
                 if (switched) {
                     clock.setVisibility(View.GONE);
                     indicator.setVisibility(View.INVISIBLE);
@@ -1950,10 +1950,10 @@ public class EdgeGestureService extends Service {
             Log.e(TAG, " Null when remove backgroundFrame");
         }
         try {
-            windowManager.removeView(clockView);
+            windowManager.removeView(clockParentsView);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(TAG, " Null when remove clockView");
+            Log.e(TAG, " Null when remove clockParentsView");
         }
         try {
             windowManager.removeView(shortcutView);
@@ -1985,10 +1985,10 @@ public class EdgeGestureService extends Service {
             Log.e(TAG, " Null when remove backgroundFrame");
         }
         try {
-            windowManager.removeView(clockView);
+            windowManager.removeView(clockParentsView);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(TAG, " Null when remove clockView");
+            Log.e(TAG, " Null when remove clockParentsView");
         }
         try {
             windowManager.removeView(shortcutView);

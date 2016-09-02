@@ -17,22 +17,24 @@ public class EdgeServicePresenter {
         this.view = view;
     }
 
-    public void onViewAttach() {
-
+    void onCreate() {
+        view.setOnTouchListener(view.isEdge1On, view.isEdge2On);
     }
 
-    public void onActionDown(int x, int y, String edgeTag) {
+    public void onActionDown(int x, int y, int edgeId) {
         int position = 0;
-        switch (edgeTag) {
-            case Cons.TAG_EDGE_1:
+        switch (edgeId) {
+            case Cons.EDGE_1_ID:
                 position = edge1Position;
                 break;
-            case Cons.TAG_EDGE_2:
+            case Cons.EDGE_2_ID:
                 position = edge2Position;
                 break;
         }
         xInit = model.getXInit(position, x, view.getWindowSize().x);
         yInit = model.getYInit(position, y, view.getWindowSize().y);
+
+
 
     }
 }

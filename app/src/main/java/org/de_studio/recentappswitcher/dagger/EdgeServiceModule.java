@@ -54,6 +54,7 @@ import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DP_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_KEY;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_PXL_NAME;
+import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_VERTICAL;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_GAP_IN_GRID;
@@ -67,6 +68,7 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_1_QUICK_ACTION_VIEWS_NAM
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_ID;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
@@ -365,7 +367,7 @@ public class EdgeServiceModule {
             , @Named(GUIDE_COLOR_NAME) int guideColor) {
 
         View edge1View = new View(context);
-        edge1View.setTag(Cons.TAG_EDGE_1);
+        edge1View.setId(Cons.EDGE_1_ID);
         if (edge1Shared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true)) {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
@@ -418,7 +420,7 @@ public class EdgeServiceModule {
 
 
         View edge2View = new View(context);
-        edge2View.setTag(Cons.TAG_EDGE_2);
+        edge2View.setId(EDGE_2_ID);
         if (edge2Shared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true)) {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
@@ -735,6 +737,15 @@ public class EdgeServiceModule {
             }
         }
         return false;
+    }
+
+
+    @Provides
+    @Singleton
+    @Named(CLOCK_PARENTS_VIEW_NAME)
+    View clockParentsView(WindowManager windowManager
+            , @Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
+        return Utility.disPlayClock(context, windowManager, defaultShared.getBoolean(EdgeSetting.ANIMATION_KEY, false), defaultShared.getInt(EdgeSetting.ANI_TIME_KEY, 100), defaultShared.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY, false));
     }
 
 

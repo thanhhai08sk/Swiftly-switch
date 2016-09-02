@@ -53,7 +53,9 @@ import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_AND_QUICK_ACTION_GAP;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_PXL_NAME;
+import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_ID;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
@@ -61,6 +63,7 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_1_QUICK_ACTION_VIEWS_NAM
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_ID;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
@@ -82,8 +85,6 @@ import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
 import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
 import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME;
-import static org.de_studio.recentappswitcher.Cons.TAG_EDGE_1;
-import static org.de_studio.recentappswitcher.Cons.TAG_EDGE_2;
 import static org.de_studio.recentappswitcher.Cons.USE_INSTANT_FAVORITE_NAME;
 import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_NAME;
 
@@ -232,6 +233,13 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(USE_INSTANT_FAVORITE_NAME)
     boolean useInstantFavorite;
+    @Inject
+    EdgeServicePresenter presenter;
+    @Inject
+    EdgeServiceModel model;
+    @Inject
+    @Named(CLOCK_PARENTS_VIEW_NAME)
+    View clockParentsView;
 
 
 
@@ -239,6 +247,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     public void onCreate() {
         super.onCreate();
         inject();
+        presenter.onCreate();
     }
 
     public IBinder onBind(Intent intent) {
@@ -246,7 +255,22 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
 
     @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
+    public boolean onTouch(View view, MotionEvent event) {
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                presenter.onActionDown(getXCord(event), getYCord(event), view.getId());
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+            case MotionEvent.ACTION_OUTSIDE:
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                break;
+        }
+
         return true;
     }
 
@@ -256,13 +280,21 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         return point;
     }
 
-    public void addEdgeToWindowManager(String edgeTag) {
+    private int getXCord(MotionEvent motionEvent) {
+        return (int) motionEvent.getRawX();
+    }
+
+    private int getYCord(MotionEvent motionEvent) {
+        return (int) motionEvent.getRawY();
+    }
+
+    public void addEdgeToWindowManager(int edgeId) {
         if (!(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false)) ) {
-            switch (edgeTag) {
-                case Cons.TAG_EDGE_1:
+            switch (edgeId) {
+                case Cons.EDGE_1_ID:
                     windowManager.addView(edge1View, edge1Para);
                     break;
-                case Cons.TAG_EDGE_2:
+                case Cons.EDGE_2_ID:
                     windowManager.addView(edge2View, edge2Para);
                     break;
             }
@@ -279,21 +311,21 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    private int getEdgeSensitive(String edgeTag) {
-        switch (edgeTag) {
-            case Cons.TAG_EDGE_1:
+    private int getEdgeSensitive(int edgeId) {
+        switch (edgeId) {
+            case Cons.EDGE_1_ID:
                 return edge2Sensitive;
-            case Cons.TAG_EDGE_2:
+            case Cons.EDGE_2_ID:
                 return edge2Sensitive;
         }
         return Cons.EDGE_SENSITIVE_DEFAULT;
     }
 
-    public int getEdgeOffset(String edgeTag) {
-        switch (edgeTag) {
-            case Cons.TAG_EDGE_1:
+    public int getEdgeOffset(int edgeId) {
+        switch (edgeId) {
+            case Cons.EDGE_1_ID:
                 return edge1Offset;
-            case Cons.TAG_EDGE_2:
+            case Cons.EDGE_2_ID:
                 return edge2Offset;
             default:
                 return Cons.EDGE_OFFSET_DEFAULT;
@@ -415,6 +447,35 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
+    public final synchronized void removeAllExceptEdgeView() {
+        Log.e(TAG, "removeAllExceptEdgeView");
+        try {
+            windowManager.removeView(backgroundFrame);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, " Null when remove backgroundFrame");
+        }
+        try {
+            windowManager.removeView(clockParentsView);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, " Null when remove clockView");
+        }
+        try {
+            windowManager.removeView(gridParentsView);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, " Null when remove shortcutView");
+        }
+        try {
+            windowManager.removeView(circleParentsView);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, " Null when remove item1View");
+        }
+
+    }
+
     public void showFavoriteGridView(int xInit, int yInit, int edgePosition, int iconToSwitch) {
         Utility.setFavoriteGridViewPosition(favoriteGridView
                 ,favoriteGridView.getHeight()
@@ -441,11 +502,11 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         Utility.showFolder(favoriteGridView, favoriteRealm, folderPosition, mScale, iconScale, folderAdapter);
     }
 
-    public void showQuickAction(String edgeTag, int id, int xInit, int yInit) {
+    public void showQuickAction(int edgeId, int id, int xInit, int yInit) {
         float x = xInit - circleSizePxl - CIRCLE_AND_QUICK_ACTION_GAP * mScale - OVAL_OFFSET * mScale - OVAL_RADIUS_PLUS * mScale;
         float y = yInit - circleSizePxl - CIRCLE_AND_QUICK_ACTION_GAP * mScale - OVAL_OFFSET * mScale - OVAL_RADIUS_PLUS * mScale;
-        switch (edgeTag) {
-            case TAG_EDGE_1:
+        switch (edgeId) {
+            case EDGE_1_ID:
                 for (int i = 0; i < edge1QuickActionViews.length; i++) {
                     if (i == id) {
                         edge1QuickActionViews[i].setVisibility(View.VISIBLE);
@@ -456,7 +517,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                     }
                 }
                 break;
-            case TAG_EDGE_2:
+            case EDGE_2_ID:
                 for (int i = 0; i < edge2QuickActionViews.length; i++) {
                     if (i == id) {
                         edge2QuickActionViews[i].setVisibility(View.VISIBLE);
@@ -471,14 +532,14 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    public void hideAllQuickAction(String edgeTag) {
-        switch (edgeTag) {
-            case TAG_EDGE_1:
+    public void hideAllQuickAction(int edgeId) {
+        switch (edgeId) {
+            case EDGE_1_ID:
                 for (ExpandStatusBarView edge1QuickActionView : edge1QuickActionViews) {
                     edge1QuickActionView.setVisibility(View.GONE);
                 }
                 break;
-            case TAG_EDGE_2:
+            case EDGE_2_ID:
                 for (ExpandStatusBarView edge2QuickActionView : edge2QuickActionViews) {
                     edge2QuickActionView.setVisibility(View.GONE);
                 }
