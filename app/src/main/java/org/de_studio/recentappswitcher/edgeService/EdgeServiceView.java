@@ -28,6 +28,7 @@ import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
+import org.de_studio.recentappswitcher.service.ExpandStatusBarView;
 import org.de_studio.recentappswitcher.service.FavoriteShortcutAdapter;
 import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
@@ -49,11 +50,13 @@ import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_QUICK_ACTION_VIEWS_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_QUICK_ACTION_VIEWS_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
@@ -166,6 +169,13 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(FAVORITE_GRID_REALM_NAME)
     Realm favoriteRealm;
+
+    @Inject
+    @Named(EDGE_1_QUICK_ACTION_VIEWS_NAME)
+    ExpandStatusBarView[] edge1QuickActionViews;
+    @Inject
+    @Named(EDGE_2_QUICK_ACTION_VIEWS_NAME)
+    ExpandStatusBarView[] edge2QuickActionViews;
 
 
 

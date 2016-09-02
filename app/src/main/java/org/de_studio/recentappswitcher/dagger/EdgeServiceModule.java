@@ -26,6 +26,7 @@ import org.de_studio.recentappswitcher.edgeService.EdgeServicePresenter;
 import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
+import org.de_studio.recentappswitcher.service.ExpandStatusBarView;
 import org.de_studio.recentappswitcher.service.FavoriteShortcutAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
 
@@ -42,6 +43,7 @@ import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_PARA_NAME;
+import static org.de_studio.recentappswitcher.Cons.CIRCLE_AND_QUICK_ACTION_GAP;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SHORTCUT_VIEW_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DEFAULT;
@@ -55,12 +57,14 @@ import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_POSITION_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_QUICK_ACTION_VIEWS_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_POSITION_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_QUICK_ACTION_VIEWS_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
@@ -83,6 +87,9 @@ import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_FREE_AND_OUT_OF_TRIAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
+import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
+import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
+import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_VIEW_RADIUS_NAME;
 import static org.de_studio.recentappswitcher.Cons.RAD_ICON_DEFAULT_DP;
 
 /**
@@ -555,6 +562,44 @@ public class EdgeServiceModule {
     int favoritePaddingVertical(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
         return defaultShared.getInt(Cons.FAVORITE_GRID_PADDING_VERTICAL_NAME, DEFAULT_FAVORITE_GRID_PADDING_VERTICAL);
     }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_1_QUICK_ACTION_VIEWS_NAME)
+    ExpandStatusBarView[] edge1QuickActionViews(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+            , @Named(QUICK_ACTION_VIEW_RADIUS_NAME) int quickActionViewRadius
+            , @Named(M_SCALE_NAME) float mScale
+            , @Named(EDGE_1_POSITION_NAME) int edge1Position) {
+
+        ExpandStatusBarView[] quickActionViews = new ExpandStatusBarView[4];
+        for (int i = 0; i < quickActionViews.length; i++) {
+            quickActionViews[i] = new ExpandStatusBarView(context, quickActionViewRadius, (int) (OVAL_OFFSET * mScale), edge1Position, i + 1);
+        }
+        return quickActionViews;
+    }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_2_QUICK_ACTION_VIEWS_NAME)
+    ExpandStatusBarView[] edge2QuickActionViews(@Named(QUICK_ACTION_VIEW_RADIUS_NAME) int quickActionViewRadius
+            , @Named(M_SCALE_NAME) float mScale
+            , @Named(EDGE_2_POSITION_NAME) int edge2Position) {
+        ExpandStatusBarView[] quickActionViews = new ExpandStatusBarView[4];
+        for (int i = 0; i < quickActionViews.length; i++) {
+            quickActionViews[i] = new ExpandStatusBarView(context, quickActionViewRadius, (int) (OVAL_OFFSET * mScale), edge2Position, i + 1);
+        }
+        return quickActionViews;
+    }
+
+    @Provides
+    @Singleton
+    @Named(QUICK_ACTION_VIEW_RADIUS_NAME)
+    int quickActionViewRadius(@Named(CIRCLE_SIZE_DP_NAME) int circleSize
+            , @Named(M_SCALE_NAME) float mScale) {
+        return (int) ((circleSize + CIRCLE_AND_QUICK_ACTION_GAP + OVAL_RADIUS_PLUS) * mScale);
+    }
+
+
 
 
 

@@ -97,7 +97,7 @@ public class EdgeGestureService extends Service {
     private FrameLayout item1View, item2View, shortcutView, backgroundFrame;
     public int icon_height = 48, serviceId;
     public int icon_width = 48, icon_rad = 24;
-    public int icon_distance = 110, distance_to_arc = 35, distance_to_arc_pxl;
+    public int circleSize = 110, distance_to_arc = 35, distance_to_arc_pxl;
     public float icon_distance_pxl, icon_24dp_in_pxls, mIconScale = 1f;
     public int edge1Length, edge2Length, edge1offset, edge2offset;
     public int edge1HeightPxl, edge2HeightPxl;
@@ -171,7 +171,7 @@ public class EdgeGestureService extends Service {
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        icon_distance_pxl = icon_distance * mScale;
+        icon_distance_pxl = circleSize * mScale;
         icon_24dp_in_pxls = 24 * mScale;
         distance_to_arc_pxl = (int) (distance_to_arc * mScale);
         backgroundFrame = (FrameLayout) layoutInflater.inflate(R.layout.background, null);
@@ -611,50 +611,12 @@ public class EdgeGestureService extends Service {
                                 n++;
                             }
                         }
-//                        if (defaultShared.getBoolean(EdgeSetting.IS_PIN_TO_TOP_KEY, false)) {
-//                            for (int t = 0; t < recentShortcut.length; t++) {
-//                                if (t < pinnedShortcut.length) {
-//                                    recentShortcut[t] = pinnedShortcut[t];
-//                                } else {
-//                                    tempShortcut = new Shortcut();
-//                                    tempShortcut.setType(Shortcut.TYPE_APP);
-//                                    tempShortcut.setPackageName(tempPackageNameKK.get(t - pinnedShortcut.length));
-//                                    recentShortcut[t] = tempShortcut;
-//                                }
-//
-//                            }
-//
-//                        } else {
-//                            for (int t = 0; t < recentShortcut.length; t++) {
-//                                if (t + pinnedShortcut.length < recentShortcut.length) {
-//                                    tempShortcut = new Shortcut();
-//                                    tempShortcut.setType(Shortcut.TYPE_APP);
-//                                    tempShortcut.setPackageName(tempPackageNameKK.get(t));
-//                                    recentShortcut[t] = tempShortcut;
-//                                } else {
-//                                    recentShortcut[t] = pinnedShortcut[n];
-//                                    n++;
-//                                }
-//
-//                            }
-//                        }
 
                         for (int i = 0; i < 6; i++) {
                             if (i >= recentShortcut.length) {
                                 iconImageArrayList.get(i).setImageDrawable(null);
                             } else {
                                 Utility.setImageForShortcut(recentShortcut[i], getPackageManager(), iconImageArrayList.get(i), getApplicationContext(), iconPack, null, true);
-//                                try {
-//                                    Drawable defaultDrawable = getPackageManager().getApplicationIcon(recentShortcut[i].getPackageName());
-//                                    if (iconPack != null) {
-//                                        iconImageArrayList.get(i).setImageDrawable(iconPack.getDrawableIconForPackage(recentShortcut[i].getPackageName(), defaultDrawable));
-//                                    } else {
-//                                        iconImageArrayList.get(i).setImageDrawable(defaultDrawable);
-//
-//                                    }
-//                                } catch (PackageManager.NameNotFoundException e) {
-//                                    Log.e(TAG, "NameNotFound" + e);
-//                                }
                             }
                         }
                     }
@@ -981,7 +943,7 @@ public class EdgeGestureService extends Service {
                         if (mode == 3 && !onInstantFavo) {
                             shortcutToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
                             shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", shortcutToSwitch).findFirst();
-                            int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
+                            int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, circleSize, mScale, position);
                             Log.e(TAG, "homeBackNoti = " + homeBackNoti);
                             String action = MainActivity.ACTION_NONE;
                             switch (homeBackNoti) {
@@ -1057,7 +1019,7 @@ public class EdgeGestureService extends Service {
 
                         }
                         recentShortcut = null;
-                        int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
+                        int homeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, circleSize, mScale, position);
                         Log.e(TAG, "homeBackNoti = " + homeBackNoti);
                         String action = MainActivity.ACTION_NONE;
                         switch (homeBackNoti) {
@@ -1124,7 +1086,7 @@ public class EdgeGestureService extends Service {
                             }
 
                             shortcutToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
-                            int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
+                            int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, circleSize, mScale, position);
                             if ((moveToHomeBackNoti != 0 | shortcutToSwitch != -1) && !iconImageArrayList.get(0).isOnAnimation()) {
                                 if (shortcutToSwitch != -1) {
                                     activateId = shortcutToSwitch + 1000;
@@ -1306,7 +1268,7 @@ public class EdgeGestureService extends Service {
                             iconToSwitch = Utility.findIconToSwitchNew(x, y, x_cord, y_cord, icon_24dp_in_pxls * mIconScale, mScale);
                         }
 
-                        int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, icon_distance, mScale, position);
+                        int moveToHomeBackNoti = Utility.isHomeOrBackOrNoti(x_init_cord, y_init_cord, x_cord, y_cord, circleSize, mScale, position);
                         if (moveToHomeBackNoti > 0) {
                             activateId = moveToHomeBackNoti + 2000;
                         }
@@ -1844,7 +1806,7 @@ public class EdgeGestureService extends Service {
         isEdge1On = sharedPreferences1.getBoolean(EdgeSetting.EDGE_ON_KEY, true);
         isEdge2On = sharedPreferences2.getBoolean(EdgeSetting.EDGE_ON_KEY, false);
         edgePositionsArray = getResources().getStringArray(R.array.edge_positions_array);
-        icon_distance = defaultShared.getInt(EdgeSetting.CIRCLE_SIZE_KEY, 105);
+        circleSize = defaultShared.getInt(EdgeSetting.CIRCLE_SIZE_KEY, 105);
         ovalOffSet = (int) (ovalOffSetInDp * mScale);
         ovalRadiusPlusPxl = (int) (ovalRadiusPlus * mIconScale * mScale);
         numOfRecent = defaultShared.getInt(EdgeSetting.NUM_OF_RECENT_KEY, 6);
@@ -2087,7 +2049,7 @@ public class EdgeGestureService extends Service {
     private int getYOffset(int y_init) {
         Point point = new Point();
         windowManager.getDefaultDisplay().getSize(point);
-        int distanceNeeded = (int) (mScale * (icon_distance + icon_rad));
+        int distanceNeeded = (int) (mScale * (circleSize + icon_rad));
         int distanceWeHave = point.y - y_init;
         if (distanceWeHave < distanceNeeded) {
             return distanceNeeded - distanceWeHave;
@@ -2099,7 +2061,7 @@ public class EdgeGestureService extends Service {
     private int getXOffset(int x_init) {
         Point point = new Point();
         windowManager.getDefaultDisplay().getSize(point);
-        int distanceNeeded = (int) (mScale * (icon_distance + icon_rad));
+        int distanceNeeded = (int) (mScale * (circleSize + icon_rad));
         int distanceWeHave = point.x - x_init;
         if (distanceWeHave < distanceNeeded) {
             return distanceNeeded - distanceWeHave;

@@ -52,6 +52,9 @@ public class Cons {
     public static final int DEFAULT_FAVORITE_GRID_PADDING_VERTICAL = 20;
     public static final int INIT_OFFSET = 10;
     public static final int CIRCLE_SIZE_DEFAULT = 105;
+    public static final int CIRCLE_AND_QUICK_ACTION_GAP = 35;
+    public static final int OVAL_RADIUS_PLUS = 17;
+    public static final int OVAL_OFFSET = 70;
     public static final int GRID_GAP_DEFAULT = 5;
     public static final int GUIDE_COLOR_DEFAULT = Color.argb(255, 255, 64, 129);
     public static final int BACKGROUND_COLOR_DEFAULT = 1879048192;
@@ -97,6 +100,10 @@ public class Cons {
     public static final String FAVORITE_CIRCLE_ADAPTER_NAME = "favoriteCircleAdapter";
     public static final String FAVORITE_GRID_PADDING_HORIZONTAL_NAME = "favoritePaddingHorizontal";
     public static final String FAVORITE_GRID_PADDING_VERTICAL_NAME = "favoritePaddingVertical";
+    public static final String EDGE_1_QUICK_ACTION_VIEWS_NAME = "edge1QuickActionViews";
+    public static final String EDGE_2_QUICK_ACTION_VIEWS_NAME = "edge2QuickActionViews";
+    public static final String QUICK_ACTION_VIEW_RADIUS_NAME = "quickActionViewRadius";
+
 
 
 
@@ -130,7 +137,7 @@ public class Cons {
     public static final String HOLD_TIME_ENABLE_KEY = "hold_time_enable";
     public static final String APP_OPEN_TIME_KEY = "app_open_time";
     public static final String HAS_REACT_FOR_VOTE_KEY = "has_react_for_vote";
-    public static final String CIRCLE_SIZE_KEY = "icon_distance";
+    public static final String CIRCLE_SIZE_KEY = "circleSize";
     public static final String NUM_OF_RECENT_KEY = "num_of_recent";
     public static final String NUM_OF_GRID_ROW_KEY = "grid_row";
     public static final String NUM_OF_GRID_COLUMN_KEY = "grid_column";
