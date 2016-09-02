@@ -1198,7 +1198,7 @@ public class EdgeGestureService extends Service {
                                             @Override
                                             public void onAnimationEnd(Animator animation) {
                                                 if (!isCancel) {
-                                                    folderCoor = Utility.showFolder(getApplicationContext(), shortcutGridView, windowManager, favoriteRealm, defaultShared, shortcutToSwitch, mScale, mIconScale, folderAdapter);
+                                                    folderCoor = Utility.showFolder( shortcutGridView, favoriteRealm, shortcutToSwitch, mScale, mIconScale, folderAdapter);
                                                     onFolderAnimator = false;
                                                     Log.e(TAG, "onAnimation end");
                                                     folderShown = true;

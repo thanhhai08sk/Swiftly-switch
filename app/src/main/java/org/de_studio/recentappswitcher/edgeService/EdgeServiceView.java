@@ -29,6 +29,7 @@ import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.FavoriteShortcutAdapter;
+import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
 
 import java.util.ArrayList;
@@ -39,6 +40,8 @@ import java.util.TreeMap;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import io.realm.Realm;
 
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_NAME;
@@ -54,6 +57,7 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_REALM_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.FOLDER_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
@@ -159,6 +163,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     int favoriteGridPaddingHorizontal;
     @Inject
     int favoriteGridPaddingVertical;
+    @Inject
+    @Named(FAVORITE_GRID_REALM_NAME)
+    Realm favoriteRealm;
 
 
 
@@ -382,6 +389,11 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         if (!gridParentsView.isAttachedToWindow()) {
             windowManager.addView(gridParentsView, gridParentViewPara);
         }
+    }
+
+    public void showFolderGridView(int folderPosition) {
+        FolderAdapter folderAdapter = new FolderAdapter(getApplicationContext(), folderPosition);
+        Utility.showFolder(favoriteGridView, favoriteRealm, folderPosition, mScalse, iconScale, folderAdapter);
     }
 
 
