@@ -89,6 +89,9 @@ public class Cons {
     public static final String EDGE_2_SENSITIVE_NAME = "edge2Sensitive";
     public static final String EDGE_1_OFFSET_NAME = "edge1Offset";
     public static final String EDGE_2_OFFSET_NAME = "edge2Offset";
+    public static final String FAVORITE_GRID_ADAPTER_NAME = "favoriteGirdAdapter";
+    public static final String FAVORITE_CIRCLE_ADAPTER_NAME = "favoriteCircleAdapter";
+
 
 
     public static final int CURRENT_SCHEMA_VERSION = 2;

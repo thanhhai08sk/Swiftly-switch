@@ -43,13 +43,16 @@ import javax.inject.Named;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_PARA_NAME;
+import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SENSITIVE_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SENSITIVE_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 
 /**
@@ -75,7 +78,15 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Named(EDGE_2_OFFSET_NAME)
     int edge2Offset;
     Vibrator vibrator;
-    SharedPreferences defaultShared, edge1Shared, edge2Shared;
+    @Inject
+    @Named(EDGE_1_SHARED_NAME)
+    SharedPreferences edge1Shared;
+    @Inject
+    @Named(EDGE_2_SHARED_NAME)
+    SharedPreferences edge2Shared;
+    @Inject
+    @Named(DEFAULT_SHARED_NAME)
+    SharedPreferences defaultShared;
     GridView shortcutGridView, shortcutFolderGridView;
     @Inject
     @Named(EDGE_1_PARA_NAME)
@@ -304,6 +315,10 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         } catch (IllegalStateException e) {
             Log.e(TAG, " item_view has already been added to the window manager");
         }
+    }
+
+    public void showFavoriteGridShortcutsView() {
+
     }
 
     public synchronized void removeCircleShortcutsView() {
