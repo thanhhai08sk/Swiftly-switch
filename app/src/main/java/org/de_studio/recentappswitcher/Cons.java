@@ -73,6 +73,7 @@ public class Cons {
     public static final String M_SCALE_NAME = "m_scale";
     public static final String HALF_ICON_WIDTH_PXL_NAME = "half_icon_width_pxl";
     public static final String CIRCLE_SIZE_DP_NAME = "circle_size_dp";
+    public static final String CIRCLE_SIZE_PXL_NAME = "circleSizePxl";
     public static final String GRID_GAP_NAME = "grid_gap_name";
     public static final String ICON_SCALE_NAME = "icon_scale";
     public static final String GRID_PARENT_VIEW_PARA_NAME = "grid_parent_view_para";

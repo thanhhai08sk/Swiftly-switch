@@ -47,6 +47,8 @@ import io.realm.Realm;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_PARA_NAME;
+import static org.de_studio.recentappswitcher.Cons.CIRCLE_AND_QUICK_ACTION_GAP;
+import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
@@ -65,6 +67,10 @@ import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.FOLDER_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
+import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
+import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
+import static org.de_studio.recentappswitcher.Cons.TAG_EDGE_1;
+import static org.de_studio.recentappswitcher.Cons.TAG_EDGE_2;
 
 /**
  * Created by HaiNguyen on 8/19/16.
@@ -154,7 +160,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     FrameLayout backgroundFrame;
     @Inject
     @Named(M_SCALE_NAME)
-    float mScalse;
+    float mScale;
     @Inject
     @Named(ICON_SCALE_NAME)
     float iconScale;
@@ -176,6 +182,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(EDGE_2_QUICK_ACTION_VIEWS_NAME)
     ExpandStatusBarView[] edge2QuickActionViews;
+    @Inject
+    @Named(CIRCLE_SIZE_PXL_NAME)
+    float circleSizePxl;
 
 
 
@@ -386,7 +395,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 ,favoriteGridView.getWidth()
                 ,xInit
                 ,yInit
-                ,mScalse
+                , mScale
                 ,edgePosition
                 ,windowManager
                 ,defaultShared
@@ -403,7 +412,37 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     public void showFolderGridView(int folderPosition) {
         FolderAdapter folderAdapter = new FolderAdapter(getApplicationContext(), folderPosition);
-        Utility.showFolder(favoriteGridView, favoriteRealm, folderPosition, mScalse, iconScale, folderAdapter);
+        Utility.showFolder(favoriteGridView, favoriteRealm, folderPosition, mScale, iconScale, folderAdapter);
+    }
+
+    public void showQuickAction(String edgeTag, int id, int xInit, int yInit) {
+        float x = xInit - circleSizePxl - CIRCLE_AND_QUICK_ACTION_GAP * mScale - OVAL_OFFSET * mScale - OVAL_RADIUS_PLUS * mScale;
+        float y = yInit - circleSizePxl - CIRCLE_AND_QUICK_ACTION_GAP * mScale - OVAL_OFFSET * mScale - OVAL_RADIUS_PLUS * mScale;
+        switch (edgeTag) {
+            case TAG_EDGE_1:
+                for (int i = 0; i < edge1QuickActionViews.length; i++) {
+                    if (i == id) {
+                        edge1QuickActionViews[i].setVisibility(View.VISIBLE);
+                        edge1QuickActionViews[i].setX(x);
+                        edge1QuickActionViews[i].setY(y);
+                    } else {
+                        edge1QuickActionViews[i].setVisibility(View.GONE);
+                    }
+                }
+                break;
+            case TAG_EDGE_2:
+                for (int i = 0; i < edge2QuickActionViews.length; i++) {
+                    if (i == id) {
+                        edge2QuickActionViews[i].setVisibility(View.VISIBLE);
+                        edge2QuickActionViews[i].setX(x);
+                        edge2QuickActionViews[i].setY(y);
+                    } else {
+                        edge2QuickActionViews[i].setVisibility(View.GONE);
+                    }
+                }
+                break;
+
+        }
     }
 
 

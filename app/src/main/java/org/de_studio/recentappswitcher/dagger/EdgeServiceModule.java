@@ -49,6 +49,7 @@ import static org.de_studio.recentappswitcher.Cons.CIRCLE_SHORTCUT_VIEW_PARA_NAM
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DP_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_KEY;
+import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_VERTICAL;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_GAP_IN_GRID;
@@ -597,6 +598,14 @@ public class EdgeServiceModule {
     int quickActionViewRadius(@Named(CIRCLE_SIZE_DP_NAME) int circleSize
             , @Named(M_SCALE_NAME) float mScale) {
         return (int) ((circleSize + CIRCLE_AND_QUICK_ACTION_GAP + OVAL_RADIUS_PLUS) * mScale);
+    }
+
+    @Provides
+    @Singleton
+    @Named(CIRCLE_SIZE_PXL_NAME)
+    float circleSizePxl(@Named(CIRCLE_SIZE_DP_NAME) int circleSize
+            , @Named(M_SCALE_NAME) float mScale) {
+        return mScale * circleSize;
     }
 
 
