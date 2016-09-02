@@ -43,9 +43,11 @@ import javax.inject.Named;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_PARA_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
@@ -66,6 +68,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(EDGE_2_SENSITIVE_NAME)
     int edge2Sensitive;
+    @Inject
+    @Named(EDGE_1_OFFSET_NAME)
+    int edge1Offset;
+    @Inject
+    @Named(EDGE_2_OFFSET_NAME)
+    int edge2Offset;
     Vibrator vibrator;
     SharedPreferences defaultShared, edge1Shared, edge2Shared;
     GridView shortcutGridView, shortcutFolderGridView;
@@ -190,15 +198,15 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             case Cons.TAG_EDGE_2:
                 return edge2Sensitive;
         }
-        return 0;
+        return Cons.EDGE_SENSITIVE_DEFAULT;
     }
 
     public int getEdgeOffset(String edgeTag) {
         switch (edgeTag) {
             case Cons.TAG_EDGE_1:
-                return edge1Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
+                return edge1Offset;
             case Cons.TAG_EDGE_2:
-                return edge2Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
+                return edge2Offset;
             default:
                 return Cons.EDGE_OFFSET_DEFAULT;
         }
@@ -289,13 +297,21 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 circleIcons[i].setImageDrawable(null);
             } else {
                 Utility.setImageForShortcut(shortcuts[i], getPackageManager(), circleIcons[i], getApplicationContext(), iconPack, null, true);
-
             }
         }
         try {
             windowManager.addView(circleParentsView, circleShortcutsViewPara);
         } catch (IllegalStateException e) {
             Log.e(TAG, " item_view has already been added to the window manager");
+        }
+    }
+
+    public synchronized void removeCircleShortcutsView() {
+        try {
+            windowManager.removeView(circleParentsView);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, " Null when remove View");
         }
     }
 
