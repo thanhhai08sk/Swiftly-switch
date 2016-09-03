@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,6 +22,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
@@ -38,7 +41,9 @@ import org.de_studio.recentappswitcher.service.FavoriteShortcutAdapter;
 import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
@@ -593,6 +598,36 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             circleIcons[i].setX(circleIconXs[i]);
             circleIcons[i].setY(circleIconYs[i]);
         }
+    }
+
+    public void showClock() {
+        LinearLayout clock = (LinearLayout) clockParentsView.findViewById(R.id.clock_linear_layout);
+            Calendar c = Calendar.getInstance();
+            int mHour;
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
+            clock.setVisibility(View.VISIBLE);
+            TextView hourTextView = (TextView) clockParentsView.findViewById(R.id.clock_time_in_hour);
+            TextView dateTextView = (TextView) clockParentsView.findViewById(R.id.clock_time_in_date);
+            TextView batteryLifeTextView = (TextView) clockParentsView.findViewById(R.id.clock_battery_life);
+            String batteryString = getApplicationContext().getString(R.string.batterylife) + " " + Utility.getBatteryLevel(getApplicationContext()) + "%";
+            if (batteryLifeTextView != null) {
+                batteryLifeTextView.setText(batteryString);
+            }
+            if (dateTextView != null) {
+                dateTextView.setText(dateFormat.format(c.getTime()));
+            }
+            if (!DateFormat.is24HourFormat(getApplicationContext())) {
+                SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm");
+                if (hourTextView != null) {
+                    hourTextView.setText(hourFormat.format(c.getTime()));
+                }
+            } else {
+                SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
+                if (hourTextView != null) {
+                    hourTextView.setText(hourFormat.format(c.getTime()));
+                }
+            }
+
     }
 
 
