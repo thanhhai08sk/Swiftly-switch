@@ -612,7 +612,6 @@ public class MainActivity extends Activity {
                 "\n - Support folder" +
                 "\n - Indicator" +
                 "\n - Change the default setting for Quick Action";
-
         SpannableString span233 = getSpanString(title2_3_3, span);
 
         SpannableString span2_3_2 = getSpanString(title2_3_2, span);
@@ -640,7 +639,7 @@ public class MainActivity extends Activity {
         SpannableString span2_2_8 = new SpannableString(title2_2_8);
         span2_2_8.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_8.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
-        CharSequence finalText = TextUtils.concat(span233,"\n\n",text2_3_3, "\n\n",span2_3_2,"\n\n",text2_3_2, "\n\n",span2_3_1,"\n\n",text2_3_1, "\n\n",span2_2_14,"\n\n",text2_3_0, "\n\n",span2_2_13,"\n\n",text2_2_13, "\n\n",span2_2_11_1,"\n\n",text2_2_12, "\n\n",span2_2_11,"\n\n",text2_2_11, "\n\n",span2_2_10,"\n\n",text2_2_10, "\n\n",span2_2_9,"\n\n",text2_2_9,"\n\n",span2_2_8,"\n\n",text2_2_8
+        CharSequence finalText = TextUtils.concat(getSpanString(title2_3_4,span),"\n\n",text2_3_4,"\n\n", span233,"\n\n",text2_3_3, "\n\n",span2_3_2,"\n\n",text2_3_2, "\n\n",span2_3_1,"\n\n",text2_3_1, "\n\n",span2_2_14,"\n\n",text2_3_0, "\n\n",span2_2_13,"\n\n",text2_2_13, "\n\n",span2_2_11_1,"\n\n",text2_2_12, "\n\n",span2_2_11,"\n\n",text2_2_11, "\n\n",span2_2_10,"\n\n",text2_2_10, "\n\n",span2_2_9,"\n\n",text2_2_9,"\n\n",span2_2_8,"\n\n",text2_2_8
                 );
         builder.setTitle(R.string.what_new)
                 .setMessage(finalText)
