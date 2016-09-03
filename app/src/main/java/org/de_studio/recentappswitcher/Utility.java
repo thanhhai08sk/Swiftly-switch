@@ -1399,13 +1399,13 @@ public  class Utility {
             clock.setVisibility(View.GONE);
         }
 
-
         WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 PixelFormat.TRANSLUCENT);
+
         paramsEdge1.gravity = Gravity.TOP|Gravity.CENTER_HORIZONTAL;
         windowManager.addView(view, paramsEdge1);
         if (isAnimation) {

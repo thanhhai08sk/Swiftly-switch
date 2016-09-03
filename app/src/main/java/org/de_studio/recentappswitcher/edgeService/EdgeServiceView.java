@@ -55,6 +55,7 @@ import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_AND_QUICK_ACTION_GAP;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_PXL_NAME;
+import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_ID;
@@ -247,6 +248,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(CLOCK_PARENTS_VIEW_NAME)
     View clockParentsView;
+    @Inject
+    @Named(CLOCK_PARENTS_PARA_NAME)
+    WindowManager.LayoutParams clockParentsPara;
     @Inject
     @Named(USE_ANIMATION_NAME)
     boolean useAnimation;

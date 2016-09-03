@@ -122,6 +122,7 @@ public class Cons {
     public static final String QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME = "quickActionWithInstant";
     public static final String USE_INSTANT_FAVORITE_NAME = "useInstant";
     public static final String CLOCK_PARENTS_VIEW_NAME = "clockParentsView";
+    public static final String CLOCK_PARENTS_PARA_NAME = "clockParentsPara";
     public static final String EXCLUDE_SET_NAME = "excludeSet";
     public static final String EDGE_1_WIDTH_PXL_NAME = "edge1Width";
     public static final String EDGE_1_HEIGHT_PXL_NAME = "edge1Height";

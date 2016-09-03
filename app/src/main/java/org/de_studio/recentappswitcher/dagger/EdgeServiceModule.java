@@ -55,6 +55,7 @@ import static org.de_studio.recentappswitcher.Cons.CIRCLE_SHORTCUT_VIEW_PARA_NAM
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_KEY;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_PXL_NAME;
+import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_VERTICAL;
@@ -853,7 +854,22 @@ public class EdgeServiceModule {
     @Named(CLOCK_PARENTS_VIEW_NAME)
     View clockParentsView(WindowManager windowManager
             , @Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
-        return Utility.disPlayClock(context, windowManager, defaultShared.getBoolean(EdgeSetting.ANIMATION_KEY, false), defaultShared.getInt(EdgeSetting.ANI_TIME_KEY, 100), defaultShared.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY, false));
+        LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        return layoutInflater.inflate(R.layout.clock, null);
+    }
+
+    @Provides
+    @Singleton
+    @Named(CLOCK_PARENTS_PARA_NAME)
+    WindowManager.LayoutParams clockParentsPara(){
+        WindowManager.LayoutParams para = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                PixelFormat.TRANSLUCENT);
+        para.gravity = Gravity.TOP|Gravity.CENTER_HORIZONTAL;
+        return para;
     }
 
     @Provides
