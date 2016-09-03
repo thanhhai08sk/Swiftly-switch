@@ -38,7 +38,7 @@ import org.de_studio.recentappswitcher.service.EdgeSetting;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
-    private static final int VERSION_NUMBER = 66;
+    private static final int VERSION_NUMBER = 67;
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final String EDGE_1_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_2_shared_preference";
@@ -565,7 +565,10 @@ public class MainActivity extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         int titleSize = getResources().getDimensionPixelSize(R.dimen.what_new_title_size);
         AbsoluteSizeSpan span = new AbsoluteSizeSpan(titleSize);
-
+        String title2_3_4 = "Version 2.3.4";
+        String text2_3_4 = " - Support Norwegian and update translations for Indonesian and Polish. Thanks Ackuna community!"
+                + "\n - Fix choosing quick action bug in android 4.4"
+                + "\n - Fix flashlight in quick action ";
         String title2_3_3 = "Version 2.3.3";
         String text2_3_3 = " - Now you can choose the position when pin shortcuts to recent"
                 + "\n - Update Korean and Czech translation"
