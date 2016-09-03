@@ -94,6 +94,7 @@ import static org.de_studio.recentappswitcher.Cons.FOLDER_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_GAP_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GRID_GAP_KEY;
 import static org.de_studio.recentappswitcher.Cons.GRID_GAP_NAME;
+import static org.de_studio.recentappswitcher.Cons.GRID_HEIGHT_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_PARENT_VIEW_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_DEFAULT;
@@ -320,6 +321,19 @@ public class EdgeServiceModule {
         gridView.setLayoutParams(gridParams);
         gridView.setAdapter(adapter);
         return gridView;
+    }
+
+    @Provides
+    @Singleton
+    @Named(GRID_HEIGHT_NAME)
+    int gridHeight(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+            , @Named(M_SCALE_NAME) float mScale
+            , @Named(ICON_SCALE_NAME) float iconScale) {
+        int gridRow = defaultShared.getInt(EdgeSetting.NUM_OF_GRID_ROW_KEY, 5);
+        int gridColumn = defaultShared.getInt(EdgeSetting.NUM_OF_GRID_COLUMN_KEY, 4);
+        int gridGap = defaultShared.getInt(EdgeSetting.GAP_OF_SHORTCUT_KEY, 5);
+        float gridTall = (int) (mScale *  (((DEFAULT_ICON_SIZE * iconScale) + DEFAULT_ICON_GAP_IN_GRID) * gridRow + gridGap * (gridRow - 1)));
+
     }
 
 

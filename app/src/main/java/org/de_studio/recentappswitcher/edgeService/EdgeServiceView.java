@@ -532,18 +532,20 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
 
     public void showFavoriteGridView(float xInit, float yInit, int edgePosition, int iconToSwitch) {
+        Log.e(TAG, "showFavoriteGridView: height = " + favoriteGridView.getHeight() + "\nwidth = " + favoriteGridView.getWidth());
+
         Utility.setFavoriteGridViewPosition(favoriteGridView
-                ,favoriteGridView.getHeight()
-                ,favoriteGridView.getWidth()
-                ,xInit
-                ,yInit
+                , (int) favoriteGridView.getTag(2)
+                , (int) favoriteGridView.getTag(1)
+                , xInit
+                , yInit
                 , mScale
-                ,edgePosition
-                ,windowManager
-                ,defaultShared
-                ,favoriteGridPaddingHorizontal
-                ,favoriteGridPaddingVertical
-                ,iconToSwitch);
+                , edgePosition
+                , windowManager
+                , defaultShared
+                , favoriteGridPaddingHorizontal
+                , favoriteGridPaddingVertical
+                , iconToSwitch);
         favoriteGridView.setVisibility(View.VISIBLE);
         favoriteGridView.setAlpha(1f);
         folderGridView.setVisibility(View.GONE);

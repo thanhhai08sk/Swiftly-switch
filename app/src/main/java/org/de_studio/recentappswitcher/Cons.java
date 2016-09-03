@@ -135,7 +135,8 @@ public class Cons {
     public static final String USE_ACTION_DOW_VIBRATE_NAME = "useActionDownVibrate";
     public static final String USE_ACTION_MOVE_VIBRATE_NAME = "useActionMoveVibrate";
     public static final String USE_CLOCK_NAME = "useClock";
-
+    public static final String GRID_HEIGHT_NAME = "gridTall";
+    public static final String GRID_WIDTH_NAME = "gridWidth";
 
 
 
