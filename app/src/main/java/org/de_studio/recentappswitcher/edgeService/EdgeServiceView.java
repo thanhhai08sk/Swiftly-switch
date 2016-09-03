@@ -100,6 +100,7 @@ import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_WITH_INSTANT_FAV
 import static org.de_studio.recentappswitcher.Cons.USE_ACTION_DOW_VIBRATE_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_ACTION_MOVE_VIBRATE_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
+import static org.de_studio.recentappswitcher.Cons.USE_CLOCK_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_INSTANT_FAVORITE_NAME;
 import static org.de_studio.recentappswitcher.Cons.VIBRATE_DURATION_NAME;
 
@@ -277,6 +278,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(USE_ACTION_MOVE_VIBRATE_NAME)
     boolean useActionMoveVibrate;
+    @Inject
+    @Named(USE_CLOCK_NAME)
+    boolean useClock;
 
 
 
@@ -638,6 +642,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                     hourTextView.setText(hourFormat.format(c.getTime()));
                 }
             }
+        windowManager.addView(clockParentsView, clockParentsPara);
     }
 
     public void showBackground() {
@@ -646,8 +651,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             windowManager.addView(backgroundFrame, backgroundPara);
             backgroundFrame.animate().alpha(1f).setDuration(defaultShared.getInt(EdgeSetting.ANI_TIME_KEY, 100)).setInterpolator(new FastOutSlowInInterpolator());
         } else {
-            windowManager.addView(backgroundFrame, backgroundPara);
+            Log.e(TAG, "showBackground: ");
             backgroundFrame.setAlpha(1f);
+            windowManager.addView(backgroundFrame, backgroundPara);
         }
     }
 

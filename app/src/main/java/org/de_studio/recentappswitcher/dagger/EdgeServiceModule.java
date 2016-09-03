@@ -120,6 +120,7 @@ import static org.de_studio.recentappswitcher.Cons.USE_ACTION_MOVE_VIBRATE_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_KEY;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
+import static org.de_studio.recentappswitcher.Cons.USE_CLOCK_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_INSTANT_FAVORITE_NAME;
 import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_KEY;
@@ -893,6 +894,13 @@ public class EdgeServiceModule {
     @Named(USE_ACTION_MOVE_VIBRATE_NAME)
     boolean useActionMoveVibrate(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
         return shared.getBoolean(Cons.HAPTIC_ON_ICON_KEY, false);
+    }
+
+    @Provides
+    @Singleton
+    @Named(USE_CLOCK_NAME)
+    boolean useClock(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
+        return !shared.getBoolean(Cons.DISABLE_CLOCK_KEY, false);
     }
 
 

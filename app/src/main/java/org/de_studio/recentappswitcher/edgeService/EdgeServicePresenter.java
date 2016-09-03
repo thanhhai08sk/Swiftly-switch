@@ -37,7 +37,7 @@ public class EdgeServicePresenter {
                 currentPosition = view.edge1Position;
                 break;
             case Cons.EDGE_2_ID:
-                Log.e(TAG, "onActionDown: edge2");
+                Log.e(TAG, "onActionDown:  edge2");
                 currentPosition = view.edge2Position;
                 break;
         }
@@ -45,13 +45,17 @@ public class EdgeServicePresenter {
         yInit = model.getYInit(currentPosition, y, view.getWindowSize().y);
 
         view.removeAllExceptEdgeView();
+        view.showBackground();
         model.calculateCircleIconPositions(view.circleSizePxl, view.iconSizePxl, currentPosition, xInit, yInit, 6);
         view.setCircleIconsPosition(model.circleIconXs, model.circleIconYs);
         view.setCircleIconsView(model.getRecentList(view.getRecentApps()));
-        view.showBackground();
 
         if (view.useActionDownVibrate) {
             view.vibrate();
+        }
+
+        if (view.useClock) {
+            view.showClock();
         }
 
     }

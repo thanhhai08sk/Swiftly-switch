@@ -130,6 +130,7 @@ public class Cons {
     public static final String EDGE_2_HEIGHT_PXL_NAME = "edge2Height";
     public static final String USE_ACTION_DOW_VIBRATE_NAME = "useActionDownVibrate";
     public static final String USE_ACTION_MOVE_VIBRATE_NAME = "useActionMoveVibrate";
+    public static final String USE_CLOCK_NAME = "useClock";
 
 
 
