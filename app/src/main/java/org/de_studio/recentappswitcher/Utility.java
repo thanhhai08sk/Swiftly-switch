@@ -2286,8 +2286,8 @@ public  class Utility {
         return -1;
     }
 
-    public static WindowManager.LayoutParams getEdgeLayoutPara(SharedPreferences defaultShared, SharedPreferences edge1Shared
-            , float mScale, int edgePosition) {
+    public static WindowManager.LayoutParams getEdgeLayoutPara(SharedPreferences defaultShared, SharedPreferences edgeShared
+            , float mScale, int edgePosition, int edgeWidth, int edgeHeight) {
         WindowManager.LayoutParams edgePara;
         switch (defaultShared.getInt(EdgeSetting.AVOID_KEYBOARD_OPTION_KEY, EdgeSetting.OPTION_PLACE_UNDER)) {
             case EdgeSetting.OPTION_PLACE_UNDER:
@@ -2344,7 +2344,7 @@ public  class Utility {
                 break;
         }
 
-        int edge1offset = edge1Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
+        int edge1offset = edgeShared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
 
         if (edgePosition == 12 | edgePosition == 22) {
             edgePara.y = (int) (edge1offset * mScale);
@@ -2353,6 +2353,8 @@ public  class Utility {
         } else {
             edgePara.y = -(int) (edge1offset * mScale);
         }
+        edgePara.width = edgeWidth;
+        edgePara.height = edgeHeight;
         return edgePara;
 
     }

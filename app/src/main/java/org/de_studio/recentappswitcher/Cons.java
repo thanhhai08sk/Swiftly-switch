@@ -123,6 +123,10 @@ public class Cons {
     public static final String USE_INSTANT_FAVORITE_NAME = "useInstant";
     public static final String CLOCK_PARENTS_VIEW_NAME = "clockParentsView";
     public static final String EXCLUDE_SET_NAME = "excludeSet";
+    public static final String EDGE_1_WIDTH_PXL_NAME = "edge1Width";
+    public static final String EDGE_1_HEIGHT_PXL_NAME = "edge1Height";
+    public static final String EDGE_2_WIDTH_PXL_NAME = "edge2Width";
+    public static final String EDGE_2_HEIGHT_PXL_NAME = "edge2Height";
 
 
 

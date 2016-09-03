@@ -17,6 +17,12 @@ public class EdgeServicePresenter {
     }
 
     void onCreate() {
+        if (view.isEdge1On) {
+            view.addEdgeToWindowManager(Cons.EDGE_1_ID);
+        }
+        if (view.isEdge2On) {
+            view.addEdgeToWindowManager(Cons.EDGE_2_ID);
+        }
         view.setOnTouchListener(view.isEdge1On, view.isEdge2On);
     }
 

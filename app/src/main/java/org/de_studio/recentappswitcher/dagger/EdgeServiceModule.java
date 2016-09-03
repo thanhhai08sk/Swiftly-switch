@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,10 +42,6 @@ import dagger.Module;
 import dagger.Provides;
 import io.realm.Realm;
 
-import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
-import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SHARED_NAME;
-import static org.de_studio.recentappswitcher.Cons.ICON_SIZE_PXL_NAME;
-import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_KEY;
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ANI_TIME_KEY;
@@ -56,7 +53,6 @@ import static org.de_studio.recentappswitcher.Cons.CIRCLE_AND_QUICK_ACTION_GAP;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SHORTCUT_VIEW_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DEFAULT;
-import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DP_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_KEY;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
@@ -65,6 +61,7 @@ import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_GAP_IN_GRID;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_SIZE;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_HEIGHT_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
@@ -73,6 +70,8 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_1_QUICK_ACTION_VIEWS_NAM
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_WIDTH_PXL_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_HEIGHT_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_ID;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_OFFSET_NAME;
@@ -82,7 +81,10 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_QUICK_ACTION_VIEWS_NAM
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_WIDTH_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_POSITIONS_ARRAY_NAME;
+import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
+import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_ADAPTER_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_HORIZONTAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_VERTICAL_NAME;
@@ -101,6 +103,7 @@ import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_ENABLE_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
+import static org.de_studio.recentappswitcher.Cons.ICON_SIZE_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_1_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_2_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_FREE_AND_OUT_OF_TRIAL_NAME;
@@ -112,6 +115,7 @@ import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_VIEW_RADIUS_NAME
 import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME;
 import static org.de_studio.recentappswitcher.Cons.RAD_ICON_DEFAULT_DP;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_DEFAULT;
+import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_KEY;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_INSTANT_FAVORITE_NAME;
 import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_DEFAULT;
@@ -124,6 +128,7 @@ import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_NAME;
 @Module
 @Singleton
 public class EdgeServiceModule {
+    private static final String TAG = EdgeServiceModule.class.getSimpleName();
     EdgeServiceView view;
     Context context;
 
@@ -153,19 +158,21 @@ public class EdgeServiceModule {
 
     @Provides
     @Singleton
-    EdgeServiceModel model(Set<String> blackListSet, @Named(Cons.PIN_REALM_NAME) Realm pinRealm
+    EdgeServiceModel model( @Named(EXCLUDE_SET_NAME)Set<String> excludeSet , @Named(Cons.PIN_REALM_NAME) Realm pinRealm
             , @Named(LAUNCHER_PACKAGENAME_NAME) String laucherPackageName
             , @Named(Cons.IS_FREE_AND_OUT_OF_TRIAL_NAME) boolean isFreeAndOutOfTrial
             , @Named(Cons.M_SCALE_NAME) float mScale
             , @Named(Cons.HALF_ICON_WIDTH_PXL_NAME) float halfIconWidthPxl
-            , @Named(Cons.CIRCLE_SIZE_DP_NAME) int circleSizeDp
+            , @Named(Cons.CIRCLE_SIZE_PXL_NAME) float circleSizePxl
             , @Named(Cons.ICON_SCALE_NAME) float iconScale
             , @Named(Cons.GRID_GAP_NAME) int gridGap) {
 
-        return new EdgeServiceModel(blackListSet, pinRealm, laucherPackageName
+        return new EdgeServiceModel(excludeSet, pinRealm, laucherPackageName
                 , isFreeAndOutOfTrial, mScale, halfIconWidthPxl
-                , circleSizeDp, iconScale, gridGap);
+                , circleSizePxl, iconScale, gridGap);
     }
+
+
     @Provides
     @Singleton
     @Named(LAUNCHER_PACKAGENAME_NAME)
@@ -421,6 +428,7 @@ public class EdgeServiceModule {
             RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1WidthPxl, edge1HeightPxl);
             edge1ImageLayoutParams.height = edge1HeightPxl;
             edge1ImageLayoutParams.width = edge1WidthPxl;
+            Log.e(TAG, "edge1View: height = " + edge1HeightPxl + "\nwidth = " + edge1WidthPxl);
             edge1View.setLayoutParams(edge1ImageLayoutParams);
         }
         return edge1View;
@@ -519,8 +527,11 @@ public class EdgeServiceModule {
     WindowManager.LayoutParams edge1Para(@Named(EDGE_1_POSITION_NAME) int edge1Position
             , @Named(M_SCALE_NAME) float mScale
             , @Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
-            , @Named(EDGE_1_SHARED_NAME) SharedPreferences edge1Shared) {
-        return Utility.getEdgeLayoutPara(defaultShared, edge1Shared, mScale, edge1Position);
+            , @Named(EDGE_1_SHARED_NAME) SharedPreferences edge1Shared
+            , @Named(EDGE_1_WIDTH_PXL_NAME) int edgeWidth
+            , @Named(EDGE_1_HEIGHT_PXL_NAME) int edgeHeight) {
+
+        return Utility.getEdgeLayoutPara(defaultShared, edge1Shared, mScale, edge1Position, edgeWidth, edgeHeight);
 
     }
 
@@ -530,9 +541,89 @@ public class EdgeServiceModule {
     WindowManager.LayoutParams edge2Para(@Named(EDGE_2_POSITION_NAME) int edge2Position
             , @Named(M_SCALE_NAME) float mScale
             , @Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
-            , @Named(EDGE_2_SHARED_NAME) SharedPreferences edge2Shared) {
-        return Utility.getEdgeLayoutPara(defaultShared, edge2Shared, mScale, edge2Position);
+            , @Named(EDGE_2_SHARED_NAME) SharedPreferences edge2Shared
+            , @Named(EDGE_2_WIDTH_PXL_NAME) int edgeWidth
+            , @Named(EDGE_2_HEIGHT_PXL_NAME) int edgeHeight) {
+
+        return Utility.getEdgeLayoutPara(defaultShared, edge2Shared, mScale, edge2Position, edgeWidth, edgeHeight);
     }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_1_WIDTH_PXL_NAME)
+    int edge1Width(@Named(EDGE_1_SHARED_NAME) SharedPreferences shared
+            , @Named(EDGE_1_POSITION_NAME) int  edgePosition
+            ,@Named(M_SCALE_NAME) float mScale) {
+        int edgeSensivite = shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.EDGE_SENSITIVE_DEFAULT);
+        int edgeLength = shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.EDGE_LENGTH_DEFAULT);
+        int edgeWidthPxl;
+
+
+        if (Utility.rightLeftOrBottom(edgePosition) == Cons.POSITION_BOTTOM) {
+            edgeWidthPxl = (int) (edgeLength * mScale);
+        } else {
+            edgeWidthPxl = (int) (edgeSensivite * mScale);
+        }
+        return edgeWidthPxl;
+    }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_2_WIDTH_PXL_NAME)
+    int edge2Width(@Named(EDGE_2_SHARED_NAME) SharedPreferences shared
+            , @Named(EDGE_2_POSITION_NAME) int edgePosition
+            , @Named(M_SCALE_NAME) float mScale) {
+        int edgeSensivite = shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.EDGE_SENSITIVE_DEFAULT);
+        int edgeLength = shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.EDGE_LENGTH_DEFAULT);
+        int edgeWidthPxl;
+
+
+        if (Utility.rightLeftOrBottom(edgePosition) == Cons.POSITION_BOTTOM) {
+            edgeWidthPxl = (int) (edgeLength * mScale);
+        } else {
+            edgeWidthPxl = (int) (edgeSensivite * mScale);
+        }
+        return edgeWidthPxl;
+    }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_1_HEIGHT_PXL_NAME)
+    int edge1Height(@Named(EDGE_1_SHARED_NAME) SharedPreferences shared
+            , @Named(EDGE_1_POSITION_NAME) int  edgePosition
+            ,@Named(M_SCALE_NAME) float mScale){
+        int edgeSensivite = shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.EDGE_SENSITIVE_DEFAULT);
+        int edgeLength = shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.EDGE_LENGTH_DEFAULT);
+        int edgeHeightPxl;
+
+
+        if (Utility.rightLeftOrBottom(edgePosition) == Cons.POSITION_BOTTOM) {
+            edgeHeightPxl = (int) (edgeSensivite * mScale);
+        } else {
+            edgeHeightPxl = (int) (edgeLength * mScale);
+        }
+        return edgeHeightPxl;
+    }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_2_HEIGHT_PXL_NAME)
+    int edge2Height(@Named(EDGE_2_SHARED_NAME) SharedPreferences shared
+            , @Named(EDGE_2_POSITION_NAME) int edgePosition
+            , @Named(M_SCALE_NAME) float mScale){
+        int edgeSensivite = shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.EDGE_SENSITIVE_DEFAULT);
+        int edgeLength = shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.EDGE_LENGTH_DEFAULT);
+        int edgeHeightPxl;
+
+
+        if (Utility.rightLeftOrBottom(edgePosition) == Cons.POSITION_BOTTOM) {
+            edgeHeightPxl = (int) (edgeSensivite * mScale);
+        } else {
+            edgeHeightPxl = (int) (edgeLength * mScale);
+        }
+        return edgeHeightPxl;
+    }
+
 
 
     @Provides
@@ -632,9 +723,9 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(QUICK_ACTION_VIEW_RADIUS_NAME)
-    int quickActionViewRadius(@Named(CIRCLE_SIZE_DP_NAME) int circleSize
+    int quickActionViewRadius(@Named(CIRCLE_SIZE_PXL_NAME) float circleSize
             , @Named(M_SCALE_NAME) float mScale) {
-        return (int) ((circleSize + CIRCLE_AND_QUICK_ACTION_GAP + OVAL_RADIUS_PLUS) * mScale);
+        return (int) ((CIRCLE_AND_QUICK_ACTION_GAP + OVAL_RADIUS_PLUS) * mScale + circleSize);
     }
 
 
@@ -781,6 +872,6 @@ public class EdgeServiceModule {
 
 
 
-    
+
 
 }

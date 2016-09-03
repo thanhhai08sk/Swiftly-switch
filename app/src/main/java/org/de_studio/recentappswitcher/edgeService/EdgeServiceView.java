@@ -13,6 +13,7 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -152,6 +153,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     FavoriteShortcutAdapter gridShortcutsAdapter;
     @Inject
+    @Nullable
     IconPackManager.IconPack iconPack;
     @Inject
     @Named(Cons.GUIDE_COLOR_NAME)
@@ -275,15 +277,21 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                Log.e(TAG, "onTouch: action down");
                 presenter.onActionDown(getXCord(event), getYCord(event), view.getId());
                 break;
             case MotionEvent.ACTION_MOVE:
+                Log.e(TAG, "onTouch: action move");
                 break;
             case MotionEvent.ACTION_UP:
+                Log.e(TAG, "onTouch: action up");
+                presenter.onActionUp(getXCord(event), getYCord(event), view.getId());
                 break;
             case MotionEvent.ACTION_OUTSIDE:
+                Log.e(TAG, "onTouch: action outside");
                 break;
             case MotionEvent.ACTION_CANCEL:
+                Log.e(TAG, "onTouch: action cancel");
                 break;
         }
 

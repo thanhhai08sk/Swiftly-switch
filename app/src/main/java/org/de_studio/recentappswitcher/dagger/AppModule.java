@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.dagger;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
@@ -53,6 +54,7 @@ public class AppModule {
     }
 
     @Provides
+    @Nullable
     @Singleton
     IconPackManager.IconPack iconPack(@Named(Cons.DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
         IconPackManager.IconPack iconPack = null;

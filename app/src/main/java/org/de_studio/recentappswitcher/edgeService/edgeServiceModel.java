@@ -27,7 +27,7 @@ public class EdgeServiceModel {
     boolean isFreeAndOutOfTrial;
     float mScale, iconScale;
     float haftIconWidthPxl;
-    int circleSizeDp;
+    float circleSizePxl;
     int iconSizeInclude10PaddingInGridDp;
     int iconSize;
     int gridGap;
@@ -40,10 +40,10 @@ public class EdgeServiceModel {
 
     public EdgeServiceModel(Set<String> blackListSet, Realm pinRealm, String launcherPackagename
             , boolean isFreeAndOutOfTrial, float mScale, float haftIconWidthPxl
-            , int circleSizeDp, float iconScale, int gridGap) {
+            , float circleSizePxl, float iconScale, int gridGap) {
         this.gridGap = gridGap;
         this.iconScale = iconScale;
-        this.circleSizeDp = circleSizeDp;
+        this.circleSizePxl = circleSizePxl;
         this.blackListSet = blackListSet;
         this.pinRealm = pinRealm;
         this.launcherPackagename = launcherPackagename;
@@ -90,7 +90,7 @@ public class EdgeServiceModel {
         double yDouble = (double) y;
 
         double distanceFromInitPxl = Math.sqrt(Math.pow(xDouble - xInitDouble,2) + Math.pow(yDouble - yInitDouble, 2));
-        double startQuickActionZonePxl = (double) ((35+ circleSizeDp)* mScale);
+        double startQuickActionZonePxl = (double) (35 * mScale + circleSizePxl);
 
         double ang30 = 0.1666*Math.PI;
         double ang70 = 0.3889*Math.PI;
@@ -201,7 +201,7 @@ public class EdgeServiceModel {
     }
 
     private int getInitPointOffsetNeeded() {
-        return (int) (mScale * (circleSizeDp + iconSize));
+        return (int) (iconSize * mScale + circleSizePxl);
     }
 
     public float getYOffset(float windowHeight, float y_init) {
@@ -249,6 +249,8 @@ public class EdgeServiceModel {
     }
 
     public void calculateCircleIconPositions(float circleSizePxl, float iconSizePxl, int edgePosition, float xInit, float yInit, int iconsNumber) {
+        circleIconXs = new float[iconsNumber];
+        circleIconYs = new float[iconsNumber];
         double alpha, beta;
         double[] alphaN = new double[iconsNumber];
         switch (iconsNumber) {

@@ -30,9 +30,9 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
 import org.de_studio.recentappswitcher.favoriteShortcut.FavoriteSettingActivity;
 import org.de_studio.recentappswitcher.intro.IntroActivity;
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.util.ArrayList;
@@ -164,9 +164,9 @@ public class MainActivity extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                    startService(new Intent(getApplicationContext(), EdgeServiceView.class));
                 } else {
-                    stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                    stopService(new Intent(getApplicationContext(), EdgeServiceView.class));
                 }
             }
         });
@@ -275,10 +275,10 @@ public class MainActivity extends Activity {
 
                 sharedPreferences1.edit().putBoolean(EdgeSetting.EDGE_ON_KEY, isChecked).commit();
                 if (!isChecked && !edge2Switch.isChecked()) {
-                    stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                    stopService(new Intent(getApplicationContext(), EdgeServiceView.class));
                 } else {
-                    stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                    startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                    stopService(new Intent(getApplicationContext(), EdgeServiceView.class));
+                    startService(new Intent(getApplicationContext(), EdgeServiceView.class));
                 }
 
 
@@ -317,10 +317,10 @@ public class MainActivity extends Activity {
 
                 } else {
                     if (!isChecked && !edge1Switch.isChecked()) {
-                        stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                        stopService(new Intent(getApplicationContext(), EdgeServiceView.class));
                     } else {
-                        stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                        startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                        stopService(new Intent(getApplicationContext(), EdgeServiceView.class));
+                        startService(new Intent(getApplicationContext(), EdgeServiceView.class));
                     }
                     sharedPreferences2.edit().putBoolean(EdgeSetting.EDGE_ON_KEY, isChecked).commit();
 
@@ -475,13 +475,13 @@ public class MainActivity extends Activity {
         });
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            stopService(new Intent(this, EdgeGestureService.class));
-            startService(new Intent(this, EdgeGestureService.class));
+            stopService(new Intent(this, EdgeServiceView.class));
+            startService(new Intent(this, EdgeServiceView.class));
 
         } else {
             if (Settings.canDrawOverlays(this)) {
-                stopService(new Intent(this, EdgeGestureService.class));
-                startService(new Intent(this, EdgeGestureService.class));
+                stopService(new Intent(this, EdgeServiceView.class));
+                startService(new Intent(this, EdgeServiceView.class));
 
             }
         }
@@ -672,15 +672,15 @@ public class MainActivity extends Activity {
         Log.e(TAG, "onResume: ");
 //        setStepButtonAndDescription();
         checkPermissionOk();
-        stopService(new Intent(this, EdgeGestureService.class));
+        stopService(new Intent(this, EdgeServiceView.class));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (Settings.canDrawOverlays(this) && (edge1Switch.isChecked() || edge1Switch.isChecked())) {
                 Log.e(TAG, "onResume: startService");
-                startService(new Intent(this, EdgeGestureService.class));
+                startService(new Intent(this, EdgeServiceView.class));
             }
         } else {
             if (edge1Switch.isChecked() || edge1Switch.isChecked()) {
-                startService(new Intent(this, EdgeGestureService.class));
+                startService(new Intent(this, EdgeServiceView.class));
             }
         }
 
@@ -752,8 +752,8 @@ public class MainActivity extends Activity {
         if (requestCode == REQUEST_CODE) {
             if (Settings.canDrawOverlays(this)) {
                 // continue here - permission was granted
-                stopService(new Intent(this, EdgeGestureService.class));
-                startService(new Intent(this, EdgeGestureService.class));
+                stopService(new Intent(this, EdgeServiceView.class));
+                startService(new Intent(this, EdgeServiceView.class));
 
             }
         }else if (requestCode == REQUEST_INVITE) {
