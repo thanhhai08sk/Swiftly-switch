@@ -12,6 +12,7 @@ public class EdgeServicePresenter {
     EdgeServiceModel model;
     EdgeServiceView view;
     float xInit, yInit;
+    int currentPosition;
     String laucherPackageName;
 
     public EdgeServicePresenter(EdgeServiceModel model, EdgeServiceView view) {
@@ -30,42 +31,37 @@ public class EdgeServicePresenter {
     }
 
     public void onActionDown(float x, float y, int edgeId) {
-        int position = 0;
         switch (edgeId) {
             case Cons.EDGE_1_ID:
                 Log.e(TAG, "onActionDown: edge1");
-                position = view.edge1Position;
+                currentPosition = view.edge1Position;
                 break;
             case Cons.EDGE_2_ID:
                 Log.e(TAG, "onActionDown: edge2");
-                position = view.edge2Position;
+                currentPosition = view.edge2Position;
                 break;
         }
-        xInit = model.getXInit(position, x, view.getWindowSize().x);
-        yInit = model.getYInit(position, y, view.getWindowSize().y);
+        xInit = model.getXInit(currentPosition, x, view.getWindowSize().x);
+        yInit = model.getYInit(currentPosition, y, view.getWindowSize().y);
 
         view.removeAllExceptEdgeView();
-        model.calculateCircleIconPositions(view.circleSizePxl, view.iconSizePxl, position, xInit, yInit, 6);
+        model.calculateCircleIconPositions(view.circleSizePxl, view.iconSizePxl, currentPosition, xInit, yInit, 6);
         view.setCircleIconsPosition(model.circleIconXs, model.circleIconYs);
         view.setCircleIconsView(model.getRecentList(view.getRecentApps()));
         view.showBackground();
 
+        if (view.useActionDownVibrate) {
+            view.vibrate();
+        }
 
+    }
 
-
+    public void onActionMove(float x, float y, int edgeId) {
 
     }
 
     public void onActionUp(float x, float y, int edgeId) {
-        int position = 0;
-        switch (edgeId) {
-            case Cons.EDGE_1_ID:
-                position = view.edge1Position;
-                break;
-            case Cons.EDGE_2_ID:
-                position = view.edge2Position;
-                break;
-        }
+
         view.removeAllExceptEdgeView();
 
     }

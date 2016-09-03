@@ -301,6 +301,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 presenter.onActionDown(getXCord(event), getYCord(event), view.getId());
                 break;
             case MotionEvent.ACTION_MOVE:
+                presenter.onActionMove(getXCord(event), getYCord(event), view.getId());
                 Log.e(TAG, "onTouch: action move");
                 break;
             case MotionEvent.ACTION_UP:
@@ -648,6 +649,10 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             windowManager.addView(backgroundFrame, backgroundPara);
             backgroundFrame.setAlpha(1f);
         }
+    }
+
+    public void vibrate() {
+        vibrator.vibrate(vibrationDuration);
     }
 
 
