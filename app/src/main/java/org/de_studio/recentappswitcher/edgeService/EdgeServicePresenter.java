@@ -8,8 +8,7 @@ import org.de_studio.recentappswitcher.Cons;
 public class EdgeServicePresenter {
     EdgeServiceModel model;
     EdgeServiceView view;
-    int edge1Position, edge2Position;
-    int xInit, yInit;
+    float xInit, yInit;
     String laucherPackageName;
 
     public EdgeServicePresenter(EdgeServiceModel model, EdgeServiceView view) {
@@ -21,20 +20,21 @@ public class EdgeServicePresenter {
         view.setOnTouchListener(view.isEdge1On, view.isEdge2On);
     }
 
-    public void onActionDown(int x, int y, int edgeId) {
+    public void onActionDown(float x, float y, int edgeId) {
         int position = 0;
         switch (edgeId) {
             case Cons.EDGE_1_ID:
-                position = edge1Position;
+                position = view.edge1Position;
                 break;
             case Cons.EDGE_2_ID:
-                position = edge2Position;
+                position = view.edge2Position;
                 break;
         }
         xInit = model.getXInit(position, x, view.getWindowSize().x);
         yInit = model.getYInit(position, y, view.getWindowSize().y);
 
         view.removeAllExceptEdgeView();
+        model.calculateCircleIconPositions(view.circleSizePxl, view.iconSizePxl, position, xInit, yInit, 6);
 
 
 

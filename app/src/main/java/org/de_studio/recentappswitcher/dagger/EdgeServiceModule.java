@@ -40,6 +40,7 @@ import dagger.Module;
 import dagger.Provides;
 import io.realm.Realm;
 
+import static org.de_studio.recentappswitcher.Cons.ICON_SIZE_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_KEY;
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_NAME;
@@ -311,6 +312,14 @@ public class EdgeServiceModule {
     @Named(FOLDER_GRID_VIEW_NAME)
     GridView folderGridView(@Named(GRID_PARENTS_VIEW_NAME) FrameLayout parent){
         return (GridView) parent.findViewById(R.id.folder_grid);
+    }
+
+    @Provides
+    @Singleton
+    @Named(ICON_SIZE_PXL_NAME)
+    float iconSizePxl(@Named(M_SCALE_NAME) float mScale
+            , @Named(ICON_SCALE_NAME) float iconScale) {
+        return DEFAULT_ICON_SIZE * mScale * iconScale;
     }
 
 

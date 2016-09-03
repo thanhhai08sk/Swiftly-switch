@@ -79,6 +79,7 @@ import static org.de_studio.recentappswitcher.Cons.FOLDER_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_ENABLE_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
+import static org.de_studio.recentappswitcher.Cons.ICON_SIZE_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_1_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_2_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
@@ -244,6 +245,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(USE_ANIMATION_NAME)
     boolean useAnimation;
+    @Inject
+    @Named(ICON_SIZE_PXL_NAME)
+    float iconSizePxl;
 
 
 
@@ -284,12 +288,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         return point;
     }
 
-    private int getXCord(MotionEvent motionEvent) {
-        return (int) motionEvent.getRawX();
+    private float getXCord(MotionEvent motionEvent) {
+        return  motionEvent.getRawX();
     }
 
-    private int getYCord(MotionEvent motionEvent) {
-        return (int) motionEvent.getRawY();
+    private float getYCord(MotionEvent motionEvent) {
+        return  motionEvent.getRawY();
     }
 
     public void addEdgeToWindowManager(int edgeId) {
