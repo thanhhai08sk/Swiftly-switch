@@ -202,9 +202,11 @@ public class EdgeServiceModule {
 
     @Provides
     @Singleton
-    @Named(CIRCLE_SIZE_DP_NAME)
-    int circleSizeDp(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
-        return defaultShared.getInt(CIRCLE_SIZE_KEY, CIRCLE_SIZE_DEFAULT);
+    @Named(CIRCLE_SIZE_PXL_NAME)
+    float circleSizeDp(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+            , @Named(M_SCALE_NAME) float mScale) {
+
+        return defaultShared.getInt(CIRCLE_SIZE_KEY, CIRCLE_SIZE_DEFAULT) * mScale;
     }
 
     @Provides
@@ -623,13 +625,6 @@ public class EdgeServiceModule {
         return (int) ((circleSize + CIRCLE_AND_QUICK_ACTION_GAP + OVAL_RADIUS_PLUS) * mScale);
     }
 
-    @Provides
-    @Singleton
-    @Named(CIRCLE_SIZE_PXL_NAME)
-    float circleSizePxl(@Named(CIRCLE_SIZE_DP_NAME) int circleSize
-            , @Named(M_SCALE_NAME) float mScale) {
-        return mScale * circleSize;
-    }
 
     @Provides
     @Singleton
