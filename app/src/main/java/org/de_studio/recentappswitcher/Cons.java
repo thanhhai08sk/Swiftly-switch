@@ -31,6 +31,10 @@ public class Cons {
     public static final String FAVORITE_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_favorite_shared_preferences";
     public static final String EXCLUDE_SHARED_NAME = "org.de_studio.recentappswitcher_exclude_shared_preferences";
 
+    public static final int MODE_DEFAULT = 1;
+    public static final int MODE_ONLY_FAVORITE = 2;
+    public static final int MODE_CIRCLE_FAVORITE = 3;
+
 
     public static final int RAD_ICON_DEFAULT_DP = 24;
     public static final String ACTION_TOGGLE_EDGES = "org.de_studio.recentappswitcher.action.toggle_edges";

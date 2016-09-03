@@ -281,6 +281,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(USE_CLOCK_NAME)
     boolean useClock;
+    String lastAppPackageName;
 
 
 
@@ -398,6 +399,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                     tempPackageNameKK.add(packName);
                 }
             }
+            if (tempPackageNameKK.size()>=1) {
+                lastAppPackageName = tempPackageNameKK.get(0);
+            }
             return tempPackageNameKK;
         } else {
             UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
@@ -455,6 +459,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
                 }
             }
+            if (tempPackageName.size()>=1) {
+                lastAppPackageName = tempPackageName.get(0);
+            }
             return tempPackageName;
         }
     }
@@ -476,9 +483,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    public void showFavoriteGridShortcutsView() {
-
-    }
 
     public synchronized void removeCircleShortcutsView() {
         try {
@@ -527,7 +531,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     }
 
-    public void showFavoriteGridView(int xInit, int yInit, int edgePosition, int iconToSwitch) {
+    public void showFavoriteGridView(float xInit, float yInit, int edgePosition, int iconToSwitch) {
         Utility.setFavoriteGridViewPosition(favoriteGridView
                 ,favoriteGridView.getHeight()
                 ,favoriteGridView.getWidth()

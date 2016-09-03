@@ -109,6 +109,8 @@ import static org.de_studio.recentappswitcher.Cons.IS_EDGE_1_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_2_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_FREE_AND_OUT_OF_TRIAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
+import static org.de_studio.recentappswitcher.Cons.MODE_DEFAULT;
+import static org.de_studio.recentappswitcher.Cons.MODE_ONLY_FAVORITE;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
 import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
@@ -122,9 +124,9 @@ import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_KEY;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_CLOCK_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_INSTANT_FAVORITE_NAME;
+import static org.de_studio.recentappswitcher.Cons.VIBRATE_DURATION_NAME;
 import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_KEY;
-import static org.de_studio.recentappswitcher.Cons.VIBRATE_DURATION_NAME;
 
 /**
  * Created by HaiNguyen on 8/27/16.
@@ -796,9 +798,9 @@ public class EdgeServiceModule {
         edge1mode = shared.getInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 0);
         if (edge1mode == 0) {
             if (shared.getBoolean(EdgeSetting.IS_ONLY_FAVORITE_KEY, false)) {
-                edge1mode = 2;
+                edge1mode = MODE_ONLY_FAVORITE;
             } else {
-                edge1mode = 1;
+                edge1mode = MODE_DEFAULT;
             }
         }
         return edge1mode;
@@ -811,9 +813,9 @@ public class EdgeServiceModule {
         int edge2mode = shared.getInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 0);
         if (edge2mode == 0) {
             if (shared.getBoolean(EdgeSetting.IS_ONLY_FAVORITE_KEY, false)) {
-                edge2mode = 2;
+                edge2mode = MODE_ONLY_FAVORITE;
             } else {
-                edge2mode = 1;
+                edge2mode = MODE_DEFAULT;
             }
         }
         return edge2mode;
@@ -902,6 +904,7 @@ public class EdgeServiceModule {
     boolean useClock(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
         return !shared.getBoolean(Cons.DISABLE_CLOCK_KEY, false);
     }
+
 
 
 
