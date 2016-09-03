@@ -561,6 +561,13 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     }
 
+    public void setCircleIconsPosition(float[] circleIconXs, float[] circleIconYs) {
+        for (int i = 0; i < circleIcons.length; i++) {
+            circleIcons[i].setX(circleIconXs[i]);
+            circleIcons[i].setY(circleIconYs[i]);
+        }
+    }
+
 
 
 
