@@ -1,11 +1,14 @@
 package org.de_studio.recentappswitcher.edgeService;
 
+import android.util.Log;
+
 import org.de_studio.recentappswitcher.Cons;
 
 /**
  * Created by HaiNguyen on 8/19/16.
  */
 public class EdgeServicePresenter {
+    private static final String TAG = EdgeServicePresenter.class.getSimpleName();
     EdgeServiceModel model;
     EdgeServiceView view;
     float xInit, yInit;
@@ -30,9 +33,11 @@ public class EdgeServicePresenter {
         int position = 0;
         switch (edgeId) {
             case Cons.EDGE_1_ID:
+                Log.e(TAG, "onActionDown: edge1");
                 position = view.edge1Position;
                 break;
             case Cons.EDGE_2_ID:
+                Log.e(TAG, "onActionDown: edge2");
                 position = view.edge2Position;
                 break;
         }

@@ -24,6 +24,7 @@ import android.widget.GridView;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
+import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerEdgeServiceComponent;
@@ -443,7 +444,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             }
         }
         try {
+            Log.e(TAG, "setCircleIconsView: add circle item to windowmanager");
             windowManager.addView(circleParentsView, circleShortcutsViewPara);
+            Log.e(TAG, "setCircleIconsView: item1 x = " + circleParentsView.findViewById(R.id.item_1).getX());
         } catch (IllegalStateException e) {
             Log.e(TAG, " item_view has already been added to the window manager");
         }
