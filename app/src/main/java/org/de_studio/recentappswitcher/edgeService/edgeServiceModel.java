@@ -29,7 +29,7 @@ public class EdgeServiceModel {
     float haftIconWidthPxl;
     float circleSizePxl;
     int iconSizeInclude10PaddingInGridDp;
-    int iconSize;
+    float iconSizePlx;
     int gridGap;
     float[] circleIconXs;
     float[] circleIconYs;
@@ -53,7 +53,7 @@ public class EdgeServiceModel {
         setPinnedShortcut();
 
         iconSizeInclude10PaddingInGridDp = (int) (Cons.DEFAULT_ICON_SIZE * iconScale) + Cons.DEFAULT_ICON_GAP_IN_GRID;
-        iconSize = (int) (Cons.DEFAULT_ICON_SIZE * iconScale);
+        iconSizePlx = Cons.DEFAULT_ICON_SIZE * iconScale * mScale;
     }
     public int getGridActivatedId(int x_cord, int y_cord, int x_grid, int y_grid,int gird_row, int grid_column, boolean folderMode) {
         double item_x,item_y;
@@ -161,8 +161,6 @@ public class EdgeServiceModel {
         int m = 0; //count for temp
         Shortcut tempShortcut;
         for (int t = 0; t <recentShortcut.length; t++) {
-            Log.e(TAG, "onTouch:  n = " + n + "\nm = " + m + "\nt = "+ t);
-//                                Log.e(TAG, "onTouch: pin.n.id = " + pinnedShortcut[n].getId());
             if (pinnedShortcut.length > n && pinnedShortcut[n].getId() == t) {
                 recentShortcut[t] = pinnedShortcut[n];
                 n++;
@@ -200,8 +198,8 @@ public class EdgeServiceModel {
         pinnedSet = new HashSet<Shortcut>(Arrays.asList(pinnedShortcut));
     }
 
-    private int getInitPointOffsetNeeded() {
-        return (int) (iconSize * mScale + circleSizePxl);
+    private float getInitPointOffsetNeeded() {
+        return iconSizePlx/2 + circleSizePxl;
     }
 
     public float getYOffset(float windowHeight, float y_init) {
