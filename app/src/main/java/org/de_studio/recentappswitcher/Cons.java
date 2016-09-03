@@ -114,7 +114,7 @@ public class Cons {
     public static final String IS_EDGE_2_ON_NAME = "isEdge2On";
     public static final String HOLD_TIME_NAME = "holdTime";
     public static final String HOLD_TIME_ENABLE_NAME = "holdTimeEnable";
-    public static final String VIBRATION_DURATION_NAME = "vibrationDuration";
+    public static final String VIBRATE_DURATION_NAME = "vibrationDuration";
     public static final String ANIMATION_TIME_NAME = "animationTime";
     public static final String USE_ANIMATION_NAME = "useAnimation";
     public static final String EDGE_1_MODE_NAME = "edge1Mode";
@@ -128,6 +128,8 @@ public class Cons {
     public static final String EDGE_1_HEIGHT_PXL_NAME = "edge1Height";
     public static final String EDGE_2_WIDTH_PXL_NAME = "edge2Width";
     public static final String EDGE_2_HEIGHT_PXL_NAME = "edge2Height";
+    public static final String USE_ACTION_DOW_VIBRATE_NAME = "useActionDownVibrate";
+    public static final String USE_ACTION_MOVE_VIBRATE_NAME = "useActionMoveVibrate";
 
 
 

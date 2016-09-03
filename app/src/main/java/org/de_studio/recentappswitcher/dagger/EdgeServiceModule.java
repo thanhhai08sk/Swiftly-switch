@@ -115,13 +115,15 @@ import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
 import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_VIEW_RADIUS_NAME;
 import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME;
 import static org.de_studio.recentappswitcher.Cons.RAD_ICON_DEFAULT_DP;
+import static org.de_studio.recentappswitcher.Cons.USE_ACTION_DOW_VIBRATE_NAME;
+import static org.de_studio.recentappswitcher.Cons.USE_ACTION_MOVE_VIBRATE_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_KEY;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_INSTANT_FAVORITE_NAME;
 import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_KEY;
-import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_NAME;
+import static org.de_studio.recentappswitcher.Cons.VIBRATE_DURATION_NAME;
 
 /**
  * Created by HaiNguyen on 8/27/16.
@@ -766,7 +768,7 @@ public class EdgeServiceModule {
 
     @Provides
     @Singleton
-    @Named(VIBRATION_DURATION_NAME)
+    @Named(VIBRATE_DURATION_NAME)
     int vibrationDuration(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
         return shared.getInt(VIBRATION_DURATION_KEY, VIBRATION_DURATION_DEFAULT);
     }
@@ -877,6 +879,20 @@ public class EdgeServiceModule {
     @Named(EXCLUDE_SET_NAME)
     Set<String> excludeSet(@Named(EXCLUDE_SHARED_NAME) SharedPreferences shared) {
         return shared.getStringSet(Cons.EXCLUDE_KEY, new HashSet<String>());
+    }
+
+    @Provides
+    @Singleton
+    @Named(USE_ACTION_DOW_VIBRATE_NAME)
+    boolean useActionDownVibrate(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
+        return !shared.getBoolean(EdgeSetting.DISABLE_HAPTIC_FEEDBACK_KEY, true);
+    }
+
+    @Provides
+    @Singleton
+    @Named(USE_ACTION_MOVE_VIBRATE_NAME)
+    boolean useActionMoveVibrate(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
+        return shared.getBoolean(Cons.HAPTIC_ON_ICON_KEY, false);
     }
 
 

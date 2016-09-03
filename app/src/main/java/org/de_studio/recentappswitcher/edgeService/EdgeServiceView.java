@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -96,9 +97,11 @@ import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
 import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
 import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME;
+import static org.de_studio.recentappswitcher.Cons.USE_ACTION_DOW_VIBRATE_NAME;
+import static org.de_studio.recentappswitcher.Cons.USE_ACTION_MOVE_VIBRATE_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_INSTANT_FAVORITE_NAME;
-import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_NAME;
+import static org.de_studio.recentappswitcher.Cons.VIBRATE_DURATION_NAME;
 
 /**
  * Created by HaiNguyen on 8/19/16.
@@ -229,7 +232,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Named(HOLD_TIME_ENABLE_NAME)
     boolean holdTimeEnable;
     @Inject
-    @Named(VIBRATION_DURATION_NAME)
+    @Named(VIBRATE_DURATION_NAME)
     int vibrationDuration;
     @Inject
     @Named(ANIMATION_TIME_NAME)
@@ -268,6 +271,13 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(EXCLUDE_SET_NAME)
     Set<String> excludeSet;
+    @Inject
+    @Named(USE_ACTION_DOW_VIBRATE_NAME)
+    boolean useActionDownVibrate;
+    @Inject
+    @Named(USE_ACTION_MOVE_VIBRATE_NAME)
+    boolean useActionMoveVibrate;
+
 
 
 
@@ -627,7 +637,17 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                     hourTextView.setText(hourFormat.format(c.getTime()));
                 }
             }
+    }
 
+    public void showBackground() {
+        if (useAnimation) {
+            backgroundFrame.setAlpha(0f);
+            windowManager.addView(backgroundFrame, backgroundPara);
+            backgroundFrame.animate().alpha(1f).setDuration(defaultShared.getInt(EdgeSetting.ANI_TIME_KEY, 100)).setInterpolator(new FastOutSlowInInterpolator());
+        } else {
+            windowManager.addView(backgroundFrame, backgroundPara);
+            backgroundFrame.setAlpha(1f);
+        }
     }
 
 
