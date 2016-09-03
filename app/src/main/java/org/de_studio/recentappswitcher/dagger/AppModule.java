@@ -47,6 +47,13 @@ public class AppModule {
 
     @Provides
     @Singleton
+    @Named(Cons.EXCLUDE_SHARED_NAME)
+    SharedPreferences excludeShared() {
+        return context.getSharedPreferences(Cons.EXCLUDE_SHARED_NAME, 0);
+    }
+
+    @Provides
+    @Singleton
     IconPackManager.IconPack iconPack(@Named(Cons.DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
         IconPackManager.IconPack iconPack = null;
         String iconPackPacka = defaultShared.getString(Cons.ICON_PACK_PACKAGE_NAME_KEY, Cons.ICON_PACK_NONE);

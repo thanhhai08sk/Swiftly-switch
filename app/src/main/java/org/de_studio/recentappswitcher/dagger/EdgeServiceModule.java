@@ -31,6 +31,7 @@ import org.de_studio.recentappswitcher.service.ExpandStatusBarView;
 import org.de_studio.recentappswitcher.service.FavoriteShortcutAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Named;
@@ -40,6 +41,8 @@ import dagger.Module;
 import dagger.Provides;
 import io.realm.Realm;
 
+import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
+import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SIZE_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_KEY;
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_DEFAULT;
@@ -760,6 +763,13 @@ public class EdgeServiceModule {
     View clockParentsView(WindowManager windowManager
             , @Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
         return Utility.disPlayClock(context, windowManager, defaultShared.getBoolean(EdgeSetting.ANIMATION_KEY, false), defaultShared.getInt(EdgeSetting.ANI_TIME_KEY, 100), defaultShared.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY, false));
+    }
+
+    @Provides
+    @Singleton
+    @Named(EXCLUDE_SET_NAME)
+    Set<String> excludeSet(@Named(EXCLUDE_SHARED_NAME) SharedPreferences shared) {
+        return shared.getStringSet(Cons.EXCLUDE_KEY, new HashSet<String>());
     }
 
 

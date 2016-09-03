@@ -29,7 +29,7 @@ public class Cons {
     public static final String EDGE_2_SHARED_NAME = "org.de_studio.recentappswitcher_edge_2_shared_preference";
     public static final String DEFAULT_SHARED_NAME = "org.de_studio.recentappswitcher_sharedpreferences";
     public static final String FAVORITE_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_favorite_shared_preferences";
-    public static final String EXCLUDE_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_exclude_shared_preferences";
+    public static final String EXCLUDE_SHARED_NAME = "org.de_studio.recentappswitcher_exclude_shared_preferences";
 
 
     public static final int RAD_ICON_DEFAULT_DP = 24;
@@ -122,6 +122,7 @@ public class Cons {
     public static final String QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME = "quickActionWithInstant";
     public static final String USE_INSTANT_FAVORITE_NAME = "useInstant";
     public static final String CLOCK_PARENTS_VIEW_NAME = "clockParentsView";
+    public static final String EXCLUDE_SET_NAME = "excludeSet";
 
 
 

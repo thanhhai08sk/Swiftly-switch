@@ -36,10 +36,24 @@ public class EdgeServicePresenter {
         view.removeAllExceptEdgeView();
         model.calculateCircleIconPositions(view.circleSizePxl, view.iconSizePxl, position, xInit, yInit, 6);
         view.setCircleIconsPosition(model.circleIconXs, model.circleIconYs);
+        view.setCircleIconsView(model.getRecentList(view.getRecentApps()));
 
 
 
 
+    }
+
+    public void onActionUp(float x, float y, int edgeId) {
+        int position = 0;
+        switch (edgeId) {
+            case Cons.EDGE_1_ID:
+                position = view.edge1Position;
+                break;
+            case Cons.EDGE_2_ID:
+                position = view.edge2Position;
+                break;
+        }
+        view.removeAllExceptEdgeView();
 
     }
 }

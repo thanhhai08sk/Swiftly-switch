@@ -71,6 +71,7 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_QUICK_ACTION_VIEWS_NAM
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_HORIZONTAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_VERTICAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_REALM_NAME;
@@ -82,6 +83,7 @@ import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SIZE_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_1_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_2_ON_NAME;
+import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
 import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
@@ -248,6 +250,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(ICON_SIZE_PXL_NAME)
     float iconSizePxl;
+    @Inject
+    @Named(LAUNCHER_PACKAGENAME_NAME)
+    String launcherPackageName;
+    @Inject
+    @Named(EXCLUDE_SET_NAME)
+    Set<String> excludeSet;
 
 
 
@@ -340,11 +348,11 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    public ArrayList<String> getRecentApps(String launcherPackagename, Set<String> excludeSet) {
+    public ArrayList<String> getRecentApps() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
             int numOfTask;
-            if (launcherPackagename != null) {
+            if (launcherPackageName != null) {
                 numOfTask = 8;
             } else numOfTask = 7;
             List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
@@ -353,7 +361,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                 ComponentName componentName = taskInfo.baseActivity;
                 String packName = componentName.getPackageName();
-                if (i != 0 && !packName.equals(launcherPackagename) && !excludeSet.contains(packName) && !packName.contains("launcher")) {
+                if (i != 0 && !packName.equals(launcherPackageName) && !excludeSet.contains(packName) && !packName.contains("launcher")) {
                     tempPackageNameKK.add(packName);
                 }
             }
@@ -418,7 +426,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    public void showCircleShortcutsView(Shortcut[] shortcuts) {
+    public void setCircleIconsView(Shortcut[] shortcuts) {
         for (int i = 0; i < 6; i++) {
             if (i >= shortcuts.length) {
                 circleIcons[i].setImageDrawable(null);

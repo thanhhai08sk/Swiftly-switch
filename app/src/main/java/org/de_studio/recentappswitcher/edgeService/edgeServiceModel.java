@@ -31,6 +31,8 @@ public class EdgeServiceModel {
     int iconSizeInclude10PaddingInGridDp;
     int iconSize;
     int gridGap;
+    float[] circleIconXs;
+    float[] circleIconYs;
 
 
 
@@ -178,7 +180,6 @@ public class EdgeServiceModel {
         return recentShortcut;
     }
 
-
     public void setPinnedShortcut() {
         RealmResults<Shortcut> results1 =
                 pinRealm.where(Shortcut.class).findAll().sort("id");
@@ -203,9 +204,9 @@ public class EdgeServiceModel {
         return (int) (mScale * (circleSizeDp + iconSize));
     }
 
-    public int getYOffset(int windowHeight, int y_init) {
-        int distanceNeeded = getInitPointOffsetNeeded();
-        int distanceWeHave = windowHeight - y_init;
+    public float getYOffset(float windowHeight, float y_init) {
+        float distanceNeeded = getInitPointOffsetNeeded();
+        float distanceWeHave = windowHeight - y_init;
         if (distanceWeHave < distanceNeeded) {
             return distanceNeeded - distanceWeHave;
         } else if (y_init < distanceNeeded) {
@@ -213,9 +214,9 @@ public class EdgeServiceModel {
         } else return 0;
     }
 
-    public int getXOffset(int windowWidth, int x_init) {
-        int distanceNeeded = getInitPointOffsetNeeded();
-        int distanceWeHave = windowWidth - x_init;
+    public float getXOffset(float windowWidth, float x_init) {
+        float distanceNeeded = getInitPointOffsetNeeded();
+        float distanceWeHave = windowWidth - x_init;
         if (distanceWeHave < distanceNeeded) {
             return distanceNeeded - distanceWeHave;
         } else if (x_init < distanceNeeded) {
@@ -223,19 +224,19 @@ public class EdgeServiceModel {
         } else return 0;
     }
 
-    public int getXInit(int position, int x, int windowWidth) {
+    public float getXInit(int position, float x, float windowWidth) {
         switch (position) {
             case Cons.POSITION_RIGHT:
-                return (int) (x - 10 * mScale);
+                return x - 10 * mScale;
             case Cons.POSITION_LEFT:
-                return  (int) (x + 10 * mScale);
+                return  x + 10 * mScale;
             case Cons.POSITION_BOTTOM:
                 return x - getXOffset(windowWidth, x);
         }
         return -1;
     }
 
-    public int getYInit(int position, int y, int windowHeight) {
+    public float getYInit(int position, float y, float windowHeight) {
         switch (position) {
             case Cons.POSITION_RIGHT:
                 return y - getYOffset(windowHeight,y);
@@ -246,6 +247,46 @@ public class EdgeServiceModel {
         }
         return -1;
     }
+
+    public void calculateCircleIconPositions(float circleSizePxl, float iconSizePxl, int edgePosition, float xInit, float yInit, int iconsNumber) {
+        double alpha, beta;
+        double[] alphaN = new double[iconsNumber];
+        switch (iconsNumber) {
+            case 4:
+//                alpha = 0.1389*Math.PI; // 25 degree
+                alpha = 0.111 * Math.PI; // 20 degree
+                break;
+            case 5:
+                alpha = 0.111 * Math.PI; // 20 degree
+                break;
+            case 6:
+                alpha = 0.0556 * Math.PI; // 10 degree
+                break;
+            default:
+                alpha = 0.0556;
+        }
+        beta = Math.PI - 2 * alpha;
+        for (int i = 0; i < iconsNumber; i++) {
+            alphaN[i] = alpha + i * (beta / (iconsNumber - 1));
+            switch (edgePosition / 10) {
+                case 1:
+                    circleIconXs[i] = xInit - circleSizePxl * (float) Math.sin(alphaN[i]) - iconSizePxl/2;
+                    circleIconYs[i] = yInit - circleSizePxl * (float) Math.cos(alphaN[i]) - iconSizePxl/2;
+                    break;
+                case 2:
+                    circleIconXs[i] = xInit + circleSizePxl * (float) Math.sin(alphaN[i]) - iconSizePxl/2;
+                    circleIconYs[i] = yInit - circleSizePxl * (float) Math.cos(alphaN[i]) - iconSizePxl/2;
+                    break;
+                case 3:
+                    circleIconXs[i] = xInit - circleSizePxl * (float) Math.cos(alphaN[i]) - iconSizePxl/2;
+                    circleIconYs[i] = yInit - circleSizePxl * (float) Math.sin(alphaN[i]) - iconSizePxl/2;
+                    break;
+            }
+        }
+
+    }
+
+
 
 
 
