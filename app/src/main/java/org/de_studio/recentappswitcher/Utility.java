@@ -1351,8 +1351,9 @@ public  class Utility {
                 break;
             case MainActivity.ACTION_RINGER_MODE:
                 setRinggerMode(context);
+                break;
             case MainActivity.ACTION_FLASH_LIGHT:
-                flashLightAction(context,EdgeGestureService.FLASH_LIGHT_ON);
+                flashLightAction(context,!EdgeGestureService.FLASH_LIGHT_ON);
                 break;
             case MainActivity.ACTION_SCREEN_LOCK:
                 screenLockAction(context);
