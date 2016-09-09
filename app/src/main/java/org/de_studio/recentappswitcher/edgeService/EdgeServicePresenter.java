@@ -20,6 +20,7 @@ public class EdgeServicePresenter {
     int currentShowing;
     int currentCircleIconHighlight = -1;
     int currentGridFavoriteIconHighlight = -1;
+    int currentGridFolderIconHighlight = -1;
 
     boolean onOpeningFolder = false;
     Shortcut tempShortcut;
@@ -85,6 +86,9 @@ public class EdgeServicePresenter {
                         , view.favoriteGridView.getY(), view.gridRows, view.gridColumns, false);
                 highlightFavoriteGridIcon(activatedGridIcon);
                 break;
+            case Cons.SHOWING_FOLDER:
+                int onFolderIcon = model.getGridActivatedId(x, y, view.folderCoor[0], view.folderCoor[1],(int) view.folderCoor[2],(int) view.folderCoor[3], true);
+                highlightFolderGridIcon(onFolderIcon);
         }
 
     }
@@ -154,6 +158,21 @@ public class EdgeServicePresenter {
             view.unhighlightGridFavoriteIcon(currentGridFavoriteIconHighlight);
             view.highlightGridFavoriteIcon(activatedGridIcon);
             currentGridFavoriteIconHighlight = activatedGridIcon;
+            view.setIndicator(tempShortcut, false, -1);
+        }
+    }
+
+    private void highlightFolderGridIcon(int iconId) {
+        if (iconId == -2) {
+            view.closeFolder();
+            currentShowing = Cons.SHOWING_GRID;
+            view.setIndicator(null, false, -1);
+        }
+        if (iconId != currentGridFolderIconHighlight) {
+            tempShortcut = (Shortcut) view.folderAdapter.getItem(iconId);
+            view.unhighlightGridFolderIcon(currentGridFolderIconHighlight);
+            view.highlightGridFolderIcon(iconId);
+            currentGridFolderIconHighlight = iconId;
             view.setIndicator(tempShortcut, false, -1);
         }
     }

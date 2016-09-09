@@ -558,6 +558,18 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
+    public void highlightGridFolderIcon(int iconId) {
+        if (iconId >= 0 && iconId < folderAdapter.getCount()) {
+            folderGridView.getChildAt(iconId).setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background_square));
+        }
+    }
+
+    public void unhighlightGridFolderIcon(int iconId) {
+        if (iconId >= 0 && iconId < folderAdapter.getCount()) {
+            folderGridView.getChildAt(iconId).setBackground(null);
+        }
+    }
+
     public void unhighlightCircleIcon(int iconId, int edgeId) {
         if (iconId > -1 && iconId < 10) {
             ImageView iconResetBackground = circleIcons[iconId];
@@ -769,6 +781,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
 
 
+    }
+
+    public void closeFolder() {
+        favoriteGridView.setVisibility(View.VISIBLE);
+        favoriteGridView.setAlpha(1f);
+        folderGridView.setVisibility(View.GONE);
     }
 
 

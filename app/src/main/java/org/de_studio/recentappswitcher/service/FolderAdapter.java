@@ -78,7 +78,8 @@ public class FolderAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        int id = (folderShortcut.getId()+1)*1000 + position;
+        return myRealm.where(Shortcut.class).equalTo("id", id).findFirst();
     }
 
     @Override
