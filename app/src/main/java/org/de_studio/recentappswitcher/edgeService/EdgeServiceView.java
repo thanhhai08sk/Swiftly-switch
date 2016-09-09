@@ -63,6 +63,7 @@ import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_AND_QUICK_ACTION_GAP;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_PXL_NAME;
+import static org.de_studio.recentappswitcher.Cons.CLOCK_LINEAR_LAYOUT_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
@@ -97,6 +98,7 @@ import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_ENABLE_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SIZE_PXL_NAME;
+import static org.de_studio.recentappswitcher.Cons.INDICATOR_FRAME_LAYOUT_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_1_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_2_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
@@ -300,6 +302,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(GRID_NUMBER_ROWS_NAME)
     int gridRows;
+    @Inject
+    @Named(INDICATOR_FRAME_LAYOUT_NAME)
+    FrameLayout indicator;
+    @Inject
+    @Named(CLOCK_LINEAR_LAYOUT_NAME)
+    LinearLayout clock;
 
 
 
@@ -517,15 +525,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             circleIcons[iconId].setPadding((int) (14 * mScale), (int) (8 * mScale), (int) (14 * mScale), (int) (8 * mScale));
         } else if (iconId >= 10) {
             showQuickAction(edgeId, iconId - 10, xInit, yInit);
-//            switch (edgeId) {
-//                case Cons.EDGE_1_ID:
-//                    showQuickAction(edgeId, iconId - 10, xInit, yInit);
-//                    edge1QuickActionViews[iconId - 10].setVisibility(View.VISIBLE);
-//                    break;
-//                case Cons.EDGE_2_ID:
-//                    edge2QuickActionViews[iconId - 10].setVisibility(View.VISIBLE);
-//                    break;
-//            }
         }
     }
 
@@ -725,11 +724,11 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
 
     public void showClock() {
-        LinearLayout clock = (LinearLayout) clockParentsView.findViewById(R.id.clock_linear_layout);
             Calendar c = Calendar.getInstance();
             int mHour;
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
             clock.setVisibility(View.VISIBLE);
+        indicator.setVisibility(View.GONE);
             TextView hourTextView = (TextView) clockParentsView.findViewById(R.id.clock_time_in_hour);
             TextView dateTextView = (TextView) clockParentsView.findViewById(R.id.clock_time_in_date);
             TextView batteryLifeTextView = (TextView) clockParentsView.findViewById(R.id.clock_battery_life);
@@ -776,5 +775,19 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         Log.e(TAG, "onDestroy: ");
         presenter.onDestroy();
         super.onDestroy();
+    }
+
+    public void setIndicator(Shortcut shortcut) {
+        clock.setVisibility(View.GONE);
+        indicator.setVisibility(View.VISIBLE);
+        if (shortcut != null) {
+            Utility.setImageForShortcut(shortcut, getPackageManager()
+                    , (ImageView) indicator.findViewById(R.id.indicator_icon)
+                    , getApplicationContext(), iconPack, null, true);
+            ((TextView) indicator.findViewById(R.id.indicator_label)).setText(shortcut.getLabel());
+        } else {
+            ((ImageView) indicator.findViewById(R.id.indicator_icon)).setImageDrawable(null);
+            ((TextView) indicator.findViewById(R.id.indicator_label)).setText("");
+        }
     }
 }

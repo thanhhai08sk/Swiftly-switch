@@ -69,6 +69,8 @@ public class Cons {
 
     public static final int EDGE_1_ID = 11;
     public static final int EDGE_2_ID = 22;
+    public static final int QUICK_ACTION_ID_INSTANT_GRID = 1;
+    public static final int QUICK_ACTION_ID_NORMAL = 2;
 
 
     public static final int EDGE_SENSITIVE_DEFAULT = 12;
@@ -126,6 +128,8 @@ public class Cons {
     public static final String QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME = "quickActionWithInstant";
     public static final String USE_INSTANT_FAVORITE_NAME = "useInstant";
     public static final String CLOCK_PARENTS_VIEW_NAME = "clockParentsView";
+    public static final String INDICATOR_FRAME_LAYOUT_NAME = "indicatorFrameLayout";
+    public static final String CLOCK_LINEAR_LAYOUT_NAME = "clockLinear";
     public static final String CLOCK_PARENTS_PARA_NAME = "clockParentsPara";
     public static final String EXCLUDE_SET_NAME = "excludeSet";
     public static final String EDGE_1_WIDTH_PXL_NAME = "edge1Width";

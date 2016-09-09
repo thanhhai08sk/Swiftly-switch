@@ -2359,6 +2359,29 @@ public  class Utility {
 
     }
 
+    public static int getQuickActionViewId(SharedPreferences defaultShared, int actionId) {
+        switch (actionId) {
+            case 0:
+                if (defaultShared.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
+                    return Cons.QUICK_ACTION_ID_INSTANT_GRID;
+                } else return Cons.QUICK_ACTION_ID_NORMAL;
+            case 1:
+                if (defaultShared.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_HOME).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
+                    return Cons.QUICK_ACTION_ID_INSTANT_GRID;
+                } else return Cons.QUICK_ACTION_ID_NORMAL;
+            case 2:
+                if (defaultShared.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_BACK).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
+                    return Cons.QUICK_ACTION_ID_INSTANT_GRID;
+                } else return Cons.QUICK_ACTION_ID_NORMAL;
+            case 3:
+                if (defaultShared.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
+                    return Cons.QUICK_ACTION_ID_INSTANT_GRID;
+                } else return Cons.QUICK_ACTION_ID_NORMAL;
+        }
+        return -1;
+    }
+
+
 
 
 

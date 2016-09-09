@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.edgeService;
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 
 import java.util.ArrayList;
 
@@ -70,35 +71,16 @@ public class EdgeServicePresenter {
         switch (currentShowing) {
             case Cons.SHOWING_RECENT_CIRCLE:
                 int iconToSwitch = model.getSemiCircleModeActivatedId(xInit, yInit, x, y, currentPosition);
-
-                if (iconToSwitch != currentCircleIconHighlight) {
-                    Log.e(TAG, "onActionMove: iconToSwitch = " + iconToSwitch);
-                    view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId);
-                    view.highlightCircleIcon(iconToSwitch, edgeId, xInit,yInit);
-                    currentCircleIconHighlight = iconToSwitch;
-                }
-
+                highlightCircleIconAndSwitchToGridIfNeed(iconToSwitch, edgeId);
                 break;
             case Cons.SHOWING_FAVORITE_CIRCLE:
                 int iconToSwitch1 = model.getSemiCircleModeActivatedId(xInit, yInit, x, y, currentPosition);
-
-                if (iconToSwitch1 != currentCircleIconHighlight) {
-                    Log.e(TAG, "onActionMove: iconToSwitch = " + iconToSwitch1);
-                    view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId);
-                    view.highlightCircleIcon(iconToSwitch1, edgeId, xInit, yInit);
-                    currentCircleIconHighlight = iconToSwitch1;
-                }
+                highlightCircleIconAndSwitchToGridIfNeed(iconToSwitch1, edgeId);
                 break;
             case Cons.SHOWING_GRID:
                 int activatedGridIcon = model.getGridActivatedId(x, y, view.favoriteGridView.getX()
                         , view.favoriteGridView.getY(), view.gridRows, view.gridColumns, false);
-
-                if (activatedGridIcon != currentGridFavoriteIconHighlight) {
-                    Log.e(TAG, "onActionMove: grid icon = " + activatedGridIcon);
-                    view.unhighlightGridFavoriteIcon(currentGridFavoriteIconHighlight);
-                    view.highlightGridFavoriteIcon(activatedGridIcon);
-                    currentGridFavoriteIconHighlight = activatedGridIcon;
-                }
+                highlightFavoriteGridIcon(activatedGridIcon);
                 break;
         }
 
@@ -127,5 +109,32 @@ public class EdgeServicePresenter {
 
     public void onDestroy() {
         view.removeAll();
+    }
+
+
+    private void highlightCircleIconAndSwitchToGridIfNeed(int iconToSwitch, int edgeId) {
+
+        if (iconToSwitch != currentCircleIconHighlight) {
+            Log.e(TAG, "onActionMove: iconToSwitch = " + iconToSwitch);
+            view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId);
+            view.highlightCircleIcon(iconToSwitch, edgeId, xInit, yInit);
+            currentCircleIconHighlight = iconToSwitch;
+            if (iconToSwitch >= 10
+                    && view.edge1QuickActionViews[iconToSwitch - 10].getId() == Cons.QUICK_ACTION_ID_INSTANT_GRID) {
+                view.removeCircleShortcutsView();
+                view.showFavoriteGridView(xInit, yInit, currentPosition, -1);
+                currentShowing = Cons.SHOWING_GRID;
+            }
+        }
+    }
+
+    private void highlightFavoriteGridIcon(int activatedGridIcon) {
+        if (activatedGridIcon != currentGridFavoriteIconHighlight) {
+            Log.e(TAG, "onActionMove: grid icon = " + activatedGridIcon);
+            view.unhighlightGridFavoriteIcon(currentGridFavoriteIconHighlight);
+            view.highlightGridFavoriteIcon(activatedGridIcon);
+            currentGridFavoriteIconHighlight = activatedGridIcon;
+            view.setIndicator((Shortcut) view.gridFavoriteAdapter.getItem(activatedGridIcon));
+        }
     }
 }

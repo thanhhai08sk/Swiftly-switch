@@ -17,15 +17,16 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.edgeService.EdgesServiceModel;
 import org.de_studio.recentappswitcher.edgeService.EdgeServicePresenter;
 import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
+import org.de_studio.recentappswitcher.edgeService.EdgesServiceModel;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.ExpandStatusBarView;
@@ -55,6 +56,7 @@ import static org.de_studio.recentappswitcher.Cons.CIRCLE_SHORTCUT_VIEW_PARA_NAM
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_KEY;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_PXL_NAME;
+import static org.de_studio.recentappswitcher.Cons.CLOCK_LINEAR_LAYOUT_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL;
@@ -109,6 +111,7 @@ import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SIZE_PXL_NAME;
+import static org.de_studio.recentappswitcher.Cons.INDICATOR_FRAME_LAYOUT_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_1_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_2_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_FREE_AND_OUT_OF_TRIAL_NAME;
@@ -752,7 +755,9 @@ public class EdgeServiceModule {
         for (int i = 0; i < quickActionViews.length; i++) {
             quickActionViews[i] = new ExpandStatusBarView(context, quickActionViewRadius, (int) (OVAL_OFFSET * mScale), edge1Position, i + 1);
             quickActionViews[i].setVisibility(View.GONE);
+            quickActionViews[i].setId(Utility.getQuickActionViewId(defaultShared, i));
             circleParentsView.addView(quickActionViews[i]);
+
         }
 
         return quickActionViews;
@@ -907,6 +912,22 @@ public class EdgeServiceModule {
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         return layoutInflater.inflate(R.layout.clock, null);
     }
+
+    @Provides
+    @Singleton
+    @Named(INDICATOR_FRAME_LAYOUT_NAME)
+    FrameLayout indicator(@Named(CLOCK_PARENTS_VIEW_NAME) View view) {
+        return (FrameLayout) view.findViewById(R.id.indicator_frame_layout);
+    }
+
+    @Provides
+    @Singleton
+    @Named(CLOCK_LINEAR_LAYOUT_NAME)
+    LinearLayout clock(@Named(CLOCK_PARENTS_VIEW_NAME) View parent) {
+        return (LinearLayout) parent.findViewById(R.id.clock_linear_layout);
+    }
+
+
 
     @Provides
     @Singleton

@@ -65,7 +65,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return myRealm.where(Shortcut.class).equalTo("id",position).findFirst();
     }
 
     @Override
