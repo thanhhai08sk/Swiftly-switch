@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -474,7 +476,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    public void setCircleIconsView(Shortcut[] shortcuts) {
+    public void showCircleIconsView(Shortcut[] shortcuts) {
         for (int i = 0; i < 6; i++) {
             if (i >= shortcuts.length) {
                 circleIcons[i].setImageDrawable(null);
@@ -483,12 +485,43 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             }
         }
         try {
-            Log.e(TAG, "setCircleIconsView: add circle item to windowmanager");
+            Log.e(TAG, "showCircleIconsView: add circle item to windowmanager");
             windowManager.addView(circleParentsView, circleShortcutsViewPara);
-            Log.e(TAG, "setCircleIconsView: item1 x = " + circleParentsView.findViewById(R.id.item_1).getX());
+            Log.e(TAG, "showCircleIconsView: item1 x = " + circleParentsView.findViewById(R.id.item_1).getX());
         } catch (IllegalStateException e) {
             Log.e(TAG, " item_view has already been added to the window manager");
         }
+    }
+
+    public void highlightCircleIcon(int iconId) {
+
+
+        int height = (int) ((16 + 48 * iconScale) * mScale);
+        int width = (int) ((28 + 48 * iconScale) * mScale);
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            circleIcons[iconId].setBackground(getDrawable(R.drawable.icon_background));
+        } else {
+            circleIcons[iconId].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
+        }
+        circleIcons[iconId].setX(circleIcons[iconId].getX() - 14 * mScale);
+        circleIcons[iconId].setY(circleIcons[iconId].getY() - 8 * mScale);
+        circleIcons[iconId].setLayoutParams(layoutParams);
+        circleIcons[iconId].setPadding((int) (14 * mScale),(int)(8 * mScale) ,(int) (14 * mScale) ,(int)(8 * mScale) );
+    }
+
+    public void unhighlightCircleIcon(int iconId) {
+        ImageView iconResetBackground = circleIcons[iconId];
+        FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(iconResetBackground.getLayoutParams());
+        layoutParams1.width = (int) (48 * mScale * iconScale);
+        layoutParams1.height = (int) (48 * mScale * iconScale);
+        float x = iconResetBackground.getX();
+        float y = iconResetBackground.getY();
+        iconResetBackground.setBackground(null);
+        iconResetBackground.setX(x + 14 * mScale);
+        iconResetBackground.setY(y + 8 * mScale);
+        iconResetBackground.setLayoutParams(layoutParams1);
+        iconResetBackground.setPadding(0, 0, 0, 0);
     }
 
 

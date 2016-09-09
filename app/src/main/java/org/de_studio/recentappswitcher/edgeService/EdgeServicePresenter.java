@@ -16,6 +16,7 @@ public class EdgeServicePresenter {
     float xInit, yInit;
     int currentPosition;
     int currentEdgeMode;
+    int currentShowing;
     String laucherPackageName;
 
     public EdgeServicePresenter(EdgesServiceModel model, EdgeServiceView view) {
@@ -46,11 +47,14 @@ public class EdgeServicePresenter {
         switch (currentEdgeMode) {
             case Cons.MODE_ONLY_FAVORITE:
                 view.showFavoriteGridView(xInit, yInit, currentPosition, -1);
+                currentShowing = Cons.SHOWING_GRID;
                 break;
             default:
                 model.calculateCircleIconPositions(view.circleSizePxl, view.iconSizePxl, currentPosition, xInit, yInit, 6);
                 view.setCircleIconsPosition(model.circleIconXs, model.circleIconYs);
-                view.setCircleIconsView(model.getRecentList(tempPackages));
+                view.showCircleIconsView(model.getRecentList(tempPackages));
+                currentShowing = Cons.SHOWING_RECENT_CIRCLE;
+
                 break;
         }
 
@@ -61,6 +65,14 @@ public class EdgeServicePresenter {
     }
 
     public void onActionMove(float x, float y, int edgeId) {
+        switch (currentShowing) {
+            case Cons.SHOWING_RECENT_CIRCLE:
+                break;
+            case Cons.SHOWING_FAVORITE_CIRCLE:
+                break;
+            case Cons.SHOWING_GRID:
+                break;
+        }
 
     }
 

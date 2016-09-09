@@ -145,6 +145,9 @@ public class Cons {
     public static final String PIN_REALM_NAME = "pinApp.realm";
     public static final String FAVORITE_GRID_REALM_NAME = "default.realm";
     public static final String FAVORITE_CIRCLE_REALM_NAME = "circleFavo.realm";
+    public static final int SHOWING_RECENT_CIRCLE = 1;
+    public static final int SHOWING_FAVORITE_CIRCLE = 2;
+    public static final int SHOWING_GRID = 3;
 
 
 
