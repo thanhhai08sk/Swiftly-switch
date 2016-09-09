@@ -33,7 +33,7 @@ android {
         applicationId "org.de_studio.recentappswitcher"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 67
+        versionCode 200
         versionName "2.3.4"
     }
     buildTypes {
