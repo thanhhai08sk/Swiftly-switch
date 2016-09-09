@@ -119,11 +119,20 @@ public class EdgeServicePresenter {
             view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId);
             view.highlightCircleIcon(iconToSwitch, edgeId, xInit, yInit);
             currentCircleIconHighlight = iconToSwitch;
+
+            if (iconToSwitch >= 0 && iconToSwitch < model.savedRecentShortcut.length) {
+                view.setIndicator(model.savedRecentShortcut[iconToSwitch], false, -1);
+            } else if (iconToSwitch >= 10) {
+                view.setIndicator(null, true, iconToSwitch - 10);
+            } else {
+                view.setIndicator(null, false, -1);
+            }
             if (iconToSwitch >= 10
                     && view.edge1QuickActionViews[iconToSwitch - 10].getId() == Cons.QUICK_ACTION_ID_INSTANT_GRID) {
                 view.removeCircleShortcutsView();
                 view.showFavoriteGridView(xInit, yInit, currentPosition, -1);
                 currentShowing = Cons.SHOWING_GRID;
+                view.setIndicator(null, false, -1);
             }
         }
     }
@@ -134,7 +143,7 @@ public class EdgeServicePresenter {
             view.unhighlightGridFavoriteIcon(currentGridFavoriteIconHighlight);
             view.highlightGridFavoriteIcon(activatedGridIcon);
             currentGridFavoriteIconHighlight = activatedGridIcon;
-            view.setIndicator((Shortcut) view.gridFavoriteAdapter.getItem(activatedGridIcon));
+            view.setIndicator((Shortcut) view.gridFavoriteAdapter.getItem(activatedGridIcon), false, -1);
         }
     }
 }

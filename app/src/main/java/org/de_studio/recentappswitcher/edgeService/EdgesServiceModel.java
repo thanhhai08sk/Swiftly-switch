@@ -175,6 +175,7 @@ public class EdgesServiceModel {
                 n++;
             }
         }
+        savedRecentShortcut = recentShortcut;
         return recentShortcut;
     }
 

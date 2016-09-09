@@ -777,17 +777,22 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         super.onDestroy();
     }
 
-    public void setIndicator(Shortcut shortcut) {
-        clock.setVisibility(View.GONE);
-        indicator.setVisibility(View.VISIBLE);
-        if (shortcut != null) {
-            Utility.setImageForShortcut(shortcut, getPackageManager()
-                    , (ImageView) indicator.findViewById(R.id.indicator_icon)
-                    , getApplicationContext(), iconPack, null, true);
-            ((TextView) indicator.findViewById(R.id.indicator_label)).setText(shortcut.getLabel());
+    public void setIndicator(Shortcut shortcut, boolean forQuickAction, int quickActionId) {
+        if (forQuickAction) {
+            Utility.setIndicatorForQuickAction(defaultShared, getApplicationContext(), quickActionId + 1, ((ImageView) indicator.findViewById(R.id.indicator_icon))
+                    , (TextView) indicator.findViewById(R.id.indicator_label));
         } else {
-            ((ImageView) indicator.findViewById(R.id.indicator_icon)).setImageDrawable(null);
-            ((TextView) indicator.findViewById(R.id.indicator_label)).setText("");
+            clock.setVisibility(View.GONE);
+            indicator.setVisibility(View.VISIBLE);
+            if (shortcut != null) {
+                Utility.setImageForShortcut(shortcut, getPackageManager()
+                        , (ImageView) indicator.findViewById(R.id.indicator_icon)
+                        , getApplicationContext(), iconPack, null, true);
+                ((TextView) indicator.findViewById(R.id.indicator_label)).setText(shortcut.getLabel());
+            } else {
+                ((ImageView) indicator.findViewById(R.id.indicator_icon)).setImageDrawable(null);
+                ((TextView) indicator.findViewById(R.id.indicator_label)).setText("");
+            }
         }
     }
 }
