@@ -55,7 +55,7 @@ public class EdgesServiceModel {
         iconSizeInclude10PaddingInGridDp = (int) (Cons.DEFAULT_ICON_SIZE * iconScale) + Cons.DEFAULT_ICON_GAP_IN_GRID;
         iconSizePlx = Cons.DEFAULT_ICON_SIZE * iconScale * mScale;
     }
-    public int getGridActivatedId(int x_cord, int y_cord, int x_grid, int y_grid,int gird_row, int grid_column, boolean folderMode) {
+    public int getGridActivatedId(float x_cord, float y_cord, float x_grid, float y_grid,int gird_row, int grid_column, boolean folderMode) {
         double item_x,item_y;
         double xCordDouble = (double) x_cord;
         double yCordDouble = (double) y_cord;
@@ -83,7 +83,7 @@ public class EdgesServiceModel {
         return -1;
     }
 
-    public int getSemiCircleModeActivatedId(int[] itemXs, int[] itemYs, int x_init, int y_init, int x, int y, int position) {
+    public int getSemiCircleModeActivatedId(float x_init, float y_init, float x, float y, int position) {
         double xInitDouble = (double) x_init;
         double yInitDouble = (double) y_init;
         double xDouble = (double) x;
@@ -99,8 +99,8 @@ public class EdgesServiceModel {
         if (distanceFromInitPxl < startQuickActionZonePxl) {
             double distance;
             double distanceNeeded = 35 * mScale;
-            for (int i = 0; i < itemXs.length; i++) {
-                distance = Math.sqrt(Math.pow(xDouble - (double) (itemXs[i] + haftIconWidthPxl), 2) + Math.pow(yDouble - (double) (itemYs[i] + haftIconWidthPxl), 2));
+            for (int i = 0; i < circleIconXs.length; i++) {
+                distance = Math.sqrt(Math.pow(xDouble - (double) (circleIconXs[i] + haftIconWidthPxl), 2) + Math.pow(yDouble - (double) (circleIconYs[i] + haftIconWidthPxl), 2));
                 if (distance <= distanceNeeded) {
                     return i;
                 }

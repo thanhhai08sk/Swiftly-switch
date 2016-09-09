@@ -17,6 +17,8 @@ public class EdgeServicePresenter {
     int currentPosition;
     int currentEdgeMode;
     int currentShowing;
+    int currentCircleIconHighlight = -1;
+    int currentGridFavoriteIconHighlight = -1;
     String laucherPackageName;
 
     public EdgeServicePresenter(EdgesServiceModel model, EdgeServiceView view) {
@@ -67,10 +69,34 @@ public class EdgeServicePresenter {
     public void onActionMove(float x, float y, int edgeId) {
         switch (currentShowing) {
             case Cons.SHOWING_RECENT_CIRCLE:
+                int iconToSwitch = model.getSemiCircleModeActivatedId(xInit, yInit, x, y, currentPosition);
+
+                if (iconToSwitch != currentCircleIconHighlight) {
+                    Log.e(TAG, "onActionMove: iconToSwitch = " + iconToSwitch);
+                    view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId);
+                    view.highlightCircleIcon(iconToSwitch, edgeId);
+                    currentCircleIconHighlight = iconToSwitch;
+                }
+
                 break;
             case Cons.SHOWING_FAVORITE_CIRCLE:
+                int iconToSwitch1 = model.getSemiCircleModeActivatedId(xInit, yInit, x, y, currentPosition);
+
+                if (iconToSwitch1 != currentCircleIconHighlight) {
+                    Log.e(TAG, "onActionMove: iconToSwitch = " + iconToSwitch1);
+                    view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId);
+                    view.highlightCircleIcon(iconToSwitch1, edgeId);
+                    currentCircleIconHighlight = iconToSwitch1;
+                }
                 break;
             case Cons.SHOWING_GRID:
+                int activatedGridIcon = model.getGridActivatedId(x, y, view.favoriteGridView.getX()
+                        , view.favoriteGridView.getY(), view.gridRows, view.gridColumns, false);
+
+                if (activatedGridIcon != currentGridFavoriteIconHighlight) {
+                    Log.e(TAG, "onActionMove: grid icon = " + activatedGridIcon);
+                    view.highlightGridFavoriteIcon(activatedGridIcon);
+                }
                 break;
         }
 

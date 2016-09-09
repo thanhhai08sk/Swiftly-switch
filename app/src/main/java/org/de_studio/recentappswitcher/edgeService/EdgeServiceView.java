@@ -89,6 +89,8 @@ import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_REALM_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.FOLDER_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_HEIGHT_NAME;
+import static org.de_studio.recentappswitcher.Cons.GRID_NUMBER_COLUMNS_NAME;
+import static org.de_studio.recentappswitcher.Cons.GRID_NUMBER_ROWS_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_WIDTH_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_ENABLE_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
@@ -165,8 +167,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(Cons.GRID_PARENT_VIEW_PARA_NAME)
     WindowManager.LayoutParams gridParentViewPara;
-    @Inject
-    FavoriteShortcutAdapter gridShortcutsAdapter;
     @Inject
     @Nullable
     IconPackManager.IconPack iconPack;
@@ -292,6 +292,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(GRID_HEIGHT_NAME)
     float gridHeight;
+    @Inject
+    @Named(GRID_NUMBER_COLUMNS_NAME)
+    int gridColumns;
+    @Inject
+    @Named(GRID_NUMBER_ROWS_NAME)
+    int gridRows;
 
 
 
@@ -493,35 +499,60 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    public void highlightCircleIcon(int iconId) {
+    public void highlightCircleIcon(int iconId, int edgeId) {
 
-
-        int height = (int) ((16 + 48 * iconScale) * mScale);
-        int width = (int) ((28 + 48 * iconScale) * mScale);
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            circleIcons[iconId].setBackground(getDrawable(R.drawable.icon_background));
-        } else {
-            circleIcons[iconId].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
+        if (iconId > -1 && iconId < 10) {
+            int height = (int) ((16 + 48 * iconScale) * mScale);
+            int width = (int) ((28 + 48 * iconScale) * mScale);
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                circleIcons[iconId].setBackground(getDrawable(R.drawable.icon_background));
+            } else {
+                circleIcons[iconId].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
+            }
+            circleIcons[iconId].setX(circleIcons[iconId].getX() - 14 * mScale);
+            circleIcons[iconId].setY(circleIcons[iconId].getY() - 8 * mScale);
+            circleIcons[iconId].setLayoutParams(layoutParams);
+            circleIcons[iconId].setPadding((int) (14 * mScale),(int)(8 * mScale) ,(int) (14 * mScale) ,(int)(8 * mScale) );
+        } else if (iconId >= 10) {
+            switch (edgeId) {
+                case Cons.EDGE_1_ID:
+                    edge1QuickActionViews[iconId - 10].setVisibility(View.VISIBLE);
+                    break;
+                case Cons.EDGE_2_ID:
+                    edge2QuickActionViews[iconId - 10].setVisibility(View.VISIBLE);
+                    break;
+            }
         }
-        circleIcons[iconId].setX(circleIcons[iconId].getX() - 14 * mScale);
-        circleIcons[iconId].setY(circleIcons[iconId].getY() - 8 * mScale);
-        circleIcons[iconId].setLayoutParams(layoutParams);
-        circleIcons[iconId].setPadding((int) (14 * mScale),(int)(8 * mScale) ,(int) (14 * mScale) ,(int)(8 * mScale) );
     }
 
-    public void unhighlightCircleIcon(int iconId) {
-        ImageView iconResetBackground = circleIcons[iconId];
-        FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(iconResetBackground.getLayoutParams());
-        layoutParams1.width = (int) (48 * mScale * iconScale);
-        layoutParams1.height = (int) (48 * mScale * iconScale);
-        float x = iconResetBackground.getX();
-        float y = iconResetBackground.getY();
-        iconResetBackground.setBackground(null);
-        iconResetBackground.setX(x + 14 * mScale);
-        iconResetBackground.setY(y + 8 * mScale);
-        iconResetBackground.setLayoutParams(layoutParams1);
-        iconResetBackground.setPadding(0, 0, 0, 0);
+    public void highlightGridFavoriteIcon(int iconId) {
+        gridFavoriteAdapter.setBackground(iconId);
+    }
+
+    public void unhighlightCircleIcon(int iconId, int edgeId) {
+        if (iconId > -1 && iconId < 10) {
+            ImageView iconResetBackground = circleIcons[iconId];
+            FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(iconResetBackground.getLayoutParams());
+            layoutParams1.width = (int) (48 * mScale * iconScale);
+            layoutParams1.height = (int) (48 * mScale * iconScale);
+            float x = iconResetBackground.getX();
+            float y = iconResetBackground.getY();
+            iconResetBackground.setBackground(null);
+            iconResetBackground.setX(x + 14 * mScale);
+            iconResetBackground.setY(y + 8 * mScale);
+            iconResetBackground.setLayoutParams(layoutParams1);
+            iconResetBackground.setPadding(0, 0, 0, 0);
+        } else if (iconId >= 10) {
+            switch (edgeId) {
+                case Cons.EDGE_1_ID:
+                    edge1QuickActionViews[iconId - 10].setVisibility(View.GONE);
+                    break;
+                case Cons.EDGE_2_ID:
+                    edge2QuickActionViews[iconId - 10].setVisibility(View.GONE);
+                    break;
+            }
+        }
     }
 
 
