@@ -23,7 +23,7 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.edgeService.EdgeServiceModel;
+import org.de_studio.recentappswitcher.edgeService.EdgesServiceModel;
 import org.de_studio.recentappswitcher.edgeService.EdgeServicePresenter;
 import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
@@ -97,6 +97,7 @@ import static org.de_studio.recentappswitcher.Cons.GRID_GAP_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_HEIGHT_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_PARENT_VIEW_PARA_NAME;
+import static org.de_studio.recentappswitcher.Cons.GRID_WIDTH_NAME;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.HALF_ICON_WIDTH_PXL_NAME;
@@ -159,13 +160,13 @@ public class EdgeServiceModule {
 
     @Provides
     @Singleton
-    EdgeServicePresenter presenter(EdgeServiceModel model) {
+    EdgeServicePresenter presenter(EdgesServiceModel model) {
         return new EdgeServicePresenter(model, view);
     }
 
     @Provides
     @Singleton
-    EdgeServiceModel model( @Named(EXCLUDE_SET_NAME)Set<String> excludeSet , @Named(Cons.PIN_REALM_NAME) Realm pinRealm
+    EdgesServiceModel model(@Named(EXCLUDE_SET_NAME)Set<String> excludeSet , @Named(Cons.PIN_REALM_NAME) Realm pinRealm
             , @Named(LAUNCHER_PACKAGENAME_NAME) String laucherPackageName
             , @Named(Cons.IS_FREE_AND_OUT_OF_TRIAL_NAME) boolean isFreeAndOutOfTrial
             , @Named(Cons.M_SCALE_NAME) float mScale
@@ -174,7 +175,7 @@ public class EdgeServiceModule {
             , @Named(Cons.ICON_SCALE_NAME) float iconScale
             , @Named(Cons.GRID_GAP_NAME) int gridGap) {
 
-        return new EdgeServiceModel(excludeSet, pinRealm, laucherPackageName
+        return new EdgesServiceModel(excludeSet, pinRealm, laucherPackageName
                 , isFreeAndOutOfTrial, mScale, halfIconWidthPxl
                 , circleSizePxl, iconScale, gridGap);
     }
@@ -326,13 +327,24 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(GRID_HEIGHT_NAME)
-    int gridHeight(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+    float gridHeight(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
             , @Named(M_SCALE_NAME) float mScale
             , @Named(ICON_SCALE_NAME) float iconScale) {
         int gridRow = defaultShared.getInt(EdgeSetting.NUM_OF_GRID_ROW_KEY, 5);
         int gridColumn = defaultShared.getInt(EdgeSetting.NUM_OF_GRID_COLUMN_KEY, 4);
         int gridGap = defaultShared.getInt(EdgeSetting.GAP_OF_SHORTCUT_KEY, 5);
-        float gridTall = (int) (mScale *  (((DEFAULT_ICON_SIZE * iconScale) + DEFAULT_ICON_GAP_IN_GRID) * gridRow + gridGap * (gridRow - 1)));
+        return mScale *  (((DEFAULT_ICON_SIZE * iconScale) + DEFAULT_ICON_GAP_IN_GRID) * gridRow + gridGap * (gridRow - 1));
+    }
+
+    @Provides
+    @Singleton
+    @Named(GRID_WIDTH_NAME)
+    float gridWidth(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+            , @Named(M_SCALE_NAME) float mScale
+            , @Named(ICON_SCALE_NAME) float iconScale) {
+        int gridColumn = defaultShared.getInt(Cons.NUM_OF_GRID_COLUMN_KEY, 4);
+        int gridGap = defaultShared.getInt(EdgeSetting.GAP_OF_SHORTCUT_KEY, 5);
+        return  mScale * (((DEFAULT_ICON_SIZE * iconScale) + DEFAULT_ICON_GAP_IN_GRID) * gridColumn + gridGap * (gridColumn - 1));
 
     }
 

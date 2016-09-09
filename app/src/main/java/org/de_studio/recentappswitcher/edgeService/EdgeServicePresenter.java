@@ -11,14 +11,14 @@ import java.util.ArrayList;
  */
 public class EdgeServicePresenter {
     private static final String TAG = EdgeServicePresenter.class.getSimpleName();
-    EdgeServiceModel model;
+    EdgesServiceModel model;
     EdgeServiceView view;
     float xInit, yInit;
     int currentPosition;
     int currentEdgeMode;
     String laucherPackageName;
 
-    public EdgeServicePresenter(EdgeServiceModel model, EdgeServiceView view) {
+    public EdgeServicePresenter(EdgesServiceModel model, EdgeServiceView view) {
         this.model = model;
         this.view = view;
     }
@@ -83,5 +83,9 @@ public class EdgeServicePresenter {
                 currentEdgeMode = view.edge2Mode;
                 break;
         }
+    }
+
+    public void onDestroy() {
+        view.removeAll();
     }
 }

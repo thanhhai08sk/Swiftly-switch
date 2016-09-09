@@ -86,6 +86,8 @@ import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_VERTICA
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_REALM_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.FOLDER_GRID_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.GRID_HEIGHT_NAME;
+import static org.de_studio.recentappswitcher.Cons.GRID_WIDTH_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_ENABLE_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
@@ -253,7 +255,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     EdgeServicePresenter presenter;
     @Inject
-    EdgeServiceModel model;
+    EdgesServiceModel model;
     @Inject
     @Named(CLOCK_PARENTS_VIEW_NAME)
     View clockParentsView;
@@ -282,6 +284,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Named(USE_CLOCK_NAME)
     boolean useClock;
     String lastAppPackageName;
+    @Inject
+    @Named(GRID_WIDTH_NAME)
+    float gridWidth;
+    @Inject
+    @Named(GRID_HEIGHT_NAME)
+    float gridHeight;
 
 
 
@@ -502,6 +510,25 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
+    public final synchronized void removeAll() {
+        Log.e(TAG, "remove all view");
+        try {
+            edge1View.setOnTouchListener(null);
+            windowManager.removeView(edge1View);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, " Null when remove edge1Image");
+        }
+        try {
+            edge2View.setOnTouchListener(null);
+            windowManager.removeView(edge2View);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, " Null when remove edge2Image");
+        }
+        removeAllExceptEdgeView();
+    }
+
     public final synchronized void removeAllExceptEdgeView() {
         Log.e(TAG, "removeAllExceptEdgeView");
         try {
@@ -535,8 +562,8 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         Log.e(TAG, "showFavoriteGridView: height = " + favoriteGridView.getHeight() + "\nwidth = " + favoriteGridView.getWidth());
 
         Utility.setFavoriteGridViewPosition(favoriteGridView
-                , (int) favoriteGridView.getTag(2)
-                , (int) favoriteGridView.getTag(1)
+                , gridHeight
+                , gridWidth
                 , xInit
                 , yInit
                 , mScale
@@ -668,9 +695,10 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
 
 
-
-
-
-
-
+    @Override
+    public void onDestroy() {
+        Log.e(TAG, "onDestroy: ");
+        presenter.onDestroy();
+        super.onDestroy();
+    }
 }
