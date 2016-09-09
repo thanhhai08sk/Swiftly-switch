@@ -79,6 +79,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         FavoriteShortcutAdapter.this.notifyDataSetChanged();
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView = (ImageView) convertView;

@@ -83,6 +83,7 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
+import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_ADAPTER_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_HORIZONTAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_VERTICAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_REALM_NAME;
@@ -203,6 +204,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Named(ICON_SCALE_NAME)
     float iconScale;
     @Inject
+    @Named(FAVORITE_GRID_ADAPTER_NAME)
     FavoriteShortcutAdapter gridFavoriteAdapter;
     @Inject
     CircleFavoriteAdapter circleFavoriteAdapter;
@@ -323,7 +325,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 break;
             case MotionEvent.ACTION_MOVE:
                 presenter.onActionMove(getXCord(event), getYCord(event), view.getId());
-                Log.e(TAG, "onTouch: action move");
                 break;
             case MotionEvent.ACTION_UP:
                 Log.e(TAG, "onTouch: action up");
@@ -527,7 +528,16 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
 
     public void highlightGridFavoriteIcon(int iconId) {
-        gridFavoriteAdapter.setBackground(iconId);
+        if (iconId >= 0 && iconId < gridColumns * gridRows) {
+            favoriteGridView.getChildAt(iconId).setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.icon_background_square));
+        }
+//        gridFavoriteAdapter.setBackground(iconId);
+    }
+
+    public void unhighlightGridFavoriteIcon(int iconId) {
+        if (iconId >= 0 && iconId < gridColumns * gridRows) {
+            favoriteGridView.getChildAt(iconId).setBackground(null);
+        }
     }
 
     public void unhighlightCircleIcon(int iconId, int edgeId) {

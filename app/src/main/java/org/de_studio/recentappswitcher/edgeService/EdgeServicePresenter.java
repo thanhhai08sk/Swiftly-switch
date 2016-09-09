@@ -95,7 +95,9 @@ public class EdgeServicePresenter {
 
                 if (activatedGridIcon != currentGridFavoriteIconHighlight) {
                     Log.e(TAG, "onActionMove: grid icon = " + activatedGridIcon);
+                    view.unhighlightGridFavoriteIcon(currentGridFavoriteIconHighlight);
                     view.highlightGridFavoriteIcon(activatedGridIcon);
+                    currentGridFavoriteIconHighlight = activatedGridIcon;
                 }
                 break;
         }
