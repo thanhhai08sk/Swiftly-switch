@@ -745,12 +745,16 @@ public class EdgeServiceModule {
     ExpandStatusBarView[] edge1QuickActionViews(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
             , @Named(QUICK_ACTION_VIEW_RADIUS_NAME) int quickActionViewRadius
             , @Named(M_SCALE_NAME) float mScale
-            , @Named(EDGE_1_POSITION_NAME) int edge1Position) {
+            , @Named(EDGE_1_POSITION_NAME) int edge1Position
+            , @Named(CIRCLE_PARENTS_VIEW_NAME) FrameLayout circleParentsView) {
 
         ExpandStatusBarView[] quickActionViews = new ExpandStatusBarView[4];
         for (int i = 0; i < quickActionViews.length; i++) {
             quickActionViews[i] = new ExpandStatusBarView(context, quickActionViewRadius, (int) (OVAL_OFFSET * mScale), edge1Position, i + 1);
+            quickActionViews[i].setVisibility(View.GONE);
+            circleParentsView.addView(quickActionViews[i]);
         }
+
         return quickActionViews;
     }
 

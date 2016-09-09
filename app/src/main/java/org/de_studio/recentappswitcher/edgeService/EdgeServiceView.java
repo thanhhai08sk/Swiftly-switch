@@ -500,7 +500,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    public void highlightCircleIcon(int iconId, int edgeId) {
+    public void highlightCircleIcon(int iconId, int edgeId, float xInit, float yInit) {
 
         if (iconId > -1 && iconId < 10) {
             int height = (int) ((16 + 48 * iconScale) * mScale);
@@ -514,16 +514,18 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             circleIcons[iconId].setX(circleIcons[iconId].getX() - 14 * mScale);
             circleIcons[iconId].setY(circleIcons[iconId].getY() - 8 * mScale);
             circleIcons[iconId].setLayoutParams(layoutParams);
-            circleIcons[iconId].setPadding((int) (14 * mScale),(int)(8 * mScale) ,(int) (14 * mScale) ,(int)(8 * mScale) );
+            circleIcons[iconId].setPadding((int) (14 * mScale), (int) (8 * mScale), (int) (14 * mScale), (int) (8 * mScale));
         } else if (iconId >= 10) {
-            switch (edgeId) {
-                case Cons.EDGE_1_ID:
-                    edge1QuickActionViews[iconId - 10].setVisibility(View.VISIBLE);
-                    break;
-                case Cons.EDGE_2_ID:
-                    edge2QuickActionViews[iconId - 10].setVisibility(View.VISIBLE);
-                    break;
-            }
+            showQuickAction(edgeId, iconId - 10, xInit, yInit);
+//            switch (edgeId) {
+//                case Cons.EDGE_1_ID:
+//                    showQuickAction(edgeId, iconId - 10, xInit, yInit);
+//                    edge1QuickActionViews[iconId - 10].setVisibility(View.VISIBLE);
+//                    break;
+//                case Cons.EDGE_2_ID:
+//                    edge2QuickActionViews[iconId - 10].setVisibility(View.VISIBLE);
+//                    break;
+//            }
         }
     }
 
@@ -531,7 +533,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         if (iconId >= 0 && iconId < gridColumns * gridRows) {
             favoriteGridView.getChildAt(iconId).setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.icon_background_square));
         }
-//        gridFavoriteAdapter.setBackground(iconId);
     }
 
     public void unhighlightGridFavoriteIcon(int iconId) {
@@ -660,11 +661,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         Utility.showFolder(favoriteGridView, favoriteRealm, folderPosition, mScale, iconScale, folderAdapter);
     }
 
-    public void showQuickAction(int edgeId, int id, int xInit, int yInit) {
+    public void showQuickAction(int edgeId, int id, float xInit, float yInit) {
         float x = xInit - circleSizePxl - CIRCLE_AND_QUICK_ACTION_GAP * mScale - OVAL_OFFSET * mScale - OVAL_RADIUS_PLUS * mScale;
         float y = yInit - circleSizePxl - CIRCLE_AND_QUICK_ACTION_GAP * mScale - OVAL_OFFSET * mScale - OVAL_RADIUS_PLUS * mScale;
         switch (edgeId) {
             case EDGE_1_ID:
+
                 for (int i = 0; i < edge1QuickActionViews.length; i++) {
                     if (i == id) {
                         edge1QuickActionViews[i].setVisibility(View.VISIBLE);

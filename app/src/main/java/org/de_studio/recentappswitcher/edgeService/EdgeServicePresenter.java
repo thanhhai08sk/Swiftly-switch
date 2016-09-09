@@ -74,7 +74,7 @@ public class EdgeServicePresenter {
                 if (iconToSwitch != currentCircleIconHighlight) {
                     Log.e(TAG, "onActionMove: iconToSwitch = " + iconToSwitch);
                     view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId);
-                    view.highlightCircleIcon(iconToSwitch, edgeId);
+                    view.highlightCircleIcon(iconToSwitch, edgeId, xInit,yInit);
                     currentCircleIconHighlight = iconToSwitch;
                 }
 
@@ -85,7 +85,7 @@ public class EdgeServicePresenter {
                 if (iconToSwitch1 != currentCircleIconHighlight) {
                     Log.e(TAG, "onActionMove: iconToSwitch = " + iconToSwitch1);
                     view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId);
-                    view.highlightCircleIcon(iconToSwitch1, edgeId);
+                    view.highlightCircleIcon(iconToSwitch1, edgeId, xInit, yInit);
                     currentCircleIconHighlight = iconToSwitch1;
                 }
                 break;
