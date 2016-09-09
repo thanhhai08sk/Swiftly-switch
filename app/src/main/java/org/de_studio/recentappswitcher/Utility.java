@@ -1786,7 +1786,7 @@ public  class Utility {
 
     public static int[] showFolder(GridView gridView, Realm realm
             , int mPosition, float mScale, float mIconScale, FolderAdapter adapter) {
-//        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         ViewGroup viewGroup = (ViewGroup) gridView.getParent();
         float gridX = gridView.getX();
         float gridY = gridView.getY();

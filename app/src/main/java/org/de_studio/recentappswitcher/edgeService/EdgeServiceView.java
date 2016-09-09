@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.edgeService;
 
+import android.animation.Animator;
 import android.app.ActivityManager;
 import android.app.Service;
 import android.app.usage.UsageStats;
@@ -18,9 +19,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -38,6 +42,9 @@ import org.de_studio.recentappswitcher.dagger.EdgeServiceModule;
 import org.de_studio.recentappswitcher.dagger.RealmModule;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
+import org.de_studio.recentappswitcher.service.Circle;
+import org.de_studio.recentappswitcher.service.CircleAngleAnimation;
+import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.ExpandStatusBarView;
 import org.de_studio.recentappswitcher.service.FavoriteShortcutAdapter;
@@ -89,6 +96,8 @@ import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_HORIZON
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_VERTICAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_REALM_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.FOLDER_ADAPTER_NAME;
+import static org.de_studio.recentappswitcher.Cons.FOLDER_CIRCLE_NAME;
 import static org.de_studio.recentappswitcher.Cons.FOLDER_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_HEIGHT_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_NUMBER_COLUMNS_NAME;
@@ -308,6 +317,15 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(CLOCK_LINEAR_LAYOUT_NAME)
     LinearLayout clock;
+    @Inject
+    @Named(FOLDER_CIRCLE_NAME)
+    Circle folderCircle;
+    @Inject
+    @Named(FOLDER_ADAPTER_NAME)
+    FolderAdapter folderAdapter;
+
+    ViewPropertyAnimator folderAnimator;
+    float[] folderCoor;
 
 
 
@@ -655,10 +673,104 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    public void showFolderGridView(int folderPosition) {
-        FolderAdapter folderAdapter = new FolderAdapter(getApplicationContext(), folderPosition);
-        Utility.showFolder(favoriteGridView, favoriteRealm, folderPosition, mScale, iconScale, folderAdapter);
+
+    public void startFolderCircleAnimation(final int folderPosition) {
+        folderAdapter.setFolderId(folderPosition);
+        folderAnimator = favoriteGridView.animate().setDuration(holdTime).alpha(0f).setListener(new Animator.AnimatorListener() {
+            boolean isCancel = false;
+            CircleAngleAnimation angleAnimation;
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+                folderCircle.setVisibility(View.VISIBLE);
+                folderCircle.setAngle(0);
+                angleAnimation = new CircleAngleAnimation(folderCircle, 270);
+                angleAnimation.setDuration(holdTime + 200);
+                folderCircle.startAnimation(angleAnimation);
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (!isCancel) {
+                    folderCoor = showFolder( folderPosition);
+                    Log.e(TAG, "onAnimation end");
+                    folderCircle.setVisibility(View.GONE);
+                    folderCircle.setAngle(0);
+                    presenter.currentShowing = Cons.SHOWING_FOLDER;
+                }
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                favoriteGridView.setVisibility(View.VISIBLE);
+                favoriteGridView.setAlpha(1f);
+                folderGridView.setVisibility(View.GONE);
+                isCancel = true;
+                angleAnimation.cancel();
+                folderCircle.setAngle(0);
+                folderCircle.setVisibility(View.GONE);
+                Log.e(TAG, "onAnimation cancel");
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
+
+    public float[] showFolder(int mPosition) {
+
+        float gridX = favoriteGridView.getX();
+        float gridY = favoriteGridView.getY();
+        float x = favoriteGridView.getChildAt(mPosition).getX()+ gridX;
+        float y = favoriteGridView.getChildAt(mPosition).getY() + gridY;
+        int size = (int) favoriteRealm.where(Shortcut.class).greaterThan("id",(mPosition+1)*1000 -1).lessThan("id",(mPosition+2)*1000).count();
+        if (size == 0) {
+            return new float[5];
+        }
+        int gridColumn = size;
+        if (gridColumn > 4) {
+            gridColumn = 4;
+        }
+        int gridRow;
+        if ( size % gridColumn == 0) {
+            gridRow = size/gridColumn;
+        }else gridRow = size/gridColumn +1;
+        int gridGap = 5;
+
+
+        favoriteGridView.setVisibility(View.GONE);
+        ViewGroup.LayoutParams gridParams = folderGridView.getLayoutParams();
+        folderGridView.setVerticalSpacing((int) (gridGap * mScale));
+        folderGridView.setNumColumns(gridColumn);
+        folderGridView.setGravity(Gravity.CENTER);
+        float gridWide = (int) (mScale * (((EdgeGestureService.GRID_ICON_SIZE * iconScale) + EdgeGestureService.GRID_2_PADDING) * gridColumn + gridGap * (gridColumn - 1)));
+        float gridTall = (int) (mScale * (((EdgeGestureService.GRID_ICON_SIZE * iconScale) + EdgeGestureService.GRID_2_PADDING) * gridRow + gridGap * (gridRow - 1)));
+        gridParams.height = (int) gridTall;
+        gridParams.width = (int) gridWide;
+        folderGridView.setLayoutParams(gridParams);
+        folderGridView.setAdapter(folderAdapter);
+        if (x - gridWide / 2 + gridWide > gridX + favoriteGridView.getWidth()) {
+            folderGridView.setX(gridX + favoriteGridView.getWidth() - gridWide);
+        } else if (x - gridWide / 2 < 10 * mScale) {
+            folderGridView.setX(10*mScale);
+        } else {
+            folderGridView.setX(x - gridWide / 2);
+        }
+
+        folderGridView.setY(y - gridTall + gridTall/gridRow);
+        Log.e(TAG,"gridX = " + gridX + "\nGridY = " + gridY +  "\nfolder x = " + folderGridView.getX() + "\nfolder y= " + folderGridView.getY() );
+        folderGridView.setVisibility(View.VISIBLE);
+        return new float[]{ folderGridView.getX(),  folderGridView.getY(), gridRow, gridColumn, mPosition};
+
+
+
+    }
+
 
     public void showQuickAction(int edgeId, int id, float xInit, float yInit) {
         float x = xInit - circleSizePxl - CIRCLE_AND_QUICK_ACTION_GAP * mScale - OVAL_OFFSET * mScale - OVAL_RADIUS_PLUS * mScale;

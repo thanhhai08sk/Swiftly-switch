@@ -28,9 +28,11 @@ import org.de_studio.recentappswitcher.edgeService.EdgeServicePresenter;
 import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
 import org.de_studio.recentappswitcher.edgeService.EdgesServiceModel;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
+import org.de_studio.recentappswitcher.service.Circle;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.ExpandStatusBarView;
 import org.de_studio.recentappswitcher.service.FavoriteShortcutAdapter;
+import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
 
 import java.util.HashSet;
@@ -92,6 +94,8 @@ import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_ADAPTER_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_HORIZONTAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_PADDING_VERTICAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.FOLDER_ADAPTER_NAME;
+import static org.de_studio.recentappswitcher.Cons.FOLDER_CIRCLE_NAME;
 import static org.de_studio.recentappswitcher.Cons.FOLDER_GRID_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_GAP_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GRID_GAP_KEY;
@@ -927,6 +931,19 @@ public class EdgeServiceModule {
         return (LinearLayout) parent.findViewById(R.id.clock_linear_layout);
     }
 
+    @Provides
+    @Singleton
+    @Named(FOLDER_CIRCLE_NAME)
+    Circle circle(@Named(CLOCK_PARENTS_VIEW_NAME) View parents) {
+        return  (Circle) parents.findViewById(R.id.circle);
+    }
+
+    @Provides
+    @Singleton
+    @Named(FOLDER_ADAPTER_NAME)
+    FolderAdapter folderAdapter(){
+        return new FolderAdapter(context, -1);
+    }
 
 
     @Provides

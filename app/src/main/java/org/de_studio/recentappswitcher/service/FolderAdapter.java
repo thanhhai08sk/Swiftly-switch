@@ -40,12 +40,12 @@ public class FolderAdapter extends BaseAdapter {
     public FolderAdapter(Context context, int mPosition) {
         mContext = context;
         this.mPosition = mPosition;
+        setFolderId(mPosition);
         myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
                 .name("default.realm")
                 .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
-        folderShortcut = myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst();
         sharedPreferences = context.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         packageManager = mContext.getPackageManager();
         String iconPackPacka = sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none");
@@ -58,8 +58,20 @@ public class FolderAdapter extends BaseAdapter {
         backgroundMode = false;
         iconPadding =(int) mContext.getResources().getDimension(R.dimen.icon_padding);
     }
+
+    public void setFolderId(int folderId) {
+        if (folderId != -1) {
+            this.mPosition = folderId;
+            folderShortcut = myRealm.where(Shortcut.class).equalTo("id", mPosition).findFirst();
+        }
+
+    }
+
     @Override
     public int getCount() {
+        if (mPosition == -1) {
+            return 0;
+        }
         return (int) myRealm.where(Shortcut.class).greaterThan("id", (folderShortcut.getId()+1 ) * 1000 -1)
                 .lessThan("id", (folderShortcut.getId() + 2)* 1000).count();
     }
@@ -78,6 +90,8 @@ public class FolderAdapter extends BaseAdapter {
         backgroundMode = true;
         FolderAdapter.this.notifyDataSetChanged();
     }
+
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

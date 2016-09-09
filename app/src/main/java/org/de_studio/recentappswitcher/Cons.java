@@ -131,6 +131,8 @@ public class Cons {
     public static final String INDICATOR_FRAME_LAYOUT_NAME = "indicatorFrameLayout";
     public static final String CLOCK_LINEAR_LAYOUT_NAME = "clockLinear";
     public static final String CLOCK_PARENTS_PARA_NAME = "clockParentsPara";
+    public static final String FOLDER_CIRCLE_NAME = "folderCircle";
+    public static final String FOLDER_ADAPTER_NAME = "folderAdapter";
     public static final String EXCLUDE_SET_NAME = "excludeSet";
     public static final String EDGE_1_WIDTH_PXL_NAME = "edge1Width";
     public static final String EDGE_1_HEIGHT_PXL_NAME = "edge1Height";
@@ -154,6 +156,7 @@ public class Cons {
     public static final int SHOWING_RECENT_CIRCLE = 1;
     public static final int SHOWING_FAVORITE_CIRCLE = 2;
     public static final int SHOWING_GRID = 3;
+    public static final int SHOWING_FOLDER = 4;
 
 
 

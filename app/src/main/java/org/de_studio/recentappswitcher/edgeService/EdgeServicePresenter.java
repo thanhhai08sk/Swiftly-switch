@@ -20,6 +20,9 @@ public class EdgeServicePresenter {
     int currentShowing;
     int currentCircleIconHighlight = -1;
     int currentGridFavoriteIconHighlight = -1;
+
+    boolean onOpeningFolder = false;
+    Shortcut tempShortcut;
     String laucherPackageName;
 
     public EdgeServicePresenter(EdgesServiceModel model, EdgeServiceView view) {
@@ -139,11 +142,19 @@ public class EdgeServicePresenter {
 
     private void highlightFavoriteGridIcon(int activatedGridIcon) {
         if (activatedGridIcon != currentGridFavoriteIconHighlight) {
+            tempShortcut = (Shortcut) view.gridFavoriteAdapter.getItem(activatedGridIcon);
+            if (tempShortcut!=null && tempShortcut.getType() == Shortcut.TYPE_FOLDER) {
+                view.startFolderCircleAnimation(activatedGridIcon);
+                onOpeningFolder = true;
+            } else if (onOpeningFolder) {
+                view.folderAnimator.cancel();
+                onOpeningFolder = false;
+            }
             Log.e(TAG, "onActionMove: grid icon = " + activatedGridIcon);
             view.unhighlightGridFavoriteIcon(currentGridFavoriteIconHighlight);
             view.highlightGridFavoriteIcon(activatedGridIcon);
             currentGridFavoriteIconHighlight = activatedGridIcon;
-            view.setIndicator((Shortcut) view.gridFavoriteAdapter.getItem(activatedGridIcon), false, -1);
+            view.setIndicator(tempShortcut, false, -1);
         }
     }
 }
