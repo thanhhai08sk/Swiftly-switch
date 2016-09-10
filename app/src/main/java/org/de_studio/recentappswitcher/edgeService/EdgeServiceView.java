@@ -475,7 +475,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 }
             }
             if (tempPackageNameKK.size()>=1) {
-                lastAppPackageName = tempPackageNameKK.get(0);
+                lastAppPackageName = tempPackageNameKK.get(1);
             }
             return tempPackageNameKK;
         } else {
@@ -513,6 +513,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                                     //do nothing
                                 } else if (packageManager.getLaunchIntentForPackage(packa) == null ||
                                         packa.contains("systemui") ||
+                                        packa.equals(launcherPackageName)||
                                         packa.contains("googlequicksearchbox") ||
                                         excludeSet.contains(packa) ||
                                         tempPackageName.contains(packa)
@@ -533,7 +534,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 }
             }
             if (tempPackageName.size()>=1) {
-                lastAppPackageName = tempPackageName.get(0);
+                lastAppPackageName = tempPackageName.get(1);
             }
             return tempPackageName;
         }
@@ -1108,6 +1109,8 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         if (action.equals(MainActivity.ACTION_NOTI) & isFreeAndOutOfTrial) {
             Utility.startNotiDialog(getApplicationContext(), NotiDialog.OUT_OF_TRIAL);
         } else {
+            Log.e(TAG, "executeQuickAction: lastapp = " + lastAppPackageName);
+
             startQuickAction(getApplicationContext(), action, v, getClass().getName(), getPackageName(), lastAppPackageName);
         }
     }
