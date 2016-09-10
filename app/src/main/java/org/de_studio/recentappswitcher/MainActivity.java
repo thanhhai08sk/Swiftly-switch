@@ -37,7 +37,7 @@ import org.de_studio.recentappswitcher.service.EdgeSetting;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
-    private static final int VERSION_NUMBER = 66;
+    private static final int VERSION_NUMBER = 68;
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final String EDGE_1_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_2_shared_preference";
@@ -556,10 +556,20 @@ public class MainActivity extends Activity {
 
     }
 
+    public static SpannableString getSpanString(String title, AbsoluteSizeSpan span) {
+        SpannableString spanString = new SpannableString(title);
+        spanString.setSpan(span,0,title.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        return spanString;
+    }
+
     private void showWhatNew() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         int titleSize = getResources().getDimensionPixelSize(R.dimen.what_new_title_size);
         AbsoluteSizeSpan span = new AbsoluteSizeSpan(titleSize);
+
+        String title2341 = "Version 2.3.4.1 (Beta)";
+        String text2341 = " - Big code factoring, please notify me if you find any bugs. Thanks!"
+                + " - New animation.";
 
         String title2_3_3 = "Version 2.3.3";
         String text2_3_3 = " - Now you can choose the position when pin shortcuts to recent"
@@ -632,8 +642,8 @@ public class MainActivity extends Activity {
         SpannableString span2_2_8 = new SpannableString(title2_2_8);
         span2_2_8.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_8.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
-        CharSequence finalText = TextUtils.concat(span233,"\n\n",text2_3_3, "\n\n",span2_3_2,"\n\n",text2_3_2, "\n\n",span2_3_1,"\n\n",text2_3_1, "\n\n",span2_2_14,"\n\n",text2_3_0, "\n\n",span2_2_13,"\n\n",text2_2_13, "\n\n",span2_2_11_1,"\n\n",text2_2_12, "\n\n",span2_2_11,"\n\n",text2_2_11, "\n\n",span2_2_10,"\n\n",text2_2_10, "\n\n",span2_2_9,"\n\n",text2_2_9,"\n\n",span2_2_8,"\n\n",text2_2_8
-                );
+        CharSequence finalText = TextUtils.concat(getSpanString(title2341, span), "\n\n", text2341,"\n\n", span233, "\n\n", text2_3_3, "\n\n", span2_3_2, "\n\n", text2_3_2, "\n\n", span2_3_1, "\n\n", text2_3_1, "\n\n", span2_2_14, "\n\n", text2_3_0, "\n\n", span2_2_13, "\n\n", text2_2_13, "\n\n", span2_2_11_1, "\n\n", text2_2_12, "\n\n", span2_2_11, "\n\n", text2_2_11, "\n\n", span2_2_10, "\n\n", text2_2_10, "\n\n", span2_2_9, "\n\n", text2_2_9, "\n\n", span2_2_8, "\n\n", text2_2_8
+        );
         builder.setTitle(R.string.what_new)
                 .setMessage(finalText)
                 .setPositiveButton("Ok", null)
@@ -653,12 +663,6 @@ public class MainActivity extends Activity {
                     }
                 });
         builder.create().show();
-    }
-
-    public static SpannableString getSpanString(String title, AbsoluteSizeSpan span) {
-        SpannableString spanString = new SpannableString(title);
-        spanString.setSpan(span,0,title.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        return spanString;
     }
 
     @Override

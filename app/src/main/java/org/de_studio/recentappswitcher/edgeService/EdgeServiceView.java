@@ -1004,6 +1004,8 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Override
     public void onDestroy() {
         Log.e(TAG, "onDestroy: ");
+        this.unregisterReceiver(receiver);
+        removeAll();
         presenter.onDestroy();
         super.onDestroy();
     }
