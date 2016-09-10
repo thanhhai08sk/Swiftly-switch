@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.edgeService;
 
 import android.util.Log;
+import android.view.View;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
@@ -93,9 +94,19 @@ public class EdgeServicePresenter {
 
     }
 
-    public void onActionUp(float x, float y, int edgeId) {
-
+    public void onActionUp(float x, float y, int edgeId, View v) {
         view.removeAllExceptEdgeView();
+        switch (currentShowing) {
+            case Cons.SHOWING_RECENT_CIRCLE:
+
+                break;
+            case Cons.SHOWING_FAVORITE_CIRCLE:
+                break;
+            case Cons.SHOWING_GRID:
+                break;
+            case Cons.SHOWING_FOLDER:
+                break;
+        }
 
     }
 

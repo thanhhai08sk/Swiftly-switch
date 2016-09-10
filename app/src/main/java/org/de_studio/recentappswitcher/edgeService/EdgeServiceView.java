@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
+import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.dagger.AppModule;
@@ -50,6 +51,7 @@ import org.de_studio.recentappswitcher.service.ExpandStatusBarView;
 import org.de_studio.recentappswitcher.service.FavoriteShortcutAdapter;
 import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
+import org.de_studio.recentappswitcher.service.NotiDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -110,6 +112,7 @@ import static org.de_studio.recentappswitcher.Cons.ICON_SIZE_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.INDICATOR_FRAME_LAYOUT_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_1_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_EDGE_2_ON_NAME;
+import static org.de_studio.recentappswitcher.Cons.IS_FREE_AND_OUT_OF_TRIAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
@@ -323,9 +326,13 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(FOLDER_ADAPTER_NAME)
     FolderAdapter folderAdapter;
+    @Inject
+    @Named(IS_FREE_AND_OUT_OF_TRIAL_NAME)
+    boolean isFreeAndOutOfTrial;
 
     ViewPropertyAnimator folderAnimator;
     float[] folderCoor;
+    public static boolean FLASH_LIGHT_ON = false;
 
 
 
@@ -354,7 +361,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 break;
             case MotionEvent.ACTION_UP:
                 Log.e(TAG, "onTouch: action up");
-                presenter.onActionUp(getXCord(event), getYCord(event), view.getId());
+                presenter.onActionUp(getXCord(event), getYCord(event), view.getId(), view);
                 break;
             case MotionEvent.ACTION_OUTSIDE:
                 Log.e(TAG, "onTouch: action outside");
@@ -924,5 +931,32 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 ((TextView) indicator.findViewById(R.id.indicator_label)).setText("");
             }
         }
+    }
+
+    public void executeQuickAction(int actionId, View v) {
+        String action = MainActivity.ACTION_NONE;
+        switch (actionId) {
+            case 0:
+                action = defaultShared.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO);
+                break;
+            case 1:
+                action = defaultShared.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_HOME);
+                break;
+            case 2:
+                action = defaultShared.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_BACK);
+                break;
+            case 3:
+                action = defaultShared.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
+                break;
+        }
+        if (action.equals(MainActivity.ACTION_NOTI) & isFreeAndOutOfTrial) {
+            Utility.startNotiDialog(getApplicationContext(), NotiDialog.OUT_OF_TRIAL);
+        } else {
+            Utility.executeAction(getApplicationContext(), action, v, getClass().getName(), getPackageName(), lastAppPackageName);
+        }
+    }
+
+    public void executeShortcut(Shortcut shortcut, View v) {
+        Utility.startShortcut(getApplicationContext(), shortcut, v, getClass().getName(), getPackageName(), lastAppPackageName, defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 0), FLASH_LIGHT_ON);
     }
 }
