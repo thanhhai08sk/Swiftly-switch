@@ -564,30 +564,29 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(BACKGROUND_FRAME_PARA_NAME)
-    WindowManager.LayoutParams backgroundFramePara(){
-        int flag1 =                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+    WindowManager.LayoutParams backgroundFramePara(@Named(M_SCALE_NAME) float mScale){
+        int flag1 = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-
+        int height =(int) (mScale* (context.getResources().getConfiguration().screenHeightDp + 120));
         int flag2 =  WindowManager.LayoutParams.FLAG_FULLSCREEN |
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-//        return new WindowManager.LayoutParams(
-//                WindowManager.LayoutParams.MATCH_PARENT,
-//                WindowManager.LayoutParams.MATCH_PARENT,
-//                WindowManager.LayoutParams.TYPE_PHONE,
-//                flag2,
-//                PixelFormat.TRANSLUCENT);
-        return  new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN |
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
-                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+        return new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                height,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                flag1,
                 PixelFormat.TRANSLUCENT);
+//        return  new android.view.WindowManager.LayoutParams(-1, height,0,0
+//                ,    WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN
+//                        |WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+//                        |WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+//                        |WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR
+//                        |WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, PixelFormat.TRANSLUCENT);
     }
 
     @Provides
