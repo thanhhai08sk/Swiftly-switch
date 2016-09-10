@@ -465,7 +465,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             return tempPackageNameKK;
         } else {
             UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-            long currentTimeMillis = System.currentTimeMillis() + 5000;
+            long currentTimeMillis = System.currentTimeMillis() + 2000;
             List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
             ArrayList<String> tempPackageName = new ArrayList<String>();
             if (stats != null) {
@@ -479,10 +479,8 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 String packa;
                 boolean isSystem = false;
                 PackageManager packageManager = getPackageManager();
-                boolean hasKeyInFuture = false;
                 for (Long key : setKey) {
                     if (key >= currentTimeMillis) {
-                        hasKeyInFuture = true;
                         Log.e(TAG, "key is in future");
                     } else {
                         usageStats = mySortedMap.get(key);
