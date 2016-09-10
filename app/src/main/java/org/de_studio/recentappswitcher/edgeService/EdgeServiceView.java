@@ -1075,7 +1075,11 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 Utility.setImageForShortcut(shortcut, getPackageManager()
                         , (ImageView) indicator.findViewById(R.id.indicator_icon)
                         , getApplicationContext(), iconPack, null, true);
-                ((TextView) indicator.findViewById(R.id.indicator_label)).setText(shortcut.getLabel());
+                if (shortcut.getLabel() == null || shortcut.getLabel().equals("") && shortcut.getType() == Shortcut.TYPE_APP) {
+                    ((TextView) indicator.findViewById(R.id.indicator_label)).setText(Utility.getLabelForShortcut(getApplicationContext(), shortcut));
+                } else {
+                    ((TextView) indicator.findViewById(R.id.indicator_label)).setText(shortcut.getLabel());
+                }
             } else {
                 ((ImageView) indicator.findViewById(R.id.indicator_icon)).setImageDrawable(null);
                 ((TextView) indicator.findViewById(R.id.indicator_label)).setText("");
