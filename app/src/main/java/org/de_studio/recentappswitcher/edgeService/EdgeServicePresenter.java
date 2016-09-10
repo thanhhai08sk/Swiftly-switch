@@ -98,7 +98,11 @@ public class EdgeServicePresenter {
         view.removeAllExceptEdgeView();
         switch (currentShowing) {
             case Cons.SHOWING_RECENT_CIRCLE:
-
+                if (currentCircleIconHighlight >= 10) {
+                    view.executeQuickAction(currentCircleIconHighlight - 10, v);
+                } else if (currentCircleIconHighlight >= 0 && currentCircleIconHighlight < model.savedRecentShortcut.length) {
+                    view.executeShortcut(model.savedRecentShortcut[currentCircleIconHighlight], v);
+                }
                 break;
             case Cons.SHOWING_FAVORITE_CIRCLE:
                 break;
