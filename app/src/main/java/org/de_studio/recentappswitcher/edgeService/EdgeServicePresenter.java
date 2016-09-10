@@ -135,6 +135,14 @@ public class EdgeServicePresenter {
 
     }
 
+    void onActionOutSide() {
+        view.removeAllExceptEdgeView();
+    }
+
+    void onActionCancel() {
+        view.removeAllExceptEdgeView();
+    }
+
     private void setCurrentPositionAndMode(int edgeId) {
         switch (edgeId) {
             case Cons.EDGE_1_ID:

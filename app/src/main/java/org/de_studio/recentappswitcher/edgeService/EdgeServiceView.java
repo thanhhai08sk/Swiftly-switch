@@ -387,9 +387,11 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 presenter.onActionUp(getXCord(event), getYCord(event), view.getId(), view);
                 break;
             case MotionEvent.ACTION_OUTSIDE:
+                presenter.onActionOutSide();
                 Log.e(TAG, "onTouch: action outside");
                 break;
             case MotionEvent.ACTION_CANCEL:
+                presenter.onActionCancel();
                 Log.e(TAG, "onTouch: action cancel");
                 break;
         }
@@ -1004,6 +1006,19 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         Log.e(TAG, "onDestroy: ");
         presenter.onDestroy();
         super.onDestroy();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE, false) && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            removeEdgeImage();
+        } else {
+            addEdgeImage();
+        }
+        Log.e(TAG, "onConfigurationChanged: ");
+        super.onConfigurationChanged(newConfig);
+        removeAllExceptEdgeView();
+
     }
 
     public void setupReceiver() {
