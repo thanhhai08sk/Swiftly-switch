@@ -22,6 +22,7 @@ public class EdgeServicePresenter {
     int currentCircleIconHighlight = -1;
     int currentGridFavoriteIconHighlight = -1;
     int currentGridFolderIconHighlight = -1;
+    long startHoldingTime;
 
     boolean onOpeningFolder = false;
     Shortcut tempShortcut;
@@ -143,6 +144,7 @@ public class EdgeServicePresenter {
             view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId);
             view.highlightCircleIcon(iconToSwitch, edgeId, xInit, yInit);
             currentCircleIconHighlight = iconToSwitch;
+            startHoldingTime = System.currentTimeMillis();
 
             if (iconToSwitch >= 0 && iconToSwitch < model.savedRecentShortcut.length) {
                 view.setIndicator(model.savedRecentShortcut[iconToSwitch], false, -1);
@@ -153,6 +155,18 @@ public class EdgeServicePresenter {
             }
             if (iconToSwitch >= 10
                     && view.edge1QuickActionViews[iconToSwitch - 10].getId() == Cons.QUICK_ACTION_ID_INSTANT_GRID) {
+                view.removeCircleShortcutsView();
+                view.showFavoriteGridView(xInit, yInit, currentPosition, -1);
+                currentShowing = Cons.SHOWING_GRID;
+                view.setIndicator(null, false, -1);
+            }
+        } else if (currentCircleIconHighlight != -1 && System.currentTimeMillis() - startHoldingTime > view.holdTime) {
+            if (currentEdgeMode == Cons.MODE_CIRCLE_FAVORITE) {
+                view.unhighlightCircleIcon(currentCircleIconHighlight,edgeId);
+
+            } else {
+                view.unhighlightCircleIcon(currentCircleIconHighlight,edgeId);
+                currentCircleIconHighlight = -1;
                 view.removeCircleShortcutsView();
                 view.showFavoriteGridView(xInit, yInit, currentPosition, -1);
                 currentShowing = Cons.SHOWING_GRID;
