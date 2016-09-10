@@ -166,14 +166,14 @@ public class AddShortcutToFolderDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().stopService(new Intent(getActivity(), EdgeGestureService.class));
+        Utility.stopService(getActivity());
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
         Utility.getFolderThumbnail(myRealm, mPosition, getActivity());
         try {
-            getActivity().startService(new Intent(getActivity(), EdgeGestureService.class));
+            Utility.startService(getActivity());
         } catch (NullPointerException e) {
             Log.e(TAG, "Null when get activity from on dismiss");
         }

@@ -24,7 +24,6 @@ import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 public class MoreSettingActivity extends AppCompatActivity {
@@ -229,8 +228,7 @@ public class MoreSettingActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.AVOID_KEYBOARD_KEY, isChecked).commit();
-                stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                Utility.restartService(getApplicationContext());
             }
         });
         holdTimeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -267,8 +265,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
                         sharedPreferencesDefautl.edit().putInt(EdgeSetting.VIBRATION_DURATION_KEY,progressChanged).commit();
-                        stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                        startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                        Utility.restartService(getApplicationContext());
                     }
                 });
                 builder.setView(view).
@@ -309,8 +306,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
                         sharedPreferencesDefautl.edit().putFloat(EdgeSetting.ICON_SCALE, ((float) progressChanged) / 100).commit();
-                        stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                        startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                        Utility.restartService(getApplicationContext());
                     }
                 });
                 builder.setView(view).
@@ -344,8 +340,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
                                 sharedPreferencesDefautl.edit().putInt(EdgeSetting.BACKGROUND_COLOR_KEY,selectedColor).commit();
-                                stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                                startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                                Utility.restartService(getApplicationContext());
                             }
                         })
                         .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -377,8 +372,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
                                 sharedPreferencesDefautl.edit().putInt(EdgeSetting.GUIDE_COLOR_KEY,selectedColor).commit();
-                                stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                                startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                                Utility.restartService(getApplicationContext());
                             }
                         })
                         .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -418,8 +412,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
                         sharedPreferencesDefautl.edit().putInt(EdgeSetting.HOLD_TIME_KEY, progressChanged).commit();
-                        stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                        startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+                        Utility.restartService(getApplicationContext());
                     }
                 });
 
@@ -466,9 +459,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
                         sharedPreferencesDefautl.edit().putInt(EdgeSetting.ANI_TIME_KEY, progressChanged).commit();
-                        stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                        startService(new Intent(getApplicationContext(), EdgeGestureService.class));
-                    }
+                        Utility.restartService(getApplicationContext());                    }
                 });
 
                 builder.setView(view).

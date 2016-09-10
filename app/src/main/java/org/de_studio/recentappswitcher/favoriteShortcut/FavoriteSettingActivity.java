@@ -388,8 +388,7 @@ public class FavoriteSettingActivity extends AppCompatActivity {
 
     private void restartService() {
         if (Utility.checkDrawPermission(getApplicationContext())) {
-            getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-            getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+            Utility.restartService(getApplicationContext());
         }else Toast.makeText(FavoriteSettingActivity.this, "Lack of Draw over other apps permission", Toast.LENGTH_SHORT).show();
     }
 

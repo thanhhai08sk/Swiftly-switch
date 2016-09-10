@@ -156,13 +156,13 @@ public class PinRecentAddActionDialogFragment extends DialogFragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         position = getArguments().getInt(POSITION_KEY);
-        getActivity().stopService(new Intent(getActivity(), EdgeGestureService.class));
+        Utility.stopService(getActivity());
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
         try {
-            getActivity().startService(new Intent(getActivity(), EdgeGestureService.class));
+            Utility.startService(getActivity());
         } catch (NullPointerException e) {
             Log.e(TAG, "Null when get activity from on dismiss");
         }

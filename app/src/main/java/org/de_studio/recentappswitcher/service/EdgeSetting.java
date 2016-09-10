@@ -2,7 +2,6 @@ package org.de_studio.recentappswitcher.service;
 
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -164,8 +163,7 @@ public class EdgeSetting extends DialogFragment {
                     case 2:
                         sharedPreferences.edit().putInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 3).commit();
                 }
-                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
-                mContext.startService(new Intent(mContext, EdgeGestureService.class));
+                Utility.restartService(getActivity());
             }
 
             @Override
@@ -179,8 +177,7 @@ public class EdgeSetting extends DialogFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 sharedPreferences.edit().putBoolean(USE_GUIDE_KEY,isChecked).commit();
-                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
-                mContext.startService(new Intent(mContext, EdgeGestureService.class));
+                Utility.restartService(getActivity());
             }
         });
         int spinnerCurrentPosition =1;
@@ -239,8 +236,7 @@ public class EdgeSetting extends DialogFragment {
                 updateEdgeView();
 //                edgeImage.setX(100);
 //                edgeImage.setY(2300);
-                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
-                mContext.startService(new Intent(mContext, EdgeGestureService.class));
+                Utility.restartService(getActivity());
 //
             }
 
@@ -278,8 +274,7 @@ public class EdgeSetting extends DialogFragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
 //                sharedPreferences.edit().putInt(EDGE_SENSIIVE_KEY, progressChanged).commit();
 //                updateEdgeView();
-                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
-                mContext.startService(new Intent(mContext, EdgeGestureService.class));
+                Utility.restartService(getActivity());
             }
         });
         final AppCompatSeekBar lengthSeekBar = (AppCompatSeekBar) rootView.findViewById(R.id.length_seek_bar);
@@ -314,8 +309,7 @@ public class EdgeSetting extends DialogFragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 //                sharedPreferences.edit().putInt(EDGE_LENGTH_KEY, progressChanged).commit();
-                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
-                mContext.startService(new Intent(mContext, EdgeGestureService.class));
+                Utility.restartService(getActivity());
             }
         });
 
@@ -355,8 +349,7 @@ public class EdgeSetting extends DialogFragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 sharedPreferences.edit().putInt(EDGE_OFFSET_KEY, progressChanged).commit();
 //                updateEdgeView();
-                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
-                mContext.startService(new Intent(mContext, EdgeGestureService.class));
+                Utility.restartService(getActivity());
 //                sharedPreferences.edit().putInt(EDGE_OFFSET_KEY, progressChanged).commit();
             }
         });
@@ -384,8 +377,7 @@ public class EdgeSetting extends DialogFragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 defaultSharedPreferences.edit().putInt(CIRCLE_SIZE_KEY,progressChanged).commit();
-                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
-                mContext.startService(new Intent(mContext, EdgeGestureService.class));
+                Utility.restartService(getActivity());
             }
         });
 
@@ -412,8 +404,7 @@ public class EdgeSetting extends DialogFragment {
                 sharedPreferences.edit().putInt(EDGE_LENGTH_KEY, 150).commit();
                 circleSizeSeekBar.setProgress(30);
                 defaultSharedPreferences.edit().putInt(CIRCLE_SIZE_KEY,105).commit();
-                mContext.stopService(new Intent(mContext, EdgeGestureService.class));
-                mContext.startService(new Intent(mContext, EdgeGestureService.class));
+                Utility.restartService(getActivity());
 //                updateEdgeView();
 
             }

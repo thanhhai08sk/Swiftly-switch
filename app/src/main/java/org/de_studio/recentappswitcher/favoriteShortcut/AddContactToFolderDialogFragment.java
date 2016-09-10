@@ -3,7 +3,6 @@ package org.de_studio.recentappswitcher.favoriteShortcut;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -64,7 +63,7 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().stopService(new Intent(getActivity(), EdgeGestureService.class));
+        Utility.stopService(getActivity());
     }
 
     @Override
@@ -153,7 +152,7 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
     public void onDismiss(DialogInterface dialog) {
         Utility.getFolderThumbnail(myRealm, mPosition, getActivity());
         try {
-            getActivity().startService(new Intent(getActivity(), EdgeGestureService.class));
+            Utility.startService(getActivity());
         } catch (NullPointerException e) {
             Log.e(TAG, "Null when get activity from on dismiss");
         }

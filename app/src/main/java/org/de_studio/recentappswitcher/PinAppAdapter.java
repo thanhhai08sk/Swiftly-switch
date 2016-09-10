@@ -1,7 +1,6 @@
 package org.de_studio.recentappswitcher;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -253,8 +252,7 @@ public class PinAppAdapter extends BaseAdapter{
     }
     private void restartService() {
         if (Utility.checkDrawPermission(mContext.getApplicationContext())) {
-            mContext.getApplicationContext().stopService(new Intent(mContext.getApplicationContext(), EdgeGestureService.class));
-            mContext.getApplicationContext().startService(new Intent(mContext.getApplicationContext(), EdgeGestureService.class));
+            Utility.restartService(mContext.getApplicationContext());
         }else Toast.makeText(mContext, "Lack of Draw over other apps permission", Toast.LENGTH_SHORT).show();
     }
 }

@@ -3,7 +3,6 @@ package org.de_studio.recentappswitcher;
 import android.Manifest;
 import android.content.ClipData;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -21,8 +20,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 public class PinAppActivity extends AppCompatActivity {
     private PinAppAdapter adapter;
@@ -246,8 +243,7 @@ public class PinAppActivity extends AppCompatActivity {
     }
     private void restartService() {
         if (Utility.checkDrawPermission(getApplicationContext())) {
-            getApplicationContext().stopService(new Intent(getApplicationContext(), EdgeGestureService.class));
-            getApplicationContext().startService(new Intent(getApplicationContext(), EdgeGestureService.class));
+            Utility.restartService(getApplicationContext());
         }else Toast.makeText(PinAppActivity.this, "Lack of Draw over other apps permission", Toast.LENGTH_SHORT).show();
     }
 }

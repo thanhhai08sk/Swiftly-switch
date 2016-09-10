@@ -3,7 +3,6 @@ package org.de_studio.recentappswitcher;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -159,13 +158,13 @@ public class PinRecentAddContactDialogFragment extends DialogFragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         position = getArguments().getInt(POSITION_KEY);
-        getActivity().stopService(new Intent(getActivity(), EdgeGestureService.class));
+        Utility.stopService(getActivity());
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
         try {
-            getActivity().startService(new Intent(getActivity(), EdgeGestureService.class));
+            Utility.startService(getActivity());
         } catch (NullPointerException e) {
             Log.e(TAG, "Null when get activity from on dismiss");
         }

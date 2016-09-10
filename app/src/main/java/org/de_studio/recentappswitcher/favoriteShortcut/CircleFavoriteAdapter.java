@@ -1,7 +1,6 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -247,8 +246,7 @@ public class CircleFavoriteAdapter extends BaseAdapter {
         }
         circleFavoRealm.commitTransaction();
         notifyDataSetChanged();
-        mContext.stopService(new Intent(mContext, EdgeGestureService.class));
-        mContext.startService(new Intent(mContext, EdgeGestureService.class));
+        Utility.restartService(mContext);
     }
 
     public void setDragPosition(int position) {

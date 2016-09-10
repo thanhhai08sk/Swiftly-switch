@@ -88,7 +88,7 @@ public class BlackListDialogFragment extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         try {
-            getActivity().startService(new Intent(getActivity(), EdgeGestureService.class));
+            Utility.startService(getActivity());
         } catch (NullPointerException e) {
             Log.e(LOG_TAG, "Null when get activity from on dismiss");
         }

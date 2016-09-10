@@ -30,7 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
 import org.de_studio.recentappswitcher.favoriteShortcut.FavoriteSettingActivity;
 import org.de_studio.recentappswitcher.intro.IntroActivity;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
@@ -164,9 +163,9 @@ public class MainActivity extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    startService(new Intent(getApplicationContext(), EdgeServiceView.class));
+                    Utility.startService(getApplicationContext());
                 } else {
-                    stopService(new Intent(getApplicationContext(), EdgeServiceView.class));
+                    Utility.stopService(getApplicationContext());
                 }
             }
         });
@@ -275,10 +274,9 @@ public class MainActivity extends Activity {
 
                 sharedPreferences1.edit().putBoolean(EdgeSetting.EDGE_ON_KEY, isChecked).commit();
                 if (!isChecked && !edge2Switch.isChecked()) {
-                    stopService(new Intent(getApplicationContext(), EdgeServiceView.class));
+                    Utility.stopService(getApplicationContext());
                 } else {
-                    stopService(new Intent(getApplicationContext(), EdgeServiceView.class));
-                    startService(new Intent(getApplicationContext(), EdgeServiceView.class));
+                    Utility.restartService(getApplicationContext());
                 }
 
 
@@ -317,10 +315,9 @@ public class MainActivity extends Activity {
 
                 } else {
                     if (!isChecked && !edge1Switch.isChecked()) {
-                        stopService(new Intent(getApplicationContext(), EdgeServiceView.class));
+                        Utility.stopService(getApplicationContext());
                     } else {
-                        stopService(new Intent(getApplicationContext(), EdgeServiceView.class));
-                        startService(new Intent(getApplicationContext(), EdgeServiceView.class));
+                        Utility.restartService(getApplicationContext());
                     }
                     sharedPreferences2.edit().putBoolean(EdgeSetting.EDGE_ON_KEY, isChecked).commit();
 
@@ -475,13 +472,11 @@ public class MainActivity extends Activity {
         });
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            stopService(new Intent(this, EdgeServiceView.class));
-            startService(new Intent(this, EdgeServiceView.class));
+            Utility.restartService(this);
 
         } else {
             if (Settings.canDrawOverlays(this)) {
-                stopService(new Intent(this, EdgeServiceView.class));
-                startService(new Intent(this, EdgeServiceView.class));
+                Utility.restartService(this);
 
             }
         }
@@ -672,15 +667,15 @@ public class MainActivity extends Activity {
         Log.e(TAG, "onResume: ");
 //        setStepButtonAndDescription();
         checkPermissionOk();
-        stopService(new Intent(this, EdgeServiceView.class));
+        Utility.stopService(getApplicationContext());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (Settings.canDrawOverlays(this) && (edge1Switch.isChecked() || edge1Switch.isChecked())) {
                 Log.e(TAG, "onResume: startService");
-                startService(new Intent(this, EdgeServiceView.class));
+                Utility.startService(this);
             }
         } else {
             if (edge1Switch.isChecked() || edge1Switch.isChecked()) {
-                startService(new Intent(this, EdgeServiceView.class));
+                Utility.startService(this);
             }
         }
 
@@ -752,8 +747,7 @@ public class MainActivity extends Activity {
         if (requestCode == REQUEST_CODE) {
             if (Settings.canDrawOverlays(this)) {
                 // continue here - permission was granted
-                stopService(new Intent(this, EdgeServiceView.class));
-                startService(new Intent(this, EdgeServiceView.class));
+                Utility.restartService(this);
 
             }
         }else if (requestCode == REQUEST_INVITE) {

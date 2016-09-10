@@ -2392,6 +2392,19 @@ public  class Utility {
         return -1;
     }
 
+    public static void startService(Context context) {
+        context.startService(new Intent(context, EdgeServiceView.class));
+    }
+
+    public static void stopService(Context context) {
+        context.stopService(new Intent(context, EdgeServiceView.class));
+    }
+
+    public static void restartService(Context context) {
+        startService(context);
+        stopService(context);
+    }
+
 
 
 
