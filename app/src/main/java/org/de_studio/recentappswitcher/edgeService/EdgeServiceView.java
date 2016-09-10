@@ -1024,6 +1024,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     public void setupReceiver() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Cons.ACTION_TOGGLE_EDGES);
+        filter.addAction(Intent.ACTION_USER_PRESENT);
         receiver = new EdgesToggleReceiver();
         this.registerReceiver(receiver, filter);
     }
@@ -1359,6 +1360,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 notificationBuilder.addAction(remoteAction);
                 startForeground(Cons.NOTIFICATION_ID,notificationBuilder.build());
 
+            } else if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
+                Log.e(TAG, "onReceive: userPresent");
+                removeAllExceptEdgeView();
             }
         }
     }
