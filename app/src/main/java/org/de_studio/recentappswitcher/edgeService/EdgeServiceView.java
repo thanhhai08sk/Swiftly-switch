@@ -47,6 +47,7 @@ import org.de_studio.recentappswitcher.dagger.DaggerEdgeServiceComponent;
 import org.de_studio.recentappswitcher.dagger.EdgeServiceModule;
 import org.de_studio.recentappswitcher.dagger.RealmModule;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
+import org.de_studio.recentappswitcher.favoriteShortcut.FavoriteSettingActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.ChooseActionDialogActivity;
 import org.de_studio.recentappswitcher.service.Circle;
@@ -237,6 +238,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(FAVORITE_GRID_REALM_NAME)
     Realm favoriteRealm;
+    @Inject
+    @Named(Cons.FAVORITE_CIRCLE_REALM_NAME)
+    Realm circleRealm;
     @Inject
     @Named(EDGE_1_QUICK_ACTION_VIEWS_NAME)
     ExpandStatusBarView[] edge1QuickActionViews;
@@ -537,6 +541,23 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         } catch (IllegalStateException e) {
             Log.e(TAG, " item_view has already been added to the window manager");
         }
+    }
+
+    public void showCircleFavorite() {
+        Shortcut shortcut;
+        for (int i = 0; i < 6; i++) {
+            shortcut = circleRealm.where(Shortcut.class).equalTo("id", i).findFirst();
+            if (shortcut != null) {
+                Utility.setImageForShortcut(shortcut, getPackageManager(),circleIcons[i], getApplicationContext(), iconPack, circleRealm, true);
+            } else {
+                circleIcons[i].setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+            }
+
+        }
+    }
+
+    public Shortcut getCircleFavoriteShorcut(int position) {
+        return circleRealm.where(Shortcut.class).equalTo("id", position).findFirst();
     }
 
     public void highlightCircleIcon(int iconId, int edgeId, float xInit, float yInit) {
@@ -962,10 +983,19 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    public void executeShortcut(Shortcut shortcut, View v) {
+    public void executeShortcut(Shortcut shortcut, View v, int mode) {
         if (shortcut != null) {
             startShortcut(getApplicationContext(), shortcut, v, getClass().getName(), getPackageName(), lastAppPackageName, defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 0), FLASH_LIGHT_ON);
+        } else if (mode != -1) {
+            showFavoriteSettingActivity(mode);
         }
+    }
+
+    public void showFavoriteSettingActivity(int mode) {
+        Intent intent = new Intent(getApplicationContext(),FavoriteSettingActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("mode", mode);
+        startActivity(intent);
     }
 
     private void startShortcut(Context context, Shortcut shortcut, View v, String className, String packageName, String lastAppPackageName, int contactAction, boolean flashLightOn) {
