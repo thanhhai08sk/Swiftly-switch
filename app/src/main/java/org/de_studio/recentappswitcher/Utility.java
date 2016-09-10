@@ -62,6 +62,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
+import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.service.ChooseActionDialogActivity;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
@@ -1098,6 +1099,16 @@ public  class Utility {
             Log.e(TAG, "flashLightAction: actionOn = " + actionOn + "\nstop flash service");
             context.stopService(i);
             EdgeGestureService.FLASH_LIGHT_ON = false;
+        }
+    }
+    public static void flashLightAction2(Context context, boolean actionOn) {
+        Intent i = new Intent(context, Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? FlashServiceM.class : FlashService.class);
+        if (actionOn) {
+            context.startService(i);
+            EdgeServiceView.FLASH_LIGHT_ON = true;
+        } else {
+            context.stopService(i);
+            EdgeServiceView.FLASH_LIGHT_ON = false;
         }
     }
 

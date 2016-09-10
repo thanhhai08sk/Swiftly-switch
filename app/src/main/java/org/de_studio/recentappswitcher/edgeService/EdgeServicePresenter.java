@@ -107,8 +107,10 @@ public class EdgeServicePresenter {
             case Cons.SHOWING_FAVORITE_CIRCLE:
                 break;
             case Cons.SHOWING_GRID:
+                view.executeShortcut((Shortcut) view.gridFavoriteAdapter.getItem(currentGridFavoriteIconHighlight), v);
                 break;
             case Cons.SHOWING_FOLDER:
+                view.executeShortcut((Shortcut) view.folderAdapter.getItem(currentGridFolderIconHighlight), v);
                 break;
         }
 

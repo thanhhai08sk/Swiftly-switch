@@ -1,19 +1,23 @@
 package org.de_studio.recentappswitcher.edgeService;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.app.ActivityManager;
 import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
@@ -31,6 +35,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
@@ -43,6 +48,7 @@ import org.de_studio.recentappswitcher.dagger.EdgeServiceModule;
 import org.de_studio.recentappswitcher.dagger.RealmModule;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
+import org.de_studio.recentappswitcher.service.ChooseActionDialogActivity;
 import org.de_studio.recentappswitcher.service.Circle;
 import org.de_studio.recentappswitcher.service.CircleAngleAnimation;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
@@ -952,11 +958,211 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         if (action.equals(MainActivity.ACTION_NOTI) & isFreeAndOutOfTrial) {
             Utility.startNotiDialog(getApplicationContext(), NotiDialog.OUT_OF_TRIAL);
         } else {
-            Utility.executeAction(getApplicationContext(), action, v, getClass().getName(), getPackageName(), lastAppPackageName);
+            startQuickAction(getApplicationContext(), action, v, getClass().getName(), getPackageName(), lastAppPackageName);
         }
     }
 
     public void executeShortcut(Shortcut shortcut, View v) {
-        Utility.startShortcut(getApplicationContext(), shortcut, v, getClass().getName(), getPackageName(), lastAppPackageName, defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 0), FLASH_LIGHT_ON);
+        if (shortcut != null) {
+            startShortcut(getApplicationContext(), shortcut, v, getClass().getName(), getPackageName(), lastAppPackageName, defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 0), FLASH_LIGHT_ON);
+        }
+    }
+
+    private void startShortcut(Context context, Shortcut shortcut, View v, String className, String packageName, String lastAppPackageName, int contactAction, boolean flashLightOn) {
+        {
+            if (shortcut.getType() == Shortcut.TYPE_APP) {
+                Intent extApp;
+                extApp =context.getPackageManager().getLaunchIntentForPackage(shortcut.getPackageName());
+                if (extApp != null) {
+                    if (shortcut.getPackageName().equals("com.devhomc.search")) {
+                        extApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(extApp);
+                    } else {
+                        ComponentName componentName = extApp.getComponent();
+                        Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
+                        startAppIntent.setComponent(componentName);
+                        startAppIntent.addFlags(1064960);
+                        startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                        context.startActivity(startAppIntent);
+//                                    startActivity(extApp);
+                    }
+
+                } else {
+                    Log.e(TAG, "extApp of shortcut = null ");
+                }
+            } else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
+                switch (shortcut.getAction()) {
+                    case Shortcut.ACTION_WIFI:
+                        Utility.toggleWifi(context);
+                        break;
+                    case Shortcut.ACTION_BLUETOOTH:
+                        Utility.toggleBluetooth(context);
+                        break;
+                    case Shortcut.ACTION_ROTATION:
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                            Utility.setAutorotation(context);
+                        } else {
+                            if (Settings.System.canWrite(context)) {
+                                Utility.setAutorotation(context);
+                            } else {
+                                Utility.startNotiDialog(context, NotiDialog.WRITE_SETTING_PERMISSION);
+                            }
+                        }
+
+                        break;
+                    case Shortcut.ACTION_POWER_MENU:
+                        Utility.powerAction(context, v, className, packageName);
+                        break;
+                    case Shortcut.ACTION_HOME:
+                        Utility.homeAction(context, v, className, packageName);
+                        break;
+                    case Shortcut.ACTION_BACK:
+                        Utility.backAction(context, v, className, packageName);
+                        break;
+                    case Shortcut.ACTION_NOTI:
+                        Utility.notiAction(context, v, className, packageName);
+                        break;
+                    case Shortcut.ACTION_LAST_APP:
+                        Utility.lastAppAction(context, lastAppPackageName);
+                        break;
+                    case Shortcut.ACTION_CALL_LOGS:
+                        Utility.callLogsAction(context);
+                        break;
+                    case Shortcut.ACTION_DIAL:
+                        Log.e(TAG, "startShortcut: Start dial");
+                        Utility.dialAction(context);
+                        break;
+                    case Shortcut.ACTION_CONTACT:
+                        Utility.contactAction(context);
+                        break;
+                    case Shortcut.ACTION_RECENT:
+                        Utility.recentAction(context, v, className, packageName);
+                        break;
+                    case Shortcut.ACTION_VOLUME:
+                        Utility.volumeAction(context);
+                        break;
+                    case Shortcut.ACTION_BRIGHTNESS:
+                        Utility.brightnessAction(context);
+                        break;
+                    case Shortcut.ACTION_RINGER_MODE:
+                        Utility.setRinggerMode(context);
+                        break;
+                    case Shortcut.ACTION_FLASH_LIGHT:
+                        Utility.flashLightAction2(context,!flashLightOn);
+                        break;
+                    case Shortcut.ACTION_SCREEN_LOCK:
+                        Utility.screenLockAction(context);
+                        break;
+                    case Shortcut.ACTION_NONE:
+                        break;
+
+                }
+            } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
+                switch (contactAction) {
+                    case EdgeSetting.ACTION_CHOOSE:
+                        Intent intent = new Intent(context, ChooseActionDialogActivity.class);
+                        intent.putExtra("number", shortcut.getNumber());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                        context.startActivity(intent);
+                        break;
+                    case EdgeSetting.ACTION_CALL:
+                        String url = "tel:"+ shortcut.getNumber();
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                            Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
+                            callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(callIntent);
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
+                        }
+                        break;
+                    case EdgeSetting.ACTION_SMS:
+                        Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
+                                + shortcut.getNumber()));
+                        smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(smsIntent);
+                        break;
+                }
+
+            } else if (shortcut.getType() == Shortcut.TYPE_SHORTCUT) {
+                try {
+                    Intent intent = Intent.parseUri(shortcut.getIntent(), 0);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "startShortcut: exception when start Shortcut shortcut");
+                }
+
+            }
+        }
+    }
+    private static void startQuickAction(Context context, String action, View v, String className, String packageName, String lastAppPackageName) {
+        switch (action) {
+            case MainActivity.ACTION_HOME:
+                Utility.homeAction(context, v, className, packageName);
+                break;
+            case MainActivity.ACTION_BACK:
+                Utility.backAction(context,v,className,packageName);
+                break;
+            case MainActivity.ACTION_NOTI:
+                Utility.notiAction(context,v,className,packageName);
+                break;
+            case MainActivity.ACTION_WIFI:
+                Utility.toggleWifi(context);
+                break;
+            case MainActivity.ACTION_BLUETOOTH:
+                Utility.toggleBluetooth(context);
+                break;
+            case MainActivity.ACTION_ROTATE:
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    Utility.setAutorotation(context);
+                } else {
+                    if (Settings.System.canWrite(context)) {
+                        Utility.setAutorotation(context);
+                    } else {
+                        Utility.startNotiDialog(context, NotiDialog.WRITE_SETTING_PERMISSION);
+                    }
+                }
+                break;
+            case MainActivity.ACTION_NONE:
+                //nothing
+                break;
+            case MainActivity.ACTION_POWER_MENU:
+                Utility.powerAction(context,v,className,packageName);
+                break;
+            case MainActivity.ACTION_LAST_APP:
+                Utility.lastAppAction(context, lastAppPackageName);
+                break;
+            case MainActivity.ACTION_CONTACT:
+                Utility.contactAction(context);
+                break;
+            case MainActivity.ACTION_CALL_LOGS:
+                Utility.callLogsAction(context);
+                break;
+            case MainActivity.ACTION_DIAL:
+                Utility.dialAction(context);
+                break;
+            case MainActivity.ACTION_RECENT:
+                Utility.recentAction(context,v,className,packageName);
+                break;
+            case MainActivity.ACTION_VOLUME:
+                Utility.volumeAction(context);
+                break;
+            case MainActivity.ACTION_BRIGHTNESS:
+                Utility.brightnessAction(context);
+                break;
+            case MainActivity.ACTION_RINGER_MODE:
+                Utility.setRinggerMode(context);
+            case MainActivity.ACTION_FLASH_LIGHT:
+                Utility.flashLightAction2(context,EdgeGestureService.FLASH_LIGHT_ON);
+                break;
+            case MainActivity.ACTION_SCREEN_LOCK:
+                Utility.screenLockAction(context);
+                break;
+        }
     }
 }
