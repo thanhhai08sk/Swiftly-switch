@@ -61,7 +61,7 @@ public class EdgeServicePresenter {
                 break;
             default:
                 model.calculateCircleIconPositions(view.circleSizePxl, view.iconSizePxl, currentPosition, xInit, yInit, 6);
-                view.setCircleIconsPosition(model.circleIconXs, model.circleIconYs);
+                view.setCircleIconsPosition(model.circleIconXs, model.circleIconYs, xInit,yInit);
                 view.showCircleIconsView(model.getRecentList(tempPackages));
                 currentShowing = Cons.SHOWING_RECENT_CIRCLE;
 

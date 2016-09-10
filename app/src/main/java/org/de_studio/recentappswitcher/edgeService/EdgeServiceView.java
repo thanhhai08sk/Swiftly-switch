@@ -878,10 +878,25 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     }
 
-    public void setCircleIconsPosition(float[] circleIconXs, float[] circleIconYs) {
+    public void setCircleIconsPosition(float[] circleIconXs, float[] circleIconYs, float xInit, float yInit) {
         for (int i = 0; i < circleIcons.length; i++) {
-            circleIcons[i].setX(circleIconXs[i]);
-            circleIcons[i].setY(circleIconYs[i]);
+            if (useAnimation) {
+                if (i > 0) {
+                    circleIcons[i].setX(circleIconXs[0]);
+                    circleIcons[i].setY(circleIconYs[0]);
+                    circleIcons[i].setAlpha(0f);
+                    circleIcons[i].animate().x(circleIconXs[i]).y(circleIconYs[i]).setStartDelay(animationTime / (6 - i)).setDuration(animationTime).alpha(1f).setInterpolator(new FastOutSlowInInterpolator());
+                } else if (i == 0) {
+                    circleIcons[i].setX(xInit - iconSizePxl / 2);
+                    circleIcons[i].setY(yInit - iconSizePxl / 2);
+                    circleIcons[i].setAlpha(0f);
+                    circleIcons[i].animate().x(circleIconXs[i]).y(circleIconYs[i]).setDuration(animationTime / 2).alpha(1f).setInterpolator(new FastOutSlowInInterpolator());
+                }
+            } else {
+                circleIcons[i].setX(circleIconXs[i]);
+                circleIcons[i].setY(circleIconYs[i]);
+            }
+
         }
     }
 
