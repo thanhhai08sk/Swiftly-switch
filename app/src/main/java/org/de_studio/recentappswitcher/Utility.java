@@ -2401,8 +2401,8 @@ public  class Utility {
     }
 
     public static void restartService(Context context) {
-        startService(context);
         stopService(context);
+        startService(context);
     }
 
 
