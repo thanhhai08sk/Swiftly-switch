@@ -558,21 +558,23 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         return circleRealm.where(Shortcut.class).equalTo("id", position).findFirst();
     }
 
-    public void highlightCircleIcon(int iconId, int edgeId, float xInit, float yInit) {
+    public void highlightCircleIcon(int iconId, int edgeId, float xInit, float yInit, float[] circleIconXs) {
 
         if (iconId > -1 && iconId < 10) {
-            int height = (int) ((16 + 48 * iconScale) * mScale);
-            int width = (int) ((28 + 48 * iconScale) * mScale);
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                circleIcons[iconId].setBackground(getDrawable(R.drawable.icon_background));
-            } else {
-                circleIcons[iconId].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
+            if (circleIcons[iconId].getX() == circleIconXs[iconId]) {
+                int height = (int) ((16 + 48 * iconScale) * mScale);
+                int width = (int) ((28 + 48 * iconScale) * mScale);
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    circleIcons[iconId].setBackground(getDrawable(R.drawable.icon_background));
+                } else {
+                    circleIcons[iconId].setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
+                }
+                circleIcons[iconId].setX(circleIcons[iconId].getX() - 14 * mScale);
+                circleIcons[iconId].setY(circleIcons[iconId].getY() - 8 * mScale);
+                circleIcons[iconId].setLayoutParams(layoutParams);
+                circleIcons[iconId].setPadding((int) (14 * mScale), (int) (8 * mScale), (int) (14 * mScale), (int) (8 * mScale));
             }
-            circleIcons[iconId].setX(circleIcons[iconId].getX() - 14 * mScale);
-            circleIcons[iconId].setY(circleIcons[iconId].getY() - 8 * mScale);
-            circleIcons[iconId].setLayoutParams(layoutParams);
-            circleIcons[iconId].setPadding((int) (14 * mScale), (int) (8 * mScale), (int) (14 * mScale), (int) (8 * mScale));
         } else if (iconId >= 10) {
             showQuickAction(edgeId, iconId - 10, xInit, yInit);
         }
@@ -602,19 +604,21 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    public void unhighlightCircleIcon(int iconId, int edgeId) {
+    public void unhighlightCircleIcon(int iconId, int edgeId, float[] circleIconXs) {
         if (iconId > -1 && iconId < 10) {
-            ImageView iconResetBackground = circleIcons[iconId];
-            FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(iconResetBackground.getLayoutParams());
-            layoutParams1.width = (int) (48 * mScale * iconScale);
-            layoutParams1.height = (int) (48 * mScale * iconScale);
-            float x = iconResetBackground.getX();
-            float y = iconResetBackground.getY();
-            iconResetBackground.setBackground(null);
-            iconResetBackground.setX(x + 14 * mScale);
-            iconResetBackground.setY(y + 8 * mScale);
-            iconResetBackground.setLayoutParams(layoutParams1);
-            iconResetBackground.setPadding(0, 0, 0, 0);
+            if (circleIcons[iconId].getX() == circleIconXs[iconId] - 14 * mScale) {
+                ImageView iconResetBackground = circleIcons[iconId];
+                FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(iconResetBackground.getLayoutParams());
+                layoutParams1.width = (int) (48 * mScale * iconScale);
+                layoutParams1.height = (int) (48 * mScale * iconScale);
+                float x = iconResetBackground.getX();
+                float y = iconResetBackground.getY();
+                iconResetBackground.setBackground(null);
+                iconResetBackground.setX(x + 14 * mScale);
+                iconResetBackground.setY(y + 8 * mScale);
+                iconResetBackground.setLayoutParams(layoutParams1);
+                iconResetBackground.setPadding(0, 0, 0, 0);
+            }
         } else if (iconId >= 10) {
             switch (edgeId) {
                 case Cons.EDGE_1_ID:
