@@ -23,6 +23,7 @@ public class Cons {
     public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.pro";
     public static final String FREE_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.trial";
     public static final int TRIAL_TIME =  1000 * 60 * 60 * 24 * 14;
+    public static final int NOTIFICATION_ID = 2323;
 
 
     public static final String EDGE_1_SHARED_NAME = "org.de_studio.recentappswitcher_edge_1_shared_preference";

@@ -3,12 +3,16 @@ package org.de_studio.recentappswitcher.edgeService;
 import android.Manifest;
 import android.animation.Animator;
 import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -19,6 +23,7 @@ import android.os.IBinder;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.text.format.DateFormat;
@@ -344,7 +349,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     float[] folderCoor;
     public static boolean FLASH_LIGHT_ON = false;
 
-
+    boolean working = true;
+    private NotificationCompat.Builder notificationBuilder;
+    EdgesToggleReceiver receiver;
 
 
     @Override
@@ -352,6 +359,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         super.onCreate();
         inject();
         presenter.onCreate();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        presenter.onStartCommand();
+        return START_STICKY;
     }
 
     public IBinder onBind(Intent intent) {
@@ -647,6 +660,41 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "removeGridParentsView: cannot remove gridParentsView");
+        }
+    }
+
+    public final synchronized void addEdgeImage() {
+        if (isEdge1On && edge1View !=null && !edge1View.isAttachedToWindow()) {
+            try {
+                windowManager.addView(edge1View,edge1Para);
+            } catch (IllegalStateException e) {
+                Log.e(TAG, "addEdgeImage: fail when add edge1Image");
+            }
+
+        }
+        if (isEdge2On && edge2View !=null && !edge2View.isAttachedToWindow()) {
+            try {
+                windowManager.addView(edge2View,edge2Para);
+            } catch (IllegalStateException e) {
+                Log.e(TAG, "addEdgeImage: fail when add edge2Image");
+            }
+
+        }
+    }
+
+    public final synchronized void removeEdgeImage() {
+        Log.e(TAG, "removeEdgeImage: ");
+        try {
+            windowManager.removeView(edge1View);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, " Null when remove edge1Image");
+        }
+        try {
+            windowManager.removeView(edge2View);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, " Null when remove edge2Image");
         }
     }
 
@@ -958,6 +1006,48 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         super.onDestroy();
     }
 
+    public void setupReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Cons.ACTION_TOGGLE_EDGES);
+        receiver = new EdgesToggleReceiver();
+        this.registerReceiver(receiver, filter);
+    }
+
+    public void setupNotification() {
+        Intent hideNotiIntent = new Intent();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            hideNotiIntent.setClassName("com.android.settings", "com.android.settings.Settings$AppNotificationSettingsActivity");
+            hideNotiIntent.putExtra("app_package", getPackageName());
+            hideNotiIntent.putExtra("app_uid", getApplicationInfo().uid);
+        } else {
+            hideNotiIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            hideNotiIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            hideNotiIntent.setData(Uri.parse("package:" + getPackageName()));
+        }
+
+        Intent remoteIntent = new Intent();
+        remoteIntent.setAction(Cons.ACTION_TOGGLE_EDGES);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, remoteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        NotificationCompat.Action remoteAction=
+                new NotificationCompat.Action.Builder(
+                        android.R.drawable.ic_media_pause,
+                        getString(R.string.pause),
+                        pendingIntent).build();
+
+        PendingIntent notiPending = PendingIntent.getActivity(getApplicationContext(), 0, hideNotiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notificationBuilder = new NotificationCompat.Builder(this);
+        notificationBuilder.setSmallIcon(R.drawable.ic_stat_ic_looks_white_48dp1)
+                .setContentIntent(notiPending)
+                .addAction(remoteAction)
+                .setPriority(Notification.PRIORITY_MIN)
+                .setContentText(getString(R.string.notification_text)).setContentTitle(getString(R.string.notification_title));
+        Notification notificationCompat = notificationBuilder.build();
+        startForeground(Cons.NOTIFICATION_ID, notificationCompat);
+    }
+
     public void setIndicator(Shortcut shortcut, boolean forQuickAction, int quickActionId) {
         if (forQuickAction) {
             Utility.setIndicatorForQuickAction(defaultShared, getApplicationContext(), quickActionId + 1, ((ImageView) indicator.findViewById(R.id.indicator_icon))
@@ -1210,6 +1300,51 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             case MainActivity.ACTION_SCREEN_LOCK:
                 Utility.screenLockAction(context);
                 break;
+        }
+    }
+
+
+
+    public class EdgesToggleReceiver extends BroadcastReceiver {
+        public EdgesToggleReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Cons.ACTION_TOGGLE_EDGES)) {
+                Log.e(TAG, "onReceive: receive broadbast success");
+                Intent remoteIntent = new Intent();
+                remoteIntent.setAction(Cons.ACTION_TOGGLE_EDGES);
+                NotificationCompat.Action remoteAction;
+
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(EdgeServiceView.this, 0, remoteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                if (working) {
+                    removeEdgeImage();
+                    working = !working;
+
+
+                    remoteAction=
+                            new NotificationCompat.Action.Builder(
+                                    android.R.drawable.ic_media_play,
+                                    getString(R.string.resume),
+                                    pendingIntent).build();
+                } else {
+                    addEdgeImage();
+                    working = !working;
+
+
+                    remoteAction=
+                            new NotificationCompat.Action.Builder(
+                                    android.R.drawable.ic_media_pause,
+                                    getString(R.string.pause),
+                                    pendingIntent).build();
+                }
+
+                notificationBuilder.mActions = new ArrayList<>();
+                notificationBuilder.addAction(remoteAction);
+                startForeground(Cons.NOTIFICATION_ID,notificationBuilder.build());
+
+            }
         }
     }
 }

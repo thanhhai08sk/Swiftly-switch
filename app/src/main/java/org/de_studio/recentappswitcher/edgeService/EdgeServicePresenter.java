@@ -42,8 +42,14 @@ public class EdgeServicePresenter {
             view.addEdgeToWindowManager(Cons.EDGE_2_ID);
         }
         view.setOnTouchListener(view.isEdge1On, view.isEdge2On);
+
     }
 
+    void onStartCommand() {
+        view.setupNotification();
+        view.setupReceiver();
+
+    }
     public void onActionDown(float x, float y, int edgeId) {
         setCurrentPositionAndMode(edgeId);
         xInit = model.getXInit(currentPosition, x, view.getWindowSize().x);
