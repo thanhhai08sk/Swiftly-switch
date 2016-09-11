@@ -200,6 +200,9 @@ public class EdgeServicePresenter {
                 view.unhighlightCircleIcon(iconToSwitch, edgeId,model.circleIconXs);
                 currentCircleIconHighlight = -1;
             }
+            if (view.useActionMoveVibrate && iconToSwitch != -1) {
+                view.vibrate();
+            }
         } else if (iconToSwitch < 10
                 && onHolding
                 && currentCircleIconHighlight != -1
@@ -220,6 +223,7 @@ public class EdgeServicePresenter {
                 view.setIndicator(null, false, -1);
             }
         }
+
     }
 
     private void highlightFavoriteGridIcon(int activatedGridIcon) {
@@ -237,6 +241,9 @@ public class EdgeServicePresenter {
             view.highlightGridFavoriteIcon(activatedGridIcon);
             currentGridFavoriteIconHighlight = activatedGridIcon;
             view.setIndicator(tempShortcut, false, -1);
+            if (view.useActionMoveVibrate && activatedGridIcon != -1) {
+                view.vibrate();
+            }
         }
     }
 
