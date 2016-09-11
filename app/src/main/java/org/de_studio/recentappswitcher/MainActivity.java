@@ -567,11 +567,13 @@ public class MainActivity extends Activity {
         int titleSize = getResources().getDimensionPixelSize(R.dimen.what_new_title_size);
         AbsoluteSizeSpan span = new AbsoluteSizeSpan(titleSize);
         String title2342 = "Version 2.3.4.2 (Beta)";
-        String text2342 = " - Fix haptic feedback when hovering on icons";
+        String text2342 = " - Fix haptic feedback when hovering on icons"
+                + "\n - Fix indicator disappear"
+                + "\n - Do not show none quick action";
 
         String title2341 = "Version 2.3.4.1 (Beta)";
         String text2341 = " - Big code factoring, please notify me if you find any bugs. Thanks!"
-                + " - New animation.";
+                + "\n - New animation.";
 
         String title2_3_3 = "Version 2.3.3";
         String text2_3_3 = " - Now you can choose the position when pin shortcuts to recent"
