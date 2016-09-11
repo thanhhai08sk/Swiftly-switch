@@ -622,7 +622,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     public void unhighlightCircleIcon(int iconId, int edgeId, float[] circleIconXs, float[] circleIconYs) {
         if (iconId > -1 && iconId < 10) {
-            Log.e(TAG, "unhighlightCircleIcon: y1 = " + circleIcons[iconId].getY() + " y2 = " + (circleIconYs[iconId]) + "mscale = " + mScale);
             if ((circleIcons[iconId].getX() == circleIconXs[iconId] - 14 * mScale)
                     && (circleIcons[iconId].getY() == circleIconYs[iconId] - 8 * mScale)) {
 
@@ -959,11 +958,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
 
     public void showClock() {
+        if (useClock) {
             Calendar c = Calendar.getInstance();
             int mHour;
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
             clock.setVisibility(View.VISIBLE);
-        indicator.setVisibility(View.GONE);
+            indicator.setVisibility(View.GONE);
             TextView hourTextView = (TextView) clockParentsView.findViewById(R.id.clock_time_in_hour);
             TextView dateTextView = (TextView) clockParentsView.findViewById(R.id.clock_time_in_date);
             TextView batteryLifeTextView = (TextView) clockParentsView.findViewById(R.id.clock_battery_life);
@@ -985,6 +985,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                     hourTextView.setText(hourFormat.format(c.getTime()));
                 }
             }
+        }
         windowManager.addView(clockParentsView, clockParentsPara);
     }
 
