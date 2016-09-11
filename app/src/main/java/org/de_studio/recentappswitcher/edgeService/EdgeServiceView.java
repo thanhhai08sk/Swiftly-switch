@@ -574,10 +574,10 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         return circleRealm.where(Shortcut.class).equalTo("id", position).findFirst();
     }
 
-    public void highlightCircleIcon(int iconId, int edgeId, float xInit, float yInit, float[] circleIconXs) {
+    public void highlightCircleIcon(int iconId, int edgeId, float xInit, float yInit, float[] circleIconXs, float[] circleIconYs) {
 
         if (iconId > -1 && iconId < 10) {
-            if (circleIcons[iconId].getX() == circleIconXs[iconId]) {
+            if (circleIcons[iconId].getX() == circleIconXs[iconId] && circleIcons[iconId].getY() == circleIconYs[iconId]) {
                 int height = (int) ((16 + 48 * iconScale) * mScale);
                 int width = (int) ((28 + 48 * iconScale) * mScale);
                 FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height);
@@ -620,9 +620,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    public void unhighlightCircleIcon(int iconId, int edgeId, float[] circleIconXs) {
+    public void unhighlightCircleIcon(int iconId, int edgeId, float[] circleIconXs, float[] circleIconYs) {
         if (iconId > -1 && iconId < 10) {
-            if (circleIcons[iconId].getX() == circleIconXs[iconId] - 14 * mScale) {
+            Log.e(TAG, "unhighlightCircleIcon: y1 = " + circleIcons[iconId].getY() + " y2 = " + (circleIconYs[iconId]) + "mscale = " + mScale);
+            if ((circleIcons[iconId].getX() == circleIconXs[iconId] - 14 * mScale)
+                    && (circleIcons[iconId].getY() == circleIconYs[iconId] - 8 * mScale)) {
+
                 ImageView iconResetBackground = circleIcons[iconId];
                 FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(iconResetBackground.getLayoutParams());
                 layoutParams1.width = (int) (48 * mScale * iconScale);

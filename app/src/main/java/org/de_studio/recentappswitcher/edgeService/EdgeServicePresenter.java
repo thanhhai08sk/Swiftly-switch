@@ -111,7 +111,7 @@ public class EdgeServicePresenter {
                 } else if (currentCircleIconHighlight >= 0 && currentCircleIconHighlight < model.savedRecentShortcut.length) {
                     view.executeShortcut(model.savedRecentShortcut[currentCircleIconHighlight], v,0);
                 }
-                view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId, model.circleIconXs);
+                view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId, model.circleIconXs, model.circleIconYs);
                 currentCircleIconHighlight = -1;
                 break;
             case Cons.SHOWING_FAVORITE_CIRCLE:
@@ -120,7 +120,7 @@ public class EdgeServicePresenter {
                 }else if (currentCircleIconHighlight != -1) {
                     view.executeShortcut(view.getCircleFavoriteShorcut(currentCircleIconHighlight),v,Cons.MODE_CIRCLE_FAVORITE);
                 }
-                view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId, model.circleIconXs);
+                view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId, model.circleIconXs, model.circleIconYs);
                 currentCircleIconHighlight = -1;
                 break;
             case Cons.SHOWING_GRID:
@@ -167,8 +167,8 @@ public class EdgeServicePresenter {
 
         if (iconToSwitch != currentCircleIconHighlight) {
             Log.e(TAG, "onActionMove: iconToSwitch = " + iconToSwitch);
-            view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId,model.circleIconXs);
-            view.highlightCircleIcon(iconToSwitch, edgeId, xInit, yInit, model.circleIconXs);
+            view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId,model.circleIconXs, model.circleIconYs);
+            view.highlightCircleIcon(iconToSwitch, edgeId, xInit, yInit, model.circleIconXs, model.circleIconYs);
             currentCircleIconHighlight = iconToSwitch;
             if (currentShowing == Cons.SHOWING_RECENT_CIRCLE) {
 
@@ -197,7 +197,7 @@ public class EdgeServicePresenter {
                 view.showFavoriteGridView(xInit, yInit, currentPosition, -1);
                 currentShowing = Cons.SHOWING_GRID;
                 view.setIndicator(null, false, -1);
-                view.unhighlightCircleIcon(iconToSwitch, edgeId,model.circleIconXs);
+                view.unhighlightCircleIcon(iconToSwitch, edgeId,model.circleIconXs, model.circleIconYs);
                 currentCircleIconHighlight = -1;
             }
             if (view.useActionMoveVibrate && iconToSwitch != -1) {
@@ -209,13 +209,13 @@ public class EdgeServicePresenter {
                 && System.currentTimeMillis() - startHoldingTime > view.holdTime) {
 
             if (currentEdgeMode == Cons.MODE_CIRCLE_FAVORITE) {
-                view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId,model.circleIconXs);
+                view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId,model.circleIconXs, model.circleIconYs);
                 view.showCircleFavorite();
                 currentCircleIconHighlight = -1;
                 currentShowing = Cons.SHOWING_FAVORITE_CIRCLE;
 
             } else {
-                view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId, model.circleIconXs);
+                view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId, model.circleIconXs, model.circleIconYs);
                 currentCircleIconHighlight = -1;
                 view.removeCircleShortcutsView();
                 view.showFavoriteGridView(xInit, yInit, currentPosition, -1);
