@@ -114,7 +114,7 @@ public class ExpandStatusBarView extends View {
                     path.addArc(oval,-110,action23Arc);
             }
         }
-        if (isBackground) {
+        if (isBackground && actionBitmap != null) {
             canvas.drawPath(path, backgroundPaint);
         }
         if (actionBitmap != null) {
