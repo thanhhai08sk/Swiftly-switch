@@ -136,6 +136,8 @@ public class EdgeServicePresenter {
                 break;
         }
 
+        clearAsyncTask();
+
     }
 
     void onActionOutSide() {
