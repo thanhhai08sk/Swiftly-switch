@@ -266,7 +266,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     int holdTime;
     @Inject
     @Named(HOLD_TIME_ENABLE_NAME)
-    boolean holdTimeEnable;
+    boolean useHoldTime;
     @Inject
     @Named(VIBRATE_DURATION_NAME)
     int vibrationDuration;

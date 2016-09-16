@@ -192,14 +192,18 @@ public class EdgeServicePresenter {
     private void highlightCircleIconAndSwitchToGridIfNeed(int iconToSwitch, int edgeId) {
 
         if (iconToSwitch != currentCircleIconHighlight) {
-            clearAsyncTask();
+            if (view.useHoldTime) {
+                clearAsyncTask();
+            }
             view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId,model.circleIconXs, model.circleIconYs);
             view.highlightCircleIcon(iconToSwitch, edgeId, xInit, yInit, model.circleIconXs, model.circleIconYs);
             currentCircleIconHighlight = iconToSwitch;
             if (currentShowing == Cons.SHOWING_RECENT_CIRCLE) {
 
                 if (iconToSwitch >= 0 && iconToSwitch < 10) {
-                    startAsyncTask(iconToSwitch);
+                    if (view.useHoldTime) {
+                        startAsyncTask(iconToSwitch);
+                    }
                     if (iconToSwitch < model.savedRecentShortcut.length) {
                         view.setIndicator(model.savedRecentShortcut[iconToSwitch], false, -1);
                     }
