@@ -20,6 +20,8 @@ import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by hai on 2/25/2016.
@@ -37,15 +39,12 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     private boolean backgroundMode = false;
     private float mIconScale;
     private PackageManager packageManager;
+    private Shortcut[] shortcuts;
 
     public FavoriteShortcutAdapter(Context context) {
         mContext = context;
         iconPadding =(int) mContext.getResources().getDimension(R.dimen.icon_padding);
-        myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
-                .name("default.realm")
-                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
-                .migration(new MyRealmMigration())
-                .build());
+        setupShortcuts();
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         mIconScale = sharedPreferences.getFloat(EdgeSetting.ICON_SCALE,1f);
         String iconPackPacka = sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "com.colechamberlin.stickers");
@@ -65,7 +64,8 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return myRealm.where(Shortcut.class).equalTo("id",position).findFirst();
+        return getShortcut(position);
+//        return myRealm.where(Shortcut.class).equalTo("id",position).findFirst();
     }
 
     @Override
@@ -98,7 +98,8 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
             imageView.setScaleType(ImageView.ScaleType.FIT_START);
             imageView.setPadding(iconPadding, iconPadding, iconPadding, iconPadding);
         }
-        shortcut = myRealm.where(Shortcut.class).equalTo("id",position).findFirst();
+//        shortcut = myRealm.where(Shortcut.class).equalTo("id",position).findFirst();
+        shortcut = getShortcut(position);
         if (shortcut == null) {
             imageView.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
         } else {
@@ -107,5 +108,30 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
 
 
         return imageView;
+    }
+
+    private void setupShortcuts() {
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+                .name("default.realm")
+                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
+        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).lessThan("id", 100).findAllSorted("id", Sort.ASCENDING);
+        shortcuts = new Shortcut[results.size()];
+        for (int i = 0; i < results.size(); i++) {
+            shortcuts[i] = myRealm.copyFromRealm(results.get(i));
+        }
+
+        myRealm.close();
+        myRealm = null;
+
+    }
+
+    private Shortcut getShortcut(int position) {
+        if (position >= shortcuts.length || position == -1) {
+            return null;
+        } else {
+            return shortcuts[position];
+        }
     }
 }

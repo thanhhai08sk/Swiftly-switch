@@ -735,11 +735,6 @@ public class EdgeServiceModule {
         return edge2Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
     }
 
-    @Provides
-    @Singleton
-    FavoriteShortcutAdapter GridFavoriteAdapter(){
-        return new FavoriteShortcutAdapter(context);
-    }
 
     @Provides
     @Singleton

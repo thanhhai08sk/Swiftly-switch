@@ -192,11 +192,13 @@ public class EdgesServiceModel {
             pinnedShortcut = new Shortcut[results1.size()];
             for (Shortcut shortcut : results1) {
                 Log.e(TAG, "result = " + shortcut.getPackageName());
-                pinnedShortcut[i] = shortcut;
+                pinnedShortcut[i] = pinRealm.copyFromRealm(shortcut);
                 i++;
             }
         }
         pinnedSet = new HashSet<Shortcut>(Arrays.asList(pinnedShortcut));
+        pinRealm.close();
+        pinRealm = null;
     }
 
     private float getInitPointOffsetNeeded() {
