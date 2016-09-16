@@ -23,7 +23,6 @@ public class EdgeServicePresenter {
     int currentCircleIconHighlight = -1;
     int currentGridFavoriteIconHighlight = -1;
     int currentGridFolderIconHighlight = -1;
-    long startHoldingTime;
     boolean onHolding = false;
 
     boolean onOpeningFolder = false;
@@ -193,15 +192,17 @@ public class EdgeServicePresenter {
     private void highlightCircleIconAndSwitchToGridIfNeed(int iconToSwitch, int edgeId) {
 
         if (iconToSwitch != currentCircleIconHighlight) {
-            Log.e(TAG, "onActionMove: iconToSwitch = " + iconToSwitch);
+            clearAsyncTask();
             view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId,model.circleIconXs, model.circleIconYs);
             view.highlightCircleIcon(iconToSwitch, edgeId, xInit, yInit, model.circleIconXs, model.circleIconYs);
             currentCircleIconHighlight = iconToSwitch;
             if (currentShowing == Cons.SHOWING_RECENT_CIRCLE) {
 
-                if (iconToSwitch >= 0 && iconToSwitch < model.savedRecentShortcut.length) {
-                    startHoldingTime = System.currentTimeMillis();
-                    view.setIndicator(model.savedRecentShortcut[iconToSwitch], false, -1);
+                if (iconToSwitch >= 0 && iconToSwitch < 10) {
+                    startAsyncTask(iconToSwitch);
+                    if (iconToSwitch < model.savedRecentShortcut.length) {
+                        view.setIndicator(model.savedRecentShortcut[iconToSwitch], false, -1);
+                    }
                 } else if (iconToSwitch >= 10) {
                     view.setIndicator(null, true, iconToSwitch - 10);
                 } else {
@@ -224,10 +225,6 @@ public class EdgeServicePresenter {
                 view.setIndicator(null, false, -1);
                 view.unhighlightCircleIcon(iconToSwitch, edgeId,model.circleIconXs, model.circleIconYs);
                 currentCircleIconHighlight = -1;
-            }
-            clearAsyncTask();
-            if (iconToSwitch < 10 && iconToSwitch != -1) {
-                startAsyncTask(iconToSwitch);
             }
             if (view.useActionMoveVibrate && iconToSwitch != -1) {
                 view.vibrate();
@@ -266,7 +263,6 @@ public class EdgeServicePresenter {
                 view.folderAnimator.cancel();
                 onOpeningFolder = false;
             }
-            Log.e(TAG, "onActionMove: grid icon = " + activatedGridIcon);
             view.unhighlightGridFavoriteIcon(currentGridFavoriteIconHighlight);
             view.highlightGridFavoriteIcon(activatedGridIcon);
             currentGridFavoriteIconHighlight = activatedGridIcon;
