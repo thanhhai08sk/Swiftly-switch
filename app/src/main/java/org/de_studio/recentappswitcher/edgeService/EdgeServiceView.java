@@ -726,12 +726,14 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     public final synchronized void removeAllExceptEdgeView() {
         Log.e(TAG, "removeAllExceptEdgeView");
+
         try {
             windowManager.removeView(backgroundFrame);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(TAG, " Null when remove backgroundFrame");
+            Log.e(TAG, " Null when remove background");
         }
+
         try {
             windowManager.removeView(clockParentsView);
         } catch (Exception e) {
@@ -752,6 +754,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
 
     }
+
 
     public void showFavoriteGridView(float xInit, float yInit, int edgePosition, int iconToSwitch) {
         Log.e(TAG, "showFavoriteGridView: height = " + favoriteGridView.getHeight() + "\nwidth = " + favoriteGridView.getWidth());
@@ -995,7 +998,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         if (useAnimation) {
             backgroundFrame.setAlpha(0f);
             windowManager.addView(backgroundFrame, backgroundPara);
-            backgroundFrame.animate().alpha(1f).setDuration(defaultShared.getInt(EdgeSetting.ANI_TIME_KEY, 100)).setInterpolator(new FastOutSlowInInterpolator());
+            backgroundFrame.animate().alpha(1f).setDuration(animationTime).setInterpolator(new FastOutSlowInInterpolator());
         } else {
             Log.e(TAG, "showBackground: ");
             backgroundFrame.setAlpha(1f);

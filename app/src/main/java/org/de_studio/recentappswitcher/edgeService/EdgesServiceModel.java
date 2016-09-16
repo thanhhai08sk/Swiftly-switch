@@ -252,10 +252,10 @@ public class EdgesServiceModel {
     public void calculateCircleIconPositions(float circleSizePxl, float iconSizePxl, int edgePosition, float xInit, float yInit, int iconsNumber) {
         circleIconXs = new float[iconsNumber];
         circleIconYs = new float[iconsNumber];
-        Log.e(TAG, "calculateCircleIconPositions: circleSize = " + circleSizePxl
-                + "\niconsize = " + iconSizePxl
-                + "\nxInit = " + xInit
-                + "\nyInit = " + yInit);
+//        Log.e(TAG, "calculateCircleIconPositions: circleSize = " + circleSizePxl
+//                + "\niconsize = " + iconSizePxl
+//                + "\nxInit = " + xInit
+//                + "\nyInit = " + yInit);
         double alpha, beta;
         double[] alphaN = new double[iconsNumber];
         switch (iconsNumber) {
@@ -279,7 +279,7 @@ public class EdgesServiceModel {
                 case 1:
                     circleIconXs[i] = xInit - circleSizePxl * (float) Math.sin(alphaN[i]) - iconSizePxl/2;
                     circleIconYs[i] = yInit - circleSizePxl * (float) Math.cos(alphaN[i]) - iconSizePxl/2;
-                    Log.e(TAG, "calculateCircleIconPositions: x" + i + " = " + circleIconXs[i] + "\ny" + i + " = " + circleIconYs[i]);
+//                    Log.e(TAG, "calculateCircleIconPositions: x" + i + " = " + circleIconXs[i] + "\ny" + i + " = " + circleIconYs[i]);
                     break;
                 case 2:
                     circleIconXs[i] = xInit + circleSizePxl * (float) Math.sin(alphaN[i]) - iconSizePxl/2;

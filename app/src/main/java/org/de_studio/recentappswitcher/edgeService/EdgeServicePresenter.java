@@ -140,10 +140,13 @@ public class EdgeServicePresenter {
     }
 
     void onActionOutSide() {
+        Log.e(TAG, "onActionOutSide: ");
         view.removeAllExceptEdgeView();
+
     }
 
     void onActionCancel() {
+        Log.e(TAG, "onActionCancel: ");
         view.removeAllExceptEdgeView();
     }
 
