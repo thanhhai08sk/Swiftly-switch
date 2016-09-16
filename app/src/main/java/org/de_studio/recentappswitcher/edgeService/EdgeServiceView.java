@@ -960,12 +960,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
 
     public void showClock() {
+        indicator.setVisibility(View.GONE);
         if (useClock) {
             Calendar c = Calendar.getInstance();
             int mHour;
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
             clock.setVisibility(View.VISIBLE);
-            indicator.setVisibility(View.GONE);
             TextView hourTextView = (TextView) clockParentsView.findViewById(R.id.clock_time_in_hour);
             TextView dateTextView = (TextView) clockParentsView.findViewById(R.id.clock_time_in_date);
             TextView batteryLifeTextView = (TextView) clockParentsView.findViewById(R.id.clock_battery_life);
