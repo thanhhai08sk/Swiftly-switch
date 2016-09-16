@@ -344,6 +344,8 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(IS_FREE_AND_OUT_OF_TRIAL_NAME)
     boolean isFreeAndOutOfTrial;
+    @Inject
+    DelayToSwitchAsyncTask asyncTask;
 
     ViewPropertyAnimator folderAnimator;
     float[] folderCoor;

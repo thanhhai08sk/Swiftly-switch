@@ -24,6 +24,7 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.edgeService.DelayToSwitchAsyncTask;
 import org.de_studio.recentappswitcher.edgeService.EdgeServicePresenter;
 import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
 import org.de_studio.recentappswitcher.edgeService.EdgesServiceModel;
@@ -1007,6 +1008,14 @@ public class EdgeServiceModule {
     boolean useClock(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
         return !shared.getBoolean(Cons.DISABLE_CLOCK_KEY, false);
     }
+
+
+    @Provides
+    @Singleton
+    DelayToSwitchAsyncTask asyncTask(EdgeServicePresenter presenter, @Named(HOLD_TIME_NAME) int holdTime) {
+        return new DelayToSwitchAsyncTask(holdTime, presenter);
+    }
+
 
 
 

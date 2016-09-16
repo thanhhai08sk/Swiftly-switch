@@ -19,6 +19,8 @@ public class EdgeServicePresenter {
     int currentPosition;
     int currentEdgeMode;
     int currentShowing;
+    int currentEdgeId;
+    int currentIconToSwitch;
     int currentCircleIconHighlight = -1;
     int currentGridFavoriteIconHighlight = -1;
     int currentGridFolderIconHighlight = -1;
@@ -144,6 +146,7 @@ public class EdgeServicePresenter {
     }
 
     private void setCurrentPositionAndMode(int edgeId) {
+        currentEdgeId = edgeId;
         switch (edgeId) {
             case Cons.EDGE_1_ID:
                 Log.e(TAG, "onActionDown: edge1");
@@ -158,8 +161,27 @@ public class EdgeServicePresenter {
         }
     }
 
+    public void onSwitch(int iconToSwitch) {
+        if (currentEdgeMode == Cons.MODE_CIRCLE_FAVORITE) {
+            view.unhighlightCircleIcon(currentCircleIconHighlight, currentEdgeId,model.circleIconXs, model.circleIconYs);
+            view.showCircleFavorite();
+            currentCircleIconHighlight = -1;
+            currentShowing = Cons.SHOWING_FAVORITE_CIRCLE;
+
+        } else {
+            view.unhighlightCircleIcon(currentCircleIconHighlight, currentEdgeId, model.circleIconXs, model.circleIconYs);
+            currentCircleIconHighlight = -1;
+            view.removeCircleShortcutsView();
+            view.showFavoriteGridView(xInit, yInit, currentPosition, iconToSwitch);
+            currentShowing = Cons.SHOWING_GRID;
+            view.setIndicator(null, false, -1);
+        }
+    }
+
     public void onDestroy() {
         view.removeAll();
+        view.asyncTask.cancel(true);
+        view.asyncTask.clear();
     }
 
 
@@ -218,7 +240,7 @@ public class EdgeServicePresenter {
                 view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId, model.circleIconXs, model.circleIconYs);
                 currentCircleIconHighlight = -1;
                 view.removeCircleShortcutsView();
-                view.showFavoriteGridView(xInit, yInit, currentPosition, -1);
+                view.showFavoriteGridView(xInit, yInit, currentPosition, iconToSwitch);
                 currentShowing = Cons.SHOWING_GRID;
                 view.setIndicator(null, false, -1);
             }
