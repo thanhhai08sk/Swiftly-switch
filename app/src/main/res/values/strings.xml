@@ -211,4 +211,5 @@
     <string name="resume">Resume</string>
     <string name="recent_app">Recent app</string>
     <string name="title_activity_pin_shortcuts">Pin shortcuts</string>
+    <string name="this_feature_does_not_supported_on_samsung_devices">This feature is not supported on Samsung devices</string>
 </resources>

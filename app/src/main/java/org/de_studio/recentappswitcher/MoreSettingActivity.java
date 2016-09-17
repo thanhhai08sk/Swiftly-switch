@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -27,6 +28,7 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 public class MoreSettingActivity extends AppCompatActivity {
+    private static final String TAG = MoreSettingActivity.class.getSimpleName();
 
     public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.pro";
     public static final String FREE_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.trial";
@@ -146,28 +148,36 @@ public class MoreSettingActivity extends AppCompatActivity {
             enableAssistAppButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MoreSettingActivity.this);
-                    builder.setTitle(R.string.enable_assist_app);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        builder.setMessage(R.string.enable_long_press_to_toggle_swiftly_switch)
-                                .setPositiveButton(R.string.go_to_setting, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent();
-                                        intent.setAction(Settings.ACTION_VOICE_INPUT_SETTINGS);
-                                        startActivity(intent);
-                                    }
-                                });
+                    Log.e(TAG, "onClick: manufacture = " + Build.MANUFACTURER);
+                    if (!android.os.Build.MANUFACTURER.toLowerCase().contains("samsung")) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MoreSettingActivity.this);
+                        builder.setTitle(R.string.enable_assist_app);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            builder.setMessage(R.string.enable_long_press_to_toggle_swiftly_switch)
+                                    .setPositiveButton(R.string.go_to_setting, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent intent = new Intent();
+                                            intent.setAction(Settings.ACTION_VOICE_INPUT_SETTINGS);
+                                            startActivity(intent);
+                                        }
+                                    });
+                        } else {
+                            builder.setMessage(R.string.assist_app_is_only_available_for_mashmallow_and_above)
+                                    .setPositiveButton(R.string.app_tab_fragment_ok_button, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // nothing
+                                        }
+                                    });
+                        }
+                        builder.create().show();
                     } else {
-                        builder.setMessage(R.string.assist_app_is_only_available_for_mashmallow_and_above)
-                                .setPositiveButton(R.string.app_tab_fragment_ok_button, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // nothing
-                                    }
-                                });
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MoreSettingActivity.this);
+                        builder.setMessage(R.string.this_feature_does_not_supported_on_samsung_devices);
+                        builder.setPositiveButton(R.string.app_tab_fragment_ok_button, null);
+                        builder.create().show();
                     }
-                    builder.create().show();
                 }
             });
         }
