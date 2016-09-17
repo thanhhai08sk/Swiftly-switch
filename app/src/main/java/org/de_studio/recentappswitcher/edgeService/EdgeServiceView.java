@@ -352,6 +352,8 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     boolean working = true;
     EdgesToggleReceiver receiver;
     private NotificationCompat.Builder notificationBuilder;
+    private UsageStatsManager usageStatsManager;
+    private PackageManager packageManager;
 
     private static void startQuickAction(Context context, String action, View v, String className, String packageName, String lastAppPackageName) {
         switch (action) {
@@ -424,6 +426,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         super.onCreate();
         inject();
         presenter.onCreate();
+
+        usageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
+        packageManager = getPackageManager();
     }
 
     @Override
@@ -622,9 +627,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     public ArrayList<String> getRecentApp2() {
         long timeStart = System.currentTimeMillis();
 
-            UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
+//            UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
             long currentTimeMillis = System.currentTimeMillis() + 2000;
-            List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
+            List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
             ArrayList<String> tempPackageName = new ArrayList<String>();
             if (stats != null) {
                 SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(Cons.DATE_DECENDING_COMPARATOR);
@@ -635,8 +640,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 Log.e(TAG, "mySortedMap size   = " + mySortedMap.size());
                 UsageStats usageStats;
                 String packa;
-                boolean isSystem = false;
-                PackageManager packageManager = getPackageManager();
+//                PackageManager packageManager = getPackageManager();
                 for (Long key : setKey) {
                     if (key >= currentTimeMillis) {
                         Log.e(TAG, "key is in future");
