@@ -1094,27 +1094,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                     circleIcons[i].setX(circleIconXs[0]);
                     circleIcons[i].setY(circleIconYs[0]);
                     circleIcons[i].setAlpha(0f);
-                    circleIcons[i].animate().x(circleIconXs[i]).y(circleIconYs[i]).setStartDelay(animationTime / (6 - i)).setDuration(animationTime).alpha(1f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart(Animator animator) {
-
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animator) {
-                            Log.e(TAG, "onAnimationEnd: time = " + System.currentTimeMillis());
-                        }
-
-                        @Override
-                        public void onAnimationCancel(Animator animator) {
-
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animator animator) {
-
-                        }
-                    });
+                    circleIcons[i].animate().x(circleIconXs[i]).y(circleIconYs[i]).setStartDelay(animationTime / (6 - i)).setDuration(animationTime).alpha(1f).setInterpolator(new FastOutSlowInInterpolator());
 
                 } else if (i == 0) {
                     circleIcons[i].setX(xInit - iconSizePxl / 2);
