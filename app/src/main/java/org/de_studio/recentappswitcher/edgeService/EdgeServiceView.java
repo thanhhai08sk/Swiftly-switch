@@ -665,7 +665,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                             }
                             Log.e(TAG, "getRecentApp2: stop if = " + System.currentTimeMillis());
                             if (tempPackageName.size() >= 6) {
-                                Log.e(TAG, "tempackage >= 6");
+                                Log.e(TAG, "tempackage >= "  + 6);
                                 break;
                             }
                         }
