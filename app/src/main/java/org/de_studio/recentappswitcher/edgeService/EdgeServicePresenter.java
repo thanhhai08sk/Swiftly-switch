@@ -59,7 +59,7 @@ public class EdgeServicePresenter {
         view.removeAllExceptEdgeView();
         view.showBackground();
 
-        ArrayList<String> tempPackages = view.getRecentApps();
+        ArrayList<String> tempPackages = view.getRecentApp2();
 
         switch (currentEdgeMode) {
             case Cons.MODE_ONLY_FAVORITE:

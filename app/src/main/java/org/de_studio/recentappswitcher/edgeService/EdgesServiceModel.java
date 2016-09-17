@@ -23,7 +23,6 @@ public class EdgesServiceModel {
     String launcherPackagename;
     Shortcut[] savedRecentShortcut, pinnedShortcut;
     Set<Shortcut> pinnedSet;
-    String lastAppPackageName;
     boolean isFreeAndOutOfTrial;
     float mScale, iconScale;
     float haftIconWidthPxl;
@@ -144,9 +143,6 @@ public class EdgesServiceModel {
             }
         }
 
-        if (tempPackageName.size() >= 1) {
-            lastAppPackageName = tempPackageName.get(0);
-        }
         for (Shortcut t : pinnedSet) {
             if (tempPackageName.contains(t.getPackageName())) {
                 tempPackageName.remove(t.getPackageName());

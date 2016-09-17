@@ -508,6 +508,15 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                             try {
                                 try {
                                     isSystem = packageManager.getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/");
+
+//                                    Log.e(TAG, "app: " + packa +
+//                                            "\nfirst time stamp = " + usageStats.getFirstTimeStamp()
+//                                            + "\nlast time stamp = " + usageStats.getLastTimeStamp()
+//                                            + "\nlast time used = " + usageStats.getLastTimeUsed()
+//                                            + "\ntotal time foreground = " + usageStats.getTotalTimeInForeground()
+//                                            + "\ndescribe = " + usageStats.describeContents()
+//                                            + "\nstring = " + usageStats.toString());
+
                                 } catch (NullPointerException e) {
                                     Log.e(TAG, "isSystem = null");
                                 }
@@ -515,13 +524,16 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                                     //do nothing
                                 } else if (packageManager.getLaunchIntentForPackage(packa) == null ||
                                         packa.contains("systemui") ||
-                                        packa.equals(launcherPackageName)||
+                                        packa.equals(launcherPackageName) ||
                                         packa.contains("googlequicksearchbox") ||
                                         excludeSet.contains(packa) ||
                                         tempPackageName.contains(packa)
                                         ) {
                                     // do nothing
-                                } else tempPackageName.add(packa);
+                                } else {
+                                    tempPackageName.add(packa);
+                                }
+
                                 if (tempPackageName.size() >= 8) {
                                     Log.e(TAG, "tempackage >= 8");
                                     break;
@@ -540,6 +552,63 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             }
             return tempPackageName;
         }
+    }
+
+    public ArrayList<String> getRecentApp2() {
+
+            UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
+            long currentTimeMillis = System.currentTimeMillis() + 2000;
+            List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
+            ArrayList<String> tempPackageName = new ArrayList<String>();
+            if (stats != null) {
+                SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(Cons.DATE_DECENDING_COMPARATOR);
+                for (UsageStats usageStats : stats) {
+                    mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
+                }
+                Set<Long> setKey = mySortedMap.keySet();
+                Log.e(TAG, "mySortedMap size   = " + mySortedMap.size());
+                UsageStats usageStats;
+                String packa;
+                boolean isSystem = false;
+                PackageManager packageManager = getPackageManager();
+                for (Long key : setKey) {
+                    if (key >= currentTimeMillis) {
+                        Log.e(TAG, "key is in future");
+                    } else {
+                        usageStats = mySortedMap.get(key);
+                        if (usageStats == null) {
+                            Log.e(TAG, " usageStats is null");
+                        } else {
+                            packa = usageStats.getPackageName();
+                                if (isSystem) {
+                                    //do nothing
+                                } else if (packageManager.getLaunchIntentForPackage(packa) == null ||
+                                        packa.contains("systemui") ||
+                                        packa.equals(launcherPackageName) ||
+                                        excludeSet.contains(packa) ||
+                                        tempPackageName.contains(packa)||
+                                        usageStats.getTotalTimeInForeground() < 500
+                                        ) {
+                                    // do nothing
+                                } else {
+                                    tempPackageName.add(packa);
+                                }
+
+                                if (tempPackageName.size() >= 8) {
+                                    Log.e(TAG, "tempackage >= 8");
+                                    break;
+                                }
+                        }
+
+                    }
+
+                }
+            }
+            if (tempPackageName.size()>=1) {
+                lastAppPackageName = tempPackageName.get(1);
+            }
+            return tempPackageName;
+
     }
 
     public void showCircleIconsView(Shortcut[] shortcuts) {
