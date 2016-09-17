@@ -67,7 +67,7 @@ public class Cons {
     public static final int BACKGROUND_COLOR_DEFAULT = 1879048192;
     public static final int HOLD_TIME_DEFAULT = 800;
     public static final int VIBRATION_DURATION_DEFAULT = 15;
-    public static final int ANIMATION_TIME_DEFAULT = 100;
+    public static final int ANIMATION_TIME_DEFAULT = 170;
 
     public static final int EDGE_1_ID = 11;
     public static final int EDGE_2_ID = 22;
@@ -79,7 +79,7 @@ public class Cons {
     public static final int EDGE_LENGTH_DEFAULT = 150;
     public static final float ICON_SCALE_DEFAULT = 1f;
     public static final int EDGE_OFFSET_DEFAULT = 0;
-    public static final boolean USE_ANIMATION_DEFAULT = false;
+    public static final boolean USE_ANIMATION_DEFAULT = true;
 
     public static final String LAUNCHER_PACKAGENAME_NAME = "launcher_packagename";
     public static final String NO_INTENT_PACKAGES_NAME = "noIntentPackages";

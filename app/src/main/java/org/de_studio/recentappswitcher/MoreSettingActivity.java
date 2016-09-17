@@ -80,7 +80,7 @@ public class MoreSettingActivity extends AppCompatActivity {
 
 
 
-        disableAnimationSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.ANIMATION_KEY,false));
+        disableAnimationSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.ANIMATION_KEY,Cons.USE_ANIMATION_DEFAULT));
         if (iconPackSettingButton != null) {
             iconPackSettingButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -455,7 +455,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                 View view = View.inflate(MoreSettingActivity.this, R.layout.dialog_ani_time_setting, null);
                 SeekBar seekBar = (SeekBar) view.findViewById(R.id.dialog_ani_time_seek_bar);
                 final TextView textView = (TextView) view.findViewById(R.id.dialog_ani_time_value);
-                int currentValue = sharedPreferencesDefautl.getInt(EdgeSetting.ANI_TIME_KEY, 100);
+                int currentValue = sharedPreferencesDefautl.getInt(EdgeSetting.ANI_TIME_KEY, Cons.ANIMATION_TIME_DEFAULT);
                 textView.setText(currentValue +" ms");
                 seekBar.setProgress(currentValue);
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
