@@ -1158,7 +1158,7 @@ public  class Utility {
         recordCompat.setSource(v);
         if (Utility.isAccessibilityEnable(context)) {
             manager.sendAccessibilityEvent(event1);
-        }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+        }else startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
     }
 
     public static void notiAction(Context context, View v, String className, String packageName) {
