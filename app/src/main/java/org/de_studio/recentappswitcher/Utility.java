@@ -2393,14 +2393,17 @@ public  class Utility {
     }
 
     public static void startService(Context context) {
+        Log.e(TAG, "startService: ");
         context.startService(new Intent(context, EdgeServiceView.class));
     }
 
     public static void stopService(Context context) {
+        Log.e(TAG, "stopService: ");
         context.stopService(new Intent(context, EdgeServiceView.class));
     }
 
     public static void restartService(Context context) {
+        Log.e(TAG, "restartService: ");
         stopService(context);
         startService(context);
     }

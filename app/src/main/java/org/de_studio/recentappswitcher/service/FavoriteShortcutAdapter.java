@@ -110,7 +110,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         return imageView;
     }
 
-    private void setupShortcuts() {
+    public void setupShortcuts() {
         myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
                 .name("default.realm")
                 .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)

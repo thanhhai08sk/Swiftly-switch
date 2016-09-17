@@ -197,42 +197,7 @@ public class EdgeSetting extends DialogFragment {
                 sharedPreferences.edit().putString(EDGE_POSITION_KEY, item).commit();
 
 
-//                int currentLength = sharedPreferences.getInt(EDGE_LENGTH_KEY ,150);
-//                int currentSensitive = sharedPreferences.getInt(EDGE_SENSIIVE_KEY, 12);
-//
-//                CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(edgeImage.getLayoutParams());
-//
-//                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSetting.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30){
-//                    lp.width = (int) (currentLength * mScale);
-//                    lp.height = (int) (currentSensitive* mScale);
-//                }else {
-//                    lp.width = (int) (currentSensitive * mScale);
-//                    lp.height = (int) (currentLength *mScale);
-//                }
-//                switch (position) {
-//                    case 0:
-//                        lp.gravity = Gravity.TOP | Gravity.RIGHT;
-//                        break;
-//                    case 1:
-//                        lp.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-//                        break;
-//                    case 2:
-//                        lp.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-//                        break;
-//                    case 3:
-//                        lp.gravity = Gravity.TOP | Gravity.LEFT;
-//                        break;
-//                    case 4:
-//                        lp.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-//                        break;
-//                    case 5:
-//                        lp.gravity = Gravity.BOTTOM | Gravity.LEFT;
-//                        break;
-//                    case 6:
-//                        lp.gravity = Gravity.BOTTOM | Gravity.CENTER;
-//                        break;
-//                }
-//                edgeImage.setLayoutParams(lp);
+
                 updateEdgeView();
 //                edgeImage.setX(100);
 //                edgeImage.setY(2300);
@@ -255,11 +220,6 @@ public class EdgeSetting extends DialogFragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChanged = progress + 5;
-//                edgeParas = edgeImage.getLayoutParams();
-//                if (Utility.getPositionIntFromString(sharedPreferences.getString(EdgeSetting.EDGE_POSITION_KEY, spinnerEntries[1]), mContext) >= 30) {
-//                    edgeParas.height = (int) (progressChanged * mScale);
-//                } else edgeParas.width = (int) (progressChanged * mScale);
-//                edgeImage.setLayoutParams(edgeParas);
                 sharedPreferences.edit().putInt(EDGE_SENSIIVE_KEY, progressChanged).commit();
                 updateEdgeView();
                 sensitiveNumberTextView.setText(progressChanged + "dp");
@@ -272,8 +232,6 @@ public class EdgeSetting extends DialogFragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-//                sharedPreferences.edit().putInt(EDGE_SENSIIVE_KEY, progressChanged).commit();
-//                updateEdgeView();
                 Utility.restartService(getActivity());
             }
         });

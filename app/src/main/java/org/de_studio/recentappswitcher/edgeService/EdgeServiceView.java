@@ -1193,6 +1193,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Cons.ACTION_TOGGLE_EDGES);
         filter.addAction(Intent.ACTION_USER_PRESENT);
+        filter.addAction(Cons.ACTION_REFRESH_FAVORITE);
         receiver = new EdgesToggleReceiver();
         this.registerReceiver(receiver, filter);
     }
@@ -1470,6 +1471,8 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             } else if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
                 Log.e(TAG, "onReceive: userPresent");
                 removeAllExceptEdgeView();
+            } else if (intent.getAction().equals(Cons.ACTION_REFRESH_FAVORITE)) {
+                gridFavoriteAdapter.setupShortcuts();
             }
         }
     }

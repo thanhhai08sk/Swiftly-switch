@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.MyRealmMigration;
@@ -20,6 +22,7 @@ import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
@@ -37,7 +40,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     private Realm myRealm;
     private PackageManager packageManager;
 
-    public FavoriteShortcutAdapter(Context context) {
+    public FavoriteShortcutAdapter(final Context context) {
         mContext = context;
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         mIconScale = sharedPreferences.getFloat(EdgeSetting.ICON_SCALE, 1f);
@@ -54,6 +57,14 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                 .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
+        myRealm.addChangeListener(new RealmChangeListener<Realm>() {
+            @Override
+            public void onChange(Realm element) {
+                Intent intent = new Intent();
+                intent.setAction(Cons.ACTION_REFRESH_FAVORITE);
+                context.sendBroadcast(intent);
+            }
+        });
     }
 
     @Override
