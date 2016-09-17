@@ -629,43 +629,53 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
 //            UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
             long currentTimeMillis = System.currentTimeMillis() + 2000;
-            List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
-            ArrayList<String> tempPackageName = new ArrayList<String>();
+        Log.e(TAG, "getRecentApp2: start get stats = " + System.currentTimeMillis());
+
+        List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
+        Log.e(TAG, "getRecentApp2: end get stats = " + System.currentTimeMillis());
+        ArrayList<String> tempPackageName = new ArrayList<String>();
             if (stats != null) {
+                Log.e(TAG, "getRecentApp2: start sorting = " + System.currentTimeMillis());
                 SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(Cons.DATE_DECENDING_COMPARATOR);
                 for (UsageStats usageStats : stats) {
                     mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
                 }
+                Log.e(TAG, "getRecentApp2: stop sorting = " + System.currentTimeMillis());
                 Set<Long> setKey = mySortedMap.keySet();
                 Log.e(TAG, "mySortedMap size   = " + mySortedMap.size());
                 UsageStats usageStats;
                 String packa;
 //                PackageManager packageManager = getPackageManager();
+                Log.e(TAG, "getRecentApp2: start get temp = " + System.currentTimeMillis());
                 for (Long key : setKey) {
-                    if (key >= currentTimeMillis) {
-                        Log.e(TAG, "key is in future");
-                    } else {
+                    if (key <= currentTimeMillis) {
                         usageStats = mySortedMap.get(key);
                         if (usageStats != null) {
                             packa = usageStats.getPackageName();
+                            Log.e(TAG, "getRecentApp2: start if = " + System.currentTimeMillis());
                             if (usageStats.getTotalTimeInForeground() > 500 &&
-                                    packageManager.getLaunchIntentForPackage(packa) != null &&
                                     !packa.contains("systemui") &&
                                     !packa.equals(launcherPackageName) &&
                                     !excludeSet.contains(packa) &&
                                     !tempPackageName.contains(packa)
-                                    ) {
-                                tempPackageName.add(packa);
+                            ) {
+                                if (packageManager.getLaunchIntentForPackage(packa) != null) {
+                                    tempPackageName.add(packa);
+                                }
                             }
-                            if (tempPackageName.size() >= 8) {
-                                Log.e(TAG, "tempackage >= 8");
+                            Log.e(TAG, "getRecentApp2: stop if = " + System.currentTimeMillis());
+                            if (tempPackageName.size() >= 6) {
+                                Log.e(TAG, "tempackage >= 6");
                                 break;
                             }
                         }
-
+                    } else {
+                        Log.e(TAG, "key is in future");
                     }
 
                 }
+                Log.e(TAG, "getRecentApp2: stop get temp = " + System.currentTimeMillis());
+
             }
             if (tempPackageName.size()>=1) {
                 lastAppPackageName = tempPackageName.get(1);
