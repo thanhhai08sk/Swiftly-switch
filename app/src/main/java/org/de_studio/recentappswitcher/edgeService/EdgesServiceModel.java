@@ -246,6 +246,7 @@ public class EdgesServiceModel {
     }
 
     public void calculateCircleIconPositions(float circleSizePxl, float iconSizePxl, int edgePosition, float xInit, float yInit, int iconsNumber) {
+
         circleIconXs = new float[iconsNumber];
         circleIconYs = new float[iconsNumber];
 //        Log.e(TAG, "calculateCircleIconPositions: circleSize = " + circleSizePxl

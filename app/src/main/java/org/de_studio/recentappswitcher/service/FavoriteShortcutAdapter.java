@@ -134,4 +134,5 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
             return shortcuts[position];
         }
     }
+
 }

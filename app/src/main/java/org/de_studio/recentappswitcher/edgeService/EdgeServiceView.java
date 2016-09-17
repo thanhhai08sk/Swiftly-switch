@@ -631,33 +631,24 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     public ArrayList<String> getRecentApp2() {
         long timeStart = System.currentTimeMillis();
-
-//            UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-            long currentTimeMillis = System.currentTimeMillis() + 2000;
-        Log.e(TAG, "getRecentApp2: start get stats = " + System.currentTimeMillis());
+         long currentTimeMillis = System.currentTimeMillis() + 2000;
 
         List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
-        Log.e(TAG, "getRecentApp2: end get stats = " + System.currentTimeMillis());
         ArrayList<String> tempPackageName = new ArrayList<String>();
             if (stats != null) {
-                Log.e(TAG, "getRecentApp2: start sorting = " + System.currentTimeMillis());
                 SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(Cons.DATE_DECENDING_COMPARATOR);
                 for (UsageStats usageStats : stats) {
                     mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
                 }
-                Log.e(TAG, "getRecentApp2: stop sorting = " + System.currentTimeMillis());
                 Set<Long> setKey = mySortedMap.keySet();
                 Log.e(TAG, "mySortedMap size   = " + mySortedMap.size());
                 UsageStats usageStats;
                 String packa;
-//                PackageManager packageManager = getPackageManager();
-                Log.e(TAG, "getRecentApp2: start get temp = " + System.currentTimeMillis());
                 for (Long key : setKey) {
                     if (key <= currentTimeMillis) {
                         usageStats = mySortedMap.get(key);
                         if (usageStats != null) {
                             packa = usageStats.getPackageName();
-                            Log.e(TAG, "getRecentApp2: start if = " + System.currentTimeMillis());
                             if (usageStats.getTotalTimeInForeground() > 500 &&
                                     !packa.contains("systemui") &&
                                     !packa.equals(launcherPackageName) &&
@@ -666,24 +657,25 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                             ) {
                                 if (!noIntentPackagesSet.contains(packa)) {
                                     tempPackageName.add(packa);
+//                                    Log.e(TAG, "app: " + packa +
+//                                            "\nfirst time stamp = " + usageStats.getFirstTimeStamp()
+//                                            + "\nlast time stamp = " + usageStats.getLastTimeStamp()
+//                                            + "\nlast time used = " + usageStats.getLastTimeUsed()
+//                                            + "\ntotal time foreground = " + usageStats.getTotalTimeInForeground()
+//                                            + "\ndescribe = " + usageStats.describeContents()
+//                                            + "\nstring = " + usageStats.toString());
                                 }
-//                                if (packageManager.getLaunchIntentForPackage(packa) != null) {
-//                                    tempPackageName.add(packa);
-//                                }
                             }
-                            Log.e(TAG, "getRecentApp2: stop if = " + System.currentTimeMillis());
                             if (tempPackageName.size() >= 6) {
                                 Log.e(TAG, "tempackage >= "  + 6);
                                 break;
                             }
                         }
                     } else {
-                        Log.e(TAG, "key is in future");
+//                        Log.e(TAG, "key is in future");
                     }
 
                 }
-                Log.e(TAG, "getRecentApp2: stop get temp = " + System.currentTimeMillis());
-
             }
             if (tempPackageName.size()>=1) {
                 lastAppPackageName = tempPackageName.get(1);
@@ -698,16 +690,16 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             if (i >= shortcuts.length) {
                 circleIcons[i].setImageDrawable(null);
             } else {
-                Utility.setImageForShortcut(shortcuts[i], getPackageManager(), circleIcons[i], getApplicationContext(), iconPack, null, true);
+                Utility.setImageForShortcut(shortcuts[i], packageManager, circleIcons[i], getApplicationContext(), iconPack, null, true);
             }
         }
         try {
             Log.e(TAG, "showCircleIconsView: add circle item to windowmanager");
             windowManager.addView(circleParentsView, circleShortcutsViewPara);
-            Log.e(TAG, "showCircleIconsView: item1 x = " + circleParentsView.findViewById(R.id.item_1).getX());
         } catch (IllegalStateException e) {
             Log.e(TAG, " item_view has already been added to the window manager");
         }
+
     }
 
     public void showCircleFavorite() {
@@ -1094,7 +1086,28 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                     circleIcons[i].setX(circleIconXs[0]);
                     circleIcons[i].setY(circleIconYs[0]);
                     circleIcons[i].setAlpha(0f);
-                    circleIcons[i].animate().x(circleIconXs[i]).y(circleIconYs[i]).setStartDelay(animationTime / (6 - i)).setDuration(animationTime).alpha(1f).setInterpolator(new FastOutSlowInInterpolator());
+                    circleIcons[i].animate().x(circleIconXs[i]).y(circleIconYs[i]).setStartDelay(animationTime / (6 - i)).setDuration(animationTime).alpha(1f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animator) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animator) {
+                            Log.e(TAG, "onAnimationEnd: time = " + System.currentTimeMillis());
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animator) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animator) {
+
+                        }
+                    });
+
                 } else if (i == 0) {
                     circleIcons[i].setX(xInit - iconSizePxl / 2);
                     circleIcons[i].setY(yInit - iconSizePxl / 2);
@@ -1144,13 +1157,13 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     public void showBackground() {
         if (useAnimation) {
             backgroundFrame.setAlpha(0f);
-            windowManager.addView(backgroundFrame, backgroundPara);
             backgroundFrame.animate().alpha(1f).setDuration(animationTime).setInterpolator(new FastOutSlowInInterpolator());
         } else {
             Log.e(TAG, "showBackground: ");
             backgroundFrame.setAlpha(1f);
-            windowManager.addView(backgroundFrame, backgroundPara);
         }
+        windowManager.addView(backgroundFrame, backgroundPara);
+
     }
 
     public void vibrate() {

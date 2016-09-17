@@ -2070,7 +2070,7 @@ public  class Utility {
 
         if (shortcut.getType() == Shortcut.TYPE_APP) {
             try {
-                Drawable defaultDrawable = context.getPackageManager().getApplicationIcon(shortcut.getPackageName());
+                Drawable defaultDrawable = packageManager.getApplicationIcon(shortcut.getPackageName());
                 Drawable iconPackDrawable;
                 if (iconPack!=null) {
                     iconPackDrawable = iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable);

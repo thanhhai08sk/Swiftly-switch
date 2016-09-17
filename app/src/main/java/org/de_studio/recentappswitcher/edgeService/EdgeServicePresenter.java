@@ -51,16 +51,13 @@ public class EdgeServicePresenter {
 
     }
     public void onActionDown(float x, float y, int edgeId) {
+        Log.e(TAG, "onActionDown: START TIME = " + System.currentTimeMillis());
         onHolding = true;
         setCurrentPositionAndMode(edgeId);
         xInit = model.getXInit(currentPosition, x, view.getWindowSize().x);
         yInit = model.getYInit(currentPosition, y, view.getWindowSize().y);
-
-        view.removeAllExceptEdgeView();
-        view.showBackground();
-
         ArrayList<String> tempPackages = view.getRecentApp2();
-
+        view.showBackground();
         switch (currentEdgeMode) {
             case Cons.MODE_ONLY_FAVORITE:
                 view.showFavoriteGridView(xInit, yInit, currentPosition, -1);
@@ -69,12 +66,13 @@ public class EdgeServicePresenter {
             default:
                 model.calculateCircleIconPositions(view.circleSizePxl, view.iconSizePxl, currentPosition, xInit, yInit, 6);
                 view.setCircleIconsPosition(model.circleIconXs, model.circleIconYs, xInit,yInit);
+                long time = System.currentTimeMillis();
                 view.showCircleIconsView(model.getRecentList(tempPackages));
+                Log.e(TAG, "calculate  = " +( System.currentTimeMillis() - time));
                 currentShowing = Cons.SHOWING_RECENT_CIRCLE;
-
                 break;
         }
-
+//        view.removeAllExceptEdgeView();
         if (view.useActionDownVibrate) view.vibrate();
         view.showClock();
 
