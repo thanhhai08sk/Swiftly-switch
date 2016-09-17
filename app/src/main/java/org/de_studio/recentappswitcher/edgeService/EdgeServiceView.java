@@ -665,13 +665,13 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                             ) {
                                 if (!noIntentPackagesSet.contains(packa)) {
                                     tempPackageName.add(packa);
-//                                    Log.e(TAG, "app: " + packa +
-//                                            "\nfirst time stamp = " + usageStats.getFirstTimeStamp()
-//                                            + "\nlast time stamp = " + usageStats.getLastTimeStamp()
-//                                            + "\nlast time used = " + usageStats.getLastTimeUsed()
-//                                            + "\ntotal time foreground = " + usageStats.getTotalTimeInForeground()
-//                                            + "\ndescribe = " + usageStats.describeContents()
-//                                            + "\nstring = " + usageStats.toString());
+                                    Log.e(TAG, "app: " + packa +
+                                            "\nfirst time stamp = " + usageStats.getFirstTimeStamp()
+                                            + "\nlast time stamp = " + usageStats.getLastTimeStamp()
+                                            + "\nlast time used = " + usageStats.getLastTimeUsed()
+                                            + "\ntotal time foreground = " + usageStats.getTotalTimeInForeground()
+                                            + "\ndescribe = " + usageStats.describeContents()
+                                            + "\nstring = " + usageStats.toString());
                                 }
                             }
                             if (tempPackageName.size() >= 6) {

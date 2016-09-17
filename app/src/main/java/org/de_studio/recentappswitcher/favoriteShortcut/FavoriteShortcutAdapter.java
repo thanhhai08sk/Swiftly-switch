@@ -57,14 +57,22 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                 .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
+
+    }
+
+    public void addChangedListenner() {
         myRealm.addChangeListener(new RealmChangeListener<Realm>() {
             @Override
             public void onChange(Realm element) {
                 Intent intent = new Intent();
                 intent.setAction(Cons.ACTION_REFRESH_FAVORITE);
-                context.sendBroadcast(intent);
+                mContext.sendBroadcast(intent);
             }
         });
+    }
+
+    public void removeRealmChangeListener() {
+        myRealm.removeAllChangeListeners();
     }
 
     @Override

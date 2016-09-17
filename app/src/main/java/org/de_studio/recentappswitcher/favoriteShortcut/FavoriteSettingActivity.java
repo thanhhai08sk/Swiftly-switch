@@ -365,6 +365,11 @@ public class FavoriteSettingActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        mAdapter.removeRealmChangeListener();
+        super.onPause();
+    }
 
     @Override
     protected void onResume() {
@@ -372,6 +377,8 @@ public class FavoriteSettingActivity extends AppCompatActivity {
         Log.e(LOG_TAG, "onResume");
         mAdapter.notifyDataSetChanged();
         listAdapter.notifyDataSetChanged();
+        mAdapter.addChangedListenner();
+
     }
 
     private void updateGridView() {
