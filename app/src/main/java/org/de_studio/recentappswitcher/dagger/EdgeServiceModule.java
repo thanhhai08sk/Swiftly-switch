@@ -3,6 +3,8 @@ package org.de_studio.recentappswitcher.dagger;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
@@ -37,6 +39,7 @@ import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Named;
@@ -124,6 +127,7 @@ import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.MODE_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.MODE_ONLY_FAVORITE;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
+import static org.de_studio.recentappswitcher.Cons.NO_INTENT_PACKAGES_NAME;
 import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
 import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
 import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_VIEW_RADIUS_NAME;
@@ -201,6 +205,25 @@ public class EdgeServiceModule {
         if (res.activityInfo != null) {
             return res.activityInfo.packageName;
         } else return  "";
+    }
+
+    @Provides
+    @Singleton
+    @Named(NO_INTENT_PACKAGES_NAME)
+    Set<String> noIntentPackagesSet() {
+        Log.e(TAG, "noIntentPackagesSet: start getting = " + System.currentTimeMillis());
+        PackageManager pm = context.getPackageManager();
+        Set<String> packageNames = new HashSet<>();
+        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+
+        for (ApplicationInfo packageInfo : packages) {
+            Log.d(TAG, "Installed package :" + packageInfo.packageName);
+            if (pm.getLaunchIntentForPackage(packageInfo.packageName) == null) {
+                packageNames.add(packageInfo.packageName);
+            }
+        }
+        Log.e(TAG, "noIntentPackagesSet: stop getting =  " + System.currentTimeMillis());
+        return packageNames;
     }
 
     @Provides

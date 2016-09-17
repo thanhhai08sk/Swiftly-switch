@@ -127,6 +127,7 @@ import static org.de_studio.recentappswitcher.Cons.IS_EDGE_2_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_FREE_AND_OUT_OF_TRIAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
+import static org.de_studio.recentappswitcher.Cons.NO_INTENT_PACKAGES_NAME;
 import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
 import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
 import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME;
@@ -347,6 +348,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     boolean isFreeAndOutOfTrial;
     @Inject
     DelayToSwitchAsyncTask asyncTask;
+    @Inject
+    @Named(NO_INTENT_PACKAGES_NAME)
+    Set<String> noIntentPackagesSet;
     ViewPropertyAnimator folderAnimator;
     float[] folderCoor;
     boolean working = true;
@@ -354,6 +358,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     private NotificationCompat.Builder notificationBuilder;
     private UsageStatsManager usageStatsManager;
     private PackageManager packageManager;
+
 
     private static void startQuickAction(Context context, String action, View v, String className, String packageName, String lastAppPackageName) {
         switch (action) {
@@ -659,9 +664,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                                     !excludeSet.contains(packa) &&
                                     !tempPackageName.contains(packa)
                             ) {
-                                if (packageManager.getLaunchIntentForPackage(packa) != null) {
+                                if (!noIntentPackagesSet.contains(packa)) {
                                     tempPackageName.add(packa);
                                 }
+//                                if (packageManager.getLaunchIntentForPackage(packa) != null) {
+//                                    tempPackageName.add(packa);
+//                                }
                             }
                             Log.e(TAG, "getRecentApp2: stop if = " + System.currentTimeMillis());
                             if (tempPackageName.size() >= 6) {
