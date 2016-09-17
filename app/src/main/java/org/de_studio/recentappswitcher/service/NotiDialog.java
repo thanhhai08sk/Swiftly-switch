@@ -22,6 +22,7 @@ public class NotiDialog extends AppCompatActivity {
     public static final int WRITE_SETTING_PERMISSION = 1;
     public static final int PHONE_ADMIN_PERMISSION = 2;
     public static final int ACCESSIBILITY_PERMISSION = 3;
+    public static final int DRAW_OVER_OTHER_APP = 4;
     private int type;
     public static final String TYPE_KEY = "type";
     private Intent buttonIntent;
@@ -72,7 +73,13 @@ public class NotiDialog extends AppCompatActivity {
                 buttonTextRes = R.string.go_to_setting;
                 buttonIntent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                 break;
-
+            case DRAW_OVER_OTHER_APP:
+                titleRes = R.string.set_required_permissions;
+                textRes = R.string.permission_used_for_showing_icons_over_other_apps;
+                buttonTextRes = R.string.go_to_setting;
+                buttonIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                break;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setPositiveButton(buttonTextRes, new DialogInterface.OnClickListener() {

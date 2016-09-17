@@ -492,10 +492,18 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         if (!(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false)) ) {
             switch (edgeId) {
                 case Cons.EDGE_1_ID:
-                    windowManager.addView(edge1View, edge1Para);
+                    try {
+                        windowManager.addView(edge1View, edge1Para);
+                    } catch (Exception e) {
+                        Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
+                    }
                     break;
                 case Cons.EDGE_2_ID:
-                    windowManager.addView(edge2View, edge2Para);
+                    try {
+                        windowManager.addView(edge2View, edge2Para);
+                    } catch (Exception e) {
+                        Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
+                    }
                     break;
             }
         }
