@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.dagger;
 
+import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +11,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.Gravity;
@@ -225,6 +227,22 @@ public class EdgeServiceModule {
         Log.e(TAG, "noIntentPackagesSet: stop getting =  " + System.currentTimeMillis());
         return packageNames;
     }
+
+    @Provides
+    @Singleton
+    PackageManager packageManager() {
+        return context.getPackageManager();
+    }
+
+    @Provides
+    @Singleton
+    UsageStatsManager usageStatsManager() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return (UsageStatsManager)context.getSystemService(Context.USAGE_STATS_SERVICE);
+        } else return null;
+    }
+
+
 
     @Provides
     @Singleton

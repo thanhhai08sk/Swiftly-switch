@@ -351,13 +351,16 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(NO_INTENT_PACKAGES_NAME)
     Set<String> noIntentPackagesSet;
+    @Inject
+    PackageManager packageManager;
+    @Inject
+    UsageStatsManager usageStatsManager;
+
     ViewPropertyAnimator folderAnimator;
     float[] folderCoor;
     boolean working = true;
     EdgesToggleReceiver receiver;
     private NotificationCompat.Builder notificationBuilder;
-    private UsageStatsManager usageStatsManager;
-    private PackageManager packageManager;
 
 
     private static void startQuickAction(Context context, String action, View v, String className, String packageName, String lastAppPackageName) {
@@ -431,9 +434,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         super.onCreate();
         inject();
         presenter.onCreate();
-
-        usageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-        packageManager = getPackageManager();
     }
 
     @Override
