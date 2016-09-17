@@ -143,6 +143,7 @@ import static org.de_studio.recentappswitcher.Cons.VIBRATE_DURATION_NAME;
 public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     private static final String TAG = EdgeServiceView.class.getSimpleName();
+    public static boolean FLASH_LIGHT_ON = false;
     @Inject
     WindowManager windowManager;
     @Inject
@@ -346,15 +347,77 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     boolean isFreeAndOutOfTrial;
     @Inject
     DelayToSwitchAsyncTask asyncTask;
-
     ViewPropertyAnimator folderAnimator;
     float[] folderCoor;
-    public static boolean FLASH_LIGHT_ON = false;
-
     boolean working = true;
-    private NotificationCompat.Builder notificationBuilder;
     EdgesToggleReceiver receiver;
+    private NotificationCompat.Builder notificationBuilder;
 
+    private static void startQuickAction(Context context, String action, View v, String className, String packageName, String lastAppPackageName) {
+        switch (action) {
+            case MainActivity.ACTION_HOME:
+                Utility.homeAction(context, v, className, packageName);
+                break;
+            case MainActivity.ACTION_BACK:
+                Utility.backAction(context,v,className,packageName);
+                break;
+            case MainActivity.ACTION_NOTI:
+                Utility.notiAction(context,v,className,packageName);
+                break;
+            case MainActivity.ACTION_WIFI:
+                Utility.toggleWifi(context);
+                break;
+            case MainActivity.ACTION_BLUETOOTH:
+                Utility.toggleBluetooth(context);
+                break;
+            case MainActivity.ACTION_ROTATE:
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    Utility.setAutorotation(context);
+                } else {
+                    if (Settings.System.canWrite(context)) {
+                        Utility.setAutorotation(context);
+                    } else {
+                        Utility.startNotiDialog(context, NotiDialog.WRITE_SETTING_PERMISSION);
+                    }
+                }
+                break;
+            case MainActivity.ACTION_NONE:
+                //nothing
+                break;
+            case MainActivity.ACTION_POWER_MENU:
+                Utility.powerAction(context,v,className,packageName);
+                break;
+            case MainActivity.ACTION_LAST_APP:
+                Utility.lastAppAction(context, lastAppPackageName);
+                break;
+            case MainActivity.ACTION_CONTACT:
+                Utility.contactAction(context);
+                break;
+            case MainActivity.ACTION_CALL_LOGS:
+                Utility.callLogsAction(context);
+                break;
+            case MainActivity.ACTION_DIAL:
+                Utility.dialAction(context);
+                break;
+            case MainActivity.ACTION_RECENT:
+                Utility.recentAction(context,v,className,packageName);
+                break;
+            case MainActivity.ACTION_VOLUME:
+                Utility.volumeAction(context);
+                break;
+            case MainActivity.ACTION_BRIGHTNESS:
+                Utility.brightnessAction(context);
+                break;
+            case MainActivity.ACTION_RINGER_MODE:
+                Utility.setRinggerMode(context);
+            case MainActivity.ACTION_FLASH_LIGHT:
+                Utility.flashLightAction2(context,EdgeGestureService.FLASH_LIGHT_ON);
+                break;
+            case MainActivity.ACTION_SCREEN_LOCK:
+                Utility.screenLockAction(context);
+                break;
+        }
+    }
 
     @Override
     public void onCreate() {
@@ -460,6 +523,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
 
     public ArrayList<String> getRecentApps() {
+        long timeStart = System.currentTimeMillis();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
             int numOfTask;
@@ -550,11 +614,13 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             if (tempPackageName.size()>=1) {
                 lastAppPackageName = tempPackageName.get(1);
             }
+            Log.e(TAG, "getRecentApp: time to get recent  = " + (System.currentTimeMillis() - timeStart));
             return tempPackageName;
         }
     }
 
     public ArrayList<String> getRecentApp2() {
+        long timeStart = System.currentTimeMillis();
 
             UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
             long currentTimeMillis = System.currentTimeMillis() + 2000;
@@ -576,28 +642,21 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                         Log.e(TAG, "key is in future");
                     } else {
                         usageStats = mySortedMap.get(key);
-                        if (usageStats == null) {
-                            Log.e(TAG, " usageStats is null");
-                        } else {
+                        if (usageStats != null) {
                             packa = usageStats.getPackageName();
-                                if (isSystem) {
-                                    //do nothing
-                                } else if (packageManager.getLaunchIntentForPackage(packa) == null ||
-                                        packa.contains("systemui") ||
-                                        packa.equals(launcherPackageName) ||
-                                        excludeSet.contains(packa) ||
-                                        tempPackageName.contains(packa)||
-                                        usageStats.getTotalTimeInForeground() < 500
-                                        ) {
-                                    // do nothing
-                                } else {
-                                    tempPackageName.add(packa);
-                                }
-
-                                if (tempPackageName.size() >= 8) {
-                                    Log.e(TAG, "tempackage >= 8");
-                                    break;
-                                }
+                            if (usageStats.getTotalTimeInForeground() > 500 &&
+                                    packageManager.getLaunchIntentForPackage(packa) != null &&
+                                    !packa.contains("systemui") &&
+                                    !packa.equals(launcherPackageName) &&
+                                    !excludeSet.contains(packa) &&
+                                    !tempPackageName.contains(packa)
+                                    ) {
+                                tempPackageName.add(packa);
+                            }
+                            if (tempPackageName.size() >= 8) {
+                                Log.e(TAG, "tempackage >= 8");
+                                break;
+                            }
                         }
 
                     }
@@ -607,6 +666,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             if (tempPackageName.size()>=1) {
                 lastAppPackageName = tempPackageName.get(1);
             }
+        Log.e(TAG, "getRecentApp2: time to get recent  = " + (System.currentTimeMillis() - timeStart));
             return tempPackageName;
 
     }
@@ -720,7 +780,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-
     public synchronized void removeCircleShortcutsView() {
         try {
             windowManager.removeView(circleParentsView);
@@ -824,7 +883,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     }
 
-
     public void showFavoriteGridView(float xInit, float yInit, int edgePosition, int iconToSwitch) {
         Log.e(TAG, "showFavoriteGridView: height = " + favoriteGridView.getHeight() + "\nwidth = " + favoriteGridView.getWidth());
 
@@ -847,7 +905,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             windowManager.addView(gridParentsView, gridParentViewPara);
         }
     }
-
 
     public void startFolderCircleAnimation(final int folderPosition) {
         folderAdapter.setFolderId(folderPosition);
@@ -951,7 +1008,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         favoriteGridView.setAlpha(1f);
         folderGridView.setVisibility(View.GONE);
     }
-
 
     public void showQuickAction(int edgeId, int id, float xInit, float yInit) {
         float x = xInit - circleSizePxl - CIRCLE_AND_QUICK_ACTION_GAP * mScale - OVAL_OFFSET * mScale - OVAL_RADIUS_PLUS * mScale;
@@ -1078,7 +1134,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     public void vibrate() {
         vibrator.vibrate(vibrationDuration);
     }
-
 
     @Override
     public void onDestroy() {
@@ -1340,73 +1395,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             }
         }
     }
-    private static void startQuickAction(Context context, String action, View v, String className, String packageName, String lastAppPackageName) {
-        switch (action) {
-            case MainActivity.ACTION_HOME:
-                Utility.homeAction(context, v, className, packageName);
-                break;
-            case MainActivity.ACTION_BACK:
-                Utility.backAction(context,v,className,packageName);
-                break;
-            case MainActivity.ACTION_NOTI:
-                Utility.notiAction(context,v,className,packageName);
-                break;
-            case MainActivity.ACTION_WIFI:
-                Utility.toggleWifi(context);
-                break;
-            case MainActivity.ACTION_BLUETOOTH:
-                Utility.toggleBluetooth(context);
-                break;
-            case MainActivity.ACTION_ROTATE:
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    Utility.setAutorotation(context);
-                } else {
-                    if (Settings.System.canWrite(context)) {
-                        Utility.setAutorotation(context);
-                    } else {
-                        Utility.startNotiDialog(context, NotiDialog.WRITE_SETTING_PERMISSION);
-                    }
-                }
-                break;
-            case MainActivity.ACTION_NONE:
-                //nothing
-                break;
-            case MainActivity.ACTION_POWER_MENU:
-                Utility.powerAction(context,v,className,packageName);
-                break;
-            case MainActivity.ACTION_LAST_APP:
-                Utility.lastAppAction(context, lastAppPackageName);
-                break;
-            case MainActivity.ACTION_CONTACT:
-                Utility.contactAction(context);
-                break;
-            case MainActivity.ACTION_CALL_LOGS:
-                Utility.callLogsAction(context);
-                break;
-            case MainActivity.ACTION_DIAL:
-                Utility.dialAction(context);
-                break;
-            case MainActivity.ACTION_RECENT:
-                Utility.recentAction(context,v,className,packageName);
-                break;
-            case MainActivity.ACTION_VOLUME:
-                Utility.volumeAction(context);
-                break;
-            case MainActivity.ACTION_BRIGHTNESS:
-                Utility.brightnessAction(context);
-                break;
-            case MainActivity.ACTION_RINGER_MODE:
-                Utility.setRinggerMode(context);
-            case MainActivity.ACTION_FLASH_LIGHT:
-                Utility.flashLightAction2(context,EdgeGestureService.FLASH_LIGHT_ON);
-                break;
-            case MainActivity.ACTION_SCREEN_LOCK:
-                Utility.screenLockAction(context);
-                break;
-        }
-    }
-
-
 
     public class EdgesToggleReceiver extends BroadcastReceiver {
         public EdgesToggleReceiver() {
