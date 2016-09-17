@@ -290,6 +290,12 @@ public class EdgesServiceModel {
 
     }
 
+    void clear() {
+        if (pinRealm != null) {
+            pinRealm.close();
+        }
+    }
+
 
 
 

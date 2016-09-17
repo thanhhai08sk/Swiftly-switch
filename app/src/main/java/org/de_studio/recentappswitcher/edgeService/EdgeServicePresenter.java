@@ -186,6 +186,8 @@ public class EdgeServicePresenter {
     }
 
     public void onDestroy() {
+        view.clear();
+        model.clear();
         view.removeAll();
         view.asyncTask.cancel(true);
         view.asyncTask.clear();

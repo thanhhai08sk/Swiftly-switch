@@ -1166,6 +1166,15 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         super.onDestroy();
     }
 
+    void clear() {
+        if (favoriteRealm != null) {
+            favoriteRealm.close();
+        }
+        if (circleRealm != null) {
+            circleRealm.close();
+        }
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         if (defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE, false) && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
