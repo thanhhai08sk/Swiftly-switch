@@ -632,7 +632,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
                 }
             }
-            if (tempPackageName.size()>=1) {
+            if (tempPackageName.size()>1) {
                 lastAppPackageName = tempPackageName.get(1);
             }
             Log.e(TAG, "getRecentApp: time to get recent  = " + (System.currentTimeMillis() - timeStart));
@@ -641,11 +641,32 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
 
     public ArrayList<String> getRecentApp2() {
-        long timeStart = System.currentTimeMillis();
-         long currentTimeMillis = System.currentTimeMillis() + 2000;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+            int numOfTask;
+            if (launcherPackageName != null) {
+                numOfTask = 8;
+            } else numOfTask = 7;
+            List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
+            ArrayList<String> tempPackageNameKK = new ArrayList<String>();
+            for (int i = 0; i < list.size(); i++) {
+                ActivityManager.RunningTaskInfo taskInfo = list.get(i);
+                ComponentName componentName = taskInfo.baseActivity;
+                String packName = componentName.getPackageName();
+                if (i != 0 && !packName.equals(launcherPackageName) && !excludeSet.contains(packName) && !packName.contains("launcher")) {
+                    tempPackageNameKK.add(packName);
+                }
+            }
+            if (tempPackageNameKK.size()>=1) {
+                lastAppPackageName = tempPackageNameKK.get(1);
+            }
+            return tempPackageNameKK;
+        } else {
+            long timeStart = System.currentTimeMillis();
+            long currentTimeMillis = System.currentTimeMillis() + 2000;
 
-        List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
-        ArrayList<String> tempPackageName = new ArrayList<String>();
+            List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
+            ArrayList<String> tempPackageName = new ArrayList<String>();
             if (stats != null) {
                 SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(Cons.DATE_DECENDING_COMPARATOR);
                 for (UsageStats usageStats : stats) {
@@ -665,16 +686,16 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                                     !packa.equals(launcherPackageName) &&
                                     !excludeSet.contains(packa) &&
                                     !tempPackageName.contains(packa)
-                            ) {
+                                    ) {
                                 if (hasIntentPackagesSet.contains(packa)) {
                                     tempPackageName.add(packa);
-//                                    Log.e(TAG, "app: " + packa +
-//                                            "\nfirst time stamp = " + usageStats.getFirstTimeStamp()
-//                                            + "\nlast time stamp = " + usageStats.getLastTimeStamp()
-//                                            + "\nlast time used = " + usageStats.getLastTimeUsed()
-//                                            + "\ntotal time foreground = " + usageStats.getTotalTimeInForeground()
-//                                            + "\ndescribe = " + usageStats.describeContents()
-//                                            + "\nstring = " + usageStats.toString());
+                                    Log.e(TAG, "app: " + packa +
+                                            "\nfirst time stamp = " + usageStats.getFirstTimeStamp()
+                                            + "\nlast time stamp = " + usageStats.getLastTimeStamp()
+                                            + "\nlast time used = " + usageStats.getLastTimeUsed()
+                                            + "\ntotal time foreground = " + usageStats.getTotalTimeInForeground()
+                                            + "\ndescribe = " + usageStats.describeContents()
+                                            + "\nstring = " + usageStats.toString());
                                 }
                             }
                             if (tempPackageName.size() >= 6) {
@@ -691,8 +712,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             if (tempPackageName.size()>1) {
                 lastAppPackageName = tempPackageName.get(1);
             }
-        Log.e(TAG, "getRecentApp2: time to get recent  = " + (System.currentTimeMillis() - timeStart));
+            Log.e(TAG, "getRecentApp2: time to get recent  = " + (System.currentTimeMillis() - timeStart));
             return tempPackageName;
+
+        }
+
+
 
     }
 

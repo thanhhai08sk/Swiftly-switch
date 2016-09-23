@@ -1,5 +1,7 @@
 package org.de_studio.recentappswitcher.edgeService;
 
+import android.util.Log;
+
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
@@ -122,6 +124,9 @@ public class EdgesServiceModel {
 
     public Shortcut[] getRecentList(ArrayList<String> tempPackageName) {
         Shortcut[] recentShortcut;
+        for (String s : tempPackageName) {
+            Log.e(TAG, "temp package = " + s);
+        }
         boolean inHome = false;
         if (tempPackageName.size() > 0) {
             if (tempPackageName.contains(launcherPackagename) && tempPackageName.get(0).equalsIgnoreCase(launcherPackagename)) {
@@ -137,6 +142,7 @@ public class EdgesServiceModel {
             for (int i = 0; i < savedRecentShortcut.length; i++) {
                 if (!tempPackageName.contains(savedRecentShortcut[i].getPackageName()) && tempPackageName.size() < 6) {
                     tempPackageName.add(savedRecentShortcut[i].getPackageName());
+                    Log.e(TAG, "getRecentList: add " + savedRecentShortcut[i].getPackageName());
                 }
             }
         }
