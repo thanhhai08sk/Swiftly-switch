@@ -37,7 +37,7 @@ import org.de_studio.recentappswitcher.service.EdgeSetting;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
-    private static final int VERSION_NUMBER = 70;
+    private static final int VERSION_NUMBER = 71;
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final String EDGE_1_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_2_shared_preference";
@@ -541,6 +541,7 @@ public class MainActivity extends Activity {
         SharedPreferences getPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getBaseContext());
         int versionSaved = getPrefs.getInt("version_saved", 0);
+        showWhatNew();
         if (versionSaved != 0 && versionSaved < VERSION_NUMBER) {
             showWhatNew();
         }
@@ -556,7 +557,8 @@ public class MainActivity extends Activity {
 
     }
 
-    public static SpannableString getSpanString(String title, AbsoluteSizeSpan span) {
+    public  SpannableString getSpanString(String title, int titleSize) {
+        AbsoluteSizeSpan span = new AbsoluteSizeSpan(titleSize);
         SpannableString spanString = new SpannableString(title);
         spanString.setSpan(span,0,title.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         return spanString;
@@ -566,17 +568,10 @@ public class MainActivity extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         int titleSize = getResources().getDimensionPixelSize(R.dimen.what_new_title_size);
         AbsoluteSizeSpan span = new AbsoluteSizeSpan(titleSize);
-        String title2343 = "Version 2.3.4.3 (Beta)";
-        String text2343 = " - Improve performance"
-                + "\n - Fix bugs";
-        String title2342 = "Version 2.3.4.2 (Beta)";
-        String text2342 = " - Fix haptic feedback when hovering on icons"
-                + "\n - Fix indicator disappear"
-                + "\n - Do not show none quick action";
-
-        String title2341 = "Version 2.3.4.1 (Beta)";
-        String text2341 = " - Big code factoring, please notify me if you find any bugs. Thanks!"
-                + "\n - New animation.";
+        String title240 = "Version 2.4.0";
+        String text240 = " - Improve performance: getting recent apps and showing favorite grid now 200% faster."
+                + "\n - New animation"
+                + "\n - Bugs fixed and mirror improvements";
 
         String title2_3_3 = "Version 2.3.3";
         String text2_3_3 = " - Now you can choose the position when pin shortcuts to recent"
@@ -612,19 +607,12 @@ public class MainActivity extends Activity {
         String text2_2_10 = " - Support Shortcut (include Tasker action)" +
                 "\n - Add Sound/Vibrate shortcut" +
                 "\n - Fix bugs" ;
-        String title2_2_9 = "Version 2.2.9";
-        String text2_2_9 = " - Add 2 more shortcuts: Screen brightness, Volume control" +
-                "\n - Add option to disable the trigger zone in Landscape" +
-                "\n - Fix bugs" ;
-        String title2_2_8 = "Version 2.2.8";
-        String text2_2_8 = " - Support contact shortcut" +
-                "\n - Support folder" +
-                "\n - Indicator" +
-                "\n - Change the default setting for Quick Action";
 
-        SpannableString span233 = getSpanString(title2_3_3, span);
+        SpannableString span240 = getSpanString(title240, titleSize);
 
-        SpannableString span2_3_2 = getSpanString(title2_3_2, span);
+        SpannableString span233 = getSpanString(title2_3_3, titleSize);
+
+        SpannableString span2_3_2 = getSpanString(title2_3_2, titleSize);
         SpannableString span2_3_1 = new SpannableString(title2_3_1);
         span2_3_1.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_3_1.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
@@ -644,13 +632,15 @@ public class MainActivity extends Activity {
         SpannableString span2_2_10 = new SpannableString(title2_2_10);
         span2_2_10.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_10.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
-        SpannableString span2_2_9 = new SpannableString(title2_2_9);
-        span2_2_9.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_9.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        SpannableString span2_2_8 = new SpannableString(title2_2_8);
-        span2_2_8.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_8.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
-        CharSequence finalText = TextUtils.concat(getSpanString(title2343, span), "\n\n", text2343,"\n\n",
-                getSpanString(title2342, span), "\n\n", text2342,"\n\n",getSpanString(title2341, span), "\n\n", text2341,"\n\n", span233, "\n\n", text2_3_3, "\n\n", span2_3_2, "\n\n", text2_3_2, "\n\n", span2_3_1, "\n\n", text2_3_1, "\n\n", span2_2_14, "\n\n", text2_3_0, "\n\n", span2_2_13, "\n\n", text2_2_13, "\n\n", span2_2_11_1, "\n\n", text2_2_12, "\n\n", span2_2_11, "\n\n", text2_2_11, "\n\n", span2_2_10, "\n\n", text2_2_10, "\n\n", span2_2_9, "\n\n", text2_2_9, "\n\n", span2_2_8, "\n\n", text2_2_8
+        CharSequence finalText = TextUtils.concat(span240, "\n\n" , text240,"\n\n"
+                        ,"\n\n", span233, "\n\n", text2_3_3
+                        , "\n\n", span2_3_2, "\n\n", text2_3_2
+                        , "\n\n", span2_3_1, "\n\n", text2_3_1, "\n\n"
+                        , span2_2_14, "\n\n", text2_3_0, "\n\n", span2_2_13
+                        , "\n\n", text2_2_13, "\n\n", span2_2_11_1
+                        , "\n\n", text2_2_12, "\n\n", span2_2_11
+                        , "\n\n", text2_2_11, "\n\n", span2_2_10, "\n\n", text2_2_10
         );
         builder.setTitle(R.string.what_new)
                 .setMessage(finalText)
