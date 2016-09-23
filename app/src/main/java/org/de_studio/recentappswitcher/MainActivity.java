@@ -541,7 +541,6 @@ public class MainActivity extends Activity {
         SharedPreferences getPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getBaseContext());
         int versionSaved = getPrefs.getInt("version_saved", 0);
-        showWhatNew();
         if (versionSaved != 0 && versionSaved < VERSION_NUMBER) {
             showWhatNew();
         }
@@ -583,7 +582,6 @@ public class MainActivity extends Activity {
                 "\n - For all Android version: you can disable/enable trigger Edges from the persistent Notification."
                 + "\n - Support new language: Polish and update new translations. Thanks for your contribution! You can contribute your translation for Swiftly switch at: http://ackuna.com/translate-/swiftly-switch .Thanks!"
                 + "\n - Some small improvement and bugs fixed";
-
         String title2_3_1 = "Version 2.3.1";
         String text2_3_1 = " - Add Flash light and Screen Lock shortcuts" +
                 "\n - Support Korean and update translation for Russian, Chinese Traditional. Thank you so much!"

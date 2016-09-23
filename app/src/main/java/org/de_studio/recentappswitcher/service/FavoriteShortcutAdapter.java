@@ -117,9 +117,12 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                 .migration(new MyRealmMigration())
                 .build());
         RealmResults<Shortcut> results = myRealm.where(Shortcut.class).lessThan("id", 100).findAllSorted("id", Sort.ASCENDING);
-        shortcuts = new Shortcut[results.size()];
-        for (int i = 0; i < results.size(); i++) {
-            shortcuts[i] = myRealm.copyFromRealm(results.get(i));
+        if (results != null && results.size() >0) {
+            shortcuts = new Shortcut[getCount()];
+            for (int i = 0; i < results.size(); i++) {
+                int j = results.get(i).getId();
+                shortcuts[j] = myRealm.copyFromRealm(results.get(i));
+            }
         }
 
         myRealm.close();
@@ -128,10 +131,10 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     }
 
     private Shortcut getShortcut(int position) {
-        if (position >= shortcuts.length || position == -1) {
+        if (shortcuts ==null || position >= shortcuts.length || position == -1) {
             return null;
         } else {
-            return shortcuts[position];
+                return shortcuts[position];
         }
     }
 

@@ -70,6 +70,7 @@ import org.de_studio.recentappswitcher.service.NotiDialog;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
@@ -119,7 +120,6 @@ import static org.de_studio.recentappswitcher.Cons.GRID_HEIGHT_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_NUMBER_COLUMNS_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_NUMBER_ROWS_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_WIDTH_NAME;
-import static org.de_studio.recentappswitcher.Cons.HAS_INTENT_PACKAGES_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_ENABLE_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
@@ -350,8 +350,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     boolean isFreeAndOutOfTrial;
     @Inject
     DelayToSwitchAsyncTask asyncTask;
-    @Inject
-    @Named(HAS_INTENT_PACKAGES_NAME)
     Set<String> hasIntentPackagesSet;
     @Inject
     PackageManager packageManager;
@@ -436,6 +434,8 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     public void onCreate() {
         super.onCreate();
         inject();
+        UpdateHasIntentPackageSet updateHasIntentPackageSet = new UpdateHasIntentPackageSet();
+        updateHasIntentPackageSet.execute();
         presenter.onCreate();
     }
 
@@ -762,13 +762,17 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     public void highlightGridFavoriteIcon(int iconId) {
         if (iconId >= 0 && iconId < gridColumns * gridRows) {
-            favoriteGridView.getChildAt(iconId).setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.icon_background_square));
+            if (favoriteGridView.getChildAt(iconId) != null) {
+                favoriteGridView.getChildAt(iconId).setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.icon_background_square));
+            }
         }
     }
 
     public void unhighlightGridFavoriteIcon(int iconId) {
         if (iconId >= 0 && iconId < gridColumns * gridRows) {
-            favoriteGridView.getChildAt(iconId).setBackground(null);
+            if (favoriteGridView.getChildAt(iconId) != null) {
+                favoriteGridView.getChildAt(iconId).setBackground(null);
+            }
         }
     }
 
@@ -1449,7 +1453,11 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     private class UpdateHasIntentPackageSet extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
-            hasIntentPackagesSet.clear();
+            if (hasIntentPackagesSet != null) {
+                hasIntentPackagesSet.clear();
+            } else {
+                hasIntentPackagesSet = new HashSet<>();
+            }
             Log.e(TAG, "noIntentPackagesSet: start getting = " + System.currentTimeMillis());
             List<ApplicationInfo> packages = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
 

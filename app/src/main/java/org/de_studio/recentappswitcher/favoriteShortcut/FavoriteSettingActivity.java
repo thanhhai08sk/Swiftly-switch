@@ -24,6 +24,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
@@ -378,6 +379,10 @@ public class FavoriteSettingActivity extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
         listAdapter.notifyDataSetChanged();
         mAdapter.addChangedListenner();
+
+        Intent intent = new Intent();
+        intent.setAction(Cons.ACTION_REFRESH_FAVORITE);
+        this.sendBroadcast(intent);
 
     }
 
