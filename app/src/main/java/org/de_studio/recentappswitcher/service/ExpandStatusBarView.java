@@ -12,7 +12,6 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 
 import org.de_studio.recentappswitcher.MainActivity;
@@ -46,13 +45,11 @@ public class ExpandStatusBarView extends View {
         super(context);
         this.radius = radius;
         this.ovalOffset = ovalOffset;
-        this.text = text;
         mContext = context;
         this.position = positionOfEdge;
         homwBackNoti = positionOfArc;
         sharedPreferences = context.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
         init();
-        Log.e("ExpandStatusBarView ", "position = " + position);
     }
 
     public String getText(){

@@ -82,7 +82,7 @@ public class Cons {
     public static final boolean USE_ANIMATION_DEFAULT = true;
 
     public static final String LAUNCHER_PACKAGENAME_NAME = "launcher_packagename";
-    public static final String NO_INTENT_PACKAGES_NAME = "noIntentPackages";
+    public static final String HAS_INTENT_PACKAGES_NAME = "noIntentPackages";
     public static final String IS_FREE_AND_OUT_OF_TRIAL_NAME = "is_free_and_out_of_trial";
     public static final String M_SCALE_NAME = "m_scale";
     public static final String HALF_ICON_WIDTH_PXL_NAME = "half_icon_width_pxl";

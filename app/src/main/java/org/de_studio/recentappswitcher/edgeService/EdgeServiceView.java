@@ -14,10 +14,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
@@ -117,6 +119,7 @@ import static org.de_studio.recentappswitcher.Cons.GRID_HEIGHT_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_NUMBER_COLUMNS_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_NUMBER_ROWS_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_WIDTH_NAME;
+import static org.de_studio.recentappswitcher.Cons.HAS_INTENT_PACKAGES_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_ENABLE_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
@@ -127,7 +130,6 @@ import static org.de_studio.recentappswitcher.Cons.IS_EDGE_2_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_FREE_AND_OUT_OF_TRIAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
-import static org.de_studio.recentappswitcher.Cons.NO_INTENT_PACKAGES_NAME;
 import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
 import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
 import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME;
@@ -349,8 +351,8 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     DelayToSwitchAsyncTask asyncTask;
     @Inject
-    @Named(NO_INTENT_PACKAGES_NAME)
-    Set<String> noIntentPackagesSet;
+    @Named(HAS_INTENT_PACKAGES_NAME)
+    Set<String> hasIntentPackagesSet;
     @Inject
     PackageManager packageManager;
     @Inject
@@ -360,6 +362,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     float[] folderCoor;
     boolean working = true;
     EdgesToggleReceiver receiver;
+    PackageChangedReceiver receiver1;
     private NotificationCompat.Builder notificationBuilder;
 
 
@@ -663,15 +666,15 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                                     !excludeSet.contains(packa) &&
                                     !tempPackageName.contains(packa)
                             ) {
-                                if (!noIntentPackagesSet.contains(packa)) {
+                                if (hasIntentPackagesSet.contains(packa)) {
                                     tempPackageName.add(packa);
-                                    Log.e(TAG, "app: " + packa +
-                                            "\nfirst time stamp = " + usageStats.getFirstTimeStamp()
-                                            + "\nlast time stamp = " + usageStats.getLastTimeStamp()
-                                            + "\nlast time used = " + usageStats.getLastTimeUsed()
-                                            + "\ntotal time foreground = " + usageStats.getTotalTimeInForeground()
-                                            + "\ndescribe = " + usageStats.describeContents()
-                                            + "\nstring = " + usageStats.toString());
+//                                    Log.e(TAG, "app: " + packa +
+//                                            "\nfirst time stamp = " + usageStats.getFirstTimeStamp()
+//                                            + "\nlast time stamp = " + usageStats.getLastTimeStamp()
+//                                            + "\nlast time used = " + usageStats.getLastTimeUsed()
+//                                            + "\ntotal time foreground = " + usageStats.getTotalTimeInForeground()
+//                                            + "\ndescribe = " + usageStats.describeContents()
+//                                            + "\nstring = " + usageStats.toString());
                                 }
                             }
                             if (tempPackageName.size() >= 6) {
@@ -1170,6 +1173,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     public void onDestroy() {
         Log.e(TAG, "onDestroy: ");
         this.unregisterReceiver(receiver);
+        this.unregisterReceiver(receiver1);
         removeAll();
         presenter.onDestroy();
         super.onDestroy();
@@ -1202,7 +1206,14 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         filter.addAction(Cons.ACTION_TOGGLE_EDGES);
         filter.addAction(Intent.ACTION_USER_PRESENT);
         filter.addAction(Cons.ACTION_REFRESH_FAVORITE);
+
+        IntentFilter filter1 = new IntentFilter();
+        filter1.addAction(Intent.ACTION_PACKAGE_ADDED);
+        filter1.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        filter1.addDataScheme("package");
         receiver = new EdgesToggleReceiver();
+        receiver1 = new PackageChangedReceiver();
+        this.registerReceiver(receiver1, filter1);
         this.registerReceiver(receiver, filter);
     }
 
@@ -1283,8 +1294,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         if (action.equals(MainActivity.ACTION_NOTI) & isFreeAndOutOfTrial) {
             Utility.startNotiDialog(getApplicationContext(), NotiDialog.OUT_OF_TRIAL);
         } else {
-            Log.e(TAG, "executeQuickAction: lastapp = " + lastAppPackageName);
-
             startQuickAction(getApplicationContext(), action, v, getClass().getName(), getPackageName(), lastAppPackageName);
         }
     }
@@ -1437,6 +1446,27 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
+    private class UpdateHasIntentPackageSet extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            hasIntentPackagesSet.clear();
+            Log.e(TAG, "noIntentPackagesSet: start getting = " + System.currentTimeMillis());
+            List<ApplicationInfo> packages = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+
+            for (ApplicationInfo packageInfo : packages) {
+                Log.d(TAG, "Installed package :" + packageInfo.packageName);
+                if (packageManager.getLaunchIntentForPackage(packageInfo.packageName) != null) {
+                    hasIntentPackagesSet.add(packageInfo.packageName);
+                }
+            }
+            Log.e(TAG, "noIntentPackagesSet: stop getting =  " + System.currentTimeMillis());
+            return null;
+        }
+    }
+
+
+
+
     public class EdgesToggleReceiver extends BroadcastReceiver {
         public EdgesToggleReceiver() {
         }
@@ -1484,4 +1514,31 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             }
         }
     }
+
+    public class PackageChangedReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED)) {
+                Log.e(TAG, "onReceive: action package removed");
+                if (!intent.getExtras().getBoolean(Intent.EXTRA_REPLACING)) {
+                    Log.e(TAG, "onReceive: remove ");
+                    UpdateHasIntentPackageSet updateHasIntentPackageSet = new UpdateHasIntentPackageSet();
+                    updateHasIntentPackageSet.execute();
+                }
+            } else if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
+                Log.e(TAG, "onReceive: action package added");
+                if (!intent.getExtras().getBoolean(Intent.EXTRA_REPLACING)) {
+                    int uid = intent.getExtras().getInt(Intent.EXTRA_UID);
+                    String[] packageName = packageManager.getPackagesForUid(uid);
+                    if (packageName != null) {
+                        for (String s : packageName) {
+                            Log.e(TAG, "onReceive: add " + s);
+                            hasIntentPackagesSet.add(s);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }

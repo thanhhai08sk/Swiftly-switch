@@ -129,7 +129,7 @@ import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.MODE_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.MODE_ONLY_FAVORITE;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
-import static org.de_studio.recentappswitcher.Cons.NO_INTENT_PACKAGES_NAME;
+import static org.de_studio.recentappswitcher.Cons.HAS_INTENT_PACKAGES_NAME;
 import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
 import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
 import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_VIEW_RADIUS_NAME;
@@ -211,7 +211,7 @@ public class EdgeServiceModule {
 
     @Provides
     @Singleton
-    @Named(NO_INTENT_PACKAGES_NAME)
+    @Named(HAS_INTENT_PACKAGES_NAME)
     Set<String> noIntentPackagesSet() {
         Log.e(TAG, "noIntentPackagesSet: start getting = " + System.currentTimeMillis());
         PackageManager pm = context.getPackageManager();
@@ -220,11 +220,12 @@ public class EdgeServiceModule {
 
         for (ApplicationInfo packageInfo : packages) {
             Log.d(TAG, "Installed package :" + packageInfo.packageName);
-            if (pm.getLaunchIntentForPackage(packageInfo.packageName) == null) {
+            if (pm.getLaunchIntentForPackage(packageInfo.packageName) != null) {
                 packageNames.add(packageInfo.packageName);
             }
         }
         Log.e(TAG, "noIntentPackagesSet: stop getting =  " + System.currentTimeMillis());
+
         return packageNames;
     }
 

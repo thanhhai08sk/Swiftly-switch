@@ -1,7 +1,5 @@
 package org.de_studio.recentappswitcher.edgeService;
 
-import android.util.Log;
-
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
@@ -187,7 +185,6 @@ public class EdgesServiceModel {
         } else {
             pinnedShortcut = new Shortcut[results1.size()];
             for (Shortcut shortcut : results1) {
-                Log.e(TAG, "result = " + shortcut.getPackageName());
                 pinnedShortcut[i] = pinRealm.copyFromRealm(shortcut);
                 i++;
             }
