@@ -683,7 +683,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                             packa = usageStats.getPackageName();
                             if (usageStats.getTotalTimeInForeground() > 500 &&
                                     !packa.contains("systemui") &&
-                                    !packa.equals(launcherPackageName) &&
+//                                    !packa.equals(launcherPackageName) &&
                                     !excludeSet.contains(packa) &&
                                     !tempPackageName.contains(packa)
                                     ) {
@@ -698,8 +698,8 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                                             + "\nstring = " + usageStats.toString());
                                 }
                             }
-                            if (tempPackageName.size() >= 6) {
-                                Log.e(TAG, "tempackage >= "  + 6);
+                            if (tempPackageName.size() >= 7) {
+                                Log.e(TAG, "tempackage >= "  + 7);
                                 break;
                             }
                         }
@@ -710,9 +710,19 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 }
             }
             if (tempPackageName.size()>1) {
-                lastAppPackageName = tempPackageName.get(1);
+                if (!tempPackageName.get(1).equals(launcherPackageName)) {
+                    lastAppPackageName = tempPackageName.get(1);
+                } else {
+                    if (tempPackageName.size() > 2) {
+                        lastAppPackageName = tempPackageName.get(2);
+                    }
+                }
             }
             Log.e(TAG, "getRecentApp2: time to get recent  = " + (System.currentTimeMillis() - timeStart));
+            Log.e(TAG, "getRecentApp2: tem size = " + tempPackageName.size());
+            for (String s : tempPackageName) {
+                Log.e(TAG, "getRecentApp2: temp = " + s);
+            }
             return tempPackageName;
 
         }

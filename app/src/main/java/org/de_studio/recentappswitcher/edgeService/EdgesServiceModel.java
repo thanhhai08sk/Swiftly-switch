@@ -124,6 +124,7 @@ public class EdgesServiceModel {
 
     public Shortcut[] getRecentList(ArrayList<String> tempPackageName) {
         Shortcut[] recentShortcut;
+        Log.e(TAG, "getRecentList: tem size = "+ tempPackageName.size());
         for (String s : tempPackageName) {
             Log.e(TAG, "temp package = " + s);
         }

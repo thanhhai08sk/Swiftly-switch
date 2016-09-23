@@ -69,7 +69,7 @@ public class EdgeServicePresenter {
                 if (shortcuts == null || shortcuts.length == 0) {
                     onSwitch(-1);
                 } else {
-                    view.showCircleIconsView(model.getRecentList(tempPackages));
+                    view.showCircleIconsView(shortcuts);
                     currentShowing = Cons.SHOWING_RECENT_CIRCLE;
                 }
                 break;
