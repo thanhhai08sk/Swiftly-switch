@@ -685,7 +685,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
                 }
             }
-            if (tempPackageName.size()>=1) {
+            if (tempPackageName.size()>1) {
                 lastAppPackageName = tempPackageName.get(1);
             }
         Log.e(TAG, "getRecentApp2: time to get recent  = " + (System.currentTimeMillis() - timeStart));
@@ -711,6 +711,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
 
     public void showCircleFavorite() {
+
         Shortcut shortcut;
         for (int i = 0; i < 6; i++) {
             shortcut = circleRealm.where(Shortcut.class).equalTo("id", i).findFirst();
@@ -719,7 +720,14 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             } else {
                 circleIcons[i].setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
             }
-
+        }
+        if (!circleParentsView.isAttachedToWindow()) {
+            try {
+                Log.e(TAG, "showCircleIconsView: add circle item to windowmanager");
+                windowManager.addView(circleParentsView, circleShortcutsViewPara);
+            } catch (IllegalStateException e) {
+                Log.e(TAG, " item_view has already been added to the window manager");
+            }
         }
     }
 

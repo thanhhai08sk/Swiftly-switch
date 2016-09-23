@@ -51,7 +51,6 @@ public class EdgeServicePresenter {
 
     }
     public void onActionDown(float x, float y, int edgeId) {
-        Log.e(TAG, "onActionDown: START TIME = " + System.currentTimeMillis());
         onHolding = true;
         setCurrentPositionAndMode(edgeId);
         xInit = model.getXInit(currentPosition, x, view.getWindowSize().x);
@@ -66,10 +65,13 @@ public class EdgeServicePresenter {
             default:
                 model.calculateCircleIconPositions(view.circleSizePxl, view.iconSizePxl, currentPosition, xInit, yInit, 6);
                 view.setCircleIconsPosition(model.circleIconXs, model.circleIconYs, xInit,yInit);
-                long time = System.currentTimeMillis();
-                view.showCircleIconsView(model.getRecentList(tempPackages));
-                Log.e(TAG, "calculate  = " +( System.currentTimeMillis() - time));
-                currentShowing = Cons.SHOWING_RECENT_CIRCLE;
+                Shortcut[] shortcuts = model.getRecentList(tempPackages);
+                if (shortcuts == null || shortcuts.length == 0) {
+                    onSwitch(-1);
+                } else {
+                    view.showCircleIconsView(model.getRecentList(tempPackages));
+                    currentShowing = Cons.SHOWING_RECENT_CIRCLE;
+                }
                 break;
         }
 //        view.removeAllExceptEdgeView();
