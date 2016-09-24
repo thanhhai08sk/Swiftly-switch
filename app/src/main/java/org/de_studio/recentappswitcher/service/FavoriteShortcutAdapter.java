@@ -111,6 +111,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
     }
 
     public void setupShortcuts() {
+        int count = getCount();
         myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
                 .name("default.realm")
                 .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
@@ -118,10 +119,12 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
                 .build());
         RealmResults<Shortcut> results = myRealm.where(Shortcut.class).lessThan("id", 100).findAllSorted("id", Sort.ASCENDING);
         if (results != null && results.size() >0) {
-            shortcuts = new Shortcut[getCount()];
+            shortcuts = new Shortcut[count];
             for (int i = 0; i < results.size(); i++) {
                 int j = results.get(i).getId();
-                shortcuts[j] = myRealm.copyFromRealm(results.get(i));
+                if (j < count) {
+                    shortcuts[j] = myRealm.copyFromRealm(results.get(i));
+                }
             }
         }
 
