@@ -354,6 +354,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     PackageManager packageManager;
     @Inject
+    @Nullable
     UsageStatsManager usageStatsManager;
 
     ViewPropertyAnimator folderAnimator;
