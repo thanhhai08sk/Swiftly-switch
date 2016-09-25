@@ -13,6 +13,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Vibrator;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -237,6 +238,7 @@ public class EdgeServiceModule {
 
     @Provides
     @Singleton
+    @Nullable
     UsageStatsManager usageStatsManager() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             return (UsageStatsManager)context.getSystemService(Context.USAGE_STATS_SERVICE);

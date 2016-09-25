@@ -353,8 +353,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     Set<String> hasIntentPackagesSet;
     @Inject
     PackageManager packageManager;
-    @Inject
-    @Nullable
     UsageStatsManager usageStatsManager;
 
     ViewPropertyAnimator folderAnimator;
@@ -435,6 +433,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     public void onCreate() {
         super.onCreate();
         inject();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            usageStatsManager = (UsageStatsManager)getSystemService(Context.USAGE_STATS_SERVICE);
+        }
         UpdateHasIntentPackageSet updateHasIntentPackageSet = new UpdateHasIntentPackageSet();
         updateHasIntentPackageSet.execute();
         presenter.onCreate();

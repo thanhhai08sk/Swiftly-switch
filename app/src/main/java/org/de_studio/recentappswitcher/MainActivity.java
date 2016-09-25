@@ -37,7 +37,7 @@ import org.de_studio.recentappswitcher.service.EdgeSetting;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
-    private static final int VERSION_NUMBER = 72;
+    private static final int VERSION_NUMBER = 74;
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final String EDGE_1_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_2_shared_preference";
@@ -566,7 +566,9 @@ public class MainActivity extends Activity {
     private void showWhatNew() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         int titleSize = getResources().getDimensionPixelSize(R.dimen.what_new_title_size);
-        AbsoluteSizeSpan span = new AbsoluteSizeSpan(titleSize);
+        String title243 = "Version 2.4.3";
+        String text243 = " - Support German and update for Portuguese, thanks Ackuna community!"
+                + "\n - Bugs fixed for android 4.4";
         String title240 = "Version 2.4.0";
         String text240 = " - Improve performance: getting recent apps and showing favorite grid now 200% faster."
                 + "\n - New animation"
@@ -606,6 +608,8 @@ public class MainActivity extends Activity {
                 "\n - Add Sound/Vibrate shortcut" +
                 "\n - Fix bugs" ;
 
+        SpannableString span243 = getSpanString(title243, titleSize);
+
         SpannableString span240 = getSpanString(title240, titleSize);
 
         SpannableString span233 = getSpanString(title2_3_3, titleSize);
@@ -631,7 +635,8 @@ public class MainActivity extends Activity {
         span2_2_10.setSpan(new AbsoluteSizeSpan(titleSize),0,title2_2_10.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
 
-        CharSequence finalText = TextUtils.concat(span240, "\n\n" , text240,"\n\n"
+        CharSequence finalText = TextUtils.concat(span243, "\n\n", text243, "\n\n",
+                span240, "\n\n" , text240,"\n\n"
                         ,"\n\n", span233, "\n\n", text2_3_3
                         , "\n\n", span2_3_2, "\n\n", text2_3_2
                         , "\n\n", span2_3_1, "\n\n", text2_3_1, "\n\n"
