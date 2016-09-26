@@ -660,7 +660,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 }
             }
             if (tempPackageNameKK.size()>=1) {
-                lastAppPackageName = tempPackageNameKK.get(1);
+                lastAppPackageName = tempPackageNameKK.get(0);
             }
             return tempPackageNameKK;
         } else {
