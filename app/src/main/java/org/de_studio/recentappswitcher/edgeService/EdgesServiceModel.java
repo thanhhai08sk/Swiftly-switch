@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.edgeService;
 
+import android.os.Build;
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -133,7 +134,9 @@ public class EdgesServiceModel {
             if (tempPackageName.contains(launcherPackagename) && tempPackageName.get(0).equalsIgnoreCase(launcherPackagename)) {
                 inHome = true;
             }
-            tempPackageName.remove(0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                tempPackageName.remove(0);
+            }
             if (!inHome && tempPackageName.contains(launcherPackagename)) {
                 tempPackageName.remove(launcherPackagename);
             }
