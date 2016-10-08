@@ -421,7 +421,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             case MainActivity.ACTION_RINGER_MODE:
                 Utility.setRinggerMode(context);
             case MainActivity.ACTION_FLASH_LIGHT:
-                Utility.flashLightAction2(context,EdgeGestureService.FLASH_LIGHT_ON);
+                Utility.flashLightAction2(context,!FLASH_LIGHT_ON);
                 break;
             case MainActivity.ACTION_SCREEN_LOCK:
                 Utility.screenLockAction(context);
