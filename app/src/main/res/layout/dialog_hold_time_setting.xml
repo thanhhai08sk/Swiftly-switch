@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/dialog_hold_time_seek_bar"
         android:padding="10dp"
-        android:max="1000"
+        android:max="1500"
         android:progress="150"
         />
 
