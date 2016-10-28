@@ -149,7 +149,7 @@ public class MoreSettingActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Log.e(TAG, "onClick: manufacture = " + Build.MANUFACTURER);
-                    if (!android.os.Build.MANUFACTURER.toLowerCase().contains("samsung")) {
+                    if (!android.os.Build.MANUFACTURER.toLowerCase().contains("samsung") && !android.os.Build.MANUFACTURER.toLowerCase().contains("zte") ) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(MoreSettingActivity.this);
                         builder.setTitle(R.string.enable_assist_app);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
