@@ -67,6 +67,7 @@ import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
 import org.de_studio.recentappswitcher.service.NotiDialog;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -139,7 +140,6 @@ import static org.de_studio.recentappswitcher.Cons.USE_CLOCK_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_INSTANT_FAVORITE_NAME;
 import static org.de_studio.recentappswitcher.Cons.VIBRATE_DURATION_NAME;
 
-java.util.ArrayList;
 
 /**
  * Created by HaiNguyen on 8/19/16.
@@ -644,6 +644,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
 
     public ArrayList<String> getRecentApp2() {
+        if (excludeSet == null) {
+            excludeSet = new HashSet<>();
+        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
             int numOfTask;
@@ -684,21 +687,14 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                         usageStats = mySortedMap.get(key);
                         if (usageStats != null) {
                             packa = usageStats.getPackageName();
-                            if (usageStats.getTotalTimeInForeground() > 500 &&
+                            if (    packa!=null &&
+                                    usageStats.getTotalTimeInForeground() > 500 &&
                                     !packa.contains("systemui") &&
-//                                    !packa.equals(launcherPackageName) &&
                                     !excludeSet.contains(packa) &&
                                     !tempPackageName.contains(packa)
                                     ) {
                                 if (hasIntentPackagesSet.contains(packa)) {
                                     tempPackageName.add(packa);
-                                    Log.e(TAG, "app: " + packa +
-                                            "\nfirst time stamp = " + usageStats.getFirstTimeStamp()
-                                            + "\nlast time stamp = " + usageStats.getLastTimeStamp()
-                                            + "\nlast time used = " + usageStats.getLastTimeUsed()
-                                            + "\ntotal time foreground = " + usageStats.getTotalTimeInForeground()
-                                            + "\ndescribe = " + usageStats.describeContents()
-                                            + "\nstring = " + usageStats.toString());
                                 }
                             }
                             if (tempPackageName.size() >= 7) {
@@ -706,10 +702,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                                 break;
                             }
                         }
-                    } else {
-//                        Log.e(TAG, "key is in future");
                     }
-
                 }
             }
             if (tempPackageName.size()>1) {
