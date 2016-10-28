@@ -35,15 +35,29 @@ public class ContactCursorAdapter extends CursorAdapter {
     private Shortcut shortcut;
     private AppListAdapter.AppChangeListener listener;
 
-    public ContactCursorAdapter(Context context, Cursor c, int flags, int mPosition) {
+    public ContactCursorAdapter(Context context, Cursor c, int flags, int mPosition, int mode) {
         super(context, c, flags);
         this.context = context;
         this.mPosition = mPosition;
-        myRealm = Realm.getInstance(new RealmConfiguration.Builder(context)
-                .name("default.realm")
-                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
-                .migration(new MyRealmMigration())
-                .build());
+//        myRealm = Realm.getInstance(new RealmConfiguration.Builder(context)
+//                .name("default.realm")
+//                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+//                .migration(new MyRealmMigration())
+//                .build());
+
+        if (mode == FavoriteSettingActivity.MODE_GRID || mode == FavoriteSettingActivity.MODE_FOLDER) {
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder(context)
+                    .name("default.realm")
+                    .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                    .migration(new MyRealmMigration())
+                    .build());
+        } else {
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder(context)
+                    .name("circleFavo.realm")
+                    .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                    .migration(new MyRealmMigration())
+                    .build());
+        }
     }
 
     @Override

@@ -130,6 +130,7 @@ public class PinRecentAddActionDialogFragment extends DialogFragment{
                                     notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
                                     getActivity().startActivity(notiIntent);
 
+
                                 }
                             });
                     builder.show();

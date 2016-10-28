@@ -78,21 +78,28 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
         mContactsList =
                 (ListView) getActivity().findViewById(R.id.list_view);
         permissionLayout = (LinearLayout) getActivity().findViewById(R.id.permission_missing);
-        mAdapter = new ContactCursorAdapter(getActivity(), null, 0, mPosition);
+        mAdapter = new ContactCursorAdapter(getActivity(), null, 0, mPosition, mode);
         mContactsList.setAdapter(mAdapter);
         mContactsList.setOnItemClickListener(this);
-        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getActivity())
-                .name("default.realm")
-                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
-                .migration(new MyRealmMigration())
-                .build());
+//        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getActivity())
+//                .name("default.realm")
+//                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+//                .migration(new MyRealmMigration())
+//                .build());
+        if (mode == FavoriteSettingActivity.MODE_GRID || mode == FavoriteSettingActivity.MODE_FOLDER) {
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder(getActivity())
+                    .name("default.realm")
+                    .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                    .migration(new MyRealmMigration())
+                    .build());
+        } else {
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder(getActivity())
+                    .name("circleFavo.realm")
+                    .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                    .migration(new MyRealmMigration())
+                    .build());
+        }
         ((ChooseShortcutActivity)getActivity()).setContactAdapter(mAdapter);
-//        mCursorAdapter = new SimpleCursorAdapter(
-//                getActivity(),
-//                R.layout.item_contact_list,
-//                null,
-//                FROM_COLUMNS, TO_IDS,
-//                0);
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
