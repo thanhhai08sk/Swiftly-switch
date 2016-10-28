@@ -410,13 +410,13 @@ public class MoreSettingActivity extends AppCompatActivity {
                 final TextView textView = (TextView) view.findViewById(R.id.dialog_hold_time_value);
                 int currentValue = sharedPreferencesDefautl.getInt(EdgeSetting.HOLD_TIME_KEY, 600);
                 textView.setText(currentValue +" ms");
-                seekBar.setProgress(currentValue - 300);
+                seekBar.setProgress(currentValue - Cons.HOLD_TIME_MIN);
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     int progressChanged;
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        progressChanged = progress + 300;
+                        progressChanged = progress + Cons.HOLD_TIME_MIN;
                         textView.setText(progressChanged + " ms");
                     }
 
