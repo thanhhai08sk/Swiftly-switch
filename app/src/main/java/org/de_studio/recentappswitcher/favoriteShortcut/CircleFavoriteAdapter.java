@@ -75,21 +75,15 @@ public class CircleFavoriteAdapter extends BaseAdapter {
         shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id",position).findFirst();
         CharSequence title= "";
         try {
-            title = shortcut.getLabel();
+            if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
+                title = shortcut.getName();
+            } else {
+                title = shortcut.getLabel();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(LOG_TAG, "null when get label");
         }
-//        try {
-//            title = packageManager.getApplicationLabel(packageManager.getApplicationInfo(shortcut.getPackageName(), 0));
-//        } catch (PackageManager.NameNotFoundException e) {
-//            remove(position);
-//            notifyDataSetChanged();
-//            Log.e(LOG_TAG, "NamenotFound when get label");
-//            return view;
-//        } catch (NullPointerException e) {
-//            Log.e(LOG_TAG, "Nullpoint when get label " + e);
-//        }
 
         if (shortcut == null) {
             icon.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
@@ -97,91 +91,6 @@ public class CircleFavoriteAdapter extends BaseAdapter {
         } else {
             Utility.setImageForShortcut(shortcut,packageManager,icon,mContext,iconPack,circleFavoRealm,false);
         }
-//            icon.setColorFilter(null);
-//            if (shortcut.getType() == Shortcut.TYPE_APP) {
-//                icon.setColorFilter(null);
-//                try {
-//                    Drawable defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
-//                    if (iconPack!=null) {
-//                        icon.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
-//                    } else {
-//                        icon.setImageDrawable(defaultDrawable);
-//                    }
-//                } catch (PackageManager.NameNotFoundException e) {
-//                    Log.e(LOG_TAG, "NameNotFound " + e);
-//                }
-//            }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
-//                switch (shortcut.getAction()) {
-//                    case Shortcut.ACTION_WIFI:
-//                        icon.setImageResource(R.drawable.ic_wifi);
-//                        break;
-//                    case Shortcut.ACTION_BLUETOOTH:
-//                        icon.setImageResource(R.drawable.ic_bluetooth);
-//                        break;
-//                    case Shortcut.ACTION_ROTATION:
-//                        icon.setImageResource(R.drawable.ic_rotation);
-//                        break;
-//                    case Shortcut.ACTION_POWER_MENU:
-//                        icon.setImageResource(R.drawable.ic_power_menu);
-//                        break;
-//                    case Shortcut.ACTION_HOME:
-//                        icon.setImageResource(R.drawable.ic_home);
-//                        break;
-//                    case Shortcut.ACTION_BACK:
-//                        icon.setImageResource(R.drawable.ic_back);
-//                        break;
-//                    case Shortcut.ACTION_NOTI:
-//                        icon.setImageResource(R.drawable.ic_notification);
-//                        break;
-//                    case Shortcut.ACTION_LAST_APP:
-//                        icon.setImageResource(R.drawable.ic_last_app);
-//                        break;
-//                    case Shortcut.ACTION_CALL_LOGS:
-//                        icon.setImageResource(R.drawable.ic_call_log);
-//                        break;
-//                    case Shortcut.ACTION_DIAL:
-//                        icon.setImageResource(R.drawable.ic_dial);
-//                        break;
-//                    case Shortcut.ACTION_CONTACT:
-//                        icon.setImageResource(R.drawable.ic_contact);
-//                        break;
-//                    case Shortcut.ACTION_RECENT:
-//                        icon.setImageResource(R.drawable.ic_recent);
-//                        break;
-//                    case Shortcut.ACTION_VOLUME:
-//                        icon.setImageResource(R.drawable.ic_volume);
-//                        break;
-//                    case Shortcut.ACTION_BRIGHTNESS:
-//                        icon.setImageResource(R.drawable.ic_screen_brightness);
-//                        break;
-//                    case Shortcut.ACTION_RINGER_MODE:
-//                        icon.setImageResource(R.drawable.ic_sound_normal);
-//                        break;
-//                    case Shortcut.ACTION_NONE:
-//                        icon.setImageDrawable(null);
-//                }
-//            }
-//
-//        }
-
-
-//        if (shortcut != null) {
-//            try {
-//                defaultDrawable = mContext.getPackageManager().getApplicationIcon(shortcut.getPackageName());
-//                if (iconPack != null) {
-//
-//                    icon.setImageDrawable(iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable));
-//                } else {
-//                    icon.setImageDrawable(defaultDrawable);
-//
-//                }
-//            } catch (PackageManager.NameNotFoundException e) {
-//                Log.e(LOG_TAG, "NameNotFound when set icon " + e);
-//            } catch (NullPointerException e) {
-//                Log.e(LOG_TAG, "Nullpoint when set icon " + e);
-//            }
-//            label.setText(title);
-//        }
         label.setText(title);
         Log.e(LOG_TAG, "label = " + title);
 
@@ -289,9 +198,6 @@ public class CircleFavoriteAdapter extends BaseAdapter {
         Shortcut shortcut = circleFavoRealm.where(Shortcut.class).equalTo("id", dragPosition).findFirst();
         if (shortcut != null) {
             shortcut.deleteFromRealm();
-//            shortcut.setType(Shortcut.TYPE_ACTION);
-//            shortcut.setAction(Shortcut.ACTION_NONE);
-//            shortcut.setLabel("");
         } else {
             Shortcut shortcut1 = new Shortcut();
             shortcut1.setType(Shortcut.TYPE_ACTION);
