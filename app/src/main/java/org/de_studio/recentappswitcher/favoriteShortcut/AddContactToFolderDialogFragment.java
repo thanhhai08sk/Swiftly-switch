@@ -185,6 +185,13 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
     @Override
     public void onDestroy() {
         Log.e(TAG, "onDestroy: close cusor");
+        if (mAdapter != null) {
+            mAdapter.clear();
+        }
+
+        if (myRealm != null) {
+            myRealm.close();
+        }
         try {
             mAdapter.getCursor().close();
         } catch (Exception e) {

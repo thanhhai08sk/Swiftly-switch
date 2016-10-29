@@ -244,4 +244,10 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void clear() {
+        if (myRealm != null) {
+            myRealm.close();
+        }
+    }
+
 }

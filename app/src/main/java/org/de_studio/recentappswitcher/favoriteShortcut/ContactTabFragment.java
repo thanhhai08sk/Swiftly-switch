@@ -244,6 +244,9 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
         } catch (Exception e) {
             e.printStackTrace();
         }
+        if (mAdapter != null) {
+            mAdapter.clear();
+        }
         super.onDestroy();
     }
 }

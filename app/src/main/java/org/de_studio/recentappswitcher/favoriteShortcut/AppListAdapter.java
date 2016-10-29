@@ -183,4 +183,10 @@ public class AppListAdapter extends BaseAdapter {
         this.listener = listener;
     }
 
+    public void clear() {
+        if (myRealm != null) {
+            myRealm.close();
+        }
+    }
+
 }

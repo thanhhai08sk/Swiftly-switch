@@ -76,4 +76,10 @@ public class AddAppToFolderAdapter extends BaseAdapter {
     public Object getItem(int position) {
         return mAppInfosArrayList.get(position);
     }
+
+    public void clear() {
+        if (myRealm != null) {
+            myRealm.close();
+        }
+    }
 }

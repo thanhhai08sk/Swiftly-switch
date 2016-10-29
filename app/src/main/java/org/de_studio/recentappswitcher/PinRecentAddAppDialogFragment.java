@@ -164,6 +164,14 @@ public class PinRecentAddAppDialogFragment extends DialogFragment {
 //        ((AddAppToFolderDialogFragment.MyDialogCloseListener) getActivity()).handleDialogClose();
     }
 
+    @Override
+    public void onDestroy() {
+        if (myRealm != null) {
+            myRealm.close();
+        }
+        super.onDestroy();
+    }
+
     private class LoadInstalledApp extends AsyncTask<Void, Void, ArrayList<AppInfors>> {
         protected ArrayList<AppInfors> doInBackground(Void... voids) {
 
@@ -197,6 +205,7 @@ public class PinRecentAddAppDialogFragment extends DialogFragment {
             }
 
         }
+
     }
 
     public void setPosition(int position) {

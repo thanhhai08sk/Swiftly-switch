@@ -210,4 +210,10 @@ public class CircleFavoriteAdapter extends BaseAdapter {
         circleFavoRealm.commitTransaction();
         notifyDataSetChanged();
     }
+
+    public void clear() {
+        if (circleFavoRealm != null) {
+            circleFavoRealm.close();
+        }
+    }
 }

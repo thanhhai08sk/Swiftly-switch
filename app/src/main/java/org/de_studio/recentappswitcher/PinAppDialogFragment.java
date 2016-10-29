@@ -130,6 +130,17 @@ public class PinAppDialogFragment extends DialogFragment {
         super.onDismiss(dialog);
     }
 
+    @Override
+    public void onDestroy() {
+        if (pinRealm != null) {
+            pinRealm.close();
+        }
+        if (mAdapter != null) {
+            mAdapter.clear();
+        }
+        super.onDestroy();
+    }
+
     private class LoadInstalledApp extends AsyncTask<Void, Void, ArrayList<AppInfors>> {
         protected ArrayList<AppInfors> doInBackground(Void... voids) {
 

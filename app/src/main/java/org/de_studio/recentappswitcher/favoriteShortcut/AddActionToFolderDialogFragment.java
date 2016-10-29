@@ -186,4 +186,15 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
         ((AddAppToFolderDialogFragment.MyDialogCloseListener) getActivity()).handleDialogClose();
     }
 
+    @Override
+    public void onDestroy() {
+        if (mAdapter != null) {
+            mAdapter.clear();
+        }
+
+        if (myRealm != null) {
+            myRealm.close();
+        }
+        super.onDestroy();
+    }
 }

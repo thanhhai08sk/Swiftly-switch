@@ -255,4 +255,10 @@ public class PinAppAdapter extends BaseAdapter{
             Utility.restartService(mContext.getApplicationContext());
         }else Toast.makeText(mContext, "Lack of Draw over other apps permission", Toast.LENGTH_SHORT).show();
     }
+
+    public void clear() {
+        if (pinRealm != null) {
+            pinRealm.close();
+        }
+    }
 }

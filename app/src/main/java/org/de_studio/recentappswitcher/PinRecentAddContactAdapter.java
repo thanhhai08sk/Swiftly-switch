@@ -15,27 +15,21 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
-
 import java.io.IOException;
-
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 /**
  * Created by HaiNguyen on 7/1/16.
  */
 public class PinRecentAddContactAdapter extends CursorAdapter {
 
-    private Realm myRealm;
 
     public PinRecentAddContactAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
-        myRealm = Realm.getInstance(new RealmConfiguration.Builder(context)
-                .name("pinApp.realm")
-                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
-                .migration(new MyRealmMigration())
-                .build());
+//        myRealm = Realm.getInstance(new RealmConfiguration.Builder(context)
+//                .name("pinApp.realm")
+//                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+//                .migration(new MyRealmMigration())
+//                .build());
     }
 
     @Override

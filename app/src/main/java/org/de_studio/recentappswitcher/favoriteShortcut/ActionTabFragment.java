@@ -71,6 +71,14 @@ public class ActionTabFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        if (mAdapter != null) {
+            mAdapter.clear();
+        }
+        super.onDestroy();
+    }
+
     public ActionListAdapter getAdapter() {
         return mAdapter;
     }

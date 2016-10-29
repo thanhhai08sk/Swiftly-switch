@@ -172,4 +172,11 @@ public class PinRecentAddActionDialogFragment extends DialogFragment{
 //        ((AddAppToFolderDialogFragment.MyDialogCloseListener) getActivity()).handleDialogClose();
     }
 
+    @Override
+    public void onDestroy() {
+        if (myRealm != null) {
+            myRealm.close();
+        }
+        super.onDestroy();
+    }
 }

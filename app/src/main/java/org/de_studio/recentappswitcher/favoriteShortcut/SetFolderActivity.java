@@ -135,4 +135,12 @@ public class SetFolderActivity extends AppCompatActivity implements AddAppToFold
             mAdapter.notifyDataSetChanged();
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        if (mAdapter != null) {
+            mAdapter.clear();
+        }
+        super.onDestroy();
+    }
 }

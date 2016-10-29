@@ -1221,6 +1221,13 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         if (circleRealm != null) {
             circleRealm.close();
         }
+        if (circleFavoriteAdapter != null) {
+            circleFavoriteAdapter.clear();
+        }
+        if (folderAdapter != null) {
+            folderAdapter.clear();
+        }
+
     }
 
     @Override

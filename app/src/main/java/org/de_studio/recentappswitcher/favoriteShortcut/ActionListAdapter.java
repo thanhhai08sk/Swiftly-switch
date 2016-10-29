@@ -217,4 +217,10 @@ public class ActionListAdapter extends BaseAdapter {
         this.listener = listener;
     }
 
+    public void clear() {
+        if (myRealm != null) {
+            myRealm.close();
+        }
+    }
+
 }

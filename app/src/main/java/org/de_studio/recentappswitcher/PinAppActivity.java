@@ -195,8 +195,15 @@ public class PinAppActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    protected void onDestroy() {
+        if (adapter != null) {
+            adapter.clear();
+        }
+        super.onDestroy();
+    }
 
-//    @Override
+    //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        MenuInflater menuInflater = getMenuInflater();
 //        menuInflater.inflate(R.menu.menu_pin_app, menu);

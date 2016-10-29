@@ -46,8 +46,6 @@ public class PinRecentAddAppAdapter extends BaseAdapter {
         }
         ImageView icon = (ImageView) returnView.findViewById(R.id.item_icon);
         TextView label = (TextView) returnView.findViewById(R.id.item_label);
-//        CheckBox checkBox = (CheckBox) returnView.findViewById(R.id.add_favorite_list_item_check_box);
-//        checkBox.setChecked(myRealm.where(Shortcut.class).equalTo("packageName",appInfors.packageName).findFirst()!=null);
         try {
             icon.setImageDrawable(packageManager.getApplicationIcon(appInfors.packageName));
 

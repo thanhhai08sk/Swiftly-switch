@@ -10,14 +10,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 /**
  * Created by HaiNguyen on 6/16/16.
@@ -28,7 +23,6 @@ public class ShortcutListAdapter extends BaseAdapter {
     private List<ResolveInfo> resolveInfos;
     private int mode;
     private AppListAdapter.AppChangeListener listener;
-    private Realm myRealm;
     private PackageManager packageManager;
 
 
@@ -38,19 +32,6 @@ public class ShortcutListAdapter extends BaseAdapter {
         this.resolveInfos = arrayList;
         this.mode = mode;
         packageManager = context.getPackageManager();
-        if (mode == FavoriteSettingActivity.MODE_GRID) {
-            myRealm = Realm.getInstance(new RealmConfiguration.Builder(context)
-                    .name("default.realm")
-                    .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
-                    .migration(new MyRealmMigration())
-                    .build());
-        } else {
-            myRealm = Realm.getInstance(new RealmConfiguration.Builder(context)
-                    .name("circleFavo.realm")
-                    .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
-                    .migration(new MyRealmMigration())
-                    .build());
-        }
     }
 
 

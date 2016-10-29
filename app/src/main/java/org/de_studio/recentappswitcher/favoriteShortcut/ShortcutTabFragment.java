@@ -179,6 +179,14 @@ public class ShortcutTabFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onDestroy() {
+        if (myRealm != null) {
+            myRealm.close();
+        }
+        super.onDestroy();
+    }
+
     public void setmPositioinToNext() {
         if (mPosition < Utility.getSizeOfFavoriteGrid(getContext())-1) {
             mPosition++;

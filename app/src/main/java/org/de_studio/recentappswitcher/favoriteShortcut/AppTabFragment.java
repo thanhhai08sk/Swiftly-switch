@@ -92,6 +92,13 @@ public class AppTabFragment extends Fragment{
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        if (mAdapter != null) {
+            mAdapter.clear();
+        }
+        super.onDestroy();
+    }
 
     private class LoadInstalledApp extends AsyncTask<Void, Void, ArrayList<AppInfors>> {
         protected ArrayList<AppInfors> doInBackground(Void... voids) {

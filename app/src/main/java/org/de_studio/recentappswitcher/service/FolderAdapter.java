@@ -124,4 +124,10 @@ public class FolderAdapter extends BaseAdapter {
 
         return imageView;
     }
+
+    public void clear() {
+        if (myRealm != null) {
+            myRealm.close();
+        }
+    }
 }

@@ -114,6 +114,12 @@ public class AddContactToFolderAdapter extends CursorAdapter {
         return LayoutInflater.from(context).inflate(R.layout.item_dialog_favorite_app, parent, false);
     }
 
+    public void clear() {
+        if (myRealm != null) {
+            myRealm.close();
+        }
+    }
+
 
 
 }

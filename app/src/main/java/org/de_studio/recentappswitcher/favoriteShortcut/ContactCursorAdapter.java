@@ -138,4 +138,10 @@ public class ContactCursorAdapter extends CursorAdapter {
     public AppListAdapter.AppChangeListener getListener() {
         return listener;
     }
+
+    public void clear() {
+        if (myRealm != null) {
+            myRealm.close();
+        }
+    }
 }

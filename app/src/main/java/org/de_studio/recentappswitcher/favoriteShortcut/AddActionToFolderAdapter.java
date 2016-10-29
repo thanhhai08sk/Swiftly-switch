@@ -105,4 +105,10 @@ public class AddActionToFolderAdapter extends BaseAdapter {
     public Object getItem(int position) {
         return stringArray[position];
     }
+
+    public void clear() {
+        if (myRealm != null) {
+            myRealm.close();
+        }
+    }
 }

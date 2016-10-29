@@ -179,6 +179,14 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
 //        });
     }
 
+    @Override
+    protected void onDestroy() {
+        if (myRealm != null) {
+            myRealm.close();
+        }
+        super.onDestroy();
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {

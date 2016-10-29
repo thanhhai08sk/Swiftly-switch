@@ -386,6 +386,17 @@ public class FavoriteSettingActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        if (listAdapter != null) {
+            listAdapter.clear();
+        }
+        if (mAdapter != null) {
+            mAdapter.clear();
+        }
+        super.onDestroy();
+    }
+
     private void updateGridView() {
         ViewGroup.LayoutParams gridParams = gridView.getLayoutParams();
         int gridRow = defaultSharedPreference.getInt(EdgeSetting.NUM_OF_GRID_ROW_KEY, 5);

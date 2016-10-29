@@ -187,4 +187,10 @@ public class FolderAdapter extends BaseAdapter {
         Utility.getFolderThumbnail(myRealm, mPosition, mContext);
         notifyDataSetChanged();
     }
+
+    public void clear() {
+        if (myRealm != null) {
+            myRealm.close();
+        }
+    }
 }

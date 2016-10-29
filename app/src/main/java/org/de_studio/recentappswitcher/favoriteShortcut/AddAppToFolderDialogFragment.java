@@ -145,6 +145,17 @@ public class AddAppToFolderDialogFragment  extends DialogFragment{
         ((MyDialogCloseListener) getActivity()).handleDialogClose();
     }
 
+    @Override
+    public void onDestroy() {
+        if (mAdapter != null) {
+            mAdapter.clear();
+        }
+        if (myRealm != null) {
+            myRealm.close();
+        }
+        super.onDestroy();
+    }
+
     private class LoadInstalledApp extends AsyncTask<Void, Void, ArrayList<AppInfors>> {
         protected ArrayList<AppInfors> doInBackground(Void... voids) {
 

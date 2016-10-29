@@ -174,6 +174,14 @@ public class PinRecentAddContactDialogFragment extends DialogFragment implements
     }
 
     @Override
+    public void onDestroy() {
+        if (myRealm != null) {
+            myRealm.close();
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle args) {
         String sordOrder = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC";
         return new CursorLoader(
