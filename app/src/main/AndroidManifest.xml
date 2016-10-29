@@ -89,6 +89,7 @@
             </intent-filter>
         </receiver>
 
+
         <activity
             android:name=".dialogActivity.AudioDialogActivity"
             android:excludeFromRecents="true"

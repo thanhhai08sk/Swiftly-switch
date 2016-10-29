@@ -1,13 +1,41 @@
 package org.de_studio.recentappswitcher.service;
 
 import android.accessibilityservice.AccessibilityService;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
+
+import org.de_studio.recentappswitcher.Cons;
 
 /**
  * Created by hai on 12/28/2015.
  */
 public class MyAccessibilityService extends AccessibilityService {
+    private static final String TAG = MyAccessibilityService.class.getSimpleName();
+    BroadcastReceiver receiver;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Cons.ACTION_BACK);
+        filter.addAction(Cons.ACTION_RECENT);
+        filter.addAction(Cons.ACTION_HOME);
+        filter.addAction(Cons.ACTION_POWER_MENU);
+        filter.addAction(Cons.ACTION_NOTI);
+        receiver = new EventReceiver();
+        this.registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.unregisterReceiver(receiver);
+    }
+
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         Log.e("MyAccessibilityService", "get event");
@@ -18,8 +46,10 @@ public class MyAccessibilityService extends AccessibilityService {
                     performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME);
                     break;
                 case 2:
-                    Log.e("MyAccessibilityService ", "back");
+                    Log.e("MyAccessibilityService ", "back " + System.currentTimeMillis());
                     performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
+                    Log.e("MyAccessibilityService ", "back " + System.currentTimeMillis());
+
                     break;
                 case 3:
                     Log.e("MyAccessibilityService ", "power");
@@ -48,6 +78,36 @@ public class MyAccessibilityService extends AccessibilityService {
     protected boolean onGesture(int gestureId) {
         return super.onGesture(gestureId);
     }
+
+
+    public class EventReceiver extends BroadcastReceiver {
+
+        public EventReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case Cons.ACTION_BACK:
+                    performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
+                    break;
+                case Cons.ACTION_HOME:
+                    performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME);
+                    break;
+                case Cons.ACTION_RECENT:
+                    performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS);
+                    break;
+                case Cons.ACTION_NOTI:
+                    performGlobalAction(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS);
+                    break;
+                case Cons.ACTION_POWER_MENU:
+                    performGlobalAction(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG);
+                    break;
+
+            }
+        }
+    }
+
 
 //    @Override
 //    protected void onServiceConnected() {

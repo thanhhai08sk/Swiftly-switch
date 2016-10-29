@@ -39,8 +39,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.view.accessibility.AccessibilityEventCompat;
-import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageView;
@@ -51,7 +49,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -1045,33 +1042,46 @@ public  class Utility {
 
 
     public static void backAction(Context context, View v, String className, String packageName) {
-        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-        event1.setClassName(className);
-        event1.getText().add("back");
-        event1.setAction(2);
-        event1.setPackageName(packageName);
-        event1.setEnabled(true);
-        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-        recordCompat.setSource(v);
-        if (Utility.isAccessibilityEnable(context)) {
-            manager.sendAccessibilityEvent(event1);
-        }else startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
+        context.sendBroadcast(new Intent(Cons.ACTION_BACK));
+        if (!Utility.isAccessibilityEnable(context)) {
+            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
+        }
+//        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+//        event1.setClassName(className);
+//        event1.getText().add("back");
+//        event1.setAction(2);
+//        event1.setPackageName(packageName);
+//        event1.setEnabled(true);
+//        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+//        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+//        recordCompat.setSource(v);
+//        Log.e(TAG, "backAction: send event " + (System.currentTimeMillis() - time));
+//        manager.sendAccessibilityEvent(event1);
+//        Log.e(TAG, "backAction: check service enabled " + (System.currentTimeMillis() - time));
+
+
+//        if (Utility.isAccessibilityEnable(context)) {
+//            manager.sendAccessibilityEvent(event1);
+//        }else startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
     }
 
     public static void recentAction(Context context, View v, String className, String packageName) {
-        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-        event1.setClassName(className);
-        event1.getText().add("recent");
-        event1.setAction(5);
-        event1.setPackageName(packageName);
-        event1.setEnabled(true);
-        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-        recordCompat.setSource(v);
-        if (Utility.isAccessibilityEnable(context)) {
-            manager.sendAccessibilityEvent(event1);
-        }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+        context.sendBroadcast(new Intent(Cons.ACTION_RECENT));
+        if (!Utility.isAccessibilityEnable(context)) {
+            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
+        }
+//        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
+//        event1.setClassName(className);
+//        event1.getText().add("recent");
+//        event1.setAction(5);
+//        event1.setPackageName(packageName);
+//        event1.setEnabled(true);
+//        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+//        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
+//        recordCompat.setSource(v);
+//        if (Utility.isAccessibilityEnable(context)) {
+//            manager.sendAccessibilityEvent(event1);
+//        }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
     }
 
     public static void volumeAction(Context context) {
@@ -1147,18 +1157,10 @@ public  class Utility {
     }
 
     public static void powerAction(Context context, View v, String className, String packageName) {
-        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-        event1.setClassName(className);
-        event1.getText().add("power");
-        event1.setAction(3);
-        event1.setPackageName(packageName);
-        event1.setEnabled(true);
-        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-        recordCompat.setSource(v);
-        if (Utility.isAccessibilityEnable(context)) {
-            manager.sendAccessibilityEvent(event1);
-        }else startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
+        context.sendBroadcast(new Intent(Cons.ACTION_POWER_MENU));
+        if (!Utility.isAccessibilityEnable(context)) {
+            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
+        }
     }
 
     public static void notiAction(Context context, View v, String className, String packageName) {
@@ -1175,46 +1177,21 @@ public  class Utility {
         } catch (ClassNotFoundException e) {
             Log.e(TAG, "ClassNotFound " + e);
         } catch (NoSuchMethodException e) {
-            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-            event1.setClassName(className);
-            event1.getText().add("noti");
-            event1.setAction(4);
-            event1.setPackageName(packageName);
-            event1.setEnabled(true);
-            AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-            recordCompat.setSource(v);
-            if (Utility.isAccessibilityEnable(context)) {
-                manager.sendAccessibilityEvent(event1);
-            }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+            notiActionByAccessibility(context);
         } catch (IllegalAccessException e) {
-            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-            event1.setClassName(className);
-            event1.getText().add("noti");
-            event1.setAction(4);
-            event1.setPackageName(packageName);
-            event1.setEnabled(true);
-            AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-            recordCompat.setSource(v);
-            if (Utility.isAccessibilityEnable(context)) {
-                manager.sendAccessibilityEvent(event1);
-            }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+            notiActionByAccessibility(context);
             Log.e(TAG, "IllegalAccessException " + e);
         } catch (InvocationTargetException e) {
-            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-            event1.setClassName(className);
-            event1.getText().add("noti");
-            event1.setAction(4);
-            event1.setPackageName(packageName);
-            event1.setEnabled(true);
-            AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-            recordCompat.setSource(v);
-            if (Utility.isAccessibilityEnable(context)) {
-                manager.sendAccessibilityEvent(event1);
-            }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+            notiActionByAccessibility(context);
             Log.e(TAG, "InvocationTargetException " + e);
+        }
+    }
+
+
+    private static void notiActionByAccessibility(Context context) {
+        context.sendBroadcast(new Intent(Cons.ACTION_NOTI));
+        if (!Utility.isAccessibilityEnable(context)) {
+            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
         }
     }
 
