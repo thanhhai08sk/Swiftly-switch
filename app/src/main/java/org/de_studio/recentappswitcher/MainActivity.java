@@ -37,7 +37,7 @@ import org.de_studio.recentappswitcher.service.EdgeSetting;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
-    private static final int VERSION_NUMBER = 76;
+    private static final int VERSION_NUMBER = 77;
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final String EDGE_1_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_2_shared_preference";
@@ -204,65 +204,14 @@ public class MainActivity extends Activity {
                     }
                 });
 
-
-//                yesButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
-//                        builder.setMessage(R.string.please_vote_for_this_app)
-//                                .setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.HAS_REACT_FOR_VOTE_KEY, true).commit();
-//                                        appBarLayout.removeView(doYouLoveLinearLayout);
-//                                        Uri uri = Uri.parse("mbarket://details?id=" + getPackageName());
-//                                        Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
-//                                        gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-//                                                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-//                                        try {
-//                                            startActivity(gotoMarket);
-//                                        } catch (ActivityNotFoundException e) {
-//                                            startActivity(new Intent(Intent.ACTION_VIEW,
-//                                                    Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
-//                                        }
-//                                    }
-//                                })
-//                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.HAS_REACT_FOR_VOTE_KEY, true).commit();
-//                                        appBarLayout.removeView(doYouLoveLinearLayout);
-//                                        // d
-//                                    }
-//                                })
-//                                .setNeutralButton(R.string.share, new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        shareFriend();
-//                                    }
-//                                });
-//                        builder.show();
-//                    }
-//                });
             }
         }
 
-//        step1Button = (Button) findViewById(R.id.step1_button);
         edge1Switch = (SwitchCompat) findViewById(R.id.edge_1_switch);
         edge2Switch = (SwitchCompat) findViewById(R.id.edge_2_switch);
-//        Switch hapticFeedbackOnTriggerSwitch = (Switch) findViewById(R.id.main_disable_haptic_feedback_switch);
-//        Switch hapticFeedbackOnItemSwitch = (Switch) findViewById(R.id.main_haptic_feedback_on_item_switch);
-//        Switch disableClockSwitch = (Switch) findViewById(R.id.main_disable_clock_switch);
-//        Switch disableAnimationSwitch = (Switch) findViewById(R.id.main_disable_animation_switch);
-//        Switch holdTimeSwitch = (Switch) findViewById(R.id.main_hold_time_switch);
         final LinearLayout shareFriendLinearLayout = (LinearLayout) findViewById(R.id.main_share_linear_layout);
         LinearLayout reviewLinearLayout = (LinearLayout) findViewById(R.id.main_review_linear_layout);
         LinearLayout emailLinearLayout = (LinearLayout) findViewById(R.id.main_email_linear_layout);
-//        hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferencesDefautl.getBoolean(EdgeSetting.DISABLE_HAPTIC_FEEDBACK_KEY, true));
-//        hapticFeedbackOnItemSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.HAPTIC_ON_ICON_KEY,false));
-//        disableClockSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY,false));
-//        disableAnimationSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.USE_ANIMATION_KEY,true));
-//        holdTimeSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.HOLD_TIME_ENABLE_KEY,true));
         edge1Switch.setChecked(sharedPreferences1.getBoolean(EdgeSetting.EDGE_ON_KEY, true));
         edge2Switch.setChecked(sharedPreferences2.getBoolean(EdgeSetting.EDGE_ON_KEY, false));
         if (isTrial) {
@@ -335,44 +284,6 @@ public class MainActivity extends Activity {
                 startActivity(intent);
             }
         });
-//        hapticFeedbackOnTriggerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.DISABLE_HAPTIC_FEEDBACK_KEY, !isChecked).commit();
-//            }
-//        });
-//        hapticFeedbackOnItemSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.HAPTIC_ON_ICON_KEY,isChecked).commit();
-//            }
-//        });
-//        disableClockSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.DISABLE_CLOCK_KEY,isChecked).commit();
-//            }
-//        });
-//        disableAnimationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.USE_ANIMATION_KEY,isChecked).commit();
-//            }
-//        });
-//        holdTimeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                sharedPreferencesDefautl.edit().putBoolean(EdgeSetting.HOLD_TIME_ENABLE_KEY, isChecked).commit();
-//            }
-//        });
-//        step2Button = (Button) findViewById(R.id.step2_button);
-//        step1Text = (TextView) findViewById(R.id.step_1_text);
-//        step1GoToSettingButton = (Button) findViewById(R.id.step1_go_to_setting_button);
-//        ImageButton favoriteInfoButton = (ImageButton) findViewById(R.id.main_favorite_info_image_button);
-//        ImageButton excludeInfoButton = (ImageButton) findViewById(R.id.main_exclude_info_image_button);
-//        ImageButton pinAppInfoButton = (ImageButton)findViewById(R.id.main_pin_app_info_image_button);
-//        ImageButton disableAccessibilityInfoButton = (ImageButton) findViewById(R.id.main_disable_accessibility_info_image_button);
-//        final FrameLayout stepTextFrame = (FrameLayout) findViewById(R.id.step_text_frame_layout);
         ImageButton edge1SettingButton = (ImageButton) findViewById(R.id.edge_1_setting_image_button);
         ImageButton edge2SettingButton = (ImageButton) findViewById(R.id.edge_2_setting_image_button);
 //        ImageButton iconPackSettingButton = (ImageButton) findViewById(R.id.main_icon_pack_support_setting_button);
@@ -423,25 +334,15 @@ public class MainActivity extends Activity {
             }
         });
         ImageButton outerRingSettingButton = (ImageButton) findViewById(R.id.main_outter_ring_setting_button);
-//        final ImageButton vibrationDurationSettingButton = (ImageButton) findViewById(R.id.main_vibration_duration_setting_image_button);
-//        ImageButton iconSizeSettingButton = (ImageButton) findViewById(R.id.main_icon_size_setting_image_button);
-//        ImageButton backgroundColorSettingButton = (ImageButton) findViewById(R.id.main_background_color_setting_image_button);
-//        ImageButton guideColorSettingButton = (ImageButton) findViewById(R.id.main_guide_color_setting_image_button);
-//        ImageButton holdTimeSettingButton = (ImageButton) findViewById(R.id.main_hold_time_setting_image_button);
-//        ImageButton animationTimeSettingButton = (ImageButton) findViewById(R.id.main_animation_time_setting_image_button);
-//        ImageButton holdTimeInfoButton = (ImageButton) findViewById(R.id.main_hold_time_info_image_button);
         edge1SettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                FragmentManager fragmentManager = getSupportFragmentManager();
                 android.app.FragmentManager fragmentManager = getFragmentManager();
                 EdgeSetting newFragment = new EdgeSetting();
                 Bundle bundle = new Bundle();
                 bundle.putInt(EdgeSetting.EDGE_NUMBER_KEY, 1);
                 newFragment.setArguments(bundle);
-//                FragmentTransaction transaction = fragmentManager.beginTransaction();
                 android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
-//                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 transaction.add(android.R.id.content, newFragment)
                         .addToBackStack(null).commit();
@@ -566,6 +467,12 @@ public class MainActivity extends Activity {
     private void showWhatNew() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         int titleSize = getResources().getDimensionPixelSize(R.dimen.what_new_title_size);
+        String title246 = "Version 2.4.6";
+        String text246 = " - Fix Ringer Mode bug in Quick Action"
+                + "\n - Fix Popup Widget shortcut's icons"
+                + "\n - Update German translation, thank jume from Ackuna.com!"
+                + "\n - Exclude Samsung/ZTE devices from the Lock Screen feature that can cause problem uninstalling the app";
+
         String title245 = "Version 2.4.5";
         String text245 = " - Fix bugs"
                 + "\n - Speed up Back Button"
@@ -611,6 +518,7 @@ public class MainActivity extends Activity {
         String text2_2_10 = " - Support Shortcut (include Tasker action)" +
                 "\n - Add Sound/Vibrate shortcut" +
                 "\n - Fix bugs" ;
+        SpannableString span246 = getSpanString(title246, titleSize);
         SpannableString span245 = getSpanString(title245, titleSize);
 
         SpannableString span243 = getSpanString(title243, titleSize);
@@ -641,6 +549,7 @@ public class MainActivity extends Activity {
 
 
         CharSequence finalText = TextUtils.concat(
+                span246, "\n\n", text246, "\n\n",
                 span245, "\n\n", text245, "\n\n",
                 span243, "\n\n", text243, "\n\n",
                 span240, "\n\n" , text240,"\n\n"
