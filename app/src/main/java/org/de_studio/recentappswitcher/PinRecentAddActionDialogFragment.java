@@ -62,60 +62,30 @@ public class PinRecentAddActionDialogFragment extends DialogFragment{
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                CheckBox checkBox = (CheckBox)view.findViewById(R.id.add_favorite_list_item_check_box);
-                int size = (int) myRealm.where(Shortcut.class).count();
-                String item =(String) mAdapter.getItem(position);
-                int action = Utility.getActionFromLabel(getActivity(), item);
-                Shortcut removeShortcut = myRealm.where(Shortcut.class).equalTo("id",PinRecentAddActionDialogFragment.this.position).findFirst();
-                Shortcut newShortcut = new Shortcut();
-                newShortcut.setId(PinRecentAddActionDialogFragment.this.position);
-                newShortcut.setAction(action);
-                newShortcut.setLabel(item);
-                newShortcut.setType(Shortcut.TYPE_ACTION);
-                myRealm.beginTransaction();
-                if (removeShortcut != null) {
-                    removeShortcut.deleteFromRealm();
+                if (stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_screen_lock))
+                        && (android.os.Build.MANUFACTURER.toLowerCase().contains("samsung") || android.os.Build.MANUFACTURER.toLowerCase().contains("zte"))
+                        && Build.VERSION.SDK_INT == Build.VERSION_CODES.M
+                        ) {
+
+                    Utility.showTextDialog(getActivity(), R.string.this_feature_does_not_supported_on_samsung_devices);
+
+                } else {
+                    int size = (int) myRealm.where(Shortcut.class).count();
+                    String item =(String) mAdapter.getItem(position);
+                    int action = Utility.getActionFromLabel(getActivity(), item);
+                    Shortcut removeShortcut = myRealm.where(Shortcut.class).equalTo("id",PinRecentAddActionDialogFragment.this.position).findFirst();
+                    Shortcut newShortcut = new Shortcut();
+                    newShortcut.setId(PinRecentAddActionDialogFragment.this.position);
+                    newShortcut.setAction(action);
+                    newShortcut.setLabel(item);
+                    newShortcut.setType(Shortcut.TYPE_ACTION);
+                    myRealm.beginTransaction();
+                    if (removeShortcut != null) {
+                        removeShortcut.deleteFromRealm();
+                    }
+                    myRealm.copyToRealm(newShortcut);
+                    myRealm.commitTransaction();
                 }
-                myRealm.copyToRealm(newShortcut);
-                myRealm.commitTransaction();
-//                if (checkBox != null) {
-//                    if (checkBox.isChecked()) {
-//                        myRealm.beginTransaction();
-//                        Shortcut removeShortcut = myRealm.where(Shortcut.class).equalTo("type",Shortcut.TYPE_ACTION) .equalTo("action",action).findFirst();
-//                        int removeId = removeShortcut.getId();
-//                        Log.e(TAG, "removeID = " + removeId);
-//                        removeShortcut.deleteFromRealm();
-//                        RealmResults<Shortcut> results = myRealm.where(Shortcut.class).findAll().sort("id", Sort.ASCENDING);
-//                        for (int i = 0; i < results.size(); i++) {
-//                            Log.e(TAG, "id = " + results.get(i).getId());
-//                            if (results.get(i).getId() >= removeId) {
-//                                Log.e(TAG, "when i = " + i + "result id = " + results.get(i).getId());
-//                                Shortcut shortcut = results.get(i);
-//                                int oldId = shortcut.getId();
-//                                shortcut.setId(oldId - 1);
-//                            }
-//                        }
-//                        myRealm.commitTransaction();
-//                    } else {
-////                        if (stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_folder))) {
-////                            checkBox.setChecked(false);
-////                            Toast.makeText(getContext(), getString(R.string.out_of_limit), Toast.LENGTH_SHORT).show();
-////                        }
-//                        if (size < 6) {
-//                            Shortcut newShortcut = new Shortcut();
-//                            newShortcut.setId(size);
-//                            newShortcut.setAction(action);
-//                            newShortcut.setLabel(item);
-//                            newShortcut.setType(Shortcut.TYPE_ACTION);
-//                            myRealm.beginTransaction();
-//                            myRealm.copyToRealm(newShortcut);
-//                            myRealm.commitTransaction();
-//                        } else {
-//                            Toast.makeText(MyApplication.getContext(),getString(R.string.out_of_limit),Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                    }
-//                }
                 if ((stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_rotation)) ||
                         stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_brightness))) &&
                         Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
@@ -135,7 +105,11 @@ public class PinRecentAddActionDialogFragment extends DialogFragment{
                             });
                     builder.show();
                 }
-                if (stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_screen_lock))) {
+                if (!android.os.Build.MANUFACTURER.toLowerCase().contains("samsung")
+                        && !android.os.Build.MANUFACTURER.toLowerCase().contains("zte")
+                        && stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_screen_lock))
+                        || Build.VERSION.SDK_INT != Build.VERSION_CODES.M)
+                {
                     Utility.askForAdminPermission(getActivity());
                 }
 
