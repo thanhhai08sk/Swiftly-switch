@@ -1,9 +1,6 @@
 package org.de_studio.recentappswitcher.favoriteShortcut;
 
 import android.app.Dialog;
-import android.app.admin.DevicePolicyManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -29,7 +26,6 @@ import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
-import org.de_studio.recentappswitcher.shortcut.LockAdmin;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -71,6 +67,7 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
                 int action = Utility.getActionFromLabel(getActivity(), item);
                 if (checkBox != null) {
                     if (checkBox.isChecked()) {
+
                         myRealm.beginTransaction();
                         Shortcut removeShortcut = myRealm.where(Shortcut.class).greaterThan("id",startId -1).lessThan("id", startId + 1000).equalTo("type",Shortcut.TYPE_ACTION) .equalTo("action",action).findFirst();
                         int removeId = removeShortcut.getId();
@@ -87,17 +84,27 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
                             }
                         }
                         myRealm.commitTransaction();
+
                     } else {
                         if (size < 16) {
-                            Shortcut newShortcut = new Shortcut();
-                            newShortcut.setId(startId+ size);
+                            if (stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_screen_lock))
+                                    && (android.os.Build.MANUFACTURER.toLowerCase().contains("samsung") || android.os.Build.MANUFACTURER.toLowerCase().contains("zte"))
+                                    && Build.VERSION.SDK_INT == Build.VERSION_CODES.M
+                                    ) {
+
+                                Utility.showTextDialog(getActivity(), R.string.this_feature_does_not_supported_on_samsung_devices);
+
+                            } else {
+                                Shortcut newShortcut = new Shortcut();
+                                newShortcut.setId(startId+ size);
 //                            Log.e(LOG_TAG, "size = " + size);
-                            newShortcut.setAction(action);
-                            newShortcut.setLabel(item);
-                            newShortcut.setType(Shortcut.TYPE_ACTION);
-                            myRealm.beginTransaction();
-                            myRealm.copyToRealm(newShortcut);
-                            myRealm.commitTransaction();
+                                newShortcut.setAction(action);
+                                newShortcut.setLabel(item);
+                                newShortcut.setType(Shortcut.TYPE_ACTION);
+                                myRealm.beginTransaction();
+                                myRealm.copyToRealm(newShortcut);
+                                myRealm.commitTransaction();
+                            }
                         } else {
                             Toast.makeText(MyApplication.getContext(),getString(R.string.out_of_limit),Toast.LENGTH_SHORT).show();
                         }
@@ -124,28 +131,12 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
                     builder.show();
                 }
 
-                if (stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_screen_lock))) {
-                    final ComponentName cm = new ComponentName(getContext(), LockAdmin.class);
-                    final DevicePolicyManager pm = (DevicePolicyManager) getContext().getSystemService(Context.DEVICE_POLICY_SERVICE);
-                    if (!pm.isAdminActive(cm)) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle(R.string.admin_permission)
-                                .setMessage(R.string.admin_permission_explain)
-                                .setPositiveButton(R.string.go_to_setting, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-                                        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cm);
-                                        intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                                                getActivity().getString(R.string.admin_desc));
-                                        startActivity(intent);
-
-                                    }
-                                });
-                        builder.show();
-                    }
-
-
+                if (!android.os.Build.MANUFACTURER.toLowerCase().contains("samsung")
+                        && !android.os.Build.MANUFACTURER.toLowerCase().contains("zte")
+                        && stringArray[position].equalsIgnoreCase(getActivity().getString(R.string.setting_shortcut_screen_lock))
+                        || Build.VERSION.SDK_INT != Build.VERSION_CODES.M)
+                {
+                    Utility.askForAdminPermission(getActivity());
                 }
 
 
