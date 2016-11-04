@@ -124,6 +124,7 @@ public class PinRecentAddShortcutDialogFragment extends DialogFragment {
                     if (extra != null && extra instanceof Intent.ShortcutIconResource) {
                         try {
                             Intent.ShortcutIconResource iconResource = (Intent.ShortcutIconResource) extra;
+                            packageName = iconResource.packageName;
                             Resources resources = packageManager.getResourcesForApplication(iconResource.packageName);
                             id = resources.getIdentifier(iconResource.resourceName, null, null);
                         } catch (Exception e) {
