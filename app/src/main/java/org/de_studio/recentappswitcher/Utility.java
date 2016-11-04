@@ -2385,6 +2385,13 @@ public  class Utility {
         startService(context);
     }
 
+    public static void showTextDialog(Context context, int stringId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(stringId);
+        builder.setPositiveButton(R.string.app_tab_fragment_ok_button, null);
+        builder.create().show();
+    }
+
 
 
 

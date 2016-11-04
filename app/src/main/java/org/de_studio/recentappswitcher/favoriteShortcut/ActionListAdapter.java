@@ -94,7 +94,7 @@ public class ActionListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -158,9 +158,16 @@ public class ActionListAdapter extends BaseAdapter {
                 if (mode != FavoriteSettingActivity.MODE_GRID && stringArray[position].equalsIgnoreCase(context.getString(R.string.setting_shortcut_folder))) {
                     Toast.makeText(context, "Can't add folder to Circle Favorite", Toast.LENGTH_SHORT).show();
 
+                } else if (stringArray[position].equalsIgnoreCase(context.getString(R.string.setting_shortcut_screen_lock))
+                        && (android.os.Build.MANUFACTURER.toLowerCase().contains("samsung") || android.os.Build.MANUFACTURER.toLowerCase().contains("zte"))
+                        && Build.VERSION.SDK_INT == Build.VERSION_CODES.M
+                        ) {
+
+                    Utility.showTextDialog(context,R.string.this_feature_does_not_supported_on_samsung_devices);
+
                 } else {
                     myRealm.beginTransaction();
-                    RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id",mPosition).findAll();
+                    RealmResults<Shortcut> oldShortcut = myRealm.where(Shortcut.class).equalTo("id", mPosition).findAll();
                     Log.e(LOG_TAG, "mPosition = " + mPosition);
                     oldShortcut.deleteAllFromRealm();
                     Shortcut shortcut = new Shortcut();
@@ -176,7 +183,7 @@ public class ActionListAdapter extends BaseAdapter {
 
                     myRealm.copyToRealm(shortcut);
                     myRealm.commitTransaction();
-                    mAction = Utility.getActionFromLabel(context,item);
+                    mAction = Utility.getActionFromLabel(context, item);
                     ActionListAdapter.this.notifyDataSetChanged();
                     listener.onSettingChange();
                 }
@@ -198,14 +205,19 @@ public class ActionListAdapter extends BaseAdapter {
                             });
                     builder.show();
                 }
-                if ((stringArray[position].equalsIgnoreCase(context.getString(R.string.setting_shortcut_screen_lock)))) {
+
+                if (!android.os.Build.MANUFACTURER.toLowerCase().contains("samsung")
+                        && !android.os.Build.MANUFACTURER.toLowerCase().contains("zte")
+                        && stringArray[position].equalsIgnoreCase(context.getString(R.string.setting_shortcut_screen_lock))
+                        || Build.VERSION.SDK_INT != Build.VERSION_CODES.M)
+                         {
                     Utility.askForAdminPermission(context);
                 }
 
 
+
             }
         });
-
         return view;
     }
 

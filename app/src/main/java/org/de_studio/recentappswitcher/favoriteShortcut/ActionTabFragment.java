@@ -63,7 +63,7 @@ public class ActionTabFragment extends Fragment {
         mListView = (ListView) view.findViewById(R.id.fragment_app_tab_list_view);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        mAdapter = new ActionListAdapter(getContext(),mPosition, mode);
+        mAdapter = new ActionListAdapter(getActivity(),mPosition, mode);
         mListView.setAdapter(mAdapter);
         ((ChooseShortcutActivity)getActivity()).setSettingAdapter(mAdapter);
         Log.e(LOG_TAG, "inflate mListView");
