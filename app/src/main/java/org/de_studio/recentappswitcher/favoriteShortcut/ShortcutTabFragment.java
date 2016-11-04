@@ -122,16 +122,14 @@ public class ShortcutTabFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode==1 && resultCode == Activity.RESULT_OK) {
             try {
-                Bundle bundle = data.getExtras();
-                for (String key : bundle.keySet()) {
-                    Object value = bundle.get(key);
-                    Log.e(TAG, String.format("%s %s (%s)", key,
-                            value.toString(), value.getClass().getName()));
-                }
+//                Bundle bundle = data.getExtras();
+//                for (String key : bundle.keySet()) {
+//                    Object value = bundle.get(key);
+//                    Log.e(TAG, String.format("%s %s (%s)", key,
+//                            value.toString(), value.getClass().getName()));
+//                }
 
-//                Log.e(TAG, "onActivityResult: res = " + data.getExtras().get(Intent.EXTRA_SHORTCUT_ICON));
                 String label = (String) data.getExtras().get(Intent.EXTRA_SHORTCUT_NAME);
-//                int iconRes = (int) data.getExtras().get(Intent.EXTRA_SHORTCUT_ICON);
                 String stringIntent = ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0);
                 String packageName =  mResolveInfo.activityInfo.packageName;
                 int id = 0;
