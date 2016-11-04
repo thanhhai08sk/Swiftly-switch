@@ -122,6 +122,13 @@ public class ShortcutTabFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode==1 && resultCode == Activity.RESULT_OK) {
             try {
+                Bundle bundle = data.getExtras();
+                for (String key : bundle.keySet()) {
+                    Object value = bundle.get(key);
+                    Log.e(TAG, String.format("%s %s (%s)", key,
+                            value.toString(), value.getClass().getName()));
+                }
+
 //                Log.e(TAG, "onActivityResult: res = " + data.getExtras().get(Intent.EXTRA_SHORTCUT_ICON));
                 String label = (String) data.getExtras().get(Intent.EXTRA_SHORTCUT_NAME);
 //                int iconRes = (int) data.getExtras().get(Intent.EXTRA_SHORTCUT_ICON);
@@ -138,8 +145,10 @@ public class ShortcutTabFragment extends Fragment {
                     if (extra != null && extra instanceof Intent.ShortcutIconResource) {
                         try {
                             Intent.ShortcutIconResource iconResource = (Intent.ShortcutIconResource) extra;
+                            packageName = iconResource.packageName;
                             Resources resources = packageManager.getResourcesForApplication(iconResource.packageName);
                             id = resources.getIdentifier(iconResource.resourceName, null, null);
+                            Log.e(TAG, "onActivityResult: get resource " + iconResource.toString() + "\nid = " + id );
                         } catch (Exception e) {
                             Log.e(TAG, "onActivityResult: Could not load shortcut icon:");
                         }
@@ -164,6 +173,7 @@ public class ShortcutTabFragment extends Fragment {
                     bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     shortcut.setBitmap(stream.toByteArray());
                 } else {
+                    Log.e(TAG, "onActivityResult: bitmap null, use resId " + id);
                     shortcut.setResId(id);
                 }
                 myRealm.copyToRealm(shortcut);
