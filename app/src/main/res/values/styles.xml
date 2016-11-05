@@ -43,4 +43,26 @@
 
     <style name="step_button"></style>
 
+    <style name="TextAppearance_Subhead_Primary_Dark" parent="@style/TextAppearance.AppCompat.Subhead">
+        <item name="android:textColor">@color/text_primary_dark</item>
+    </style>
+    <style name="TextAppearance_Body1_Secondary_Dark" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/text_secondary_dark</item>
+    </style>
+
+    //Main view
+    <style name="Main_text_primary">
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:lines">1</item>
+        <item name="android:textAppearance">@style/TextAppearance_Subhead_Primary_Dark</item>
+    </style>
+    <style name="Main_text_secondary">
+        <item name="android:textAppearance">@style/TextAppearance_Body1_Secondary_Dark</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:lines">1</item>
+
+    </style>
+
 </resources>

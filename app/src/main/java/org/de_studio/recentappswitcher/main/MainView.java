@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 
 import org.de_studio.recentappswitcher.R;
 
@@ -17,6 +20,10 @@ public class MainView extends Activity {
     TabLayout tabLayout;
     @BindView(R.id.container)
     ViewPager viewPager;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
 
 
@@ -43,6 +50,10 @@ public class MainView extends Activity {
     }
 
     public void setupViewPager() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }

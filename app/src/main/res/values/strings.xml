@@ -214,4 +214,8 @@
     <string name="this_feature_does_not_supported_on_samsung_devices">This feature is not supported on Samsung or ZTE devices</string>
     <string name="title_activity_main_view">MainView</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_main_view1">MainView1</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
