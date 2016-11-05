@@ -212,4 +212,6 @@
     <string name="recent_app">Recent app</string>
     <string name="title_activity_pin_shortcuts">Pin shortcuts</string>
     <string name="this_feature_does_not_supported_on_samsung_devices">This feature is not supported on Samsung or ZTE devices</string>
+    <string name="title_activity_main_view">MainView</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

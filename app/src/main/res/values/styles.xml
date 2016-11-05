@@ -39,9 +39,8 @@
         <item name="android:windowBackground">@color/transparent</item>
     </style>
 
-    <style name="tablayout_text_appearacnce" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
-    </style>
-    <style name="step_button">
-    </style>
+    <style name="tablayout_text_appearacnce" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"></style>
+
+    <style name="step_button"></style>
 
 </resources>

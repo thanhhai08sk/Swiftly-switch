@@ -21,6 +21,7 @@
     <uses-permission
         android:name="android.permission.CAMERA"
         android:maxSdkVersion="22" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -33,22 +34,22 @@
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
+
     <supports-screens
+        android:anyDensity="true"
         android:largeScreens="true"
         android:normalScreens="true"
         android:resizeable="true"
         android:smallScreens="true"
-        android:xlargeScreens="true"
-        android:anyDensity="true"
-        />
+        android:xlargeScreens="true" />
 
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:installLocation="internalOnly"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:installLocation="internalOnly"
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
@@ -62,12 +63,13 @@
             </intent-filter>
         </activity>
 
-        <!--<service-->
-            <!--android:name=".service.EdgeGestureService"-->
-            <!--android:exported="false" />-->
+        <!-- <service -->
+        <!-- android:name=".service.EdgeGestureService" -->
+        <!-- android:exported="false" /> -->
         <service
             android:name=".edgeService.EdgeServiceView"
-            android:exported="false" />`
+            android:exported="false" />
+        `
         <service
             android:name=".service.MyAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
@@ -88,7 +90,6 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
-
 
         <activity
             android:name=".dialogActivity.AudioDialogActivity"
@@ -146,9 +147,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.de_studio.recentappswitcher.MainActivity" />
         </activity>
-        <activity android:name=".favoriteShortcut.SetFolderActivity"
-                  android:label="@string/setting_shortcut_folder"
-            />
+        <activity
+            android:name=".favoriteShortcut.SetFolderActivity"
+            android:label="@string/setting_shortcut_folder" />
         <activity
             android:name=".service.ChooseActionDialogActivity"
             android:excludeFromRecents="true"
@@ -159,18 +160,20 @@
             android:excludeFromRecents="true"
             android:label=""
             android:theme="@style/DialogTheme" />
-        <activity android:name=".service.ScreenBrightnessDialogActivity"
+        <activity
+            android:name=".service.ScreenBrightnessDialogActivity"
             android:excludeFromRecents="true"
             android:label=""
-            android:theme="@style/DialogTheme"
-            />
-        <service android:name=".shortcut.FlashService"/>
+            android:theme="@style/DialogTheme" />
+
+        <service android:name=".shortcut.FlashService" />
         <service android:name=".shortcut.FlashServiceM" />
+
         <receiver
             android:name=".shortcut.LockAdmin"
             android:description="@string/admin_desc"
             android:label="@string/swiftly_switch_screen_lock"
-            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data
                 android:name="android.app.device_admin"
                 android:resource="@xml/lock_admin" />
@@ -185,11 +188,13 @@
             android:excludeFromRecents="true"
             android:label=""
             android:theme="@style/DialogTheme" />
-        <service android:name=".assist.MyInteractionService"
+
+        <service
+            android:name=".assist.MyInteractionService"
             android:permission="android.permission.BIND_VOICE_INTERACTION"
             android:process=":session">
             <intent-filter>
-                <action android:name="android.service.voice.VoiceInteractionService"/>
+                <action android:name="android.service.voice.VoiceInteractionService" />
             </intent-filter>
         </service>
         <service
@@ -197,11 +202,17 @@
             android:permission="android.permission.BIND_VOICE_INTERACTION">
             <meta-data
                 android:name="android.voice_interaction"
-                android:resource="@xml/assist_service"/>
+                android:resource="@xml/assist_service" />
+
             <intent-filter>
-                <action android:name="android.service.voice.VoiceInteractionService"/>
+                <action android:name="android.service.voice.VoiceInteractionService" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".main.MainView"
+            android:label="@string/title_activity_main_view"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

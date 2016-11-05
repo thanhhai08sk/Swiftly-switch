@@ -47,8 +47,12 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    //    compile project(':libraries:drag-sort-listview:library')
-//    compile project(':library')
+
+
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
+    compile 'com.jakewharton:butterknife:8.2.1'
+
+
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.android.support:gridlayout-v7:24.1.1'
     compile 'com.android.support:design:24.1.1'
@@ -58,7 +62,6 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
 
-    apt 'com.jakewharton:butterknife-compiler:8.2.1'
 
     //Dagger
     apt 'com.google.dagger:dagger-compiler:2.5'
