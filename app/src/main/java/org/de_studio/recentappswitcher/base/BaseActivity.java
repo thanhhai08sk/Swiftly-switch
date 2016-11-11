@@ -22,12 +22,12 @@ public abstract class BaseActivity extends Activity {
         getPresenter().onViewAttach();
     }
 
-    abstract void inject();
+    protected abstract void inject();
 
-    abstract BasePresenter getPresenter();
+    protected abstract BasePresenter getPresenter();
 
     @LayoutRes
-    abstract int getLayoutId();
+    protected abstract int getLayoutId();
 
     @CallSuper
     @Override
