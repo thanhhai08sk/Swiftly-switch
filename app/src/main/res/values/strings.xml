@@ -210,6 +210,7 @@
     <string name="pause">Pause</string>
     <string name="resume">Resume</string>
     <string name="recent_app">Recent app</string>
+    <string name="recent_apps">Recent apps</string>
     <string name="title_activity_pin_shortcuts">Pin shortcuts</string>
     <string name="this_feature_does_not_supported_on_samsung_devices">This feature is not supported on Samsung or ZTE devices</string>
     <string name="title_activity_main_view">MainView</string>
@@ -218,4 +219,12 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="recent_apps_description">Click to set size, pinned shortcuts and the behavior of recent section</string>
+    <string name="quick_actions_description">Quick actions are placed outside of recent apps semi-circle, click to customize it</string>
+    <string name="grid_favorites">Grid Favorites</string>
+    <string name="grid_favorites_description">"Place a large set of your favorite shortcuts here. Click to set size, content and position"</string>
+    <string name="circle_favorites">Circle favorites</string>
+    <string name="circle_favorites_description">Place a small set of your favorite shortcuts in a semi-circle manner</string>
+
 </resources>
