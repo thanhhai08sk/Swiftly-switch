@@ -230,6 +230,12 @@ public class Cons {
     public static final int HOLD_TIME_MIN = 150;
 
 
+    public static final String ITEM_ID_APP = "app_";
+    public static final String ITEM_ID_ACTION = "action_";
+    public static final String ITEM_ID_CONTACT = "contact_";
+    public static final String ITEM_ID_SHORTCUT = "shortcut_";
+
+
 
 
 }

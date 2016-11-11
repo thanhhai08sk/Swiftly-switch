@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.de_studio.recentappswitcher.main.general.GeneralView;
+
 /**
  * Created by HaiNguyen on 11/5/16.
  */
@@ -15,8 +17,12 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-
-//        return MainView.PlaceholderFragment.newInstance(position + 1);
+        switch (position) {
+            case 0:
+                return new GeneralView();
+            default:
+                return new GeneralView();
+        }
     }
 
     @Override

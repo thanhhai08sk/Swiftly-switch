@@ -664,10 +664,6 @@ public  class Utility {
         Drawable defaultActivityIcon = packageManager.getDefaultActivityIcon();
 
         for(PackageInfo each : allInstalledPackages) {
-//            if(ctx.getPackageName().equals(each.packageName)) {
-//                continue;  // skip own app
-//            }
-
             try {
                 // add only apps with application icon
                 Intent intentOfStartActivity = packageManager.getLaunchIntentForPackage(each.packageName);

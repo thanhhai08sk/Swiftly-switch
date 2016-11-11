@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="@string/recent_apps_description"
+            android:text="@string/recent_apps_description"
             style="@style/Main_text_secondary"
             />
 
