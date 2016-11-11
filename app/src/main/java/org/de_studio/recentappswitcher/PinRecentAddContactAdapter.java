@@ -27,7 +27,7 @@ public class PinRecentAddContactAdapter extends CursorAdapter {
         super(context, c, flags);
 //        myRealm = Realm.getInstance(new RealmConfiguration.Builder(context)
 //                .name("pinApp.realm")
-//                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+//                .schemaVersion(EdgeGestureService.OLD_REALM_SCHEMA_VERSION)
 //                .migration(new MyRealmMigration())
 //                .build());
     }

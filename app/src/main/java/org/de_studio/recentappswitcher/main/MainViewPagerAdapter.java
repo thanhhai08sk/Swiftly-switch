@@ -15,9 +15,8 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return MainView.PlaceholderFragment.newInstance(position + 1);
+
+//        return MainView.PlaceholderFragment.newInstance(position + 1);
     }
 
     @Override
@@ -30,11 +29,11 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "SECTION 1";
+                return "General";
             case 1:
-                return "SECTION 2";
+                return "Edge 1";
             case 2:
-                return "SECTION 3";
+                return "Edge 2";
         }
         return null;
     }

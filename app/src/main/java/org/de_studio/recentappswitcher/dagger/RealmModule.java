@@ -13,7 +13,7 @@ import dagger.Provides;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-import static org.de_studio.recentappswitcher.Cons.CURRENT_SCHEMA_VERSION;
+import static org.de_studio.recentappswitcher.Cons.OLD_REALM_SCHEMA_VERSION;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_CIRCLE_REALM_NAME;
 import static org.de_studio.recentappswitcher.Cons.FAVORITE_GRID_REALM_NAME;
 import static org.de_studio.recentappswitcher.Cons.PIN_REALM_NAME;
@@ -35,7 +35,7 @@ public class RealmModule {
     Realm pinRealm() {
         return Realm.getInstance(new RealmConfiguration.Builder(context)
                 .name(Cons.PIN_REALM_NAME)
-                .schemaVersion(Cons.CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
     }
@@ -46,7 +46,7 @@ public class RealmModule {
     Realm favoriteGridRealm() {
         return Realm.getInstance(new RealmConfiguration.Builder(context)
                 .name("default.realm")
-                .schemaVersion(Cons.CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
     }
@@ -57,7 +57,7 @@ public class RealmModule {
     Realm favoriteCircleRealm() {
         return Realm.getInstance(new RealmConfiguration.Builder(context)
                 .name("circleFavo.realm")
-                .schemaVersion(CURRENT_SCHEMA_VERSION)
+                .schemaVersion(OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
     }

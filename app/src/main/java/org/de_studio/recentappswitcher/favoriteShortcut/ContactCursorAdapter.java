@@ -41,7 +41,7 @@ public class ContactCursorAdapter extends CursorAdapter {
         this.mPosition = mPosition;
 //        myRealm = Realm.getInstance(new RealmConfiguration.Builder(context)
 //                .name("default.realm")
-//                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+//                .schemaVersion(EdgeGestureService. OLD_REALM_SCHEMA_VERSION)
 //                .migration(new MyRealmMigration())
 //                .build());
 

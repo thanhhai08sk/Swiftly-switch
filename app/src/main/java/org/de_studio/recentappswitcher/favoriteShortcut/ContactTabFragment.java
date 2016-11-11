@@ -83,7 +83,7 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
         mContactsList.setOnItemClickListener(this);
 //        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getActivity())
 //                .name("default.realm")
-//                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+//                .schemaVersion(EdgeGestureService. OLD_REALM_SCHEMA_VERSION)
 //                .migration(new MyRealmMigration())
 //                .build());
         if (mode == FavoriteSettingActivity.MODE_GRID || mode == FavoriteSettingActivity.MODE_FOLDER) {

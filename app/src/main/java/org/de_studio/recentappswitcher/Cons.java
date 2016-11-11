@@ -31,6 +31,7 @@ public class Cons {
     public static final String DEFAULT_SHARED_NAME = "org.de_studio.recentappswitcher_sharedpreferences";
     public static final String FAVORITE_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_favorite_shared_preferences";
     public static final String EXCLUDE_SHARED_NAME = "org.de_studio.recentappswitcher_exclude_shared_preferences";
+    public static final String DEFAULT_REALM_NAME = "swiftly_switch.realm";
 
     public static final int MODE_DEFAULT = 1;
     public static final int MODE_ONLY_FAVORITE = 2;
@@ -158,7 +159,8 @@ public class Cons {
 
 
 
-    public static final int CURRENT_SCHEMA_VERSION = 2;
+    public static final int OLD_REALM_SCHEMA_VERSION = 2;
+    public static final int REALM_SCHEMA_VERSION = 0;
     public static final String PIN_REALM_NAME = "pinApp.realm";
     public static final String FAVORITE_GRID_REALM_NAME = "default.realm";
     public static final String FAVORITE_CIRCLE_REALM_NAME = "circleFavo.realm";

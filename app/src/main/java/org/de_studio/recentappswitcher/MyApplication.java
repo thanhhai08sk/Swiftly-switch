@@ -14,8 +14,11 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).build();
-        Realm.setDefaultConfiguration(realmConfig);
+        Realm.init(this);
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder()
+                .name(Cons.DEFAULT_REALM_NAME)
+                .schemaVersion(Cons.REALM_SCHEMA_VERSION)
+                .deleteRealmIfMigrationNeeded().build());
         this.mContext = this;
     }
 
