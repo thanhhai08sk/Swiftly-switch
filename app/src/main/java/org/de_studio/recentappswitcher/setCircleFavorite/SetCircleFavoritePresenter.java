@@ -33,6 +33,10 @@ public class SetCircleFavoritePresenter extends BasePresenter {
 
     }
 
+    public void onChooseCollectionSize(int size) {
+        model.setCollectionSize(size);
+    }
+
 
     @Override
     public void onViewDetach() {

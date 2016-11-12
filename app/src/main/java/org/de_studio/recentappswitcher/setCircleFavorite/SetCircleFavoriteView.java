@@ -1,8 +1,10 @@
 package org.de_studio.recentappswitcher.setCircleFavorite;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -112,6 +114,18 @@ public class SetCircleFavoriteView extends BaseActivity {
 
     public void updateRecyclerView(OrderedRealmCollection<Slot> slots) {
         adapter.updateData(slots);
+    }
+
+    public void showChooseSizeDialog() {
+        AlertDialog.Builder buider = new AlertDialog.Builder(this);
+        buider.setTitle(R.string.set_size)
+                .setItems(new CharSequence[]{"5", "6", "7", "8"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        presenter.onChooseCollectionSize(which + 5);
+                    }
+                });
+        buider.create().show();
     }
 
 

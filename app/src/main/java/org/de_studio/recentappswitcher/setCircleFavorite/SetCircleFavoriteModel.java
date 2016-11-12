@@ -8,6 +8,7 @@ import org.de_studio.recentappswitcher.model.Slot;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
@@ -55,6 +56,17 @@ public class SetCircleFavoriteModel {
         }
     }
 
+    public void setCollectionSize(int size) {
+        RealmList<Slot> slots = getCurrentCollection().slots;
+        while (slots.size() > size) {
+            slots.remove(slots.size() - 1);
+        }
+
+        while (slots.size() < size) {
+            addNullSlotToList(slots);
+        }
+    }
+
     public OrderedRealmCollection<Slot> getSlots() {
 
         return getCurrentCollection().slots;
@@ -94,6 +106,19 @@ public class SetCircleFavoriteModel {
 
             }
         });
+    }
+
+    private Slot addNullSlotToList(final RealmList<Slot> slots) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Slot nullSlot = new Slot();
+                nullSlot.type = Slot.TYPE_NULL;
+                Slot realmSlot = realm.copyToRealm(nullSlot);
+                slots.add(realmSlot);
+            }
+        });
+
     }
 
     public void clear() {

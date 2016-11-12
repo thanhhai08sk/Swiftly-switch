@@ -232,5 +232,6 @@
     <string name="size">Size</string>
     <string name="add_new">Add new</string>
     <string name="empty">Empty</string>
+    <string name="set_size">Set size</string>
 
 </resources>
