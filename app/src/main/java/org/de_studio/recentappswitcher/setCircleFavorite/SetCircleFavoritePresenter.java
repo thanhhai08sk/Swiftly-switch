@@ -7,6 +7,7 @@ import org.de_studio.recentappswitcher.base.BasePresenter;
  */
 
 public class SetCircleFavoritePresenter extends BasePresenter {
+    private static final String TAG = SetCircleFavoritePresenter.class.getSimpleName();
     SetCircleFavoriteView view;
     SetCircleFavoriteModel model;
 
@@ -19,18 +20,19 @@ public class SetCircleFavoritePresenter extends BasePresenter {
     @Override
     public void onViewAttach() {
         view.setSpinner(model.getCollectionList(), model.getCurrentCollection());
-        setListView();
+        view.setRecyclerView(model.getSlots());
 
     }
 
     public void onSpinnerItemSelect(String itemLabel) {
         model.setCollection(itemLabel);
-        setListView();
+        view.updateRecyclerView(model.getSlots());
     }
 
-    private void setListView() {
-        view.setListView(model.getSlots());
+    public void onSlotClick(int position) {
+
     }
+
 
     @Override
     public void onViewDetach() {

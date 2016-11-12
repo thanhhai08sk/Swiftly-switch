@@ -56,11 +56,11 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
 
         <!-- <service -->
@@ -212,15 +212,25 @@
         <activity
             android:name=".main.MainView"
             android:label="@string/title_activity_main_view"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".main.MainView1"
             android:label="@string/title_activity_main_view1"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".setCircleFavorite.SetCircleFavoriteView"
+            android:label="@string/circle_favorites"
+            android:theme="@style/AppTheme"/>
 
         <service
             android:name=".dadaSetup.DataSetupService"
-            android:exported="false"></service>
+            android:exported="false"/>
     </application>
 
 </manifest>

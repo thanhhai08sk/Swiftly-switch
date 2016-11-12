@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -28,6 +30,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmResults;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by HaiNguyen on 11/11/16.
@@ -37,8 +41,8 @@ public class SetCircleFavoriteView extends BaseActivity {
     private static final String TAG = SetCircleFavoriteView.class.getSimpleName();
     @BindView(R.id.spinner)
     AppCompatSpinner spinner;
-    @BindView(R.id.list_view)
-    ListView listView;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
     @BindView(R.id.size_text)
     TextView sizeText;
     @BindView(R.id.long_click_mode_text)
@@ -51,13 +55,13 @@ public class SetCircleFavoriteView extends BaseActivity {
     @Inject
     SlotsAdapter adapter;
     String collectionId;
+    Subscription subscription;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         collectionId = getIntent().getStringExtra(Cons.COLLECTION_ID);
         super.onCreate(savedInstanceState);
-        listView.setAdapter(adapter);
     }
 
 
@@ -88,6 +92,7 @@ public class SetCircleFavoriteView extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String itemLabel = ((CheckedTextView) view.findViewById(android.R.id.text1)).getText().toString();
+                Log.e(TAG, "onItemSelected: label = " + itemLabel);
                 presenter.onSpinnerItemSelect(itemLabel);
             }
             @Override
@@ -97,7 +102,15 @@ public class SetCircleFavoriteView extends BaseActivity {
         });
     }
 
-    public void setListView(OrderedRealmCollection<Slot> slots) {
+    public void setRecyclerView(OrderedRealmCollection<Slot> slots) {
+        Log.e(TAG, "setRecyclerView: slots size = " + slots.size());
+        adapter.updateData(slots);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setOnItemClick();
+    }
+
+    public void updateRecyclerView(OrderedRealmCollection<Slot> slots) {
         adapter.updateData(slots);
     }
 
@@ -130,9 +143,19 @@ public class SetCircleFavoriteView extends BaseActivity {
         presenter.onLongClickModeClick();
     }
 
+    public void setOnItemClick() {
+        subscription = adapter.getKeyClicked().subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer s) {
+                Log.e(TAG, "call: " + s);
+                presenter.onSlotClick(s);
+            }
+        });
+    }
+
     @Override
     protected void clear() {
-
+        subscription.unsubscribe();
     }
 
     public static Intent getIntent(Context context, String collectionId) {

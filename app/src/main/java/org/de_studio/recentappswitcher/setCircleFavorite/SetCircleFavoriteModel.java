@@ -1,5 +1,7 @@
 package org.de_studio.recentappswitcher.setCircleFavorite;
 
+import android.util.Log;
+
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
@@ -13,6 +15,7 @@ import io.realm.RealmResults;
  */
 
 public class SetCircleFavoriteModel {
+    private static final String TAG = SetCircleFavoriteModel.class.getSimpleName();
     private Realm realm = Realm.getDefaultInstance();
     private String collectionId;
     private String defaultLabel;
@@ -53,6 +56,7 @@ public class SetCircleFavoriteModel {
     }
 
     public OrderedRealmCollection<Slot> getSlots() {
+
         return getCurrentCollection().slots;
     }
 
@@ -86,6 +90,7 @@ public class SetCircleFavoriteModel {
                 for (int i = 0; i < 6; i++) {
                     realmCollection.slots.add(realmSlot);
                 }
+                Log.e(TAG, "execute: collection slots size = " + realmCollection.slots.size());
 
             }
         });

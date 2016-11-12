@@ -44,7 +44,7 @@ public class SetCircleFavoriteModule {
     @Provides
     @Singleton
     SlotsAdapter adapter(@Nullable IconPackManager.IconPack iconPack){
-        return new SlotsAdapter(view, null, iconPack);
+        return new SlotsAdapter(view, null, true, iconPack);
     }
 
 

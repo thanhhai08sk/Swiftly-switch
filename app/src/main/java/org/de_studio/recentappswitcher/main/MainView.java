@@ -1,22 +1,24 @@
 package org.de_studio.recentappswitcher.main;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.dagger.DaggerMainComponent;
+import org.de_studio.recentappswitcher.dagger.MainModule;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainView extends Activity {
+public class MainView extends AppCompatActivity {
     @BindView(R.id.tabs)
     TabLayout tabLayout;
     @BindView(R.id.container)
@@ -73,7 +75,9 @@ public class MainView extends Activity {
     }
 
     void inject() {
-
+        DaggerMainComponent.builder()
+                .mainModule(new MainModule(this))
+                .build().inject(this);
     }
 
 

@@ -1,9 +1,9 @@
 package org.de_studio.recentappswitcher.base;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
+import android.support.v7.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
 
@@ -11,7 +11,7 @@ import butterknife.ButterKnife;
  * Created by HaiNguyen on 11/11/16.
  */
 
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends AppCompatActivity {
     @CallSuper
     @Override
     protected void onCreate(Bundle savedInstanceState) {

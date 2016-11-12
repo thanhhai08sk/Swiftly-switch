@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,36 +18,64 @@ import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.model.Slot;
 
 import io.realm.OrderedRealmCollection;
-import io.realm.RealmBaseAdapter;
+import io.realm.RealmRecyclerViewAdapter;
+import rx.Observable;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by HaiNguyen on 11/12/16.
  */
 
-public class SlotsAdapter extends RealmBaseAdapter<Slot> {
+public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.ViewHolder> {
+    private static final String TAG = SlotsAdapter.class.getSimpleName();
     PackageManager packageManager;
     IconPackManager.IconPack iconPack;
+    private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
 
-    public SlotsAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<Slot> data
-            , IconPackManager.IconPack iconPack) {
-        super(context, data);
+
+    public SlotsAdapter(@NonNull Context context, @Nullable OrderedRealmCollection data, boolean autoUpdate, IconPackManager.IconPack iconPack) {
+        super(context, data, autoUpdate);
         this.iconPack = iconPack;
-        packageManager = context.getPackageManager();
+    }
+
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        final Slot slot = getItem(position);
+        if (slot != null) {
+            Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack);
+            Utility.setSlotLabel(slot, context, holder.label);
+        }
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Log.e(TAG, "onClick: " + position);
+                onClickSubject.onNext(position);
+            }
+        });
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
-        if (view == null) {
-            view = View.inflate(context, R.layout.item_circle_favorite, null);
-        }
-        Slot slot = getItem(position);
-        TextView label = (TextView) view.findViewById(R.id.label);
-        ImageView icon = (ImageView) view.findViewById(R.id.item_icon);
-        if (slot != null) {
-            Utility.setSlotIcon(slot, context, icon, packageManager, iconPack);
-            Utility.setSlotLabel(slot, context, label);
-        }
-        return view;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_circle_favorite, parent, false);
+        return new ViewHolder(view);
     }
+
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public View view;
+        public TextView label;
+        public ImageView icon;
+        public ViewHolder(View itemView) {
+            super(itemView);
+            this.view = itemView;
+            label = (TextView) view.findViewById(R.id.item_label);
+            icon = (ImageView) view.findViewById(R.id.item_icon);
+        }
+    }
+    public Observable<Integer> getKeyClicked() {
+        return onClickSubject.asObservable();
+    }
+
+
 }
