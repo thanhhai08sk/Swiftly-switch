@@ -41,7 +41,7 @@ public class FolderAdapter extends BaseAdapter {
         mContext = context;
         this.mPosition = mPosition;
         setFolderId(mPosition);
-        myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
                 .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())

@@ -71,13 +71,13 @@ public class ShortcutTabFragment extends Fragment {
 
 
         if (mode == FavoriteSettingActivity.MODE_GRID) {
-            myRealm = Realm.getInstance(new RealmConfiguration.Builder(getContext())
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                     .name("default.realm")
                     .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())
                     .build());
         } else {
-            myRealm = Realm.getInstance(new RealmConfiguration.Builder(getContext())
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                     .name("circleFavo.realm")
                     .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())

@@ -70,7 +70,7 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mListView = (ListView) getView(). findViewById(R.id.add_favorite_list_view);
-        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getActivity())
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
                 .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
@@ -132,7 +132,7 @@ public class AddContactToFolderDialogFragment extends DialogFragment implements 
                 mAdapter.notifyDataSetChanged();
             }
         });
-        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getContext())
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
                 .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())

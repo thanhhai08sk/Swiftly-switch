@@ -39,7 +39,7 @@ public class PinAppAdapter extends BaseAdapter{
         super();
         mContext = context;
         packageManager = context.getPackageManager();
-        pinRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+        pinRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("pinApp.realm")
                 .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())

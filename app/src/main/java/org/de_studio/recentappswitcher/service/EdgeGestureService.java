@@ -1819,17 +1819,17 @@ public class EdgeGestureService extends Service {
         iconPaddingTop = (int) (8 * mScale);
         edge1Position = Utility.getPositionIntFromString(sharedPreferences1.getString(EdgeSetting.EDGE_POSITION_KEY, edgePositionsArray[1]), getApplicationContext()); // default =1
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSetting.EDGE_POSITION_KEY, edgePositionsArray[5]), getApplicationContext());
-        pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext())
+        pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("pinApp.realm")
                 .schemaVersion(CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
-        circleFavoRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext())
+        circleFavoRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("circleFavo.realm")
                 .schemaVersion(CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
-        favoriteRealm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext())
+        favoriteRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
                 .schemaVersion(CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())

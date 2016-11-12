@@ -33,7 +33,7 @@ public class RealmModule {
     @Singleton
     @Named(PIN_REALM_NAME)
     Realm pinRealm() {
-        return Realm.getInstance(new RealmConfiguration.Builder(context)
+        return Realm.getInstance(new RealmConfiguration.Builder()
                 .name(Cons.PIN_REALM_NAME)
                 .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
@@ -44,7 +44,7 @@ public class RealmModule {
     @Singleton
     @Named(FAVORITE_GRID_REALM_NAME)
     Realm favoriteGridRealm() {
-        return Realm.getInstance(new RealmConfiguration.Builder(context)
+        return Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
                 .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
@@ -55,7 +55,7 @@ public class RealmModule {
     @Singleton
     @Named(FAVORITE_CIRCLE_REALM_NAME)
     Realm favoriteCircleRealm() {
-        return Realm.getInstance(new RealmConfiguration.Builder(context)
+        return Realm.getInstance(new RealmConfiguration.Builder()
                 .name("circleFavo.realm")
                 .schemaVersion(OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())

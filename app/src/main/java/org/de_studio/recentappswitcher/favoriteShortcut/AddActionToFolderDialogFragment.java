@@ -50,7 +50,7 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
         View rootView = inflater.inflate(R.layout.add_favorite_app_fragment_list_view, container);
         mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
         stringArray = getActivity().getResources().getStringArray(R.array.setting_shortcut_array);
-        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getContext())
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
                 .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())

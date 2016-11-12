@@ -35,7 +35,7 @@ public class AddContactToFolderAdapter extends CursorAdapter {
     public AddContactToFolderAdapter(Context context, Cursor c, int flags, int mPosition) {
         super(context, c, flags);
         this.mPosition = mPosition;
-        myRealm = Realm.getInstance(new RealmConfiguration.Builder(context)
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
                 .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())

@@ -44,7 +44,7 @@ public class CircleFavoriteAdapter extends BaseAdapter {
     public CircleFavoriteAdapter(Context context) {
         super();
         this.mContext = context;
-        circleFavoRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+        circleFavoRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("circleFavo.realm")
                 .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())

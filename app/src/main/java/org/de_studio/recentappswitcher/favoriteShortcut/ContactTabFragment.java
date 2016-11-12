@@ -87,13 +87,13 @@ public class ContactTabFragment extends android.support.v4.app.Fragment
 //                .migration(new MyRealmMigration())
 //                .build());
         if (mode == FavoriteSettingActivity.MODE_GRID || mode == FavoriteSettingActivity.MODE_FOLDER) {
-            myRealm = Realm.getInstance(new RealmConfiguration.Builder(getActivity())
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                     .name("default.realm")
                     .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())
                     .build());
         } else {
-            myRealm = Realm.getInstance(new RealmConfiguration.Builder(getActivity())
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                     .name("circleFavo.realm")
                     .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())

@@ -48,7 +48,7 @@ public class PinRecentAddActionDialogFragment extends DialogFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.add_favorite_app_fragment_list_view, container);
-        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getContext())
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("pinApp.realm")
                 .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())

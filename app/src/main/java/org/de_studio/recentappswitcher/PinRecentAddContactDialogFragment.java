@@ -68,7 +68,7 @@ public class PinRecentAddContactDialogFragment extends DialogFragment implements
         }
 
 
-        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getContext())
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("pinApp.realm")
                 .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
