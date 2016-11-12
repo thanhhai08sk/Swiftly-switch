@@ -13,10 +13,10 @@ import io.realm.RealmResults;
  */
 
 public class SetCircleFavoriteModel {
-    Realm realm = Realm.getDefaultInstance();
-    String collectionId;
-    String defaultLabel;
-    Collection collection;
+    private Realm realm = Realm.getDefaultInstance();
+    private String collectionId;
+    private String defaultLabel;
+    private Collection collection;
     public SetCircleFavoriteModel(String collectionId, String defaultLabel) {
         this.collectionId = collectionId;
         if (collectionId != null && !collectionId.contains(Collection.TYPE_CIRCLE_FAVORITE)) {
@@ -55,7 +55,7 @@ public class SetCircleFavoriteModel {
         return getCurrentCollection().slots;
     }
 
-    public RealmResults<Collection> getCollectionIdList() {
+    public RealmResults<Collection> getCollectionList() {
         RealmResults<Collection> circleFavoriteCollections = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_CIRCLE_FAVORITE).findAll();
         if (circleFavoriteCollections.size() ==0) {
             createDefaultCollection();

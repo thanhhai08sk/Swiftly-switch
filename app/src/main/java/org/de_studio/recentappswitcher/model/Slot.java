@@ -18,8 +18,17 @@ public class Slot extends RealmObject {
     public Item stage2Item;
     public int longClickMode;
     public RealmList<Item> items;
+    public byte[] iconBitmap;
 
     public Slot() {
+    }
+
+    public byte[] getIconBitmap() {
+        return iconBitmap;
+    }
+
+    public void setIconBitmap(byte[] iconBitmap) {
+        this.iconBitmap = iconBitmap;
     }
 
     public String getType() {

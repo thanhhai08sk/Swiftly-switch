@@ -14,11 +14,13 @@ import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.model.Slot;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.realm.OrderedRealmCollection;
 import io.realm.RealmResults;
 
 /**
@@ -57,16 +59,22 @@ public class SetCircleFavoriteView extends BaseActivity {
     public void setCollectionId(String collectionId) {
         this.collectionId = collectionId;
     }
-    public void setSpinner(RealmResults<Collection> itemLabels) {
+    public void setSpinner(RealmResults<Collection> collections, Collection currentCollection) {
+
         String addNew = getString(R.string.add_new);
-        String[] adapterItems = new String[itemLabels.size() + 1];
-        for (int i = 0; i < itemLabels.size(); i++) {
-            adapterItems[i] = itemLabels.get(i).label;
+        String[] adapterItems = new String[collections.size() + 1];
+        int position = 0;
+        for (int i = 0; i < collections.size(); i++) {
+            adapterItems[i] = collections.get(i).label;
+            if (collections.get(i).equals(currentCollection)) {
+                position = i;
+            }
         }
         adapterItems[adapterItems.length - 1] = addNew;
 
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_dropdown_item, adapterItems);
         spinner.setAdapter(adapter);
+        spinner.setSelection(position);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -78,6 +86,10 @@ public class SetCircleFavoriteView extends BaseActivity {
 
             }
         });
+    }
+
+    public void setListView(OrderedRealmCollection<Slot> slots) {
+
     }
 
 

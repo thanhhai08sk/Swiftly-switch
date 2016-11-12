@@ -61,6 +61,8 @@ import android.widget.Toast;
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
+import org.de_studio.recentappswitcher.model.Item;
+import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.service.ChooseActionDialogActivity;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
@@ -2386,6 +2388,107 @@ public  class Utility {
         builder.setMessage(stringId);
         builder.setPositiveButton(R.string.app_tab_fragment_ok_button, null);
         builder.create().show();
+    }
+
+    public static void setSlotIcon(Slot slot, Context context, ImageView icon, PackageManager packageManager, IconPackManager.IconPack iconPack) {
+        switch (slot.type) {
+            case Slot.TYPE_ITEM:
+                setItemIcon(slot.stage1Item, context, icon, packageManager, iconPack);
+                break;
+            case Slot.TYPE_FOLDER:
+                byte[] byteArray = slot.iconBitmap;
+                icon.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
+                break;
+            case Slot.TYPE_RECENT:
+                icon.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+                break;
+            case Slot.TYPE_EMPTY:
+                icon.setImageDrawable(null);
+                break;
+            case Slot.TYPE_NULL:
+                icon.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+                break;
+        }
+    }
+
+
+    public static void setItemIcon(Item item, Context context, ImageView icon, PackageManager packageManager, IconPackManager.IconPack iconPack) {
+        switch (item.type) {
+            case Item.TYPE_APP:
+                try {
+                    Drawable defaultDrawable = packageManager.getApplicationIcon(item.getPackageName());
+                    Drawable iconPackDrawable;
+                    if (iconPack!=null) {
+                        iconPackDrawable = iconPack.getDrawableIconForPackage(item.getPackageName(), defaultDrawable);
+                        if (iconPackDrawable == null) {
+                            iconPackDrawable = defaultDrawable;
+                        }
+                        icon.setImageDrawable(iconPackDrawable);
+                    } else {
+                        icon.setImageDrawable(defaultDrawable);
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    Log.e(TAG, "NameNotFound " + e);
+                }
+                break;
+            case Item.TYPE_ACTION:
+                icon.setImageResource(item.iconResourceId);
+                break;
+            case Item.TYPE_SHORTCUT:
+                byte[] byteArray = item.iconBitmap;
+                try {
+                    if (byteArray != null) {
+                        icon.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
+                    } else {
+                        Resources resources = packageManager.getResourcesForApplication(item.getPackageName());
+                        icon.setImageBitmap(BitmapFactory.decodeResource(resources,item.iconResourceId));
+                    }
+
+                } catch (Exception e) {
+                    Log.e(TAG, "getView: can not set imageview for shortcut shortcut");
+                }
+                break;
+            case Item.TYPE_CONTACT:
+                String thumbnaiUri = item.iconUri;
+                if (thumbnaiUri != null) {
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(thumbnaiUri));
+                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+                        drawable.setCircular(true);
+                        icon.setImageDrawable(drawable);
+                        icon.setColorFilter(null);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        icon.setImageResource(R.drawable.ic_contact_default);
+                    } catch (SecurityException e) {
+                        Toast.makeText(context, context.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    icon.setImageResource(R.drawable.ic_contact_default);
+                }
+                break;
+        }
+    }
+
+    public static void setSlotLabel(Slot slot, Context context, TextView label) {
+        switch (slot.type) {
+            case Slot.TYPE_ITEM:
+                Item item = slot.stage1Item;
+                label.setText(item.label);
+                break;
+            case Slot.TYPE_FOLDER:
+                label.setText(context.getString(R.string.setting_shortcut_folder));
+                break;
+            case Slot.TYPE_RECENT:
+                label.setText(context.getString(R.string.recent_app));
+                break;
+            case Slot.TYPE_EMPTY:
+                label.setText("");
+                break;
+            case Slot.TYPE_NULL:
+                label.setText(context.getString(R.string.empty));
+                break;
+        }
     }
 
 
