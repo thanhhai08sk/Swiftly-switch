@@ -9,10 +9,10 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class Item extends RealmObject {
-    public static final int TYPE_APP = 0;
-    public static final int TYPE_ACTION = 1;
-    public static final int TYPE_CONTACT =2;
-    public static final int TYPE_SHORTCUT = 4;
+    public static final String TYPE_APP = "app_";
+    public static final String TYPE_ACTION = "action_";
+    public static final String TYPE_CONTACT = "contact_";
+    public static final String TYPE_SHORTCUT = "shortcut_";
     public static final int ACTION_WIFI = 0;
     public static final int ACTION_BLUETOOTH = 1;
     public static final int ACTION_POWER_MENU = 2;
@@ -32,7 +32,7 @@ public class Item extends RealmObject {
     public static final int ACTION_SCREEN_LOCK = 17;
     @PrimaryKey
     public String itemId;
-    public int type;
+    public String type;
     public String label;
     public int action;
     @Index
@@ -58,11 +58,11 @@ public class Item extends RealmObject {
         this.itemId = itemId;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 

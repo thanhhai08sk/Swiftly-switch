@@ -46,7 +46,7 @@ public class DataSetupService extends IntentService {
             public void execute(Realm realm) {
                 for (PackageInfo packageInfo : packageInfos) {
                     Item item = new Item();
-                    item.itemId = Cons.ITEM_ID_APP + packageInfo.packageName;
+                    item.itemId = Item.TYPE_APP + packageInfo.packageName;
                     item.type = Item.TYPE_APP;
                     item.label = (String) packageManager.getApplicationLabel(packageInfo.applicationInfo);
                     item.packageName = packageInfo.packageName;

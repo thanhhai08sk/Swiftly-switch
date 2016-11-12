@@ -8,12 +8,12 @@ import io.realm.RealmObject;
  */
 
 public class Slot extends RealmObject {
-    public static final int TYPE_ITEM = 1;
-    public static final int TYPE_RECENT = 2;
-    public static final int TYPE_FOLDER = 3;
-    public static final int TYPE_EMPTY = 4;
-    public static final int TYPE_NULL = 5; //plus
-    public int type;
+    public static final String TYPE_ITEM = "item_";
+    public static final String TYPE_RECENT = "recent_";
+    public static final String TYPE_FOLDER = "folder_";
+    public static final String TYPE_EMPTY = "empty_";
+    public static final String TYPE_NULL = "null_"; //plus
+    public String type;
     public Item stage1Item;
     public Item stage2Item;
     public int longClickMode;
@@ -22,11 +22,11 @@ public class Slot extends RealmObject {
     public Slot() {
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 

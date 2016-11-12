@@ -235,6 +235,8 @@ public class Cons {
     public static final String ITEM_ID_CONTACT = "contact_";
     public static final String ITEM_ID_SHORTCUT = "shortcut_";
 
+    public static final String COLLECTION_ID_KEY = "collectionId";
+
 
 
 

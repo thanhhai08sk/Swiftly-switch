@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.setCircleFavorite;
 
+import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.widget.AdapterView;
@@ -8,6 +9,7 @@ import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.BasePresenter;
@@ -36,8 +38,21 @@ public class SetCircleFavoriteView extends BaseActivity {
     SetCircleFavoritePresenter presenter;
     @Inject
     SetCircleFavoriteModel model;
+    String collectionId;
 
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        collectionId = getIntent().getStringExtra(Cons.COLLECTION_ID_KEY);
+        super.onCreate(savedInstanceState);
+    }
+
+
+    public String getCollectionId() {
+        if (collectionId == null) {
+
+        }
+    }
     public void setSpinner(String[] itemIncludeCreateNew) {
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_dropdown_item, itemIncludeCreateNew);
         spinner.setAdapter(adapter);

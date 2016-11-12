@@ -8,12 +8,12 @@ import io.realm.RealmObject;
  */
 
 public class Collection extends RealmObject {
-    public static final int TYPE_RECENT = 1;
-    public static final int TYPE_CIRCLE_FAVORITE = 2;
-    public static final int TYPE_QUICK_ACTION = 3;
-    public static final int TYPE_GRID_FAVORITE = 4;
-    public static final int TYPE_BLACK_LIST = 5;
-    public int type;
+    public static final String TYPE_RECENT = "recent_";
+    public static final String TYPE_CIRCLE_FAVORITE = "circleFavorite_";
+    public static final String TYPE_QUICK_ACTION = "quickAction_";
+    public static final String TYPE_GRID_FAVORITE = "gridFavorite_";
+    public static final String TYPE_BLACK_LIST = "blackList_";
+    public String type;
     public String collectionId;
     public String label;
     public RealmList<Slot> slots;
@@ -24,11 +24,11 @@ public class Collection extends RealmObject {
     public Collection() {
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 
