@@ -44,13 +44,13 @@ public class ActionListAdapter extends BaseAdapter {
         mPosition = position;
         this.mode = mode;
         if (mode == FavoriteSettingActivity.MODE_GRID) {
-            myRealm = Realm.getInstance(new RealmConfiguration.Builder(this.context)
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                     .name("default.realm")
                     .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())
                     .build());
         } else {
-            myRealm = Realm.getInstance(new RealmConfiguration.Builder(this.context)
+            myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                     .name("circleFavo.realm")
                     .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())

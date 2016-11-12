@@ -25,10 +25,10 @@ public class Cons {
     public static final int TRIAL_TIME =  1000 * 60 * 60 * 24 * 14;
     public static final int NOTIFICATION_ID = 2323;
 
-
+    public static final String SHARED_PREFERENCE_NAME = "org.de_studio.recentappswitcher.shared";
     public static final String EDGE_1_SHARED_NAME = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHARED_NAME = "org.de_studio.recentappswitcher_edge_2_shared_preference";
-    public static final String DEFAULT_SHARED_NAME = "org.de_studio.recentappswitcher_sharedpreferences";
+    public static final String OLD_DEFAULT_SHARED_NAME = "org.de_studio.recentappswitcher_sharedpreferences";
     public static final String FAVORITE_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_favorite_shared_preferences";
     public static final String EXCLUDE_SHARED_NAME = "org.de_studio.recentappswitcher_exclude_shared_preferences";
     public static final String DEFAULT_REALM_NAME = "swiftly_switch.realm";

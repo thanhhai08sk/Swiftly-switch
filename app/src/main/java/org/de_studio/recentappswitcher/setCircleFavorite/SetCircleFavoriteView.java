@@ -13,6 +13,7 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.BasePresenter;
+import org.de_studio.recentappswitcher.base.SlotsAdapter;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
 
@@ -42,6 +43,8 @@ public class SetCircleFavoriteView extends BaseActivity {
     SetCircleFavoritePresenter presenter;
     @Inject
     SetCircleFavoriteModel model;
+    @Inject
+    SlotsAdapter adapter;
     String collectionId;
 
 
@@ -49,6 +52,7 @@ public class SetCircleFavoriteView extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         collectionId = getIntent().getStringExtra(Cons.COLLECTION_ID);
         super.onCreate(savedInstanceState);
+        listView.setAdapter(adapter);
     }
 
 
@@ -78,8 +82,8 @@ public class SetCircleFavoriteView extends BaseActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String itemId = ((CheckedTextView) view.findViewById(android.R.id.text1)).getText().toString();
-                presenter.onSpinnerItemSelect(itemId);
+                String itemLabel = ((CheckedTextView) view.findViewById(android.R.id.text1)).getText().toString();
+                presenter.onSpinnerItemSelect(itemLabel);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -89,7 +93,7 @@ public class SetCircleFavoriteView extends BaseActivity {
     }
 
     public void setListView(OrderedRealmCollection<Slot> slots) {
-
+        adapter.updateData(slots);
     }
 
 
@@ -118,6 +122,8 @@ public class SetCircleFavoriteView extends BaseActivity {
         presenter.onLongClickModeClick();
     }
 
+    @Override
+    protected void clear() {
 
-
+    }
 }

@@ -72,7 +72,7 @@ import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_VERTICAL;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_GAP_IN_GRID;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_SIZE;
-import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
+import static org.de_studio.recentappswitcher.Cons.OLD_DEFAULT_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_HEIGHT_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
@@ -250,7 +250,7 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(IS_FREE_AND_OUT_OF_TRIAL_NAME)
-    boolean isFreeAndOutOfTrial(@Named(Cons.DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
+    boolean isFreeAndOutOfTrial(@Named(Cons.OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
 
         return context.getPackageName().equals(Cons.FREE_VERSION_PACKAGE_NAME)
                 && System.currentTimeMillis() - defaultShared.getLong(EdgeSetting.BEGIN_DAY_KEY, System.currentTimeMillis()) > MainActivity.trialTime;
@@ -276,7 +276,7 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(CIRCLE_SIZE_PXL_NAME)
-    float circleSizeDp(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+    float circleSizeDp(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared
             , @Named(M_SCALE_NAME) float mScale) {
 
         return defaultShared.getInt(CIRCLE_SIZE_KEY, CIRCLE_SIZE_DEFAULT) * mScale;
@@ -285,14 +285,14 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(ICON_SCALE_NAME)
-    float iconScale(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
+    float iconScale(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
             return defaultShared.getFloat(ICON_SCALE,1f);
     }
 
     @Provides
     @Singleton
     @Named(GRID_GAP_NAME)
-    int gridGap(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
+    int gridGap(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
         return defaultShared.getInt(GRID_GAP_KEY, GRID_GAP_DEFAULT);
     }
 
@@ -331,7 +331,7 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(GUIDE_COLOR_NAME)
-    int guideColor(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
+    int guideColor(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
         return defaultShared.getInt(EdgeSetting.GUIDE_COLOR_KEY, GUIDE_COLOR_DEFAULT);
     }
 
@@ -355,7 +355,7 @@ public class EdgeServiceModule {
     @Singleton
     @Named(FAVORITE_GRID_VIEW_NAME)
     GridView favoriteGridView(@Named(GRID_PARENTS_VIEW_NAME) FrameLayout parent
-            , @Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+            , @Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared
             , @Named(M_SCALE_NAME) float mScale
             , @Named(FAVORITE_GRID_ADAPTER_NAME) FavoriteShortcutAdapter adapter
             , @Named(ICON_SCALE_NAME) float mIconScale) {
@@ -381,7 +381,7 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(GRID_HEIGHT_NAME)
-    float gridHeight(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+    float gridHeight(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared
             , @Named(M_SCALE_NAME) float mScale
             , @Named(ICON_SCALE_NAME) float iconScale) {
         int gridRow = defaultShared.getInt(EdgeSetting.NUM_OF_GRID_ROW_KEY, 5);
@@ -392,7 +392,7 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(GRID_WIDTH_NAME)
-    float gridWidth(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+    float gridWidth(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared
             , @Named(M_SCALE_NAME) float mScale
             , @Named(ICON_SCALE_NAME) float iconScale) {
         int gridColumn = defaultShared.getInt(Cons.NUM_OF_GRID_COLUMN_KEY, 4);
@@ -404,14 +404,14 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(GRID_NUMBER_COLUMNS_NAME)
-    int gridColumns(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
+    int gridColumns(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences shared) {
         return shared.getInt(Cons.NUM_OF_GRID_COLUMN_KEY, 4);
     }
 
     @Provides
     @Singleton
     @Named(GRID_NUMBER_ROWS_NAME)
-    int gridRows(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
+    int gridRows(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences shared) {
         return shared.getInt(Cons.NUM_OF_GRID_ROW_KEY, 5);
     }
 
@@ -589,7 +589,7 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(BACKGROUND_COLOR_NAME)
-    int backgroundColor(@Named(DEFAULT_SHARED_NAME)SharedPreferences shared){
+    int backgroundColor(@Named(OLD_DEFAULT_SHARED_NAME)SharedPreferences shared){
         return shared.getInt(Cons.BACKGROUND_COLOR_KEY, BACKGROUND_COLOR_DEFAULT);
     }
 
@@ -639,7 +639,7 @@ public class EdgeServiceModule {
     @Named(EDGE_1_PARA_NAME)
     WindowManager.LayoutParams edge1Para(@Named(EDGE_1_POSITION_NAME) int edge1Position
             , @Named(M_SCALE_NAME) float mScale
-            , @Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+            , @Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared
             , @Named(EDGE_1_SHARED_NAME) SharedPreferences edge1Shared
             , @Named(EDGE_1_WIDTH_PXL_NAME) int edgeWidth
             , @Named(EDGE_1_HEIGHT_PXL_NAME) int edgeHeight) {
@@ -653,7 +653,7 @@ public class EdgeServiceModule {
     @Named(EDGE_2_PARA_NAME)
     WindowManager.LayoutParams edge2Para(@Named(EDGE_2_POSITION_NAME) int edge2Position
             , @Named(M_SCALE_NAME) float mScale
-            , @Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+            , @Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared
             , @Named(EDGE_2_SHARED_NAME) SharedPreferences edge2Shared
             , @Named(EDGE_2_WIDTH_PXL_NAME) int edgeWidth
             , @Named(EDGE_2_HEIGHT_PXL_NAME) int edgeHeight) {
@@ -789,21 +789,21 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(FAVORITE_GRID_PADDING_HORIZONTAL_NAME)
-    int favoritePaddingHorizontal(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
+    int favoritePaddingHorizontal(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
         return defaultShared.getInt(Cons.FAVORITE_GRID_PADDING_HORIZONTAL_KEY, DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL);
     }
 
     @Provides
     @Singleton
     @Named(FAVORITE_GRID_PADDING_VERTICAL_NAME)
-    int favoritePaddingVertical(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
+    int favoritePaddingVertical(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
         return defaultShared.getInt(Cons.FAVORITE_GRID_PADDING_VERTICAL_NAME, DEFAULT_FAVORITE_GRID_PADDING_VERTICAL);
     }
 
     @Provides
     @Singleton
     @Named(EDGE_1_QUICK_ACTION_VIEWS_NAME)
-    ExpandStatusBarView[] edge1QuickActionViews(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+    ExpandStatusBarView[] edge1QuickActionViews(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared
             , @Named(QUICK_ACTION_VIEW_RADIUS_NAME) int quickActionViewRadius
             , @Named(M_SCALE_NAME) float mScale
             , @Named(EDGE_1_POSITION_NAME) int edge1Position
@@ -827,7 +827,7 @@ public class EdgeServiceModule {
     ExpandStatusBarView[] edge2QuickActionViews(@Named(QUICK_ACTION_VIEW_RADIUS_NAME) int quickActionViewRadius
             , @Named(M_SCALE_NAME) float mScale
             , @Named(EDGE_2_POSITION_NAME) int edge2Position
-            , @Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared
+            , @Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared
             , @Named(CIRCLE_PARENTS_VIEW_NAME) FrameLayout circleParentsView) {
         
         ExpandStatusBarView[] quickActionViews = new ExpandStatusBarView[4];
@@ -872,35 +872,35 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(HOLD_TIME_NAME)
-    int holdTime(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared){
+    int holdTime(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences shared){
         return shared.getInt(Cons.HOLD_TIME_KEY, HOLD_TIME_DEFAULT);
     }
 
     @Provides
     @Singleton
     @Named(HOLD_TIME_ENABLE_NAME)
-    boolean holdTimeEnable(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared){
+    boolean holdTimeEnable(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences shared){
         return shared.getBoolean(Cons.HOLD_TIME_ENABLE_KEY, true);
     }
 
     @Provides
     @Singleton
     @Named(VIBRATE_DURATION_NAME)
-    int vibrationDuration(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
+    int vibrationDuration(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences shared) {
         return shared.getInt(VIBRATION_DURATION_KEY, VIBRATION_DURATION_DEFAULT);
     }
 
     @Provides
     @Singleton
     @Named(ANIMATION_TIME_NAME)
-    int animationTime(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
+    int animationTime(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences shared) {
         return shared.getInt(ANI_TIME_KEY, ANIMATION_TIME_DEFAULT);
     }
 
     @Provides
     @Singleton
     @Named(USE_ANIMATION_NAME)
-    boolean useAnimation(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
+    boolean useAnimation(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
         return defaultShared.getBoolean(USE_ANIMATION_KEY, USE_ANIMATION_DEFAULT);
     }
 
@@ -938,7 +938,7 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME)
-    int[] quickActionWithInstant(@Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
+    int[] quickActionWithInstant(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
         int[] returnArray = new int[4];
         if (defaultShared.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
             returnArray[0] = 1;
@@ -972,7 +972,7 @@ public class EdgeServiceModule {
     @Singleton
     @Named(CLOCK_PARENTS_VIEW_NAME)
     View clockParentsView(WindowManager windowManager
-            , @Named(DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
+            , @Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         return layoutInflater.inflate(R.layout.clock, null);
     }
@@ -1030,21 +1030,21 @@ public class EdgeServiceModule {
     @Provides
     @Singleton
     @Named(USE_ACTION_DOW_VIBRATE_NAME)
-    boolean useActionDownVibrate(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
+    boolean useActionDownVibrate(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences shared) {
         return !shared.getBoolean(EdgeSetting.DISABLE_HAPTIC_FEEDBACK_KEY, true);
     }
 
     @Provides
     @Singleton
     @Named(USE_ACTION_MOVE_VIBRATE_NAME)
-    boolean useActionMoveVibrate(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
+    boolean useActionMoveVibrate(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences shared) {
         return shared.getBoolean(Cons.HAPTIC_ON_ICON_KEY, false);
     }
 
     @Provides
     @Singleton
     @Named(USE_CLOCK_NAME)
-    boolean useClock(@Named(DEFAULT_SHARED_NAME) SharedPreferences shared) {
+    boolean useClock(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences shared) {
         return !shared.getBoolean(Cons.DISABLE_CLOCK_KEY, false);
     }
 

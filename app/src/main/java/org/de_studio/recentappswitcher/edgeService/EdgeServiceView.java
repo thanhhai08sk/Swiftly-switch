@@ -90,7 +90,7 @@ import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_LINEAR_LAYOUT_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
-import static org.de_studio.recentappswitcher.Cons.DEFAULT_SHARED_NAME;
+import static org.de_studio.recentappswitcher.Cons.OLD_DEFAULT_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_ID;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
@@ -173,7 +173,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Named(EDGE_2_SHARED_NAME)
     SharedPreferences edge2Shared;
     @Inject
-    @Named(DEFAULT_SHARED_NAME)
+    @Named(OLD_DEFAULT_SHARED_NAME)
     SharedPreferences defaultShared;
     @Inject
     @Named(FAVORITE_GRID_VIEW_NAME)

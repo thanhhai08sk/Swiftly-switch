@@ -52,7 +52,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
             iconPack = iconPackManager.getInstance(iconPackPacka);
         }
         iconPadding = (int)mContext.getResources().getDimension(R.dimen.icon_padding);
-        myRealm = Realm.getInstance(new RealmConfiguration.Builder(mContext)
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
                 .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())

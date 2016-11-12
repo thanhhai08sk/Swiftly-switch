@@ -19,16 +19,23 @@ public class SetCircleFavoritePresenter extends BasePresenter {
     @Override
     public void onViewAttach() {
         view.setSpinner(model.getCollectionList(), model.getCurrentCollection());
-
+        setListView();
 
     }
 
-    public void onSpinnerItemSelect(String itemId) {
+    public void onSpinnerItemSelect(String itemLabel) {
+        model.setCollection(itemLabel);
+        setListView();
+    }
 
+    private void setListView() {
+        view.setListView(model.getSlots());
     }
 
     @Override
     public void onViewDetach() {
+        model.clear();
+        view.clear();
         super.onViewDetach();
     }
 

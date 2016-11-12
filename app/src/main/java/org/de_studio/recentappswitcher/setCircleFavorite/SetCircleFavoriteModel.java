@@ -42,8 +42,9 @@ public class SetCircleFavoriteModel {
 
     public void setCollection(String collectionLabel) {
         if (collectionLabel != null) {
-            Collection collectionWithLabel = realm.where(Collection.class).equalTo(Cons.LABEL, collectionLabel).findFirst();
-            if (collectionLabel == null) {
+            Collection collectionWithLabel = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_CIRCLE_FAVORITE)
+                    .equalTo(Cons.LABEL, collectionLabel).findFirst();
+            if (collectionWithLabel == null) {
                 throw new IllegalArgumentException("No collection with this label found");
             } else {
                 collection = collectionWithLabel;
@@ -88,5 +89,9 @@ public class SetCircleFavoriteModel {
 
             }
         });
+    }
+
+    public void clear() {
+        realm.close();
     }
 }

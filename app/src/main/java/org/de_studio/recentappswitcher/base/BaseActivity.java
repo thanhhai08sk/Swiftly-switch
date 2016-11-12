@@ -35,4 +35,6 @@ public abstract class BaseActivity extends Activity {
         getPresenter().onViewDetach();
         super.onDestroy();
     }
+
+    protected abstract void clear();
 }

@@ -27,9 +27,16 @@ public class AppModule {
 
     @Provides
     @Singleton
-    @Named(Cons.DEFAULT_SHARED_NAME)
+    @Named(Cons.SHARED_PREFERENCE_NAME)
+    SharedPreferences sharedPreference(){
+        return context.getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
+    }
+
+    @Provides
+    @Singleton
+    @Named(Cons.OLD_DEFAULT_SHARED_NAME)
     SharedPreferences defaultShared(){
-        return context.getSharedPreferences(Cons.DEFAULT_SHARED_NAME, 0);
+        return context.getSharedPreferences(Cons.OLD_DEFAULT_SHARED_NAME, 0);
     }
 
     @Provides
@@ -56,7 +63,7 @@ public class AppModule {
     @Provides
     @Nullable
     @Singleton
-    IconPackManager.IconPack iconPack(@Named(Cons.DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
+    IconPackManager.IconPack iconPack(@Named(Cons.OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
         IconPackManager.IconPack iconPack = null;
         String iconPackPacka = defaultShared.getString(Cons.ICON_PACK_PACKAGE_NAME_KEY, Cons.ICON_PACK_NONE);
         if (!iconPackPacka.equals(Cons.ICON_PACK_NONE)) {
