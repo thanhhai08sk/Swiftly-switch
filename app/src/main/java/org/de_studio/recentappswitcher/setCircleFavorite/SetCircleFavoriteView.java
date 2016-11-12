@@ -14,6 +14,9 @@ import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
+import org.de_studio.recentappswitcher.dagger.AppModule;
+import org.de_studio.recentappswitcher.dagger.DaggerSetCircleFavoriteComponent;
+import org.de_studio.recentappswitcher.dagger.SetCircleFavoriteModule;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
 
@@ -109,7 +112,10 @@ public class SetCircleFavoriteView extends BaseActivity {
 
     @Override
     protected void inject() {
-
+        DaggerSetCircleFavoriteComponent.builder()
+                .appModule(new AppModule(this.getApplicationContext()))
+                .setCircleFavoriteModule(new SetCircleFavoriteModule(this, collectionId))
+                .build().inject(this);
     }
 
     @OnClick(R.id.size)
