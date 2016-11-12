@@ -6,15 +6,17 @@ package org.de_studio.recentappswitcher.main.general;
 
 public class GeneralPresenter {
     GeneralView view;
-    GeneralModel model;
 
-    public GeneralPresenter(GeneralView view, GeneralModel model) {
+    public GeneralPresenter(GeneralView view) {
         this.view = view;
-        this.model = model;
     }
 
     public void onViewAttach() {
 
+    }
+
+    public void onViewDetach() {
+        view.clear();
     }
 
     public void onRecentClick() {

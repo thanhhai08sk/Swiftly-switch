@@ -8,8 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.de_studio.recentappswitcher.R;
-
-import javax.inject.Inject;
+import org.de_studio.recentappswitcher.setCircleFavorite.SetCircleFavoriteView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -21,17 +20,13 @@ import butterknife.Unbinder;
 
 public class GeneralView extends Fragment {
 
-
-    @Inject
     GeneralPresenter presenter;
-    @Inject
-    GeneralModel model;
 
     Unbinder unbinder;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        inject();
+        presenter = new GeneralPresenter(this);
     }
 
     @Nullable
@@ -41,6 +36,12 @@ public class GeneralView extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         presenter.onViewAttach();
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        presenter.onViewDetach();
+        super.onDestroy();
     }
 
     public void setRecent() {
@@ -56,14 +57,10 @@ public class GeneralView extends Fragment {
     }
 
     public void setCircleFavorite() {
-
+        startActivity(SetCircleFavoriteView.getIntent(getActivity(), null));
     }
 
     public void setBlackList() {
-
-    }
-
-    void inject() {
 
     }
 
@@ -90,5 +87,9 @@ public class GeneralView extends Fragment {
     @OnClick(R.id.black_list)
     void onBlackListClick(){
         presenter.onBlackListClick();
+    }
+
+    public void clear() {
+        unbinder.unbind();
     }
 }

@@ -1,5 +1,7 @@
 package org.de_studio.recentappswitcher.setCircleFavorite;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
@@ -131,5 +133,11 @@ public class SetCircleFavoriteView extends BaseActivity {
     @Override
     protected void clear() {
 
+    }
+
+    public static Intent getIntent(Context context, String collectionId) {
+        Intent intent = new Intent(context, SetCircleFavoriteView.class);
+        intent.putExtra(Cons.COLLECTION_ID, collectionId);
+        return intent;
     }
 }
