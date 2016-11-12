@@ -16,12 +16,12 @@ public class SetCircleFavoritePresenter extends BasePresenter {
     }
 
 
-    public void onSpinnerItemSelect(String itemId) {
+    @Override
+    public void onViewAttach() {
 
     }
 
-    @Override
-    public void onViewAttach() {
+    public void onSpinnerItemSelect(String itemId) {
 
     }
 

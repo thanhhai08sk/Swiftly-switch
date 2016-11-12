@@ -13,11 +13,13 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.BasePresenter;
+import org.de_studio.recentappswitcher.model.Collection;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.realm.RealmResults;
 
 /**
  * Created by HaiNguyen on 11/11/16.
@@ -43,18 +45,27 @@ public class SetCircleFavoriteView extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        collectionId = getIntent().getStringExtra(Cons.COLLECTION_ID_KEY);
+        collectionId = getIntent().getStringExtra(Cons.COLLECTION_ID);
         super.onCreate(savedInstanceState);
     }
 
 
     public String getCollectionId() {
-        if (collectionId == null) {
-
-        }
+        return collectionId;
     }
-    public void setSpinner(String[] itemIncludeCreateNew) {
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_dropdown_item, itemIncludeCreateNew);
+
+    public void setCollectionId(String collectionId) {
+        this.collectionId = collectionId;
+    }
+    public void setSpinner(RealmResults<Collection> itemLabels) {
+        String addNew = getString(R.string.add_new);
+        String[] adapterItems = new String[itemLabels.size() + 1];
+        for (int i = 0; i < itemLabels.size(); i++) {
+            adapterItems[i] = itemLabels.get(i).label;
+        }
+        adapterItems[adapterItems.length - 1] = addNew;
+
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_dropdown_item, adapterItems);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

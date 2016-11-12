@@ -235,7 +235,22 @@ public class Cons {
     public static final String ITEM_ID_CONTACT = "contact_";
     public static final String ITEM_ID_SHORTCUT = "shortcut_";
 
-    public static final String COLLECTION_ID_KEY = "collectionId";
+    //Model
+    public static final String TYPE = "type";
+    public static final String ITEM_ID = "itemId";
+    public static final String LABEL = "label";
+    public static final String ACTION = "action";
+    public static final String PACKAGENAME = "packageName";
+    public static final String NUMBER = "number";
+    public static final String CONTACT_ID = "contactId";
+    public static final String INTENT = "intent";
+    public static final String APP_FOREGROUND_TIME = "appForegroundTime";
+    public static final String ICON_RESOURCE_ID = "iconResourceId";
+    public static final String ICON_RESOURCE_ID_2 = "iconResourceId2";
+    public static final String ICON_RESOURCE_ID_3 = "iconResourceId3";
+    public static final String ICON_BITMAP = "iconBitmap";
+    public static final String ICON_URI = "iconUri";
+    public static final String COLLECTION_ID = "collectionId";
 
 
 
