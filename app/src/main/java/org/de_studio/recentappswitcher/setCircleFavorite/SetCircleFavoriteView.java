@@ -158,9 +158,9 @@ public class SetCircleFavoriteView extends BaseActivity {
     }
 
     public void setOnItemClick() {
-        subscription = adapter.getKeyClicked().subscribe(new Action1<Integer>() {
+        subscription = adapter.getKeyClicked().subscribe(new Action1<String>() {
             @Override
-            public void call(Integer s) {
+            public void call(String s) {
                 Log.e(TAG, "call: " + s);
                 presenter.onSlotClick(s);
             }

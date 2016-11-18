@@ -29,7 +29,7 @@ public class SetCircleFavoritePresenter extends BasePresenter {
         view.updateRecyclerView(model.getSlots());
     }
 
-    public void onSlotClick(int position) {
+    public void onSlotClick(String slotId) {
 
     }
 

@@ -6,6 +6,8 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
 
+import java.util.Random;
+
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -48,10 +50,10 @@ public class SetCircleFavoriteModel {
         if (collectionLabel != null) {
             Collection collectionWithLabel = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_CIRCLE_FAVORITE)
                     .equalTo(Cons.LABEL, collectionLabel).findFirst();
-            if (collectionWithLabel == null) {
-                throw new IllegalArgumentException("No collection with this label found");
-            } else {
+            if (collectionWithLabel != null) {
                 collection = collectionWithLabel;
+            } else {
+                Log.e(TAG, "setCollection: no collection with this label found: " + collectionLabel);
             }
         }
     }
@@ -96,6 +98,8 @@ public class SetCircleFavoriteModel {
 
                 Slot nullSlot = new Slot();
                 nullSlot.type = Slot.TYPE_NULL;
+                nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
+                Log.e(TAG, "new slot, id = " + nullSlot.slotId);
                 Slot realmSlot = realm.copyToRealm(nullSlot);
 
                 for (int i = 0; i < 6; i++) {
@@ -113,6 +117,8 @@ public class SetCircleFavoriteModel {
             public void execute(Realm realm) {
                 Slot nullSlot = new Slot();
                 nullSlot.type = Slot.TYPE_NULL;
+                nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
+                Log.e(TAG, "new slot, id = " + nullSlot.slotId);
                 Slot realmSlot = realm.copyToRealm(nullSlot);
                 slots.add(realmSlot);
             }

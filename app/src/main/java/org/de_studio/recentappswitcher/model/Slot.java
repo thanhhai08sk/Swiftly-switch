@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.model;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by HaiNguyen on 11/5/16.
@@ -14,6 +15,8 @@ public class Slot extends RealmObject {
     public static final String TYPE_EMPTY = "empty_";
     public static final String TYPE_NULL = "null_"; //plus
     public String type;
+    @PrimaryKey
+    public String slotId;
     public Item stage1Item;
     public Item stage2Item;
     public int longClickMode;
@@ -21,6 +24,15 @@ public class Slot extends RealmObject {
     public byte[] iconBitmap;
 
     public Slot() {
+    }
+
+
+    public String getSlotId() {
+        return slotId;
+    }
+
+    public void setSlotId(String slotId) {
+        this.slotId = slotId;
     }
 
     public byte[] getIconBitmap() {

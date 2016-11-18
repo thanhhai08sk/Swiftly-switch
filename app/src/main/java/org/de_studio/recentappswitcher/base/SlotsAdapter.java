@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,7 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
     private static final String TAG = SlotsAdapter.class.getSimpleName();
     PackageManager packageManager;
     IconPackManager.IconPack iconPack;
-    private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
+    private final PublishSubject<String> onClickSubject = PublishSubject.create();
 
 
     public SlotsAdapter(@NonNull Context context, @Nullable OrderedRealmCollection data, boolean autoUpdate, IconPackManager.IconPack iconPack) {
@@ -45,14 +44,13 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
         if (slot != null) {
             Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack);
             Utility.setSlotLabel(slot, context, holder.label);
+            holder.view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onClickSubject.onNext(slot.slotId);
+                }
+            });
         }
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Log.e(TAG, "onClick: " + position);
-                onClickSubject.onNext(position);
-            }
-        });
     }
 
     @Override
@@ -73,7 +71,7 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
             icon = (ImageView) view.findViewById(R.id.item_icon);
         }
     }
-    public Observable<Integer> getKeyClicked() {
+    public Observable<String> getKeyClicked() {
         return onClickSubject.asObservable();
     }
 
