@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.model.Item;
+import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppView;
 
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
@@ -29,7 +30,16 @@ public class SetItemsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return null;
+        switch (position) {
+            case 0:
+                ChooseAppView chooseAppView = new ChooseAppView();
+                chooseAppView.setSubjects(currentItemChangeSubject, setItemSubject);
+                return chooseAppView;
+            default:
+                ChooseAppView chooseAppView1 = new ChooseAppView();
+                chooseAppView1.setSubjects(currentItemChangeSubject, setItemSubject);
+                return chooseAppView1;
+        }
     }
 
     @Override

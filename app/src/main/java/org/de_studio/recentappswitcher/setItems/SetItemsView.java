@@ -32,7 +32,7 @@ public class SetItemsView extends BaseActivity {
     public static final String KEY_ITEMS_TYPE = "itemsType";
     public static final String KEY_ITEM_INDEX = "itemIndex";
     public static final String KEY_COLLECTION_ID = "collectionId";
-    public static final String KEY_ITEM_ID = "itemId";//in case of folder
+    public static final String KEY_ITEM_ID = "slotId";//in case of folder
 
     @BindView(R.id.view_pager)
     ViewPager viewPager;
@@ -47,7 +47,7 @@ public class SetItemsView extends BaseActivity {
     int itemsType;
     int itemIndex;
     String collectionId;
-    String itemId;
+    String slotId;
 
     @Inject
     SetItemsPresenter presenter;
@@ -68,7 +68,7 @@ public class SetItemsView extends BaseActivity {
         itemsType = getIntent().getIntExtra(KEY_ITEMS_TYPE, ITEMS_TYPE_STAGE_1);
         itemIndex = getIntent().getIntExtra(KEY_ITEM_INDEX, 0);
         collectionId = getIntent().getStringExtra(KEY_COLLECTION_ID);
-        itemId = getIntent().getStringExtra(KEY_ITEM_ID);
+        slotId = getIntent().getStringExtra(KEY_ITEM_ID);
         super.onCreate(savedInstanceState);
         tabLayout.setupWithViewPager(viewPager);
     }

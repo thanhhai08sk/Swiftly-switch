@@ -247,6 +247,7 @@ public class Cons {
     public static final String ICON_BITMAP = "iconBitmap";
     public static final String ICON_URI = "iconUri";
     public static final String COLLECTION_ID = "collectionId";
+    public static final String SLOT_ID = "slotId";
 
 
 
