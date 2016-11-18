@@ -59,9 +59,8 @@ public class SetCircleFavoriteModel {
     public void setCollectionSize(int size) {
         RealmList<Slot> slots = getCurrentCollection().slots;
         while (slots.size() > size) {
-            slots.remove(slots.size() - 1);
+            removeSlot(slots.size() - 1, slots);
         }
-
         while (slots.size() < size) {
             addNullSlotToList(slots);
         }
@@ -108,7 +107,7 @@ public class SetCircleFavoriteModel {
         });
     }
 
-    private Slot addNullSlotToList(final RealmList<Slot> slots) {
+    private void addNullSlotToList(final RealmList<Slot> slots) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -119,6 +118,15 @@ public class SetCircleFavoriteModel {
             }
         });
 
+    }
+
+    private void removeSlot(final int position, final RealmList<Slot> slots) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                slots.remove(position);
+            }
+        });
     }
 
     public void clear() {

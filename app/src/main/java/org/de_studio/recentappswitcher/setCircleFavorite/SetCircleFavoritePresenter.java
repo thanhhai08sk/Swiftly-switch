@@ -46,7 +46,7 @@ public class SetCircleFavoritePresenter extends BasePresenter {
     }
 
     public void onSizeClick() {
-
+        view.showChooseSizeDialog();
     }
 
     public void onLongClickModeClick() {
