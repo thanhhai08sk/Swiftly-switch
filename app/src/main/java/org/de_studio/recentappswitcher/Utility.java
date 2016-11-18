@@ -657,8 +657,7 @@ public  class Utility {
 
 
     // get installed apps but skip the system apps
-    public static Set<PackageInfo> getInstalledApps(Context ctx) {
-        final PackageManager packageManager = ctx.getPackageManager();
+    public static Set<PackageInfo> getInstalledApps(PackageManager packageManager) {
 
         final List<PackageInfo> allInstalledPackages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA);
         final Set<PackageInfo> filteredPackages = new HashSet();

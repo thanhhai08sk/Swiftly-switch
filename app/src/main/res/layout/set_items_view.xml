@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/tabbar"
+            android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -25,7 +25,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/container"
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
@@ -40,19 +40,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1."
+            tools:text="1."
             android:textColor="@color/white"
-            android:textSize="24dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="5dp"
-            android:id="@+id/app_tab_fragment_position_text_view"
-            android:layout_gravity="left|center_vertical"
+            android:textSize="24sp"
+            android:paddingStart="10dp"
+            android:paddingEnd="5dp"
+            android:id="@+id/index"
+            android:layout_gravity="start|center_vertical"
             />
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:scaleType="fitStart"
-            android:id="@+id/app_tab_fragment_current_shortcut_image_view"
+            android:id="@+id/icon"
             android:layout_weight="1"
             />
         <android.support.v7.widget.AppCompatImageButton
