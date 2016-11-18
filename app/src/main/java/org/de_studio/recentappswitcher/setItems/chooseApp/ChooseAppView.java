@@ -88,6 +88,11 @@ public class ChooseAppView extends Fragment implements AdapterView.OnItemClickLi
         super.onDestroy();
     }
 
+    public void setSubjects(BehaviorSubject<Item> currentItemChangeSubject, PublishSubject<Item> setItemSubject) {
+        this.currentItemChangeSubject = currentItemChangeSubject;
+        this.setItemSubject = setItemSubject;
+    }
+
     public BehaviorSubject<Item> onCurrentItemChange() {
         return currentItemChangeSubject;
     }

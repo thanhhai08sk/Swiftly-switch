@@ -97,7 +97,7 @@ public class SetItemsView extends BaseActivity {
 
     @Override
     protected BasePresenter getPresenter() {
-        return null;
+        return presenter;
     }
 
     @Override
