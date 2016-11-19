@@ -73,6 +73,7 @@ public class ChooseAppView extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         inject();
     }
 

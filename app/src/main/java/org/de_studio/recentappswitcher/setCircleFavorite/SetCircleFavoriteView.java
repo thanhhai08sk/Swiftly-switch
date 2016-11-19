@@ -94,9 +94,11 @@ public class SetCircleFavoriteView extends BaseActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String itemLabel = ((CheckedTextView) view.findViewById(android.R.id.text1)).getText().toString();
-                Log.e(TAG, "onItemSelected: label = " + itemLabel);
-                presenter.onSpinnerItemSelect(itemLabel);
+                if (view != null) {
+                    String itemLabel = ((CheckedTextView) view.findViewById(android.R.id.text1)).getText().toString();
+                    Log.e(TAG, "onItemSelected: label = " + itemLabel);
+                    presenter.onSpinnerItemSelect(itemLabel);
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {

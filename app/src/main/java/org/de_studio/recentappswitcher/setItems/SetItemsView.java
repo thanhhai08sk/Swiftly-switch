@@ -81,7 +81,10 @@ public class SetItemsView extends BaseActivity {
         super.onCreate(savedInstanceState);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setAdapter(adapter);
+
     }
+
+
 
 
 
