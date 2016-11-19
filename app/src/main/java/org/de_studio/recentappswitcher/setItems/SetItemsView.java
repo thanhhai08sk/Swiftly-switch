@@ -8,7 +8,9 @@ import android.support.v4.view.ViewPager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.model.Item;
@@ -55,6 +57,8 @@ public class SetItemsView extends BaseActivity {
     SetItemsModel model;
     @Inject
     SetItemsPagerAdapter adapter;
+    @Inject
+    IconPackManager.IconPack iconPack;
 
     BehaviorSubject<Item> currentItemChangeSubject = BehaviorSubject.create();
     PublishSubject<Item> setItemSubject = PublishSubject.create();
@@ -73,6 +77,11 @@ public class SetItemsView extends BaseActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
+    @Override
+    protected void onDestroy() {
+        presenter.onViewDetach();
+        super.onDestroy();
+    }
 
     public BehaviorSubject<Item> onCurrentItemChange() {
         return currentItemChangeSubject;
@@ -93,6 +102,11 @@ public class SetItemsView extends BaseActivity {
     @Override
     protected void inject() {
 
+    }
+
+    public void showCurrentIconAndIndex(Item currentItem, int itemIndex) {
+        Utility.setItemIcon(currentItem,this,icon,getPackageManager(),iconPack);
+        index.setText(String.valueOf(itemIndex));
     }
 
     @Override

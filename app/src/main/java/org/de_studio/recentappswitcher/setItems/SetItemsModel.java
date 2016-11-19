@@ -14,14 +14,12 @@ import io.realm.RealmList;
 
 public class SetItemsModel {
     int itemsType;
-    int itemIndex;
     String collectionId;
     String slotId;
     Realm realm = Realm.getDefaultInstance();
 
-    public SetItemsModel(int itemsType, int itemIndex, String collectionId, String slotId) {
+    public SetItemsModel(int itemsType, String collectionId, String slotId) {
         this.itemsType = itemsType;
-        this.itemIndex = itemIndex;
         this.collectionId = collectionId;
         this.slotId = slotId;
     }
@@ -58,6 +56,10 @@ public class SetItemsModel {
                 return (items != null && currentIndex - 1 >= 0) ? items.get(currentIndex - 1) : null;
         }
         return null;
+    }
+
+    public Item getCurrentItem(int currentIndex) {
+        return getNextItem(currentIndex - 1);
     }
 
     public void setCurrentItem(final Item item, final int currentIndex) {
@@ -115,5 +117,9 @@ public class SetItemsModel {
             return slot.items;
         }
         return null;
+    }
+
+    public void clear() {
+        realm.close();
     }
 }
