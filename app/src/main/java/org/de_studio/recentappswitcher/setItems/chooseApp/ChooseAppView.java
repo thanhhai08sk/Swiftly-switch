@@ -6,9 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -76,11 +74,6 @@ public class ChooseAppView extends BaseFragment implements AdapterView.OnItemCli
         setRetainInstance(true);
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -141,10 +134,6 @@ public class ChooseAppView extends BaseFragment implements AdapterView.OnItemCli
         return presenter;
     }
 
-    @Override
-    protected void clear() {
-        super.clear();
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
