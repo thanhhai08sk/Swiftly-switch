@@ -46,7 +46,6 @@ public class ChooseAppPresenter extends BasePresenter {
                 view.onCurrentItemChange().subscribe(new Action1<Item>() {
                     @Override
                     public void call(Item item) {
-                        Log.e(TAG, "call: on current item change " + item.label);
                         view.setCurrentItem(item);
                     }
                 })
