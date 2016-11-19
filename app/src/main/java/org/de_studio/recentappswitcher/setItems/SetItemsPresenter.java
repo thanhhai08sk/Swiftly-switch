@@ -1,5 +1,7 @@
 package org.de_studio.recentappswitcher.setItems;
 
+import android.util.Log;
+
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.model.Item;
 
@@ -10,6 +12,7 @@ import rx.functions.Action1;
  */
 
 public class SetItemsPresenter extends BasePresenter {
+    private static final String TAG = SetItemsPresenter.class.getSimpleName();
     SetItemsView view;
     SetItemsModel model;
     int currentIndex;
@@ -65,7 +68,17 @@ public class SetItemsPresenter extends BasePresenter {
                 view.onSetItem().subscribe(new Action1<Item>() {
                     @Override
                     public void call(Item item) {
+                        Log.e(TAG, "call SetItemsSubject " + item.label);
                         model.setCurrentItem(item, currentIndex);
+                    }
+                })
+        );
+
+        addSubscription(
+                view.onOkButton().subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        view.finishAfterTransition();
                     }
                 })
         );
@@ -76,6 +89,5 @@ public class SetItemsPresenter extends BasePresenter {
         super.onViewDetach();
         model.clear();
         view.clear();
-        view = null;
     }
 }

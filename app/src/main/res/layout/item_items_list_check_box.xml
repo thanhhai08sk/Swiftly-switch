@@ -21,7 +21,7 @@
         android:paddingEnd="16dp"
         android:layout_weight="1"
         android:textColor="@color/black"
-        android:id="@+id/choose_app_title_text_view"
+        android:id="@+id/label"
         tools:text="Example app name text"
         />
     <CheckBox

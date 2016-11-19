@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.setItems;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.widget.ImageView;
@@ -13,6 +14,9 @@ import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.BasePresenter;
+import org.de_studio.recentappswitcher.dagger.AppModule;
+import org.de_studio.recentappswitcher.dagger.DaggerSetItemsComponent;
+import org.de_studio.recentappswitcher.dagger.SetItemsModule;
 import org.de_studio.recentappswitcher.model.Item;
 
 import javax.inject.Inject;
@@ -34,7 +38,7 @@ public class SetItemsView extends BaseActivity {
     public static final String KEY_ITEMS_TYPE = "itemsType";
     public static final String KEY_ITEM_INDEX = "itemIndex";
     public static final String KEY_COLLECTION_ID = "collectionId";
-    public static final String KEY_ITEM_ID = "slotId";//in case of folder
+    public static final String KEY_SLOT_ID = "slotId";//in case of folder
 
     @BindView(R.id.view_pager)
     ViewPager viewPager;
@@ -57,6 +61,7 @@ public class SetItemsView extends BaseActivity {
     SetItemsModel model;
     @Inject
     SetItemsPagerAdapter adapter;
+    @Nullable
     @Inject
     IconPackManager.IconPack iconPack;
 
@@ -72,16 +77,13 @@ public class SetItemsView extends BaseActivity {
         itemsType = getIntent().getIntExtra(KEY_ITEMS_TYPE, ITEMS_TYPE_STAGE_1);
         itemIndex = getIntent().getIntExtra(KEY_ITEM_INDEX, 0);
         collectionId = getIntent().getStringExtra(KEY_COLLECTION_ID);
-        slotId = getIntent().getStringExtra(KEY_ITEM_ID);
+        slotId = getIntent().getStringExtra(KEY_SLOT_ID);
         super.onCreate(savedInstanceState);
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.setAdapter(adapter);
     }
 
-    @Override
-    protected void onDestroy() {
-        presenter.onViewDetach();
-        super.onDestroy();
-    }
+
 
     public BehaviorSubject<Item> onCurrentItemChange() {
         return currentItemChangeSubject;
@@ -99,14 +101,23 @@ public class SetItemsView extends BaseActivity {
         return previousButtonSubject;
     }
 
+    public PublishSubject<Void> onOkButton() {
+        return okButtonSubject;
+    }
+
     @Override
     protected void inject() {
-
+        DaggerSetItemsComponent.builder()
+                .appModule(new AppModule(this))
+                .setItemsModule(new SetItemsModule(this, itemsType, itemIndex, collectionId, slotId))
+                .build().inject(this);
     }
 
     public void showCurrentIconAndIndex(Item currentItem, int itemIndex) {
-        Utility.setItemIcon(currentItem,this,icon,getPackageManager(),iconPack);
-        index.setText(String.valueOf(itemIndex));
+        if (currentItem != null) {
+            Utility.setItemIcon(currentItem,this,icon,getPackageManager(),iconPack);
+            index.setText(String.valueOf(itemIndex));
+        }
     }
 
     @Override
@@ -136,12 +147,12 @@ public class SetItemsView extends BaseActivity {
         okButtonSubject.onNext(null);
     }
 
-    public static Intent getIntent(Context context, int itemsType, int itemIndex, String collectionId, String itemId) {
+    public static Intent getIntent(Context context, int itemsType, int itemIndex, String collectionId, String slotId) {
         Intent intent = new Intent(context, SetItemsView.class);
         intent.putExtra(KEY_ITEMS_TYPE, itemsType);
         intent.putExtra(KEY_ITEM_INDEX, itemIndex);
         intent.putExtra(KEY_COLLECTION_ID, collectionId);
-        intent.putExtra(KEY_ITEM_ID, itemId);
+        intent.putExtra(KEY_SLOT_ID, slotId);
         return intent;
     }
 }

@@ -40,7 +40,7 @@ public class ChooseAppPresenter extends BasePresenter {
         });
 
         addSubscription(
-                view.currentItemChangeSubject.subscribe(new Action1<Item>() {
+                view.onCurrentItemChange().subscribe(new Action1<Item>() {
                     @Override
                     public void call(Item item) {
                         view.setCurrentItem(item);

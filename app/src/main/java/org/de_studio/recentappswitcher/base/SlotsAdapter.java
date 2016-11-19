@@ -29,17 +29,18 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
     private static final String TAG = SlotsAdapter.class.getSimpleName();
     PackageManager packageManager;
     IconPackManager.IconPack iconPack;
-    private final PublishSubject<String> onClickSubject = PublishSubject.create();
+    private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
 
 
     public SlotsAdapter(@NonNull Context context, @Nullable OrderedRealmCollection data, boolean autoUpdate, IconPackManager.IconPack iconPack) {
         super(context, data, autoUpdate);
         this.iconPack = iconPack;
+        packageManager = context.getPackageManager();
     }
 
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Slot slot = getItem(position);
         if (slot != null) {
             Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack);
@@ -47,7 +48,7 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onClickSubject.onNext(slot.slotId);
+                    onClickSubject.onNext(holder.getAdapterPosition());
                 }
             });
         }
@@ -71,7 +72,7 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
             icon = (ImageView) view.findViewById(R.id.item_icon);
         }
     }
-    public Observable<String> getKeyClicked() {
+    public Observable<Integer> getKeyClicked() {
         return onClickSubject.asObservable();
     }
 

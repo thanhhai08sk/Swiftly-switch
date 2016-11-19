@@ -104,7 +104,7 @@ public class AppTabFragment extends Fragment{
         protected ArrayList<AppInfors> doInBackground(Void... voids) {
             PackageManager packageManager = getActivity().getPackageManager();
             ArrayList<AppInfors> arrayList = new ArrayList<AppInfors>();
-            Set<PackageInfo> set = Utility.getInstalledApps(getContext());
+            Set<PackageInfo> set = Utility.getInstalledApps(getContext().getPackageManager());
             PackageInfo[] array = set.toArray(new PackageInfo[set.size()]);
             for (PackageInfo pack : array){
 

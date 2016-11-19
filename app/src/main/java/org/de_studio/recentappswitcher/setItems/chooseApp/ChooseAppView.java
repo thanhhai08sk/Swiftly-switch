@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,9 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.adapter.ItemsListAdapter;
+import org.de_studio.recentappswitcher.dagger.AppModule;
+import org.de_studio.recentappswitcher.dagger.ChooseAppModule;
+import org.de_studio.recentappswitcher.dagger.DaggerChooseAppComponent;
 import org.de_studio.recentappswitcher.model.Item;
 
 import java.lang.ref.WeakReference;
@@ -76,7 +80,7 @@ public class ChooseAppView extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.choose_app_view, container, false);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         listView.setOnItemClickListener(this);
         presenter.onViewAttach();
         return view;
@@ -124,7 +128,10 @@ public class ChooseAppView extends Fragment implements AdapterView.OnItemClickLi
     }
 
     void inject() {
-
+        DaggerChooseAppComponent.builder()
+                .appModule(new AppModule(getActivity()))
+                .chooseAppModule(new ChooseAppModule(this))
+                .build().inject(this);
     }
 
     void clear() {
@@ -135,6 +142,7 @@ public class ChooseAppView extends Fragment implements AdapterView.OnItemClickLi
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Item item = ((Item) parent.getAdapter().getItem(position));
         if (item != null) {
+            Log.e(TAG, "onItemClick: " + position);
             presenter.onItemClick(item);
         }
     }

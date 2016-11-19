@@ -33,17 +33,20 @@ public class SetCircleFavoriteModel {
 
     public Collection getCurrentCollection() {
         if (collection == null) {
-            if (collectionId == null) {
-                collectionId = Collection.TYPE_CIRCLE_FAVORITE + "1";
-            }
-
-            collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, collectionId).findFirst();
+            collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, getCollectionId()).findFirst();
             if (collection == null) {
                 createDefaultCollection();
                 collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, collectionId).findFirst();
             }
         }
         return collection;
+    }
+
+    public String getCollectionId() {
+        if (collectionId == null) {
+            collectionId = Collection.TYPE_CIRCLE_FAVORITE + "1";
+        }
+        return collectionId;
     }
 
     public void setCollection(String collectionLabel) {

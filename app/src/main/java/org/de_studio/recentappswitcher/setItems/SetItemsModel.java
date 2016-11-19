@@ -1,5 +1,7 @@
 package org.de_studio.recentappswitcher.setItems;
 
+import android.util.Log;
+
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Item;
@@ -13,6 +15,7 @@ import io.realm.RealmList;
  */
 
 public class SetItemsModel {
+    private static final String TAG = SetItemsModel.class.getSimpleName();
     int itemsType;
     String collectionId;
     String slotId;
@@ -29,6 +32,7 @@ public class SetItemsModel {
     }
 
     public Item getNextItem(int currentIndex) {
+        Log.e(TAG, "getNextItem: " + currentIndex);
         switch (itemsType) {
             case SetItemsView.ITEMS_TYPE_STAGE_1:
                 Slot slot = getSlot(currentIndex + 1);
@@ -44,6 +48,7 @@ public class SetItemsModel {
     }
 
     public Item getPreviousItem(int currentIndex) {
+        Log.e(TAG, "getPreviousItem: " + currentIndex);
         switch (itemsType) {
             case SetItemsView.ITEMS_TYPE_STAGE_1:
                 Slot slot = getSlot(currentIndex - 1);
@@ -59,6 +64,7 @@ public class SetItemsModel {
     }
 
     public Item getCurrentItem(int currentIndex) {
+        Log.e(TAG, "getCurrentItem: " + currentIndex);
         return getNextItem(currentIndex - 1);
     }
 
@@ -70,6 +76,9 @@ public class SetItemsModel {
                     public void execute(Realm realm) {
                         Slot slot = getSlot(currentIndex);
                         if (slot != null) {
+                            slot.type = Slot.TYPE_ITEM;
+                            Log.e(TAG, "execute: set stage1 = " + item.label + "\ntype " + item.type + "\npackage " + item.packageName
+                            + "\ncollection = " + collectionId);
                             slot.stage1Item = item;
                         }
                     }
@@ -81,6 +90,7 @@ public class SetItemsModel {
                     public void execute(Realm realm) {
                         Slot slot = getSlot(currentIndex);
                         if (slot != null) {
+                            slot.type = Slot.TYPE_ITEM;
                             slot.stage2Item = item;
                         }
                     }

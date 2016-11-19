@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
-import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.model.Item;
 
@@ -67,6 +66,6 @@ public class DataSetupService extends IntentService {
 
 
     private Set<PackageInfo> getAppsList() {
-        return Utility.getInstalledApps(this);
+        return Utility.getInstalledApps(getPackageManager());
     }
 }

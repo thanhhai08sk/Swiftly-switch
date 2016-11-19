@@ -25,6 +25,7 @@ import org.de_studio.recentappswitcher.dagger.DaggerSetCircleFavoriteComponent;
 import org.de_studio.recentappswitcher.dagger.SetCircleFavoriteModule;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
+import org.de_studio.recentappswitcher.setItems.SetItemsView;
 
 import javax.inject.Inject;
 
@@ -128,6 +129,10 @@ public class SetCircleFavoriteView extends BaseActivity {
         buider.create().show();
     }
 
+    public void openSetItems(int slotIndex, String collectionId) {
+        startActivity(SetItemsView.getIntent(this,SetItemsView.ITEMS_TYPE_STAGE_1,slotIndex,collectionId,null));
+    }
+
 
     @Override
     protected BasePresenter getPresenter() {
@@ -158,11 +163,11 @@ public class SetCircleFavoriteView extends BaseActivity {
     }
 
     public void setOnItemClick() {
-        subscription = adapter.getKeyClicked().subscribe(new Action1<String>() {
+        subscription = adapter.getKeyClicked().subscribe(new Action1<Integer>() {
             @Override
-            public void call(String s) {
-                Log.e(TAG, "call: " + s);
-                presenter.onSlotClick(s);
+            public void call(Integer integer) {
+                Log.e(TAG, "call: " + integer);
+                presenter.onSlotClick(integer);
             }
         });
     }

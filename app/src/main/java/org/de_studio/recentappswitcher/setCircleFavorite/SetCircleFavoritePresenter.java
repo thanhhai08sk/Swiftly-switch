@@ -29,8 +29,8 @@ public class SetCircleFavoritePresenter extends BasePresenter {
         view.updateRecyclerView(model.getSlots());
     }
 
-    public void onSlotClick(String slotId) {
-
+    public void onSlotClick(int slotIndex) {
+        view.openSetItems(slotIndex,model.getCollectionId());
     }
 
     public void onChooseCollectionSize(int size) {

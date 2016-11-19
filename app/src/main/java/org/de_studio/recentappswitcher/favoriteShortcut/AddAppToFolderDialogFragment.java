@@ -166,7 +166,7 @@ public class AddAppToFolderDialogFragment  extends DialogFragment{
                 packageManager = getActivity().getPackageManager();
             }
             ArrayList<AppInfors> arrayList = new ArrayList<AppInfors>();
-            Set<PackageInfo> set = Utility.getInstalledApps(getActivity());
+            Set<PackageInfo> set = Utility.getInstalledApps(getActivity().getPackageManager());
             PackageInfo[] array = set.toArray(new PackageInfo[set.size()]);
             for (PackageInfo pack : array) {
                 AppInfors appInfors = new AppInfors();
