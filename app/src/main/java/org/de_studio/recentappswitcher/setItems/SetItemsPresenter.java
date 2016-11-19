@@ -50,17 +50,16 @@ public class SetItemsPresenter extends BasePresenter {
                             currentIndex--;
                             view.onCurrentItemChange().onNext(item);
                         }
-
                     }
                 })
         );
 
         addSubscription(
                 view.onCurrentItemChange()
-                        .startWith(model.getCurrentItem(currentIndex))
                         .subscribe(new Action1<Item>() {
                     @Override
                     public void call(Item item) {
+                        Log.e(TAG, "call: on current item change");
                         view.showCurrentIconAndIndex(item, currentIndex);
                     }
                 })
@@ -72,6 +71,8 @@ public class SetItemsPresenter extends BasePresenter {
                     public void call(Item item) {
                         Log.e(TAG, "call SetItemsSubject " + item.label);
                         model.setCurrentItem(item, currentIndex);
+                        view.onCurrentItemChange().onNext(item);
+
                     }
                 })
         );
@@ -84,7 +85,10 @@ public class SetItemsPresenter extends BasePresenter {
                     }
                 })
         );
+
+        view.onCurrentItemChange().onNext(model.getCurrentItem(currentIndex));
     }
+
 
     @Override
     public void onViewDetach() {

@@ -25,6 +25,7 @@ import io.realm.RealmBaseAdapter;
  */
 
 public class ItemsListAdapter extends RealmBaseAdapter<Item> {
+    private static final String TAG = ItemsListAdapter.class.getSimpleName();
     PackageManager packageManager;
     IconPackManager.IconPack iconPack;
     int itemRes;
@@ -39,6 +40,7 @@ public class ItemsListAdapter extends RealmBaseAdapter<Item> {
 
     public void setCurrentItem(Item item) {
         currentItem = item;
+        notifyDataSetChanged();
     }
 
     @Override

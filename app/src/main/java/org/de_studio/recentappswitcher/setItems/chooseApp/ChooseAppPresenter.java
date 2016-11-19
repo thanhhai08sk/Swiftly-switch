@@ -1,5 +1,7 @@
 package org.de_studio.recentappswitcher.setItems.chooseApp;
 
+import android.util.Log;
+
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.model.Item;
@@ -14,6 +16,7 @@ import rx.functions.Action1;
  */
 
 public class ChooseAppPresenter extends BasePresenter {
+    private static final String TAG = ChooseAppPresenter.class.getSimpleName();
     ChooseAppView view;
     ChooseAppModel model;
     Realm realm = Realm.getDefaultInstance();
@@ -29,12 +32,12 @@ public class ChooseAppPresenter extends BasePresenter {
         view.loadApps();
         view.setProgressBar(true);
         results = realm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_APP).findAllSortedAsync(Cons.LABEL);
+        view.setAdapter(results);
         results.addChangeListener(new RealmChangeListener<RealmResults<Item>>() {
             @Override
             public void onChange(RealmResults<Item> element) {
                 if (element.size()>0) {
                     view.setProgressBar(false);
-                    view.setAdapter(element);
                 }
             }
         });
@@ -43,6 +46,7 @@ public class ChooseAppPresenter extends BasePresenter {
                 view.onCurrentItemChange().subscribe(new Action1<Item>() {
                     @Override
                     public void call(Item item) {
+                        Log.e(TAG, "call: on current item change " + item.label);
                         view.setCurrentItem(item);
                     }
                 })
