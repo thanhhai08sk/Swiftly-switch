@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +16,8 @@ import android.widget.ProgressBar;
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.base.BaseFragment;
+import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.adapter.ItemsListAdapter;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.ChooseAppModule;
@@ -29,7 +30,6 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
@@ -40,7 +40,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 11/18/16.
  */
 
-public class ChooseAppView extends Fragment implements AdapterView.OnItemClickListener{
+public class ChooseAppView extends BaseFragment implements AdapterView.OnItemClickListener{
     private static final String TAG = ChooseAppView.class.getSimpleName();
     @BindView(R.id.list_view)
     ListView listView;
@@ -74,23 +74,18 @@ public class ChooseAppView extends Fragment implements AdapterView.OnItemClickLi
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        inject();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.choose_app_view, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        listView.setOnItemClickListener(this);
-        presenter.onViewAttach();
-        return view;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
-    public void onDestroy() {
-        presenter.onViewDetach();
-        super.onDestroy();
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        listView.setOnItemClickListener(this);
     }
 
     public void setSubjects(BehaviorSubject<Item> currentItemChangeSubject, PublishSubject<Item> setItemSubject) {
@@ -128,15 +123,27 @@ public class ChooseAppView extends Fragment implements AdapterView.OnItemClickLi
         loadAppsTask.execute();
     }
 
-    void inject() {
+    @Override
+    protected void inject() {
         DaggerChooseAppComponent.builder()
                 .appModule(new AppModule(getActivity()))
                 .chooseAppModule(new ChooseAppModule(this))
                 .build().inject(this);
     }
 
-    void clear() {
-        unbinder.unbind();
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.choose_app_view;
+    }
+
+    @Override
+    protected BasePresenter getPresenter() {
+        return presenter;
+    }
+
+    @Override
+    protected void clear() {
+        super.clear();
     }
 
     @Override
