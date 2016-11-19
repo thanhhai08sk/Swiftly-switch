@@ -18,7 +18,6 @@ import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerSetItemsComponent;
 import org.de_studio.recentappswitcher.dagger.SetItemsModule;
 import org.de_studio.recentappswitcher.model.Item;
-import org.de_studio.recentappswitcher.utils.RetainFragment;
 
 import javax.inject.Inject;
 
@@ -31,7 +30,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 11/18/16.
  */
 
-public class SetItemsView extends BaseActivity {
+public class SetItemsView extends BaseActivity<SetItemsView.Subjects> {
     private static final String TAG = SetItemsView.class.getSimpleName();
     public static final int ITEMS_TYPE_STAGE_1 = 1;
     public static final int ITEMS_TYPE_STAGE_2 = 2;
@@ -40,10 +39,6 @@ public class SetItemsView extends BaseActivity {
     public static final String KEY_ITEM_INDEX = "itemIndex";
     public static final String KEY_COLLECTION_ID = "collectionId";
     public static final String KEY_SLOT_ID = "slotId";//in case of folder
-
-    RetainFragment<Subjects> retainFragment;
-    private String tag = "subjects";
-    protected boolean destroyedBySystem;
 
     @BindView(R.id.view_pager)
     ViewPager viewPager;
@@ -83,10 +78,7 @@ public class SetItemsView extends BaseActivity {
         itemIndex = getIntent().getIntExtra(KEY_ITEM_INDEX, 0);
         collectionId = getIntent().getStringExtra(KEY_COLLECTION_ID);
         slotId = getIntent().getStringExtra(KEY_SLOT_ID);
-
-
         super.onCreate(savedInstanceState);
-
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setAdapter(adapter);
 
@@ -94,23 +86,7 @@ public class SetItemsView extends BaseActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        destroyedBySystem = false;
-    }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        destroyedBySystem = true;
-    }
-
-    @Override
-    protected void onDestroy() {
-        if(destroyedBySystem) onDestroyBySystem(); else onDestroyByUser();
-        super.onDestroy();
-    }
 
     public BehaviorSubject<Item> onCurrentItemChange() {
         return currentItemChangeSubject;
@@ -138,7 +114,10 @@ public class SetItemsView extends BaseActivity {
                 .appModule(new AppModule(this))
                 .setItemsModule(new SetItemsModule(this, itemsType, itemIndex, collectionId, slotId))
                 .build().inject(this);
-        retainFragment = RetainFragment.findOrCreate(getSupportFragmentManager(), tag);
+    }
+
+    @Override
+    public void getDataFromRetainFragment() {
         if (retainFragment.data != null) {
             currentItemChangeSubject = retainFragment.data.currentItemChangeSubject;
             setItemSubject = retainFragment.data.setItemSubject;
@@ -201,11 +180,6 @@ public class SetItemsView extends BaseActivity {
         }
     }
 
-    public void onDestroyByUser(){
-        retainFragment.remove(getSupportFragmentManager());
-        retainFragment.data = null;
-        retainFragment = null;
-    }
 
     public void onDestroyBySystem() {
         retainFragment.data = new Subjects(currentItemChangeSubject, setItemSubject);

@@ -184,4 +184,14 @@ public class SetCircleFavoriteView extends BaseActivity {
         intent.putExtra(Cons.COLLECTION_ID, collectionId);
         return intent;
     }
+
+    @Override
+    public void getDataFromRetainFragment() {
+
+    }
+
+    @Override
+    public void onDestroyBySystem() {
+
+    }
 }
