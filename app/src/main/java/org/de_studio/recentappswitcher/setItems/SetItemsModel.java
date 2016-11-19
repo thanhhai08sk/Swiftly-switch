@@ -33,33 +33,14 @@ public class SetItemsModel {
     public Item getNextItem(int currentIndex) {
         switch (itemsType) {
             case SetItemsView.ITEMS_TYPE_STAGE_1:
-                Collection collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, collectionId).findFirst();
-                if (collection != null) {
-                    RealmList<Slot> slots = collection.slots;
-                    if (currentIndex+1 < slots.size()) {
-                        return slots.get(currentIndex + 1).getStage1Item();
-                    }
-                }
-                break;
+                Slot slot = getSlot(currentIndex + 1);
+                return slot != null ? slot.stage1Item : null;
             case SetItemsView.ITEMS_TYPE_STAGE_2:
-                Collection collection1 = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, collectionId).findFirst();
-                if (collection1 != null) {
-                    RealmList<Slot> slots = collection1.slots;
-                    if (currentIndex+1 < slots.size()) {
-                        return slots.get(currentIndex + 1).getStage2Item();
-                    }
-                }
-                break;
+                Slot slot1 = getSlot(currentIndex + 1);
+                return slot1 != null ? slot1.stage2Item : null;
             case SetItemsView.ITEMS_TYPE_FOLDER:
-                Slot slot = realm.where(Slot.class).equalTo(Cons.SLOT_ID, slotId).findFirst();
-                if (slot != null) {
-                    RealmList<Item> items = slot.items;
-                    if (currentIndex + 1 < items.size()) {
-                        return items.get(currentIndex + 1);
-                    }
-
-                }
-                break;
+                RealmList<Item> items = getItemsList();
+                return (items != null && currentIndex + 1 < items.size()) ? items.get(currentIndex + 1) : null;
         }
         return null;
     }
@@ -79,8 +60,42 @@ public class SetItemsModel {
         return null;
     }
 
-    public void setCurrentItem(Item item) {
-
+    public void setCurrentItem(final Item item, final int currentIndex) {
+        switch (itemsType) {
+            case SetItemsView.ITEMS_TYPE_STAGE_1:
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        Slot slot = getSlot(currentIndex);
+                        if (slot != null) {
+                            slot.stage1Item = item;
+                        }
+                    }
+                });
+                break;
+            case SetItemsView.ITEMS_TYPE_STAGE_2:
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        Slot slot = getSlot(currentIndex);
+                        if (slot != null) {
+                            slot.stage2Item = item;
+                        }
+                    }
+                });
+                break;
+            case SetItemsView.ITEMS_TYPE_FOLDER:
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmList<Item> items = getItemsList();
+                        if (items != null) {
+                            items.remove(currentIndex);
+                            items.add(currentIndex, item);
+                        }
+                    }
+                });
+        }
     }
 
     private Slot getSlot(int itemIndex) {
