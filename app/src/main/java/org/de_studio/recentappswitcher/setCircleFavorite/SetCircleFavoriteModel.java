@@ -99,16 +99,15 @@ public class SetCircleFavoriteModel {
                 collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
                 Collection realmCollection = realm.copyToRealm(collection);
 
-                Slot nullSlot = new Slot();
-                nullSlot.type = Slot.TYPE_NULL;
-                nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
-                Log.e(TAG, "new slot, id = " + nullSlot.slotId);
-                Slot realmSlot = realm.copyToRealm(nullSlot);
-
                 for (int i = 0; i < 6; i++) {
+                    Slot nullSlot = new Slot();
+                    nullSlot.type = Slot.TYPE_NULL;
+                    nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
+                    Log.e(TAG, "new slot, id = " + nullSlot.slotId);
+                    Slot realmSlot = realm.copyToRealm(nullSlot);
                     realmCollection.slots.add(realmSlot);
                 }
-                Log.e(TAG, "execute: collection slots size = " + realmCollection.slots.size());
+
 
             }
         });

@@ -119,7 +119,7 @@ public class SetItemsView extends BaseActivity {
         } else {
             icon.setImageDrawable(null);
         }
-        index.setText(String.valueOf(itemIndex));
+        index.setText(String.valueOf(itemIndex + 1));
     }
 
     @Override
