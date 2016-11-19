@@ -47,6 +47,16 @@ public class SetItemsModel {
         return null;
     }
 
+    public int getMaxIndex() {
+        switch (itemsType) {
+            case SetItemsView.ITEMS_TYPE_FOLDER:
+                return -1;
+            default:
+                Collection collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, collectionId).findFirst();
+                return collection.slots.size() - 1;
+        }
+    }
+
     public Item getPreviousItem(int currentIndex) {
         Log.e(TAG, "getPreviousItem: " + currentIndex);
         switch (itemsType) {
@@ -78,7 +88,7 @@ public class SetItemsModel {
                         if (slot != null) {
                             slot.type = Slot.TYPE_ITEM;
                             Log.e(TAG, "execute: set stage1 = " + item.label + "\ntype " + item.type + "\npackage " + item.packageName
-                            + "\ncollection = " + collectionId);
+                            + "\ncollection = " + collectionId + "\nindex = " + currentIndex);
                             slot.stage1Item = item;
                         }
                     }

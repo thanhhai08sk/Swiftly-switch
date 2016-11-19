@@ -31,11 +31,12 @@ public class SetItemsPresenter extends BasePresenter {
                 view.onNextButton().subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        Item item = model.getNextItem(currentIndex);
-                        if (item != null) {
+                        if (currentIndex < model.getMaxIndex()) {
+                            Item item = model.getNextItem(currentIndex);
                             currentIndex++;
                             view.onCurrentItemChange().onNext(item);
                         }
+
                     }
                 })
         );
@@ -44,11 +45,12 @@ public class SetItemsPresenter extends BasePresenter {
                 view.onPreviousButton().subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        Item item = model.getPreviousItem(currentIndex);
-                        if (item != null) {
+                        if (currentIndex >0) {
+                            Item item = model.getPreviousItem(currentIndex);
                             currentIndex--;
                             view.onCurrentItemChange().onNext(item);
                         }
+
                     }
                 })
         );
