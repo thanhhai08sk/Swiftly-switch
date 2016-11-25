@@ -25,15 +25,17 @@ public abstract class BaseChooseItemPresenter extends BasePresenter {
         view.loadItems();
         view.setProgressBar(true);
         results = getItemRealmResult();
-        view.setAdapter(results);
-        results.addChangeListener(new RealmChangeListener<RealmResults<Item>>() {
-            @Override
-            public void onChange(RealmResults<Item> element) {
-                if (element.size()>0) {
-                    view.setProgressBar(false);
+        if (results != null) {
+            view.setAdapter(results);
+            results.addChangeListener(new RealmChangeListener<RealmResults<Item>>() {
+                @Override
+                public void onChange(RealmResults<Item> element) {
+                    if (element.size()>0) {
+                        view.setProgressBar(false);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         addSubscription(
                 view.onCurrentItemChange().subscribe(new Action1<Item>() {
@@ -54,7 +56,9 @@ public abstract class BaseChooseItemPresenter extends BasePresenter {
     @Override
     public void onViewDetach() {
         super.onViewDetach();
-        results.removeChangeListeners();
+        if (results != null) {
+            results.removeChangeListeners();
+        }
         view.clear();
         realm.close();
         view = null;
