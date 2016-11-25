@@ -2412,6 +2412,9 @@ public  class Utility {
 
 
     public static void setItemIcon(Item item, Context context, ImageView icon, PackageManager packageManager, IconPackManager.IconPack iconPack) {
+        if (item == null) {
+            return;
+        }
         switch (item.type) {
             case Item.TYPE_APP:
                 try {
@@ -2473,7 +2476,9 @@ public  class Utility {
         switch (slot.type) {
             case Slot.TYPE_ITEM:
                 Item item = slot.stage1Item;
-                label.setText(item.label);
+                if (item != null) {
+                    label.setText(item.label);
+                }
                 break;
             case Slot.TYPE_FOLDER:
                 label.setText(context.getString(R.string.setting_shortcut_folder));
@@ -2488,6 +2493,72 @@ public  class Utility {
                 label.setText(context.getString(R.string.empty));
                 break;
         }
+    }
+
+
+
+    public static void setIconResourceIdsForAction(Item item) {
+        switch (item.action) {
+            case Item.ACTION_WIFI:
+                item.iconResourceId = R.drawable.ic_wifi;
+                item.iconResourceId2 = R.drawable.ic_wifi_off;
+                break;
+            case Item.ACTION_BLUETOOTH:
+                item.iconResourceId = R.drawable.ic_bluetooth;
+                item.iconResourceId2 = R.drawable.ic_bluetooth_off;
+                break;
+            case Item.ACTION_ROTATION:
+                item.iconResourceId = R.drawable.ic_rotation;
+                item.iconResourceId2 = R.drawable.ic_rotation_lock;
+                break;
+            case Item.ACTION_POWER_MENU:
+                item.iconResourceId = R.drawable.ic_power_menu;
+                break;
+            case Item.ACTION_HOME:
+                item.iconResourceId = R.drawable.ic_home;
+                break;
+            case Item.ACTION_BACK:
+                item.iconResourceId = R.drawable.ic_back;
+                break;
+            case Item.ACTION_NOTI:
+                item.iconResourceId = R.drawable.ic_notification;
+                break;
+            case Item.ACTION_LAST_APP:
+                item.iconResourceId = R.drawable.ic_last_app;
+                break;
+            case Item.ACTION_CALL_LOGS:
+                item.iconResourceId = R.drawable.ic_call_log;
+                break;
+            case Item.ACTION_DIAL:
+                item.iconResourceId = R.drawable.ic_dial;
+                break;
+            case Item.ACTION_CONTACT:
+                item.iconResourceId = R.drawable.ic_contact;
+                break;
+            case Item.ACTION_RECENT:
+                item.iconResourceId = R.drawable.ic_recent;
+                break;
+            case Item.ACTION_VOLUME:
+                item.iconResourceId = R.drawable.ic_volume;
+                break;
+            case Item.ACTION_BRIGHTNESS:
+                item.iconResourceId = R.drawable.ic_screen_brightness;
+                break;
+            case Item.ACTION_RINGER_MODE:
+                item.iconResourceId = R.drawable.ic_sound_normal;
+                item.iconResourceId2 = R.drawable.ic_sound_vibrate;
+                item.iconResourceId3 = R.drawable.ic_sound_silent;
+                break;
+            case Item.ACTION_FLASH_LIGHT:
+                item.iconResourceId = R.drawable.ic_flash_light;
+                item.iconResourceId2 = R.drawable.ic_flash_light_off;
+                break;
+            case Item.ACTION_SCREEN_LOCK:
+                item.iconResourceId = R.drawable.ic_screen_lock;
+                break;
+
+        }
+
     }
 
 

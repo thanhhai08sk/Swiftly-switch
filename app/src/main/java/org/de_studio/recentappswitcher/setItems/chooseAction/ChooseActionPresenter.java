@@ -3,7 +3,6 @@ package org.de_studio.recentappswitcher.setItems.chooseAction;
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.model.Item;
-import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppView;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -14,17 +13,17 @@ import rx.functions.Action1;
  */
 
 public class ChooseActionPresenter extends BasePresenter {
-    ChooseAppView view;
+    ChooseActionView view;
     RealmResults<Item> results;
     Realm realm = Realm.getDefaultInstance();
 
-    public ChooseActionPresenter(ChooseAppView view) {
+    public ChooseActionPresenter(ChooseActionView view) {
         this.view = view;
     }
 
     @Override
     public void onViewAttach() {
-        view.loadApps();
+        view.loadActions();
         results = realm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_ACTION).findAllAsync();
         view.setAdapter(results);
 

@@ -16,6 +16,9 @@ import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseFragment;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.adapter.ItemsListAdapter;
+import org.de_studio.recentappswitcher.dagger.AppModule;
+import org.de_studio.recentappswitcher.dagger.ChooseActionModule;
+import org.de_studio.recentappswitcher.dagger.DaggerChooseActionComponent;
 import org.de_studio.recentappswitcher.model.Item;
 
 import java.lang.ref.WeakReference;
@@ -98,7 +101,10 @@ public class ChooseActionView extends BaseFragment implements AdapterView.OnItem
     }
     @Override
     protected void inject() {
-
+        DaggerChooseActionComponent.builder()
+                .appModule(new AppModule(getActivity()))
+                .chooseActionModule(new ChooseActionModule(this))
+                .build().inject(this);
     }
 
     @Override
@@ -125,21 +131,28 @@ public class ChooseActionView extends BaseFragment implements AdapterView.OnItem
         @Override
         protected Void doInBackground(Void... params) {
             Realm realm = Realm.getDefaultInstance();
-            String[] actionStrings = contextWeakReference.get().getResources().getStringArray(R.array.setting_shortcut_array_no_folder);
-            for (String string : actionStrings) {
-                int action = Utility.getActionFromLabel(contextWeakReference.get(), string);
-                String itemId = Item.TYPE_ACTION + action;
-                Item item = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
-                if (item == null) {
-                    Log.e(TAG, "LoadActions - add action " + string);
-                    Item newItem = new Item();
-                    newItem.type = Item.TYPE_ACTION;
-                    newItem.itemId = itemId;
-                    newItem.label = string;
-                    newItem.action = action;
-                    realm.copyToRealm(newItem);
+            final String[] actionStrings = contextWeakReference.get().getResources().getStringArray(R.array.setting_shortcut_array_no_folder);
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    for (String string : actionStrings) {
+                        int action = Utility.getActionFromLabel(contextWeakReference.get(), string);
+                        String itemId = Item.TYPE_ACTION + action;
+                        Item item = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
+                        if (item == null) {
+                            Log.e(TAG, "LoadActions - add action " + string);
+                            Item newItem = new Item();
+                            newItem.type = Item.TYPE_ACTION;
+                            newItem.itemId = itemId;
+                            newItem.label = string;
+                            newItem.action = action;
+                            Utility.setIconResourceIdsForAction(newItem);
+                            realm.copyToRealm(newItem);
+                        }
+                    }
+
                 }
-            }
+            });
             realm.close();
             return null;
         }
