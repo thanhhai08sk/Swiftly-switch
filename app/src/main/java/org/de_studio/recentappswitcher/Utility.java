@@ -2586,6 +2586,14 @@ public  class Utility {
 
     }
 
+    public static String createCollectionId(String collectionType, long number) {
+        return collectionType + number;
+    }
+
+    public static String createCollectionLabel(String defaultLabel, long number) {
+        return defaultLabel + " " + number;
+    }
+
 
 
 

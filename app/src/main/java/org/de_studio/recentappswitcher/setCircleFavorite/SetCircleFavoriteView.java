@@ -27,6 +27,9 @@ import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.setItems.SetItemsView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -57,6 +60,7 @@ public class SetCircleFavoriteView extends BaseActivity {
     SetCircleFavoriteModel model;
     @Inject
     SlotsAdapter adapter;
+    ArrayAdapter<CharSequence> spinnerAdapter;
     String collectionId;
     Subscription subscription;
 
@@ -77,7 +81,7 @@ public class SetCircleFavoriteView extends BaseActivity {
     }
     public void setSpinner(RealmResults<Collection> collections, Collection currentCollection) {
 
-        String addNew = getString(R.string.add_new);
+        final String addNew = getString(R.string.add_new);
         String[] adapterItems = new String[collections.size() + 1];
         int position = 0;
         for (int i = 0; i < collections.size(); i++) {
@@ -88,8 +92,14 @@ public class SetCircleFavoriteView extends BaseActivity {
         }
         adapterItems[adapterItems.length - 1] = addNew;
 
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_dropdown_item, adapterItems);
-        spinner.setAdapter(adapter);
+        List<CharSequence> itemsList = new ArrayList<>();
+        for (Collection collection : collections) {
+            itemsList.add(collection.label);
+        }
+        itemsList.add(addNew);
+
+        spinnerAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_dropdown_item, itemsList);
+        spinner.setAdapter(spinnerAdapter);
         spinner.setSelection(position);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -97,7 +107,11 @@ public class SetCircleFavoriteView extends BaseActivity {
                 if (view != null) {
                     String itemLabel = ((CheckedTextView) view.findViewById(android.R.id.text1)).getText().toString();
                     Log.e(TAG, "onItemSelected: label = " + itemLabel);
-                    presenter.onSpinnerItemSelect(itemLabel);
+                    if (itemLabel.equals(addNew)) {
+                        presenter.onAddNewCollection();
+                    } else {
+                        presenter.onSpinnerItemSelect(itemLabel);
+                    }
                 }
             }
             @Override
@@ -105,6 +119,12 @@ public class SetCircleFavoriteView extends BaseActivity {
 
             }
         });
+    }
+
+    public void addCollectionToSpinner(String collectionLabel) {
+        int currentCount = spinnerAdapter.getCount();
+        spinnerAdapter.insert(collectionLabel, currentCount -1);
+        spinner.setSelection(spinnerAdapter.getCount() - 2);
     }
 
     public void setRecyclerView(OrderedRealmCollection<Slot> slots) {

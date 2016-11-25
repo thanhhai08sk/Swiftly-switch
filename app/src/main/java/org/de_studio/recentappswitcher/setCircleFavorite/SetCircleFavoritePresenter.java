@@ -25,8 +25,15 @@ public class SetCircleFavoritePresenter extends BasePresenter {
     }
 
     public void onSpinnerItemSelect(String itemLabel) {
+
         model.setCollection(itemLabel);
         view.updateRecyclerView(model.getSlots());
+    }
+
+    public void onAddNewCollection() {
+        String newLabel =  model.addCollection();
+        view.addCollectionToSpinner(newLabel);
+        onSpinnerItemSelect(newLabel);
     }
 
     public void onSlotClick(int slotIndex) {

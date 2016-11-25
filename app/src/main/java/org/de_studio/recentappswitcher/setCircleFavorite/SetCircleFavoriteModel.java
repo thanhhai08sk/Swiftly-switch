@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.setCircleFavorite;
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
 
@@ -35,7 +36,7 @@ public class SetCircleFavoriteModel {
         if (collection == null) {
             collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, getCollectionId()).findFirst();
             if (collection == null) {
-                createDefaultCollection();
+                createNewCircleCollection();
                 collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, collectionId).findFirst();
             }
         }
@@ -61,6 +62,10 @@ public class SetCircleFavoriteModel {
         }
     }
 
+    public String addCollection() {
+        return createNewCircleCollection();
+    }
+
     public void setCollectionSize(int size) {
         RealmList<Slot> slots = getCurrentCollection().slots;
         while (slots.size() > size) {
@@ -79,23 +84,24 @@ public class SetCircleFavoriteModel {
     public RealmResults<Collection> getCollectionList() {
         RealmResults<Collection> circleFavoriteCollections = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_CIRCLE_FAVORITE).findAll();
         if (circleFavoriteCollections.size() ==0) {
-            createDefaultCollection();
+            createNewCircleCollection();
         }
         return circleFavoriteCollections;
     }
 
 
 
-    private void createDefaultCollection() {
+    private String createNewCircleCollection() {
+        final long newCollectionNumber = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_CIRCLE_FAVORITE).count() + 1;
+        final String newLabel = Utility.createCollectionLabel(defaultLabel, newCollectionNumber);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                long newCollectionNumber = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_CIRCLE_FAVORITE).count() + 1;
 
                 Collection collection = new Collection();
                 collection.type = Collection.TYPE_CIRCLE_FAVORITE;
-                collection.collectionId = Collection.TYPE_CIRCLE_FAVORITE + newCollectionNumber;
-                collection.label = defaultLabel + " " + newCollectionNumber;
+                collection.collectionId = Utility.createCollectionId(Collection.TYPE_CIRCLE_FAVORITE, newCollectionNumber);
+                collection.label = newLabel;
                 collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
                 Collection realmCollection = realm.copyToRealm(collection);
 
@@ -107,10 +113,10 @@ public class SetCircleFavoriteModel {
                     Slot realmSlot = realm.copyToRealm(nullSlot);
                     realmCollection.slots.add(realmSlot);
                 }
-
-
             }
         });
+        return newLabel;
+
     }
 
     private void addNullSlotToList(final RealmList<Slot> slots) {
