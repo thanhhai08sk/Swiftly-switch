@@ -81,6 +81,7 @@ public class SetItemsView extends BaseActivity<SetItemsView.Subjects> {
         super.onCreate(savedInstanceState);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(4);
 
 
 
