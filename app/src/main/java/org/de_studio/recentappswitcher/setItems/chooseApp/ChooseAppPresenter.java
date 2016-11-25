@@ -20,6 +20,6 @@ public class ChooseAppPresenter extends BaseChooseItemPresenter {
 
     @Override
     protected RealmResults<Item> getItemRealmResult() {
-        return realm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_APP).findAllAsync();
+        return realm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_APP).findAllSortedAsync(Cons.LABEL);
     }
 }

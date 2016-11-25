@@ -4,8 +4,8 @@ import android.support.annotation.Nullable;
 
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.base.BaseChooseItemPresenter;
 import org.de_studio.recentappswitcher.base.adapter.ItemsListAdapter;
-import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppModel;
 import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppPresenter;
 import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppView;
 
@@ -28,15 +28,10 @@ public class ChooseAppModule {
 
     @Provides
     @Singleton
-    ChooseAppPresenter presenter(ChooseAppModel model) {
-        return new ChooseAppPresenter(view, model);
+    BaseChooseItemPresenter presenter() {
+        return new ChooseAppPresenter(view);
     }
 
-    @Provides
-    @Singleton
-    ChooseAppModel model() {
-        return new ChooseAppModel();
-    }
 
     @Provides
     @Singleton
