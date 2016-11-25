@@ -33,6 +33,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.CallLog;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
@@ -2557,6 +2558,30 @@ public  class Utility {
                 item.iconResourceId = R.drawable.ic_screen_lock;
                 break;
 
+        }
+
+    }
+
+    public static String getContactItemLabel(int type, String name, Context context) {
+        switch (type) {
+            case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                return name;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                return String.format("%s(%s)", name, context.getString(R.string.contact_type_work));
+            case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                return String.format("%s(%s)", name, context.getString(R.string.contact_type_home));
+            case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
+                return String.format("%s(%s)", name, context.getString(R.string.contact_type_main));
+            case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
+                return String.format("%s(%s)", name, context.getString(R.string.contact_type_work_fax));
+            case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
+                return String.format("%s(%s)", name, context.getString(R.string.contact_type_pager));
+            case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
+                return String.format("%s(%s)", name, context.getString(R.string.contact_type_other));
+            case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
+                return String.format("%s(%s)", name, context.getString(R.string.contact_type_custom));
+            default:
+                return name;
         }
 
     }

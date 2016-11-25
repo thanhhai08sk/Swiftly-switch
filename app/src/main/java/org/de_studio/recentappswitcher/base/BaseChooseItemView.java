@@ -106,8 +106,4 @@ public abstract class BaseChooseItemView extends BaseFragment implements Adapter
         return presenter;
     }
 
-    @Override
-    protected void inject() {
-
-    }
 }
