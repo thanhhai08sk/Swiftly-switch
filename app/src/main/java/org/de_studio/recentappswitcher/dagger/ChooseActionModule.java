@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.base.BaseChooseItemPresenter;
 import org.de_studio.recentappswitcher.base.adapter.ItemsListAdapter;
 import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionPresenter;
 import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionView;
@@ -28,7 +29,7 @@ public class ChooseActionModule {
 
     @Provides
     @Singleton
-    ChooseActionPresenter presenter() {
+    BaseChooseItemPresenter presenter() {
         return new ChooseActionPresenter(view);
     }
 
