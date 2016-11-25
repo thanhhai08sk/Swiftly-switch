@@ -10,6 +10,7 @@ import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionView;
 import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppView;
 import org.de_studio.recentappswitcher.setItems.chooseContact.ChooseContactView;
+import org.de_studio.recentappswitcher.setItems.chooseShortcut.ChooseShortcutView;
 
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
@@ -45,6 +46,10 @@ public class SetItemsPagerAdapter extends FragmentPagerAdapter {
                 ChooseContactView chooseContactView = new ChooseContactView();
                 chooseContactView.setSubjects(currentItemChangeSubject, setItemSubject);
                 return chooseContactView;
+            case 3:
+                ChooseShortcutView chooseShortcutView = new ChooseShortcutView();
+                chooseShortcutView.setSubjects(currentItemChangeSubject, setItemSubject);
+                return chooseShortcutView;
             default:
                 ChooseAppView chooseAppView1 = new ChooseAppView();
                 chooseAppView1.setSubjects(currentItemChangeSubject, setItemSubject);

@@ -26,18 +26,18 @@ import rx.subjects.PublishSubject;
 public abstract class BaseChooseItemView extends BaseFragment implements AdapterView.OnItemClickListener {
     private static final String TAG = BaseChooseItemView.class.getSimpleName();
     @BindView(R.id.list_view)
-    ListView listView;
+    protected ListView listView;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
 
     @Inject
-    ItemsListAdapter adapter;
+    protected ItemsListAdapter adapter;
     @Inject
-    BaseChooseItemPresenter presenter;
+    protected BaseChooseItemPresenter presenter;
 
 
-    BehaviorSubject<Item> currentItemChangeSubject;
-    PublishSubject<Item> setItemSubject;
+    protected BehaviorSubject<Item> currentItemChangeSubject;
+    protected PublishSubject<Item> setItemSubject;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
