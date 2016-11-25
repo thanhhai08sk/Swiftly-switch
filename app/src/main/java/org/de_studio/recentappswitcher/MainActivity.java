@@ -37,7 +37,7 @@ import org.de_studio.recentappswitcher.service.EdgeSetting;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
-    private static final int VERSION_NUMBER = 77;
+    private static final int VERSION_NUMBER = 78;
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final String EDGE_1_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHAREDPREFERENCE = "org.de_studio.recentappswitcher_edge_2_shared_preference";
@@ -467,6 +467,9 @@ public class MainActivity extends Activity {
     private void showWhatNew() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         int titleSize = getResources().getDimensionPixelSize(R.dimen.what_new_title_size);
+
+        String title247 = "Version 2.4.7";
+        String text247 = " - 50% sale for Black Friday till 30/11/2016";
         String title246 = "Version 2.4.6";
         String text246 = " - Fix Ringer Mode bug in Quick Action"
                 + "\n - Fix Popup Widget shortcut's icons"
