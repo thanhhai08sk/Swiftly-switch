@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.model.Item;
+import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionView;
 import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppView;
 
 import rx.subjects.BehaviorSubject;
@@ -35,6 +36,10 @@ public class SetItemsPagerAdapter extends FragmentPagerAdapter {
                 ChooseAppView chooseAppView = new ChooseAppView();
                 chooseAppView.setSubjects(currentItemChangeSubject, setItemSubject);
                 return chooseAppView;
+            case 1:
+                ChooseActionView chooseActionView = new ChooseActionView();
+                chooseActionView.setSubjects(currentItemChangeSubject, setItemSubject);
+                return chooseActionView;
             default:
                 ChooseAppView chooseAppView1 = new ChooseAppView();
                 chooseAppView1.setSubjects(currentItemChangeSubject, setItemSubject);

@@ -28,7 +28,6 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import rx.subjects.BehaviorSubject;
@@ -57,7 +56,6 @@ public class ChooseAppView extends BaseFragment implements AdapterView.OnItemCli
     PublishSubject<Item> setItemSubject;
 
 
-    Unbinder unbinder;
     public static ChooseAppView newInstance() {
 
         Bundle args = new Bundle();

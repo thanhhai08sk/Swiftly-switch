@@ -45,7 +45,7 @@ public abstract class BaseFragment extends Fragment {
     protected abstract BasePresenter getPresenter();
     protected abstract void inject();
     @CallSuper
-    protected void clear(){
+    public void clear(){
         unbinder.unbind();
     }
 }
