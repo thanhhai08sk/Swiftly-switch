@@ -85,7 +85,7 @@ public abstract class BaseChooseItemView extends BaseFragment implements Adapter
 
 
 
-    protected abstract void loadItems();
+    public abstract void loadItems();
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
