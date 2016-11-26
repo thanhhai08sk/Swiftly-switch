@@ -8,8 +8,8 @@ import org.de_studio.recentappswitcher.base.BasePresenter;
 
 public abstract class BaseCollectionSettingPresenter extends BasePresenter {
     private static final String TAG = BaseCollectionSettingPresenter.class.getSimpleName();
-    BaseCollectionSettingView view;
-    BaseCollectionSettingModel model;
+    protected BaseCollectionSettingView view;
+    protected BaseCollectionSettingModel model;
 
     public BaseCollectionSettingPresenter(BaseCollectionSettingView view, BaseCollectionSettingModel model) {
         this.view = view;

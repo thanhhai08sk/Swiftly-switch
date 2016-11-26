@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.de_studio.recentappswitcher.R;
-import org.de_studio.recentappswitcher.setCircleFavorite.SetCircleFavoriteView;
+import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -57,7 +57,7 @@ public class GeneralView extends Fragment {
     }
 
     public void setCircleFavorite() {
-        startActivity(SetCircleFavoriteView.getIntent(getActivity(), null));
+        startActivity(CircleFavoriteSettingView.getIntent(getActivity(), null));
     }
 
     public void setBlackList() {

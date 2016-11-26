@@ -1,4 +1,4 @@
-package org.de_studio.recentappswitcher.setCircleFavorite;
+package org.de_studio.recentappswitcher.circleFavoriteSetting;
 
 import android.util.Log;
 
@@ -18,13 +18,13 @@ import io.realm.RealmResults;
  * Created by HaiNguyen on 11/11/16.
  */
 
-public class SetCircleFavoriteModel {
-    private static final String TAG = SetCircleFavoriteModel.class.getSimpleName();
+public class CircleFavoriteSettingModel {
+    private static final String TAG = CircleFavoriteSettingModel.class.getSimpleName();
     private Realm realm = Realm.getDefaultInstance();
     private String collectionId;
     private String defaultLabel;
     private Collection collection;
-    public SetCircleFavoriteModel(String collectionId, String defaultLabel) {
+    public CircleFavoriteSettingModel(String collectionId, String defaultLabel) {
         this.collectionId = collectionId;
         if (collectionId != null && !collectionId.contains(Collection.TYPE_CIRCLE_FAVORITE)) {
             throw new IllegalArgumentException();

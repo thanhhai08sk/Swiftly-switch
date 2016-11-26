@@ -224,7 +224,7 @@
             android:name=".main.MainView1"
             android:label="@string/title_activity_main_view1"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".setCircleFavorite.SetCircleFavoriteView"
+        <activity android:name=".circleFavoriteSetting.CircleFavoriteSettingView"
             android:label="@string/circle_favorites"
             android:theme="@style/AppTheme"/>
 

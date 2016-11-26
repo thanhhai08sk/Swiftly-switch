@@ -5,9 +5,9 @@ import android.support.annotation.Nullable;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
-import org.de_studio.recentappswitcher.setCircleFavorite.SetCircleFavoriteModel;
-import org.de_studio.recentappswitcher.setCircleFavorite.SetCircleFavoritePresenter;
-import org.de_studio.recentappswitcher.setCircleFavorite.SetCircleFavoriteView;
+import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
+import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingModel;
+import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingPresenter;
 
 import javax.inject.Singleton;
 
@@ -19,25 +19,25 @@ import dagger.Provides;
  */
 @Module
 @Singleton
-public class SetCircleFavoriteModule {
-    SetCircleFavoriteView view;
+public class CircleFavoriteSettingModule {
+    CircleFavoriteSettingView view;
     String collectionId;
 
-    public SetCircleFavoriteModule(SetCircleFavoriteView view, String collectionId) {
+    public CircleFavoriteSettingModule(CircleFavoriteSettingView view, String collectionId) {
         this.view = view;
         this.collectionId = collectionId;
     }
 
     @Provides
     @Singleton
-    SetCircleFavoritePresenter presenter(SetCircleFavoriteModel model) {
-        return new SetCircleFavoritePresenter(view, model);
+    CircleFavoriteSettingPresenter presenter(CircleFavoriteSettingModel model) {
+        return new CircleFavoriteSettingPresenter(view, model);
     }
 
     @Provides
     @Singleton
-    SetCircleFavoriteModel model() {
-        return new SetCircleFavoriteModel(collectionId, view.getString(R.string.circle_favorites));
+    CircleFavoriteSettingModel model() {
+        return new CircleFavoriteSettingModel(collectionId, view.getString(R.string.circle_favorites));
     }
 
 

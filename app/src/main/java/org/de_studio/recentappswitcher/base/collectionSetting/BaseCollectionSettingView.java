@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.base.collectionSetting;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.GridLayoutManager;
@@ -28,6 +29,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmResults;
 import rx.Subscription;
@@ -44,12 +46,12 @@ public abstract class BaseCollectionSettingView extends BaseActivity {
     @BindView(R.id.recycler_view)
     protected RecyclerView recyclerView;
 
-    protected ArrayAdapter<CharSequence> spinnerAdapter;
-
     @Inject
     protected BaseCollectionSettingPresenter presenter;
     @Inject
     protected SlotsAdapter adapter;
+
+    protected ArrayAdapter<CharSequence> spinnerAdapter;
     protected Subscription subscription;
     protected String collectionId;
 
@@ -153,9 +155,15 @@ public abstract class BaseCollectionSettingView extends BaseActivity {
         return presenter;
     }
 
+    @CallSuper
     @Override
     protected void clear() {
         subscription.unsubscribe();
+    }
+
+    @OnClick(R.id.size)
+    void onSizeClick(){
+        presenter.onSizeClick();
     }
 
     @Override
