@@ -19,10 +19,10 @@ import io.realm.RealmResults;
 
 public abstract class BaseCollectionSettingModel {
     private static final String TAG = BaseCollectionSettingModel.class.getSimpleName();
-    private Realm realm = Realm.getDefaultInstance();
-    private String collectionId;
-    private String defaultLabel;
-    private Collection collection;
+    protected Realm realm = Realm.getDefaultInstance();
+    protected String collectionId;
+    protected String defaultLabel;
+    protected Collection collection;
 
     public BaseCollectionSettingModel(String defaultLabel, String collectionId) {
         this.defaultLabel = defaultLabel;
@@ -47,7 +47,9 @@ public abstract class BaseCollectionSettingModel {
         return collectionId;
     }
 
-    public abstract String getDefaultCollectionId();
+    public  String getDefaultCollectionId() {
+        return getCollectionType() + "1";
+    }
 
     public abstract String getCollectionType();
 
