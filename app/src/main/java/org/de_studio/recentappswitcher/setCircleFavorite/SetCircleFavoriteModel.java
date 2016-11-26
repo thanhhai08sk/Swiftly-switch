@@ -56,6 +56,7 @@ public class SetCircleFavoriteModel {
                     .equalTo(Cons.LABEL, collectionLabel).findFirst();
             if (collectionWithLabel != null) {
                 collection = collectionWithLabel;
+                collectionId = collection.collectionId;
             } else {
                 Log.e(TAG, "setCollection: no collection with this label found: " + collectionLabel);
             }
