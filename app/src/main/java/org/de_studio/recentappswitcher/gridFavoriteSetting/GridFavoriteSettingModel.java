@@ -40,12 +40,12 @@ public class GridFavoriteSettingModel extends BaseCollectionSettingModel {
                 collection.type = getCollectionType();
                 collection.collectionId = Utility.createCollectionId(getCollectionType(), newCollectionNumber);
                 collection.label = newLabel;
-                collection.rowsCount = 5;
-                collection.columnCount = 4;
+                collection.rowsCount = Cons.DEFAULT_FAVORITE_GRID_ROW_COUNT;
+                collection.columnCount = Cons.DEFAULT_FAVORITE_GRID_COLUMN_COUNT;
                 collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
                 Collection realmCollection = realm.copyToRealm(collection);
 
-                for (int i = 0; i < 20; i++) {
+                for (int i = 0; i < collection.rowsCount * collection.columnCount; i++) {
                     Slot nullSlot = new Slot();
                     nullSlot.type = Slot.TYPE_NULL;
                     nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());

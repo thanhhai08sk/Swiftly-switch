@@ -63,6 +63,8 @@ public class Cons {
     public static final int DEFAULT_ICON_GAP_IN_GRID = 10;
     public static final int DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL = 20;
     public static final int DEFAULT_FAVORITE_GRID_PADDING_VERTICAL = 20;
+    public static final int DEFAULT_FAVORITE_GRID_COLUMN_COUNT = 4;
+    public static final int DEFAULT_FAVORITE_GRID_ROW_COUNT = 5;
     public static final int INIT_OFFSET = 10;
     public static final int CIRCLE_SIZE_DEFAULT = 105;
     public static final int CIRCLE_AND_QUICK_ACTION_GAP = 35;
