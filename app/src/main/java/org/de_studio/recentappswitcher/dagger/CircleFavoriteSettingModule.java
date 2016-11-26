@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.dagger;
 
 import android.support.annotation.Nullable;
 
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
@@ -45,7 +46,7 @@ public class CircleFavoriteSettingModule {
     @Provides
     @Singleton
     SlotsAdapter adapter(@Nullable IconPackManager.IconPack iconPack){
-        return new SlotsAdapter(view, null, true, iconPack);
+        return new SlotsAdapter(view, null, true, iconPack, Cons.ITEM_TYPE_ICON_LABEL);
     }
 
 

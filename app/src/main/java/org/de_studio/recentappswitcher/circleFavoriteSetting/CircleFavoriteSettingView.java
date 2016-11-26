@@ -30,7 +30,7 @@ public class CircleFavoriteSettingView extends BaseCollectionSettingView {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.set_circle_favorite_view;
+        return R.layout.circle_favorite_setting;
     }
 
     @Override

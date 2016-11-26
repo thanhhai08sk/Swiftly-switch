@@ -14,6 +14,8 @@ public class Collection extends RealmObject {
     public static final String TYPE_QUICK_ACTION = "quickAction_";
     public static final String TYPE_GRID_FAVORITE = "gridFavorite_";
     public static final String TYPE_BLACK_LIST = "blackList_";
+    public static final int POSITION_TRIGGER = 0;
+    public static final int POSITION_CENTER = 1;
     public static final int LONG_CLICK_MODE_NONE = 1;
     public static final int LONG_CLICK_MODE_OPEN_COLLECTION = 2;
     public String type;
@@ -25,8 +27,61 @@ public class Collection extends RealmObject {
     public String longClickCollection;
     public int rowsCount;
     public int columnCount;
+    public int position;
+    public int marginHorizontal;
+    public int marginVertical;
+    public int offsetHorizontal;
+    public int offsetVertical;
 
     public Collection() {
+    }
+
+    public String getLongClickCollection() {
+        return longClickCollection;
+    }
+
+    public void setLongClickCollection(String longClickCollection) {
+        this.longClickCollection = longClickCollection;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public int getMarginHorizontal() {
+        return marginHorizontal;
+    }
+
+    public void setMarginHorizontal(int marginHorizontal) {
+        this.marginHorizontal = marginHorizontal;
+    }
+
+    public int getMarginVertical() {
+        return marginVertical;
+    }
+
+    public void setMarginVertical(int marginVertical) {
+        this.marginVertical = marginVertical;
+    }
+
+    public int getOffsetHorizontal() {
+        return offsetHorizontal;
+    }
+
+    public void setOffsetHorizontal(int offsetHorizontal) {
+        this.offsetHorizontal = offsetHorizontal;
+    }
+
+    public int getOffsetVertical() {
+        return offsetVertical;
+    }
+
+    public void setOffsetVertical(int offsetVertical) {
+        this.offsetVertical = offsetVertical;
     }
 
     public String getType() {

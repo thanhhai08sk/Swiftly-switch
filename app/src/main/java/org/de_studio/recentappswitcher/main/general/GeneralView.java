@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
+import org.de_studio.recentappswitcher.gridFavoriteSetting.GridFavoriteSettingView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -19,6 +20,7 @@ import butterknife.Unbinder;
  */
 
 public class GeneralView extends Fragment {
+    private static final String TAG = GeneralView.class.getSimpleName();
 
     GeneralPresenter presenter;
 
@@ -53,7 +55,7 @@ public class GeneralView extends Fragment {
     }
 
     public void setGridFavorite() {
-
+        startActivity(GridFavoriteSettingView.getIntent(getActivity(), null));
     }
 
     public void setCircleFavorite() {

@@ -254,6 +254,9 @@ public class Cons {
     public static final int LAYOUT_TYPE_LINEAR = 0;
     public static final int LAYOUT_TYPE_GRID = 1;
 
+    public static final int ITEM_TYPE_ICON_LABEL = 0;
+    public static final int ITEM_TYPE_ICON_ONLY = 1;
+
 
 
 

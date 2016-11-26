@@ -234,4 +234,10 @@
     <string name="empty">Empty</string>
     <string name="set_size">Set size</string>
 
+    //Grid favorite
+    <string name="columns_count">Columns count</string>
+    <string name="rows_count">Rows count</string>
+    <string name="vertical_margin">Vertical margin</string>
+    <string name="horizontal_margin">Horizontal margin</string>
+
 </resources>
