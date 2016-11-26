@@ -58,4 +58,58 @@ public class GridFavoriteSettingModel extends BaseCollectionSettingModel {
         return newLabel;
     }
 
+    public void setHorizontalMargin(final int value) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                collection.marginHorizontal = value;
+            }
+        });
+    }
+
+    public void setVerticalMargin(final int value) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                collection.marginVertical = value;
+            }
+        });
+    }
+
+    public void setPosition(final int position) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                collection.position = position;
+            }
+        });
+    }
+
+    public void setColumnsCount(final int value) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                collection.columnCount = value;
+            }
+        });
+    }
+
+    public void setRowsCount(final int value) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                collection.rowsCount = value;
+            }
+        });
+    }
+
+    public void setShortcutsSpace(final int value) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                collection.space = value;
+            }
+        });
+    }
+
 }

@@ -30,6 +30,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.Optional;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmResults;
 import rx.Subscription;
@@ -160,7 +161,7 @@ public abstract class BaseCollectionSettingView extends BaseActivity {
     protected void clear() {
         subscription.unsubscribe();
     }
-
+    @Optional
     @OnClick(R.id.size)
     void onSizeClick(){
         presenter.onSizeClick();

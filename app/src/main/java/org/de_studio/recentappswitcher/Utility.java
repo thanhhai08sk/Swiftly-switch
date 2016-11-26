@@ -56,6 +56,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,6 +90,7 @@ import java.util.List;
 import java.util.Set;
 
 import io.realm.Realm;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by hai on 12/19/2015.
@@ -2592,6 +2594,45 @@ public  class Utility {
 
     public static String createCollectionLabel(String defaultLabel, long number) {
         return defaultLabel + " " + number;
+    }
+
+    public static void showDialogWithSeekBar(final int min, int max, int current, final String unit
+            , String title
+            , final PublishSubject<Integer> subject, Context context) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = View.inflate(context, R.layout.dialog_with_seek_bar, null);
+        SeekBar seekBar = (SeekBar) view.findViewById(R.id.seek_bar);
+        final TextView value = (TextView) view.findViewById(R.id.value);
+        value.setText(current + unit);
+        seekBar.setProgress(current - min);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChanged;
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChanged = progress + min;
+                value.setText(progressChanged + unit);
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                subject.onNext(progressChanged);
+            }
+        });
+
+        builder.setView(view).
+                setTitle(title).
+                setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //do nothing
+                    }
+                });
+        builder.show();
+
     }
 
 

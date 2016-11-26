@@ -115,4 +115,11 @@
         <item>@string/avoid_keyboard_place_under</item>
         <item>@string/avoid_keyboard_step_aside</item>
     </string-array>
+
+    <string-array name="gird_favorite_position">
+        <item>@string/grid_position_trigger_position</item>
+        <item>@string/grid_position_center</item>
+
+    </string-array>
+
 </resources>
