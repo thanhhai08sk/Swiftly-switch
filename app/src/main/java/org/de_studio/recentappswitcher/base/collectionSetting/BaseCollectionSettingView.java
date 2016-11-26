@@ -1,14 +1,19 @@
 package org.de_studio.recentappswitcher.base.collectionSetting;
 
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.BasePresenter;
@@ -25,6 +30,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmResults;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by HaiNguyen on 11/26/16.
@@ -34,13 +41,25 @@ public abstract class BaseCollectionSettingView extends BaseActivity {
     private static final String TAG = BaseCollectionSettingView.class.getSimpleName();
     @BindView(R.id.spinner)
     protected AppCompatSpinner spinner;
+    @BindView(R.id.recycler_view)
+    protected RecyclerView recyclerView;
+
     protected ArrayAdapter<CharSequence> spinnerAdapter;
 
     @Inject
-    BaseCollectionSettingPresenter presenter;
+    protected BaseCollectionSettingPresenter presenter;
     @Inject
-    SlotsAdapter adapter;
+    protected SlotsAdapter adapter;
+    protected Subscription subscription;
+    protected String collectionId;
 
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        collectionId = getIntent().getStringExtra(Cons.COLLECTION_ID);
+        super.onCreate(savedInstanceState);
+    }
 
 
 
@@ -71,6 +90,34 @@ public abstract class BaseCollectionSettingView extends BaseActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+    }
+
+    public void setRecyclerView(OrderedRealmCollection<Slot> slots, RecyclerView.LayoutManager layoutManager) {
+        Log.e(TAG, "setRecyclerView: slots size = " + slots.size());
+        adapter.updateData(slots);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(layoutManager);
+        setOnItemClick();
+    }
+
+    public RecyclerView.LayoutManager getLayoutManager(int layoutType, int column) {
+        switch (layoutType) {
+            case Cons.LAYOUT_TYPE_LINEAR:
+                return new LinearLayoutManager(this);
+            case Cons.LAYOUT_TYPE_GRID:
+                return new GridLayoutManager(this, column);
+        }
+        return null;
+    }
+
+    public void setOnItemClick() {
+        subscription = adapter.getKeyClicked().subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                Log.e(TAG, "call: " + integer);
+                presenter.onSlotClick(integer);
             }
         });
     }
@@ -107,7 +154,9 @@ public abstract class BaseCollectionSettingView extends BaseActivity {
     }
 
     @Override
-    protected abstract void clear();
+    protected void clear() {
+        subscription.unsubscribe();
+    }
 
     @Override
     public void getDataFromRetainFragment() {
