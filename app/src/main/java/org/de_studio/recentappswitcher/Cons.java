@@ -249,6 +249,9 @@ public class Cons {
     public static final String COLLECTION_ID = "collectionId";
     public static final String SLOT_ID = "slotId";
 
+    public static final int LAYOUT_TYPE_LINEAR = 0;
+    public static final int LAYOUT_TYPE_GRID = 1;
+
 
 
 

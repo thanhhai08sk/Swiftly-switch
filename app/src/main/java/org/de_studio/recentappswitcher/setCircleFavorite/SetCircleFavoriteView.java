@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -71,36 +72,17 @@ public class SetCircleFavoriteView extends BaseActivity {
         super.onCreate(savedInstanceState);
     }
 
-
-    public String getCollectionId() {
-        return collectionId;
-    }
-
-    public void setCollectionId(String collectionId) {
-        this.collectionId = collectionId;
-    }
     public void setSpinner(RealmResults<Collection> collections, Collection currentCollection) {
 
         final String addNew = getString(R.string.add_new);
-        String[] adapterItems = new String[collections.size() + 1];
-        int position = 0;
-        for (int i = 0; i < collections.size(); i++) {
-            adapterItems[i] = collections.get(i).label;
-            if (collections.get(i).equals(currentCollection)) {
-                position = i;
-            }
-        }
-        adapterItems[adapterItems.length - 1] = addNew;
-
         List<CharSequence> itemsList = new ArrayList<>();
         for (Collection collection : collections) {
             itemsList.add(collection.label);
         }
         itemsList.add(addNew);
-
         spinnerAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_dropdown_item, itemsList);
         spinner.setAdapter(spinnerAdapter);
-        spinner.setSelection(position);
+        spinner.setSelection(itemsList.indexOf(currentCollection.label));
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -127,12 +109,22 @@ public class SetCircleFavoriteView extends BaseActivity {
         spinner.setSelection(spinnerAdapter.getCount() - 2);
     }
 
-    public void setRecyclerView(OrderedRealmCollection<Slot> slots) {
+    public void setRecyclerView(OrderedRealmCollection<Slot> slots, RecyclerView.LayoutManager layoutManager) {
         Log.e(TAG, "setRecyclerView: slots size = " + slots.size());
         adapter.updateData(slots);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(layoutManager);
         setOnItemClick();
+    }
+
+    public RecyclerView.LayoutManager getLayoutManager(int layoutType, int column) {
+        switch (layoutType) {
+            case Cons.LAYOUT_TYPE_LINEAR:
+                return new LinearLayoutManager(this);
+            case Cons.LAYOUT_TYPE_GRID:
+                return new GridLayoutManager(this, column);
+        }
+        return null;
     }
 
     public void updateRecyclerView(OrderedRealmCollection<Slot> slots) {

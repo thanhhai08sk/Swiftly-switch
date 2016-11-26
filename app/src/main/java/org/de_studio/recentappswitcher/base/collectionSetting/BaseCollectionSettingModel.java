@@ -1,9 +1,8 @@
-package org.de_studio.recentappswitcher.setCircleFavorite;
+package org.de_studio.recentappswitcher.base.collectionSetting;
 
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
-import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
 
@@ -15,21 +14,19 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
- * Created by HaiNguyen on 11/11/16.
+ * Created by HaiNguyen on 11/26/16.
  */
 
-public class SetCircleFavoriteModel {
-    private static final String TAG = SetCircleFavoriteModel.class.getSimpleName();
+public abstract class BaseCollectionSettingModel {
+    private static final String TAG = BaseCollectionSettingModel.class.getSimpleName();
     private Realm realm = Realm.getDefaultInstance();
     private String collectionId;
     private String defaultLabel;
     private Collection collection;
-    public SetCircleFavoriteModel(String collectionId, String defaultLabel) {
-        this.collectionId = collectionId;
-        if (collectionId != null && !collectionId.contains(Collection.TYPE_CIRCLE_FAVORITE)) {
-            throw new IllegalArgumentException();
-        }
+
+    public BaseCollectionSettingModel(String defaultLabel, String collectionId) {
         this.defaultLabel = defaultLabel;
+        this.collectionId = collectionId;
     }
 
     public Collection getCurrentCollection() {
@@ -50,17 +47,13 @@ public class SetCircleFavoriteModel {
         return collectionId;
     }
 
-    public String getDefaultCollectionId() {
-        return Collection.TYPE_CIRCLE_FAVORITE + "1";
-    }
+    public abstract String getDefaultCollectionId();
 
-    public String getCollectionType() {
-        return Collection.TYPE_CIRCLE_FAVORITE;
-    }
+    public abstract String getCollectionType();
 
     public void setCurrentCollection(String collectionLabel) {
         if (collectionLabel != null) {
-            Collection collectionWithLabel = realm.where(Collection.class).equalTo(Cons.LABEL, collectionLabel).findFirst();
+            Collection collectionWithLabel = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).equalTo(Cons.LABEL, collectionLabel).findFirst();
             if (collectionWithLabel != null) {
                 collection = collectionWithLabel;
                 collectionId = collection.collectionId;
@@ -94,34 +87,7 @@ public class SetCircleFavoriteModel {
     }
 
 
-
-    public String createNewCollection() {
-        final long newCollectionNumber = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).count() + 1;
-        final String newLabel = Utility.createCollectionLabel(defaultLabel, newCollectionNumber);
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-
-                Collection collection = new Collection();
-                collection.type = getCollectionType();
-                collection.collectionId = Utility.createCollectionId(getCollectionType(), newCollectionNumber);
-                collection.label = newLabel;
-                collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
-                Collection realmCollection = realm.copyToRealm(collection);
-
-                for (int i = 0; i < 6; i++) {
-                    Slot nullSlot = new Slot();
-                    nullSlot.type = Slot.TYPE_NULL;
-                    nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
-                    Log.e(TAG, "new slot, id = " + nullSlot.slotId);
-                    Slot realmSlot = realm.copyToRealm(nullSlot);
-                    realmCollection.slots.add(realmSlot);
-                }
-            }
-        });
-        return newLabel;
-
-    }
+    public abstract String createNewCollection();
 
     private void addNullSlotToList(final RealmList<Slot> slots) {
         realm.executeTransaction(new Realm.Transaction() {

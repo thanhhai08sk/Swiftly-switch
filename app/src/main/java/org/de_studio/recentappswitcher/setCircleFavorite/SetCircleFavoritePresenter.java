@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.setCircleFavorite;
 
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 
 /**
@@ -20,18 +21,21 @@ public class SetCircleFavoritePresenter extends BasePresenter {
     @Override
     public void onViewAttach() {
         view.setSpinner(model.getCollectionList(), model.getCurrentCollection());
-        view.setRecyclerView(model.getSlots());
+        setRecyclerView();
+    }
 
+    public void setRecyclerView() {
+        view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_LINEAR, -1));
     }
 
     public void onSpinnerItemSelect(String itemLabel) {
 
-        model.setCollection(itemLabel);
+        model.setCurrentCollection(itemLabel);
         view.updateRecyclerView(model.getSlots());
     }
 
     public void onAddNewCollection() {
-        String newLabel =  model.addCollection();
+        String newLabel =  model.createNewCollection();
         view.addCollectionToSpinner(newLabel);
         onSpinnerItemSelect(newLabel);
     }
@@ -41,7 +45,7 @@ public class SetCircleFavoritePresenter extends BasePresenter {
     }
 
     public void onChooseCollectionSize(int size) {
-        model.setCollectionSize(size);
+        model.setCurrentCollectionSize(size);
     }
 
 
