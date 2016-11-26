@@ -37,7 +37,7 @@ public class CircleFavoriteSettingView extends BaseCollectionSettingView {
     protected void inject() {
         DaggerCircleFavoriteSettingComponent.builder()
                 .appModule(new AppModule(this.getApplicationContext()))
-                .setCircleFavoriteModule(new CircleFavoriteSettingModule(this, collectionId))
+                .circleFavoriteSettingModule(new CircleFavoriteSettingModule(this, collectionId))
                 .build().inject(this);
     }
 

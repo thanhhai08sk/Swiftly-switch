@@ -29,14 +29,15 @@ public abstract class BaseCollectionSettingModel {
         this.collectionId = collectionId;
     }
 
-    public Collection getCurrentCollection() {
+    public void setup() {
+        collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, getCollectionId()).findFirst();
         if (collection == null) {
+            createNewCollection();
             collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, getCollectionId()).findFirst();
-            if (collection == null) {
-                createNewCollection();
-                collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, getCollectionId()).findFirst();
-            }
         }
+    }
+
+    public Collection getCurrentCollection() {
         return collection;
     }
 
@@ -81,11 +82,7 @@ public abstract class BaseCollectionSettingModel {
     }
 
     public RealmResults<Collection> getCollectionList() {
-        RealmResults<Collection> circleFavoriteCollections = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).findAll();
-        if (circleFavoriteCollections.size() ==0) {
-            createNewCollection();
-        }
-        return circleFavoriteCollections;
+        return realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).findAll();
     }
 
 

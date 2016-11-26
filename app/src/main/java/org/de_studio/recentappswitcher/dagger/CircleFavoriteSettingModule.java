@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
+import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
 import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
 import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingModel;
 import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingPresenter;
@@ -30,14 +31,14 @@ public class CircleFavoriteSettingModule {
 
     @Provides
     @Singleton
-    CircleFavoriteSettingPresenter presenter(CircleFavoriteSettingModel model) {
+    BaseCollectionSettingPresenter presenter(CircleFavoriteSettingModel model) {
         return new CircleFavoriteSettingPresenter(view, model);
     }
 
     @Provides
     @Singleton
     CircleFavoriteSettingModel model() {
-        return new CircleFavoriteSettingModel(collectionId, view.getString(R.string.circle_favorites));
+        return new CircleFavoriteSettingModel(view.getString(R.string.circle_favorites), collectionId);
     }
 
 

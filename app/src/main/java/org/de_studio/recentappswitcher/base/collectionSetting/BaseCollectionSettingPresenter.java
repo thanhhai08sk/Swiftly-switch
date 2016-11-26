@@ -18,6 +18,7 @@ public abstract class BaseCollectionSettingPresenter extends BasePresenter {
 
     @Override
     public void onViewAttach() {
+        model.setup();
         view.setSpinner(model.getCollectionList(), model.getCurrentCollection());
         setRecyclerView();
     }
