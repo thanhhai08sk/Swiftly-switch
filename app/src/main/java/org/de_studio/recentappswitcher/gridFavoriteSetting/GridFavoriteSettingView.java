@@ -91,6 +91,8 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView {
         builder.create().show();
     }
 
+
+
     public void showChooseMarginHorizontal(int min, int max, int current, PublishSubject<Integer> subject) {
         Utility.showDialogWithSeekBar(min,max,current,"dp",getString(R.string.horizontal_margin),subject,this);
     }

@@ -37,6 +37,7 @@ public abstract class BaseCollectionSettingModel {
         }
     }
 
+
     public Collection getCurrentCollection() {
         return collection;
     }

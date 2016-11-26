@@ -1,7 +1,6 @@
 package org.de_studio.recentappswitcher.gridFavoriteSetting;
 
 import org.de_studio.recentappswitcher.Cons;
-import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingModel;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingView;
 import org.de_studio.recentappswitcher.model.Collection;
@@ -19,7 +18,7 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     private PublishSubject<Integer> setMarginVerticalSubject = PublishSubject.create();
 
 
-    public GridFavoriteSettingPresenter(BaseCollectionSettingView view, BaseCollectionSettingModel model) {
+    public GridFavoriteSettingPresenter(BaseCollectionSettingView view, GridFavoriteSettingModel model) {
         super(view, model);
     }
 
@@ -31,10 +30,20 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
                 setMarginHorizontalSubject.subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
-                        model.setHorizontalMargin();
+                        getGridModel().setHorizontalMargin(integer);
                     }
                 })
         );
+
+        addSubscription(
+                setMarginVerticalSubject.subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        getGridModel().setVerticalMargin(integer);
+                    }
+                })
+        );
+
     }
 
     @Override
@@ -64,19 +73,31 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     }
 
     public void onSetShortcutsSpaceClick() {
-
+        getGridView().show
     }
 
     public void onSetMarginHorizontalClick() {
-
+        getGridView().showChooseMarginHorizontal(Cons.FAVORITE_GRID_MIN_HORIZONTAL_MARGIN
+                , Cons.FAVORITE_GRID_MAX_HORIZONTAL_MARGIN
+                , model.getCurrentCollection().marginHorizontal, setMarginHorizontalSubject);
     }
 
     public void onSetMarginVerticalClick() {
-
+        getGridView().showChooseMarginVertical(Cons.FAVORITE_GRID_MIN_VERTICAL_MARGIN
+                , Cons.FAVORITE_GRID_MAX_VERTICAL_MARGIN
+                , model.getCurrentCollection().marginVertical, setMarginVerticalSubject);
     }
 
     public void onSetPositionClick() {
+        getGridView().showChoosePositionDialog();
+    }
 
+    public GridFavoriteSettingModel getGridModel() {
+        return ((GridFavoriteSettingModel) model);
+    }
+
+    public GridFavoriteSettingView getGridView() {
+        return ((GridFavoriteSettingView) view);
     }
 
 }
