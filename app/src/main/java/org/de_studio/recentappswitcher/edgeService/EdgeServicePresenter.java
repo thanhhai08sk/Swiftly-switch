@@ -109,29 +109,29 @@ public class EdgeServicePresenter {
         switch (currentShowing) {
             case Cons.SHOWING_RECENT_CIRCLE:
                 if (currentCircleIconHighlight >= 10) {
-                    view.executeQuickAction(currentCircleIconHighlight - 10, v);
+                    view.executeQuickAction(currentCircleIconHighlight - 10, v, model.getLastAppPackageName());
                 } else if (currentCircleIconHighlight >= 0 && currentCircleIconHighlight < model.savedRecentShortcut.length) {
-                    view.executeShortcut(model.savedRecentShortcut[currentCircleIconHighlight], v,0);
+                    view.executeShortcut(model.savedRecentShortcut[currentCircleIconHighlight], v,0, model.getLastAppPackageName());
                 }
                 view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId, model.circleIconXs, model.circleIconYs);
                 currentCircleIconHighlight = -1;
                 break;
             case Cons.SHOWING_FAVORITE_CIRCLE:
                 if (currentCircleIconHighlight >= 10) {
-                    view.executeQuickAction(currentCircleIconHighlight - 10, v);
+                    view.executeQuickAction(currentCircleIconHighlight - 10, v, model.getLastAppPackageName());
                 }else if (currentCircleIconHighlight != -1) {
-                    view.executeShortcut(view.getCircleFavoriteShorcut(currentCircleIconHighlight),v,Cons.MODE_CIRCLE_FAVORITE);
+                    view.executeShortcut(view.getCircleFavoriteShorcut(currentCircleIconHighlight),v,Cons.MODE_CIRCLE_FAVORITE, model.getLastAppPackageName());
                 }
                 view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId, model.circleIconXs, model.circleIconYs);
                 currentCircleIconHighlight = -1;
                 break;
             case Cons.SHOWING_GRID:
                 if (currentGridFavoriteIconHighlight != -1) {
-                    view.executeShortcut((Shortcut) view.gridFavoriteAdapter.getItem(currentGridFavoriteIconHighlight), v, Cons.MODE_DEFAULT);
+                    view.executeShortcut((Shortcut) view.gridFavoriteAdapter.getItem(currentGridFavoriteIconHighlight), v, Cons.MODE_DEFAULT, model.getLastAppPackageName());
                 }
                 break;
             case Cons.SHOWING_FOLDER:
-                view.executeShortcut((Shortcut) view.folderAdapter.getItem(currentGridFolderIconHighlight), v, -1);
+                view.executeShortcut((Shortcut) view.folderAdapter.getItem(currentGridFolderIconHighlight), v, -1, model.getLastAppPackageName());
                 break;
         }
 

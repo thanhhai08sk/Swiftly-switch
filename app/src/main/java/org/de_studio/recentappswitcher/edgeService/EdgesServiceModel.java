@@ -1,6 +1,5 @@
 package org.de_studio.recentappswitcher.edgeService;
 
-import android.os.Build;
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -21,7 +20,8 @@ import io.realm.RealmResults;
 public class EdgesServiceModel {
     Set<String> blackListSet;
     Realm pinRealm;
-    String launcherPackagename;
+    String launcherPackageName;
+    String lastAppPackageName;
     Shortcut[] savedRecentShortcut, pinnedShortcut;
     Set<Shortcut> pinnedSet;
     boolean isFreeAndOutOfTrial;
@@ -38,7 +38,7 @@ public class EdgesServiceModel {
 
     private static final String TAG = EdgesServiceModel.class.getSimpleName();
 
-    public EdgesServiceModel(Set<String> blackListSet, Realm pinRealm, String launcherPackagename
+    public EdgesServiceModel(Set<String> blackListSet, Realm pinRealm, String launcherPackageName
             , boolean isFreeAndOutOfTrial, float mScale, float haftIconWidthPxl
             , float circleSizePxl, float iconScale, int gridGap) {
         this.gridGap = gridGap;
@@ -46,7 +46,7 @@ public class EdgesServiceModel {
         this.circleSizePxl = circleSizePxl;
         this.blackListSet = blackListSet;
         this.pinRealm = pinRealm;
-        this.launcherPackagename = launcherPackagename;
+        this.launcherPackageName = launcherPackageName;
         this.isFreeAndOutOfTrial = isFreeAndOutOfTrial;
         this.mScale = mScale;
         this.haftIconWidthPxl = haftIconWidthPxl;
@@ -123,6 +123,10 @@ public class EdgesServiceModel {
 
     }
 
+    public String getLastAppPackageName() {
+        return lastAppPackageName;
+    }
+
     public Shortcut[] getRecentList(ArrayList<String> tempPackageName) {
         Shortcut[] recentShortcut;
         Log.e(TAG, "getRecentList: tem size = "+ tempPackageName.size());
@@ -131,15 +135,23 @@ public class EdgesServiceModel {
         }
         boolean inHome = false;
         if (tempPackageName.size() > 0) {
-            if (tempPackageName.contains(launcherPackagename) && tempPackageName.get(0).equalsIgnoreCase(launcherPackagename)) {
+            if (tempPackageName.get(0).equals(launcherPackageName)) {
                 inHome = true;
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                tempPackageName.remove(0);
+            tempPackageName.remove(0);
+            tempPackageName.remove(launcherPackageName);
+            if (tempPackageName.size()>0) {
+                lastAppPackageName = tempPackageName.get(0);
             }
-            if (!inHome && tempPackageName.contains(launcherPackagename)) {
-                tempPackageName.remove(launcherPackagename);
-            }
+//            if (tempPackageName.contains(launcherPackageName) && tempPackageName.get(0).equalsIgnoreCase(launcherPackageName)) {
+//                inHome = true;
+//            }
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                tempPackageName.remove(0);
+//            }
+//            if (!inHome && tempPackageName.contains(launcherPackageName)) {
+//                tempPackageName.remove(launcherPackageName);
+//            }
         }
 
         if (tempPackageName.size() < 6 && savedRecentShortcut != null) {
