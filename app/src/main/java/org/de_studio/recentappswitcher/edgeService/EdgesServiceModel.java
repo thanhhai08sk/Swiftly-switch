@@ -147,7 +147,10 @@ public class EdgesServiceModel {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (tempPackageName.size() < 6 && savedRecentShortcut != null) {
                 for (int i = 0; i < savedRecentShortcut.length; i++) {
-                    if (!savedRecentShortcut[i].getPackageName().equals(removedPackage) && !tempPackageName.contains(savedRecentShortcut[i].getPackageName()) && tempPackageName.size() < 6) {
+                    if ( savedRecentShortcut[i].getType() == Shortcut.TYPE_APP
+                            && !savedRecentShortcut[i].getPackageName().equals(removedPackage)
+                            && !tempPackageName.contains(savedRecentShortcut[i].getPackageName())
+                            && tempPackageName.size() < 6) {
                         tempPackageName.add(savedRecentShortcut[i].getPackageName());
                         Log.e(TAG, "getRecentList: add " + savedRecentShortcut[i].getPackageName());
                     }
