@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.edgeService;
 
+import android.os.Build;
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -133,32 +134,23 @@ public class EdgesServiceModel {
         for (String s : tempPackageName) {
             Log.e(TAG, "temp package = " + s);
         }
-        boolean inHome = false;
+        String removedPackage = null;
         if (tempPackageName.size() > 0) {
-            if (tempPackageName.get(0).equals(launcherPackageName)) {
-                inHome = true;
-            }
+            removedPackage = tempPackageName.get(0);
             tempPackageName.remove(0);
             tempPackageName.remove(launcherPackageName);
             if (tempPackageName.size()>0) {
                 lastAppPackageName = tempPackageName.get(0);
             }
-//            if (tempPackageName.contains(launcherPackageName) && tempPackageName.get(0).equalsIgnoreCase(launcherPackageName)) {
-//                inHome = true;
-//            }
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                tempPackageName.remove(0);
-//            }
-//            if (!inHome && tempPackageName.contains(launcherPackageName)) {
-//                tempPackageName.remove(launcherPackageName);
-//            }
         }
 
-        if (tempPackageName.size() < 6 && savedRecentShortcut != null) {
-            for (int i = 0; i < savedRecentShortcut.length; i++) {
-                if (!tempPackageName.contains(savedRecentShortcut[i].getPackageName()) && tempPackageName.size() < 6) {
-                    tempPackageName.add(savedRecentShortcut[i].getPackageName());
-                    Log.e(TAG, "getRecentList: add " + savedRecentShortcut[i].getPackageName());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (tempPackageName.size() < 6 && savedRecentShortcut != null) {
+                for (int i = 0; i < savedRecentShortcut.length; i++) {
+                    if (!savedRecentShortcut[i].getPackageName().equals(removedPackage) && !tempPackageName.contains(savedRecentShortcut[i].getPackageName()) && tempPackageName.size() < 6) {
+                        tempPackageName.add(savedRecentShortcut[i].getPackageName());
+                        Log.e(TAG, "getRecentList: add " + savedRecentShortcut[i].getPackageName());
+                    }
                 }
             }
         }

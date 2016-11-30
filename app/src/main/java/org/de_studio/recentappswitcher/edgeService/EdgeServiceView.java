@@ -566,7 +566,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                 ComponentName componentName = taskInfo.baseActivity;
                 String packName = componentName.getPackageName();
-                if (i != 0 && !packName.equals(launcherPackageName) && !excludeSet.contains(packName) && !packName.contains("launcher")) {
+                if (!excludeSet.contains(packName) && !packName.contains("systemui")) {
                     tempPackageNameKK.add(packName);
                 }
             }
