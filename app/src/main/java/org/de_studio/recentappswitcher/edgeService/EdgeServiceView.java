@@ -321,7 +321,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Inject
     @Named(USE_CLOCK_NAME)
     boolean useClock;
-    String lastAppPackageName;
+//    String lastAppPackageName;
     @Inject
     @Named(GRID_WIDTH_NAME)
     float gridWidth;
@@ -547,107 +547,13 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    public ArrayList<String> getRecentApps() {
-        long timeStart = System.currentTimeMillis();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-            int numOfTask;
-            if (launcherPackageName != null) {
-                numOfTask = 8;
-            } else numOfTask = 7;
-            List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
-            ArrayList<String> tempPackageNameKK = new ArrayList<String>();
-            for (int i = 0; i < list.size(); i++) {
-                ActivityManager.RunningTaskInfo taskInfo = list.get(i);
-                ComponentName componentName = taskInfo.baseActivity;
-                String packName = componentName.getPackageName();
-                if (i != 0 && !packName.equals(launcherPackageName) && !excludeSet.contains(packName) && !packName.contains("launcher")) {
-                    tempPackageNameKK.add(packName);
-                }
-            }
-            if (tempPackageNameKK.size()>=1) {
-                lastAppPackageName = tempPackageNameKK.get(1);
-            }
-            return tempPackageNameKK;
-        } else {
-            UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-            long currentTimeMillis = System.currentTimeMillis() + 2000;
-            List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
-            ArrayList<String> tempPackageName = new ArrayList<String>();
-            if (stats != null) {
-                SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(Cons.DATE_DECENDING_COMPARATOR);
-                for (UsageStats usageStats : stats) {
-                    mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
-                }
-                Set<Long> setKey = mySortedMap.keySet();
-                Log.e(TAG, "mySortedMap size   = " + mySortedMap.size());
-                UsageStats usageStats;
-                String packa;
-                boolean isSystem = false;
-                PackageManager packageManager = getPackageManager();
-                for (Long key : setKey) {
-                    if (key >= currentTimeMillis) {
-                        Log.e(TAG, "key is in future");
-                    } else {
-                        usageStats = mySortedMap.get(key);
-                        if (usageStats == null) {
-                            Log.e(TAG, " usageStats is null");
-                        } else {
-                            packa = usageStats.getPackageName();
-                            try {
-                                try {
-                                    isSystem = packageManager.getApplicationInfo(packa, 0).dataDir.startsWith("/system/app/");
 
-//                                    Log.e(TAG, "app: " + packa +
-//                                            "\nfirst time stamp = " + usageStats.getFirstTimeStamp()
-//                                            + "\nlast time stamp = " + usageStats.getLastTimeStamp()
-//                                            + "\nlast time used = " + usageStats.getLastTimeUsed()
-//                                            + "\ntotal time foreground = " + usageStats.getTotalTimeInForeground()
-//                                            + "\ndescribe = " + usageStats.describeContents()
-//                                            + "\nstring = " + usageStats.toString());
-
-                                } catch (NullPointerException e) {
-                                    Log.e(TAG, "isSystem = null");
-                                }
-                                if (isSystem) {
-                                    //do nothing
-                                } else if (packageManager.getLaunchIntentForPackage(packa) == null ||
-                                        packa.contains("systemui") ||
-                                        packa.equals(launcherPackageName) ||
-                                        packa.contains("googlequicksearchbox") ||
-                                        excludeSet.contains(packa) ||
-                                        tempPackageName.contains(packa)
-                                        ) {
-                                    // do nothing
-                                } else {
-                                    tempPackageName.add(packa);
-                                }
-
-                                if (tempPackageName.size() >= 8) {
-                                    Log.e(TAG, "tempackage >= 8");
-                                    break;
-                                }
-                            } catch (PackageManager.NameNotFoundException e) {
-                                Log.e(TAG, "name not found" + e);
-                            }
-                        }
-
-                    }
-
-                }
-            }
-            if (tempPackageName.size()>1) {
-                lastAppPackageName = tempPackageName.get(1);
-            }
-            Log.e(TAG, "getRecentApp: time to get recent  = " + (System.currentTimeMillis() - timeStart));
-            return tempPackageName;
-        }
-    }
 
     public ArrayList<String> getRecentApp2() {
         if (excludeSet == null) {
             excludeSet = new HashSet<>();
         }
+        Log.e(TAG, "getRecentApp2: launcher = " + launcherPackageName);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
             int numOfTask;
@@ -660,13 +566,13 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                 ComponentName componentName = taskInfo.baseActivity;
                 String packName = componentName.getPackageName();
-                if (i != 0 && !packName.equals(launcherPackageName) && !excludeSet.contains(packName) && !packName.contains("launcher")) {
+                if (!excludeSet.contains(packName) && !packName.contains("systemui")) {
                     tempPackageNameKK.add(packName);
                 }
             }
-            if (tempPackageNameKK.size()>=1) {
-                lastAppPackageName = tempPackageNameKK.get(0);
-            }
+//            if (tempPackageNameKK.size()>=1) {
+//                lastAppPackageName = tempPackageNameKK.get(0);
+//            }
             return tempPackageNameKK;
         } else {
             long timeStart = System.currentTimeMillis();
@@ -694,7 +600,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                                     !excludeSet.contains(packa) &&
                                     !tempPackageName.contains(packa)
                                     ) {
-                                if (hasIntentPackagesSet.contains(packa)) {
+                                if (hasIntentPackagesSet.contains(packa) || packa.equals(launcherPackageName)) {
                                     tempPackageName.add(packa);
                                 }
                             }
@@ -706,20 +612,17 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                     }
                 }
             }
-            if (tempPackageName.size()>1) {
-                if (!tempPackageName.get(1).equals(launcherPackageName)) {
-                    lastAppPackageName = tempPackageName.get(1);
-                } else {
-                    if (tempPackageName.size() > 2) {
-                        lastAppPackageName = tempPackageName.get(2);
-                    }
-                }
-            }
+//            if (tempPackageName.size()>1) {
+//                if (!tempPackageName.get(1).equals(launcherPackageName)) {
+//                    lastAppPackageName = tempPackageName.get(1);
+//                } else {
+//                    if (tempPackageName.size() > 2) {
+//                        lastAppPackageName = tempPackageName.get(2);
+//                    }
+//                }
+//            }
             Log.e(TAG, "getRecentApp2: time to get recent  = " + (System.currentTimeMillis() - timeStart));
             Log.e(TAG, "getRecentApp2: tem size = " + tempPackageName.size());
-            for (String s : tempPackageName) {
-                Log.e(TAG, "getRecentApp2: temp = " + s);
-            }
             return tempPackageName;
 
         }
@@ -1318,7 +1221,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    public void executeQuickAction(int actionId, View v) {
+    public void executeQuickAction(int actionId, View v, String lastAppPackageName) {
         String action = MainActivity.ACTION_NONE;
         switch (actionId) {
             case 0:
@@ -1341,7 +1244,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
     }
 
-    public void executeShortcut(Shortcut shortcut, View v, int mode) {
+    public void executeShortcut(Shortcut shortcut, View v, int mode, String lastAppPackageName) {
         if (shortcut != null) {
             startShortcut(getApplicationContext(), shortcut, v, getClass().getName(), getPackageName(), lastAppPackageName, defaultShared.getInt(EdgeSetting.CONTACT_ACTION, 0), FLASH_LIGHT_ON);
         } else if (mode != -1) {
