@@ -13,7 +13,7 @@ import butterknife.ButterKnife;
  * Created by HaiNguyen on 11/11/16.
  */
 
-public abstract class BaseActivity<T> extends AppCompatActivity {
+public abstract class BaseActivity<T> extends AppCompatActivity implements PresenterView {
 
     protected RetainFragment<T> retainFragment;
     String tag = getClass().getCanonicalName();
@@ -28,7 +28,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
         getDataFromRetainFragment();
         setContentView(getLayoutId());
         ButterKnife.bind(this);
-        getPresenter().onViewAttach();
+        getPresenter().onViewAttach(this);
     }
 
     protected abstract void inject();
@@ -59,8 +59,6 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
         if(destroyedBySystem) onDestroyBySystem(); else onDestroyByUser();
         super.onDestroy();
     }
-
-    protected abstract void clear();
 
     public T getData(){ return retainFragment.data; }
     public void setData(T data){ retainFragment.data = data; }

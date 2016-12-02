@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.setItems;
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
@@ -14,7 +15,7 @@ import io.realm.RealmList;
  * Created by HaiNguyen on 11/18/16.
  */
 
-public class SetItemsModel {
+public class SetItemsModel extends BaseModel {
     private static final String TAG = SetItemsModel.class.getSimpleName();
     int itemsType;
     String collectionId;

@@ -145,9 +145,10 @@ public class SetItemsView extends BaseActivity<SetItemsView.Subjects> {
     }
 
     @Override
-    protected void clear() {
+    public void clear() {
 
     }
+
     @OnClick(R.id.next)
     void onNextClick(){
         nextButtonSubject.onNext(null);

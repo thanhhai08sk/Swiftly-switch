@@ -11,20 +11,18 @@ import rx.functions.Action1;
  * Created by HaiNguyen on 11/18/16.
  */
 
-public class SetItemsPresenter extends BasePresenter {
+public class SetItemsPresenter extends BasePresenter<SetItemsView, SetItemsModel> {
     private static final String TAG = SetItemsPresenter.class.getSimpleName();
-    SetItemsView view;
-    SetItemsModel model;
     int currentIndex;
 
 
-    public SetItemsPresenter(SetItemsView view, SetItemsModel model) {
-        this.view = view;
+    public SetItemsPresenter(SetItemsModel model) {
         this.model = model;
     }
 
     @Override
-    public void onViewAttach() {
+    public void onViewAttach(final SetItemsView view) {
+        super.onViewAttach(view);
         currentIndex = view.itemIndex;
 
         addSubscription(
@@ -57,12 +55,12 @@ public class SetItemsPresenter extends BasePresenter {
         addSubscription(
                 view.onCurrentItemChange()
                         .subscribe(new Action1<Item>() {
-                    @Override
-                    public void call(Item item) {
-                        Log.e(TAG, "call: on current item change");
-                        view.showCurrentIconAndIndex(item, currentIndex);
-                    }
-                })
+                            @Override
+                            public void call(Item item) {
+                                Log.e(TAG, "call: on current item change");
+                                view.showCurrentIconAndIndex(item, currentIndex);
+                            }
+                        })
         );
 
         addSubscription(
@@ -87,8 +85,8 @@ public class SetItemsPresenter extends BasePresenter {
         );
 
         view.onCurrentItemChange().onNext(model.getCurrentItem(currentIndex));
-    }
 
+    }
 
     @Override
     public void onViewDetach() {

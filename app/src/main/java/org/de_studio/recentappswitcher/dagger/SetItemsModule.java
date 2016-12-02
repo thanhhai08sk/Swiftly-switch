@@ -31,7 +31,7 @@ public class SetItemsModule {
     @Provides
     @Singleton
     SetItemsPresenter presenter(SetItemsModel model){
-        return new SetItemsPresenter(view, model);
+        return new SetItemsPresenter(model);
     }
 
     @Provides
