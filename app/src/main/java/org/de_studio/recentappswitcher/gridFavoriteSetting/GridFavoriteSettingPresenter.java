@@ -1,9 +1,11 @@
 package org.de_studio.recentappswitcher.gridFavoriteSetting;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingView;
 import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
@@ -16,6 +18,7 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     private static final String TAG = GridFavoriteSettingPresenter.class.getSimpleName();
     private PublishSubject<Integer> setMarginHorizontalSubject = PublishSubject.create();
     private PublishSubject<Integer> setMarginVerticalSubject = PublishSubject.create();
+    private PublishSubject<Integer> setShortcutsSpaceSubject = PublishSubject.create();
 
 
     public GridFavoriteSettingPresenter(BaseCollectionSettingView view, GridFavoriteSettingModel model) {
@@ -44,11 +47,21 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
                 })
         );
 
+        addSubscription(
+                setShortcutsSpaceSubject.subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        getGridModel().setShortcutsSpace(integer);
+                    }
+                })
+        );
+
     }
 
     @Override
     public void setRecyclerView() {
-        view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_GRID, Cons.DEFAULT_FAVORITE_GRID_COLUMN_COUNT));
+        view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_GRID, Cons.DEFAULT_FAVORITE_GRID_COLUMN_COUNT)
+                , new GridSpacingItemDecoration(Utility.dpToPixel(view, model.getCurrentCollection().space)));
     }
 
     public void onSetColumnsCount(int columnsCount) {
@@ -59,9 +72,8 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
 
     }
 
-    public void onSetShortcutsSpace(int shortcutsSpace) {
 
-    }
+
 
     public void onSetPosition(int position) {
         switch (position) {
@@ -73,7 +85,10 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     }
 
     public void onSetShortcutsSpaceClick() {
-        getGridView().show
+        getGridView().showChooseShortcutSpace(Cons.FAVORITE_GRID_MIN_SHORTCUTS_SPACE
+                , Cons.FAVORITE_GRID_MAX_SHORTCUTS_SPACE
+                , model.getCurrentCollection().space
+                , setShortcutsSpaceSubject);
     }
 
     public void onSetMarginHorizontalClick() {

@@ -22,6 +22,7 @@ import org.de_studio.recentappswitcher.base.SlotsAdapter;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.setItems.SetItemsView;
+import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +53,12 @@ public abstract class BaseCollectionSettingView extends BaseActivity {
     @Inject
     protected SlotsAdapter adapter;
 
+    protected GridSpacingItemDecoration decoration;
+
     protected ArrayAdapter<CharSequence> spinnerAdapter;
     protected Subscription subscription;
     protected String collectionId;
+    protected GridLayoutManager manager;
 
 
 
@@ -97,9 +101,13 @@ public abstract class BaseCollectionSettingView extends BaseActivity {
         });
     }
 
-    public void setRecyclerView(OrderedRealmCollection<Slot> slots, RecyclerView.LayoutManager layoutManager) {
+    public void setRecyclerView(OrderedRealmCollection<Slot> slots, RecyclerView.LayoutManager layoutManager, GridSpacingItemDecoration decoration) {
         Log.e(TAG, "setRecyclerView: slots size = " + slots.size());
         adapter.updateData(slots);
+        if (decoration != null) {
+            this.decoration = decoration;
+            recyclerView.addItemDecoration(decoration);
+        }
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
         setOnItemClick();
@@ -110,7 +118,8 @@ public abstract class BaseCollectionSettingView extends BaseActivity {
             case Cons.LAYOUT_TYPE_LINEAR:
                 return new LinearLayoutManager(this);
             case Cons.LAYOUT_TYPE_GRID:
-                return new GridLayoutManager(this, column);
+                manager = new GridLayoutManager(this, column);
+                return manager;
         }
         return null;
     }

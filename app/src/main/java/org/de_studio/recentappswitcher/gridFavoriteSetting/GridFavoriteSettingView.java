@@ -13,6 +13,7 @@ import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerGridFavoriteSettingComponent;
 import org.de_studio.recentappswitcher.dagger.GridFavoriteSettingModule;
 import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
 import butterknife.OnClick;
 import rx.subjects.PublishSubject;
@@ -93,6 +94,7 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView {
 
 
 
+
     public void showChooseMarginHorizontal(int min, int max, int current, PublishSubject<Integer> subject) {
         Utility.showDialogWithSeekBar(min,max,current,"dp",getString(R.string.horizontal_margin),subject,this);
     }
@@ -101,6 +103,19 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView {
         Utility.showDialogWithSeekBar(min,max,current,"dp",getString(R.string.vertical_margin),subject,this);
     }
 
+    public void showChooseShortcutSpace(int min, int max, int current, PublishSubject<Integer> subject) {
+        Utility.showDialogWithSeekBar(min, max, current, "dp", getString(R.string.set_favorite_shortcut_grid_gap_title_text_view), subject, this);
+    }
+
+    public void setShorcutsSpace(int space) {
+        recyclerView.removeItemDecoration(decoration);
+        decoration = new GridSpacingItemDecoration(Utility.dpToPixel(this, space));
+        recyclerView.addItemDecoration(decoration);
+    }
+
+    public void setGridColumn(int column) {
+        manager.setSpanCount(column);
+    }
 
 
     @OnClick(R.id.shortcuts_space)

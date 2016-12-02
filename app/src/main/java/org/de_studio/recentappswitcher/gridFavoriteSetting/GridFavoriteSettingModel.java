@@ -110,6 +110,7 @@ public class GridFavoriteSettingModel extends BaseCollectionSettingModel {
                 collection.space = value;
             }
         });
+
     }
 
 }

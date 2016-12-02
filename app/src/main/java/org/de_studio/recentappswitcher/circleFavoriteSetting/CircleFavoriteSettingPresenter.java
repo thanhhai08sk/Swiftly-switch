@@ -16,7 +16,7 @@ public class CircleFavoriteSettingPresenter extends BaseCollectionSettingPresent
 
     @Override
     public void setRecyclerView() {
-        view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_LINEAR, -1));
+        view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_LINEAR, -1),null);
     }
 
 }

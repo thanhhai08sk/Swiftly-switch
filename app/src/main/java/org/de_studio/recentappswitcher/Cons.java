@@ -69,6 +69,8 @@ public class Cons {
     public static final int FAVORITE_GRID_MAX_VERTICAL_MARGIN = 120;
     public static final int FAVORITE_GRID_MIN_HORIZONTAL_MARGIN = 0;
     public static final int FAVORITE_GRID_MAX_HORIZONTAL_MARGIN = 120;
+    public static final int FAVORITE_GRID_MIN_SHORTCUTS_SPACE = 10;
+    public static final int FAVORITE_GRID_MAX_SHORTCUTS_SPACE = 50;
     public static final int INIT_OFFSET = 10;
     public static final int CIRCLE_SIZE_DEFAULT = 105;
     public static final int CIRCLE_AND_QUICK_ACTION_GAP = 35;
