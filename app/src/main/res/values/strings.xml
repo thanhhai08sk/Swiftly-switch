@@ -241,5 +241,6 @@
     <string name="horizontal_margin">Horizontal margin</string>
     <string name="grid_position_trigger_position">Trigger position</string>
     <string name="grid_position_center">Center of screen</string>
+    <string name="app_shortcut_contact">Apps, shortcuts,...</string>
 
 </resources>

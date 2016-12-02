@@ -2406,7 +2406,11 @@ public  class Utility {
                 break;
             case Slot.TYPE_FOLDER:
                 byte[] byteArray = slot.iconBitmap;
-                icon.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
+                if (byteArray != null) {
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
+                } else {
+                    icon.setImageResource(R.drawable.ic_folder);
+                }
                 break;
             case Slot.TYPE_RECENT:
                 icon.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);

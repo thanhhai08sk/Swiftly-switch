@@ -69,6 +69,11 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
         updateTextValue();
     }
 
+    @Override
+    public void onSlotClick(int slotIndex) {
+        getGridView().showChooseBetweenSetFolderAndSetItems(slotIndex);
+    }
+
     public void onSetColumnsCount(int columnsCount) {
         getGridModel().setColumnsCount(columnsCount);
         getGridView().setGridColumn(columnsCount);

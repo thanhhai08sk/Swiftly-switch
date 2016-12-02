@@ -113,6 +113,25 @@ public abstract class BaseCollectionSettingView extends BaseActivity {
         setOnItemClick();
     }
 
+    public void showChooseBetweenSetFolderAndSetItems(final int slotIndex) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder
+                .setItems(new CharSequence[]{getString(R.string.app_shortcut_contact), getString(R.string.setting_shortcut_folder)}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                presenter.setItems(slotIndex);
+                                break;
+                            case 1:
+                                presenter.setFolder(slotIndex);
+                                break;
+                        }
+                    }
+                });
+        builder.create().show();
+    }
+
     public RecyclerView.LayoutManager getLayoutManager(int layoutType, int column) {
         switch (layoutType) {
             case Cons.LAYOUT_TYPE_LINEAR:

@@ -39,6 +39,14 @@ public abstract class BaseCollectionSettingPresenter extends BasePresenter< Base
         view.openSetItems(slotIndex,model.getCollectionId());
     }
 
+    public void setFolder(int slotIndex) {
+        model.setSlotAsFolder(slotIndex);
+    }
+
+    public void setItems(int slotIndex) {
+        view.openSetItems(slotIndex, model.getCollectionId());
+    }
+
     public void onChooseCollectionSize(int size) {
         model.setCurrentCollectionSize(size);
     }

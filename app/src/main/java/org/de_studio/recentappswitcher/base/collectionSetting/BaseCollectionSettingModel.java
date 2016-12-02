@@ -50,6 +50,7 @@ public abstract class BaseCollectionSettingModel extends BaseModel{
         return collectionId;
     }
 
+
     public  String getDefaultCollectionId() {
         return getCollectionType() + "1";
     }
@@ -76,6 +77,22 @@ public abstract class BaseCollectionSettingModel extends BaseModel{
         }
         while (slots.size() < size) {
             addNullSlotToList(slots);
+        }
+    }
+
+    public void setSlotAsFolder(int slotIndex) {
+        Slot slot = collection.slots.get(slotIndex);
+        if (slot != null) {
+            final String slotId = slot.slotId;
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Slot slot1 = realm.where(Slot.class).equalTo(Cons.SLOT_ID, slotId).findFirst();
+                    if (slot1 != null) {
+                        slot1.type = Slot.TYPE_FOLDER;
+                    }
+                }
+            });
         }
     }
 
