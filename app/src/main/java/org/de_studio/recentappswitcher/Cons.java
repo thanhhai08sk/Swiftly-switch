@@ -65,6 +65,8 @@ public class Cons {
     public static final int DEFAULT_FAVORITE_GRID_PADDING_VERTICAL = 20;
     public static final int DEFAULT_FAVORITE_GRID_COLUMN_COUNT = 4;
     public static final int DEFAULT_FAVORITE_GRID_ROW_COUNT = 5;
+    public static final int DEFAULT_FAVORITE_GRID_VERTICAL_MARGIN = 20;
+    public static final int DEFAULT_FAVORITE_GRID_HORIZONTAL_MARGIN = 20;
     public static final int FAVORITE_GRID_MIN_VERTICAL_MARGIN = 20;
     public static final int FAVORITE_GRID_MAX_VERTICAL_MARGIN = 120;
     public static final int FAVORITE_GRID_MIN_HORIZONTAL_MARGIN = 0;
