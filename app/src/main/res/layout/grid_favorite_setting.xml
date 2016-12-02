@@ -140,55 +140,66 @@
         <include layout="@layout/separator" />
 
         <LinearLayout
-            android:id="@+id/horizontal_margin"
+            android:id="@+id/margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
             >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/horizontal_margin"
-                style="@style/Main_text_primary"
-                />
 
-            <TextView
-                android:id="@+id/horizontal_margin_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="@string/recent_apps_description"
-                style="@style/Main_text_secondary"
-                />
 
+            <LinearLayout
+                android:id="@+id/horizontal_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/horizontal_margin"
+                    style="@style/Main_text_primary"
+                    />
+
+                <TextView
+                    android:id="@+id/horizontal_margin_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="@string/recent_apps_description"
+                    style="@style/Main_text_secondary"
+                    />
+
+            </LinearLayout>
+            <include layout="@layout/separator" />
+            <LinearLayout
+                android:id="@+id/vertical_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vertical_margin"
+                    style="@style/Main_text_primary"
+                    />
+
+                <TextView
+                    android:id="@+id/vertical_margin_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="@string/recent_apps_description"
+                    style="@style/Main_text_secondary"
+                    />
+
+            </LinearLayout>
+            <include layout="@layout/separator" />
         </LinearLayout>
-        <include layout="@layout/separator" />
-        <LinearLayout
-            android:id="@+id/vertical_margin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/vertical_margin"
-                style="@style/Main_text_primary"
-                />
 
-            <TextView
-                android:id="@+id/vertical_margin_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="@string/recent_apps_description"
-                style="@style/Main_text_secondary"
-                />
 
-        </LinearLayout>
-        <include layout="@layout/separator" />
 
 
 

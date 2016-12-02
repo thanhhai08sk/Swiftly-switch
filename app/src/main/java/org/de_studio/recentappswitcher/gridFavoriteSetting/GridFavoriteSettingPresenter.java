@@ -62,6 +62,7 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     public void setRecyclerView() {
         view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_GRID, Cons.DEFAULT_FAVORITE_GRID_COLUMN_COUNT)
                 , new GridSpacingItemDecoration(Utility.dpToPixel(view, model.getCurrentCollection().space)));
+        getGridView().setChoosingMargins(model.getCurrentCollection().position == Collection.POSITION_TRIGGER);
     }
 
     public void onSetColumnsCount(int columnsCount) {
@@ -79,10 +80,13 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
 
 
     public void onSetPosition(int position) {
+        getGridModel().setPosition(position);
         switch (position) {
             case Collection.POSITION_TRIGGER:
+                getGridView().setChoosingMargins(true);
                 break;
             case Collection.POSITION_CENTER:
+                getGridView().setChoosingMargins(false);
                 break;
         }
     }

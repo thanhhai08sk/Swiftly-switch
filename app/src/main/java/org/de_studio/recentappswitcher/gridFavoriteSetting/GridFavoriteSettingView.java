@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
@@ -15,6 +17,7 @@ import org.de_studio.recentappswitcher.dagger.GridFavoriteSettingModule;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 import rx.subjects.PublishSubject;
 
@@ -24,8 +27,12 @@ import rx.subjects.PublishSubject;
 
 public class GridFavoriteSettingView extends BaseCollectionSettingView {
     private static final String TAG = GridFavoriteSettingView.class.getSimpleName();
-
-
+    @BindView(R.id.horizontal_margin)
+    LinearLayout horizontalMargin;
+    @BindView(R.id.vertical_margin)
+    LinearLayout verticalMargin;
+    @BindView(R.id.margin)
+    LinearLayout marginLayout;
     @Override
     protected void inject() {
         DaggerGridFavoriteSettingComponent.builder()
@@ -139,6 +146,11 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView {
 
     public void setGridColumn(int column) {
         manager.setSpanCount(column);
+    }
+
+    public void setChoosingMargins(boolean enable) {
+        marginLayout.setVisibility(enable ? View.VISIBLE : View.INVISIBLE);
+
     }
 
 
