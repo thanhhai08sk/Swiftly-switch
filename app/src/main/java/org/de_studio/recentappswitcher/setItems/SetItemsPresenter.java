@@ -88,10 +88,4 @@ public class SetItemsPresenter extends BasePresenter<SetItemsView, SetItemsModel
 
     }
 
-    @Override
-    public void onViewDetach() {
-        super.onViewDetach();
-        model.clear();
-        view.clear();
-    }
 }

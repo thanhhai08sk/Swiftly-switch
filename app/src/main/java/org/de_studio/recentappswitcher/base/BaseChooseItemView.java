@@ -23,7 +23,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 11/25/16.
  */
 
-public abstract class BaseChooseItemView extends BaseFragment implements AdapterView.OnItemClickListener {
+public abstract class BaseChooseItemView extends BaseFragment implements AdapterView.OnItemClickListener , PresenterView{
     private static final String TAG = BaseChooseItemView.class.getSimpleName();
     @BindView(R.id.list_view)
     protected ListView listView;
@@ -106,4 +106,8 @@ public abstract class BaseChooseItemView extends BaseFragment implements Adapter
         return presenter;
     }
 
+    @Override
+    protected PresenterView getPresenterView() {
+        return this;
+    }
 }

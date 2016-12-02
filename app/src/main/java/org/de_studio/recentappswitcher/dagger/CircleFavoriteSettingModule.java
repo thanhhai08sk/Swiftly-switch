@@ -33,7 +33,7 @@ public class CircleFavoriteSettingModule {
     @Provides
     @Singleton
     BaseCollectionSettingPresenter presenter(CircleFavoriteSettingModel model) {
-        return new CircleFavoriteSettingPresenter(view, model);
+        return new CircleFavoriteSettingPresenter(model);
     }
 
     @Provides

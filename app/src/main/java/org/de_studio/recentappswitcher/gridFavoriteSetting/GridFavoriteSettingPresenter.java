@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.gridFavoriteSetting;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingModel;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingView;
 import org.de_studio.recentappswitcher.model.Collection;
@@ -21,14 +22,13 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     private PublishSubject<Integer> setShortcutsSpaceSubject = PublishSubject.create();
 
 
-    public GridFavoriteSettingPresenter(BaseCollectionSettingView view, GridFavoriteSettingModel model) {
-        super(view, model);
+    public GridFavoriteSettingPresenter(BaseCollectionSettingModel model) {
+        super(model);
     }
 
-
     @Override
-    public void onViewAttach() {
-        super.onViewAttach();
+    public void onViewAttach(BaseCollectionSettingView view) {
+        super.onViewAttach(view);
         addSubscription(
                 setMarginHorizontalSubject.subscribe(new Action1<Integer>() {
                     @Override
@@ -55,7 +55,6 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
                     }
                 })
         );
-
     }
 
     @Override

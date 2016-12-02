@@ -6,18 +6,16 @@ import org.de_studio.recentappswitcher.base.BasePresenter;
  * Created by HaiNguyen on 11/26/16.
  */
 
-public abstract class BaseCollectionSettingPresenter extends BasePresenter {
+public abstract class BaseCollectionSettingPresenter extends BasePresenter<BaseCollectionSettingView, BaseCollectionSettingModel> {
     private static final String TAG = BaseCollectionSettingPresenter.class.getSimpleName();
-    protected BaseCollectionSettingView view;
-    protected BaseCollectionSettingModel model;
 
-    public BaseCollectionSettingPresenter(BaseCollectionSettingView view, BaseCollectionSettingModel model) {
-        this.view = view;
+    public BaseCollectionSettingPresenter(BaseCollectionSettingModel model) {
         this.model = model;
     }
 
     @Override
-    public void onViewAttach() {
+    public void onViewAttach(BaseCollectionSettingView view) {
+        super.onViewAttach(view);
         model.setup();
         view.setSpinner(model.getCollectionList(), model.getCurrentCollection());
         setRecyclerView();
@@ -45,13 +43,6 @@ public abstract class BaseCollectionSettingPresenter extends BasePresenter {
         model.setCurrentCollectionSize(size);
     }
 
-
-    @Override
-    public void onViewDetach() {
-        model.clear();
-        view.clear();
-        super.onViewDetach();
-    }
 
     public void onSizeClick() {
         view.showChooseSizeDialog();

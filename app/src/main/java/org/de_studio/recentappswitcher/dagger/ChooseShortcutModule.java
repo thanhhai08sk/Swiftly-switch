@@ -44,7 +44,4 @@ public class ChooseShortcutModule {
     ItemsListAdapter fakeAdapter(@Nullable IconPackManager.IconPack iconPack){
         return new ItemsListAdapter(view.getActivity(), null, view.getActivity().getPackageManager(), iconPack, R.layout.item_items_list_radio_button);
     }
-
-
-
 }

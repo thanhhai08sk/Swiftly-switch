@@ -11,7 +11,7 @@ import rx.functions.Action1;
  * Created by HaiNguyen on 11/25/16.
  */
 
-public abstract class BaseChooseItemPresenter extends BasePresenter {
+public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseItemView,BaseModel> {
     protected BaseChooseItemView view;
     protected RealmResults<Item> results;
     protected Realm realm = Realm.getDefaultInstance();
@@ -21,7 +21,8 @@ public abstract class BaseChooseItemPresenter extends BasePresenter {
     }
 
     @Override
-    public void onViewAttach() {
+    public void onViewAttach( final BaseChooseItemView view) {
+        super.onViewAttach(view);
         view.loadItems();
         view.setProgressBar(true);
         results = getItemRealmResult();
@@ -45,6 +46,7 @@ public abstract class BaseChooseItemPresenter extends BasePresenter {
                     }
                 })
         );
+
     }
 
     public void onItemClick(Item item) {
@@ -59,9 +61,7 @@ public abstract class BaseChooseItemPresenter extends BasePresenter {
         if (results != null) {
             results.removeChangeListeners();
         }
-        view.clear();
         realm.close();
-        view = null;
     }
 
     protected abstract RealmResults<Item> getItemRealmResult();

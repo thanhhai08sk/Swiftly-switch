@@ -167,7 +167,7 @@ public abstract class BaseCollectionSettingView extends BaseActivity {
 
     @CallSuper
     @Override
-    protected void clear() {
+    public void clear() {
         subscription.unsubscribe();
     }
     @Optional

@@ -33,7 +33,7 @@ public class GridFavoriteSettingModule {
     @Provides
     @Singleton
     BaseCollectionSettingPresenter presenter(GridFavoriteSettingModel model) {
-        return new GridFavoriteSettingPresenter(view, model);
+        return new GridFavoriteSettingPresenter(model);
     }
 
     @Provides

@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.base.collectionSetting;
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
 
@@ -17,7 +18,7 @@ import io.realm.RealmResults;
  * Created by HaiNguyen on 11/26/16.
  */
 
-public abstract class BaseCollectionSettingModel {
+public abstract class BaseCollectionSettingModel extends BaseModel{
     private static final String TAG = BaseCollectionSettingModel.class.getSimpleName();
     protected Realm realm = Realm.getDefaultInstance();
     protected String collectionId;

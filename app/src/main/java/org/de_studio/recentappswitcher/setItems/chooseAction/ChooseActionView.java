@@ -74,4 +74,5 @@ public class ChooseActionView extends BaseChooseItemView{
             return null;
         }
     }
+
 }

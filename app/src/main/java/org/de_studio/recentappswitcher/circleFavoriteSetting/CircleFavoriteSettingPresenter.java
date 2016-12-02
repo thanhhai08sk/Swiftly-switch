@@ -10,8 +10,8 @@ import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSett
 public class CircleFavoriteSettingPresenter extends BaseCollectionSettingPresenter {
     private static final String TAG = CircleFavoriteSettingPresenter.class.getSimpleName();
 
-    public CircleFavoriteSettingPresenter(CircleFavoriteSettingView view, CircleFavoriteSettingModel model) {
-        super(view, model);
+    public CircleFavoriteSettingPresenter(CircleFavoriteSettingModel model) {
+        super( model);
     }
 
     @Override

@@ -15,7 +15,8 @@ import butterknife.Unbinder;
  * Created by HaiNguyen on 11/19/16.
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment<V extends PresenterView> extends Fragment {
+    private static final String TAG = BaseFragment.class.getSimpleName();
     Unbinder unbinder;
     @CallSuper
     @Override
@@ -30,7 +31,7 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutRes(), container, false);
         unbinder = ButterKnife.bind(this, view);
-        getPresenter().onViewAttach();
+        getPresenter().onViewAttach(getPresenterView());
         return view;
     }
     @CallSuper
@@ -43,6 +44,8 @@ public abstract class BaseFragment extends Fragment {
     protected abstract int getLayoutRes();
 
     protected abstract BasePresenter getPresenter();
+
+    protected abstract V getPresenterView();
     protected abstract void inject();
     @CallSuper
     public void clear(){
