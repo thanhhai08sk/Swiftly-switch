@@ -6,6 +6,7 @@ import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSett
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingView;
 import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
 import rx.functions.Action1;
@@ -71,7 +72,11 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
 
     @Override
     public void onSlotClick(int slotIndex) {
-        getGridView().showChooseBetweenSetFolderAndSetItems(slotIndex);
+        if (model.getCurrentCollection().slots.get(slotIndex).type.equals(Slot.TYPE_FOLDER)) {
+            //// TODO: 12/2/16 open folder setting
+        } else {
+            getGridView().showChooseBetweenSetFolderAndSetItems(slotIndex);
+        }
     }
 
     public void onSetColumnsCount(int columnsCount) {
