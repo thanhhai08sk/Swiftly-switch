@@ -107,6 +107,30 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView {
         Utility.showDialogWithSeekBar(min, max, current, "dp", getString(R.string.set_favorite_shortcut_grid_gap_title_text_view), subject, this);
     }
 
+    public void showChooseRowsCount() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.rows_count)
+                .setItems(new CharSequence[]{"1","2","3","4", "5", "6", "7", "8"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getGridPresenter().onSetRowsCount(which + 1);
+                    }
+                });
+        builder.create().show();
+    }
+
+    public void showChooseColumnsCount() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.columns_count)
+                .setItems(new CharSequence[]{"1","2","3","4", "5", "6", "7", "8"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getGridPresenter().onSetColumnsCount(which + 1);
+                    }
+                });
+        builder.create().show();
+    }
+
     public void setShorcutsSpace(int space) {
         recyclerView.removeItemDecoration(decoration);
         decoration = new GridSpacingItemDecoration(Utility.dpToPixel(this, space));
@@ -118,6 +142,14 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView {
     }
 
 
+    @OnClick(R.id.rows_count)
+    void onSetRowsClick(){
+        getGridPresenter().onSetRowsCountClick();
+    }
+    @OnClick(R.id.columns_count)
+    void onSetColumnsCountClick(){
+        getGridPresenter().onSetColumnsCountClick();
+    }
     @OnClick(R.id.shortcuts_space)
     void onSetShortcutsSpaceClick(){
         getGridPresenter().onSetShortcutsSpaceClick();

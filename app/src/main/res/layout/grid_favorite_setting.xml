@@ -62,7 +62,7 @@
         <include layout="@layout/separator" />
 
         <LinearLayout
-            android:id="@+id/columnsCount"
+            android:id="@+id/rows_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"

@@ -65,12 +65,15 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     }
 
     public void onSetColumnsCount(int columnsCount) {
+        getGridModel().setColumnsCount(columnsCount);
+        getGridView().setGridColumn(columnsCount);
 
     }
 
     public void onSetRowsCount(int rowsCount) {
-
+        getGridModel().setRowsCount(rowsCount);
     }
+
 
 
 
@@ -101,6 +104,14 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
         getGridView().showChooseMarginVertical(Cons.FAVORITE_GRID_MIN_VERTICAL_MARGIN
                 , Cons.FAVORITE_GRID_MAX_VERTICAL_MARGIN
                 , model.getCurrentCollection().marginVertical, setMarginVerticalSubject);
+    }
+
+    public void onSetRowsCountClick() {
+        getGridView().showChooseRowsCount();
+    }
+
+    public void onSetColumnsCountClick() {
+        getGridView().showChooseColumnsCount();
     }
 
     public void onSetPositionClick() {

@@ -92,6 +92,7 @@ public class GridFavoriteSettingModel extends BaseCollectionSettingModel {
                 collection.columnCount = value;
             }
         });
+        setCurrentCollectionSize(collection.columnCount * collection.rowsCount);
     }
 
     public void setRowsCount(final int value) {
@@ -101,6 +102,7 @@ public class GridFavoriteSettingModel extends BaseCollectionSettingModel {
                 collection.rowsCount = value;
             }
         });
+        setCurrentCollectionSize(collection.columnCount * collection.rowsCount);
     }
 
     public void setShortcutsSpace(final int value) {
