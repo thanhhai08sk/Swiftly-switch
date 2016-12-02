@@ -58,6 +58,7 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
                     onClickSubject.onNext(holder.getAdapterPosition());
                 }
             });
+
         }
     }
 

@@ -125,6 +125,9 @@ public abstract class BaseCollectionSettingView extends BaseActivity {
     }
 
     public void setOnItemClick() {
+        if (subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
         subscription = adapter.getKeyClicked().subscribe(new Action1<Integer>() {
             @Override
             public void call(Integer integer) {
