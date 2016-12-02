@@ -46,6 +46,7 @@ public class GridFavoriteSettingModel extends BaseCollectionSettingModel {
                 collection.position = Collection.POSITION_TRIGGER;
                 collection.marginHorizontal = Cons.DEFAULT_FAVORITE_GRID_HORIZONTAL_MARGIN;
                 collection.marginVertical = Cons.DEFAULT_FAVORITE_GRID_VERTICAL_MARGIN;
+                collection.space = Cons.DEFAULT_FAVORITE_GRID_SPACE;
                 Collection realmCollection = realm.copyToRealm(collection);
 
                 for (int i = 0; i < collection.rowsCount * collection.columnCount; i++) {

@@ -81,9 +81,11 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
         updateTextValue();
     }
 
-
-
-
+    @Override
+    public void onSpinnerItemSelect(String itemLabel) {
+        super.onSpinnerItemSelect(itemLabel);
+        setRecyclerView();
+    }
 
     public void onSetPosition(int position) {
         getGridModel().setPosition(position);
