@@ -6,7 +6,7 @@ import org.de_studio.recentappswitcher.base.BasePresenter;
  * Created by HaiNguyen on 11/26/16.
  */
 
-public abstract class BaseCollectionSettingPresenter extends BasePresenter<BaseCollectionSettingView, BaseCollectionSettingModel> {
+public abstract class BaseCollectionSettingPresenter extends BasePresenter< BaseCollectionSettingView, BaseCollectionSettingModel> {
     private static final String TAG = BaseCollectionSettingPresenter.class.getSimpleName();
 
     public BaseCollectionSettingPresenter(BaseCollectionSettingModel model) {

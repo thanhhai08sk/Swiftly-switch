@@ -2611,8 +2611,9 @@ public  class Utility {
         View view = View.inflate(context, R.layout.dialog_with_seek_bar, null);
         SeekBar seekBar = (SeekBar) view.findViewById(R.id.seek_bar);
         final TextView value = (TextView) view.findViewById(R.id.value);
-        value.setText(current + unit);
+        value.setText(current  + unit);
         seekBar.setProgress(current - min);
+        seekBar.setMax(max - min);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChanged;
             @Override
