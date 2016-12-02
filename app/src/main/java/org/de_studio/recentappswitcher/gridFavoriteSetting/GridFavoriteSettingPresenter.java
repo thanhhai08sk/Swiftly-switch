@@ -52,6 +52,7 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
                     @Override
                     public void call(Integer integer) {
                         getGridModel().setShortcutsSpace(integer);
+                        getGridView().setShorcutsSpace(integer);
                     }
                 })
         );
