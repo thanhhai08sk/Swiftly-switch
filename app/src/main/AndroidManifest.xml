@@ -238,7 +238,7 @@
 
         <activity
             android:name=".folderSetting.FolderSettingView"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme" />
 
         <service
             android:name=".dadaSetup.DataSetupService"

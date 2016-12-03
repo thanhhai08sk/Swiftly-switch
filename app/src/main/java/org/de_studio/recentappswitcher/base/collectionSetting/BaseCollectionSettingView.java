@@ -19,6 +19,7 @@ import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
+import org.de_studio.recentappswitcher.folderSetting.FolderSettingView;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.setItems.SetItemsView;
@@ -168,6 +169,10 @@ public abstract class BaseCollectionSettingView extends BaseActivity {
 
     public void openSetItems(int slotIndex, String collectionId) {
         startActivity(SetItemsView.getIntent(this,SetItemsView.ITEMS_TYPE_STAGE_1,slotIndex,collectionId,null));
+    }
+
+    public void openSetFolder(String folderId) {
+        startActivity(FolderSettingView.getIntent(this, folderId));
     }
 
     public void showChooseSizeDialog() {

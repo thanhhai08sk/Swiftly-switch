@@ -1,5 +1,7 @@
 package org.de_studio.recentappswitcher.folderSetting;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 
@@ -145,6 +147,12 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
     @OnClick(R.id.fab)
     void onFabClick(){
         addItemSubject.onNext(null);
+    }
+
+    public static Intent getIntent(Context context, String folderId) {
+        Intent intent = new Intent(context, FolderSettingView.class);
+        intent.putExtra(Cons.SLOT_ID, folderId);
+        return intent;
     }
 
 }

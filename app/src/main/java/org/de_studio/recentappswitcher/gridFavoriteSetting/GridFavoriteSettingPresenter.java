@@ -72,8 +72,9 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
 
     @Override
     public void onSlotClick(int slotIndex) {
-        if (model.getCurrentCollection().slots.get(slotIndex).type.equals(Slot.TYPE_FOLDER)) {
-            //// TODO: 12/2/16 open folder setting
+        Slot slot = model.getSlots().get(slotIndex);
+        if (slot.type.equals(Slot.TYPE_FOLDER)) {
+            view.openSetFolder(slot.slotId);
         } else {
             getGridView().showChooseBetweenSetFolderAndSetItems(slotIndex);
         }
