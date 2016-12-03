@@ -1,7 +1,10 @@
 package org.de_studio.recentappswitcher.dagger;
 
+import android.support.annotation.Nullable;
+
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.base.adapter.ItemsListWithCheckBoxAdapter;
+import org.de_studio.recentappswitcher.base.addItemsToFolder.BaseAddItemsToFolderPresenter;
 import org.de_studio.recentappswitcher.folderSetting.addAppToFolder.AddAppToFolderPresenter;
 import org.de_studio.recentappswitcher.folderSetting.addAppToFolder.AddAppToFolderView;
 
@@ -25,13 +28,13 @@ public class AddAppsToFolderModule {
 
     @Provides
     @Singleton
-    AddAppToFolderPresenter presenter(){
+    BaseAddItemsToFolderPresenter presenter(){
         return new AddAppToFolderPresenter(slotId);
     }
 
     @Provides
     @Singleton
-    ItemsListWithCheckBoxAdapter adapter(IconPackManager.IconPack iconPack){
+    ItemsListWithCheckBoxAdapter adapter(@Nullable IconPackManager.IconPack iconPack){
         return new ItemsListWithCheckBoxAdapter(view.getActivity(), null, view.getActivity().getPackageManager(), iconPack, null);
     }
 }
