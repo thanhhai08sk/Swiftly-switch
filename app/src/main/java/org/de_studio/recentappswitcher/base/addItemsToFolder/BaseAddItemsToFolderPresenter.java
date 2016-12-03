@@ -38,7 +38,7 @@ public abstract class BaseAddItemsToFolderPresenter extends BasePresenter<BaseAd
         view.setProgressBar(true);
         results = getItemRealmResult();
         if (results != null) {
-            view.setAdapter(results);
+            view.setAdapter(results, folderItems);
             results.addChangeListener(new RealmChangeListener<RealmResults<Item>>() {
                 @Override
                 public void onChange(RealmResults<Item> element) {
@@ -50,7 +50,7 @@ public abstract class BaseAddItemsToFolderPresenter extends BasePresenter<BaseAd
         }
 
         addSubscription(
-                view.onAddItemToFolder().subscribe(new Action1<Item>() {
+                view.onSetItem().subscribe(new Action1<Item>() {
                     @Override
                     public void call(final Item item) {
                         realm.executeTransaction(new Realm.Transaction() {
@@ -58,21 +58,7 @@ public abstract class BaseAddItemsToFolderPresenter extends BasePresenter<BaseAd
                             public void execute(Realm realm) {
                                 if (!folderItems.contains(item)) {
                                     folderItems.add(item);
-                                }
-                            }
-                        });
-                    }
-                })
-        );
-
-        addSubscription(
-                view.onRemoveItemFromFolder().subscribe(new Action1<Item>() {
-                    @Override
-                    public void call(final Item item) {
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                if (folderItems.contains(item)) {
+                                } else {
                                     folderItems.remove(item);
                                 }
                             }
@@ -80,6 +66,7 @@ public abstract class BaseAddItemsToFolderPresenter extends BasePresenter<BaseAd
                     }
                 })
         );
+
     }
 
     private void loadFolderItems() {
@@ -107,11 +94,9 @@ public abstract class BaseAddItemsToFolderPresenter extends BasePresenter<BaseAd
 
         void setProgressBar(boolean visible);
 
-        void setAdapter(OrderedRealmCollection<Item> result);
+        void setAdapter(OrderedRealmCollection<Item> result, RealmList<Item> folderItems);
 
-        PublishSubject<Item> onAddItemToFolder();
-
-        PublishSubject<Item> onRemoveItemFromFolder();
+        PublishSubject<Item> onSetItem();
 
     }
 }

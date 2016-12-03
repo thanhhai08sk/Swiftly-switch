@@ -39,7 +39,7 @@ public class ChooseAppView extends BaseChooseItemView{
         task.execute();
     }
 
-    static class LoadAppsTask extends AsyncTask<Void, Void, Void> {
+    public static class LoadAppsTask extends AsyncTask<Void, Void, Void> {
         WeakReference<PackageManager> packageManagerWeakReference;
 
         public LoadAppsTask(WeakReference<PackageManager> packageManagerWeakReference) {
