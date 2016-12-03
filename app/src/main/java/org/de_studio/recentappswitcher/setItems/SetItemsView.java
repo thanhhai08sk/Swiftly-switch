@@ -38,7 +38,7 @@ public class SetItemsView extends BaseActivity<SetItemsView.Subjects> {
     public static final String KEY_ITEMS_TYPE = "itemsType";
     public static final String KEY_ITEM_INDEX = "itemIndex";
     public static final String KEY_COLLECTION_ID = "collectionId";
-    public static final String KEY_SLOT_ID = "slotId";//in case of folder
+    public static final String KEY_SLOT_ID = "folderId";//in case of folder
 
     @BindView(R.id.view_pager)
     ViewPager viewPager;

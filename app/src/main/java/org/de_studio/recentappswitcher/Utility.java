@@ -2647,6 +2647,20 @@ public  class Utility {
 
     }
 
+    public static void showDialogWithOptionToChoose(Context context, int titleId, CharSequence[] options, final PublishSubject<Void>[] subjects) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        if (titleId>0) {
+            builder.setTitle(titleId);
+        }
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        subjects[which].onNext(null);
+                    }
+                });
+        builder.create().show();
+    }
+
 
 
 

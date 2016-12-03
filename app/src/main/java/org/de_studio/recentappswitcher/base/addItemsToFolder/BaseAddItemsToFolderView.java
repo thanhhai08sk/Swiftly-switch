@@ -48,14 +48,6 @@ public class BaseAddItemsToFolderView extends DialogFragment implements BaseAddI
     protected String slotId;
     Unbinder unbinder;
 
-    public static BaseAddItemsToFolderView newInstance(String slotId) {
-
-        Bundle args = new Bundle();
-        args.putString(Cons.SLOT_ID, slotId);
-        BaseAddItemsToFolderView fragment = new BaseAddItemsToFolderView();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

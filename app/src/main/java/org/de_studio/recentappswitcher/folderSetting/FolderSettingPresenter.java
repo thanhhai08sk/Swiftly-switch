@@ -2,7 +2,9 @@ package org.de_studio.recentappswitcher.folderSetting;
 
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.PresenterView;
+import org.de_studio.recentappswitcher.model.Item;
 
+import io.realm.OrderedRealmCollection;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 
@@ -18,22 +20,80 @@ public class FolderSettingPresenter extends BasePresenter<FolderSettingPresenter
     @Override
     public void onViewAttach(final View view) {
         super.onViewAttach(view);
-
+        model.setup();
+        view.setAdapter(model.getFolderItems());
         addSubscription(
-                view.onAddItem().subscribe(new Action1<Void>() {
+                view.onAddItemToFolder().subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        view.openSetItems();
+                        view.chooseTypeOfItemsToAdd();
                     }
                 })
         );
 
+        addSubscription(
+                view.onAddApps().subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        view.addApps();
+                    }
+                })
+        );
+
+        addSubscription(
+                view.onAddActions().subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        view.addActions();
+                    }
+                })
+        );
+
+        addSubscription(
+                view.onAddContacts().subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        view.addContacts();
+                    }
+                })
+        );
+
+        addSubscription(
+                view.onAddShortcuts().subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        view.addShortcuts();
+                    }
+                })
+        );
+
+
     }
 
     public interface View extends PresenterView {
-        PublishSubject<Void> onAddItem();
+        PublishSubject<Void> onAddItemToFolder();
 
-        void openSetItems();
+        PublishSubject<Void> onAddApps();
+
+        PublishSubject<Void> onAddActions();
+
+        PublishSubject<Void> onAddContacts();
+
+        PublishSubject<Void> onAddShortcuts();
+
+
+        void chooseTypeOfItemsToAdd();
+
+        void addApps();
+
+        void addActions();
+
+        void addContacts();
+
+        void addShortcuts();
+
+
+        void setAdapter(OrderedRealmCollection<Item> folderItems);
 
     }
 }

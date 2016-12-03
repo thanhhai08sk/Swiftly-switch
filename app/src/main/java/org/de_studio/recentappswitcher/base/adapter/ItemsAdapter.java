@@ -1,4 +1,4 @@
-package org.de_studio.recentappswitcher.base;
+package org.de_studio.recentappswitcher.base.adapter;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -15,7 +15,7 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.model.Slot;
+import org.de_studio.recentappswitcher.model.Item;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
@@ -23,42 +23,43 @@ import rx.Observable;
 import rx.subjects.PublishSubject;
 
 /**
- * Created by HaiNguyen on 11/12/16.
+ * Created by HaiNguyen on 12/3/16.
  */
 
-public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.ViewHolder> {
-    private static final String TAG = SlotsAdapter.class.getSimpleName();
+public class ItemsAdapter extends RealmRecyclerViewAdapter<Item,ItemsAdapter
+        .ViewHolder> {
+    private static final String TAG = ItemsAdapter.class.getSimpleName();
     PackageManager packageManager;
     IconPackManager.IconPack iconPack;
-    private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
+    private final PublishSubject<Item> onClickSubject = PublishSubject.create();
     int itemType;
 
 
-    public SlotsAdapter(@NonNull Context context, @Nullable OrderedRealmCollection data, boolean autoUpdate, IconPackManager.IconPack iconPack, int itemType) {
+    public ItemsAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<Item> data, boolean autoUpdate, PackageManager packageManager, IconPackManager.IconPack iconPack, int itemType) {
         super(context, data, autoUpdate);
+        this.packageManager = packageManager;
         this.iconPack = iconPack;
-        packageManager = context.getPackageManager();
         this.itemType = itemType;
     }
 
-
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final Slot slot = getItem(position);
-        if (slot != null) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        final Item item = getItem(position);
+        if (item != null) {
             switch (itemType) {
                 case Cons.ITEM_TYPE_ICON_LABEL:
-                    Utility.setSlotLabel(slot, context, holder.label);
+                    holder.label.setText(item.label);
                     break;
             }
-            Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack);
+            Utility.setItemIcon(item,context,holder.icon,packageManager, iconPack);
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onClickSubject.onNext(holder.getAdapterPosition());
+                    onClickSubject.onNext(item);
                 }
             });
         }
+
     }
 
     @Override
@@ -73,8 +74,8 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
                 break;
         }
         return new ViewHolder(view);
-    }
 
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View view;
@@ -87,7 +88,7 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
             icon = (ImageView) view.findViewById(R.id.item_icon);
         }
     }
-    public Observable<Integer> getKeyClicked() {
+    public Observable<Item> getKeyClicked() {
         return onClickSubject.asObservable();
     }
 
