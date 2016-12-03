@@ -236,6 +236,10 @@
             android:name=".setItems.SetItemsView"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name=".folderSetting.FolderSettingView"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <service
             android:name=".dadaSetup.DataSetupService"
             android:exported="false"/>

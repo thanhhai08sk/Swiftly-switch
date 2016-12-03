@@ -9,6 +9,9 @@ import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.adapter.ItemsAdapter;
+import org.de_studio.recentappswitcher.dagger.AppModule;
+import org.de_studio.recentappswitcher.dagger.DaggerFolderSettingComponent;
+import org.de_studio.recentappswitcher.dagger.FolderSettingModule;
 import org.de_studio.recentappswitcher.folderSetting.addAppToFolder.AddAppToFolderView;
 import org.de_studio.recentappswitcher.model.Item;
 
@@ -49,7 +52,10 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
 
     @Override
     protected void inject() {
-
+        DaggerFolderSettingComponent.builder()
+                .appModule(new AppModule(this))
+                .folderSettingModule(new FolderSettingModule(this,folderId))
+                .build().inject(this);
     }
 
     @Override
