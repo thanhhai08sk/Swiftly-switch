@@ -16,22 +16,24 @@ public class FolderSettingPresenter extends BasePresenter<FolderSettingPresenter
     }
 
     @Override
-    public void onViewAttach(View view) {
+    public void onViewAttach(final View view) {
         super.onViewAttach(view);
 
         addSubscription(
                 view.onAddItem().subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-
+                        view.openSetItems();
                     }
                 })
         );
+
     }
 
     public interface View extends PresenterView {
         PublishSubject<Void> onAddItem();
-        void openSetItems
+
+        void openSetItems();
 
     }
 }
