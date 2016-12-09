@@ -4,17 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:mContext="org.de_studio.recentappswitcher.favoriteShortcut.SetFolderActivity">
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/list_view"
+        android:id="@+id/recycler_view"
         />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
         android:src="@android:drawable/ic_input_add" />
     <ImageButton
         android:layout_width="48dp"

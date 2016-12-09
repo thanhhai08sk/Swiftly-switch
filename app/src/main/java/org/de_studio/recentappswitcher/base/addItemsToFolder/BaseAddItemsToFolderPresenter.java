@@ -1,5 +1,7 @@
 package org.de_studio.recentappswitcher.base.addItemsToFolder;
 
+import android.util.Log;
+
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.base.BasePresenter;
@@ -20,6 +22,7 @@ import rx.subjects.PublishSubject;
  */
 
 public abstract class BaseAddItemsToFolderPresenter extends BasePresenter<BaseAddItemsToFolderPresenter.View, BaseModel> {
+    private static final String TAG = BaseAddItemsToFolderPresenter.class.getSimpleName();
 
     protected RealmResults<Item> results;
     protected Realm realm = Realm.getDefaultInstance();
@@ -56,6 +59,7 @@ public abstract class BaseAddItemsToFolderPresenter extends BasePresenter<BaseAd
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
+                                Log.e(TAG, "execute: set item " + item.itemId);
                                 if (!folderItems.contains(item)) {
                                     folderItems.add(item);
                                 } else {

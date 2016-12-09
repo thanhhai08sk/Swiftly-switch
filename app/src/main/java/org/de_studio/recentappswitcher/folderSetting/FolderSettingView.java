@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
@@ -19,6 +22,7 @@ import org.de_studio.recentappswitcher.model.Item;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 import io.realm.OrderedRealmCollection;
 import rx.subjects.PublishSubject;
@@ -31,7 +35,8 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
     private static final String TAG = FolderSettingView.class.getSimpleName();
     private String folderId;
 
-
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
 
 
     @Inject
@@ -43,6 +48,9 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
     protected void onCreate(Bundle savedInstanceState) {
         folderId = getIntent().getStringExtra(Cons.SLOT_ID);
         super.onCreate(savedInstanceState);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
     }
 
     PublishSubject<Void> addItemSubject = PublishSubject.create();
@@ -67,7 +75,7 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_set_folder;
+        return R.layout.folder_setting_view;
     }
 
     @Override
@@ -136,6 +144,7 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
 
     @Override
     public void setAdapter(OrderedRealmCollection<Item> folderItems) {
+        Log.e(TAG, "setAdapter: size =   " + folderItems.size());
         adapter.updateData(folderItems);
     }
 

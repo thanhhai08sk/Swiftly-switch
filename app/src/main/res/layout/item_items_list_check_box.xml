@@ -30,6 +30,8 @@
         android:layout_height="wrap_content"
         android:paddingEnd="16dp"
         android:paddingStart="8dp"
+        android:clickable="false"
+        android:focusable="false"
 
         />
 
