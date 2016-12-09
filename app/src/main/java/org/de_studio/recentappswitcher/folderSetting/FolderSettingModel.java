@@ -33,6 +33,18 @@ public class FolderSettingModel extends BaseModel {
         return folder.items;
     }
 
+    public void moveItem(int from, int to) {
+        realm.beginTransaction();
+        folder.items.move(from,to);
+        realm.commitTransaction();
+    }
+
+    public void removeItem(int position) {
+        realm.beginTransaction();
+        folder.items.remove(position);
+        realm.commitTransaction();
+    }
+
 
 
     @Override

@@ -36,14 +36,14 @@ public class ItemsAdapter extends RealmRecyclerViewAdapter<Item,ItemsAdapter
 
 
     public ItemsAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<Item> data, boolean autoUpdate, PackageManager packageManager, IconPackManager.IconPack iconPack, int itemType) {
-        super(context, data, autoUpdate);
+        super(context, data, false);
         this.packageManager = packageManager;
         this.iconPack = iconPack;
         this.itemType = itemType;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final Item item = getItem(position);
         if (item != null) {
             switch (itemType) {
@@ -58,6 +58,18 @@ public class ItemsAdapter extends RealmRecyclerViewAdapter<Item,ItemsAdapter
                     onClickSubject.onNext(item);
                 }
             });
+
+
+//            holder.view.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View v) {
+//                    Log.e(TAG, "onLongClick: " + holder.getAdapterPosition());
+//                    ClipData data = ClipData.newPlainText("","");
+//                    View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+//                    v.startDragAndDrop(data, shadowBuilder, v, 0);
+//                    return true;
+//                }
+//            });
         }
 
     }

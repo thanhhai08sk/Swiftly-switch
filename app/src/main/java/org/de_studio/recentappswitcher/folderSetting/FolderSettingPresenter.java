@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.folderSetting;
 
 import org.de_studio.recentappswitcher.base.BasePresenter;
+import org.de_studio.recentappswitcher.base.DragAndDropCallback;
 import org.de_studio.recentappswitcher.base.PresenterView;
 import org.de_studio.recentappswitcher.model.Item;
 
@@ -13,6 +14,7 @@ import rx.subjects.PublishSubject;
  */
 
 public class FolderSettingPresenter extends BasePresenter<FolderSettingPresenter.View, FolderSettingModel> {
+    private static final String TAG = FolderSettingPresenter.class.getSimpleName();
     public FolderSettingPresenter(FolderSettingModel model) {
         this.model = model;
     }
@@ -67,6 +69,48 @@ public class FolderSettingPresenter extends BasePresenter<FolderSettingPresenter
                 })
         );
 
+        addSubscription(
+                view.onMoveItem().subscribe(new Action1<DragAndDropCallback.MoveData>() {
+                    @Override
+                    public void call(DragAndDropCallback.MoveData moveData) {
+                        model.moveItem(moveData.from, moveData.to);
+                        view.notifyItemMove(moveData.from,moveData.to);
+
+                    }
+                })
+        );
+
+        addSubscription(
+                view.onDropItem().subscribe(new Action1<DragAndDropCallback.DropData>() {
+                    @Override
+                    public void call(DragAndDropCallback.DropData dropData) {
+                        if (dropData.dropY > view.getDeleteButtonY()) {
+                            model.removeItem(dropData.position);
+                            view.notifyItemRemove(dropData.position);
+                        }
+                        view.setDeleteButtonVisibility(false);
+                    }
+                })
+        );
+
+        addSubscription(
+                view.onCurrentlyDrag().subscribe(new Action1<DragAndDropCallback.Coord>() {
+                    @Override
+                    public void call(DragAndDropCallback.Coord coord) {
+                        view.setDeleteButtonVisibility(true);
+                        if (coord.y > view.getDeleteButtonY()) {
+                            view.setDeleteButtonColor(true);
+                        } else {
+                            view.setDeleteButtonColor(false);
+                        }
+                    }
+                })
+        );
+
+
+
+
+
 
     }
 
@@ -81,6 +125,12 @@ public class FolderSettingPresenter extends BasePresenter<FolderSettingPresenter
 
         PublishSubject<Void> onAddShortcuts();
 
+        PublishSubject<DragAndDropCallback.MoveData> onMoveItem();
+
+        PublishSubject<DragAndDropCallback.DropData> onDropItem();
+
+        PublishSubject<DragAndDropCallback.Coord> onCurrentlyDrag();
+
 
         void chooseTypeOfItemsToAdd();
 
@@ -94,6 +144,16 @@ public class FolderSettingPresenter extends BasePresenter<FolderSettingPresenter
 
 
         void setAdapter(OrderedRealmCollection<Item> folderItems);
+
+        void notifyItemMove(int from, int to);
+
+        void notifyItemRemove(int position);
+
+        void setDeleteButtonVisibility(boolean visible);
+
+        void setDeleteButtonColor(boolean redColor);
+
+        float getDeleteButtonY();
 
     }
 }

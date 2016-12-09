@@ -6,13 +6,17 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.BasePresenter;
+import org.de_studio.recentappswitcher.base.DragAndDropCallback;
 import org.de_studio.recentappswitcher.base.adapter.ItemsAdapter;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerFolderSettingComponent;
@@ -40,12 +44,17 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-
+    @BindView(R.id.delete_image_button)
+    ImageButton deleteButton;
 
     @Inject
     FolderSettingPresenter presenter;
     @Inject
     ItemsAdapter adapter;
+
+    PublishSubject<DragAndDropCallback.MoveData> moveItemSubject = PublishSubject.create();
+    PublishSubject<DragAndDropCallback.DropData> dropItemSubject = PublishSubject.create();
+    PublishSubject<DragAndDropCallback.Coord> currentlyDragSubject = PublishSubject.create();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +62,12 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
         super.onCreate(savedInstanceState);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new DragAndDropCallback(moveItemSubject
+                , dropItemSubject
+                , currentlyDragSubject));
+
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
 
     }
 
@@ -114,6 +129,47 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
     @Override
     public PublishSubject<Void> onAddShortcuts() {
         return addShortcutsSubject;
+    }
+
+    @Override
+    public PublishSubject<DragAndDropCallback.MoveData> onMoveItem() {
+        return moveItemSubject;
+    }
+
+    @Override
+    public PublishSubject<DragAndDropCallback.Coord> onCurrentlyDrag() {
+        return currentlyDragSubject;
+    }
+
+    @Override
+    public PublishSubject<DragAndDropCallback.DropData> onDropItem() {
+        return dropItemSubject;
+    }
+
+    @Override
+    public float getDeleteButtonY() {
+        return deleteButton.getY();
+    }
+
+    @Override
+    public void setDeleteButtonVisibility(boolean visible) {
+        deleteButton.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    @Override
+    public void setDeleteButtonColor(boolean redColor) {
+        deleteButton.setBackgroundResource(redColor ? R.drawable.delete_button_red : R.drawable.delete_button_normal);
+    }
+
+    @Override
+    public void notifyItemMove(int from, int to) {
+        adapter.notifyItemMoved(from, to);
+    }
+
+    @Override
+    public void notifyItemRemove(int position) {
+//        adapter.notifyItemRemoved(position);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
