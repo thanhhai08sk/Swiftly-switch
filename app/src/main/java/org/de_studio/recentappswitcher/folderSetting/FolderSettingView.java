@@ -19,6 +19,7 @@ import org.de_studio.recentappswitcher.dagger.DaggerFolderSettingComponent;
 import org.de_studio.recentappswitcher.dagger.FolderSettingModule;
 import org.de_studio.recentappswitcher.folderSetting.addActionToFolder.AddActionToFolderView;
 import org.de_studio.recentappswitcher.folderSetting.addAppToFolder.AddAppToFolderView;
+import org.de_studio.recentappswitcher.folderSetting.addContactToFolder.AddContactToFolderView;
 import org.de_studio.recentappswitcher.model.Item;
 
 import javax.inject.Inject;
@@ -137,6 +138,9 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
 
     @Override
     public void addContacts() {
+        FragmentManager fragmentManager1 = getSupportFragmentManager();
+        AddContactToFolderView newFragment1 = AddContactToFolderView.newInstance(folderId);
+        newFragment1.show(fragmentManager1, "addContactToFolder");
 
     }
 
