@@ -549,17 +549,15 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
 
 
-    public ArrayList<String> getRecentApp2() {
+    public ArrayList<String> getRecentApp() {
         if (excludeSet == null) {
             excludeSet = new HashSet<>();
         }
-        Log.e(TAG, "getRecentApp2: launcher = " + launcherPackageName);
+        Log.e(TAG, "getRecentApp: launcher = " + launcherPackageName);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-            int numOfTask;
-            if (launcherPackageName != null) {
-                numOfTask = 8;
-            } else numOfTask = 7;
+            int numOfTask = 13;
+
             List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
             ArrayList<String> tempPackageNameKK = new ArrayList<String>();
             for (int i = 0; i < list.size(); i++) {
@@ -621,8 +619,8 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 //                    }
 //                }
 //            }
-            Log.e(TAG, "getRecentApp2: time to get recent  = " + (System.currentTimeMillis() - timeStart));
-            Log.e(TAG, "getRecentApp2: tem size = " + tempPackageName.size());
+            Log.e(TAG, "getRecentApp: time to get recent  = " + (System.currentTimeMillis() - timeStart));
+            Log.e(TAG, "getRecentApp: tem size = " + tempPackageName.size());
             return tempPackageName;
 
         }

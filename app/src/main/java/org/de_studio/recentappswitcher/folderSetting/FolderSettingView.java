@@ -17,6 +17,7 @@ import org.de_studio.recentappswitcher.base.adapter.ItemsAdapter;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerFolderSettingComponent;
 import org.de_studio.recentappswitcher.dagger.FolderSettingModule;
+import org.de_studio.recentappswitcher.folderSetting.addActionToFolder.AddActionToFolderView;
 import org.de_studio.recentappswitcher.folderSetting.addAppToFolder.AddAppToFolderView;
 import org.de_studio.recentappswitcher.model.Item;
 
@@ -124,12 +125,14 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
     public void addApps() {
         FragmentManager fragmentManager1 = getSupportFragmentManager();
         AddAppToFolderView newFragment1 = AddAppToFolderView.newInstance(folderId);
-        newFragment1.show(fragmentManager1, "addActionToFolder");
+        newFragment1.show(fragmentManager1, "addAppToFolder");
     }
 
     @Override
     public void addActions() {
-
+        FragmentManager fragmentManager1 = getSupportFragmentManager();
+        AddActionToFolderView newFragment1 = AddActionToFolderView.newInstance(folderId);
+        newFragment1.show(fragmentManager1, "addActionToFolder");
     }
 
     @Override

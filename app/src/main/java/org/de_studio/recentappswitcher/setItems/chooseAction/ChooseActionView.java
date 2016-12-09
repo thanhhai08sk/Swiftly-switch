@@ -38,7 +38,7 @@ public class ChooseActionView extends BaseChooseItemView{
         task.execute();
     }
 
-    static class LoadActionsTask extends AsyncTask<Void, Void, Void> {
+    public static class LoadActionsTask extends AsyncTask<Void, Void, Void> {
         WeakReference<Context> contextWeakReference;
 
         public LoadActionsTask(WeakReference<Context> contextWeakReference) {

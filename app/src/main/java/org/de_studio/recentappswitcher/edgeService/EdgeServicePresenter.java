@@ -55,7 +55,7 @@ public class EdgeServicePresenter {
         setCurrentPositionAndMode(edgeId);
         xInit = model.getXInit(currentPosition, x, view.getWindowSize().x);
         yInit = model.getYInit(currentPosition, y, view.getWindowSize().y);
-        ArrayList<String> tempPackages = view.getRecentApp2();
+        ArrayList<String> tempPackages = view.getRecentApp();
         view.showBackground();
         switch (currentEdgeMode) {
             case Cons.MODE_ONLY_FAVORITE:
