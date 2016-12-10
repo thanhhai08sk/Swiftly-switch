@@ -4,7 +4,6 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingModel;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
-import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingView;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
@@ -28,7 +27,7 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     }
 
     @Override
-    public void onViewAttach(BaseCollectionSettingView view) {
+    public void onViewAttach(View view) {
         super.onViewAttach(view);
         addSubscription(
                 setMarginHorizontalSubject.subscribe(new Action1<Integer>() {
@@ -64,8 +63,8 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
 
     @Override
     public void setRecyclerView() {
-        view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_GRID, Cons.DEFAULT_FAVORITE_GRID_COLUMN_COUNT)
-                , new GridSpacingItemDecoration(Utility.dpToPixel(view, model.getCurrentCollection().space)));
+        getGridView().setRecyclerView(model.getSlots(), getGridView().getLayoutManager(Cons.LAYOUT_TYPE_GRID, Cons.DEFAULT_FAVORITE_GRID_COLUMN_COUNT)
+                , new GridSpacingItemDecoration(Utility.dpToPixel(getGridView(), model.getCurrentCollection().space)));
         getGridView().setChoosingMargins(model.getCurrentCollection().position == Collection.POSITION_TRIGGER);
         updateTextValue();
     }
@@ -74,7 +73,7 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     public void onSlotClick(int slotIndex) {
         Slot slot = model.getSlots().get(slotIndex);
         if (slot.type.equals(Slot.TYPE_FOLDER)) {
-            view.openSetFolder(slot.slotId);
+            getGridView().openSetFolder(slot.slotId);
         } else {
             getGridView().showChooseBetweenSetFolderAndSetItems(slotIndex);
         }

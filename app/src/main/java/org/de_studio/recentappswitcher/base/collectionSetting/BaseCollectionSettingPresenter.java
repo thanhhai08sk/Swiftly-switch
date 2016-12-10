@@ -1,10 +1,13 @@
 package org.de_studio.recentappswitcher.base.collectionSetting;
 
+import android.support.v7.widget.RecyclerView;
+
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.DragAndDropCallback;
 import org.de_studio.recentappswitcher.base.PresenterView;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
+import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmResults;
@@ -18,6 +21,7 @@ import rx.subjects.PublishSubject;
 public abstract class BaseCollectionSettingPresenter extends BasePresenter< BaseCollectionSettingPresenter.View, BaseCollectionSettingModel> {
     private static final String TAG = BaseCollectionSettingPresenter.class.getSimpleName();
 
+    boolean onDragDrop = false;
     public BaseCollectionSettingPresenter(BaseCollectionSettingModel model) {
         this.model = model;
     }
@@ -49,6 +53,7 @@ public abstract class BaseCollectionSettingPresenter extends BasePresenter< Base
                             view.notifyItemRemove(dropData.position);
                         }
                         view.setDeleteButtonVisibility(false);
+                        onDragDrop = false;
                     }
                 })
         );
@@ -57,6 +62,7 @@ public abstract class BaseCollectionSettingPresenter extends BasePresenter< Base
                 view.onDragItem().subscribe(new Action1<DragAndDropCallback.Coord>() {
                     @Override
                     public void call(DragAndDropCallback.Coord coord) {
+                        onDragDrop = true;
                         view.setDeleteButtonVisibility(true);
                         if (view.isHoverOnDeleteButton(coord.x,coord.y)) {
                             view.setDeleteButtonColor(true);
@@ -66,6 +72,19 @@ public abstract class BaseCollectionSettingPresenter extends BasePresenter< Base
                     }
                 })
         );
+
+        addSubscription(
+                model.onCollectionChanged().subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        if (!onDragDrop) {
+                            view.notifyAdapter();
+                        }
+                    }
+                })
+        );
+
+
 
     }
 
@@ -119,6 +138,8 @@ public abstract class BaseCollectionSettingPresenter extends BasePresenter< Base
 
         void notifyItemRemove(int position);
 
+        void notifyAdapter();
+
         void setDeleteButtonVisibility(boolean visible);
 
         void setDeleteButtonColor(boolean red);
@@ -134,6 +155,10 @@ public abstract class BaseCollectionSettingPresenter extends BasePresenter< Base
         void openSetItems(int slotIndex, String collectionId);
 
         void showChooseSizeDialog();
+
+        void setRecyclerView(OrderedRealmCollection<Slot> slots, RecyclerView.LayoutManager layoutManager, GridSpacingItemDecoration decoration);
+
+        RecyclerView.LayoutManager getLayoutManager(int layoutType, int column);
 
 
     }

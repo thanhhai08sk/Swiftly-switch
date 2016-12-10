@@ -11,19 +11,23 @@ import java.util.Random;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmList;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by HaiNguyen on 11/26/16.
  */
 
-public abstract class BaseCollectionSettingModel extends BaseModel{
+public abstract class BaseCollectionSettingModel extends BaseModel implements RealmChangeListener<Collection> {
     private static final String TAG = BaseCollectionSettingModel.class.getSimpleName();
     protected Realm realm = Realm.getDefaultInstance();
     protected String collectionId;
     protected String defaultLabel;
     protected Collection collection;
+    PublishSubject<Void> collectionChangedSubject = PublishSubject.create();
 
     public BaseCollectionSettingModel(String defaultLabel, String collectionId) {
         this.defaultLabel = defaultLabel;
@@ -36,6 +40,12 @@ public abstract class BaseCollectionSettingModel extends BaseModel{
             createNewCollection();
             collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, getCollectionId()).findFirst();
         }
+        RealmObject.addChangeListener(collection,this);
+
+    }
+
+    public PublishSubject<Void> onCollectionChanged() {
+        return collectionChangedSubject;
     }
 
 
@@ -61,7 +71,11 @@ public abstract class BaseCollectionSettingModel extends BaseModel{
         if (collectionLabel != null) {
             Collection collectionWithLabel = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).equalTo(Cons.LABEL, collectionLabel).findFirst();
             if (collectionWithLabel != null) {
+                if (collection != null) {
+                    RealmObject.removeChangeListeners(collection);
+                }
                 collection = collectionWithLabel;
+                RealmObject.addChangeListener(collection, this);
                 collectionId = collection.collectionId;
             } else {
                 Log.e(TAG, "setCurrentCollection: no collection with this label found: " + collectionLabel);
@@ -122,6 +136,20 @@ public abstract class BaseCollectionSettingModel extends BaseModel{
 
     }
 
+    private Slot createNullSlot() {
+        Slot nullSlot = new Slot();
+        nullSlot.type = Slot.TYPE_NULL;
+        nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
+        return realm.copyToRealm(nullSlot);
+    }
+
+    private Slot createEmptySlot() {
+        Slot emptySlot = new Slot();
+        emptySlot.type = Slot.TYPE_EMPTY;
+        emptySlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
+        return realm.copyToRealm(emptySlot);
+    }
+
     private void removeSlot(final int position, final RealmList<Slot> slots) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -139,11 +167,31 @@ public abstract class BaseCollectionSettingModel extends BaseModel{
 
     public void removeItem(int position) {
         realm.beginTransaction();
+        Slot removeSlot = collection.slots.get(position);
         collection.slots.remove(position);
+        switch (removeSlot.type) {
+            case Slot.TYPE_NULL:
+                collection.slots.add(createEmptySlot());
+                removeSlot.deleteFromRealm();
+                break;
+            case Slot.TYPE_EMPTY:
+                collection.slots.add(createNullSlot());
+                removeSlot.deleteFromRealm();
+                break;
+
+            default:
+                collection.slots.add(createNullSlot());
+                break;
+        }
         realm.commitTransaction();
     }
 
     public void clear() {
         realm.close();
+    }
+
+    @Override
+    public void onChange(Collection element) {
+        collectionChangedSubject.onNext(null);
     }
 }

@@ -41,6 +41,11 @@ public class CircleFavoriteSettingView extends BaseCollectionSettingView {
                 .build().inject(this);
     }
 
+    @Override
+    public boolean isHoverOnDeleteButton(float x, float y) {
+        return  y > deleteButton.getY() - deleteButton.getHeight()*2;
+    }
+
 
 
     @OnClick(R.id.long_click_mode)

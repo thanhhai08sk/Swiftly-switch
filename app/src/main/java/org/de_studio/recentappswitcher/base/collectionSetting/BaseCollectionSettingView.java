@@ -53,7 +53,7 @@ public abstract class BaseCollectionSettingView extends BaseActivity implements 
     @BindView(R.id.recycler_view)
     protected RecyclerView recyclerView;
     @BindView(R.id.delete_image_button)
-    ImageButton deleteButton;
+    protected ImageButton deleteButton;
 
 
     @Inject
@@ -107,6 +107,12 @@ public abstract class BaseCollectionSettingView extends BaseActivity implements 
     @Override
     public void notifyItemRemove(int position) {
         adapter.notifyItemRemoved(position);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void notifyAdapter() {
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -121,7 +127,7 @@ public abstract class BaseCollectionSettingView extends BaseActivity implements 
 
     @Override
     public boolean isHoverOnDeleteButton(float x, float y) {
-        return (x > deleteButton.getX() - deleteButton.getWidth() && x < deleteButton.getX()) && y > deleteButton.getY() - deleteButton.getHeight() / 2;
+        return (x > deleteButton.getX() - deleteButton.getWidth()*2 && x < deleteButton.getX()) && y > deleteButton.getY() - deleteButton.getHeight()*2;
     }
 
     public void setSpinner(RealmResults<Collection> collections, Collection currentCollection) {
