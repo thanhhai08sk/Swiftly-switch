@@ -8,16 +8,19 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
+import android.widget.ImageButton;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.BasePresenter;
+import org.de_studio.recentappswitcher.base.DragAndDropCallback;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
 import org.de_studio.recentappswitcher.folderSetting.FolderSettingView;
 import org.de_studio.recentappswitcher.model.Collection;
@@ -37,17 +40,21 @@ import io.realm.OrderedRealmCollection;
 import io.realm.RealmResults;
 import rx.Subscription;
 import rx.functions.Action1;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by HaiNguyen on 11/26/16.
  */
 
-public abstract class BaseCollectionSettingView extends BaseActivity {
+public abstract class BaseCollectionSettingView extends BaseActivity implements BaseCollectionSettingPresenter.View {
     private static final String TAG = BaseCollectionSettingView.class.getSimpleName();
     @BindView(R.id.spinner)
     protected AppCompatSpinner spinner;
     @BindView(R.id.recycler_view)
     protected RecyclerView recyclerView;
+    @BindView(R.id.delete_image_button)
+    ImageButton deleteButton;
+
 
     @Inject
     protected BaseCollectionSettingPresenter presenter;
@@ -61,15 +68,61 @@ public abstract class BaseCollectionSettingView extends BaseActivity {
     protected String collectionId;
     protected GridLayoutManager manager;
 
+    PublishSubject<DragAndDropCallback.MoveData> moveItemSubject = PublishSubject.create();
+    PublishSubject<DragAndDropCallback.DropData> dropItemSubject = PublishSubject.create();
+    PublishSubject<DragAndDropCallback.Coord> dragItemSubject = PublishSubject.create();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         collectionId = getIntent().getStringExtra(Cons.COLLECTION_ID);
         super.onCreate(savedInstanceState);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new DragAndDropCallback(moveItemSubject
+                , dropItemSubject
+                , dragItemSubject));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
 
+    @Override
+    public PublishSubject<DragAndDropCallback.MoveData> onMoveItem() {
+        return moveItemSubject;
+    }
+
+    @Override
+    public PublishSubject<DragAndDropCallback.DropData> onDropItem() {
+        return dropItemSubject;
+    }
+
+    @Override
+    public PublishSubject<DragAndDropCallback.Coord> onDragItem() {
+        return dragItemSubject;
+    }
+
+    @Override
+    public void notifyItemMove(int from, int to) {
+        adapter.notifyItemMoved(from,to);
+    }
+
+    @Override
+    public void notifyItemRemove(int position) {
+        adapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void setDeleteButtonVisibility(boolean visible) {
+        deleteButton.setVisibility(visible? View.VISIBLE: View.INVISIBLE);
+    }
+
+    @Override
+    public void setDeleteButtonColor(boolean red) {
+        deleteButton.setBackgroundResource(red ? R.drawable.delete_button_red : R.drawable.delete_button_normal);
+    }
+
+    @Override
+    public boolean isHoverOnDeleteButton(float x, float y) {
+        return (x > deleteButton.getX() - deleteButton.getWidth() && x < deleteButton.getX()) && y > deleteButton.getY() - deleteButton.getHeight() / 2;
+    }
 
     public void setSpinner(RealmResults<Collection> collections, Collection currentCollection) {
 

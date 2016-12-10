@@ -131,6 +131,18 @@ public abstract class BaseCollectionSettingModel extends BaseModel{
         });
     }
 
+    public void moveItem(int from, int to) {
+        realm.beginTransaction();
+        collection.slots.move(from, to);
+        realm.commitTransaction();
+    }
+
+    public void removeItem(int position) {
+        realm.beginTransaction();
+        collection.slots.remove(position);
+        realm.commitTransaction();
+    }
+
     public void clear() {
         realm.close();
     }
