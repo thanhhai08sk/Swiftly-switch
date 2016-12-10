@@ -133,10 +133,6 @@ public abstract class BaseCollectionSettingPresenter extends BasePresenter< Base
 
         void openSetItems(int slotIndex, String collectionId);
 
-        void setSlotAsFolder(int slotIndex);
-
-        void setCurrentCollectionSize(int size);
-
         void showChooseSizeDialog();
 
 
