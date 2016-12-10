@@ -18,6 +18,7 @@ import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.model.Item;
 
 import io.realm.OrderedRealmCollection;
+import io.realm.RealmChangeListener;
 import io.realm.RealmRecyclerViewAdapter;
 import rx.Observable;
 import rx.subjects.PublishSubject;
@@ -33,6 +34,8 @@ public class ItemsAdapter extends RealmRecyclerViewAdapter<Item,ItemsAdapter
     IconPackManager.IconPack iconPack;
     private final PublishSubject<Item> onClickSubject = PublishSubject.create();
     int itemType;
+    private RealmChangeListener listener;
+
 
 
     public ItemsAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<Item> data, boolean autoUpdate, PackageManager packageManager, IconPackManager.IconPack iconPack, int itemType) {
@@ -40,6 +43,7 @@ public class ItemsAdapter extends RealmRecyclerViewAdapter<Item,ItemsAdapter
         this.packageManager = packageManager;
         this.iconPack = iconPack;
         this.itemType = itemType;
+
     }
 
     @Override

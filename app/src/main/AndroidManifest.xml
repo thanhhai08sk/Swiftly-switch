@@ -238,7 +238,9 @@
 
         <activity
             android:name=".folderSetting.FolderSettingView"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".gridFavoriteSetting.GridFavoriteSettingView"
+            />
 
         <service
             android:name=".dadaSetup.DataSetupService"

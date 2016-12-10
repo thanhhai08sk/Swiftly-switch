@@ -17,6 +17,7 @@ import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.DragAndDropCallback;
+import org.de_studio.recentappswitcher.base.OnDialogClosed;
 import org.de_studio.recentappswitcher.base.adapter.ItemsAdapter;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerFolderSettingComponent;
@@ -38,7 +39,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 12/2/16.
  */
 
-public class FolderSettingView extends BaseActivity implements FolderSettingPresenter.View {
+public class FolderSettingView extends BaseActivity implements FolderSettingPresenter.View, OnDialogClosed {
     private static final String TAG = FolderSettingView.class.getSimpleName();
     private String folderId;
 
@@ -67,6 +68,8 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
                 , currentlyDragSubject));
 
         itemTouchHelper.attachToRecyclerView(recyclerView);
+        setTitle(R.string.setting_shortcut_folder);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
     }
@@ -147,8 +150,8 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
     }
 
     @Override
-    public float getDeleteButtonY() {
-        return deleteButton.getY();
+    public float getDeleteButtonY()  {
+        return deleteButton.getY() - deleteButton.getHeight()/2;
     }
 
     @Override
@@ -230,5 +233,14 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
         intent.putExtra(Cons.SLOT_ID, folderId);
         return intent;
     }
+
+    @Override
+    public void dialogClosed() {
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+
 
 }

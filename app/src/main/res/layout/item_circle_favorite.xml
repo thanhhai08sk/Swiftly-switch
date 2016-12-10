@@ -5,6 +5,7 @@
     xmlns:tool="http://schemas.android.com/apk/res-auto"
     android:gravity="center_vertical"
     android:paddingTop="4dp"
+    android:background="?selectableItemBackground"
     android:paddingBottom="4dp"
     android:orientation="horizontal">
     <ImageView
