@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.DragAndDropCallback;
@@ -244,6 +245,11 @@ public abstract class BaseCollectionSettingView extends BaseActivity implements 
                     }
                 });
         builder.create().show();
+    }
+
+    @Override
+    public int dpToPixel(int dp) {
+        return Utility.dpToPixel(this, dp);
     }
 
     @Override

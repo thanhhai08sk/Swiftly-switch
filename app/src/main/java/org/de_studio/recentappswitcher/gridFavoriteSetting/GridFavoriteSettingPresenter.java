@@ -1,8 +1,6 @@
 package org.de_studio.recentappswitcher.gridFavoriteSetting;
 
 import org.de_studio.recentappswitcher.Cons;
-import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingModel;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
@@ -15,25 +13,25 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 11/26/16.
  */
 
-public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter {
+public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter<GridFavoriteSettingPresenter.View,GridFavoriteSettingModel> {
     private static final String TAG = GridFavoriteSettingPresenter.class.getSimpleName();
     private PublishSubject<Integer> setMarginHorizontalSubject = PublishSubject.create();
     private PublishSubject<Integer> setMarginVerticalSubject = PublishSubject.create();
     private PublishSubject<Integer> setShortcutsSpaceSubject = PublishSubject.create();
 
 
-    public GridFavoriteSettingPresenter(BaseCollectionSettingModel model) {
+    public GridFavoriteSettingPresenter(GridFavoriteSettingModel model) {
         super(model);
     }
 
     @Override
-    public void onViewAttach(View view) {
+    public void onViewAttach(final View view) {
         super.onViewAttach(view);
         addSubscription(
                 setMarginHorizontalSubject.subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
-                        getGridModel().setHorizontalMargin(integer);
+                        model.setHorizontalMargin(integer);
                         updateTextValue();
                     }
                 })
@@ -43,7 +41,7 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
                 setMarginVerticalSubject.subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
-                        getGridModel().setVerticalMargin(integer);
+                        model.setVerticalMargin(integer);
                         updateTextValue();
                     }
                 })
@@ -53,8 +51,8 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
                 setShortcutsSpaceSubject.subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
-                        getGridModel().setShortcutsSpace(integer);
-                        getGridView().setShorcutsSpace(integer);
+                        model.setShortcutsSpace(integer);
+                        view.setShorcutsSpace(integer);
                         updateTextValue();
                     }
                 })
@@ -63,9 +61,9 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
 
     @Override
     public void setRecyclerView() {
-        getGridView().setRecyclerView(model.getSlots(), getGridView().getLayoutManager(Cons.LAYOUT_TYPE_GRID, Cons.DEFAULT_FAVORITE_GRID_COLUMN_COUNT)
-                , new GridSpacingItemDecoration(Utility.dpToPixel(getGridView(), model.getCurrentCollection().space)));
-        getGridView().setChoosingMargins(model.getCurrentCollection().position == Collection.POSITION_TRIGGER);
+        view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_GRID, Cons.DEFAULT_FAVORITE_GRID_COLUMN_COUNT)
+                , new GridSpacingItemDecoration(view.dpToPixel(model.getCurrentCollection().space)));
+        view.setChoosingMargins(model.getCurrentCollection().position == Collection.POSITION_TRIGGER);
         updateTextValue();
     }
 
@@ -73,21 +71,21 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     public void onSlotClick(int slotIndex) {
         Slot slot = model.getSlots().get(slotIndex);
         if (slot.type.equals(Slot.TYPE_FOLDER)) {
-            getGridView().openSetFolder(slot.slotId);
+            view.openSetFolder(slot.slotId);
         } else {
-            getGridView().showChooseBetweenSetFolderAndSetItems(slotIndex);
+            view.showChooseBetweenSetFolderAndSetItems(slotIndex);
         }
     }
 
     public void onSetColumnsCount(int columnsCount) {
-        getGridModel().setColumnsCount(columnsCount);
-        getGridView().setGridColumn(columnsCount);
+        model.setColumnsCount(columnsCount);
+        view.setGridColumn(columnsCount);
         updateTextValue();
 
     }
 
     public void onSetRowsCount(int rowsCount) {
-        getGridModel().setRowsCount(rowsCount);
+        model.setRowsCount(rowsCount);
         updateTextValue();
     }
 
@@ -98,59 +96,82 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     }
 
     public void onSetPosition(int position) {
-        getGridModel().setPosition(position);
+        model.setPosition(position);
         switch (position) {
             case Collection.POSITION_TRIGGER:
-                getGridView().setChoosingMargins(true);
+                view.setChoosingMargins(true);
                 break;
             case Collection.POSITION_CENTER:
-                getGridView().setChoosingMargins(false);
+                view.setChoosingMargins(false);
                 break;
         }
         updateTextValue();
     }
 
     public void onSetShortcutsSpaceClick() {
-        getGridView().showChooseShortcutSpace(Cons.FAVORITE_GRID_MIN_SHORTCUTS_SPACE
+        view.showChooseShortcutSpace(Cons.FAVORITE_GRID_MIN_SHORTCUTS_SPACE
                 , Cons.FAVORITE_GRID_MAX_SHORTCUTS_SPACE
                 , model.getCurrentCollection().space
                 , setShortcutsSpaceSubject);
     }
 
     public void onSetMarginHorizontalClick() {
-        getGridView().showChooseMarginHorizontal(Cons.FAVORITE_GRID_MIN_HORIZONTAL_MARGIN
+        view.showChooseMarginHorizontal(Cons.FAVORITE_GRID_MIN_HORIZONTAL_MARGIN
                 , Cons.FAVORITE_GRID_MAX_HORIZONTAL_MARGIN
                 , model.getCurrentCollection().marginHorizontal, setMarginHorizontalSubject);
     }
 
     public void onSetMarginVerticalClick() {
-        getGridView().showChooseMarginVertical(Cons.FAVORITE_GRID_MIN_VERTICAL_MARGIN
+        view.showChooseMarginVertical(Cons.FAVORITE_GRID_MIN_VERTICAL_MARGIN
                 , Cons.FAVORITE_GRID_MAX_VERTICAL_MARGIN
                 , model.getCurrentCollection().marginVertical, setMarginVerticalSubject);
     }
 
     public void onSetRowsCountClick() {
-        getGridView().showChooseRowsCount();
+        view.showChooseRowsCount();
     }
 
     public void onSetColumnsCountClick() {
-        getGridView().showChooseColumnsCount();
+        view.showChooseColumnsCount();
     }
 
     public void onSetPositionClick() {
-        getGridView().showChoosePositionDialog();
+        view.showChoosePositionDialog();
     }
 
-    public GridFavoriteSettingModel getGridModel() {
-        return ((GridFavoriteSettingModel) model);
-    }
-
-    public GridFavoriteSettingView getGridView() {
-        return ((GridFavoriteSettingView) view);
-    }
 
     public void updateTextValue() {
-        getGridView().updateValueText(getGridModel().getCurrentCollection());
+        view.updateValueText(model.getCurrentCollection());
     }
+
+    public interface View extends BaseCollectionSettingPresenter.View {
+        void showChooseColumnsCountDialog();
+
+        void updateValueText(Collection collection);
+
+        void setChoosingMargins(boolean enable);
+
+        void setGridColumn(int column);
+
+        void setShorcutsSpace(int space);
+
+        void showChooseColumnsCount();
+
+        void showChooseRowsCount();
+
+        void showChooseShortcutSpace(int min, int max, int current, PublishSubject<Integer> subject);
+
+        void showChooseMarginVertical(int min, int max, int current, PublishSubject<Integer> subject);
+
+        void showChooseMarginHorizontal(int min, int max, int current, PublishSubject<Integer> subject);
+
+        void showChoosePositionDialog();
+
+        void showChooseRowsCountDialog();
+
+
+
+    }
+
 
 }

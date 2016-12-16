@@ -18,16 +18,17 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 11/26/16.
  */
 
-public abstract class BaseCollectionSettingPresenter extends BasePresenter< BaseCollectionSettingPresenter.View, BaseCollectionSettingModel> {
+public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSettingPresenter.View, M extends BaseCollectionSettingModel> extends BasePresenter<V, M> {
     private static final String TAG = BaseCollectionSettingPresenter.class.getSimpleName();
 
     boolean onDragDrop = false;
-    public BaseCollectionSettingPresenter(BaseCollectionSettingModel model) {
-        this.model = model;
+
+    public BaseCollectionSettingPresenter(M model) {
+        super(model);
     }
 
     @Override
-    public void onViewAttach(final View view) {
+    public void onViewAttach(final V view) {
         super.onViewAttach(view);
         model.setup();
         view.setSpinner(model.getCollectionList(), model.getCurrentCollection());
@@ -38,7 +39,7 @@ public abstract class BaseCollectionSettingPresenter extends BasePresenter< Base
                     @Override
                     public void call(DragAndDropCallback.MoveData moveData) {
                         model.moveItem(moveData.from, moveData.to);
-                        view.notifyItemMove(moveData.from,moveData.to);
+                        view.notifyItemMove(moveData.from, moveData.to);
 
                     }
                 })
@@ -64,7 +65,7 @@ public abstract class BaseCollectionSettingPresenter extends BasePresenter< Base
                     public void call(DragAndDropCallback.Coord coord) {
                         onDragDrop = true;
                         view.setDeleteButtonVisibility(true);
-                        if (view.isHoverOnDeleteButton(coord.x,coord.y)) {
+                        if (view.isHoverOnDeleteButton(coord.x, coord.y)) {
                             view.setDeleteButtonColor(true);
                         } else {
                             view.setDeleteButtonColor(false);
@@ -84,8 +85,6 @@ public abstract class BaseCollectionSettingPresenter extends BasePresenter< Base
                 })
         );
 
-
-
     }
 
     public abstract void setRecyclerView();
@@ -97,13 +96,13 @@ public abstract class BaseCollectionSettingPresenter extends BasePresenter< Base
     }
 
     public void onAddNewCollection() {
-        String newLabel =  model.createNewCollection();
+        String newLabel = model.createNewCollection();
         view.addCollectionToSpinner(newLabel);
         onSpinnerItemSelect(newLabel);
     }
 
     public void onSlotClick(int slotIndex) {
-        view.openSetItems(slotIndex,model.getCollectionId());
+        view.openSetItems(slotIndex, model.getCollectionId());
     }
 
     public void setFolder(int slotIndex) {
@@ -154,11 +153,16 @@ public abstract class BaseCollectionSettingPresenter extends BasePresenter< Base
 
         void openSetItems(int slotIndex, String collectionId);
 
+        void openSetFolder(String folderId);
+
         void showChooseSizeDialog();
 
+        void showChooseBetweenSetFolderAndSetItems(final int slotIndex);
         void setRecyclerView(OrderedRealmCollection<Slot> slots, RecyclerView.LayoutManager layoutManager, GridSpacingItemDecoration decoration);
 
         RecyclerView.LayoutManager getLayoutManager(int layoutType, int column);
+
+        int dpToPixel(int dp);
 
 
     }

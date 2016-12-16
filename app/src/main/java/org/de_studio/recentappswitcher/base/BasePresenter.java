@@ -15,6 +15,10 @@ public abstract class BasePresenter<V extends PresenterView, M extends BaseModel
     protected M model;
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
+    public BasePresenter(M model) {
+        this.model = model;
+    }
+
     @CallSuper
     public void onViewAttach(V view) {
         if (this.view != null) {
