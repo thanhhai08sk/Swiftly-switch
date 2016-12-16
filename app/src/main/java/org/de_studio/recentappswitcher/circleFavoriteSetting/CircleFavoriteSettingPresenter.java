@@ -7,7 +7,7 @@ import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSett
  * Created by HaiNguyen on 11/11/16.
  */
 
-public class CircleFavoriteSettingPresenter extends BaseCollectionSettingPresenter {
+public class CircleFavoriteSettingPresenter extends BaseCollectionSettingPresenter<CircleFavoriteSettingPresenter.View, CircleFavoriteSettingModel> {
     private static final String TAG = CircleFavoriteSettingPresenter.class.getSimpleName();
 
     public CircleFavoriteSettingPresenter(CircleFavoriteSettingModel model) {
@@ -18,5 +18,9 @@ public class CircleFavoriteSettingPresenter extends BaseCollectionSettingPresent
     public void setRecyclerView() {
         view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_LINEAR, -1),null);
     }
+
+    public interface View extends BaseCollectionSettingPresenter.View {
+    }
+
 
 }
