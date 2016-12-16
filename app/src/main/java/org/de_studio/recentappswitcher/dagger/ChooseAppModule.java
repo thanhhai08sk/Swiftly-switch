@@ -29,7 +29,7 @@ public class ChooseAppModule {
     @Provides
     @Singleton
     BaseChooseItemPresenter presenter() {
-        return new ChooseAppPresenter(view);
+        return new ChooseAppPresenter(null);
     }
 
 

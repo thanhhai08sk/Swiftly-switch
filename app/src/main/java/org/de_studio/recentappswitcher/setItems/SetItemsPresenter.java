@@ -17,7 +17,7 @@ public class SetItemsPresenter extends BasePresenter<SetItemsView, SetItemsModel
 
 
     public SetItemsPresenter(SetItemsModel model) {
-        this.model = model;
+        super(model);
     }
 
     @Override

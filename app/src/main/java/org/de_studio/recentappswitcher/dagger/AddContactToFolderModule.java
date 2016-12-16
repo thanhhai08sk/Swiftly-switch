@@ -29,7 +29,7 @@ public class AddContactToFolderModule {
     @Provides
     @Singleton
     BaseAddItemsToFolderPresenter presenter(){
-        return new AddContactToFolderPresenter(slotId);
+        return new AddContactToFolderPresenter(null,slotId);
     }
 
     @Provides

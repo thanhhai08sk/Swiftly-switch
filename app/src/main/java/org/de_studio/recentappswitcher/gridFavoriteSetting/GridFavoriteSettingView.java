@@ -26,7 +26,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 11/26/16.
  */
 
-public class GridFavoriteSettingView extends BaseCollectionSettingView {
+public class GridFavoriteSettingView extends BaseCollectionSettingView implements GridFavoriteSettingPresenter.View {
     private static final String TAG = GridFavoriteSettingView.class.getSimpleName();
     @BindView(R.id.margin)
     LinearLayout marginLayout;

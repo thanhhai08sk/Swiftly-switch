@@ -29,7 +29,7 @@ public class ChooseContactModule {
     @Provides
     @Singleton
     BaseChooseItemPresenter presenter() {
-        return new ChooseContactPresenter(view);
+        return new ChooseContactPresenter(null);
     }
 
 

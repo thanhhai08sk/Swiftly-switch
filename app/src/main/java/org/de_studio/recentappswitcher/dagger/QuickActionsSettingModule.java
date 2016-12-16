@@ -7,9 +7,9 @@ import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
-import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
-import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingModel;
-import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingPresenter;
+import org.de_studio.recentappswitcher.quickActionSetting.QuickActionSettingModel;
+import org.de_studio.recentappswitcher.quickActionSetting.QuickActionSettingPresenter;
+import org.de_studio.recentappswitcher.quickActionSetting.QuickActionSettingView;
 
 import javax.inject.Singleton;
 
@@ -17,37 +17,35 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by HaiNguyen on 11/12/16.
+ * Created by HaiNguyen on 12/16/16.
  */
 @Module
-public class CircleFavoriteSettingModule {
-    CircleFavoriteSettingView view;
+public class QuickActionsSettingModule {
+    QuickActionSettingView view;
     String collectionId;
 
-    public CircleFavoriteSettingModule(CircleFavoriteSettingView view, String collectionId) {
+    public QuickActionsSettingModule(QuickActionSettingView view, String collectionId) {
         this.view = view;
         this.collectionId = collectionId;
     }
-
+    
     @Provides
     @Singleton
-    BaseCollectionSettingPresenter presenter(CircleFavoriteSettingModel model) {
-        return new CircleFavoriteSettingPresenter(model);
+    BaseCollectionSettingPresenter presenter(QuickActionSettingModel model){
+        return new QuickActionSettingPresenter(model);
     }
-
+    
     @Provides
     @Singleton
-    CircleFavoriteSettingModel model() {
-        return new CircleFavoriteSettingModel(view.getString(R.string.circle_favorites), collectionId);
+    QuickActionSettingModel model(){
+        return new QuickActionSettingModel(view.getString(R.string.main_outer_ring_setting), collectionId);
     }
-
 
     @Provides
     @Singleton
     SlotsAdapter adapter(@Nullable IconPackManager.IconPack iconPack){
         return new SlotsAdapter(view, null, false, iconPack, Cons.ITEM_TYPE_ICON_LABEL);
     }
-
 
 
 

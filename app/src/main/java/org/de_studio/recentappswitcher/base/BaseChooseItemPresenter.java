@@ -12,12 +12,11 @@ import rx.functions.Action1;
  */
 
 public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseItemView,BaseModel> {
-    protected BaseChooseItemView view;
     protected RealmResults<Item> results;
     protected Realm realm = Realm.getDefaultInstance();
 
-    public BaseChooseItemPresenter(BaseChooseItemView view) {
-        this.view = view;
+    public BaseChooseItemPresenter(BaseModel model) {
+        super(model);
     }
 
     @Override

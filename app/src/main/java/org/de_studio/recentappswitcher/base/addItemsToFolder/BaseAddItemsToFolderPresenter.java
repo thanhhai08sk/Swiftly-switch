@@ -29,7 +29,8 @@ public abstract class BaseAddItemsToFolderPresenter extends BasePresenter<BaseAd
     protected RealmList<Item> folderItems;
     protected String folderId;
 
-    public BaseAddItemsToFolderPresenter(String folderId) {
+    public BaseAddItemsToFolderPresenter(BaseModel model, String folderId) {
+        super(model);
         this.folderId = folderId;
     }
 

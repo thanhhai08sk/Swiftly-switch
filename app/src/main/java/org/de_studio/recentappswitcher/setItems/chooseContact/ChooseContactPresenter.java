@@ -2,7 +2,7 @@ package org.de_studio.recentappswitcher.setItems.chooseContact;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BaseChooseItemPresenter;
-import org.de_studio.recentappswitcher.base.BaseChooseItemView;
+import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.model.Item;
 
 import io.realm.RealmResults;
@@ -12,8 +12,8 @@ import io.realm.RealmResults;
  */
 
 public class ChooseContactPresenter extends BaseChooseItemPresenter {
-    public ChooseContactPresenter(BaseChooseItemView view) {
-        super(view);
+    public ChooseContactPresenter(BaseModel model) {
+        super(model);
     }
 
     @Override

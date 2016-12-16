@@ -30,7 +30,7 @@ public class AddShortcutToFolderModule {
     @Provides
     @Singleton
     BaseAddItemsToFolderPresenter presenter() {
-        return new AddShortcutToFolderPresenter(slotId);
+        return new AddShortcutToFolderPresenter(null,slotId);
     }
     @Provides
     @Singleton

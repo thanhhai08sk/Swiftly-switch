@@ -30,8 +30,9 @@ public class QuickActionSettingModel extends BaseCollectionSettingModel {
     }
 
 
+    @Override
     public void setup() {
-
+        super.setup();
         subscription.add(
                 Observable.combineLatest(collectionReadySubject, loadItemsOk, new Func2<Collection, Void, Collection>() {
                     @Override
@@ -82,9 +83,7 @@ public class QuickActionSettingModel extends BaseCollectionSettingModel {
                     }
                 })
         );
-
     }
-
 
     @Override
     public String getCollectionType() {

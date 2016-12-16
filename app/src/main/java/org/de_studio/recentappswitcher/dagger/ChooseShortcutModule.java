@@ -30,7 +30,7 @@ public class ChooseShortcutModule {
     @Provides
     @Singleton
     BaseChooseItemPresenter presenter() {
-        return new ChooseShortcutPresenter(view);
+        return new ChooseShortcutPresenter(null);
     }
 
     @Provides

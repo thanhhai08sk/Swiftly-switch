@@ -81,6 +81,7 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
             } else {
                 Log.e(TAG, "setCurrentCollection: no collection with this label found: " + collectionLabel);
             }
+            collectionReadySubject.onNext(collection);
         }
     }
 

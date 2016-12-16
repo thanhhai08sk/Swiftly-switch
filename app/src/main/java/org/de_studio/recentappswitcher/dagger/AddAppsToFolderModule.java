@@ -29,7 +29,7 @@ public class AddAppsToFolderModule {
     @Provides
     @Singleton
     BaseAddItemsToFolderPresenter presenter(){
-        return new AddAppToFolderPresenter(slotId);
+        return new AddAppToFolderPresenter(null,slotId);
     }
 
     @Provides

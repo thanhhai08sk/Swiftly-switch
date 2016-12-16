@@ -1,7 +1,7 @@
 package org.de_studio.recentappswitcher.setItems.chooseShortcut;
 
 import org.de_studio.recentappswitcher.base.BaseChooseItemPresenter;
-import org.de_studio.recentappswitcher.base.BaseChooseItemView;
+import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.model.Item;
 
 import io.realm.RealmResults;
@@ -11,8 +11,8 @@ import io.realm.RealmResults;
  */
 
 public class ChooseShortcutPresenter extends BaseChooseItemPresenter {
-    public ChooseShortcutPresenter(BaseChooseItemView view) {
-        super(view);
+    public ChooseShortcutPresenter(BaseModel model) {
+        super(model);
     }
 
     @Override

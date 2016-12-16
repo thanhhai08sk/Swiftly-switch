@@ -30,7 +30,7 @@ public class ChooseActionModule {
     @Provides
     @Singleton
     BaseChooseItemPresenter presenter() {
-        return new ChooseActionPresenter(view);
+        return new ChooseActionPresenter(null);
     }
 
 

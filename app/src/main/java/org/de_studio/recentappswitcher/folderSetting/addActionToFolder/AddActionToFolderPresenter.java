@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.folderSetting.addActionToFolder;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.base.addItemsToFolder.BaseAddItemsToFolderPresenter;
 import org.de_studio.recentappswitcher.model.Item;
 
@@ -11,8 +12,8 @@ import io.realm.RealmResults;
  */
 
 public class AddActionToFolderPresenter extends BaseAddItemsToFolderPresenter {
-    public AddActionToFolderPresenter(String folderId) {
-        super(folderId);
+    public AddActionToFolderPresenter(BaseModel model, String folderId) {
+        super(model, folderId);
     }
 
     @Override

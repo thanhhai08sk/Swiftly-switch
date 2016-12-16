@@ -2,7 +2,7 @@ package org.de_studio.recentappswitcher.setItems.chooseApp;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BaseChooseItemPresenter;
-import org.de_studio.recentappswitcher.base.BaseChooseItemView;
+import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.model.Item;
 
 import io.realm.RealmResults;
@@ -14,8 +14,8 @@ import io.realm.RealmResults;
 public class ChooseAppPresenter extends BaseChooseItemPresenter {
     private static final String TAG = ChooseAppPresenter.class.getSimpleName();
 
-    public ChooseAppPresenter(BaseChooseItemView view) {
-        super(view);
+    public ChooseAppPresenter(BaseModel model) {
+        super(model);
     }
 
     @Override

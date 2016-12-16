@@ -28,7 +28,7 @@ public class AddActionToFolderView extends BaseAddItemsToFolderView {
 
     @Override
     public void loadItems() {
-        ChooseActionView.LoadActionsTask task = new ChooseActionView.LoadActionsTask(new WeakReference<Context>(getActivity()));
+        ChooseActionView.LoadActionsTask task = new ChooseActionView.LoadActionsTask(new WeakReference<Context>(getActivity()),null);
         task.execute();
     }
 

@@ -15,8 +15,9 @@ import rx.subjects.PublishSubject;
 
 public class FolderSettingPresenter extends BasePresenter<FolderSettingPresenter.View, FolderSettingModel> {
     private static final String TAG = FolderSettingPresenter.class.getSimpleName();
+
     public FolderSettingPresenter(FolderSettingModel model) {
-        this.model = model;
+        super(model);
     }
 
     @Override

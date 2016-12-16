@@ -16,6 +16,7 @@ import org.de_studio.recentappswitcher.model.Item;
 import java.lang.ref.WeakReference;
 
 import io.realm.Realm;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by HaiNguyen on 11/19/16.
@@ -34,15 +35,17 @@ public class ChooseActionView extends BaseChooseItemView{
 
     @Override
     public void loadItems() {
-        LoadActionsTask task = new LoadActionsTask(new WeakReference<Context>(getActivity()));
+        LoadActionsTask task = new LoadActionsTask(new WeakReference<Context>(getActivity()), null);
         task.execute();
     }
 
     public static class LoadActionsTask extends AsyncTask<Void, Void, Void> {
         WeakReference<Context> contextWeakReference;
+        PublishSubject<Void> loadItemsOkSubject;
 
-        public LoadActionsTask(WeakReference<Context> contextWeakReference) {
+        public LoadActionsTask(WeakReference<Context> contextWeakReference, PublishSubject<Void> loadItemsOkSubject) {
             this.contextWeakReference = contextWeakReference;
+            this.loadItemsOkSubject = loadItemsOkSubject;
         }
 
         @Override
@@ -72,6 +75,14 @@ public class ChooseActionView extends BaseChooseItemView{
             });
             realm.close();
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (loadItemsOkSubject != null) {
+                loadItemsOkSubject.onNext(null);
+            }
+            super.onPostExecute(aVoid);
         }
     }
 

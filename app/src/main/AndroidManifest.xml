@@ -241,6 +241,10 @@
             android:theme="@style/AppTheme"
             android:parentActivityName=".gridFavoriteSetting.GridFavoriteSettingView"
             />
+        <activity android:name=".quickActionSetting.QuickActionSettingView"
+            android:label="@string/main_outer_ring_setting"
+            android:theme="@style/AppTheme"/>
+
 
         <service
             android:name=".dadaSetup.DataSetupService"

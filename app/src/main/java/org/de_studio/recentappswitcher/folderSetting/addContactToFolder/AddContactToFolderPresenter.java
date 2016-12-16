@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.folderSetting.addContactToFolder;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.base.addItemsToFolder.BaseAddItemsToFolderPresenter;
 import org.de_studio.recentappswitcher.model.Item;
 
@@ -11,8 +12,8 @@ import io.realm.RealmResults;
  */
 
 public class AddContactToFolderPresenter extends BaseAddItemsToFolderPresenter {
-    public AddContactToFolderPresenter(String folderId) {
-        super(folderId);
+    public AddContactToFolderPresenter(BaseModel model, String folderId) {
+        super(model, folderId);
     }
 
     @Override
