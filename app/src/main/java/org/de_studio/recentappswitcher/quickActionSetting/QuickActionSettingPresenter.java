@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.quickActionSetting;
 
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
 
 import rx.functions.Action1;
@@ -22,19 +23,20 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
                 view.onLoadItemsOk().subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-
+                        model.loadItemsOk();
                     }
                 })
         );
 
 
         view.loadItems();
+        model.setup();
 
     }
 
     @Override
     public void setRecyclerView() {
-
+        view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_LINEAR, -1),null);
     }
 
     public interface View extends BaseCollectionSettingPresenter.View {
