@@ -16,7 +16,7 @@ public class Slot extends RealmObject {
     public static final String TYPE_NULL = "null_"; //plus
     public String type;
     @PrimaryKey
-    public String slotId;
+    public String slotId;  // currentTimeInMilliSeconds_random
     public Item stage1Item;
     public Item stage2Item;
     public int longClickMode;

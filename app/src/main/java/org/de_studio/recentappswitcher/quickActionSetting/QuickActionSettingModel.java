@@ -1,16 +1,21 @@
 package org.de_studio.recentappswitcher.quickActionSetting;
 
-import android.util.Log;
-
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingModel;
 import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 
 import java.util.Random;
 
 import io.realm.Realm;
+import io.realm.RealmList;
+import rx.Observable;
+import rx.functions.Action1;
+import rx.functions.Func2;
+import rx.subjects.PublishSubject;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by HaiNguyen on 12/10/16.
@@ -18,9 +23,68 @@ import io.realm.Realm;
 
 public class QuickActionSettingModel extends BaseCollectionSettingModel {
     private static final String TAG = QuickActionSettingModel.class.getSimpleName();
+    PublishSubject<Void> loadItemsOk = PublishSubject.create();
+    CompositeSubscription subscription = new CompositeSubscription();
     public QuickActionSettingModel(String defaultLabel, String collectionId) {
         super(defaultLabel, collectionId);
     }
+
+
+    public void setup() {
+
+        subscription.add(
+                Observable.combineLatest(collectionReadySubject, loadItemsOk, new Func2<Collection, Void, Collection>() {
+                    @Override
+                    public Collection call(Collection collection, Void aVoid) {
+                        if (collection.slots.size() == 0) {
+                            return collection;
+                        } else {
+                            return null;
+                        }
+                    }
+                }).subscribe(new Action1<Collection>() {
+                    @Override
+                    public void call(final Collection collection) {
+                        if (collection != null) {
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    RealmList<Slot> slots = collection.slots;
+                                    Item[] items = new Item[4];
+                                    items[0] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_SHORTCUTS_SET + Collection.TYPE_GRID_FAVORITE + 1).findFirst();
+                                    if (items[0] ==null) {
+                                        Collection firstGridFavoriteCollection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Collection.TYPE_GRID_FAVORITE + 1).findFirst();
+                                        Item newItem = new Item();
+                                        newItem.type = Item.TYPE_SHORTCUTS_SET;
+                                        newItem.itemId = Item.TYPE_SHORTCUTS_SET + firstGridFavoriteCollection.collectionId;
+                                        newItem.label = firstGridFavoriteCollection.label;
+                                        newItem.collectionId = firstGridFavoriteCollection.collectionId;
+                                        Utility.setIconResourceIdsForShortcutsSet(newItem);
+                                        Item realmItem = realm.copyToRealm(newItem);
+                                        items[0] = realmItem;
+                                    }
+
+                                    items[1] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_ACTION + Item.ACTION_HOME).findFirst();
+                                    items[2] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_ACTION + Item.ACTION_BACK).findFirst();
+                                    items[3] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_ACTION + Item.ACTION_NOTI).findFirst();
+
+                                    for (int i = 0; i < 4; i++) {
+                                        Slot slot = new Slot();
+                                        slot.type = Slot.TYPE_ITEM;
+                                        slot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
+                                        slot.stage1Item = items[i];
+                                        Slot realmSlot = realm.copyToRealm(slot);
+                                        slots.add(realmSlot);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                })
+        );
+
+    }
+
 
     @Override
     public String getCollectionType() {
@@ -40,18 +104,19 @@ public class QuickActionSettingModel extends BaseCollectionSettingModel {
                 collection.collectionId = Utility.createCollectionId(getCollectionType(), newCollectionNumber);
                 collection.label = newLabel;
                 collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
-                Collection realmCollection = realm.copyToRealm(collection);
-
-                for (int i = 0; i < 4; i++) {
-                    Slot nullSlot = new Slot();
-                    nullSlot.type = Slot.TYPE_NULL;
-                    nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
-                    Log.e(TAG, "new slot, id = " + nullSlot.slotId);
-                    Slot realmSlot = realm.copyToRealm(nullSlot);
-                    realmCollection.slots.add(realmSlot);
-                }
+                realm.copyToRealm(collection);
             }
         });
         return newLabel;
+    }
+
+    @Override
+    public void clear() {
+        super.clear();
+        subscription.clear();
+    }
+
+    public void loadItemsOk() {
+        loadItemsOk.onNext(null);
     }
 }

@@ -65,6 +65,7 @@ import android.widget.Toast;
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
+import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.service.ChooseActionDialogActivity;
@@ -2573,6 +2574,17 @@ public  class Utility {
 
         }
 
+    }
+
+    public static void setIconResourceIdsForShortcutsSet(Item item) {
+        String itemId = item.itemId;
+        if (itemId.contains(Collection.TYPE_GRID_FAVORITE)) {
+            item.iconResourceId = R.drawable.ic_action_instant_favorite_512;
+        } else if (itemId.contains(Collection.TYPE_CIRCLE_FAVORITE)) {
+            item.iconResourceId = R.drawable.ic_action_instant_favorite_512;
+        } else if (itemId.contains(Collection.TYPE_RECENT)) {
+            item.iconResourceId = R.drawable.ic_action_instant_favorite_512;
+        }
     }
 
     public static String getContactItemLabel(int type, String name, Context context) {

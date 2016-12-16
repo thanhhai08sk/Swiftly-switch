@@ -27,7 +27,8 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
     protected String collectionId;
     protected String defaultLabel;
     protected Collection collection;
-    PublishSubject<Void> collectionChangedSubject = PublishSubject.create();
+    protected PublishSubject<Void> collectionChangedSubject = PublishSubject.create();
+    protected PublishSubject<Collection> collectionReadySubject = PublishSubject.create();
 
     public BaseCollectionSettingModel(String defaultLabel, String collectionId) {
         this.defaultLabel = defaultLabel;
@@ -41,7 +42,7 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
             collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, getCollectionId()).findFirst();
         }
         RealmObject.addChangeListener(collection,this);
-
+        collectionReadySubject.onNext(collection);
     }
 
     public PublishSubject<Void> onCollectionChanged() {

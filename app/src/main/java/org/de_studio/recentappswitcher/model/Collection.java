@@ -20,7 +20,7 @@ public class Collection extends RealmObject {
     public static final int LONG_CLICK_MODE_OPEN_COLLECTION = 2;
     public String type;
     @PrimaryKey
-    public String collectionId;
+    public String collectionId;  // collection_type_number, numbers start from 1
     public String label;
     public RealmList<Slot> slots;
     public int longClickMode;

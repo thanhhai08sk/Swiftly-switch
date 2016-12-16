@@ -13,6 +13,7 @@ public class Item extends RealmObject {
     public static final String TYPE_ACTION = "action_";
     public static final String TYPE_CONTACT = "contact_";
     public static final String TYPE_SHORTCUT = "shortcut_";
+    public static final String TYPE_SHORTCUTS_SET = "shortcuts_set_";
     public static final int ACTION_WIFI = 0;
     public static final int ACTION_BLUETOOTH = 1;
     public static final int ACTION_POWER_MENU = 2;
@@ -31,7 +32,7 @@ public class Item extends RealmObject {
     public static final int ACTION_FLASH_LIGHT = 16;
     public static final int ACTION_SCREEN_LOCK = 17;
     @PrimaryKey
-    public String itemId; // = type + identifier | app_packageName | action_action | contact_number | shortcut_intent
+    public String itemId; // = type + identifier | app_packageName | action_action | contact_number | shortcut_intent | shortcuts_set_collection_id
     public String type;
     public String label;
     public int action;
@@ -46,6 +47,7 @@ public class Item extends RealmObject {
     public int iconResourceId3;
     public byte[] iconBitmap;
     public String iconUri;
+    public String collectionId;
 
     public Item() {
     }
@@ -160,5 +162,13 @@ public class Item extends RealmObject {
 
     public void setIconUri(String iconUri) {
         this.iconUri = iconUri;
+    }
+
+    public String getCollectionId() {
+        return collectionId;
+    }
+
+    public void setCollectionId(String collectionId) {
+        this.collectionId = collectionId;
     }
 }
