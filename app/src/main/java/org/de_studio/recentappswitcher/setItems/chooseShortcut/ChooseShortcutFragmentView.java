@@ -13,7 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
-import org.de_studio.recentappswitcher.base.BaseChooseItemView;
+import org.de_studio.recentappswitcher.base.BaseChooseItemFragmentView;
 import org.de_studio.recentappswitcher.base.adapter.ShortcutListAdapter;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.ChooseShortcutModule;
@@ -31,8 +31,8 @@ import io.realm.Realm;
  * Created by HaiNguyen on 11/25/16.
  */
 
-public class ChooseShortcutView extends BaseChooseItemView {
-    private static final String TAG = ChooseShortcutView.class.getSimpleName();
+public class ChooseShortcutFragmentView extends BaseChooseItemFragmentView {
+    private static final String TAG = ChooseShortcutFragmentView.class.getSimpleName();
     private PackageManager packageManager;
     private ResolveInfo mResolveInfo;
     private List<ResolveInfo> resolveInfos;

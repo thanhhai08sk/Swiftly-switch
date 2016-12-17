@@ -13,7 +13,7 @@ import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.base.BaseChooseItemView;
+import org.de_studio.recentappswitcher.base.BaseChooseItemFragmentView;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.ChooseContactModule;
 import org.de_studio.recentappswitcher.dagger.DaggerChooseContactComponent;
@@ -25,8 +25,8 @@ import io.realm.Realm;
  * Created by HaiNguyen on 11/25/16.
  */
 
-public class ChooseContactView extends BaseChooseItemView implements android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor>{
-    private static final String TAG = ChooseContactView.class.getSimpleName();
+public class ChooseContactFragmentView extends BaseChooseItemFragmentView implements android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor>{
+    private static final String TAG = ChooseContactFragmentView.class.getSimpleName();
 
 
 

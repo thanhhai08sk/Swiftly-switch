@@ -6,8 +6,8 @@ import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.BaseChooseItemPresenter;
 import org.de_studio.recentappswitcher.base.adapter.ItemsListAdapter;
+import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionFragmentView;
 import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionPresenter;
-import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionView;
 
 import javax.inject.Singleton;
 
@@ -21,9 +21,9 @@ import dagger.Provides;
 @Singleton
 @Module
 public class ChooseActionModule {
-    ChooseActionView view;
+    ChooseActionFragmentView view;
 
-    public ChooseActionModule(ChooseActionView view) {
+    public ChooseActionModule(ChooseActionFragmentView view) {
         this.view = view;
     }
 

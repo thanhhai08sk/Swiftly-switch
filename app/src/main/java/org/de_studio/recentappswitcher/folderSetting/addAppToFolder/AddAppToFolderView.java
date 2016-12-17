@@ -8,7 +8,7 @@ import org.de_studio.recentappswitcher.base.addItemsToFolder.BaseAddItemsToFolde
 import org.de_studio.recentappswitcher.dagger.AddAppsToFolderModule;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerAddAppsToFolderComponent;
-import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppView;
+import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppFragmentView;
 
 import java.lang.ref.WeakReference;
 
@@ -29,7 +29,7 @@ public class AddAppToFolderView extends BaseAddItemsToFolderView {
 
     @Override
     public void loadItems() {
-        ChooseAppView.LoadAppsTask task = new ChooseAppView.LoadAppsTask(new WeakReference<PackageManager>(getActivity().getPackageManager()));
+        ChooseAppFragmentView.LoadAppsTask task = new ChooseAppFragmentView.LoadAppsTask(new WeakReference<PackageManager>(getActivity().getPackageManager()));
         task.execute();
     }
 

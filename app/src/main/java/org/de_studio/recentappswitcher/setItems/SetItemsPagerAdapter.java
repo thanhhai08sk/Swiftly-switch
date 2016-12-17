@@ -7,10 +7,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.model.Item;
-import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionView;
-import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppView;
-import org.de_studio.recentappswitcher.setItems.chooseContact.ChooseContactView;
-import org.de_studio.recentappswitcher.setItems.chooseShortcut.ChooseShortcutView;
+import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionFragmentView;
+import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppFragmentView;
+import org.de_studio.recentappswitcher.setItems.chooseContact.ChooseContactFragmentView;
+import org.de_studio.recentappswitcher.setItems.chooseShortcut.ChooseShortcutFragmentView;
 
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
@@ -35,23 +35,23 @@ public class SetItemsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                ChooseAppView chooseAppView = new ChooseAppView();
+                ChooseAppFragmentView chooseAppView = new ChooseAppFragmentView();
                 chooseAppView.setSubjects(currentItemChangeSubject, setItemSubject);
                 return chooseAppView;
             case 1:
-                ChooseActionView chooseActionView = new ChooseActionView();
+                ChooseActionFragmentView chooseActionView = new ChooseActionFragmentView();
                 chooseActionView.setSubjects(currentItemChangeSubject, setItemSubject);
                 return chooseActionView;
             case 2:
-                ChooseContactView chooseContactView = new ChooseContactView();
+                ChooseContactFragmentView chooseContactView = new ChooseContactFragmentView();
                 chooseContactView.setSubjects(currentItemChangeSubject, setItemSubject);
                 return chooseContactView;
             case 3:
-                ChooseShortcutView chooseShortcutView = new ChooseShortcutView();
+                ChooseShortcutFragmentView chooseShortcutView = new ChooseShortcutFragmentView();
                 chooseShortcutView.setSubjects(currentItemChangeSubject, setItemSubject);
                 return chooseShortcutView;
             default:
-                ChooseAppView chooseAppView1 = new ChooseAppView();
+                ChooseAppFragmentView chooseAppView1 = new ChooseAppFragmentView();
                 chooseAppView1.setSubjects(currentItemChangeSubject, setItemSubject);
                 return chooseAppView1;
         }

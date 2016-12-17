@@ -19,11 +19,11 @@ import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 
 /**
- * Created by HaiNguyen on 11/25/16.
+ * Created by HaiNguyen on 12/17/16.
  */
 
-public abstract class BaseChooseItemView extends BaseFragment implements AdapterView.OnItemClickListener , BaseChooseItemPresenter.View{
-    private static final String TAG = BaseChooseItemView.class.getSimpleName();
+public abstract class BaseChooseItemDialogView extends BaseDialogFragment implements AdapterView.OnItemClickListener, BaseChooseItemPresenter.View {
+    private static final String TAG = BaseChooseItemFragmentView.class.getSimpleName();
     @BindView(R.id.list_view)
     protected ListView listView;
     @BindView(R.id.progress_bar)
@@ -116,4 +116,5 @@ public abstract class BaseChooseItemView extends BaseFragment implements Adapter
     protected PresenterView getPresenterView() {
         return this;
     }
+
 }

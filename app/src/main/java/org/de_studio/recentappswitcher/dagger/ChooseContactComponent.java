@@ -1,6 +1,6 @@
 package org.de_studio.recentappswitcher.dagger;
 
-import org.de_studio.recentappswitcher.setItems.chooseContact.ChooseContactView;
+import org.de_studio.recentappswitcher.setItems.chooseContact.ChooseContactFragmentView;
 
 import javax.inject.Singleton;
 
@@ -12,5 +12,5 @@ import dagger.Component;
 @Singleton
 @Component(modules = {AppModule.class,ChooseContactModule.class})
 public interface ChooseContactComponent {
-    void inject(ChooseContactView view);
+    void inject(ChooseContactFragmentView view);
 }

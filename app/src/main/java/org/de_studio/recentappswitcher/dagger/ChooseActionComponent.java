@@ -1,6 +1,6 @@
 package org.de_studio.recentappswitcher.dagger;
 
-import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionView;
+import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionFragmentView;
 
 import javax.inject.Singleton;
 
@@ -12,5 +12,5 @@ import dagger.Component;
 @Singleton
 @Component(modules = {AppModule.class, ChooseActionModule.class})
 public interface ChooseActionComponent {
-    void inject(ChooseActionView view);
+    void inject(ChooseActionFragmentView view);
 }

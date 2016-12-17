@@ -12,7 +12,7 @@ import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerQuickActionsSettingComponent;
 import org.de_studio.recentappswitcher.dagger.QuickActionsSettingModule;
 import org.de_studio.recentappswitcher.model.Item;
-import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionView;
+import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionFragmentView;
 
 import java.lang.ref.WeakReference;
 
@@ -43,7 +43,7 @@ public class QuickActionSettingView extends BaseCollectionSettingView implements
 
     @Override
     public void loadItems() {
-        ChooseActionView.LoadActionsTask task = new ChooseActionView.LoadActionsTask(new WeakReference<Context>(this), loadItemsOkSubject);
+        ChooseActionFragmentView.LoadActionsTask task = new ChooseActionFragmentView.LoadActionsTask(new WeakReference<Context>(this), loadItemsOkSubject);
         task.execute();
     }
 

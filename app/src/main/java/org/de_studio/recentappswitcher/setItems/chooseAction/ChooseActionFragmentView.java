@@ -7,7 +7,7 @@ import android.util.Log;
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.base.BaseChooseItemView;
+import org.de_studio.recentappswitcher.base.BaseChooseItemFragmentView;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.ChooseActionModule;
 import org.de_studio.recentappswitcher.dagger.DaggerChooseActionComponent;
@@ -22,8 +22,8 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 11/19/16.
  */
 
-public class ChooseActionView extends BaseChooseItemView{
-    private static final String TAG = ChooseActionView.class.getSimpleName();
+public class ChooseActionFragmentView extends BaseChooseItemFragmentView {
+    private static final String TAG = ChooseActionFragmentView.class.getSimpleName();
 
     @Override
     protected void inject() {

@@ -6,10 +6,10 @@ import android.os.AsyncTask;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.base.BaseChooseItemView;
+import org.de_studio.recentappswitcher.base.BaseChooseItemFragmentView;
 import org.de_studio.recentappswitcher.dagger.AppModule;
-import org.de_studio.recentappswitcher.dagger.ChooseAppModule;
-import org.de_studio.recentappswitcher.dagger.DaggerChooseAppComponent;
+import org.de_studio.recentappswitcher.dagger.ChooseAppFragmentModule;
+import org.de_studio.recentappswitcher.dagger.DaggerChooseAppFragmentComponent;
 import org.de_studio.recentappswitcher.model.Item;
 
 import java.lang.ref.WeakReference;
@@ -21,15 +21,15 @@ import io.realm.Realm;
  * Created by HaiNguyen on 11/18/16.
  */
 
-public class ChooseAppView extends BaseChooseItemView{
+public class ChooseAppFragmentView extends BaseChooseItemFragmentView {
 
 
 
     @Override
     protected void inject() {
-        DaggerChooseAppComponent.builder()
+        DaggerChooseAppFragmentComponent.builder()
                 .appModule(new AppModule(getActivity()))
-                .chooseAppModule(new ChooseAppModule(this))
+                .chooseAppFragmentModule(new ChooseAppFragmentModule(this))
                 .build().inject(this);
     }
 

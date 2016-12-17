@@ -7,7 +7,7 @@ import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.BaseChooseItemPresenter;
 import org.de_studio.recentappswitcher.base.adapter.ItemsListAdapter;
 import org.de_studio.recentappswitcher.setItems.chooseContact.ChooseContactPresenter;
-import org.de_studio.recentappswitcher.setItems.chooseContact.ChooseContactView;
+import org.de_studio.recentappswitcher.setItems.chooseContact.ChooseContactFragmentView;
 
 import javax.inject.Singleton;
 
@@ -20,9 +20,9 @@ import dagger.Provides;
 @Singleton
 @Module
 public class ChooseContactModule {
-    ChooseContactView view;
+    ChooseContactFragmentView view;
 
-    public ChooseContactModule(ChooseContactView view) {
+    public ChooseContactModule(ChooseContactFragmentView view) {
         this.view = view;
     }
 

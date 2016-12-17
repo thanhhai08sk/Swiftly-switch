@@ -1,6 +1,6 @@
 package org.de_studio.recentappswitcher.dagger;
 
-import org.de_studio.recentappswitcher.setItems.chooseShortcut.ChooseShortcutView;
+import org.de_studio.recentappswitcher.setItems.chooseShortcut.ChooseShortcutFragmentView;
 
 import javax.inject.Singleton;
 
@@ -12,5 +12,5 @@ import dagger.Component;
 @Singleton
 @Component(modules = {AppModule.class, ChooseShortcutModule.class})
 public interface ChooseShortcutComponent {
-    void inject(ChooseShortcutView view);
+    void inject(ChooseShortcutFragmentView view);
 }

@@ -7,7 +7,7 @@ import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.BaseChooseItemPresenter;
 import org.de_studio.recentappswitcher.base.adapter.ItemsListAdapter;
 import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppPresenter;
-import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppView;
+import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppFragmentView;
 
 import javax.inject.Singleton;
 
@@ -19,10 +19,10 @@ import dagger.Provides;
  */
 @Module
 @Singleton
-public class ChooseAppModule {
-    ChooseAppView view;
+public class ChooseAppFragmentModule {
+    ChooseAppFragmentView view;
 
-    public ChooseAppModule(ChooseAppView view) {
+    public ChooseAppFragmentModule(ChooseAppFragmentView view) {
         this.view = view;
     }
 
