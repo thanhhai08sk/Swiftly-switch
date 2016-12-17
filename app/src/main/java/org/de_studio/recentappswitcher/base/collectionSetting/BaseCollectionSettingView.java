@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.base.collectionSetting;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.GridLayoutManager;
@@ -49,6 +50,7 @@ import rx.subjects.PublishSubject;
 
 public abstract class BaseCollectionSettingView extends BaseActivity implements BaseCollectionSettingPresenter.View {
     private static final String TAG = BaseCollectionSettingView.class.getSimpleName();
+    @Nullable
     @BindView(R.id.spinner)
     protected AppCompatSpinner spinner;
     @BindView(R.id.recycler_view)

@@ -235,6 +235,9 @@
             android:label="@string/grid_favorites"
             android:theme="@style/AppTheme" />
 
+        <activity android:name=".blackListSetting.BlackListSettingView"
+            android:label="@string/main_exclude_app_title"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".setItems.SetItemsView"
             android:theme="@style/AppTheme.NoActionBar" />

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.blackListSetting.BlackListSettingView;
 import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
 import org.de_studio.recentappswitcher.gridFavoriteSetting.GridFavoriteSettingView;
 import org.de_studio.recentappswitcher.quickActionSetting.QuickActionSettingView;
@@ -65,7 +66,7 @@ public class GeneralView extends Fragment {
     }
 
     public void setBlackList() {
-
+        startActivity(BlackListSettingView.getIntent(getActivity(),null));
     }
 
     @OnClick(R.id.recent)
