@@ -120,7 +120,7 @@ public class ChooseShortcutView extends BaseChooseItemView {
             }
             Item realmItem = realm.copyToRealm(item);
             realm.commitTransaction();
-            presenter.onItemClick(realmItem);
+            itemClickSubject.onNext(realmItem);
 
         }
     }

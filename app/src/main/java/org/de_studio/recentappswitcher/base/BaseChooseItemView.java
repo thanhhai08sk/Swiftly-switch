@@ -2,7 +2,6 @@ package org.de_studio.recentappswitcher.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -15,7 +14,7 @@ import org.de_studio.recentappswitcher.model.Item;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import io.realm.OrderedRealmCollection;
+import io.realm.RealmResults;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 
@@ -23,7 +22,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 11/25/16.
  */
 
-public abstract class BaseChooseItemView extends BaseFragment implements AdapterView.OnItemClickListener , PresenterView{
+public abstract class BaseChooseItemView extends BaseFragment implements AdapterView.OnItemClickListener , BaseChooseItemPresenter.View{
     private static final String TAG = BaseChooseItemView.class.getSimpleName();
     @BindView(R.id.list_view)
     protected ListView listView;
@@ -38,6 +37,7 @@ public abstract class BaseChooseItemView extends BaseFragment implements Adapter
 
     protected BehaviorSubject<Item> currentItemChangeSubject;
     protected PublishSubject<Item> setItemSubject;
+    protected PublishSubject<Item> itemClickSubject = PublishSubject.create();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,7 +60,13 @@ public abstract class BaseChooseItemView extends BaseFragment implements Adapter
         return currentItemChangeSubject;
     }
 
-    public PublishSubject<Item> onSetItemSubject() {
+    @Override
+    public PublishSubject<Item> onItemClick() {
+        return itemClickSubject;
+    }
+
+    @Override
+    public PublishSubject<Item> onSetItemToSlot() {
         return setItemSubject;
     }
 
@@ -72,7 +78,8 @@ public abstract class BaseChooseItemView extends BaseFragment implements Adapter
         }
     }
 
-    public void setAdapter(OrderedRealmCollection<Item> items) {
+    @Override
+    public void setAdapter(RealmResults<Item> items) {
         adapter.updateData(items);
         listView.setAdapter(adapter);
     }
@@ -91,8 +98,7 @@ public abstract class BaseChooseItemView extends BaseFragment implements Adapter
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Item item = ((Item) parent.getAdapter().getItem(position));
         if (item != null) {
-            Log.e(TAG, "onItemClick: " + position);
-            presenter.onItemClick(item);
+            itemClickSubject.onNext(item);
         }
     }
 

@@ -6,12 +6,14 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import rx.functions.Action1;
+import rx.subjects.BehaviorSubject;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by HaiNguyen on 11/25/16.
  */
 
-public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseItemView,BaseModel> {
+public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseItemPresenter.View,BaseModel> {
     protected RealmResults<Item> results;
     protected Realm realm = Realm.getDefaultInstance();
 
@@ -20,7 +22,7 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
     }
 
     @Override
-    public void onViewAttach( final BaseChooseItemView view) {
+    public void onViewAttach(final View view) {
         super.onViewAttach(view);
         view.loadItems();
         view.setProgressBar(true);
@@ -46,13 +48,17 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
                 })
         );
 
+        addSubscription(
+                view.onItemClick().subscribe(new Action1<Item>() {
+                    @Override
+                    public void call(Item item) {
+                        view.onSetItemToSlot().onNext(item);
+                    }
+                })
+        );
+
     }
 
-    public void onItemClick(Item item) {
-        if (item != null) {
-            view.onSetItemSubject().onNext(item);
-        }
-    }
 
     @Override
     public void onViewDetach() {
@@ -64,4 +70,21 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
     }
 
     protected abstract RealmResults<Item> getItemRealmResult();
+
+    public interface View extends PresenterView {
+        PublishSubject<Item> onItemClick();
+
+        PublishSubject<Item> onSetItemToSlot();
+
+        BehaviorSubject<Item> onCurrentItemChange();
+
+        void loadItems();
+
+        void setAdapter(RealmResults<Item> items);
+
+        void setCurrentItem(Item item);
+
+        void setProgressBar(boolean visible);
+    }
+
 }
