@@ -18,6 +18,7 @@ import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionFragmen
 import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppDialogView;
 import org.de_studio.recentappswitcher.setItems.chooseContact.ChooseContactDialogView;
 import org.de_studio.recentappswitcher.setItems.chooseShortcut.ChooseShortcutDialogView;
+import org.de_studio.recentappswitcher.setItems.chooseShortcutsSet.ChooseShortcutsSetDialogView;
 
 import java.lang.ref.WeakReference;
 
@@ -134,7 +135,10 @@ public class QuickActionSettingView extends BaseCollectionSettingView implements
 
     @Override
     public void setShortcutsSetToSlot(String slotId) {
-
+        FragmentManager fragmentManager1 = getSupportFragmentManager();
+        ChooseShortcutsSetDialogView dialogView = new ChooseShortcutsSetDialogView();
+        dialogView.setSubjects(null, setItemToSlotSubject);
+        dialogView.show(fragmentManager1, "chooseShortcutsSetDialog");
     }
 
     public static Intent getIntent(Context context, String collectionId) {

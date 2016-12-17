@@ -32,7 +32,7 @@ public class Item extends RealmObject {
     public static final int ACTION_FLASH_LIGHT = 16;
     public static final int ACTION_SCREEN_LOCK = 17;
     @PrimaryKey
-    public String itemId; // = type + identifier | app_packageName | action_action | contact_number | shortcut_intent | shortcuts_set_collection_id
+    public String itemId; // = type + identifier | app_packageName | action_action | contact_number | shortcut_intent | shortcuts_set_collection_id_
     public String type;
     public String label;
     public int action;
