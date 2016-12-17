@@ -199,6 +199,9 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
             public void execute(Realm realm) {
                 Slot slot = realm.where(Slot.class).equalTo(Cons.SLOT_ID, slotId).findFirst();
                 if (slot != null && item != null) {
+                    if (slot.type.equals(Slot.TYPE_EMPTY) || slot.type.equals(Slot.TYPE_NULL)) {
+                        slot.type = Slot.TYPE_ITEM;
+                    }
                     slot.stage1Item = item;
                 }
             }
