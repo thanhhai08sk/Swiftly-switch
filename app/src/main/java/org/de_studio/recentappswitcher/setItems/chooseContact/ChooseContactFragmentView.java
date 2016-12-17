@@ -23,7 +23,7 @@ public class ChooseContactFragmentView extends BaseChooseItemFragmentView {
     @Override
     public void loadItems() {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            ContactLoader contactLoader = new ContactLoader(getActivity());
+            ContactLoader contactLoader = new ContactLoader(getActivity().getApplicationContext());
             getLoaderManager().initLoader(0, null, contactLoader);
         } else {
             ActivityCompat.requestPermissions(getActivity(),
