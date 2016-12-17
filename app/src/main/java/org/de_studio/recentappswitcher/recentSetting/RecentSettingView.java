@@ -1,4 +1,4 @@
-package org.de_studio.recentappswitcher.circleFavoriteSetting;
+package org.de_studio.recentappswitcher.recentSetting;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,36 +8,27 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingView;
 import org.de_studio.recentappswitcher.dagger.AppModule;
-import org.de_studio.recentappswitcher.dagger.DaggerCircleFavoriteSettingComponent;
-import org.de_studio.recentappswitcher.dagger.CircleFavoriteSettingModule;
+import org.de_studio.recentappswitcher.dagger.DaggerRecentSettingComponent;
+import org.de_studio.recentappswitcher.dagger.RecentSettingModule;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * Created by HaiNguyen on 11/11/16.
+ * Created by HaiNguyen on 12/17/16.
  */
 
-public class CircleFavoriteSettingView extends BaseCollectionSettingView implements CircleFavoriteSettingPresenter.View {
-    private static final String TAG = CircleFavoriteSettingView.class.getSimpleName();
+public class RecentSettingView extends BaseCollectionSettingView implements RecentSettingPresenter.View {
+    private static final String TAG = RecentSettingView.class.getSimpleName();
     @BindView(R.id.size_text)
     TextView sizeText;
     @BindView(R.id.long_click_mode_text)
     TextView longClickModeText;
-
-
-
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.circle_favorite_setting;
-    }
-
     @Override
     protected void inject() {
-        DaggerCircleFavoriteSettingComponent.builder()
-                .appModule(new AppModule(this.getApplicationContext()))
-                .circleFavoriteSettingModule(new CircleFavoriteSettingModule(this, collectionId))
+        DaggerRecentSettingComponent.builder()
+                .appModule(new AppModule(this))
+                .recentSettingModule(new RecentSettingModule(this, collectionId))
                 .build().inject(this);
     }
 
@@ -53,11 +44,14 @@ public class CircleFavoriteSettingView extends BaseCollectionSettingView impleme
         presenter.onLongClickModeClick();
     }
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.circle_favorite_setting;
+    }
 
     public static Intent getIntent(Context context, String collectionId) {
-        Intent intent = new Intent(context, CircleFavoriteSettingView.class);
+        Intent intent = new Intent(context, RecentSettingView.class);
         intent.putExtra(Cons.COLLECTION_ID, collectionId);
         return intent;
     }
-
 }

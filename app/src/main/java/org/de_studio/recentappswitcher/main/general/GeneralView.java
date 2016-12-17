@@ -11,6 +11,7 @@ import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
 import org.de_studio.recentappswitcher.gridFavoriteSetting.GridFavoriteSettingView;
 import org.de_studio.recentappswitcher.quickActionSetting.QuickActionSettingView;
+import org.de_studio.recentappswitcher.recentSetting.RecentSettingView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -48,7 +49,7 @@ public class GeneralView extends Fragment {
     }
 
     public void setRecent() {
-
+        startActivity(RecentSettingView.getIntent(getActivity(), null));
     }
 
     public void setQuickAction() {

@@ -227,6 +227,9 @@
         <activity android:name=".circleFavoriteSetting.CircleFavoriteSettingView"
             android:label="@string/circle_favorites"
             android:theme="@style/AppTheme"/>
+        <activity android:name=".recentSetting.RecentSettingView"
+            android:label="@string/recent_apps"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".gridFavoriteSetting.GridFavoriteSettingView"
             android:label="@string/grid_favorites"
