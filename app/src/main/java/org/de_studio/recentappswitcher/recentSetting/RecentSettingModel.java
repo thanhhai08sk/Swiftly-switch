@@ -54,4 +54,19 @@ public class RecentSettingModel extends BaseCollectionSettingModel {
         });
         return newLabel;
     }
+
+    @Override
+    public void removeItem(int position) {
+        realm.beginTransaction();
+        Slot removeSlot = collection.slots.get(position);
+        if (!removeSlot.type.equals(Slot.TYPE_RECENT)) {
+            collection.slots.remove(position);
+            Slot recentSlot = new Slot();
+            recentSlot.slotId = Utility.createSlotId();
+            recentSlot.type = Slot.TYPE_RECENT;
+            Slot realmRecentSlot = realm.copyToRealm(recentSlot);
+            collection.slots.add(realmRecentSlot);
+        }
+        realm.commitTransaction();
+    }
 }

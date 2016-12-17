@@ -90,6 +90,7 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import io.realm.Realm;
@@ -2616,6 +2617,10 @@ public  class Utility {
 
     public static String createCollectionId(String collectionType, long number) {
         return collectionType + number;
+    }
+
+    public static String createSlotId() {
+        return String.valueOf(System.currentTimeMillis() + new Random().nextLong());
     }
 
     public static String createCollectionLabel(String defaultLabel, long number) {

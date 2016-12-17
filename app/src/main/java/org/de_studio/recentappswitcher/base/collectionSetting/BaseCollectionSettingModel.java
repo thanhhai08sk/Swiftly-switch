@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.base.collectionSetting;
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Item;
@@ -93,7 +94,7 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
             removeSlot(slots.size() - 1, slots);
         }
         while (slots.size() < size) {
-            addNullSlotToList(slots);
+            addDefaultSlotToList(slots);
         }
     }
 
@@ -128,26 +129,34 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
 
     public abstract String createNewCollection();
 
-    private void addNullSlotToList(final RealmList<Slot> slots) {
+    private void addDefaultSlotToList(final RealmList<Slot> slots) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Slot nullSlot = new Slot();
-                nullSlot.type = Slot.TYPE_NULL;
-                nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
-                Log.e(TAG, "new slot, id = " + nullSlot.slotId);
-                Slot realmSlot = realm.copyToRealm(nullSlot);
-                slots.add(realmSlot);
+                slots.add(createDefaultSlot());
             }
         });
 
     }
+
+
 
     private Slot createNullSlot() {
         Slot nullSlot = new Slot();
         nullSlot.type = Slot.TYPE_NULL;
         nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
         return realm.copyToRealm(nullSlot);
+    }
+
+    public Slot createDefaultSlot() {
+        Slot defaultSlot = new Slot();
+        defaultSlot.slotId = Utility.createSlotId();
+        if (collection.type.equals(Collection.TYPE_RECENT)) {
+            defaultSlot.type = Slot.TYPE_RECENT;
+        } else {
+            defaultSlot.type = Slot.TYPE_NULL;
+        }
+        return realm.copyToRealm(defaultSlot);
     }
 
     private Slot createEmptySlot() {
