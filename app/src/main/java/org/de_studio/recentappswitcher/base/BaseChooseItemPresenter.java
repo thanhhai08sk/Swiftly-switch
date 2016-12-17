@@ -55,6 +55,7 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
                     @Override
                     public void call(Item item) {
                         view.onSetItemToSlot().onNext(item);
+                        view.dismissIfDialog();
                     }
                 })
         );
@@ -87,6 +88,8 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
         void setCurrentItem(Item item);
 
         void setProgressBar(boolean visible);
+
+        void dismissIfDialog();
     }
 
 }

@@ -116,4 +116,9 @@ public abstract class BaseChooseItemFragmentView extends BaseFragment implements
     protected PresenterView getPresenterView() {
         return this;
     }
+
+    @Override
+    public void dismissIfDialog() {
+
+    }
 }

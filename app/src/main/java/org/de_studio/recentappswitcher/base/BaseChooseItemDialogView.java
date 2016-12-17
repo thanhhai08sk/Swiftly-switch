@@ -24,7 +24,7 @@ import rx.subjects.PublishSubject;
 
 public abstract class BaseChooseItemDialogView extends BaseDialogFragment implements AdapterView.OnItemClickListener, BaseChooseItemPresenter.View {
     private static final String TAG = BaseChooseItemFragmentView.class.getSimpleName();
-    @BindView(R.id.list_view)
+    @BindView(R.id.add_favorite_list_view)
     protected ListView listView;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
@@ -104,7 +104,7 @@ public abstract class BaseChooseItemDialogView extends BaseDialogFragment implem
 
     @Override
     protected int getLayoutRes() {
-        return R.layout.choose_app_view;
+        return R.layout.add_favorite_app_fragment_list_view;
     }
 
     @Override
@@ -117,4 +117,8 @@ public abstract class BaseChooseItemDialogView extends BaseDialogFragment implem
         return this;
     }
 
+    @Override
+    public void dismissIfDialog() {
+        dismiss();
+    }
 }
