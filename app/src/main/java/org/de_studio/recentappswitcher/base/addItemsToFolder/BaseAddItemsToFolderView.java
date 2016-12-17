@@ -1,30 +1,25 @@
 package org.de_studio.recentappswitcher.base.addItemsToFolder;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.base.BaseDialogFragment;
+import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.OnDialogClosed;
+import org.de_studio.recentappswitcher.base.PresenterView;
 import org.de_studio.recentappswitcher.base.adapter.ItemsListWithCheckBoxAdapter;
 import org.de_studio.recentappswitcher.model.Item;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmList;
 import rx.subjects.PublishSubject;
@@ -33,7 +28,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 12/3/16.
  */
 
-public class BaseAddItemsToFolderView extends DialogFragment implements BaseAddItemsToFolderPresenter.View , AdapterView.OnItemClickListener{
+public abstract class BaseAddItemsToFolderView extends BaseDialogFragment implements BaseAddItemsToFolderPresenter.View , AdapterView.OnItemClickListener{
     private static final String TAG = BaseAddItemsToFolderView.class.getSimpleName();
     @BindView(R.id.add_favorite_list_view)
     protected ListView listView;
@@ -48,33 +43,19 @@ public class BaseAddItemsToFolderView extends DialogFragment implements BaseAddI
 
     protected PublishSubject<Item> setItemSubject = PublishSubject.create();
     protected String slotId;
-    Unbinder unbinder;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         slotId = getArguments().getString(Cons.SLOT_ID);
-        inject();
+        super.onCreate(savedInstanceState);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.add_favorite_app_fragment_list_view, container);
-        unbinder = ButterKnife.bind(this, view);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
-        presenter.onViewAttach(this);
-        return view;
-    }
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        return dialog;
     }
 
     @Override
@@ -86,16 +67,18 @@ public class BaseAddItemsToFolderView extends DialogFragment implements BaseAddI
     }
 
     @Override
-    public void onDestroy() {
-        presenter.onViewDetach();
-        super.onDestroy();
+    protected int getLayoutRes() {
+        return R.layout.add_favorite_app_fragment_list_view;
     }
 
-    protected void inject(){}
+    @Override
+    protected PresenterView getPresenterView() {
+        return this;
+    }
 
     @Override
-    public void loadItems() {
-
+    protected BasePresenter getPresenter() {
+        return presenter;
     }
 
     @Override
@@ -119,9 +102,4 @@ public class BaseAddItemsToFolderView extends DialogFragment implements BaseAddI
         return setItemSubject;
     }
 
-
-    @Override
-    public void clear() {
-        unbinder.unbind();
-    }
 }
