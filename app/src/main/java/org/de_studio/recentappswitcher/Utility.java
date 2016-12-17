@@ -2451,7 +2451,7 @@ public  class Utility {
             case Item.TYPE_ACTION:
                 icon.setImageResource(item.iconResourceId);
                 break;
-            case Item.TYPE_SHORTCUT:
+            case Item.TYPE_DEVICE_SHORTCUT:
                 byte[] byteArray = item.iconBitmap;
                 try {
                     if (byteArray != null) {

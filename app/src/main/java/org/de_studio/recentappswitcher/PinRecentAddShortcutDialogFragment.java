@@ -160,7 +160,7 @@ public class PinRecentAddShortcutDialogFragment extends DialogFragment {
 //                    oldShortcut.deleteAllFromRealm();
 //
 //                    Shortcut shortcut = new Shortcut();
-//                    shortcut.setType(Shortcut.TYPE_SHORTCUT);
+//                    shortcut.setType(Shortcut.TYPE_DEVICE_SHORTCUT);
 //                    shortcut.setId(size);
 //                    shortcut.setLabel(label);
 //                    shortcut.setPackageName(packageName);

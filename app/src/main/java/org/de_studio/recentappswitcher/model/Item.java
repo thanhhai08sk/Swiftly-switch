@@ -12,7 +12,7 @@ public class Item extends RealmObject {
     public static final String TYPE_APP = "app_";
     public static final String TYPE_ACTION = "action_";
     public static final String TYPE_CONTACT = "contact_";
-    public static final String TYPE_SHORTCUT = "shortcut_";
+    public static final String TYPE_DEVICE_SHORTCUT = "shortcut_";
     public static final String TYPE_SHORTCUTS_SET = "shortcuts_set_";
     public static final int ACTION_WIFI = 0;
     public static final int ACTION_BLUETOOTH = 1;

@@ -48,7 +48,7 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
                             case Item.TYPE_CONTACT:
                                 view.setContactToSlot(slotInfo.slotId);
                                 break;
-                            case Item.TYPE_SHORTCUT:
+                            case Item.TYPE_DEVICE_SHORTCUT:
                                 view.setDeviceShortcutToSlot(slotInfo.slotId);
                                 break;
                             case Item.TYPE_SHORTCUTS_SET:

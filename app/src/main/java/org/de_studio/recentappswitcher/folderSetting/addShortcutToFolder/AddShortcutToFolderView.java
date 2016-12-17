@@ -108,8 +108,8 @@ public class AddShortcutToFolderView extends BaseAddItemsToFolderView {
             }
             realm.beginTransaction();
             Item item = new Item();
-            item.type = Item.TYPE_SHORTCUT;
-            item.itemId = Item.TYPE_SHORTCUT + stringIntent;
+            item.type = Item.TYPE_DEVICE_SHORTCUT;
+            item.itemId = Item.TYPE_DEVICE_SHORTCUT + stringIntent;
             item.label = label;
             item.packageName = packageName;
             item.intent = stringIntent;

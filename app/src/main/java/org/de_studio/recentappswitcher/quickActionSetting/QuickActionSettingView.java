@@ -13,6 +13,7 @@ import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerQuickActionsSettingComponent;
 import org.de_studio.recentappswitcher.dagger.QuickActionsSettingModule;
 import org.de_studio.recentappswitcher.model.Item;
+import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionDialogView;
 import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionFragmentView;
 import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppDialogView;
 
@@ -77,6 +78,20 @@ public class QuickActionSettingView extends BaseCollectionSettingView implements
                 switch (which) {
                     case 0:
                         setSlotSubject.onNext(new QuickActionSettingPresenter.SlotInfo(slotId, Item.TYPE_APP));
+                        break;
+                    case 1:
+                        setSlotSubject.onNext(new QuickActionSettingPresenter.SlotInfo(slotId, Item.TYPE_ACTION));
+                        break;
+                    case 2:
+                        setSlotSubject.onNext(new QuickActionSettingPresenter.SlotInfo(slotId, Item.TYPE_CONTACT));
+                        break;
+                    case 3:
+                        setSlotSubject.onNext(new QuickActionSettingPresenter.SlotInfo(slotId, Item.TYPE_DEVICE_SHORTCUT));
+                        break;
+                    case 4:
+                        setSlotSubject.onNext(new QuickActionSettingPresenter.SlotInfo(slotId, Item.TYPE_SHORTCUTS_SET));
+                        break;
+
                 }
             }
         });
@@ -93,7 +108,10 @@ public class QuickActionSettingView extends BaseCollectionSettingView implements
 
     @Override
     public void setActionToSlot(String slotId) {
-
+        FragmentManager fragmentManager1 = getSupportFragmentManager();
+        ChooseActionDialogView dialogView = new ChooseActionDialogView();
+        dialogView.setSubjects(null, setItemToSlotSubject);
+        dialogView.show(fragmentManager1, "chooseActionDialog");
     }
 
     @Override
