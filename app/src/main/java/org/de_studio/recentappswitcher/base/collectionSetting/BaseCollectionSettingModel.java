@@ -116,6 +116,10 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
         return getCurrentCollection().slots;
     }
 
+    public String getSlotId(int slotIndex) {
+        return getSlots().get(slotIndex).slotId;
+    }
+
     public RealmResults<Collection> getCollectionList() {
         return realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).findAll();
     }

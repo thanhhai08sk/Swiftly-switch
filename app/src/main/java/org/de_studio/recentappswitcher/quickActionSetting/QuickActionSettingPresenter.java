@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.quickActionSetting;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
+import org.de_studio.recentappswitcher.model.Item;
 
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
@@ -17,7 +18,7 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
     }
 
     @Override
-    public void onViewAttach(View view) {
+    public void onViewAttach(final View view) {
         super.onViewAttach(view);
         addSubscription(
                 view.onLoadItemsOk().subscribe(new Action1<Void>() {
@@ -32,6 +33,36 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
         view.loadItems();
         model.setup();
 
+        addSubscription(
+                view.onSetSlot().subscribe(new Action1<SlotInfo>() {
+                    @Override
+                    public void call(SlotInfo slotInfo) {
+                        switch (slotInfo.itemTypeToAdd) {
+                            case Item.TYPE_APP:
+                                view.setAppToSlot(slotInfo.slotId);
+                                break;
+                            case Item.TYPE_ACTION:
+                                view.setActionToSlot(slotInfo.slotId);
+                                break;
+                            case Item.TYPE_CONTACT:
+                                view.setContactToSlot(slotInfo.slotId);
+                                break;
+                            case Item.TYPE_SHORTCUT:
+                                view.setDeviceShortcutToSlot(slotInfo.slotId);
+                                break;
+                            case Item.TYPE_SHORTCUTS_SET:
+                                view.setShortcutsSetToSlot(slotInfo.slotId);
+                                break;
+                        }
+                    }
+                })
+        );
+
+    }
+
+    @Override
+    public void onSlotClick(int slotIndex) {
+        view.chooseItemTypeToAdd(model.getSlotId(slotIndex));
     }
 
     @Override
@@ -42,8 +73,33 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
     public interface View extends BaseCollectionSettingPresenter.View {
 
         PublishSubject<Void> onLoadItemsOk();
+
+        PublishSubject<SlotInfo> onSetSlot();
+
         void loadItems();
 
+        void chooseItemTypeToAdd(String slotId);
+
+        void setAppToSlot(String slotId);
+
+        void setActionToSlot(String slotId);
+
+        void setContactToSlot(String slotId);
+
+        void setDeviceShortcutToSlot(String slotId);
+
+        void setShortcutsSetToSlot(String slotId);
     }
+
+    public static class SlotInfo {
+        public String slotId;
+        public String itemTypeToAdd;
+
+        public SlotInfo(String slotId, String itemTypeToAdd) {
+            this.slotId = slotId;
+            this.itemTypeToAdd = itemTypeToAdd;
+        }
+    }
+
 
 }

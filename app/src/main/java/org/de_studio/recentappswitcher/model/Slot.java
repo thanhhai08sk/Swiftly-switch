@@ -82,4 +82,6 @@ public class Slot extends RealmObject {
     public void setItems(RealmList<Item> items) {
         this.items = items;
     }
+
+
 }

@@ -244,6 +244,8 @@
     <string name="app_shortcut_contact">Apps, shortcuts,...</string>
 
     //Quick action
-
+    <string name="device_shortcuts">"Device's shortcuts"</string>
+    <string name="shortcuts_sets">Shortcuts sets</string>
+    <string name="choose_shortcuts_type">Choose shortcut type</string>
 
 </resources>

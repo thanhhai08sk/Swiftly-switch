@@ -178,7 +178,7 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
     @Override
     public void chooseTypeOfItemsToAdd() {
         Utility.showDialogWithOptionToChoose(this, 0, new CharSequence[]{getString(R.string.apps)
-                        , getString(R.string.actions), getString(R.string.contacts), getString(R.string.shortcut)}
+                        , getString(R.string.actions), getString(R.string.contacts), getString(R.string.device_shortcuts)}
                 , new PublishSubject[]{addAppsSubject, addActionsSubject, addContactsSubject, addShortcutsSubject});
     }
 

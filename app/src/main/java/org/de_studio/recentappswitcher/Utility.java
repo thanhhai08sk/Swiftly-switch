@@ -2484,6 +2484,9 @@ public  class Utility {
                     icon.setImageResource(R.drawable.ic_contact_default);
                 }
                 break;
+            case Item.TYPE_SHORTCUTS_SET:
+                icon.setImageResource(item.iconResourceId);
+                break;
         }
     }
 
