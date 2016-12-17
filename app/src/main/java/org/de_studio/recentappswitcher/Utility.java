@@ -2627,6 +2627,13 @@ public  class Utility {
         return defaultLabel + " " + number;
     }
 
+    public static Slot createSlotAndAddToRealm(Realm realm, String slotType) {
+        Slot newSlot = new Slot();
+        newSlot.slotId = Utility.createSlotId();
+        newSlot.type = slotType;
+        return realm.copyToRealm(newSlot);
+    }
+
     public static void showDialogWithSeekBar(final int min, int max, int current, final String unit
             , String title
             , final PublishSubject<Integer> subject, Context context) {

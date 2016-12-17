@@ -9,8 +9,6 @@ import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 
-import java.util.Random;
-
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -140,31 +138,14 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
     }
 
 
-
-    private Slot createNullSlot() {
-        Slot nullSlot = new Slot();
-        nullSlot.type = Slot.TYPE_NULL;
-        nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
-        return realm.copyToRealm(nullSlot);
-    }
-
     public Slot createDefaultSlot() {
-        Slot defaultSlot = new Slot();
-        defaultSlot.slotId = Utility.createSlotId();
         if (collection.type.equals(Collection.TYPE_RECENT)) {
-            defaultSlot.type = Slot.TYPE_RECENT;
+            return Utility.createSlotAndAddToRealm(realm, Slot.TYPE_RECENT);
         } else {
-            defaultSlot.type = Slot.TYPE_NULL;
+            return Utility.createSlotAndAddToRealm(realm, Slot.TYPE_NULL);
         }
-        return realm.copyToRealm(defaultSlot);
     }
 
-    private Slot createEmptySlot() {
-        Slot emptySlot = new Slot();
-        emptySlot.type = Slot.TYPE_EMPTY;
-        emptySlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
-        return realm.copyToRealm(emptySlot);
-    }
 
     private void removeSlot(final int position, final RealmList<Slot> slots) {
         realm.executeTransaction(new Realm.Transaction() {
@@ -187,16 +168,16 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
         collection.slots.remove(position);
         switch (removeSlot.type) {
             case Slot.TYPE_NULL:
-                collection.slots.add(createEmptySlot());
+                collection.slots.add(Utility.createSlotAndAddToRealm(realm,Slot.TYPE_EMPTY));
                 removeSlot.deleteFromRealm();
                 break;
             case Slot.TYPE_EMPTY:
-                collection.slots.add(createNullSlot());
+                collection.slots.add(Utility.createSlotAndAddToRealm(realm, Slot.TYPE_NULL));
                 removeSlot.deleteFromRealm();
                 break;
 
             default:
-                collection.slots.add(createNullSlot());
+                collection.slots.add(Utility.createSlotAndAddToRealm(realm, Slot.TYPE_NULL));
                 break;
         }
         realm.commitTransaction();
