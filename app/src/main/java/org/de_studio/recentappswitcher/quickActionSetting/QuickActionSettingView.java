@@ -44,6 +44,19 @@ public class QuickActionSettingView extends BaseCollectionSettingView implements
     }
 
     @Override
+    public void showChooseSizeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.set_size)
+                .setItems(new CharSequence[]{"4", "5", "6", "7", "8"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        presenter.onChooseCollectionSize(which + 4);
+                    }
+                });
+        builder.create().show();
+    }
+
+    @Override
     protected int getLayoutId() {
         return R.layout.quick_action_setting;
     }
