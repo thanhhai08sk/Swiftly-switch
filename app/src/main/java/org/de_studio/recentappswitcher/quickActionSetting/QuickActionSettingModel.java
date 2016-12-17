@@ -90,6 +90,7 @@ public class QuickActionSettingModel extends BaseCollectionSettingModel {
         return Collection.TYPE_QUICK_ACTION;
     }
 
+
     @Override
     public String createNewCollection() {
         final long newCollectionNumber = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).count() + 1;

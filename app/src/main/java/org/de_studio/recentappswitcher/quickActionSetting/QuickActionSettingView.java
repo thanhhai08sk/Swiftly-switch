@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.quickActionSetting;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -13,6 +14,7 @@ import org.de_studio.recentappswitcher.dagger.DaggerQuickActionsSettingComponent
 import org.de_studio.recentappswitcher.dagger.QuickActionsSettingModule;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionFragmentView;
+import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppDialogView;
 
 import java.lang.ref.WeakReference;
 
@@ -26,6 +28,7 @@ public class QuickActionSettingView extends BaseCollectionSettingView implements
 
     PublishSubject<Void> loadItemsOkSubject = PublishSubject.create();
     PublishSubject<QuickActionSettingPresenter.SlotInfo> setSlotSubject = PublishSubject.create();
+    PublishSubject<Item> setItemToSlotSubject = PublishSubject.create();
 
 
     @Override
@@ -58,6 +61,11 @@ public class QuickActionSettingView extends BaseCollectionSettingView implements
     }
 
     @Override
+    public PublishSubject<Item> onSetItemToSlot() {
+        return setItemToSlotSubject;
+    }
+
+    @Override
     public void chooseItemTypeToAdd(final String slotId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.choose_shortcuts_type);
@@ -77,7 +85,10 @@ public class QuickActionSettingView extends BaseCollectionSettingView implements
 
     @Override
     public void setAppToSlot(String slotId) {
-
+        FragmentManager fragmentManager1 = getSupportFragmentManager();
+        ChooseAppDialogView chooseAppDialogView = new ChooseAppDialogView();
+        chooseAppDialogView.setSubjects(null, setItemToSlotSubject);
+        chooseAppDialogView.show(fragmentManager1, "chooseAppDialog");
     }
 
     @Override

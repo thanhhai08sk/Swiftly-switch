@@ -13,6 +13,7 @@ import rx.subjects.PublishSubject;
 
 public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<QuickActionSettingPresenter.View, QuickActionSettingModel> {
 
+    String slotOnsettingId;
     public QuickActionSettingPresenter(QuickActionSettingModel model) {
         super(model);
     }
@@ -58,11 +59,21 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
                 })
         );
 
+        addSubscription(
+                view.onSetItemToSlot().subscribe(new Action1<Item>() {
+                    @Override
+                    public void call(Item item) {
+                        model.setItemToSlotStage1(item, slotOnsettingId);
+                    }
+                })
+        );
+
     }
 
     @Override
     public void onSlotClick(int slotIndex) {
-        view.chooseItemTypeToAdd(model.getSlotId(slotIndex));
+        slotOnsettingId = model.getSlotId(slotIndex);
+        view.chooseItemTypeToAdd(slotOnsettingId);
     }
 
     @Override
@@ -75,6 +86,8 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
         PublishSubject<Void> onLoadItemsOk();
 
         PublishSubject<SlotInfo> onSetSlot();
+
+        PublishSubject<Item> onSetItemToSlot();
 
         void loadItems();
 

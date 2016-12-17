@@ -5,6 +5,7 @@ import android.util.Log;
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 
 import java.util.Random;
@@ -190,6 +191,18 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
                 break;
         }
         realm.commitTransaction();
+    }
+
+    public void setItemToSlotStage1(final Item item, final String slotId) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Slot slot = realm.where(Slot.class).equalTo(Cons.SLOT_ID, slotId).findFirst();
+                if (slot != null && item != null) {
+                    slot.stage1Item = item;
+                }
+            }
+        });
     }
 
     public void clear() {

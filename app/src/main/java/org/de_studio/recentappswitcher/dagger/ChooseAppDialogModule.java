@@ -6,8 +6,8 @@ import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.BaseChooseItemPresenter;
 import org.de_studio.recentappswitcher.base.adapter.ItemsListAdapter;
+import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppDialogView;
 import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppPresenter;
-import org.de_studio.recentappswitcher.setItems.chooseApp.ChooseAppFragmentView;
 
 import javax.inject.Singleton;
 
@@ -15,13 +15,13 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by HaiNguyen on 11/18/16.
+ * Created by HaiNguyen on 12/17/16.
  */
 @Module
-public class ChooseAppFragmentModule {
-    ChooseAppFragmentView view;
+public class ChooseAppDialogModule {
+    ChooseAppDialogView view;
 
-    public ChooseAppFragmentModule(ChooseAppFragmentView view) {
+    public ChooseAppDialogModule(ChooseAppDialogView view) {
         this.view = view;
     }
 
@@ -35,9 +35,7 @@ public class ChooseAppFragmentModule {
     @Provides
     @Singleton
     ItemsListAdapter adapter(@Nullable IconPackManager.IconPack iconPack){
-        return new ItemsListAdapter(view.getActivity(), null, view.getActivity().getPackageManager(), iconPack, R.layout.item_items_list_radio_button);
+        return new ItemsListAdapter(view.getActivity(), null, view.getActivity().getPackageManager(), iconPack, R.layout.item_items_list);
     }
-
-
 
 }

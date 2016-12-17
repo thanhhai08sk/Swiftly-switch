@@ -39,14 +39,16 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
             });
         }
 
-        addSubscription(
-                view.onCurrentItemChange().subscribe(new Action1<Item>() {
-                    @Override
-                    public void call(Item item) {
-                        view.setCurrentItem(item);
-                    }
-                })
-        );
+        if (view.onCurrentItemChange() != null) {
+            addSubscription(
+                    view.onCurrentItemChange().subscribe(new Action1<Item>() {
+                        @Override
+                        public void call(Item item) {
+                            view.setCurrentItem(item);
+                        }
+                    })
+            );
+        }
 
         addSubscription(
                 view.onItemClick().subscribe(new Action1<Item>() {
