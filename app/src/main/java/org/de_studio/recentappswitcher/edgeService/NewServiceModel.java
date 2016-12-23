@@ -65,6 +65,35 @@ public class NewServiceModel extends BaseModel {
 
     }
 
+    public int getGridActivatedId(float x, float y, float gridX, float gridY,int rowsCount, int columnCount, int space, boolean folderMode) {
+        double item_x,item_y;
+        double xDouble = (double) x;
+        double yDouble = (double) y;
+        float iconSpace = space * mScale * 2 + iconWidth;
+        double distance;
+        double smallestDistance = 1000*mScale;
+        for (int i = 0; i < columnCount; i++) {
+            for (int j = 0; j < rowsCount; j++) {
+                item_x = (gridX + iconSpace/2 +i*iconSpace);
+                item_y = (gridY + iconSpace/2 * mScale + j * iconSpace);
+                distance = Math.sqrt(Math.pow(xDouble - item_x,2) + Math.pow(yDouble - item_y, 2));
+                if (distance <= 35 * mScale) {
+                    return j * columnCount + i;
+                } else {
+                    if (smallestDistance > distance) {
+                        smallestDistance = distance;
+                    }
+                }
+            }
+        }
+        if (folderMode) {
+            if (smallestDistance > 105 * mScale) {
+                return -2;
+            }
+        }
+        return -1;
+    }
+
     public IconsXY calculateCircleIconPositions(int radius, int edgePosition, float xInit, float yInit, int iconCount) {
         float circleSizePxl = radius * mScale;
         float[] xs = new float[iconCount];
