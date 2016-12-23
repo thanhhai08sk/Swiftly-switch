@@ -12,7 +12,25 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         super(model);
     }
 
-    public interface View extends PresenterView {
+    @Override
+    public void onViewAttach(View view) {
+        super.onViewAttach(view);
+        model.setup();
+        view.addEdgesToWindowAndSetListener();
+        view.setupNotification();
+        view.setupReceiver();
+    }
+
+
+
+
+
+    public interface View extends PresenterView, android.view.View.OnTouchListener {
+        void addEdgesToWindowAndSetListener();
+
+        void setupNotification();
+
+        void setupReceiver();
 
     }
 }
