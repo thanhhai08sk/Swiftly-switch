@@ -59,7 +59,7 @@ public class Cons {
     public static final int CIRCLE_ICON_NUMBER_DEFAULT = 6;
 
     public static final int QUICK_ACTION_GAP_DP = 35;
-    public static final int DEFAULT_ICON_SIZE = 48;
+    public static final int DEFAULT_ICON_WIDTH = 48;
     public static final int DEFAULT_ICON_GAP_IN_GRID = 10;
     public static final int DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL = 20;
     public static final int DEFAULT_FAVORITE_GRID_PADDING_VERTICAL = 20;
@@ -85,6 +85,7 @@ public class Cons {
     public static final int HOLD_TIME_DEFAULT = 800;
     public static final int VIBRATION_DURATION_DEFAULT = 15;
     public static final int ANIMATION_TIME_DEFAULT = 170;
+
 
     public static final int EDGE_1_ID = 11;
     public static final int EDGE_2_ID = 22;

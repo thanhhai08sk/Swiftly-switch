@@ -71,7 +71,7 @@ import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_VERTICAL;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_GAP_IN_GRID;
-import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_SIZE;
+import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_WIDTH;
 import static org.de_studio.recentappswitcher.Cons.OLD_DEFAULT_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_HEIGHT_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_MODE_NAME;
@@ -369,8 +369,8 @@ public class EdgeServiceModule {
         gridView.setNumColumns(gridColumn);
         gridView.setGravity(Gravity.CENTER);
 
-        float gridWide = (int) (mScale *  (((DEFAULT_ICON_SIZE * mIconScale) + DEFAULT_ICON_GAP_IN_GRID) * gridColumn + gridGap * (gridColumn - 1)));
-        float gridTall = (int) (mScale *  (((DEFAULT_ICON_SIZE * mIconScale) + DEFAULT_ICON_GAP_IN_GRID) * gridRow + gridGap * (gridRow - 1)));
+        float gridWide = (int) (mScale *  (((DEFAULT_ICON_WIDTH * mIconScale) + DEFAULT_ICON_GAP_IN_GRID) * gridColumn + gridGap * (gridColumn - 1)));
+        float gridTall = (int) (mScale *  (((DEFAULT_ICON_WIDTH * mIconScale) + DEFAULT_ICON_GAP_IN_GRID) * gridRow + gridGap * (gridRow - 1)));
         gridParams.height = (int) gridTall;
         gridParams.width = (int) gridWide;
         gridView.setLayoutParams(gridParams);
@@ -386,7 +386,7 @@ public class EdgeServiceModule {
             , @Named(ICON_SCALE_NAME) float iconScale) {
         int gridRow = defaultShared.getInt(EdgeSetting.NUM_OF_GRID_ROW_KEY, 5);
         int gridGap = defaultShared.getInt(EdgeSetting.GAP_OF_SHORTCUT_KEY, 5);
-        return mScale *  (((DEFAULT_ICON_SIZE * iconScale) + DEFAULT_ICON_GAP_IN_GRID) * gridRow + gridGap * (gridRow - 1));
+        return mScale *  (((DEFAULT_ICON_WIDTH * iconScale) + DEFAULT_ICON_GAP_IN_GRID) * gridRow + gridGap * (gridRow - 1));
     }
 
     @Provides
@@ -397,7 +397,7 @@ public class EdgeServiceModule {
             , @Named(ICON_SCALE_NAME) float iconScale) {
         int gridColumn = defaultShared.getInt(Cons.NUM_OF_GRID_COLUMN_KEY, 4);
         int gridGap = defaultShared.getInt(EdgeSetting.GAP_OF_SHORTCUT_KEY, 5);
-        return  mScale * (((DEFAULT_ICON_SIZE * iconScale) + DEFAULT_ICON_GAP_IN_GRID) * gridColumn + gridGap * (gridColumn - 1));
+        return  mScale * (((DEFAULT_ICON_WIDTH * iconScale) + DEFAULT_ICON_GAP_IN_GRID) * gridColumn + gridGap * (gridColumn - 1));
 
     }
 
@@ -428,7 +428,7 @@ public class EdgeServiceModule {
     @Named(ICON_SIZE_PXL_NAME)
     float iconSizePxl(@Named(M_SCALE_NAME) float mScale
             , @Named(ICON_SCALE_NAME) float iconScale) {
-        return DEFAULT_ICON_SIZE * mScale * iconScale;
+        return DEFAULT_ICON_WIDTH * mScale * iconScale;
     }
 
 

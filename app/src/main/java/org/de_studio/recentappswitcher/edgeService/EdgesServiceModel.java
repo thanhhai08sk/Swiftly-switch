@@ -53,8 +53,8 @@ public class EdgesServiceModel {
         this.haftIconWidthPxl = haftIconWidthPxl;
         setPinnedShortcut();
 
-        iconSizeInclude10PaddingInGridDp = (int) (Cons.DEFAULT_ICON_SIZE * iconScale) + Cons.DEFAULT_ICON_GAP_IN_GRID;
-        iconSizePlx = Cons.DEFAULT_ICON_SIZE * iconScale * mScale;
+        iconSizeInclude10PaddingInGridDp = (int) (Cons.DEFAULT_ICON_WIDTH * iconScale) + Cons.DEFAULT_ICON_GAP_IN_GRID;
+        iconSizePlx = Cons.DEFAULT_ICON_WIDTH * iconScale * mScale;
     }
     public int getGridActivatedId(float x_cord, float y_cord, float x_grid, float y_grid,int gird_row, int grid_column, boolean folderMode) {
         double item_x,item_y;

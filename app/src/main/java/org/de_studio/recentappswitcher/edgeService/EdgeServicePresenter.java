@@ -239,26 +239,6 @@ public class EdgeServicePresenter {
                 view.vibrate();
             }
         }
-//        else if (iconToSwitch < 10
-//                && onHolding
-//                && currentCircleIconHighlight != -1
-//                && System.currentTimeMillis() - startHoldingTime > view.holdTime) {
-//
-//            if (currentEdgeMode == Cons.MODE_CIRCLE_FAVORITE) {
-//                view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId,model.circleIconXs, model.circleIconYs);
-//                view.showCircleFavorite();
-//                currentCircleIconHighlight = -1;
-//                currentShowing = Cons.SHOWING_FAVORITE_CIRCLE;
-//
-//            } else {
-//                view.unhighlightCircleIcon(currentCircleIconHighlight, edgeId, model.circleIconXs, model.circleIconYs);
-//                currentCircleIconHighlight = -1;
-//                view.removeCircleShortcutsView();
-//                view.showFavoriteGridView(xInit, yInit, currentPosition, iconToSwitch);
-//                currentShowing = Cons.SHOWING_GRID;
-//                view.setIndicator(null, false, -1);
-//            }
-//        }
 
     }
 

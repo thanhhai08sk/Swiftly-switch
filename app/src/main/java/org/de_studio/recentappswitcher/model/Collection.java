@@ -33,6 +33,7 @@ public class Collection extends RealmObject {
     public int offsetHorizontal;
     public int offsetVertical;
     public int space;
+    public int radius;
 
     public Collection() {
     }
@@ -147,5 +148,13 @@ public class Collection extends RealmObject {
 
     public void setColumnCount(int columnCount) {
         this.columnCount = columnCount;
+    }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
     }
 }
