@@ -28,12 +28,19 @@ public class NewServiceModel extends BaseModel {
     Realm realm;
     ArrayList<String> savedRecentShortcut;
 
+    public NewServiceModel(float mScale, float iconScale, String launcherPackageName, Realm realm) {
+        this.mScale = mScale;
+        this.iconScale = iconScale;
+        this.launcherPackageName = launcherPackageName;
+        this.realm = realm;
+    }
+
     void setup() {
         iconWidth = Cons.DEFAULT_ICON_WIDTH * mScale * iconScale;
         haftIconWidth = iconWidth / 2;
     }
 
-    float convertDpToPixel(int dp) {
+    public float convertDpToPixel(int dp) {
         return dp * mScale;
     }
 
@@ -261,7 +268,7 @@ public class NewServiceModel extends BaseModel {
 
     @Override
     public void clear() {
-
+        realm.close();
     }
 
     public class IconsXY {
