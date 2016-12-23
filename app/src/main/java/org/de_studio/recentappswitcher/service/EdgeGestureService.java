@@ -898,7 +898,7 @@ public class EdgeGestureService extends Service {
                                 Log.e(TAG, " item_view has already been added to the window manager");
                             }
                             delayToSwitchTask.switchToCircleShortcut();
-                            Log.e(TAG, "Switch to circle favorite");
+                            Log.e(TAG, "Switch to circleFav favorite");
                         } else {
                             delayToSwitchTask.switchToShortcut();
                         }
@@ -1065,7 +1065,7 @@ public class EdgeGestureService extends Service {
                         indicator.setVisibility(View.GONE);
                         circle = (Circle) clockParentsView.findViewById(R.id.circle);
                         if (circle == null) {
-                            Log.e(TAG, "circle = null");
+                            Log.e(TAG, "circleFav = null");
                         }
                         isClockShown = true;
                     }

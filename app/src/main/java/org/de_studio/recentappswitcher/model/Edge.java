@@ -9,13 +9,14 @@ import io.realm.annotations.PrimaryKey;
 
 public class Edge extends RealmObject {
     public static final int MODE_RECENT_AND_QUICK_ACTION = 0;
-    public static final int MODE_CIRCLE_AND_QUICK_ACTION = 1;
+    public static final int MODE_CIRCLE_FAV_AND_QUICK_ACTION = 1;
     public static final int MODE_GRID = 2;
     public int mode;
     public int position;
     @PrimaryKey
     public String edgeId; //edge1 or edge2
     public Collection recent;
+    public Collection circleFav;
     public Collection quickAction;
     public Collection grid;
     public int sensitive;

@@ -74,7 +74,6 @@ public class EdgeServicePresenter {
                 }
                 break;
         }
-//        view.removeAllExceptEdgeView();
         if (view.useActionDownVibrate) view.vibrate();
         view.showClock();
 

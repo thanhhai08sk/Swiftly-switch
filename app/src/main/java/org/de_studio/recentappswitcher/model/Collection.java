@@ -27,7 +27,6 @@ public class Collection extends RealmObject {
     public String longClickCollection;
     public int rowsCount;
     public int columnCount;
-    public int position;
     public int marginHorizontal;
     public int marginVertical;
     public int offsetHorizontal;
@@ -52,14 +51,6 @@ public class Collection extends RealmObject {
 
     public void setSpace(int space) {
         this.space = space;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
     }
 
     public int getMarginHorizontal() {

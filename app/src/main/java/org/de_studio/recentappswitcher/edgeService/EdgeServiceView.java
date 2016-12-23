@@ -638,7 +638,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             }
         }
         try {
-            Log.e(TAG, "showCircleIconsView: add circle item to windowmanager");
+            Log.e(TAG, "showCircleIconsView: add circleFav item to windowmanager");
             windowManager.addView(circleParentsView, circleShortcutsViewPara);
         } catch (IllegalStateException e) {
             Log.e(TAG, " item_view has already been added to the window manager");
@@ -659,7 +659,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         }
         if (!circleParentsView.isAttachedToWindow()) {
             try {
-                Log.e(TAG, "showCircleIconsView: add circle item to windowmanager");
+                Log.e(TAG, "showCircleIconsView: add circleFav item to windowmanager");
                 windowManager.addView(circleParentsView, circleShortcutsViewPara);
             } catch (IllegalStateException e) {
                 Log.e(TAG, " item_view has already been added to the window manager");

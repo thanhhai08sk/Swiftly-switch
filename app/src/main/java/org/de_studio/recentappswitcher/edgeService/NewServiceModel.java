@@ -9,7 +9,6 @@ import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -45,8 +44,8 @@ public class NewServiceModel extends BaseModel {
     }
 
 
-    public List<Slot> getRecent(ArrayList<String> packageNames, RealmList<Slot> slots) {
-        List<Slot> returnSlots = new ArrayList<>();
+    public RealmList<Slot> getRecent(ArrayList<String> packageNames, RealmList<Slot> slots) {
+        RealmList<Slot> returnSlots = new RealmList<>();
         long recentSlotsCount = slots.where().equalTo(Cons.TYPE, Slot.TYPE_RECENT).count();
         String removedPackage = null;
         if (packageNames.size() > 0) {
