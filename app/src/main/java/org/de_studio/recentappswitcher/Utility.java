@@ -2688,6 +2688,10 @@ public  class Utility {
         builder.create().show();
     }
 
+    public static String createAppItemId(String packageName) {
+        return Item.TYPE_APP + packageName;
+    }
+
 
 
 

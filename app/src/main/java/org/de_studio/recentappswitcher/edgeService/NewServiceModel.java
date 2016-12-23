@@ -1,19 +1,32 @@
 package org.de_studio.recentappswitcher.edgeService;
 
+import android.os.Build;
+
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseModel;
+import org.de_studio.recentappswitcher.model.Item;
+import org.de_studio.recentappswitcher.model.Slot;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmList;
 
 /**
  * Created by HaiNguyen on 12/23/16.
  */
 
 public class NewServiceModel extends BaseModel {
-
+    private static final String TAG = NewServiceModel.class.getSimpleName();
     float mScale, iconScale;
 
     float iconWidth, haftIconWidth;
-
+    String launcherPackageName;
+    String lastAppPackageName;
+    Realm realm;
+    ArrayList<String> savedRecentShortcut;
 
     void setup() {
         iconWidth = Cons.DEFAULT_ICON_WIDTH * mScale * iconScale;
@@ -22,6 +35,65 @@ public class NewServiceModel extends BaseModel {
 
     float convertDpToPixel(int dp) {
         return dp * mScale;
+    }
+
+
+    public List<Slot> getRecent(ArrayList<String> packageNames, RealmList<Slot> slots) {
+        List<Slot> returnSlots = new ArrayList<>();
+        long recentSlotsCount = slots.where().equalTo(Cons.TYPE, Slot.TYPE_RECENT).count();
+        String removedPackage = null;
+        if (packageNames.size() > 0) {
+            removedPackage = packageNames.get(0);
+            packageNames.remove(0);
+            packageNames.remove(launcherPackageName);
+            if (packageNames.size()>0) {
+                lastAppPackageName = packageNames.get(0);
+            }
+        }
+
+
+        for (Slot slot : slots) {
+            if (slot.type.equals(Slot.TYPE_ITEM) && slot.stage1Item.type.equals(Item.TYPE_APP) && packageNames.contains(slot.stage1Item.packageName)) {
+                packageNames.remove(slot.stage1Item.packageName);
+            }
+            if (slot.type.equals(Slot.TYPE_ITEM) && slot.stage1Item.type.equals(Item.TYPE_APP) && savedRecentShortcut.contains(slot.stage1Item.packageName)) {
+                savedRecentShortcut.remove(slot.stage1Item.packageName);
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int i = 0;
+            if (savedRecentShortcut != null) {
+                while (packageNames.size() < recentSlotsCount && i < savedRecentShortcut.size()) {
+                    if (!savedRecentShortcut.get(i).equals(removedPackage)
+                            && !packageNames.contains(savedRecentShortcut.get(i))) {
+                        packageNames.add(savedRecentShortcut.get(i));
+                    }
+                    i++;
+                }
+            }
+        }
+
+        savedRecentShortcut = packageNames;
+
+        for (Slot slot : slots) {
+            switch (slot.type) {
+                case Slot.TYPE_RECENT:
+                    if (packageNames.size()>0) {
+                        Item item = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(packageNames.get(0))).findFirst();
+                        Slot slot1 = new Slot();
+                        slot1.type = Slot.TYPE_ITEM;
+                        slot1.stage1Item = item;
+                        returnSlots.add(slot1);
+                    }
+                    break;
+                default:
+                    returnSlots.add(slot);
+                    break;
+            }
+        }
+
+        return returnSlots;
     }
 
     public int getCircleAndQuickActionTriggerId(IconsXY iconsXY, int radius, float x_init, float y_init, float x, float y, int position, int iconsCount) {

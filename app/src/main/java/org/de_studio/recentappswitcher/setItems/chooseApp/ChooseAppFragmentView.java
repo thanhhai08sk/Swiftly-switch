@@ -52,7 +52,7 @@ public class ChooseAppFragmentView extends BaseChooseItemFragmentView {
             Set<PackageInfo> packageInfos = Utility.getInstalledApps(packageManagerWeakReference.get());
             Item tempItem;
             for (final PackageInfo info : packageInfos) {
-                final String itemId = Item.TYPE_APP + info.packageName;
+                final String itemId = Utility.createAppItemId(info.packageName);
                 tempItem = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
                 if (tempItem == null) {
                     realm.executeTransaction(new Realm.Transaction() {
