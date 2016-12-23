@@ -138,6 +138,53 @@ public class NewServiceModel extends BaseModel {
         return new IconsXY(xs, ys);
     }
 
+    public float getXInit(int position, float x, float windowWidth, int radius) {
+        switch (Utility.rightLeftOrBottom(position)) {
+            case Cons.POSITION_RIGHT:
+                return x - 10 * mScale;
+            case Cons.POSITION_LEFT:
+                return  x + 10 * mScale;
+            case Cons.POSITION_BOTTOM:
+                return x - getXOffset(windowWidth, x,radius);
+        }
+        return -1;
+    }
+
+    public float getYInit(int position, float y, float windowHeight, int radius) {
+        switch (Utility.rightLeftOrBottom(position)) {
+            case Cons.POSITION_RIGHT:
+                return y - getYOffset(windowHeight, y, radius);
+            case Cons.POSITION_LEFT:
+                return y - getYOffset(windowHeight, y,radius);
+            case Cons.POSITION_BOTTOM:
+                return (int) (y - 10 * mScale);
+        }
+        return -1;
+    }
+
+    private float getYOffset(float windowHeight, float y_init, int radius) {
+        float distanceNeeded = getInitPointOffsetNeeded(radius);
+        float distanceWeHave = windowHeight - y_init;
+        if (distanceWeHave < distanceNeeded) {
+            return distanceNeeded - distanceWeHave;
+        } else if (y_init < distanceNeeded) {
+            return y_init - distanceNeeded;
+        } else return 0;
+    }
+
+    private float getXOffset(float windowWidth, float x_init, int radius) {
+        float distanceNeeded = getInitPointOffsetNeeded(radius);
+        float distanceWeHave = windowWidth - x_init;
+        if (distanceWeHave < distanceNeeded) {
+            return distanceNeeded - distanceWeHave;
+        } else if (x_init < distanceNeeded) {
+            return x_init - distanceNeeded;
+        } else return 0;
+    }
+    private float getInitPointOffsetNeeded(int radius) {
+        return haftIconWidth + radius*mScale;
+    }
+
 
 
     @Override
