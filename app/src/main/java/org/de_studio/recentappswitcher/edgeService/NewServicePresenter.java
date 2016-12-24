@@ -94,6 +94,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         );
     }
 
+    @Override
+    public void onViewDetach() {
+        view.removeAll();
+        super.onViewDetach();
+    }
 
     public void onActionDown(float x, float y, int edgeId) {
         setCurrentEdge(edgeId);
@@ -119,7 +124,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     }
 
     public void onActionUp(float x, float y) {
+        onHolding = false;
         Slot slot = null;
+        view.hideAllExceptEdges();
         switch (currentShowing.showWhat) {
             case Showing.SHOWING_CIRCLE_AND_ACTION:
                 if (currentHighlight < 10) {
@@ -138,6 +145,18 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         if (slot != null) {
             view.startSlot(slot);
         }
+    }
+
+    public void onActionOutSide() {
+        Log.e(TAG, "onActionOutSide: ");
+        view.hideAllExceptEdges();
+        onHolding = false;
+    }
+
+    public void onActionCancel() {
+        Log.e(TAG, "onActionCancel: ");
+        view.hideAllExceptEdges();
+        onHolding = false;
     }
 
 
@@ -220,6 +239,12 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         void startSlot(Slot slot);
 
         void startItem(Item item);
+
+        void hideAllExceptEdges();
+
+        void removeAllExceptEdges();
+
+        void removeAll();
     }
 
     public class Showing {
