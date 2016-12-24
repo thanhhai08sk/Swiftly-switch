@@ -1,9 +1,15 @@
 package org.de_studio.recentappswitcher.edgeService;
 
+import android.app.ActivityManager;
 import android.app.Service;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
@@ -32,15 +38,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.realm.RealmList;
+import io.realm.RealmResults;
 
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
+import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 
 /**
  * Created by HaiNguyen on 12/23/16.
@@ -64,6 +76,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Named(EDGE_2_VIEW_NAME)
     View edge2View;
     @Inject
+    @Named(LAUNCHER_PACKAGENAME_NAME)
+    String launcherPackageName;
+    @Inject
+    @Named(EXCLUDE_SET_NAME)
+    RealmResults<Item> excludeSet;
+    @Inject
     WindowManager windowManager;
     @Inject
     float mScale;
@@ -74,9 +92,16 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Inject
     NewServicePresenter presenter;
     HashMap<String, View> collectionViewsMap = new HashMap<>();
+    UsageStatsManager usageStatsManager;
 
 
-
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            usageStatsManager = (UsageStatsManager)getSystemService(Context.USAGE_STATS_SERVICE);
+        }
+    }
 
     @Nullable
     @Override
@@ -111,7 +136,65 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public ArrayList<String> getRecentApp() {
-        return null;
+        Log.e(TAG, "getRecentApp: launcher = " + launcherPackageName);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+            int numOfTask = 13;
+
+            List<ActivityManager.RunningTaskInfo> list = activityManager.getRunningTasks(numOfTask);
+            ArrayList<String> tempPackageNameKK = new ArrayList<String>();
+            for (int i = 0; i < list.size(); i++) {
+                ActivityManager.RunningTaskInfo taskInfo = list.get(i);
+                ComponentName componentName = taskInfo.baseActivity;
+                String packName = componentName.getPackageName();
+                if (!excludeSet.contains(packName) && !packName.contains("systemui")) {
+                    tempPackageNameKK.add(packName);
+                }
+            }
+            return tempPackageNameKK;
+        } else {
+            long timeStart = System.currentTimeMillis();
+            long currentTimeMillis = System.currentTimeMillis() + 2000;
+
+            List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
+            ArrayList<String> tempPackageName = new ArrayList<String>();
+            if (stats != null) {
+                SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(Cons.DATE_DECENDING_COMPARATOR);
+                for (UsageStats usageStats : stats) {
+                    mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
+                }
+                Set<Long> setKey = mySortedMap.keySet();
+                Log.e(TAG, "mySortedMap size   = " + mySortedMap.size());
+                UsageStats usageStats;
+                String packa;
+                for (Long key : setKey) {
+                    if (key <= currentTimeMillis) {
+                        usageStats = mySortedMap.get(key);
+                        if (usageStats != null) {
+                            packa = usageStats.getPackageName();
+                            if (packa != null &&
+                                    (usageStats.getTotalTimeInForeground() > 500
+                                            && !packa.contains("systemui")
+                                            && (excludeSet.where().equalTo(Cons.PACKAGENAME, packa).findFirst() == null)
+                                            && !tempPackageName.contains(packa)
+                                            || packa.equals(launcherPackageName))
+                                    ) {
+                                tempPackageName.add(packa);
+                            }
+                            if (tempPackageName.size() >= 7) {
+                                Log.e(TAG, "tempackage >= "  + 7);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            Log.e(TAG, "getRecentApp: time to get recent  = " + (System.currentTimeMillis() - timeStart));
+            Log.e(TAG, "getRecentApp: tem size = " + tempPackageName.size());
+            return tempPackageName;
+
+        }
+
     }
 
     @Override

@@ -569,9 +569,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                     tempPackageNameKK.add(packName);
                 }
             }
-//            if (tempPackageNameKK.size()>=1) {
-//                lastAppPackageName = tempPackageNameKK.get(0);
-//            }
             return tempPackageNameKK;
         } else {
             long timeStart = System.currentTimeMillis();
@@ -611,15 +608,6 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                     }
                 }
             }
-//            if (tempPackageName.size()>1) {
-//                if (!tempPackageName.get(1).equals(launcherPackageName)) {
-//                    lastAppPackageName = tempPackageName.get(1);
-//                } else {
-//                    if (tempPackageName.size() > 2) {
-//                        lastAppPackageName = tempPackageName.get(2);
-//                    }
-//                }
-//            }
             Log.e(TAG, "getRecentApp: time to get recent  = " + (System.currentTimeMillis() - timeStart));
             Log.e(TAG, "getRecentApp: tem size = " + tempPackageName.size());
             return tempPackageName;
