@@ -22,8 +22,25 @@ public class Edge extends RealmObject {
     public int sensitive;
     public int length;
     public int offset;
+    public boolean useGuide;
 
     public Edge() {
+    }
+
+    public Collection getCircleFav() {
+        return circleFav;
+    }
+
+    public void setCircleFav(Collection circleFav) {
+        this.circleFav = circleFav;
+    }
+
+    public boolean isUseGuide() {
+        return useGuide;
+    }
+
+    public void setUseGuide(boolean useGuide) {
+        this.useGuide = useGuide;
     }
 
     public int getMode() {

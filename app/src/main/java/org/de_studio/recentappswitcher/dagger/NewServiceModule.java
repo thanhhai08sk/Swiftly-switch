@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -36,6 +37,7 @@ import io.realm.RealmList;
 
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_HEIGHT_PXL_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_POSITION_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SHARED_NAME;
@@ -43,6 +45,7 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_WIDTH_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_HEIGHT_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_ID;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_POSITION_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
@@ -50,6 +53,7 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_WIDTH_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_PARENT_VIEW_PARA_NAME;
+import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
@@ -72,14 +76,30 @@ public class NewServiceModule {
         this.context = context;
     }
 
+
     @Provides
     @Singleton
     NewServicePresenter presenter(NewServiceModel model
             , Realm realm
-            , @Named(SHARED_PREFERENCE_NAME) SharedPreferences shared) {
-        Edge edge1 = realm.where(Edge.class).equalTo(Cons.EDGE_ID, Cons.EDGE_1_ID).findFirst();
-        Edge edge2 = realm.where(Edge.class).equalTo(Cons.EDGE_ID, Cons.EDGE_2_ID).findFirst();
+            , @Named(SHARED_PREFERENCE_NAME) SharedPreferences shared
+            , @Named(EDGE_1_NAME) Edge edge1
+            , @Named(EDGE_2_NAME) Edge edge2) {
+
         return new NewServicePresenter(model, edge1, edge2, shared.getInt(Cons.HOLD_TIME_KEY, Cons.DEFAULT_HOLD_TIME));
+    }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_1_NAME)
+    Edge edge1(Realm realm) {
+        return realm.where(Edge.class).equalTo(Cons.EDGE_ID, Cons.EDGE_1_ID).findFirst();
+    }
+
+    @Provides
+    @Singleton
+    @Named(EDGE_2_NAME)
+    Edge edge2(Realm realm) {
+        return realm.where(Edge.class).equalTo(Cons.EDGE_ID, Cons.EDGE_2_ID).findFirst();
     }
 
     @Provides
@@ -110,28 +130,27 @@ public class NewServiceModule {
     @Provides
     @Singleton
     @Named(CLOCK_PARENTS_VIEW_NAME)
-    View clockParentsView() {
+    FrameLayout clockParentsView() {
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        return layoutInflater.inflate(R.layout.clock, null);
+        return (FrameLayout) layoutInflater.inflate(R.layout.clock, null);
     }
 
     @Provides
     @Singleton
     @Named(EDGE_1_VIEW_NAME)
-    View edge1View(@Named(EDGE_1_POSITION_NAME) int edge1Position
+    View edge1View(@Named(EDGE_1_NAME) Edge edge1
             , @Named(M_SCALE_NAME) float mScale
-            , @Named(EDGE_1_SHARED_NAME) SharedPreferences edge1Shared
             , @Named(GUIDE_COLOR_NAME) int guideColor) {
 
         View edge1View = new View(context);
         edge1View.setId(Cons.EDGE_1_ID);
-        if (edge1Shared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true)) {
+        if (edge1.useGuide) {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
             shape.setCornerRadius(0);
             shape.setStroke((int) (2 * mScale), guideColor);
             LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
-            switch (edge1Position / 10) {
+            switch (edge1.position / 10) {
                 case 1:
                     drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), 0, (int) (-5 * mScale));
                     break;
@@ -145,13 +164,13 @@ public class NewServiceModule {
             edge1View.setBackground(drawable);
 
 
-            int edge1Sensivite = edge1Shared.getInt(Cons.EDGE_SENSIIVE_KEY, Cons.EDGE_SENSITIVE_DEFAULT);
-            int edge1Length = edge1Shared.getInt(Cons.EDGE_LENGTH_KEY, Cons.EDGE_LENGTH_DEFAULT);
+            int edge1Sensivite = edge1.sensitive;
+            int edge1Length = edge1.length;
             int edge1HeightPxl;
             int edge1WidthPxl;
 
 
-            if (Utility.rightLeftOrBottom(edge1Position) == Cons.POSITION_BOTTOM) {
+            if (Utility.rightLeftOrBottom(edge1.position) == Cons.POSITION_BOTTOM) {
                 edge1HeightPxl = (int) (edge1Sensivite * mScale);
                 edge1WidthPxl = (int) (edge1Length * mScale);
             } else {
@@ -166,26 +185,31 @@ public class NewServiceModule {
         }
         return edge1View;
     }
+    @Provides
+    @Singleton
+    @Named(GUIDE_COLOR_NAME)
+    int guideColor(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
+        return defaultShared.getInt(EdgeSetting.GUIDE_COLOR_KEY, GUIDE_COLOR_DEFAULT);
+    }
 
 
     @Provides
     @Singleton
     @Named(EDGE_2_VIEW_NAME)
-    View edge2View(@Named(EDGE_2_POSITION_NAME) int edge2Position
+    View edge2View(@Named(EDGE_2_NAME) Edge edge2
             , @Named(M_SCALE_NAME) float mScale
-            , @Named(EDGE_2_SHARED_NAME) SharedPreferences edge2Shared
             , @Named(GUIDE_COLOR_NAME) int guideColor) {
 
 
         View edge2View = new View(context);
         edge2View.setId(EDGE_2_ID);
-        if (edge2Shared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true)) {
+        if (edge2.useGuide) {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
             shape.setCornerRadius(0);
             shape.setStroke((int) (2 * mScale), guideColor);
             LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
-            switch (edge2Position / 10) {
+            switch (edge2.position / 10) {
                 case 1:
                     drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), 0, (int) (-5 * mScale));
                     break;
@@ -198,20 +222,20 @@ public class NewServiceModule {
             }
             edge2View.setBackground(drawable);
 
-            int edge2Sensivite = edge2Shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.EDGE_SENSITIVE_DEFAULT);
-            int edge2Length = edge2Shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.EDGE_LENGTH_DEFAULT);
+            int edge2Sensivite = edge2.sensitive;
+            int edge2Length = edge2.length;
             int edge2HeightPxl;
             int edge2WidthPxl;
 
 
-            if (Utility.rightLeftOrBottom(edge2Position) == Cons.POSITION_BOTTOM) {
+            if (Utility.rightLeftOrBottom(edge2.position) == Cons.POSITION_BOTTOM) {
                 edge2HeightPxl = (int) (edge2Sensivite * mScale);
                 edge2WidthPxl = (int) (edge2Length * mScale);
             } else {
                 edge2HeightPxl = (int) (edge2Length * mScale);
                 edge2WidthPxl = (int) (edge2Sensivite * mScale);
             }
-            RelativeLayout.LayoutParams edge2ImageLayoutParams = new RelativeLayout.LayoutParams(edge2WidthPxl,edge2HeightPxl);
+            RelativeLayout.LayoutParams edge2ImageLayoutParams = new RelativeLayout.LayoutParams(edge2WidthPxl, edge2HeightPxl);
             edge2ImageLayoutParams.height = edge2HeightPxl;
             edge2ImageLayoutParams.width = edge2WidthPxl;
             edge2View.setLayoutParams(edge2ImageLayoutParams);

@@ -166,6 +166,8 @@ public class Cons {
     public static final String GRID_WIDTH_NAME = "gridWidth";
     public static final String GRID_NUMBER_COLUMNS_NAME = "gridNumberColumns";
     public static final String GRID_NUMBER_ROWS_NAME = "gridNumberRows";
+    public static final String EDGE_1_NAME = "edge1";
+    public static final String EDGE_2_NAME = "edge2";
 
 
 

@@ -75,6 +75,7 @@ import static org.de_studio.recentappswitcher.Cons.SHARED_PREFERENCE_NAME;
 public class NewServiceView extends Service implements NewServicePresenter.View {
     private static final String TAG = NewServiceView.class.getSimpleName();
     public static boolean FLASH_LIGHT_ON = false;
+    @Nullable
     @Inject
     IconPackManager.IconPack iconPack;
     @Inject

@@ -12,6 +12,7 @@ import org.de_studio.recentappswitcher.dagger.DaggerBlackListSettingComponent;
 import org.de_studio.recentappswitcher.model.Collection;
 
 import io.realm.RealmResults;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by HaiNguyen on 12/17/16.
@@ -45,5 +46,15 @@ public class BlackListSettingView extends BaseCollectionSettingView implements B
         Intent intent = new Intent(context, BlackListSettingView.class);
         intent.putExtra(Cons.COLLECTION_ID, collectionId);
         return intent;
+    }
+
+    @Override
+    public PublishSubject<Void> onAddApps() {
+        return null;
+    }
+
+    @Override
+    public void addApps() {
+
     }
 }
