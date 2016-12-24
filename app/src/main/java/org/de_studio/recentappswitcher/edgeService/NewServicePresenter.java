@@ -142,11 +142,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 slot = currentShowing.grid.slots.get(currentHighlight);
                 break;
             case Showing.SHOWING_FOLDER:
-                view.startItem(currentShowing.folderItems.get(currentHighlight));
+                view.startItem(currentShowing.folderItems.get(currentHighlight), model.getLastApp());
                 break;
         }
         if (slot != null) {
-            view.startSlot(slot);
+            view.startSlot(slot, model.getLastApp());
         }
     }
 
@@ -241,9 +241,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void unhighlightSlot(Showing currentShowing, int id);
 
-        void startSlot(Slot slot);
+        void startSlot(Slot slot, String lastApp);
 
-        void startItem(Item item);
+        void startItem(Item item, String lastApp);
 
         void hideAllExceptEdges();
 

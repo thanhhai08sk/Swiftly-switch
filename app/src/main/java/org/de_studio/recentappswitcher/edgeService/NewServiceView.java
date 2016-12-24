@@ -220,13 +220,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
-    public void startSlot(Slot slot) {
-
+    public void startSlot(Slot slot, String lastApp) {
+        Utility.startSlot(slot, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION, Cons.DEFAULT_CONTACT_ACTION));
     }
 
     @Override
-    public void startItem(Item item) {
-
+    public void startItem(Item item, String lastApp) {
+        Utility.startItem(item, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION, Cons.DEFAULT_CONTACT_ACTION));
     }
 
     @Override

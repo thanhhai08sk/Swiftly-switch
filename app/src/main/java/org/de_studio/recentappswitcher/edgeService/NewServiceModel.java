@@ -102,6 +102,10 @@ public class NewServiceModel extends BaseModel {
         return returnSlots;
     }
 
+    public String getLastApp() {
+        return lastAppPackageName;
+    }
+
     public int getCircleAndQuickActionTriggerId(IconsXY iconsXY, int radius, float x_init, float y_init, float x, float y, int position, int iconsCount) {
         float circleSizePxl = radius * mScale;
         double xInitDouble = (double) x_init;

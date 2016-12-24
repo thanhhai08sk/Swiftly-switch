@@ -238,6 +238,7 @@ public class Cons {
     public static final int ACTION_CHOOSE = 0;
     public static final int ACTION_CALL = 1;
     public static final int ACTION_SMS = 2;
+    public static final int DEFAULT_CONTACT_ACTION = ACTION_CHOOSE;
 
     public static final int HOLD_TIME_MIN = 150;
 
