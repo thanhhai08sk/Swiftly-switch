@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,18 +32,22 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.realm.RealmList;
 
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
+
 /**
  * Created by HaiNguyen on 12/23/16.
  */
 
 public class NewServiceView extends Service implements NewServicePresenter.View {
-
+    private static final String TAG = NewServiceView.class.getSimpleName();
     public static boolean FLASH_LIGHT_ON = false;
     @Inject
     IconPackManager.IconPack iconPack;
@@ -52,6 +57,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Inject
     @Named(Cons.CLOCK_PARENTS_VIEW_NAME)
     FrameLayout backgroundView;
+    @Inject
+    @Named(EDGE_1_VIEW_NAME)
+    View edge1View;
+    @Inject
+    @Named(EDGE_2_VIEW_NAME)
+    View edge2View;
     @Inject
     WindowManager windowManager;
     @Inject
@@ -231,17 +242,49 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void hideAllExceptEdges() {
+        Set<String> collectionIds = collectionViewsMap.keySet();
+        for (String collectionId : collectionIds) {
+            collectionViewsMap.get(collectionId).setVisibility(View.GONE);
+        }
 
+        if (backgroundView != null) {
+            backgroundView.setVisibility(View.GONE);
+        }
     }
 
     @Override
-    public void removeAllExceptEdges() {
+    public synchronized void removeAllExceptEdges() {
+        Set<String> collectionIds = collectionViewsMap.keySet();
+        for (String collectionId : collectionIds) {
+            try {
+                windowManager.removeView(collectionViewsMap.get(collectionId));
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG, "removeAllExceptEdges: can not remove " + collectionId);
+            }
+        }
 
+        if (backgroundView != null && backgroundView.isAttachedToWindow()) {
+            windowManager.removeView(backgroundView);
+        }
     }
 
     @Override
-    public void removeAll() {
+    public synchronized void removeAll() {
+        if (edge1View != null) {
+            edge1View.setOnTouchListener(null);
+            if (edge1View.isAttachedToWindow()) {
+                windowManager.removeView(edge1View);
+            }
+        }
 
+        if (edge2View != null) {
+            edge2View.setOnClickListener(null);
+            if (edge2View.isAttachedToWindow()) {
+                windowManager.removeView(edge2View);
+            }
+        }
+        removeAllExceptEdges();
     }
 
     @Override
