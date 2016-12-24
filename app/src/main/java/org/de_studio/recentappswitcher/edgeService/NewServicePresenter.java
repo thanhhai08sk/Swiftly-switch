@@ -164,7 +164,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     private void showCollection(ArrayList<String> tempPackages) {
         switch (currentEdge.mode) {
             case Edge.MODE_GRID:
-                view.showGrid(xInit, yInit, currentEdge.grid);
+                view.showGrid(xInit, yInit, currentEdge.grid, currentEdge.position);
                 currentShowing.showWhat = Showing.SHOWING_GRID;
                 currentShowing.grid = currentEdge.grid;
                 break;
@@ -224,7 +224,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void showBackground();
 
-        void showGrid(float xInit, float yInit, Collection grid);
+        void showGrid(float xInit, float yInit, Collection grid, int position);
 
         void showCircle(NewServiceModel.IconsXY iconsXY, Collection circle, RealmList<Slot> slots);
 

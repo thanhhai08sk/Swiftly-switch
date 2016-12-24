@@ -460,7 +460,7 @@ public  class Utility {
 
     }
 
-    public static void setFavoriteGridViewPosition(GridView gridView, float gridTall, float gridWide, float x_init_cord, float y_init_cord, float mScale, int edgePosition, WindowManager windowManager, SharedPreferences sharedPreferences, int distanceFromEdgeDp, int distanceVertical, int iconToSwitch) {
+    public static void setFavoriteGridViewPosition(View gridView, float gridTall, float gridWide, float x_init_cord, float y_init_cord, float mScale, int edgePosition, WindowManager windowManager, SharedPreferences sharedPreferences, int distanceFromEdgeDp, int distanceVertical, int iconToSwitch) {
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
         float distanceVerticalFromEdge = ((float)distanceVertical)* mScale;
         boolean isCenter = sharedPreferences.getBoolean(EdgeSetting.IS_CENTRE_FAVORITE, false);
