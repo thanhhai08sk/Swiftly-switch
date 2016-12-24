@@ -9,22 +9,27 @@ import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
+import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -45,6 +50,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Named(Cons.GRID_PARENT_VIEW_PARA_NAME)
     WindowManager.LayoutParams collectionWindowPapams;
     @Inject
+    @Named(Cons.CLOCK_PARENTS_VIEW_NAME)
+    FrameLayout backgroundView;
+    @Inject
     WindowManager windowManager;
     @Inject
     float mScale;
@@ -53,6 +61,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Inject
     SharedPreferences sharedPreferences;
     HashMap<String, View> collectionViewsMap = new HashMap<>();
+
 
 
 
@@ -94,7 +103,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void showBackground() {
-
+        if (!backgroundView.isAttachedToWindow()) {
+            windowManager.addView(backgroundView, collectionWindowPapams);
+        }
     }
 
     @Override
@@ -169,7 +180,33 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void showClock() {
-
+        backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.GONE);
+        if (!sharedPreferences.getBoolean(Cons.DISABLE_CLOCK_KEY,false)) {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
+            backgroundView.findViewById(R.id.clock_linear_layout).setVisibility(View.VISIBLE);
+            TextView hourTextView = (TextView) backgroundView.findViewById(R.id.clock_time_in_hour);
+            TextView dateTextView = (TextView) backgroundView.findViewById(R.id.clock_time_in_date);
+            TextView batteryLifeTextView = (TextView) backgroundView.findViewById(R.id.clock_battery_life);
+            String batteryString = getApplicationContext().getString(R.string.batterylife) + " " + Utility.getBatteryLevel(getApplicationContext()) + "%";
+            if (batteryLifeTextView != null) {
+                batteryLifeTextView.setText(batteryString);
+            }
+            if (dateTextView != null) {
+                dateTextView.setText(dateFormat.format(c.getTime()));
+            }
+            if (!DateFormat.is24HourFormat(getApplicationContext())) {
+                SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm");
+                if (hourTextView != null) {
+                    hourTextView.setText(hourFormat.format(c.getTime()));
+                }
+            } else {
+                SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
+                if (hourTextView != null) {
+                    hourTextView.setText(hourFormat.format(c.getTime()));
+                }
+            }
+        }
     }
 
     @Override
