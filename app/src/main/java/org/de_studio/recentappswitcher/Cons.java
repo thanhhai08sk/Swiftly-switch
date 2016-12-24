@@ -83,7 +83,7 @@ public class Cons {
     public static final int GUIDE_COLOR_DEFAULT = Color.argb(255, 255, 64, 129);
     public static final int BACKGROUND_COLOR_DEFAULT = 1879048192;
     public static final int HOLD_TIME_DEFAULT = 800;
-    public static final int VIBRATION_DURATION_DEFAULT = 15;
+    public static final int DEFAULT_VIBRATE_DURATION = 15;
     public static final int ANIMATION_TIME_DEFAULT = 170;
 
 

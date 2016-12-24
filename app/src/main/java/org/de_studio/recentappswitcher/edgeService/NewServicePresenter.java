@@ -66,6 +66,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         highlightFrom = System.currentTimeMillis();
                         holdingHelper = holdingHelper + integer;
                         longClickHelperSubject.onNext(holdingHelper);
+                        if (integer!= -1) {
+                            view.actionMoveVibrate();
+                        }
                     }
                 })
         );
@@ -229,6 +232,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         void showCircle(NewServiceModel.IconsXY iconsXY, Collection circle, RealmList<Slot> slots);
 
         void actionDownVibrate();
+
+        void actionMoveVibrate();
 
         void showClock();
 

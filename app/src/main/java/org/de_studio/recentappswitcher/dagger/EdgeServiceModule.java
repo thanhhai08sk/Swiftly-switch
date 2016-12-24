@@ -144,7 +144,7 @@ import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_CLOCK_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_INSTANT_FAVORITE_NAME;
 import static org.de_studio.recentappswitcher.Cons.VIBRATE_DURATION_NAME;
-import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_DEFAULT;
+import static org.de_studio.recentappswitcher.Cons.DEFAULT_VIBRATE_DURATION;
 import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_KEY;
 
 /**
@@ -887,7 +887,7 @@ public class EdgeServiceModule {
     @Singleton
     @Named(VIBRATE_DURATION_NAME)
     int vibrationDuration(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences shared) {
-        return shared.getInt(VIBRATION_DURATION_KEY, VIBRATION_DURATION_DEFAULT);
+        return shared.getInt(VIBRATION_DURATION_KEY, DEFAULT_VIBRATE_DURATION);
     }
 
     @Provides
