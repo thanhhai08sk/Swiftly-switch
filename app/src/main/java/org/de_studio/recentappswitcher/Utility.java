@@ -64,6 +64,7 @@ import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
+import org.de_studio.recentappswitcher.edgeService.NewServiceView;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Item;
@@ -1032,21 +1033,16 @@ public  class Utility {
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
-
-
-//        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-//        event1.setClassName(className);
-//        event1.getText().add("home");
-//        event1.setAction(1);
-//        event1.setPackageName(packageName);
-//        event1.setEnabled(true);
-//        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-//        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-//        recordCompat.setSource(v);
-//        if (Utility.isAccessibilityEnable(context)) {
-//            manager.sendAccessibilityEvent(event1);
-//        }else Toast.makeText(context, R.string.ask_user_to_turn_on_accessibility_toast, Toast.LENGTH_LONG).show();
     }
+
+    public static void startHomeAction(Context context) {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+
 
 
 
@@ -1055,23 +1051,13 @@ public  class Utility {
         if (!Utility.isAccessibilityEnable(context)) {
             startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
         }
-//        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-//        event1.setClassName(className);
-//        event1.getText().add("back");
-//        event1.setAction(2);
-//        event1.setPackageName(packageName);
-//        event1.setEnabled(true);
-//        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-//        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-//        recordCompat.setSource(v);
-//        Log.e(TAG, "backAction: send event " + (System.currentTimeMillis() - time));
-//        manager.sendAccessibilityEvent(event1);
-//        Log.e(TAG, "backAction: check service enabled " + (System.currentTimeMillis() - time));
+    }
 
-
-//        if (Utility.isAccessibilityEnable(context)) {
-//            manager.sendAccessibilityEvent(event1);
-//        }else startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
+    public static void startBackAction(Context context) {
+        context.sendBroadcast(new Intent(Cons.ACTION_BACK));
+        if (!Utility.isAccessibilityEnable(context)) {
+            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
+        }
     }
 
     public static void recentAction(Context context, View v, String className, String packageName) {
@@ -1079,18 +1065,13 @@ public  class Utility {
         if (!Utility.isAccessibilityEnable(context)) {
             startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
         }
-//        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-//        event1.setClassName(className);
-//        event1.getText().add("recent");
-//        event1.setAction(5);
-//        event1.setPackageName(packageName);
-//        event1.setEnabled(true);
-//        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-//        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-//        recordCompat.setSource(v);
-//        if (Utility.isAccessibilityEnable(context)) {
-//            manager.sendAccessibilityEvent(event1);
-//        }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+    }
+
+    public static void startRecentAction(Context context) {
+        context.sendBroadcast(new Intent(Cons.ACTION_RECENT));
+        if (!Utility.isAccessibilityEnable(context)) {
+            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
+        }
     }
 
     public static void volumeAction(Context context) {
@@ -1128,6 +1109,17 @@ public  class Utility {
         } else {
             context.stopService(i);
             EdgeServiceView.FLASH_LIGHT_ON = false;
+        }
+    }
+
+    public static void flashLightAction3(Context context) {
+        Intent i = new Intent(context, Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? FlashServiceM.class : FlashService.class);
+        if (!NewServiceView.FLASH_LIGHT_ON) {
+            context.startService(i);
+            NewServiceView.FLASH_LIGHT_ON = true;
+        } else {
+            context.stopService(i);
+            NewServiceView.FLASH_LIGHT_ON = false;
         }
     }
 
@@ -1172,7 +1164,37 @@ public  class Utility {
         }
     }
 
+    public static void startPowerAction(Context context) {
+        context.sendBroadcast(new Intent(Cons.ACTION_POWER_MENU));
+        if (!Utility.isAccessibilityEnable(context)) {
+            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
+        }
+    }
+
     public static void notiAction(Context context, View v, String className, String packageName) {
+        Object sbservice =context.getSystemService("statusbar");
+        try {
+            Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
+            Method showsb;
+            if (Build.VERSION.SDK_INT >= 17) {
+                showsb = statusbarManager.getMethod("expandNotificationsPanel");
+            } else {
+                showsb = statusbarManager.getMethod("expand");
+            }
+            showsb.invoke(sbservice);
+        } catch (ClassNotFoundException e) {
+            Log.e(TAG, "ClassNotFound " + e);
+        } catch (NoSuchMethodException e) {
+            notiActionByAccessibility(context);
+        } catch (IllegalAccessException e) {
+            notiActionByAccessibility(context);
+            Log.e(TAG, "IllegalAccessException " + e);
+        } catch (InvocationTargetException e) {
+            notiActionByAccessibility(context);
+            Log.e(TAG, "InvocationTargetException " + e);
+        }
+    }
+    public static void startNotiAction(Context context) {
         Object sbservice =context.getSystemService("statusbar");
         try {
             Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
@@ -2692,6 +2714,160 @@ public  class Utility {
         return Item.TYPE_APP + packageName;
     }
 
+    public static void startSlot(Slot slot, String lastAppPackageName, Context context, int contactAction) {
+        switch (slot.type) {
+            case Slot.TYPE_ITEM:
+                startItem(slot.stage1Item,lastAppPackageName,context,contactAction);
+                break;
+            case Slot.TYPE_NULL:
+                break;
+        }
+    }
+
+    public static void startItem(Item item, String lastAppPackageName, Context context,int contactAction) {
+        switch (item.type) {
+            case Item.TYPE_APP:
+                startApp(item, context);
+                break;
+            case Item.TYPE_ACTION:
+                startAction(item.action, context, lastAppPackageName);
+                break;
+            case Item.TYPE_CONTACT:
+                startContact(item, context, contactAction);
+                break;
+            case Item.TYPE_DEVICE_SHORTCUT:
+                startDeviceShortcut(item, context);
+                break;
+        }
+    }
+
+    private static void startDeviceShortcut(Item item, Context context) {
+        try {
+            Intent intent = Intent.parseUri(item.getIntent(), 0);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "startShortcut: exception when start Shortcut shortcut");
+        }
+    }
+
+    private static void startApp(Item item, Context context) {
+        Intent extApp = context.getPackageManager().getLaunchIntentForPackage(item.getPackageName());
+        if (extApp != null) {
+            if (item.getPackageName().equals("com.devhomc.search")) {
+                extApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(extApp);
+            } else {
+                ComponentName componentName = extApp.getComponent();
+                Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
+                startAppIntent.setComponent(componentName);
+                startAppIntent.addFlags(1064960);
+                startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                context.startActivity(startAppIntent);
+            }
+        } else {
+            Log.e(TAG, "extApp of shortcut = null ");
+        }
+    }
+
+    private static void startContact(Item item, Context context, int contactAction) {
+        switch (contactAction) {
+            case EdgeSetting.ACTION_CHOOSE:
+                Intent intent = new Intent(context, ChooseActionDialogActivity.class);
+                intent.putExtra("number", item.getNumber());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                context.startActivity(intent);
+                break;
+            case EdgeSetting.ACTION_CALL:
+                String url = "tel:"+ item.getNumber();
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
+                    callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(callIntent);
+                } else {
+                    Toast.makeText(context, context.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
+                }
+                break;
+            case EdgeSetting.ACTION_SMS:
+                Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
+                        + item.getNumber()));
+                smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(smsIntent);
+                break;
+        }
+    }
+
+    public static void startAction(int action, Context context, String lastAppPackageName) {
+        switch (action) {
+            case Item.ACTION_WIFI:
+                Utility.toggleWifi(context);
+                break;
+            case Item.ACTION_BLUETOOTH:
+                Utility.toggleBluetooth(context);
+                break;
+            case Item.ACTION_ROTATION:
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    Utility.setAutorotation(context);
+                } else {
+                    if (Settings.System.canWrite(context)) {
+                        Utility.setAutorotation(context);
+                    } else {
+                        Utility.startNotiDialog(context, NotiDialog.WRITE_SETTING_PERMISSION);
+                    }
+                }
+
+                break;
+            case Item.ACTION_POWER_MENU:
+                Utility.startPowerAction(context);
+                break;
+            case Item.ACTION_HOME:
+                Utility.startHomeAction(context);
+                break;
+            case Item.ACTION_BACK:
+                Utility.startBackAction(context);
+                break;
+            case Item.ACTION_NOTI:
+                Utility.startNotiAction(context);
+                break;
+            case Item.ACTION_LAST_APP:
+                Utility.lastAppAction(context, lastAppPackageName);
+                break;
+            case Item.ACTION_CALL_LOGS:
+                Utility.callLogsAction(context);
+                break;
+            case Item.ACTION_DIAL:
+                Log.e(TAG, "startShortcut: Start dial");
+                Utility.dialAction(context);
+                break;
+            case Item.ACTION_CONTACT:
+                Utility.contactAction(context);
+                break;
+            case Item.ACTION_RECENT:
+                Utility.startRecentAction(context);
+                break;
+            case Item.ACTION_VOLUME:
+                Utility.volumeAction(context);
+                break;
+            case Item.ACTION_BRIGHTNESS:
+                Utility.brightnessAction(context);
+                break;
+            case Item.ACTION_RINGER_MODE:
+                Utility.setRinggerMode(context);
+                break;
+            case Item.ACTION_FLASH_LIGHT:
+                Utility.flashLightAction3(context);
+                break;
+            case Item.ACTION_SCREEN_LOCK:
+                Utility.screenLockAction(context);
+                break;
+
+        }
+    }
 
 
 

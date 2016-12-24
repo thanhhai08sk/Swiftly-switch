@@ -396,7 +396,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 //nothing
                 break;
             case MainActivity.ACTION_POWER_MENU:
-                Utility.powerAction(context,v,className,packageName);
+                Utility.startPowerAction(context);
                 break;
             case MainActivity.ACTION_LAST_APP:
                 Utility.lastAppAction(context, lastAppPackageName);

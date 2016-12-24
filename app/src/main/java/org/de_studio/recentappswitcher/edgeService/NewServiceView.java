@@ -43,7 +43,7 @@ import io.realm.RealmList;
 
 public class NewServiceView extends Service implements NewServicePresenter.View {
 
-
+    public static boolean FLASH_LIGHT_ON = false;
     @Inject
     IconPackManager.IconPack iconPack;
     @Inject
@@ -249,15 +249,5 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         return false;
     }
 
-    public class ViewParams {
-        public View view;
-        public WindowManager.LayoutParams params;
-        public SlotsAdapter gridAdapter;
-
-        public ViewParams(View view, WindowManager.LayoutParams params) {
-            this.view = view;
-            this.params = params;
-        }
-    }
 
 }
