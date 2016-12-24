@@ -11,6 +11,9 @@ public class Edge extends RealmObject {
     public static final int MODE_RECENT_AND_QUICK_ACTION = 0;
     public static final int MODE_CIRCLE_FAV_AND_QUICK_ACTION = 1;
     public static final int MODE_GRID = 2;
+    public static final int KEYBOARD_OPTION_STEP_ASIDE = 1;
+    public static final int KEYBOARD_OPTION_PLACE_UNDER = 0;
+    public static final int KEYBOARD_OPTION_NONE = 3;
     public int mode;
     public int position;
     @PrimaryKey
@@ -23,8 +26,17 @@ public class Edge extends RealmObject {
     public int length;
     public int offset;
     public boolean useGuide;
+    public int keyboardOption;
 
     public Edge() {
+    }
+
+    public int getKeyboardOption() {
+        return keyboardOption;
+    }
+
+    public void setKeyboardOption(int keyboardOption) {
+        this.keyboardOption = keyboardOption;
     }
 
     public Collection getCircleFav() {

@@ -67,6 +67,7 @@ import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
 import org.de_studio.recentappswitcher.edgeService.NewServiceView;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.service.ChooseActionDialogActivity;
@@ -2305,11 +2306,10 @@ public  class Utility {
         return -1;
     }
 
-    public static WindowManager.LayoutParams getEdgeLayoutPara(SharedPreferences defaultShared, SharedPreferences edgeShared
-            , float mScale, int edgePosition, int edgeWidth, int edgeHeight) {
+    public static WindowManager.LayoutParams getEdgeLayoutPara(int avoidKeyboardOption, float mScale, int edgePosition, int edgeWidth, int edgeHeight, int edgeOffset) {
         WindowManager.LayoutParams edgePara;
-        switch (defaultShared.getInt(EdgeSetting.AVOID_KEYBOARD_OPTION_KEY, EdgeSetting.OPTION_PLACE_UNDER)) {
-            case EdgeSetting.OPTION_PLACE_UNDER:
+        switch (avoidKeyboardOption) {
+            case Edge.KEYBOARD_OPTION_PLACE_UNDER:
                 edgePara = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.WRAP_CONTENT,
                         WindowManager.LayoutParams.WRAP_CONTENT,
@@ -2317,7 +2317,7 @@ public  class Utility {
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                         PixelFormat.TRANSLUCENT);
                 break;
-            case EdgeSetting.OPTION_STEP_ASIDE:
+            case Edge.KEYBOARD_OPTION_STEP_ASIDE:
                 edgePara = new WindowManager.LayoutParams();
                 edgePara.type = 2002;
                 edgePara.gravity = 53;
@@ -2336,7 +2336,7 @@ public  class Utility {
                 break;
         }
 
-        if (defaultShared.getBoolean(EdgeSetting.AVOID_KEYBOARD_KEY, true)) {
+        if (avoidKeyboardOption != Edge.KEYBOARD_OPTION_NONE) {
             edgePara.flags |= 131072;
         }
         switch (edgePosition) {
@@ -2363,14 +2363,13 @@ public  class Utility {
                 break;
         }
 
-        int edge1offset = edgeShared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
 
         if (edgePosition == 12 | edgePosition == 22) {
-            edgePara.y = (int) (edge1offset * mScale);
+            edgePara.y = (int) (edgeOffset * mScale);
         } else if (edgePosition == 31) {
-            edgePara.x = -(int) (edge1offset * mScale);
+            edgePara.x = -(int) (edgeOffset * mScale);
         } else {
-            edgePara.y = -(int) (edge1offset * mScale);
+            edgePara.y = -(int) (edgeOffset * mScale);
         }
         edgePara.width = edgeWidth;
         edgePara.height = edgeHeight;

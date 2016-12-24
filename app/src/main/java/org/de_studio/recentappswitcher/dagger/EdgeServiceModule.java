@@ -34,6 +34,7 @@ import org.de_studio.recentappswitcher.edgeService.EdgeServicePresenter;
 import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
 import org.de_studio.recentappswitcher.edgeService.EdgesServiceModel;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
+import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.service.Circle;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.ExpandStatusBarView;
@@ -644,7 +645,7 @@ public class EdgeServiceModule {
             , @Named(EDGE_1_WIDTH_PXL_NAME) int edgeWidth
             , @Named(EDGE_1_HEIGHT_PXL_NAME) int edgeHeight) {
 
-        return Utility.getEdgeLayoutPara(defaultShared, edge1Shared, mScale, edge1Position, edgeWidth, edgeHeight);
+        return Utility.getEdgeLayoutPara(Edge.KEYBOARD_OPTION_NONE, edge1Shared, mScale, edge1Position, edgeWidth, edgeHeight);
 
     }
 
@@ -658,7 +659,7 @@ public class EdgeServiceModule {
             , @Named(EDGE_2_WIDTH_PXL_NAME) int edgeWidth
             , @Named(EDGE_2_HEIGHT_PXL_NAME) int edgeHeight) {
 
-        return Utility.getEdgeLayoutPara(defaultShared, edge2Shared, mScale, edge2Position, edgeWidth, edgeHeight);
+        return Utility.getEdgeLayoutPara(Edge.KEYBOARD_OPTION_NONE, edge2Shared, mScale, edge2Position, edgeWidth, edgeHeight);
     }
 
     @Provides
