@@ -23,6 +23,7 @@ public class Collection extends RealmObject {
     public String collectionId;  // collection_type_number, numbers start from 1
     public String label;
     public RealmList<Slot> slots;
+    public RealmList<Item> items; //For blacklist
     public int longClickMode;
     public String longClickCollection;
     public int rowsCount;

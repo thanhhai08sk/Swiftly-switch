@@ -57,7 +57,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.realm.RealmList;
-import io.realm.RealmResults;
 
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
@@ -93,9 +92,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Inject
     @Named(LAUNCHER_PACKAGENAME_NAME)
     String launcherPackageName;
+    @Nullable
     @Inject
     @Named(EXCLUDE_SET_NAME)
-    RealmResults<Item> excludeSet;
+    RealmList<Item> excludeSet;
     @Inject
     @Named(EDGE_1_PARA_NAME)
     WindowManager.LayoutParams edge1Para;
@@ -238,7 +238,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                 ComponentName componentName = taskInfo.baseActivity;
                 String packName = componentName.getPackageName();
-                if (!excludeSet.contains(packName) && !packName.contains("systemui")) {
+                if ((excludeSet ==null || excludeSet.where().equalTo(Cons.PACKAGENAME, packName).findFirst() == null) && !packName.contains("systemui")) {
                     tempPackageNameKK.add(packName);
                 }
             }
@@ -266,7 +266,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                             if (packa != null &&
                                     (usageStats.getTotalTimeInForeground() > 500
                                             && !packa.contains("systemui")
-                                            && (excludeSet.where().equalTo(Cons.PACKAGENAME, packa).findFirst() == null)
+                                            && (excludeSet ==null || excludeSet.where().equalTo(Cons.PACKAGENAME, packa).findFirst() == null)
                                             && !tempPackageName.contains(packa)
                                             || packa.equals(launcherPackageName))
                                     ) {

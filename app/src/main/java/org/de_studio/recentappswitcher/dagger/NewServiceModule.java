@@ -8,6 +8,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.edgeService.NewServiceModel;
 import org.de_studio.recentappswitcher.edgeService.NewServicePresenter;
 import org.de_studio.recentappswitcher.edgeService.NewServiceView;
+import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
@@ -30,7 +32,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import io.realm.Realm;
-import io.realm.RealmResults;
+import io.realm.RealmList;
 
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_HEIGHT_PXL_NAME;
@@ -229,10 +231,15 @@ public class NewServiceModule {
         } else return  "";
     }
 
+    @Nullable
     @Provides
     @Singleton
     @Named(EXCLUDE_SET_NAME)
-    RealmResults<Item> excludeSet(){
+    RealmList<Item> excludeSet(Realm realm) {
+        Collection blackList = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_BLACK_LIST).findFirst();
+        if (blackList != null) {
+            return blackList.items;
+        }
         return null;
     }
 
