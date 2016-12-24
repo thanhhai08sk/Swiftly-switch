@@ -71,6 +71,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     float iconScale;
     @Inject
     SharedPreferences sharedPreferences;
+    @Inject
+    NewServicePresenter presenter;
     HashMap<String, View> collectionViewsMap = new HashMap<>();
 
 
@@ -277,7 +279,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 windowManager.removeView(edge1View);
             }
         }
-
         if (edge2View != null) {
             edge2View.setOnClickListener(null);
             if (edge2View.isAttachedToWindow()) {
@@ -288,8 +289,36 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        return false;
+    public boolean onTouch(View view, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                Log.e(TAG, "onTouch: action down");
+                presenter.onActionDown(getXCord(event), getYCord(event), view.getId());
+                break;
+            case MotionEvent.ACTION_MOVE:
+                presenter.onActionMove(getXCord(event), getYCord(event));
+                break;
+            case MotionEvent.ACTION_UP:
+                Log.e(TAG, "onTouch: action up");
+                presenter.onActionUp(getXCord(event), getYCord(event));
+                break;
+            case MotionEvent.ACTION_OUTSIDE:
+                presenter.onActionOutSide();
+                Log.e(TAG, "onTouch: action outside");
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                presenter.onActionCancel();
+                Log.e(TAG, "onTouch: action cancel");
+                break;
+        }
+        return true;
+    }
+    private float getXCord(MotionEvent motionEvent) {
+        return  motionEvent.getRawX();
+    }
+
+    private float getYCord(MotionEvent motionEvent) {
+        return  motionEvent.getRawY();
     }
 
 
