@@ -64,7 +64,10 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
+import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
+import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
+import static org.de_studio.recentappswitcher.Cons.SHARED_PREFERENCE_NAME;
 
 /**
  * Created by HaiNguyen on 12/23/16.
@@ -102,9 +105,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Inject
     WindowManager windowManager;
     @Inject
+    @Named(M_SCALE_NAME)
     float mScale;
     @Inject
+    @Named(ICON_SCALE_NAME)
     float iconScale;
+    @Named(SHARED_PREFERENCE_NAME)
     @Inject
     SharedPreferences sharedPreferences;
     @Inject
@@ -112,7 +118,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     HashMap<String, View> collectionViewsMap = new HashMap<>();
     UsageStatsManager usageStatsManager;
     NewServiceView.EdgesToggleReceiver receiver;
-    EdgeServiceView.PackageChangedReceiver receiver1;
     boolean working = true;
     private NotificationCompat.Builder notificationBuilder;
 
@@ -133,6 +138,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void clear() {
+        collectionViewsMap = null;
+        usageStatsManager = null;
+        receiver = null;
+        notificationBuilder = null;
+        windowManager = null;
+        sharedPreferences = null;
+        iconPack = null;
 
     }
 

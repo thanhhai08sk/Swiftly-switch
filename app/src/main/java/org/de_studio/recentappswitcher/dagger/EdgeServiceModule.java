@@ -116,7 +116,7 @@ import static org.de_studio.recentappswitcher.Cons.GRID_WIDTH_NAME;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.HALF_ICON_WIDTH_PXL_NAME;
-import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_DEFAULT;
+import static org.de_studio.recentappswitcher.Cons.DEFAULT_HOLD_TIME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_ENABLE_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE;
@@ -258,20 +258,12 @@ public class EdgeServiceModule {
 
     @Provides
     @Singleton
-    @Named(M_SCALE_NAME)
-    float mScale(){
-        return context.getResources().getDisplayMetrics().density;
-    }
-
-    @Provides
-    @Singleton
     @Named(HALF_ICON_WIDTH_PXL_NAME)
     float iconWidth(@Named(ICON_SCALE_NAME) float iconScale
             , @Named(M_SCALE_NAME) float mScale) {
 
         return iconScale * RAD_ICON_DEFAULT_DP * mScale;
     }
-
 
     @Provides
     @Singleton
@@ -280,6 +272,14 @@ public class EdgeServiceModule {
             , @Named(M_SCALE_NAME) float mScale) {
 
         return defaultShared.getInt(CIRCLE_SIZE_KEY, CIRCLE_SIZE_DEFAULT) * mScale;
+    }
+
+
+    @Provides
+    @Singleton
+    @Named(M_SCALE_NAME)
+    float mScale(){
+        return context.getResources().getDisplayMetrics().density;
     }
 
     @Provides
@@ -873,7 +873,7 @@ public class EdgeServiceModule {
     @Singleton
     @Named(HOLD_TIME_NAME)
     int holdTime(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences shared){
-        return shared.getInt(Cons.HOLD_TIME_KEY, HOLD_TIME_DEFAULT);
+        return shared.getInt(Cons.HOLD_TIME_KEY, DEFAULT_HOLD_TIME);
     }
 
     @Provides

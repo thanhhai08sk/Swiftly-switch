@@ -82,7 +82,7 @@ public class Cons {
     public static final int GRID_GAP_DEFAULT = 5;
     public static final int GUIDE_COLOR_DEFAULT = Color.argb(255, 255, 64, 129);
     public static final int BACKGROUND_COLOR_DEFAULT = 1879048192;
-    public static final int HOLD_TIME_DEFAULT = 800;
+    public static final int DEFAULT_HOLD_TIME = 800;
     public static final int DEFAULT_VIBRATE_DURATION = 15;
     public static final int ANIMATION_TIME_DEFAULT = 170;
 
@@ -263,6 +263,7 @@ public class Cons {
     public static final String ICON_URI = "iconUri";
     public static final String COLLECTION_ID = "collectionId";
     public static final String SLOT_ID = "slotId";
+    public static final String EDGE_ID = "edgeId";
 
     public static final int LAYOUT_TYPE_LINEAR = 0;
     public static final int LAYOUT_TYPE_GRID = 1;
