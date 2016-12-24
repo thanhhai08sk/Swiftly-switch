@@ -8,6 +8,7 @@ import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.PresenterView;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Edge;
+import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 
 import java.util.ArrayList;
@@ -103,18 +104,40 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         showCollection(tempPackages);
         view.actionDownVibrate();
         view.showClock();
+        holdingHelper = 0;
     }
 
     public void onActionMove(float x, float y) {
         switch (currentShowing.showWhat) {
             case Showing.SHOWING_CIRCLE_AND_ACTION:
-
+                highlightIdSubject.onNext(model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size()));
                 break;
             case Showing.SHOWING_GRID:
-
+                highlightIdSubject.onNext(model.getGridActivatedId(x,y,currentShowing.gridXY.x,currentShowing.gridXY.y,currentShowing.grid.rowsCount, currentShowing.grid.columnCount,currentShowing.grid.space,false));
                 break;
         }
+    }
 
+    public void onActionUp(float x, float y) {
+        Slot slot = null;
+        switch (currentShowing.showWhat) {
+            case Showing.SHOWING_CIRCLE_AND_ACTION:
+                if (currentHighlight < 10) {
+                    slot = currentShowing.circle.slots.get(currentHighlight);
+                } else {
+                    slot = currentShowing.action.slots.get(currentHighlight - 10);
+                }
+                break;
+            case Showing.SHOWING_GRID:
+                slot = currentShowing.grid.slots.get(currentHighlight);
+                break;
+            case Showing.SHOWING_FOLDER:
+                view.startItem(currentShowing.folderItems.get(currentHighlight));
+                break;
+        }
+        if (slot != null) {
+            view.startSlot(slot);
+        }
     }
 
 
@@ -127,15 +150,17 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 currentShowing.grid = currentEdge.grid;
                 break;
             case Edge.MODE_RECENT_AND_QUICK_ACTION:
-                view.showCircle(model.calculateCircleIconPositions(currentEdge.recent.radius, currentEdge.position
-                        , xInit, yInit, currentEdge.recent.slots.size()), currentEdge.recent
+                currentShowing.circleIconsXY = model.calculateCircleIconPositions(currentEdge.recent.radius, currentEdge.position
+                        , xInit, yInit, currentEdge.recent.slots.size());
+                view.showCircle(currentShowing.circleIconsXY, currentEdge.recent
                         , model.getRecent(tempPackages, currentEdge.recent.slots));
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
                 currentShowing.circle = currentEdge.recent;
                 break;
             case Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION:
-                view.showCircle(model.calculateCircleIconPositions(currentEdge.circleFav.radius, currentEdge.position
-                        , xInit, yInit, currentEdge.circleFav.slots.size()), currentEdge.circleFav, currentEdge.circleFav.slots);
+                currentShowing.circleIconsXY = model.calculateCircleIconPositions(currentEdge.circleFav.radius, currentEdge.position
+                        , xInit, yInit, currentEdge.circleFav.slots.size());
+                view.showCircle(currentShowing.circleIconsXY, currentEdge.circleFav, currentEdge.circleFav.slots);
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
                 currentShowing.circle = currentEdge.circleFav;
                 break;
@@ -191,18 +216,27 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         void highlightSlot(Showing currentShowing, int id);
 
         void unhighlightSlot(Showing currentShowing, int id);
+
+        void startSlot(Slot slot);
+
+        void startItem(Item item);
     }
 
     public class Showing {
         public static final int SHOWING_GRID = 0;
         public static final int SHOWING_CIRCLE_AND_ACTION = 1;
         public static final int SHOWING_NONE = 2;
+        public static final int SHOWING_FOLDER = 3;
         public int showWhat;
         public Collection grid;
         public Collection circle;
         public Collection action;
+        public RealmList<Item> folderItems;
+        public NewServiceModel.IconsXY circleIconsXY;
+        public Point gridXY = new Point(0, 0);
         public Showing() {
         }
+
     }
 
 }
