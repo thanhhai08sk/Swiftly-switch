@@ -12,6 +12,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
@@ -45,6 +47,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     WindowManager windowManager;
     @Inject
     float mScale;
+    @Inject
+    float iconScale;
     @Inject
     SharedPreferences sharedPreferences;
     HashMap<String, View> collectionViewsMap = new HashMap<>();
@@ -122,7 +126,30 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void showCircle(NewServiceModel.IconsXY iconsXY, Collection circle, RealmList<Slot> slots) {
+        if (collectionViewsMap.get(circle.collectionId) == null) {
+            FrameLayout circleView = new FrameLayout(this);
+            addIconsToCircleView(slots, circleView);
+            collectionViewsMap.put(circle.collectionId, circleView);
+        }
+        FrameLayout frameLayout = (FrameLayout) collectionViewsMap.get(circle.collectionId);
+        for (int i = 0; i < frameLayout.getChildCount(); i++) {
+            Utility.setSlotIcon(slots.get(i), this, (ImageView) frameLayout.getChildAt(i), getPackageManager(), iconPack);
+            frameLayout.getChildAt(i).setX(iconsXY.xs[i]);
+            frameLayout.getChildAt(i).setY(iconsXY.ys[i]);
+        }
+        if (!frameLayout.isAttachedToWindow()) {
+            windowManager.addView(frameLayout, collectionWindowPapams);
+        }
+        frameLayout.setVisibility(View.VISIBLE);
+    }
 
+    private void addIconsToCircleView(RealmList<Slot> slots, FrameLayout circleView) {
+        circleView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        for (int i = 0; i < slots.size(); i++) {
+            ImageView imageView = new ImageView(this);
+            imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale), (int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale)));
+            circleView.addView(imageView);
+        }
     }
 
     @Override
