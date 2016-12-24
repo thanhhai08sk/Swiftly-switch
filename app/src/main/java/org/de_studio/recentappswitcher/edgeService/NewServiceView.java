@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.edgeService;
 
 import android.app.ActivityManager;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.app.usage.UsageStats;
@@ -11,10 +12,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -37,6 +41,8 @@ import org.de_studio.recentappswitcher.base.SlotsAdapter;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
+import org.de_studio.recentappswitcher.service.EdgeSetting;
+import org.de_studio.recentappswitcher.service.NotiDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -132,12 +138,62 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void addEdgesToWindowAndSetListener() {
-
+        if (!(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && sharedPreferences.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false)) ) {
+            if (sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY,true)) {
+                try {
+                    windowManager.addView(edge1View, edge1Para);
+                    edge1View.setOnTouchListener(null);
+                    edge1View.setOnTouchListener(this);
+                } catch (Exception e) {
+                    Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
+                }
+            }
+            if (sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY,false)) {
+                try {
+                    windowManager.addView(edge2View, edge2Para);
+                    edge2View.setOnTouchListener(null);
+                    edge2View.setOnTouchListener(this);
+                } catch (Exception e) {
+                    Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
+                }
+            }
+        }
     }
 
     @Override
     public void setupNotification() {
+        Intent hideNotiIntent = new Intent();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            hideNotiIntent.setClassName("com.android.settings", "com.android.settings.Settings$AppNotificationSettingsActivity");
+            hideNotiIntent.putExtra("app_package", getPackageName());
+            hideNotiIntent.putExtra("app_uid", getApplicationInfo().uid);
+        } else {
+            hideNotiIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            hideNotiIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            hideNotiIntent.setData(Uri.parse("package:" + getPackageName()));
+        }
 
+        Intent remoteIntent = new Intent();
+        remoteIntent.setAction(Cons.ACTION_TOGGLE_EDGES);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, remoteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        NotificationCompat.Action remoteAction=
+                new NotificationCompat.Action.Builder(
+                        android.R.drawable.ic_media_pause,
+                        getString(R.string.pause),
+                        pendingIntent).build();
+
+        PendingIntent notiPending = PendingIntent.getActivity(getApplicationContext(), 0, hideNotiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notificationBuilder = new NotificationCompat.Builder(this);
+        notificationBuilder.setSmallIcon(R.drawable.ic_stat_ic_looks_white_48dp1)
+                .setContentIntent(notiPending)
+                .addAction(remoteAction)
+                .setPriority(Notification.PRIORITY_MIN)
+                .setContentText(getString(R.string.notification_text)).setContentTitle(getString(R.string.notification_title));
+        Notification notificationCompat = notificationBuilder.build();
+        startForeground(Cons.NOTIFICATION_ID, notificationCompat);
     }
 
     @Override
