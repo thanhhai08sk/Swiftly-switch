@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.edgeService;
 
 import android.graphics.Point;
+import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BasePresenter;
@@ -12,33 +13,79 @@ import org.de_studio.recentappswitcher.model.Slot;
 import java.util.ArrayList;
 
 import io.realm.RealmList;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by HaiNguyen on 12/23/16.
  */
 
 public class NewServicePresenter extends BasePresenter<NewServicePresenter.View, NewServiceModel> {
+    private static final String TAG = NewServicePresenter.class.getSimpleName();
     Edge edge1;
     Edge edge2;
+    long holdTime;
     float xInit, yInit;
     Edge currentEdge;
     boolean onHolding;
     Showing currentShowing = new Showing();
+    long highlightFrom;
+    int currentHighlight = -1;
+
+    PublishSubject<Integer> highlightIdSubject = PublishSubject.create();
+    PublishSubject<Integer> longClickItemSubject = PublishSubject.create();
 
 
-    public NewServicePresenter(NewServiceModel model, Edge edge1, Edge edge2) {
+    public NewServicePresenter(NewServiceModel model, Edge edge1, Edge edge2, long holdTime) {
         super(model);
         this.edge1 = edge1;
         this.edge2 = edge2;
+        this.holdTime = holdTime;
     }
 
     @Override
-    public void onViewAttach(View view) {
+    public void onViewAttach(final View view) {
         super.onViewAttach(view);
         model.setup();
         view.addEdgesToWindowAndSetListener();
         view.setupNotification();
         view.setupReceiver();
+
+        addSubscription(
+                highlightIdSubject.filter(new Func1<Integer, Boolean>() {
+                    @Override
+                    public Boolean call(Integer integer) {
+                        return (highlightFrom != 0 && System.currentTimeMillis() - highlightFrom > holdTime);
+                    }
+                }).subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        longClickItemSubject.onNext(integer);
+                    }
+                })
+        );
+
+        addSubscription(
+                highlightIdSubject.distinct().subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        view.unhighlightSlot(currentShowing, currentHighlight);
+                        view.highlightSlot(currentShowing, integer);
+                        currentHighlight = integer;
+                        highlightFrom = System.currentTimeMillis();
+                    }
+                })
+        );
+
+        addSubscription(
+                longClickItemSubject.subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        Log.e(TAG, "call: long click " + integer);
+                    }
+                })
+        );
     }
 
 
@@ -48,6 +95,26 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         ArrayList<String> tempPackages = view.getRecentApp();
         view.showBackground();
+        showCollection(tempPackages);
+        view.actionDownVibrate();
+        view.showClock();
+    }
+
+    public void onActionMove(float x, float y) {
+        switch (currentShowing.showWhat) {
+            case Showing.SHOWING_CIRCLE_AND_ACTION:
+
+                break;
+            case Showing.SHOWING_GRID:
+
+                break;
+        }
+
+    }
+
+
+
+    private void showCollection(ArrayList<String> tempPackages) {
         switch (currentEdge.mode) {
             case Edge.MODE_GRID:
                 view.showGrid(xInit, yInit, currentEdge.grid);
@@ -67,10 +134,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
                 currentShowing.circle = currentEdge.circleFav;
                 break;
-
         }
-        view.actionDownVibrate();
-        view.showClock();
     }
 
     private void setTriggerPoint(float x, float y) {
@@ -119,11 +183,15 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void showClock();
 
+        void highlightSlot(Showing currentShowing, int id);
+
+        void unhighlightSlot(Showing currentShowing, int id);
     }
 
     public class Showing {
         public static final int SHOWING_GRID = 0;
         public static final int SHOWING_CIRCLE_AND_ACTION = 1;
+        public static final int SHOWING_NONE = 2;
         public int showWhat;
         public Collection grid;
         public Collection circle;

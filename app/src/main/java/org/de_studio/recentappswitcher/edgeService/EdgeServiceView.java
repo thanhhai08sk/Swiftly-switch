@@ -476,6 +476,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                 presenter.onActionCancel();
                 Log.e(TAG, "onTouch: action cancel");
                 break;
+
         }
 
         return true;
@@ -1009,6 +1010,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
         }
     }
+
 
     public void hideAllQuickAction(int edgeId) {
         switch (edgeId) {
