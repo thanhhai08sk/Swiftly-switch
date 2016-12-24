@@ -11,6 +11,7 @@ import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Slot;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import io.realm.RealmList;
 import rx.functions.Action1;
@@ -32,9 +33,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     Showing currentShowing = new Showing();
     long highlightFrom;
     int currentHighlight = -1;
+    long holdingHelper;
 
     PublishSubject<Integer> highlightIdSubject = PublishSubject.create();
-    PublishSubject<Integer> longClickItemSubject = PublishSubject.create();
+    PublishSubject<Void> longClickItemSubject = PublishSubject.create();
+    PublishSubject<Long> longClickHelperSubject = PublishSubject.create();
 
 
     public NewServicePresenter(NewServiceModel model, Edge edge1, Edge edge2, long holdTime) {
@@ -53,20 +56,6 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         view.setupReceiver();
 
         addSubscription(
-                highlightIdSubject.filter(new Func1<Integer, Boolean>() {
-                    @Override
-                    public Boolean call(Integer integer) {
-                        return (highlightFrom != 0 && System.currentTimeMillis() - highlightFrom > holdTime);
-                    }
-                }).subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer integer) {
-                        longClickItemSubject.onNext(integer);
-                    }
-                })
-        );
-
-        addSubscription(
                 highlightIdSubject.distinct().subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
@@ -74,15 +63,31 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         view.highlightSlot(currentShowing, integer);
                         currentHighlight = integer;
                         highlightFrom = System.currentTimeMillis();
+                        holdingHelper = holdingHelper + integer;
+                        longClickHelperSubject.onNext(holdingHelper);
                     }
                 })
         );
 
         addSubscription(
-                longClickItemSubject.subscribe(new Action1<Integer>() {
+                longClickHelperSubject.delay(holdTime, TimeUnit.MILLISECONDS).filter(new Func1<Long, Boolean>() {
                     @Override
-                    public void call(Integer integer) {
-                        Log.e(TAG, "call: long click " + integer);
+                    public Boolean call(Long aLong) {
+                        return aLong == holdingHelper;
+                    }
+                }).subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        longClickItemSubject.onNext(null);
+                    }
+                })
+        );
+
+        addSubscription(
+                longClickItemSubject.subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Log.e(TAG, "call: longClick " + currentHighlight);
                     }
                 })
         );
