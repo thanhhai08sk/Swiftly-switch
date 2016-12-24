@@ -194,6 +194,8 @@ public class Cons {
     public static final String EDGE_OFFSET_KEY = "off_set";
     public static final String EDGE_NUMBER_KEY = "number_of_edge";
     public static final String EDGE_ON_KEY = "is_on";
+    public static final String EDGE_1_ON_KEY = "edge_1_on";
+    public static final String EDGE_2_ON_KEY = "edge_2_on";
     public static final String FAVORITE_KEY = "favorite";
     public static final String EXCLUDE_KEY = "exclude";
     public static final String TRIAL_TIME_PASS_KEY = "trial_time_pass";

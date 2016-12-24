@@ -1,18 +1,22 @@
 package org.de_studio.recentappswitcher.edgeService;
 
 import android.app.ActivityManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -49,7 +53,9 @@ import javax.inject.Named;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
@@ -82,6 +88,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Named(EXCLUDE_SET_NAME)
     RealmResults<Item> excludeSet;
     @Inject
+    @Named(EDGE_1_PARA_NAME)
+    WindowManager.LayoutParams edge1Para;
+    @Inject
+    @Named(EDGE_2_PARA_NAME)
+    WindowManager.LayoutParams edge2Para;
+    @Inject
     WindowManager windowManager;
     @Inject
     float mScale;
@@ -93,6 +105,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     NewServicePresenter presenter;
     HashMap<String, View> collectionViewsMap = new HashMap<>();
     UsageStatsManager usageStatsManager;
+    NewServiceView.EdgesToggleReceiver receiver;
+    EdgeServiceView.PackageChangedReceiver receiver1;
+    boolean working = true;
+    private NotificationCompat.Builder notificationBuilder;
 
 
     @Override
@@ -126,12 +142,19 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void setupReceiver() {
-
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Cons.ACTION_TOGGLE_EDGES);
+        filter.addAction(Intent.ACTION_USER_PRESENT);
+        filter.addAction(Cons.ACTION_REFRESH_FAVORITE);
+        receiver = new NewServiceView.EdgesToggleReceiver();
+        this.registerReceiver(receiver, filter);
     }
 
     @Override
     public Point getWindowSize() {
-        return null;
+        Point point = new Point();
+        windowManager.getDefaultDisplay().getSize(point);
+        return point;
     }
 
     @Override
@@ -402,6 +425,88 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     private float getYCord(MotionEvent motionEvent) {
         return  motionEvent.getRawY();
+    }
+    public final synchronized void addEdgeImage() {
+        if (sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY,true) && edge1View !=null && !edge1View.isAttachedToWindow()) {
+            try {
+                windowManager.addView(edge1View,edge1Para);
+            } catch (IllegalStateException e) {
+                Log.e(TAG, "addEdgeImage: fail when add edge1Image");
+            }
+
+        }
+        if (sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false) && edge2View !=null && !edge2View.isAttachedToWindow()) {
+            try {
+                windowManager.addView(edge2View,edge2Para);
+            } catch (IllegalStateException e) {
+                Log.e(TAG, "addEdgeImage: fail when add edge2Image");
+            }
+
+        }
+    }
+
+    public final synchronized void removeEdgeImage() {
+        Log.e(TAG, "removeEdgeImage: ");
+        try {
+            windowManager.removeView(edge1View);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, " Null when remove edge1Image");
+        }
+        try {
+            windowManager.removeView(edge2View);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, " Null when remove edge2Image");
+        }
+    }
+
+
+
+    public class EdgesToggleReceiver extends BroadcastReceiver {
+        public EdgesToggleReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Cons.ACTION_TOGGLE_EDGES)) {
+                Log.e(TAG, "onReceive: receive broadbast success");
+                Intent remoteIntent = new Intent();
+                remoteIntent.setAction(Cons.ACTION_TOGGLE_EDGES);
+                NotificationCompat.Action remoteAction;
+
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(NewServiceView.this, 0, remoteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                if (working) {
+                    removeEdgeImage();
+                    working = !working;
+
+
+                    remoteAction=
+                            new NotificationCompat.Action.Builder(
+                                    android.R.drawable.ic_media_play,
+                                    getString(R.string.resume),
+                                    pendingIntent).build();
+                } else {
+                    addEdgeImage();
+                    working = !working;
+
+
+                    remoteAction=
+                            new NotificationCompat.Action.Builder(
+                                    android.R.drawable.ic_media_pause,
+                                    getString(R.string.pause),
+                                    pendingIntent).build();
+                }
+
+                notificationBuilder.mActions = new ArrayList<>();
+                notificationBuilder.addAction(remoteAction);
+                startForeground(Cons.NOTIFICATION_ID,notificationBuilder.build());
+
+            } else if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
+                Log.e(TAG, "onReceive: userPresent");
+                hideAllExceptEdges();
+            }
+        }
     }
 
 

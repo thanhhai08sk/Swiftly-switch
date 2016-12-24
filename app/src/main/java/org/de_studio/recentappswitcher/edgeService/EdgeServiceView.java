@@ -358,9 +358,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     ViewPropertyAnimator folderAnimator;
     float[] folderCoor;
-    boolean working = true;
     EdgesToggleReceiver receiver;
     PackageChangedReceiver receiver1;
+    boolean working = true;
     private NotificationCompat.Builder notificationBuilder;
 
 
