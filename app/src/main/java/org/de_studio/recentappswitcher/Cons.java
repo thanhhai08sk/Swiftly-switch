@@ -31,7 +31,8 @@ public class Cons {
     public static final String OLD_DEFAULT_SHARED_NAME = "org.de_studio.recentappswitcher_sharedpreferences";
     public static final String FAVORITE_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_favorite_shared_preferences";
     public static final String EXCLUDE_SHARED_NAME = "org.de_studio.recentappswitcher_exclude_shared_preferences";
-    public static final String DEFAULT_REALM_NAME = "swiftly_switch.realm";
+    public static final String OLD_DEFAULT_REALM_NAME = "swiftly_switch.realm";
+    public static final String DEFAULT_REALM_NAME = "swiftly_switch_ver2.realm";
 
     public static final int MODE_DEFAULT = 1;
     public static final int MODE_ONLY_FAVORITE = 2;
