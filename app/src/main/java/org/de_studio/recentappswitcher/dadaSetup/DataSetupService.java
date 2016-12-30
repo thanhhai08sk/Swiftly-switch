@@ -14,11 +14,15 @@ import android.util.Log;
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Item;
+import org.de_studio.recentappswitcher.model.Slot;
 
+import java.util.Random;
 import java.util.Set;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 
 import static org.de_studio.recentappswitcher.MyApplication.getContext;
 
@@ -40,16 +44,18 @@ public class DataSetupService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_GENERATE_DATA.equals(action)) {
-                handleActionCreateItems();
+                handleGenerateData();
             } else if (ACTION_CONVERT.equals(action)) {
                 handleActionConvert();
             }
         }
     }
 
-    private void handleActionCreateItems() {
-
-
+    private void handleGenerateData() {
+        Realm realm = Realm.getDefaultInstance();
+        generateItems(realm);
+        generateCollections(realm);
+        realm.close();
     }
 
 
@@ -58,8 +64,176 @@ public class DataSetupService extends IntentService {
     }
 
 
-    private Set<PackageInfo> getAppsList() {
-        return Utility.getInstalledApps(getPackageManager());
+    private void generateCollections(Realm realm) {
+        generateRecent(realm);
+        generateCircleFavorite(realm);
+        generateGridFavorite(realm);
+        generateQuickActions(realm);
+        generateBlackList(realm);
+    }
+
+    private void generateItems(Realm realm) {
+        generateAppItems(realm);
+        generateActionItems(realm);
+        generateContactItems(realm);
+    }
+
+    private void generateRecent(Realm realm) {
+        final String newLabel = Utility.createCollectionLabel(getString(R.string.recent_apps), 1);
+        Collection recents = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_RECENT, 1)).findFirst();
+        if (recents == null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Collection collection = new Collection();
+                    collection.type = Collection.TYPE_RECENT;
+                    collection.collectionId = Utility.createCollectionId(Collection.TYPE_RECENT, 1);
+                    collection.label = newLabel;
+                    collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
+                    Collection realmCollection = realm.copyToRealm(collection);
+                    for (int i = 0; i < 6; i++) {
+                        Slot recentSlot = new Slot();
+                        recentSlot.type = Slot.TYPE_RECENT;
+                        recentSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
+                        Log.e(TAG, "new slot, id = " + recentSlot.slotId);
+                        Slot realmSlot = realm.copyToRealm(recentSlot);
+                        realmCollection.slots.add(realmSlot);
+                    }
+                }
+            });
+        }
+    }
+
+    private void generateCircleFavorite(Realm realm) {
+        final String newLabel = Utility.createCollectionLabel(getString(R.string.circle_favorites), 1);
+        Collection circle = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_CIRCLE_FAVORITE, 1)).findFirst();
+        if (circle == null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+
+                    Collection collection = new Collection();
+                    collection.type = Collection.TYPE_CIRCLE_FAVORITE;
+                    collection.collectionId = Utility.createCollectionId(Collection.TYPE_CIRCLE_FAVORITE, 1);
+                    collection.label = newLabel;
+                    collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
+                    Collection realmCollection = realm.copyToRealm(collection);
+
+                    for (int i = 0; i < 6; i++) {
+                        Slot nullSlot = new Slot();
+                        nullSlot.type = Slot.TYPE_NULL;
+                        nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
+                        Log.e(TAG, "new slot, id = " + nullSlot.slotId);
+                        Slot realmSlot = realm.copyToRealm(nullSlot);
+                        realmCollection.slots.add(realmSlot);
+                    }
+                }
+            });
+        }
+    }
+
+    private void generateGridFavorite(Realm realm) {
+        final String newLabel = Utility.createCollectionLabel(getString(R.string.grid_favorites), 1);
+        Collection grid = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_GRID_FAVORITE, 1)).findFirst();
+        if (grid == null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+
+                    Collection collection = new Collection();
+                    collection.type = Collection.TYPE_GRID_FAVORITE;
+                    collection.collectionId = Utility.createCollectionId(Collection.TYPE_GRID_FAVORITE, 1);
+                    collection.label = newLabel;
+                    collection.rowsCount = Cons.DEFAULT_FAVORITE_GRID_ROW_COUNT;
+                    collection.columnCount = Cons.DEFAULT_FAVORITE_GRID_COLUMN_COUNT;
+                    collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
+                    collection.position = Collection.POSITION_TRIGGER;
+                    collection.marginHorizontal = Cons.DEFAULT_FAVORITE_GRID_HORIZONTAL_MARGIN;
+                    collection.marginVertical = Cons.DEFAULT_FAVORITE_GRID_VERTICAL_MARGIN;
+                    collection.space = Cons.DEFAULT_FAVORITE_GRID_SPACE;
+                    Collection realmCollection = realm.copyToRealm(collection);
+
+                    for (int i = 0; i < collection.rowsCount * collection.columnCount; i++) {
+                        Slot nullSlot = new Slot();
+                        nullSlot.type = Slot.TYPE_NULL;
+                        nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
+                        Log.e(TAG, "new slot, id = " + nullSlot.slotId);
+                        Slot realmSlot = realm.copyToRealm(nullSlot);
+                        realmCollection.slots.add(realmSlot);
+                    }
+                }
+            });
+        }
+    }
+
+    private void generateQuickActions(Realm realm) {
+        Collection quickActions = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 1)).findFirst();
+        final String newLabel = Utility.createCollectionLabel(getString(R.string.main_outer_ring_setting), 1);
+        if (quickActions == null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+
+                    Collection collection = new Collection();
+                    collection.type = Collection.TYPE_QUICK_ACTION;
+                    collection.collectionId = Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 1);
+                    collection.label = newLabel;
+                    collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
+                    realm.copyToRealm(collection);
+                }
+            });
+            final Collection quickActions1 = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Collection.TYPE_QUICK_ACTION + 1).findFirst();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmList<Slot> slots = quickActions1.slots;
+                    Item[] items = new Item[4];
+                    items[0] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_SHORTCUTS_SET + Collection.TYPE_GRID_FAVORITE + 1).findFirst();
+                    if (items[0] ==null) {
+                        Collection firstGridFavoriteCollection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Collection.TYPE_GRID_FAVORITE + 1).findFirst();
+                        Item newItem = new Item();
+                        newItem.type = Item.TYPE_SHORTCUTS_SET;
+                        newItem.itemId = Item.TYPE_SHORTCUTS_SET + firstGridFavoriteCollection.collectionId;
+                        newItem.label = firstGridFavoriteCollection.label;
+                        newItem.collectionId = firstGridFavoriteCollection.collectionId;
+                        Utility.setIconResourceIdsForShortcutsSet(newItem);
+                        Item realmItem = realm.copyToRealm(newItem);
+                        items[0] = realmItem;
+                    }
+
+                    items[1] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_ACTION + Item.ACTION_HOME).findFirst();
+                    items[2] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_ACTION + Item.ACTION_BACK).findFirst();
+                    items[3] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_ACTION + Item.ACTION_NOTI).findFirst();
+
+                    for (int i = 0; i < 4; i++) {
+                        Slot slot = new Slot();
+                        slot.type = Slot.TYPE_ITEM;
+                        slot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
+                        slot.stage1Item = items[i];
+                        Slot realmSlot = realm.copyToRealm(slot);
+                        slots.add(realmSlot);
+                    }
+                }
+            });
+        }
+
+    }
+
+    private void generateBlackList(Realm realm) {
+        Collection blackList = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_BLACK_LIST, 1)).findFirst();
+        if (blackList == null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Collection collection = new Collection();
+                    collection.type = Collection.TYPE_BLACK_LIST;
+                    collection.collectionId = Utility.createCollectionId(Collection.TYPE_BLACK_LIST, 1);
+                    collection.label = getString(R.string.main_exclude_app_title);
+                    realm.copyToRealm(collection);
+                }
+            });
+
+        }
     }
 
     private void generateAppItems(Realm realm) {
