@@ -34,6 +34,7 @@ public class Collection extends RealmObject {
     public int offsetVertical;
     public int space;
     public int radius;
+    public int position;
 
     public Collection() {
     }
@@ -44,6 +45,22 @@ public class Collection extends RealmObject {
 
     public void setLongClickCollection(String longClickCollection) {
         this.longClickCollection = longClickCollection;
+    }
+
+    public RealmList<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(RealmList<Item> items) {
+        this.items = items;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public int getSpace() {

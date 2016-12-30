@@ -36,21 +36,13 @@ import io.realm.Realm;
 import io.realm.RealmList;
 
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
-import static org.de_studio.recentappswitcher.Cons.EDGE_1_HEIGHT_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
-import static org.de_studio.recentappswitcher.Cons.EDGE_1_POSITION_NAME;
-import static org.de_studio.recentappswitcher.Cons.EDGE_1_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
-import static org.de_studio.recentappswitcher.Cons.EDGE_1_WIDTH_PXL_NAME;
-import static org.de_studio.recentappswitcher.Cons.EDGE_2_HEIGHT_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_ID;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
-import static org.de_studio.recentappswitcher.Cons.EDGE_2_POSITION_NAME;
-import static org.de_studio.recentappswitcher.Cons.EDGE_2_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
-import static org.de_studio.recentappswitcher.Cons.EDGE_2_WIDTH_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_PARENT_VIEW_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_DEFAULT;
@@ -59,7 +51,6 @@ import static org.de_studio.recentappswitcher.Cons.ICON_SCALE;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
-import static org.de_studio.recentappswitcher.Cons.OLD_DEFAULT_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.SHARED_PREFERENCE_NAME;
 
 /**
@@ -87,6 +78,13 @@ public class NewServiceModule {
 
         return new NewServicePresenter(model, edge1, edge2, shared.getInt(Cons.HOLD_TIME_KEY, Cons.DEFAULT_HOLD_TIME));
     }
+
+    @Provides
+    @Singleton
+    Realm realm(){
+        return Realm.getDefaultInstance();
+    }
+
 
     @Provides
     @Singleton
@@ -188,7 +186,7 @@ public class NewServiceModule {
     @Provides
     @Singleton
     @Named(GUIDE_COLOR_NAME)
-    int guideColor(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
+    int guideColor(@Named(SHARED_PREFERENCE_NAME) SharedPreferences defaultShared){
         return defaultShared.getInt(EdgeSetting.GUIDE_COLOR_KEY, GUIDE_COLOR_DEFAULT);
     }
 
@@ -270,28 +268,23 @@ public class NewServiceModule {
     @Provides
     @Singleton
     @Named(EDGE_1_PARA_NAME)
-    WindowManager.LayoutParams edge1Para(@Named(EDGE_1_POSITION_NAME) int edge1Position
-            , @Named(M_SCALE_NAME) float mScale
-            , @Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared
-            , @Named(EDGE_1_SHARED_NAME) SharedPreferences edge1Shared
-            , @Named(EDGE_1_WIDTH_PXL_NAME) int edgeWidth
-            , @Named(EDGE_1_HEIGHT_PXL_NAME) int edgeHeight) {
+    WindowManager.LayoutParams edge1Para(@Named(M_SCALE_NAME) float mScale
+            , @Named(SHARED_PREFERENCE_NAME) SharedPreferences defaultShared
+            , @Named(EDGE_1_NAME) Edge edge1) {
 
-        return Utility.getEdgeLayoutPara(defaultShared, edge1Shared, mScale, edge1Position, edgeWidth, edgeHeight);
+        return Utility.getEdgeLayoutPara(defaultShared.getInt(Cons.AVOID_KEYBOARD_OPTION_KEY, Cons.AVOID_KEYBOARD_OPTION_PLACE_UNDER)
+                , mScale, edge1.position, edge1.sensitive, edge1.length, edge1.offset);
 
     }
 
     @Provides
     @Singleton
     @Named(EDGE_2_PARA_NAME)
-    WindowManager.LayoutParams edge2Para(@Named(EDGE_2_POSITION_NAME) int edge2Position
-            , @Named(M_SCALE_NAME) float mScale
-            , @Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared
-            , @Named(EDGE_2_SHARED_NAME) SharedPreferences edge2Shared
-            , @Named(EDGE_2_WIDTH_PXL_NAME) int edgeWidth
-            , @Named(EDGE_2_HEIGHT_PXL_NAME) int edgeHeight) {
-
-        return Utility.getEdgeLayoutPara(defaultShared, edge2Shared, mScale, edge2Position, edgeWidth, edgeHeight);
+    WindowManager.LayoutParams edge2Para( @Named(M_SCALE_NAME) float mScale
+            , @Named(SHARED_PREFERENCE_NAME) SharedPreferences defaultShared
+            , @Named(EDGE_2_NAME) Edge edge2) {
+        return Utility.getEdgeLayoutPara(defaultShared.getInt(Cons.AVOID_KEYBOARD_OPTION_KEY, Cons.AVOID_KEYBOARD_OPTION_PLACE_UNDER)
+                , mScale, edge2.position, edge2.sensitive, edge2.length, edge2.offset);
     }
 
     @Provides
@@ -310,7 +303,7 @@ public class NewServiceModule {
     @Provides
     @Singleton
     @Named(ICON_SCALE_NAME)
-    float iconScale(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
+    float iconScale(@Named(SHARED_PREFERENCE_NAME) SharedPreferences defaultShared){
         return defaultShared.getFloat(ICON_SCALE,1f);
     }
 

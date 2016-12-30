@@ -34,7 +34,6 @@ import org.de_studio.recentappswitcher.edgeService.EdgeServicePresenter;
 import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
 import org.de_studio.recentappswitcher.edgeService.EdgesServiceModel;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
-import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.service.Circle;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.ExpandStatusBarView;
@@ -71,9 +70,10 @@ import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_VERTICAL;
+import static org.de_studio.recentappswitcher.Cons.DEFAULT_HOLD_TIME;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_GAP_IN_GRID;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_WIDTH;
-import static org.de_studio.recentappswitcher.Cons.OLD_DEFAULT_SHARED_NAME;
+import static org.de_studio.recentappswitcher.Cons.DEFAULT_VIBRATE_DURATION;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_HEIGHT_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
@@ -117,7 +117,7 @@ import static org.de_studio.recentappswitcher.Cons.GRID_WIDTH_NAME;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.HALF_ICON_WIDTH_PXL_NAME;
-import static org.de_studio.recentappswitcher.Cons.DEFAULT_HOLD_TIME;
+import static org.de_studio.recentappswitcher.Cons.HAS_INTENT_PACKAGES_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_ENABLE_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE;
@@ -131,7 +131,7 @@ import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.MODE_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.MODE_ONLY_FAVORITE;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
-import static org.de_studio.recentappswitcher.Cons.HAS_INTENT_PACKAGES_NAME;
+import static org.de_studio.recentappswitcher.Cons.OLD_DEFAULT_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
 import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
 import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_VIEW_RADIUS_NAME;
@@ -145,7 +145,6 @@ import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_CLOCK_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_INSTANT_FAVORITE_NAME;
 import static org.de_studio.recentappswitcher.Cons.VIBRATE_DURATION_NAME;
-import static org.de_studio.recentappswitcher.Cons.DEFAULT_VIBRATE_DURATION;
 import static org.de_studio.recentappswitcher.Cons.VIBRATION_DURATION_KEY;
 
 /**
@@ -634,7 +633,7 @@ public class EdgeServiceModule {
 //                        |WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR
 //                        |WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, PixelFormat.TRANSLUCENT);
     }
-
+    @Nullable
     @Provides
     @Singleton
     @Named(EDGE_1_PARA_NAME)
@@ -645,10 +644,10 @@ public class EdgeServiceModule {
             , @Named(EDGE_1_WIDTH_PXL_NAME) int edgeWidth
             , @Named(EDGE_1_HEIGHT_PXL_NAME) int edgeHeight) {
 
-        return Utility.getEdgeLayoutPara(Edge.KEYBOARD_OPTION_NONE, edge1Shared, mScale, edge1Position, edgeWidth, edgeHeight);
-
+//        return Utility.getEdgeLayoutPara(Edge.KEYBOARD_OPTION_NONE, edge1Shared, mScale, edge1Position, edgeWidth, edgeHeight);
+        return null;
     }
-
+    @Nullable
     @Provides
     @Singleton
     @Named(EDGE_2_PARA_NAME)
@@ -659,7 +658,8 @@ public class EdgeServiceModule {
             , @Named(EDGE_2_WIDTH_PXL_NAME) int edgeWidth
             , @Named(EDGE_2_HEIGHT_PXL_NAME) int edgeHeight) {
 
-        return Utility.getEdgeLayoutPara(Edge.KEYBOARD_OPTION_NONE, edge2Shared, mScale, edge2Position, edgeWidth, edgeHeight);
+//        return Utility.getEdgeLayoutPara(Edge.KEYBOARD_OPTION_NONE, edge2Shared, mScale, edge2Position, edgeWidth, edgeHeight);
+        return null;
     }
 
     @Provides

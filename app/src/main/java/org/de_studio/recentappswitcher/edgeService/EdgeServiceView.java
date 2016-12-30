@@ -49,10 +49,6 @@ import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.dagger.AppModule;
-import org.de_studio.recentappswitcher.dagger.DaggerEdgeServiceComponent;
-import org.de_studio.recentappswitcher.dagger.EdgeServiceModule;
-import org.de_studio.recentappswitcher.dagger.RealmModule;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
 import org.de_studio.recentappswitcher.favoriteShortcut.FavoriteSettingActivity;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
@@ -90,7 +86,6 @@ import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_LINEAR_LAYOUT_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
-import static org.de_studio.recentappswitcher.Cons.OLD_DEFAULT_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_ID;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
@@ -130,6 +125,7 @@ import static org.de_studio.recentappswitcher.Cons.IS_EDGE_2_ON_NAME;
 import static org.de_studio.recentappswitcher.Cons.IS_FREE_AND_OUT_OF_TRIAL_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
+import static org.de_studio.recentappswitcher.Cons.OLD_DEFAULT_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.OVAL_OFFSET;
 import static org.de_studio.recentappswitcher.Cons.OVAL_RADIUS_PLUS;
 import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME;
@@ -1016,12 +1012,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     }
 
     private void inject() {
-        DaggerEdgeServiceComponent.builder()
-                .appModule(new AppModule(getApplicationContext()))
-                .edgeServiceModule(new EdgeServiceModule(this))
-                .realmModule(new RealmModule(getApplicationContext()))
-                .build()
-                .inject(this);
+//        DaggerEdgeServiceComponent.builder()
+//                .appModule(new AppModule(getApplicationContext()))
+//                .edgeServiceModule(new EdgeServiceModule(this))
+//                .realmModule(new RealmModule(getApplicationContext()))
+//                .build()
+//                .inject(this);
 
     }
 
