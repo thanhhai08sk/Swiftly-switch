@@ -15,6 +15,7 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 
@@ -55,6 +56,7 @@ public class DataSetupService extends IntentService {
         Realm realm = Realm.getDefaultInstance();
         generateItems(realm);
         generateCollections(realm);
+        generateEdges(realm);
         realm.close();
     }
 
@@ -76,6 +78,45 @@ public class DataSetupService extends IntentService {
         generateAppItems(realm);
         generateActionItems(realm);
         generateContactItems(realm);
+    }
+
+    private void generateEdges(Realm realm) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Collection recent = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_RECENT, 1)).findFirst();
+                Collection quickAction = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 1)).findFirst();
+                if (realm.where(Edge.class).equalTo(Cons.EDGE_ID, "edge1").findFirst() == null) {
+                    Edge edge1 = new Edge();
+                    edge1.edgeId = "edge1";
+                    edge1.mode = Edge.MODE_RECENT_AND_QUICK_ACTION;
+                    edge1.useGuide = true;
+                    edge1.position = Cons.POSITION_RIGHT_CENTRE;
+                    edge1.recent = recent;
+                    edge1.quickAction = quickAction;
+                    edge1.sensitive = Cons.EDGE_SENSITIVE_DEFAULT;
+                    edge1.length = Cons.EDGE_LENGTH_DEFAULT;
+                    edge1.offset = Cons.EDGE_OFFSET_DEFAULT;
+                    edge1.keyboardOption = Edge.KEYBOARD_OPTION_PLACE_UNDER;
+                    realm.copyToRealm(edge1);
+                }
+
+                if (realm.where(Edge.class).equalTo(Cons.EDGE_ID, "edge2").findFirst() == null) {
+                    Edge edge2 = new Edge();
+                    edge2.edgeId = "edge2 ";
+                    edge2.mode = Edge.MODE_RECENT_AND_QUICK_ACTION;
+                    edge2.useGuide = true;
+                    edge2.position = Cons.POSITION_LEFT_BOTTOM;
+                    edge2.recent = recent;
+                    edge2.quickAction = quickAction;
+                    edge2.sensitive = Cons.EDGE_SENSITIVE_DEFAULT;
+                    edge2.length = Cons.EDGE_LENGTH_DEFAULT;
+                    edge2.offset = Cons.EDGE_OFFSET_DEFAULT;
+                    edge2.keyboardOption = Edge.KEYBOARD_OPTION_PLACE_UNDER;
+                    realm.copyToRealm(edge2);
+                }
+            }
+        });
     }
 
     private void generateRecent(Realm realm) {

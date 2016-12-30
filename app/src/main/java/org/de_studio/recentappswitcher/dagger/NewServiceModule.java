@@ -269,10 +269,9 @@ public class NewServiceModule {
     @Singleton
     @Named(EDGE_1_PARA_NAME)
     WindowManager.LayoutParams edge1Para(@Named(M_SCALE_NAME) float mScale
-            , @Named(SHARED_PREFERENCE_NAME) SharedPreferences defaultShared
             , @Named(EDGE_1_NAME) Edge edge1) {
 
-        return Utility.getEdgeLayoutPara(defaultShared.getInt(Cons.AVOID_KEYBOARD_OPTION_KEY, Cons.AVOID_KEYBOARD_OPTION_PLACE_UNDER)
+        return Utility.getEdgeLayoutPara(edge1.keyboardOption
                 , mScale, edge1.position, edge1.sensitive, edge1.length, edge1.offset);
 
     }
@@ -281,9 +280,8 @@ public class NewServiceModule {
     @Singleton
     @Named(EDGE_2_PARA_NAME)
     WindowManager.LayoutParams edge2Para( @Named(M_SCALE_NAME) float mScale
-            , @Named(SHARED_PREFERENCE_NAME) SharedPreferences defaultShared
             , @Named(EDGE_2_NAME) Edge edge2) {
-        return Utility.getEdgeLayoutPara(defaultShared.getInt(Cons.AVOID_KEYBOARD_OPTION_KEY, Cons.AVOID_KEYBOARD_OPTION_PLACE_UNDER)
+        return Utility.getEdgeLayoutPara(edge2.keyboardOption
                 , mScale, edge2.position, edge2.sensitive, edge2.length, edge2.offset);
     }
 
