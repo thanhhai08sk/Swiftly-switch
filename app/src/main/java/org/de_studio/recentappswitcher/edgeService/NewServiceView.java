@@ -38,7 +38,12 @@ import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
+import org.de_studio.recentappswitcher.dadaSetup.DataSetupService;
+import org.de_studio.recentappswitcher.dagger.AppModule;
+import org.de_studio.recentappswitcher.dagger.DaggerNewServiceComponent;
+import org.de_studio.recentappswitcher.dagger.NewServiceModule;
 import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.model.DataInfo;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
@@ -56,6 +61,7 @@ import java.util.TreeMap;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
@@ -121,14 +127,36 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     NewServiceView.EdgesToggleReceiver receiver;
     boolean working = true;
     private NotificationCompat.Builder notificationBuilder;
+    Realm realm = Realm.getDefaultInstance();
+    GenerateDataOkReceiver generateDataOkReceiver;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
+        DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+        if (dataInfo == null || !dataInfo.everyThingsOk()) {
+            Log.e(TAG, "onCreate: start DataSetupService");
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(DataSetupService.BROADCAST_GENERATE_DATA_OK);
+            generateDataOkReceiver = new GenerateDataOkReceiver();
+            this.registerReceiver(receiver, filter);
+            startService(new Intent(this, DataSetupService.class));
+        } else {
+            inject();
+            presenter.onViewAttach(this);
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             usageStatsManager = (UsageStatsManager)getSystemService(Context.USAGE_STATS_SERVICE);
         }
+    }
+
+    private void inject() {
+        DaggerNewServiceComponent.builder()
+                .appModule(new AppModule(this))
+                .newServiceModule(new NewServiceModule(this,this, realm))
+                .build().inject(this);
     }
 
     @Nullable
@@ -146,6 +174,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         windowManager = null;
         sharedPreferences = null;
         iconPack = null;
+        this.unregisterReceiver(generateDataOkReceiver);
+        realm.close();
 
     }
 
@@ -577,6 +607,20 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             }
         }
     }
+
+    public class GenerateDataOkReceiver extends BroadcastReceiver {
+        public GenerateDataOkReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(DataSetupService.BROADCAST_GENERATE_DATA_OK)) {
+                inject();
+                presenter.onViewAttach(NewServiceView.this);
+            }
+        }
+    }
+
 
 
 }

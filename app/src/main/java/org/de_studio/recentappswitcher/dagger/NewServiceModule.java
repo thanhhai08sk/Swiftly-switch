@@ -61,10 +61,12 @@ public class NewServiceModule {
     private static final String TAG = NewServiceModule.class.getSimpleName();
     NewServiceView view;
     Context context;
+    Realm realm;
 
-    public NewServiceModule(NewServiceView view, Context context) {
+    public NewServiceModule(NewServiceView view, Context context, Realm realm) {
         this.view = view;
         this.context = context;
+        this.realm = realm;
     }
 
 
@@ -82,7 +84,7 @@ public class NewServiceModule {
     @Provides
     @Singleton
     Realm realm(){
-        return Realm.getDefaultInstance();
+        return realm;
     }
 
 

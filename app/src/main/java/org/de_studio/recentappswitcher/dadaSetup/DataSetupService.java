@@ -15,6 +15,7 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.model.DataInfo;
 import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
@@ -35,6 +36,8 @@ public class DataSetupService extends IntentService {
     public static final String ACTION_GENERATE_DATA = "org.de_studio.recentappswitcher.dadaSetup.action.GENERATE_DATA";
     public static final String ACTION_CONVERT = "org.de_studio.recentappswitcher.dadaSetup.action.CONVERT";
 
+    public static final String BROADCAST_GENERATE_DATA_OK = "org.de_studio.recentappswitcher.dadaSetup.action.GENERATE_DATA_OK";
+
 
     public DataSetupService() {
         super("DataSetupService");
@@ -54,10 +57,25 @@ public class DataSetupService extends IntentService {
 
     private void handleGenerateData() {
         Realm realm = Realm.getDefaultInstance();
+        DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+        if (dataInfo == null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    DataInfo dataInfo1 = new DataInfo();
+                    realm.copyToRealm(dataInfo1);
+                }
+            });
+
+
+        }
+
+        dataInfo = realm.where(DataInfo.class).findFirst();
         generateItems(realm);
-        generateCollections(realm);
+        generateCollections(realm,dataInfo);
         generateEdges(realm);
         realm.close();
+        sendBroadcast(new Intent(BROADCAST_GENERATE_DATA_OK));
     }
 
 
@@ -66,12 +84,29 @@ public class DataSetupService extends IntentService {
     }
 
 
-    private void generateCollections(Realm realm) {
-        generateRecent(realm);
-        generateCircleFavorite(realm);
-        generateGridFavorite(realm);
-        generateQuickActions(realm);
-        generateBlackList(realm);
+    private void generateCollections(Realm realm, final DataInfo dataInfo) {
+        if (dataInfo.everyThingsOk()) {
+            return;
+        }
+        if (!dataInfo.recentOk) {
+            generateRecent(realm);
+        }
+
+        if (!dataInfo.circleFavoriteOk) {
+            generateCircleFavorite(realm);
+        }
+
+        if (!dataInfo.gridOk) {
+            generateGridFavorite(realm);
+        }
+
+        if (!dataInfo.quickActionOk) {
+            generateQuickActions(realm);
+        }
+
+        if (!dataInfo.blackListOk) {
+            generateBlackList(realm);
+        }
     }
 
     private void generateItems(Realm realm) {
@@ -140,6 +175,8 @@ public class DataSetupService extends IntentService {
                         Slot realmSlot = realm.copyToRealm(recentSlot);
                         realmCollection.slots.add(realmSlot);
                     }
+                    DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+                    dataInfo.recentOk = true;
                 }
             });
         }
@@ -168,6 +205,8 @@ public class DataSetupService extends IntentService {
                         Slot realmSlot = realm.copyToRealm(nullSlot);
                         realmCollection.slots.add(realmSlot);
                     }
+                    DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+                    dataInfo.circleFavoriteOk = true;
                 }
             });
         }
@@ -202,6 +241,8 @@ public class DataSetupService extends IntentService {
                         Slot realmSlot = realm.copyToRealm(nullSlot);
                         realmCollection.slots.add(realmSlot);
                     }
+                    DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+                    dataInfo.gridOk = true;
                 }
             });
         }
@@ -254,6 +295,8 @@ public class DataSetupService extends IntentService {
                         Slot realmSlot = realm.copyToRealm(slot);
                         slots.add(realmSlot);
                     }
+                    DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+                    dataInfo.quickActionOk = true;
                 }
             });
         }
@@ -271,6 +314,9 @@ public class DataSetupService extends IntentService {
                     collection.collectionId = Utility.createCollectionId(Collection.TYPE_BLACK_LIST, 1);
                     collection.label = getString(R.string.main_exclude_app_title);
                     realm.copyToRealm(collection);
+
+                    DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+                    dataInfo.blackListOk = true;
                 }
             });
 
