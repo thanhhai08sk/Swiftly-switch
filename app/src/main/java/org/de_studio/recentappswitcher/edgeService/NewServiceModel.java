@@ -6,6 +6,7 @@ import android.util.Log;
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseModel;
+import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 
@@ -116,6 +117,10 @@ public class NewServiceModel extends BaseModel {
 
     public String getLastApp() {
         return lastAppPackageName;
+    }
+
+    public Collection getCollection(String id) {
+        return realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, id).findFirst();
     }
 
     public int getCircleAndQuickActionTriggerId(IconsXY iconsXY, int radius, float x_init, float y_init, float x, float y, int position, int iconsCount) {

@@ -193,7 +193,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     @Named(EDGE_2_VIEW_NAME)
     View edge2View;
     @Inject
-    @Named(Cons.GRID_PARENT_VIEW_PARA_NAME)
+    @Named(Cons.COLLECTION_WINDOW_PARAMS_NAME)
     WindowManager.LayoutParams gridParentViewPara;
     @Inject
     @Nullable

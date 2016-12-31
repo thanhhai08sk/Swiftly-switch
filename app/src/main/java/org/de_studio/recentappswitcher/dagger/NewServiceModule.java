@@ -44,7 +44,7 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
-import static org.de_studio.recentappswitcher.Cons.GRID_PARENT_VIEW_PARA_NAME;
+import static org.de_studio.recentappswitcher.Cons.COLLECTION_WINDOW_PARAMS_NAME;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE;
@@ -115,7 +115,7 @@ public class NewServiceModule {
 
     @Provides
     @Singleton
-    @Named(GRID_PARENT_VIEW_PARA_NAME)
+    @Named(COLLECTION_WINDOW_PARAMS_NAME)
     WindowManager.LayoutParams gridParentViewPara(){
         return new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
@@ -126,6 +126,21 @@ public class NewServiceModule {
                         WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 PixelFormat.TRANSLUCENT);
     }
+
+    @Provides
+    @Singleton
+    @Named(Cons.GRID_WINDOW_PARAMS_NAME)
+    WindowManager.LayoutParams  gridParams(){
+        return new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                PixelFormat.TRANSLUCENT);
+    }
+
 
     @Provides
     @Singleton

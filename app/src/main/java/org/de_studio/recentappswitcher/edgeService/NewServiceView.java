@@ -37,7 +37,7 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.base.SlotsAdapter;
+import org.de_studio.recentappswitcher.base.ServiceSlotAdapter;
 import org.de_studio.recentappswitcher.dadaSetup.DataSetupService;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerNewServiceComponent;
@@ -85,8 +85,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Inject
     IconPackManager.IconPack iconPack;
     @Inject
-    @Named(Cons.GRID_PARENT_VIEW_PARA_NAME)
+    @Named(Cons.COLLECTION_WINDOW_PARAMS_NAME)
     WindowManager.LayoutParams collectionWindowPapams;
+    @Inject
+    @Named(Cons.GRID_WINDOW_PARAMS_NAME)
+    WindowManager.LayoutParams gridParams;
     @Inject
     @Named(Cons.CLOCK_PARENTS_VIEW_NAME)
     FrameLayout backgroundView;
@@ -151,7 +154,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            usageStatsManager = (UsageStatsManager)getSystemService(Context.USAGE_STATS_SERVICE);
+            usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         }
     }
 
@@ -171,7 +174,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         Log.e(TAG, "inject: ");
         DaggerNewServiceComponent.builder()
                 .appModule(new AppModule(this))
-                .newServiceModule(new NewServiceModule(this,this, realm))
+                .newServiceModule(new NewServiceModule(this, this, realm))
                 .build().inject(this);
     }
 
@@ -204,8 +207,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public void addEdgesToWindowAndSetListener() {
         Log.e(TAG, "addEdgesToWindowAndSetListener: ");
-        if (!(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && sharedPreferences.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false)) ) {
-            if (sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY,true)) {
+        if (!(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && sharedPreferences.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE, false))) {
+            if (sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY, true)) {
                 try {
                     windowManager.addView(edge1View, edge1Para);
                     edge1View.setOnTouchListener(null);
@@ -214,7 +217,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
                 }
             }
-            if (sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY,false)) {
+            if (sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false)) {
                 try {
                     windowManager.addView(edge2View, edge2Para);
                     edge2View.setOnTouchListener(null);
@@ -245,7 +248,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, remoteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        NotificationCompat.Action remoteAction=
+        NotificationCompat.Action remoteAction =
                 new NotificationCompat.Action.Builder(
                         android.R.drawable.ic_media_pause,
                         getString(R.string.pause),
@@ -292,7 +295,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 ActivityManager.RunningTaskInfo taskInfo = list.get(i);
                 ComponentName componentName = taskInfo.baseActivity;
                 String packName = componentName.getPackageName();
-                if ((excludeSet ==null || excludeSet.where().equalTo(Cons.PACKAGENAME, packName).findFirst() == null) && !packName.contains("systemui")) {
+                if ((excludeSet == null || excludeSet.where().equalTo(Cons.PACKAGENAME, packName).findFirst() == null) && !packName.contains("systemui")) {
                     tempPackageNameKK.add(packName);
                 }
             }
@@ -320,14 +323,14 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                             if (packa != null &&
                                     (usageStats.getTotalTimeInForeground() > 500
                                             && !packa.contains("systemui")
-                                            && (excludeSet ==null || excludeSet.where().equalTo(Cons.PACKAGENAME, packa).findFirst() == null)
+                                            && (excludeSet == null || excludeSet.where().equalTo(Cons.PACKAGENAME, packa).findFirst() == null)
                                             && !tempPackageName.contains(packa)
                                             || packa.equals(launcherPackageName))
                                     ) {
                                 tempPackageName.add(packa);
                             }
                             if (tempPackageName.size() >= 7) {
-                                Log.e(TAG, "tempackage >= "  + 7);
+                                Log.e(TAG, "tempackage >= " + 7);
                                 break;
                             }
                         }
@@ -346,23 +349,39 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     public void showBackground() {
         if (!backgroundView.isAttachedToWindow()) {
             windowManager.addView(backgroundView, collectionWindowPapams);
+        } else {
+            backgroundView.setVisibility(View.VISIBLE);
         }
+    }
+
+    public ImageView getIconImageView() {
+        ImageView imageView = new ImageView(this);
+        imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale), (int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale)));
+        imageView.setId(R.id.item_icon);
+        return imageView;
     }
 
     @Override
     public void showGrid(float xInit, float yInit, Collection grid, int position) {
         if (collectionViewsMap.get(grid.collectionId) == null) {
             RecyclerView gridView = new RecyclerView(this);
-            gridView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            SlotsAdapter slotsAdapter = new SlotsAdapter(this, grid.slots, true, iconPack, Cons.ITEM_TYPE_ICON_ONLY);
+            gridView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//            SlotsAdapter slotsAdapter = new SlotsAdapter(getApplicationContext(), grid.slots, true, iconPack, Cons.ITEM_TYPE_ICON_ONLY);
+            ServiceSlotAdapter adapter = new ServiceSlotAdapter(this, grid.slots, false, iconPack, mScale, iconScale);
             gridView.setLayoutManager(new GridLayoutManager(this, grid.columnCount));
-            gridView.setAdapter(slotsAdapter);
+            gridView.setAdapter(adapter);
+            gridView.setId(R.id.recycler_view);
             collectionViewsMap.put(grid.collectionId, gridView);
         }
-        RecyclerView recyclerView =(RecyclerView) collectionViewsMap.get(grid.collectionId);
-        if (!recyclerView.isAttachedToWindow()) {
-            windowManager.addView(recyclerView,collectionWindowPapams);
+        RecyclerView recyclerView = (RecyclerView) collectionViewsMap.get(grid.collectionId);
+//        if (!recyclerView.isAttachedToWindow()) {
+//            windowManager.addView(recyclerView, gridParams);
+//        }
+        if (backgroundView.findViewById(R.id.recycler_view) == null) {
+            backgroundView.addView(recyclerView);
         }
+        recyclerView.setVisibility(View.VISIBLE);
+
         Utility.setFavoriteGridViewPosition(recyclerView
                 , recyclerView.getHeight()
                 , recyclerView.getWidth()
@@ -422,7 +441,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public void showClock() {
         backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.GONE);
-        if (!sharedPreferences.getBoolean(Cons.DISABLE_CLOCK_KEY,false)) {
+        if (!sharedPreferences.getBoolean(Cons.DISABLE_CLOCK_KEY, false)) {
             Calendar c = Calendar.getInstance();
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
             backgroundView.findViewById(R.id.clock_linear_layout).setVisibility(View.VISIBLE);
@@ -542,25 +561,27 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         }
         return true;
     }
+
     private float getXCord(MotionEvent motionEvent) {
-        return  motionEvent.getRawX();
+        return motionEvent.getRawX();
     }
 
     private float getYCord(MotionEvent motionEvent) {
-        return  motionEvent.getRawY();
+        return motionEvent.getRawY();
     }
+
     public final synchronized void addEdgeImage() {
-        if (sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY,true) && edge1View !=null && !edge1View.isAttachedToWindow()) {
+        if (sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY, true) && edge1View != null && !edge1View.isAttachedToWindow()) {
             try {
-                windowManager.addView(edge1View,edge1Para);
+                windowManager.addView(edge1View, edge1Para);
             } catch (IllegalStateException e) {
                 Log.e(TAG, "addEdgeImage: fail when add edge1Image");
             }
 
         }
-        if (sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false) && edge2View !=null && !edge2View.isAttachedToWindow()) {
+        if (sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false) && edge2View != null && !edge2View.isAttachedToWindow()) {
             try {
-                windowManager.addView(edge2View,edge2Para);
+                windowManager.addView(edge2View, edge2Para);
             } catch (IllegalStateException e) {
                 Log.e(TAG, "addEdgeImage: fail when add edge2Image");
             }
@@ -585,7 +606,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
 
-
     public class EdgesToggleReceiver extends BroadcastReceiver {
         public EdgesToggleReceiver() {
         }
@@ -604,7 +624,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     working = !working;
 
 
-                    remoteAction=
+                    remoteAction =
                             new NotificationCompat.Action.Builder(
                                     android.R.drawable.ic_media_play,
                                     getString(R.string.resume),
@@ -614,7 +634,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     working = !working;
 
 
-                    remoteAction=
+                    remoteAction =
                             new NotificationCompat.Action.Builder(
                                     android.R.drawable.ic_media_pause,
                                     getString(R.string.pause),
@@ -623,7 +643,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
                 notificationBuilder.mActions = new ArrayList<>();
                 notificationBuilder.addAction(remoteAction);
-                startForeground(Cons.NOTIFICATION_ID,notificationBuilder.build());
+                startForeground(Cons.NOTIFICATION_ID, notificationBuilder.build());
 
             } else if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
                 Log.e(TAG, "onReceive: userPresent");
@@ -645,7 +665,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             }
         }
     }
-
 
 
 }

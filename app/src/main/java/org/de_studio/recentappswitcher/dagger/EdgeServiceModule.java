@@ -112,7 +112,7 @@ import static org.de_studio.recentappswitcher.Cons.GRID_HEIGHT_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_NUMBER_COLUMNS_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_NUMBER_ROWS_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_PARENTS_VIEW_NAME;
-import static org.de_studio.recentappswitcher.Cons.GRID_PARENT_VIEW_PARA_NAME;
+import static org.de_studio.recentappswitcher.Cons.COLLECTION_WINDOW_PARAMS_NAME;
 import static org.de_studio.recentappswitcher.Cons.GRID_WIDTH_NAME;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_NAME;
@@ -299,7 +299,7 @@ public class EdgeServiceModule {
 
     @Provides
     @Singleton
-    @Named(GRID_PARENT_VIEW_PARA_NAME)
+    @Named(COLLECTION_WINDOW_PARAMS_NAME)
     WindowManager.LayoutParams gridParentViewPara(){
            return new WindowManager.LayoutParams(
                    WindowManager.LayoutParams.MATCH_PARENT,

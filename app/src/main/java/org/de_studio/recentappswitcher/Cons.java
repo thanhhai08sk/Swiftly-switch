@@ -110,7 +110,8 @@ public class Cons {
     public static final String ICON_SIZE_PXL_NAME = "iconSizePxl";
     public static final String GRID_GAP_NAME = "grid_gap_name";
     public static final String ICON_SCALE_NAME = "icon_scale";
-    public static final String GRID_PARENT_VIEW_PARA_NAME = "grid_parent_view_para";
+    public static final String COLLECTION_WINDOW_PARAMS_NAME = "grid_parent_view_para";
+    public static final String GRID_WINDOW_PARAMS_NAME = "grid_params";
     public static final String CIRCLE_SHORTCUT_VIEW_PARA_NAME = "circle_shortcut_view_para";
     public static final String GUIDE_COLOR_NAME = "guide_color";
     public static final String BACKGROUND_COLOR_NAME = "background_color";

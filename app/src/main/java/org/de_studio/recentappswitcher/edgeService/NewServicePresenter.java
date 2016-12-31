@@ -39,6 +39,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     PublishSubject<Integer> highlightIdSubject = PublishSubject.create();
     PublishSubject<Void> longClickItemSubject = PublishSubject.create();
     PublishSubject<Long> longClickHelperSubject = PublishSubject.create();
+    PublishSubject<String> showCollectionInstantlySubject = PublishSubject.create();
 
 
     public NewServicePresenter(NewServiceModel model, Edge edge1, Edge edge2, long holdTime) {
@@ -58,7 +59,12 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         view.setupReceiver();
 
         addSubscription(
-                highlightIdSubject.distinct().subscribe(new Action1<Integer>() {
+                highlightIdSubject.filter(new Func1<Integer, Boolean>() {
+                    @Override
+                    public Boolean call(Integer integer) {
+                        return integer!=currentHighlight;
+                    }
+                }).subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
                         Log.e(TAG, "call: highlight " + integer);
@@ -70,6 +76,26 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         longClickHelperSubject.onNext(holdingHelper);
                         if (integer!= -1) {
                             view.actionMoveVibrate();
+                        }
+
+                        if (integer >= 10
+                                && currentShowing.showWhat == Showing.SHOWING_CIRCLE_AND_ACTION
+                                && currentShowing.action.slots.get(integer - 10).type.equals(Slot.TYPE_ITEM)
+                                && currentShowing.action.slots.get(integer - 10).stage1Item.type.equals(Item.TYPE_SHORTCUTS_SET)) {
+                            showCollectionInstantlySubject.onNext(currentShowing.action.slots.get(integer - 10).stage1Item.collectionId);
+                        }
+                    }
+                })
+        );
+
+        addSubscription(
+                showCollectionInstantlySubject.subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        Log.e(TAG, "call: showCollectionInstantly");
+                        Collection collection = model.getCollection(s);
+                        if (collection.type.equals(Collection.TYPE_GRID_FAVORITE)) {
+                            view.showGrid(xInit, yInit, collection, currentEdge.position);
                         }
                     }
                 })

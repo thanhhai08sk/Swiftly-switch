@@ -5,11 +5,9 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
@@ -23,34 +21,28 @@ import rx.Observable;
 import rx.subjects.PublishSubject;
 
 /**
- * Created by HaiNguyen on 11/12/16.
+ * Created by HaiNguyen on 12/31/16.
  */
 
-public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.ViewHolder> {
-    private static final String TAG = SlotsAdapter.class.getSimpleName();
-    PackageManager packageManager;
+public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSlotAdapter.ViewHolder> {PackageManager packageManager;
     IconPackManager.IconPack iconPack;
     private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
-    int itemType;
+    float mScale, iconScale;
 
 
-    public SlotsAdapter(@NonNull Context context, @Nullable OrderedRealmCollection data, boolean autoUpdate, IconPackManager.IconPack iconPack, int itemType) {
+    public ServiceSlotAdapter(@NonNull Context context, @Nullable OrderedRealmCollection data, boolean autoUpdate, IconPackManager.IconPack iconPack, float mScale, float iconScale) {
         super(context, data, autoUpdate);
         this.iconPack = iconPack;
         packageManager = context.getPackageManager();
-        this.itemType = itemType;
+        this.mScale = mScale;
+        this.iconScale = iconScale;
     }
 
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ServiceSlotAdapter.ViewHolder holder, final int position) {
         final Slot slot = getItem(position);
         if (slot != null) {
-            switch (itemType) {
-                case Cons.ITEM_TYPE_ICON_LABEL:
-                    Utility.setSlotLabel(slot, context, holder.label);
-                    break;
-            }
             Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack);
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -63,28 +55,19 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = null;
-        switch (itemType) {
-            case Cons.ITEM_TYPE_ICON_LABEL:
-                view = LayoutInflater.from(context).inflate(R.layout.item_circle_favorite, parent, false);
-                break;
-            case Cons.ITEM_TYPE_ICON_ONLY:
-//                view = LayoutInflater.from(context).inflate(R.layout.item_icon_only, parent, false);
-                view = inflater.inflate(R.layout.item_icon_only, parent, false);
-                break;
-        }
-        return new ViewHolder(view);
+        ImageView imageView = new ImageView(context);
+        imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale), (int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale)));
+        imageView.setId(R.id.item_icon);
+        return new ViewHolder(imageView);
     }
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View view;
-        public TextView label;
         public ImageView icon;
         public ViewHolder(View itemView) {
             super(itemView);
             this.view = itemView;
-            label = (TextView) view.findViewById(R.id.item_label);
             icon = (ImageView) view.findViewById(R.id.item_icon);
         }
     }
