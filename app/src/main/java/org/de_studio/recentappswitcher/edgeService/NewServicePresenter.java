@@ -61,6 +61,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 highlightIdSubject.distinct().subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
+                        Log.e(TAG, "call: highlight " + integer);
                         view.unhighlightSlot(currentShowing, currentHighlight);
                         view.highlightSlot(currentShowing, integer);
                         currentHighlight = integer;
@@ -119,7 +120,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     public void onActionMove(float x, float y) {
         switch (currentShowing.showWhat) {
             case Showing.SHOWING_CIRCLE_AND_ACTION:
-                highlightIdSubject.onNext(model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size()));
+                int highlight = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size());
+                highlightIdSubject.onNext(highlight);
                 break;
             case Showing.SHOWING_GRID:
                 highlightIdSubject.onNext(model.getGridActivatedId(x,y,currentShowing.gridXY.x,currentShowing.gridXY.y,currentShowing.grid.rowsCount, currentShowing.grid.columnCount,currentShowing.grid.space,false));
@@ -128,6 +130,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     }
 
     public void onActionUp(float x, float y) {
+        Log.e(TAG, "onActionUp: currentHighlight = " + currentHighlight);
         onHolding = false;
         Slot slot = null;
         view.hideAllExceptEdges();
@@ -135,7 +138,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             switch (currentShowing.showWhat) {
                 case Showing.SHOWING_CIRCLE_AND_ACTION:
                     if (currentHighlight < 10) {
-                        slot = currentShowing.circle.slots.get(currentHighlight);
+                        slot = currentShowing.circleSlots.get(currentHighlight);
                     } else {
                         slot = currentShowing.action.slots.get(currentHighlight - 10);
                     }
@@ -179,10 +182,13 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 Log.e(TAG, "showCollection: recent and quick action");
                 currentShowing.circleIconsXY = model.calculateCircleIconPositions(currentEdge.recent.radius, currentEdge.position
                         , xInit, yInit, currentEdge.recent.slots.size());
+                RealmList<Slot> slots = model.getRecent(tempPackages, currentEdge.recent.slots);
                 view.showCircle(currentShowing.circleIconsXY, currentEdge.recent
-                        , model.getRecent(tempPackages, currentEdge.recent.slots));
+                        , slots);
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
                 currentShowing.circle = currentEdge.recent;
+                currentShowing.circleSlots = slots;
+                currentShowing.action = currentEdge.quickAction;
                 break;
             case Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION:
                 Log.e(TAG, "showCollection: circle and quick action");
@@ -191,6 +197,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 view.showCircle(currentShowing.circleIconsXY, currentEdge.circleFav, currentEdge.circleFav.slots);
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
                 currentShowing.circle = currentEdge.circleFav;
+                currentShowing.circleSlots = currentShowing.circle.slots;
+                currentShowing.action = currentEdge.quickAction;
                 break;
         }
     }
@@ -267,6 +275,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         public Collection grid;
         public Collection circle;
         public Collection action;
+        public RealmList<Slot> circleSlots;
         public RealmList<Item> folderItems;
         public NewServiceModel.IconsXY circleIconsXY;
         public Point gridXY = new Point(0, 0);

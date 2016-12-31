@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.edgeService;
 
 import android.os.Build;
+import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
@@ -46,6 +47,9 @@ public class NewServiceModel extends BaseModel {
 
     public RealmList<Slot> getRecent(ArrayList<String> packageNames, RealmList<Slot> slots) {
         RealmList<Slot> returnSlots = new RealmList<>();
+        for (String packageName : packageNames) {
+            Log.e(TAG, "getRecent: temp package " + packageName);
+        }
         long recentSlotsCount = slots.where().equalTo(Cons.TYPE, Slot.TYPE_RECENT).count();
         String removedPackage = null;
         if (packageNames.size() > 0) {
@@ -91,6 +95,7 @@ public class NewServiceModel extends BaseModel {
                         slot1.type = Slot.TYPE_ITEM;
                         slot1.stage1Item = item;
                         returnSlots.add(slot1);
+                        packageNames.remove(0);
                     }
                     break;
                 default:
@@ -98,6 +103,11 @@ public class NewServiceModel extends BaseModel {
                     break;
             }
         }
+
+        for (Slot returnSlot : returnSlots) {
+            Log.e(TAG, "return slot " + returnSlot.toString());
+        }
+
 
         return returnSlots;
     }

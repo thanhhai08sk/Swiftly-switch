@@ -27,6 +27,22 @@ public class Slot extends RealmObject {
     }
 
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(type);
+        if (stage1Item != null) {
+            builder.append("\nstage1Item ");
+            builder.append(stage1Item.label);
+        }
+        if (stage2Item != null) {
+            builder.append("\nstage2Item ");
+            builder.append(stage2Item.label);
+        }
+
+        return builder.toString();
+    }
+
     public String getSlotId() {
         return slotId;
     }

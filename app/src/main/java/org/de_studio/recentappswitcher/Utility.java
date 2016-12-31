@@ -2455,6 +2455,7 @@ public  class Utility {
         switch (item.type) {
             case Item.TYPE_APP:
                 try {
+//                    Log.e(TAG, "setItemIcon: app: " + item.getPackageName() );
                     Drawable defaultDrawable = packageManager.getApplicationIcon(item.getPackageName());
                     Drawable iconPackDrawable;
                     if (iconPack!=null) {
@@ -2726,6 +2727,7 @@ public  class Utility {
     public static void startItem(Item item, String lastAppPackageName, Context context,int contactAction) {
         switch (item.type) {
             case Item.TYPE_APP:
+                Log.e(TAG, "startItem: start app");
                 startApp(item, context);
                 break;
             case Item.TYPE_ACTION:
