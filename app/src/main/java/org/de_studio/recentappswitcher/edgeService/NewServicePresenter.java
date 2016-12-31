@@ -138,7 +138,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             switch (currentShowing.showWhat) {
                 case Showing.SHOWING_CIRCLE_AND_ACTION:
                     if (currentHighlight < 10) {
-                        slot = currentShowing.circleSlots.get(currentHighlight);
+                        Log.e(TAG, "onActionUp: size = " + currentShowing.circleSlots.size() + "\nhighlight "+ currentHighlight) ;
+                        if (currentShowing.circleSlots.size() > currentHighlight) {
+                            slot = currentShowing.circleSlots.get(currentHighlight);
+                        }
                     } else {
                         slot = currentShowing.action.slots.get(currentHighlight - 10);
                     }
