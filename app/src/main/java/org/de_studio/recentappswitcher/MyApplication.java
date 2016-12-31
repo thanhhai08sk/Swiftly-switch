@@ -2,10 +2,7 @@ package org.de_studio.recentappswitcher;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
-
-import org.de_studio.recentappswitcher.dadaSetup.DataSetupService;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -25,11 +22,6 @@ public class MyApplication extends Application {
                 .schemaVersion(Cons.REALM_SCHEMA_VERSION)
                 .deleteRealmIfMigrationNeeded().build());
         this.mContext = this;
-
-        if (!checkIfDataOk()) {
-            Log.e(TAG, "onCreate: start dataSetupService");
-            startService(new Intent(this, DataSetupService.class));
-        }
     }
 
 

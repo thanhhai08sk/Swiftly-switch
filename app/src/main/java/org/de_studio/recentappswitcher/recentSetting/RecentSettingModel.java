@@ -40,6 +40,7 @@ public class RecentSettingModel extends BaseCollectionSettingModel {
                 collection.collectionId = Utility.createCollectionId(getCollectionType(), newCollectionNumber);
                 collection.label = newLabel;
                 collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
+                collection.radius = Cons.CIRCLE_RADIUS_DEFAULT;
                 Collection realmCollection = realm.copyToRealm(collection);
 
                 for (int i = 0; i < 6; i++) {

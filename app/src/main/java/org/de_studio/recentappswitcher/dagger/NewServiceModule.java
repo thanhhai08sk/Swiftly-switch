@@ -39,7 +39,7 @@ import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
-import static org.de_studio.recentappswitcher.Cons.EDGE_2_ID;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_ID_INT;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
@@ -92,14 +92,14 @@ public class NewServiceModule {
     @Singleton
     @Named(EDGE_1_NAME)
     Edge edge1(Realm realm) {
-        return realm.where(Edge.class).equalTo(Cons.EDGE_ID, Cons.EDGE_1_ID).findFirst();
+        return realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_1_ID).findFirst();
     }
 
     @Provides
     @Singleton
     @Named(EDGE_2_NAME)
     Edge edge2(Realm realm) {
-        return realm.where(Edge.class).equalTo(Cons.EDGE_ID, Cons.EDGE_2_ID).findFirst();
+        return realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_2_ID).findFirst();
     }
 
     @Provides
@@ -143,7 +143,7 @@ public class NewServiceModule {
             , @Named(GUIDE_COLOR_NAME) int guideColor) {
 
         View edge1View = new View(context);
-        edge1View.setId(Cons.EDGE_1_ID);
+        edge1View.setId(Cons.EDGE_1_ID_INT);
         if (edge1.useGuide) {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
@@ -202,7 +202,7 @@ public class NewServiceModule {
 
 
         View edge2View = new View(context);
-        edge2View.setId(EDGE_2_ID);
+        edge2View.setId(EDGE_2_ID_INT);
         if (edge2.useGuide) {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);

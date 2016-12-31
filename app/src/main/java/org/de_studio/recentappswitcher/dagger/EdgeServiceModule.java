@@ -62,7 +62,7 @@ import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_AND_QUICK_ACTION_GAP;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SHORTCUT_VIEW_PARA_NAME;
-import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_DEFAULT;
+import static org.de_studio.recentappswitcher.Cons.CIRCLE_RADIUS_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_KEY;
 import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_LINEAR_LAYOUT_NAME;
@@ -85,7 +85,7 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_1_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_WIDTH_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_HEIGHT_PXL_NAME;
-import static org.de_studio.recentappswitcher.Cons.EDGE_2_ID;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_ID_INT;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
@@ -271,7 +271,7 @@ public class EdgeServiceModule {
     float circleSizeDp(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared
             , @Named(M_SCALE_NAME) float mScale) {
 
-        return defaultShared.getInt(CIRCLE_SIZE_KEY, CIRCLE_SIZE_DEFAULT) * mScale;
+        return defaultShared.getInt(CIRCLE_SIZE_KEY, CIRCLE_RADIUS_DEFAULT) * mScale;
     }
 
 
@@ -490,7 +490,7 @@ public class EdgeServiceModule {
             , @Named(GUIDE_COLOR_NAME) int guideColor) {
 
         View edge1View = new View(context);
-        edge1View.setId(Cons.EDGE_1_ID);
+        edge1View.setId(Cons.EDGE_1_ID_INT);
         if (edge1Shared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true)) {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
@@ -544,7 +544,7 @@ public class EdgeServiceModule {
 
 
         View edge2View = new View(context);
-        edge2View.setId(EDGE_2_ID);
+        edge2View.setId(EDGE_2_ID_INT);
         if (edge2Shared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true)) {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);

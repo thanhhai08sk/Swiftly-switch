@@ -36,10 +36,10 @@ public class EdgeServicePresenter {
 
     void onCreate() {
         if (view.isEdge1On) {
-            view.addEdgeToWindowManager(Cons.EDGE_1_ID);
+            view.addEdgeToWindowManager(Cons.EDGE_1_ID_INT);
         }
         if (view.isEdge2On) {
-            view.addEdgeToWindowManager(Cons.EDGE_2_ID);
+            view.addEdgeToWindowManager(Cons.EDGE_2_ID_INT);
         }
         view.setOnTouchListener(view.isEdge1On, view.isEdge2On);
 
@@ -152,12 +152,12 @@ public class EdgeServicePresenter {
     private void setCurrentPositionAndMode(int edgeId) {
         currentEdgeId = edgeId;
         switch (edgeId) {
-            case Cons.EDGE_1_ID:
+            case Cons.EDGE_1_ID_INT:
                 Log.e(TAG, "onActionDown: edge1");
                 currentPosition = view.edge1Position;
                 currentEdgeMode = view.edge1Mode;
                 break;
-            case Cons.EDGE_2_ID:
+            case Cons.EDGE_2_ID_INT:
                 Log.e(TAG, "onActionDown:  edge2");
                 currentPosition = view.edge2Position;
                 currentEdgeMode = view.edge2Mode;

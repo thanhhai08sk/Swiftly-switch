@@ -140,8 +140,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             IntentFilter filter = new IntentFilter();
             filter.addAction(DataSetupService.BROADCAST_GENERATE_DATA_OK);
             generateDataOkReceiver = new GenerateDataOkReceiver();
-            this.registerReceiver(receiver, filter);
-            startService(new Intent(this, DataSetupService.class));
+//            this.registerReceiver(receiver, filter);
+            this.registerReceiver(generateDataOkReceiver, filter);
+            Intent intent = new Intent(this, DataSetupService.class);
+            intent.setAction(DataSetupService.ACTION_GENERATE_DATA);
+            startService(intent);
         } else {
             inject();
             presenter.onViewAttach(this);
@@ -152,7 +155,20 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         }
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.e(TAG, "onDestroy: ");
+        presenter.onViewDetach();
+        super.onDestroy();
+    }
+
     private void inject() {
+        Log.e(TAG, "inject: ");
         DaggerNewServiceComponent.builder()
                 .appModule(new AppModule(this))
                 .newServiceModule(new NewServiceModule(this,this, realm))
@@ -174,13 +190,20 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         windowManager = null;
         sharedPreferences = null;
         iconPack = null;
-        this.unregisterReceiver(generateDataOkReceiver);
+        if (generateDataOkReceiver != null) {
+            this.unregisterReceiver(generateDataOkReceiver);
+        }
+
+        if (receiver != null) {
+            this.unregisterReceiver(receiver);
+        }
         realm.close();
 
     }
 
     @Override
     public void addEdgesToWindowAndSetListener() {
+        Log.e(TAG, "addEdgesToWindowAndSetListener: ");
         if (!(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && sharedPreferences.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false)) ) {
             if (sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY,true)) {
                 try {
@@ -615,6 +638,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(DataSetupService.BROADCAST_GENERATE_DATA_OK)) {
+                Log.e(TAG, "onReceive: generate data ok");
                 inject();
                 presenter.onViewAttach(NewServiceView.this);
             }

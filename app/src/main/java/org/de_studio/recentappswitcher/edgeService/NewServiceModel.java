@@ -216,6 +216,7 @@ public class NewServiceModel extends BaseModel {
                     ys[i] = yInit - circleSizePxl * (float) Math.sin(alphaN[i]) - iconWidth/2;
                     break;
             }
+//            Log.e(TAG, "calculateCircleIconPositions: " + i + " = " + xs[i] + "\n" + ys[i]);
         }
         return new IconsXY(xs, ys);
     }

@@ -1,6 +1,8 @@
 package org.de_studio.recentappswitcher.main;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -10,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.dagger.DaggerMainComponent;
 import org.de_studio.recentappswitcher.dagger.MainModule;
 
@@ -45,6 +48,17 @@ public class MainView extends AppCompatActivity {
         setContentView(R.layout.main_view);
         ButterKnife.bind(this);
         presenter.onViewAttach();
+
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            Utility.restartService(this);
+
+        } else {
+            if (Settings.canDrawOverlays(this)) {
+                Utility.restartService(this);
+
+            }
+        }
     }
 
     @Override

@@ -69,7 +69,9 @@
         <service
             android:name=".edgeService.EdgeServiceView"
             android:exported="false" />
-        `
+        <service
+            android:name=".edgeService.NewServiceView"
+            android:exported="false" />
         <service
             android:name=".service.MyAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
@@ -216,7 +218,6 @@
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

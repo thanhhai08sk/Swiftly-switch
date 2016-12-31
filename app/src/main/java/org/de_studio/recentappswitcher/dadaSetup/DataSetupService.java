@@ -56,6 +56,7 @@ public class DataSetupService extends IntentService {
     }
 
     private void handleGenerateData() {
+        Log.e(TAG, "handleGenerateData: ");
         Realm realm = Realm.getDefaultInstance();
         DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
         if (dataInfo == null) {
@@ -85,6 +86,7 @@ public class DataSetupService extends IntentService {
 
 
     private void generateCollections(Realm realm, final DataInfo dataInfo) {
+        Log.e(TAG, "generateCollections: ");
         if (dataInfo.everyThingsOk()) {
             return;
         }
@@ -121,9 +123,9 @@ public class DataSetupService extends IntentService {
             public void execute(Realm realm) {
                 Collection recent = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_RECENT, 1)).findFirst();
                 Collection quickAction = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 1)).findFirst();
-                if (realm.where(Edge.class).equalTo(Cons.EDGE_ID, "edge1").findFirst() == null) {
+                if (realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_1_ID).findFirst() == null) {
                     Edge edge1 = new Edge();
-                    edge1.edgeId = "edge1";
+                    edge1.edgeId = Edge.EDGE_1_ID;
                     edge1.mode = Edge.MODE_RECENT_AND_QUICK_ACTION;
                     edge1.useGuide = true;
                     edge1.position = Cons.POSITION_RIGHT_CENTRE;
@@ -133,12 +135,15 @@ public class DataSetupService extends IntentService {
                     edge1.length = Cons.EDGE_LENGTH_DEFAULT;
                     edge1.offset = Cons.EDGE_OFFSET_DEFAULT;
                     edge1.keyboardOption = Edge.KEYBOARD_OPTION_PLACE_UNDER;
+
                     realm.copyToRealm(edge1);
+                    DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+                    dataInfo.edge1Ok = true;
                 }
 
-                if (realm.where(Edge.class).equalTo(Cons.EDGE_ID, "edge2").findFirst() == null) {
+                if (realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_2_ID).findFirst() == null) {
                     Edge edge2 = new Edge();
-                    edge2.edgeId = "edge2 ";
+                    edge2.edgeId = Edge.EDGE_2_ID;
                     edge2.mode = Edge.MODE_RECENT_AND_QUICK_ACTION;
                     edge2.useGuide = true;
                     edge2.position = Cons.POSITION_LEFT_BOTTOM;
@@ -148,7 +153,10 @@ public class DataSetupService extends IntentService {
                     edge2.length = Cons.EDGE_LENGTH_DEFAULT;
                     edge2.offset = Cons.EDGE_OFFSET_DEFAULT;
                     edge2.keyboardOption = Edge.KEYBOARD_OPTION_PLACE_UNDER;
+
                     realm.copyToRealm(edge2);
+                    DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+                    dataInfo.edge2Ok = true;
                 }
             }
         });
@@ -166,6 +174,7 @@ public class DataSetupService extends IntentService {
                     collection.collectionId = Utility.createCollectionId(Collection.TYPE_RECENT, 1);
                     collection.label = newLabel;
                     collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
+                    collection.radius = Cons.CIRCLE_RADIUS_DEFAULT;
                     Collection realmCollection = realm.copyToRealm(collection);
                     for (int i = 0; i < 6; i++) {
                         Slot recentSlot = new Slot();
@@ -177,6 +186,7 @@ public class DataSetupService extends IntentService {
                     }
                     DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
                     dataInfo.recentOk = true;
+                    Log.e(TAG, "generate recent ok");
                 }
             });
         }
@@ -195,6 +205,7 @@ public class DataSetupService extends IntentService {
                     collection.collectionId = Utility.createCollectionId(Collection.TYPE_CIRCLE_FAVORITE, 1);
                     collection.label = newLabel;
                     collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
+                    collection.radius = Cons.CIRCLE_RADIUS_DEFAULT;
                     Collection realmCollection = realm.copyToRealm(collection);
 
                     for (int i = 0; i < 6; i++) {
@@ -207,6 +218,7 @@ public class DataSetupService extends IntentService {
                     }
                     DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
                     dataInfo.circleFavoriteOk = true;
+                    Log.e(TAG, "generate circleFav ok");
                 }
             });
         }
@@ -243,6 +255,7 @@ public class DataSetupService extends IntentService {
                     }
                     DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
                     dataInfo.gridOk = true;
+                    Log.e(TAG, "generate grid ok");
                 }
             });
         }
@@ -297,6 +310,7 @@ public class DataSetupService extends IntentService {
                     }
                     DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
                     dataInfo.quickActionOk = true;
+                    Log.e(TAG, "generate quick action ok");
                 }
             });
         }
@@ -317,6 +331,7 @@ public class DataSetupService extends IntentService {
 
                     DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
                     dataInfo.blackListOk = true;
+                    Log.e(TAG, "generate blacklist ok");
                 }
             });
 
@@ -339,6 +354,7 @@ public class DataSetupService extends IntentService {
                         item.packageName = info.packageName;
                         item.label = info.applicationInfo.loadLabel(getPackageManager()).toString();
                         realm.copyToRealm(item);
+                        Log.e(TAG, "generate app item: " + info.packageName);
                     }
                 });
             }
@@ -363,6 +379,7 @@ public class DataSetupService extends IntentService {
                         newItem.action = action;
                         Utility.setIconResourceIdsForAction(newItem);
                         realm.copyToRealm(newItem);
+                        Log.e(TAG, "generate action item: " + string);
                     }
                 }
             }
@@ -403,6 +420,7 @@ public class DataSetupService extends IntentService {
                                 newItem.contactId = contactId;
                                 newItem.iconUri = iconUri;
                                 realm.copyToRealm(newItem);
+                                Log.e(TAG, "generate contact item: " + newItem.label );
                             }
                         }
                     }

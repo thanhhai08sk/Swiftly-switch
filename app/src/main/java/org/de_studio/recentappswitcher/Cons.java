@@ -76,7 +76,7 @@ public class Cons {
     public static final int FAVORITE_GRID_MIN_SHORTCUTS_SPACE = 10;
     public static final int FAVORITE_GRID_MAX_SHORTCUTS_SPACE = 50;
     public static final int INIT_OFFSET = 10;
-    public static final int CIRCLE_SIZE_DEFAULT = 105;
+    public static final int CIRCLE_RADIUS_DEFAULT = 105;
     public static final int CIRCLE_AND_QUICK_ACTION_GAP = 35;
     public static final int OVAL_RADIUS_PLUS = 17;
     public static final int OVAL_OFFSET = 70;
@@ -88,8 +88,8 @@ public class Cons {
     public static final int ANIMATION_TIME_DEFAULT = 170;
 
 
-    public static final int EDGE_1_ID = 11;
-    public static final int EDGE_2_ID = 22;
+    public static final int EDGE_1_ID_INT = 11;
+    public static final int EDGE_2_ID_INT = 22;
     public static final int QUICK_ACTION_ID_INSTANT_GRID = 1;
     public static final int QUICK_ACTION_ID_NORMAL = 2;
 

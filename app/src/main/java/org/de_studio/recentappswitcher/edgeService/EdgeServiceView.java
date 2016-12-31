@@ -86,7 +86,7 @@ import static org.de_studio.recentappswitcher.Cons.CIRCLE_SIZE_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_LINEAR_LAYOUT_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
-import static org.de_studio.recentappswitcher.Cons.EDGE_1_ID;
+import static org.de_studio.recentappswitcher.Cons.EDGE_1_ID_INT;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
@@ -94,7 +94,7 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_1_QUICK_ACTION_VIEWS_NAM
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SENSITIVE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_SHARED_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
-import static org.de_studio.recentappswitcher.Cons.EDGE_2_ID;
+import static org.de_studio.recentappswitcher.Cons.EDGE_2_ID_INT;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_MODE_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_OFFSET_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
@@ -495,14 +495,14 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
     public void addEdgeToWindowManager(int edgeId) {
         if (!(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && defaultShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE,false)) ) {
             switch (edgeId) {
-                case Cons.EDGE_1_ID:
+                case Cons.EDGE_1_ID_INT:
                     try {
                         windowManager.addView(edge1View, edge1Para);
                     } catch (Exception e) {
                         Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
                     }
                     break;
-                case Cons.EDGE_2_ID:
+                case Cons.EDGE_2_ID_INT:
                     try {
                         windowManager.addView(edge2View, edge2Para);
                     } catch (Exception e) {
@@ -525,9 +525,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     private int getEdgeSensitive(int edgeId) {
         switch (edgeId) {
-            case Cons.EDGE_1_ID:
+            case Cons.EDGE_1_ID_INT:
                 return edge2Sensitive;
-            case Cons.EDGE_2_ID:
+            case Cons.EDGE_2_ID_INT:
                 return edge2Sensitive;
         }
         return Cons.EDGE_SENSITIVE_DEFAULT;
@@ -535,9 +535,9 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     public int getEdgeOffset(int edgeId) {
         switch (edgeId) {
-            case Cons.EDGE_1_ID:
+            case Cons.EDGE_1_ID_INT:
                 return edge1Offset;
-            case Cons.EDGE_2_ID:
+            case Cons.EDGE_2_ID_INT:
                 return edge2Offset;
             default:
                 return Cons.EDGE_OFFSET_DEFAULT;
@@ -725,10 +725,10 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             }
         } else if (iconId >= 10) {
             switch (edgeId) {
-                case Cons.EDGE_1_ID:
+                case Cons.EDGE_1_ID_INT:
                     edge1QuickActionViews[iconId - 10].setVisibility(View.GONE);
                     break;
-                case Cons.EDGE_2_ID:
+                case Cons.EDGE_2_ID_INT:
                     edge2QuickActionViews[iconId - 10].setVisibility(View.GONE);
                     break;
             }
@@ -968,7 +968,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
         float x = xInit - circleSizePxl - CIRCLE_AND_QUICK_ACTION_GAP * mScale - OVAL_OFFSET * mScale - OVAL_RADIUS_PLUS * mScale;
         float y = yInit - circleSizePxl - CIRCLE_AND_QUICK_ACTION_GAP * mScale - OVAL_OFFSET * mScale - OVAL_RADIUS_PLUS * mScale;
         switch (edgeId) {
-            case EDGE_1_ID:
+            case EDGE_1_ID_INT:
 
                 for (int i = 0; i < edge1QuickActionViews.length; i++) {
                     if (i == id) {
@@ -980,7 +980,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
                     }
                 }
                 break;
-            case EDGE_2_ID:
+            case EDGE_2_ID_INT:
                 for (int i = 0; i < edge2QuickActionViews.length; i++) {
                     if (i == id) {
                         edge2QuickActionViews[i].setVisibility(View.VISIBLE);
@@ -998,12 +998,12 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
 
     public void hideAllQuickAction(int edgeId) {
         switch (edgeId) {
-            case EDGE_1_ID:
+            case EDGE_1_ID_INT:
                 for (ExpandStatusBarView edge1QuickActionView : edge1QuickActionViews) {
                     edge1QuickActionView.setVisibility(View.GONE);
                 }
                 break;
-            case EDGE_2_ID:
+            case EDGE_2_ID_INT:
                 for (ExpandStatusBarView edge2QuickActionView : edge2QuickActionViews) {
                     edge2QuickActionView.setVisibility(View.GONE);
                 }

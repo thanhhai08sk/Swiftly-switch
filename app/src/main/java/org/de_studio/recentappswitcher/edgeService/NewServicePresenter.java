@@ -50,6 +50,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
     @Override
     public void onViewAttach(final View view) {
+        Log.e(TAG, "onViewAttach: ");
         super.onViewAttach(view);
         model.setup();
         view.addEdgesToWindowAndSetListener();
@@ -130,23 +131,25 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         onHolding = false;
         Slot slot = null;
         view.hideAllExceptEdges();
-        switch (currentShowing.showWhat) {
-            case Showing.SHOWING_CIRCLE_AND_ACTION:
-                if (currentHighlight < 10) {
-                    slot = currentShowing.circle.slots.get(currentHighlight);
-                } else {
-                    slot = currentShowing.action.slots.get(currentHighlight - 10);
-                }
-                break;
-            case Showing.SHOWING_GRID:
-                slot = currentShowing.grid.slots.get(currentHighlight);
-                break;
-            case Showing.SHOWING_FOLDER:
-                view.startItem(currentShowing.folderItems.get(currentHighlight), model.getLastApp());
-                break;
-        }
-        if (slot != null) {
-            view.startSlot(slot, model.getLastApp());
+        if (currentHighlight >=0) {
+            switch (currentShowing.showWhat) {
+                case Showing.SHOWING_CIRCLE_AND_ACTION:
+                    if (currentHighlight < 10) {
+                        slot = currentShowing.circle.slots.get(currentHighlight);
+                    } else {
+                        slot = currentShowing.action.slots.get(currentHighlight - 10);
+                    }
+                    break;
+                case Showing.SHOWING_GRID:
+                    slot = currentShowing.grid.slots.get(currentHighlight);
+                    break;
+                case Showing.SHOWING_FOLDER:
+                    view.startItem(currentShowing.folderItems.get(currentHighlight), model.getLastApp());
+                    break;
+            }
+            if (slot != null) {
+                view.startSlot(slot, model.getLastApp());
+            }
         }
     }
 
@@ -167,11 +170,13 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     private void showCollection(ArrayList<String> tempPackages) {
         switch (currentEdge.mode) {
             case Edge.MODE_GRID:
+                Log.e(TAG, "showCollection: grid");
                 view.showGrid(xInit, yInit, currentEdge.grid, currentEdge.position);
                 currentShowing.showWhat = Showing.SHOWING_GRID;
                 currentShowing.grid = currentEdge.grid;
                 break;
             case Edge.MODE_RECENT_AND_QUICK_ACTION:
+                Log.e(TAG, "showCollection: recent and quick action");
                 currentShowing.circleIconsXY = model.calculateCircleIconPositions(currentEdge.recent.radius, currentEdge.position
                         , xInit, yInit, currentEdge.recent.slots.size());
                 view.showCircle(currentShowing.circleIconsXY, currentEdge.recent
@@ -180,6 +185,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 currentShowing.circle = currentEdge.recent;
                 break;
             case Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION:
+                Log.e(TAG, "showCollection: circle and quick action");
                 currentShowing.circleIconsXY = model.calculateCircleIconPositions(currentEdge.circleFav.radius, currentEdge.position
                         , xInit, yInit, currentEdge.circleFav.slots.size());
                 view.showCircle(currentShowing.circleIconsXY, currentEdge.circleFav, currentEdge.circleFav.slots);
@@ -204,10 +210,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
     private void setCurrentEdge(int edgeId) {
         switch (edgeId) {
-            case Cons.EDGE_1_ID:
+            case Cons.EDGE_1_ID_INT:
                 currentEdge = edge1;
                 break;
-            case Cons.EDGE_2_ID:
+            case Cons.EDGE_2_ID_INT:
                 currentEdge = edge2;
                 break;
         }
