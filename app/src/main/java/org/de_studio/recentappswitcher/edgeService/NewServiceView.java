@@ -16,6 +16,7 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -48,6 +49,7 @@ import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.NotiDialog;
+import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -188,17 +190,18 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     public void clear() {
         collectionViewsMap = null;
         usageStatsManager = null;
-        receiver = null;
         notificationBuilder = null;
         windowManager = null;
         sharedPreferences = null;
         iconPack = null;
         if (generateDataOkReceiver != null) {
             this.unregisterReceiver(generateDataOkReceiver);
+            generateDataOkReceiver = null;
         }
 
         if (receiver != null) {
             this.unregisterReceiver(receiver);
+            receiver = null;
         }
         realm.close();
 
@@ -362,53 +365,84 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
-    public void showGrid(float xInit, float yInit, Collection grid, int position) {
+    public void showGrid(final float xInit, final float yInit, final Collection grid, final int position, final NewServicePresenter.Showing currentShowing) {
         if (collectionViewsMap.get(grid.collectionId) == null) {
             RecyclerView gridView = new RecyclerView(this);
-            gridView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            gridView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 //            SlotsAdapter slotsAdapter = new SlotsAdapter(getApplicationContext(), grid.slots, true, iconPack, Cons.ITEM_TYPE_ICON_ONLY);
-            ServiceSlotAdapter adapter = new ServiceSlotAdapter(this, grid.slots, false, iconPack, mScale, iconScale);
+            ServiceSlotAdapter adapter = new ServiceSlotAdapter(this, grid.slots, true, iconPack, mScale, iconScale);
             gridView.setLayoutManager(new GridLayoutManager(this, grid.columnCount));
             gridView.setAdapter(adapter);
             gridView.setId(R.id.recycler_view);
+            gridView.addItemDecoration(new GridSpacingItemDecoration((int)(grid.space * mScale)));
             collectionViewsMap.put(grid.collectionId, gridView);
         }
-        RecyclerView recyclerView = (RecyclerView) collectionViewsMap.get(grid.collectionId);
+        final RecyclerView recyclerView = (RecyclerView) collectionViewsMap.get(grid.collectionId);
 //        if (!recyclerView.isAttachedToWindow()) {
 //            windowManager.addView(recyclerView, gridParams);
 //        }
+        boolean needDelay = false;
         if (backgroundView.findViewById(R.id.recycler_view) == null) {
             backgroundView.addView(recyclerView);
+            needDelay = true;
         }
         hideAllCollections();
         recyclerView.setVisibility(View.VISIBLE);
 
-        Utility.setFavoriteGridViewPosition(recyclerView
-                , grid.position == Collection.POSITION_CENTER
-                , recyclerView.getHeight()
-                , recyclerView.getWidth()
-                , xInit, yInit
-                , mScale
-                , position
-                , windowManager
-                , grid.offsetHorizontal
-                , grid.offsetVertical
-                , 0);
-        recyclerView.setVisibility(View.VISIBLE);
+        if (needDelay) {
+            Handler handlerClose = new Handler();
+            handlerClose.postDelayed(new Runnable() {
+                public void run() {
+                    Utility.setFavoriteGridViewPosition(recyclerView
+                            , grid.position == Collection.POSITION_CENTER
+                            , recyclerView.getHeight()
+                            , recyclerView.getWidth()
+                            , xInit, yInit
+                            , mScale
+                            , position
+                            , windowManager
+                            , grid.offsetHorizontal
+                            , grid.offsetVertical);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    currentShowing.gridXY.x = (int) recyclerView.getX();
+                    currentShowing.gridXY.y = (int) recyclerView.getY();
+                }
+            }, 20);
+        } else {
+            Utility.setFavoriteGridViewPosition(recyclerView
+                    , grid.position == Collection.POSITION_CENTER
+                    , recyclerView.getHeight()
+                    , recyclerView.getWidth()
+                    , xInit, yInit
+                    , mScale
+                    , position
+                    , windowManager
+                    , grid.offsetHorizontal
+                    , grid.offsetVertical);
+            recyclerView.setVisibility(View.VISIBLE);
+            currentShowing.gridXY.x = (int) recyclerView.getX();
+            currentShowing.gridXY.y = (int) recyclerView.getY();
+        }
+
     }
 
     @Override
     public void showCircle(NewServiceModel.IconsXY iconsXY, Collection circle, RealmList<Slot> slots) {
         if (collectionViewsMap.get(circle.collectionId) == null) {
             FrameLayout circleView = new FrameLayout(this);
-            addIconsToCircleView(slots, circleView);
+            addIconsToCircleView(circle.slots, circleView);
             collectionViewsMap.put(circle.collectionId, circleView);
         }
         FrameLayout frameLayout = (FrameLayout) collectionViewsMap.get(circle.collectionId);
         for (int i = 0; i < frameLayout.getChildCount(); i++) {
-            Utility.setSlotIcon(slots.get(i), this, (ImageView) frameLayout.getChildAt(i), getPackageManager(), iconPack);
-            frameLayout.getChildAt(i).setX(iconsXY.xs[i]);
-            frameLayout.getChildAt(i).setY(iconsXY.ys[i]);
+            if (i < slots.size()) {
+                frameLayout.getChildAt(i).setVisibility(View.VISIBLE);
+                Utility.setSlotIcon(slots.get(i), this, (ImageView) frameLayout.getChildAt(i), getPackageManager(), iconPack);
+                frameLayout.getChildAt(i).setX(iconsXY.xs[i]);
+                frameLayout.getChildAt(i).setY(iconsXY.ys[i]);
+            } else {
+                frameLayout.getChildAt(i).setVisibility(View.GONE);
+            }
         }
         if (!frameLayout.isAttachedToWindow()) {
             windowManager.addView(frameLayout, collectionWindowPapams);

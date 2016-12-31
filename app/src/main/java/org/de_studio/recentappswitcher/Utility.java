@@ -462,7 +462,8 @@ public  class Utility {
 
     }
 
-    public static void setFavoriteGridViewPosition(View gridView,boolean isCenter ,  float gridTall, float gridWide, float x_init_cord, float y_init_cord, float mScale, int edgePosition, WindowManager windowManager, int distanceFromEdgeDp, int distanceVertical, int iconToSwitch) {
+    public static void setFavoriteGridViewPosition(View gridView,boolean isCenter ,  float gridTall, float gridWide, float xInit, float yInit, float mScale, int edgePosition, WindowManager windowManager, int distanceFromEdgeDp, int distanceVertical) {
+        Log.e(TAG, "setFavoriteGridViewPosition: width " + gridWide + "\ntall " + gridTall + "\nxInit " + xInit + "\nyInit " + yInit);
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
         float distanceVerticalFromEdge = ((float)distanceVertical)* mScale;
         Point point = new Point();
@@ -472,89 +473,43 @@ public  class Utility {
         if (!isCenter) {
             switch (edgePosition) {
                 case 10:
-                    gridView.setX(( x_init_cord) - distanceFromEdge - gridWide);
-                    if (iconToSwitch != -1) {
-                        if (y_init_cord - gridTall / 2 < distanceVerticalFromEdge) {
-                            gridView.setY(distanceVerticalFromEdge);
-                        } else {
-                            gridView.setY(y_init_cord - gridTall/2);
-                        }
-                    } else {
-                        gridView.setY(distanceVerticalFromEdge);
-                    }
-
+                    gridView.setX(( xInit) - distanceFromEdge - gridWide);
+                    gridView.setY(yInit - gridTall/2);
                     break;
                 case 11:
-//                    if (x_init_cord - triggerPoint[0] < distanceFromEdge) {
-                        gridView.setX(( x_init_cord) - distanceFromEdge - gridWide);
-//                    } else {
-//                        gridView.setX(triggerPoint[0] - gridWide + 24*mScale);
-//                    }
-//                    if (( y_init_cord) - gridTall / (float)2 < 0) {
-//                        gridView.setY(0);
-//                    } else if (((float) y_init_cord) - gridTall /(float) 2 + gridTall > y) {
-//                        gridView.setY(y - gridTall);
-//                    } else {
-//                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
-//                    }
-                    if (iconToSwitch >1) {
-                        gridView.setY(y_init_cord - gridTall / (float) 2);
-                    } else {
-                        gridView.setY(( y_init_cord) - gridTall /(float) 2);
-                    }
-
+                    float x1 = (xInit) - distanceFromEdge - gridWide;
+                    float y1 = (yInit) - gridTall / (float) 2;
+                    Log.e(TAG, "setFavoriteGridViewPosition: x " + x1 + "\ny " + y1);
+                    gridView.setX(x1);
+                    gridView.setY(y1);
                     break;
                 case 12:
-                    gridView.setX(( x_init_cord) - distanceFromEdge - gridWide);
-                    if (y - y_init_cord - gridTall / 2 < distanceVerticalFromEdge) {
+                    gridView.setX(( xInit) - distanceFromEdge - gridWide);
+                    if (y - yInit - gridTall / 2 < distanceVerticalFromEdge) {
                         gridView.setY(y - gridTall - distanceVerticalFromEdge);
                     } else {
-                        gridView.setY(y_init_cord - gridTall/2);
+                        gridView.setY(yInit - gridTall/2);
                     }
-
                     break;
                 case 20:
-                    gridView.setX(( x_init_cord) + distanceFromEdge);
-                    if (iconToSwitch != -1) {
-                        if (y_init_cord - gridTall / 2 < distanceVerticalFromEdge) {
-                            gridView.setY(distanceVerticalFromEdge);
-                        } else {
-                            gridView.setY(y_init_cord - gridTall/2);
-                        }
-                    } else {
-                        gridView.setY(distanceVerticalFromEdge);
-                    }
+                    gridView.setX(( xInit) + distanceFromEdge);
+                    gridView.setY(yInit - gridTall/2);
                     break;
                 case 21:
-                    gridView.setX(( x_init_cord) + distanceFromEdge);
-//                    if (( y_init_cord) - gridTall /(float) 2 < 0) {
-//                        gridView.setY(0);
-//                    } else if (((float) y_init_cord) - gridTall /(float) 2 + gridTall > y) {
-//                        gridView.setY(y - gridTall);
-//                    } else {
-//                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
-//                    }
-                    if (iconToSwitch >1) {
-                        gridView.setY(y_init_cord - gridTall / (float) 2);
-                    } else {
-                        gridView.setY(( y_init_cord) - gridTall /(float) 2);
-                    }
+                    gridView.setX(( xInit) + distanceFromEdge);
+                    gridView.setY(( yInit) - gridTall /(float) 2);
                     break;
                 case 22:
-                    gridView.setX(( x_init_cord) + distanceFromEdge);
-                    if (y - y_init_cord - gridTall / 2 < distanceVerticalFromEdge) {
+                    gridView.setX(( xInit) + distanceFromEdge);
+                    if (y - yInit - gridTall / 2 < distanceVerticalFromEdge) {
                         gridView.setY(y - gridTall - distanceVerticalFromEdge);
                     } else {
-                        gridView.setY(y_init_cord - gridTall/2);
+                        gridView.setY(yInit - gridTall/2);
                     }
                     break;
                 case 31:
-                    if (iconToSwitch != -1) {
-                        gridView.setX(x_init_cord - gridWide / (float) 2);
-                    } else {
-                        gridView.setX(( x_init_cord) - gridWide /(float) 2);
-                    }
-                    gridView.setY(( y_init_cord) - distanceVerticalFromEdge - gridTall);
+                    gridView.setX(( xInit) - gridWide /(float) 2);
+                    gridView.setY(( yInit) - distanceVerticalFromEdge - gridTall);
                     break;
             }
         } else {

@@ -164,18 +164,27 @@ public class NewServiceModel extends BaseModel {
 
     }
 
-    public int getGridActivatedId(float x, float y, float gridX, float gridY,int rowsCount, int columnCount, int space, boolean folderMode) {
-        double item_x,item_y;
+    public int getGridActivatedId(float x, float y, float gridX, float gridY, int rowsCount, int columnCount, int space, boolean folderMode) {
+
+//        Log.e(TAG, "getGridActivatedId: x " + x
+//                + "\ny " + y
+//                + "\ngridX " + gridX
+//                + "\ngridY " + gridY
+//                + "\nspace " + space
+//                + "\niconWidth " + iconWidth
+//                +"\nmScale " + mScale
+//        );
+        double centerIconX, centerIconY;
         double xDouble = (double) x;
         double yDouble = (double) y;
-        float iconSpace = space * mScale * 2 + iconWidth;
+        float totalIconWidth = space * mScale * 2 + iconWidth;
         double distance;
-        double smallestDistance = 1000*mScale;
+        double smallestDistance = 1000 * mScale;
         for (int i = 0; i < columnCount; i++) {
             for (int j = 0; j < rowsCount; j++) {
-                item_x = (gridX + iconSpace/2 +i*iconSpace);
-                item_y = (gridY + iconSpace/2 * mScale + j * iconSpace);
-                distance = Math.sqrt(Math.pow(xDouble - item_x,2) + Math.pow(yDouble - item_y, 2));
+                centerIconX = (gridX + totalIconWidth / 2 + i * totalIconWidth);
+                centerIconY = (gridY + totalIconWidth / 2  + j * totalIconWidth);
+                distance = Math.sqrt(Math.pow(xDouble - centerIconX, 2) + Math.pow(yDouble - centerIconY, 2));
                 if (distance <= 35 * mScale) {
                     return j * columnCount + i;
                 } else {

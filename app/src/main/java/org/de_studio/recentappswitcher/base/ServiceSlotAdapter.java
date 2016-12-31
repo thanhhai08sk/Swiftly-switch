@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -58,7 +59,12 @@ public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSl
         ImageView imageView = new ImageView(context);
         imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale), (int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale)));
         imageView.setId(R.id.item_icon);
-        return new ViewHolder(imageView);
+
+        FrameLayout frameLayout = new FrameLayout(context);
+        frameLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        frameLayout.addView(imageView);
+//        frameLayout.setBackgroundColor(Color.BLUE);
+        return new ViewHolder(frameLayout);
     }
 
 

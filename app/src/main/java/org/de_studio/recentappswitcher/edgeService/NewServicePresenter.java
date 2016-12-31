@@ -126,7 +126,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     }
 
     private void showGrid(Collection collection, View view) {
-        view.showGrid(xInit, yInit, collection, currentEdge.position);
+        view.showGrid(xInit, yInit, collection, currentEdge.position, currentShowing);
         currentShowing.showWhat = Showing.SHOWING_GRID;
         currentShowing.grid = collection;
     }
@@ -156,7 +156,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 highlightIdSubject.onNext(highlight);
                 break;
             case Showing.SHOWING_GRID:
-                highlightIdSubject.onNext(model.getGridActivatedId(x,y,currentShowing.gridXY.x,currentShowing.gridXY.y,currentShowing.grid.rowsCount, currentShowing.grid.columnCount,currentShowing.grid.space,false));
+                int onPosition = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, currentShowing.grid.rowsCount, currentShowing.grid.columnCount, currentShowing.grid.space, false);
+                highlightIdSubject.onNext(onPosition);
                 break;
         }
     }
@@ -274,7 +275,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void showBackground();
 
-        void showGrid(float xInit, float yInit, Collection grid, int position);
+        void showGrid(float xInit, float yInit, Collection grid, int position, Showing currentShowing);
 
         void showCircle(NewServiceModel.IconsXY iconsXY, Collection circle, RealmList<Slot> slots);
 
