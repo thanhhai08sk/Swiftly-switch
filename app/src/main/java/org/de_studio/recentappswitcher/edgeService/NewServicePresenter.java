@@ -95,7 +95,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         Log.e(TAG, "call: showCollectionInstantly");
                         Collection collection = model.getCollection(s);
                         if (collection.type.equals(Collection.TYPE_GRID_FAVORITE)) {
-                            view.showGrid(xInit, yInit, collection, currentEdge.position);
+                            showGrid(collection, view);
                         }
                     }
                 })
@@ -123,6 +123,12 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     }
                 })
         );
+    }
+
+    private void showGrid(Collection collection, View view) {
+        view.showGrid(xInit, yInit, collection, currentEdge.position);
+        currentShowing.showWhat = Showing.SHOWING_GRID;
+        currentShowing.grid = collection;
     }
 
     @Override
@@ -203,9 +209,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         switch (currentEdge.mode) {
             case Edge.MODE_GRID:
                 Log.e(TAG, "showCollection: grid");
-                view.showGrid(xInit, yInit, currentEdge.grid, currentEdge.position);
-                currentShowing.showWhat = Showing.SHOWING_GRID;
-                currentShowing.grid = currentEdge.grid;
+                showGrid(currentEdge.grid, view);
                 break;
             case Edge.MODE_RECENT_AND_QUICK_ACTION:
                 Log.e(TAG, "showCollection: recent and quick action");
@@ -287,6 +291,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         void startSlot(Slot slot, String lastApp);
 
         void startItem(Item item, String lastApp);
+
+        void hideAllCollections();
 
         void hideAllExceptEdges();
 

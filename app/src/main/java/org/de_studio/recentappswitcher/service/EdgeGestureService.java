@@ -1433,7 +1433,7 @@ public class EdgeGestureService extends Service {
                         PixelFormat.TRANSLUCENT);
 //                shortcutViewParams.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
 
-                Utility.setFavoriteGridViewPosition(shortcutGridView, gridTall, gridWide, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared, gridDistanceFromEdge, gridDistanceVertical, iconToSwitch);
+//                Utility.setFavoriteGridViewPosition(shortcutGridView, gridTall, gridWide, x_init_cord, y_init_cord, mScale, position, windowManager, defaultShared, gridDistanceFromEdge, gridDistanceVertical, iconToSwitch);
                 gridX = (int) shortcutGridView.getX();
                 gridY = (int) shortcutGridView.getY();
                 shortcutGridView.setVisibility(View.VISIBLE);

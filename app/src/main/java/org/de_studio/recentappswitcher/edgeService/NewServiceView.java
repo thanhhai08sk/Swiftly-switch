@@ -380,16 +380,17 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         if (backgroundView.findViewById(R.id.recycler_view) == null) {
             backgroundView.addView(recyclerView);
         }
+        hideAllCollections();
         recyclerView.setVisibility(View.VISIBLE);
 
         Utility.setFavoriteGridViewPosition(recyclerView
+                , grid.position == Collection.POSITION_CENTER
                 , recyclerView.getHeight()
                 , recyclerView.getWidth()
                 , xInit, yInit
                 , mScale
                 , position
                 , windowManager
-                , sharedPreferences
                 , grid.offsetHorizontal
                 , grid.offsetVertical
                 , 0);
@@ -491,16 +492,22 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
-    public void hideAllExceptEdges() {
+    public void hideAllCollections() {
         Set<String> collectionIds = collectionViewsMap.keySet();
         for (String collectionId : collectionIds) {
             collectionViewsMap.get(collectionId).setVisibility(View.GONE);
         }
+    }
 
+    @Override
+    public void hideAllExceptEdges() {
+        hideAllCollections();
         if (backgroundView != null) {
             backgroundView.setVisibility(View.GONE);
         }
     }
+
+
 
     @Override
     public synchronized void removeAllExceptEdges() {
