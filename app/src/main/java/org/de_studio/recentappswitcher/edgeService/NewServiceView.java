@@ -70,6 +70,7 @@ import javax.inject.Named;
 import io.realm.Realm;
 import io.realm.RealmList;
 
+import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
@@ -126,6 +127,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Inject
     @Named(ICON_SCALE_NAME)
     float iconScale;
+    @Inject
+    @Named(ANIMATION_TIME_NAME)
+    int animationTime;
     @Named(SHARED_PREFERENCE_NAME)
     @Inject
     SharedPreferences sharedPreferences;
@@ -434,7 +438,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
-    public void showCircle(NewServiceModel.IconsXY iconsXY, Collection circle, RealmList<Slot> slots) {
+    public void showCircle(NewServiceModel.IconsXY iconsXY, Collection circle, RealmList<Slot> slots, float xInit, float yInit) {
         if (collectionViewsMap.get(circle.collectionId) == null) {
             FrameLayout circleView = new FrameLayout(this);
             addIconsToCircleView(circle.slots, circleView);
@@ -453,16 +457,20 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 if (i == 0) {
                     icon.setX(iconsXY.xs[i]);
                     icon.setY(iconsXY.ys[i]);
-                    previousX = iconsXY.xs[i];
-                    previousY = iconsXY.ys[i];
                 } else {
                     icon.setX(previousX);
                     icon.setY(previousY);
                 }
+                previousX = iconsXY.xs[i];
+                previousY = iconsXY.ys[i];
 
-
-                ObjectAnimator animator = ObjectAnimator.ofFloat(icon, "x", "y", new Path());
-
+                Path path = new Path();
+                path.moveTo(icon.getX(),icon.getY());
+                path.lineTo(iconsXY.xs[i], iconsXY.ys[i]);
+                ObjectAnimator animator = ObjectAnimator.ofFloat(icon, "x", "y", path);
+                animator.setStartDelay(animationTime / (frameLayout.getChildCount() - i));
+                animator.setDuration(animationTime);
+                animator.start();
 
             } else {
                 frameLayout.getChildAt(i).setVisibility(View.GONE);

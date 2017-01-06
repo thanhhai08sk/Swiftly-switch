@@ -223,7 +223,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         , xInit, yInit, currentEdge.recent.slots.size());
                 RealmList<Slot> slots = model.getRecent(tempPackages, currentEdge.recent.slots);
                 view.showCircle(currentShowing.circleIconsXY, currentEdge.recent
-                        , slots);
+                        , slots, xInit,yInit);
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
                 currentShowing.circle = currentEdge.recent;
                 currentShowing.circleSlots = slots;
@@ -233,7 +233,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 Log.e(TAG, "showCollection: circle and quick action");
                 currentShowing.circleIconsXY = model.calculateCircleIconPositions(currentEdge.circleFav.radius, currentEdge.position
                         , xInit, yInit, currentEdge.circleFav.slots.size());
-                view.showCircle(currentShowing.circleIconsXY, currentEdge.circleFav, currentEdge.circleFav.slots);
+                view.showCircle(currentShowing.circleIconsXY, currentEdge.circleFav, currentEdge.circleFav.slots,xInit,yInit);
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
                 currentShowing.circle = currentEdge.circleFav;
                 currentShowing.circleSlots = currentShowing.circle.slots;
@@ -282,7 +282,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void showGrid(float xInit, float yInit, Collection grid, int position, Showing currentShowing);
 
-        void showCircle(NewServiceModel.IconsXY iconsXY, Collection circle, RealmList<Slot> slots);
+        void showCircle(NewServiceModel.IconsXY iconsXY, Collection circle, RealmList<Slot> slots, float xInit, float yInit);
 
         void actionDownVibrate();
 

@@ -35,7 +35,11 @@ import dagger.Provides;
 import io.realm.Realm;
 import io.realm.RealmList;
 
+import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_DEFAULT;
+import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_NAME;
+import static org.de_studio.recentappswitcher.Cons.ANI_TIME_KEY;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.COLLECTION_WINDOW_PARAMS_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
@@ -44,7 +48,6 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
-import static org.de_studio.recentappswitcher.Cons.COLLECTION_WINDOW_PARAMS_NAME;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE;
@@ -148,6 +151,12 @@ public class NewServiceModule {
     FrameLayout clockParentsView() {
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         return (FrameLayout) layoutInflater.inflate(R.layout.clock, null);
+    }
+    @Provides
+    @Singleton
+    @Named(ANIMATION_TIME_NAME)
+    int animationTime(@Named(SHARED_PREFERENCE_NAME) SharedPreferences shared) {
+        return shared.getInt(ANI_TIME_KEY, ANIMATION_TIME_DEFAULT);
     }
 
     @Provides
