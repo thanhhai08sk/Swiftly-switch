@@ -360,6 +360,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     public void showBackground() {
         if (!backgroundView.isAttachedToWindow()) {
             windowManager.addView(backgroundView, collectionWindowPapams);
+
         } else {
             backgroundView.setVisibility(View.VISIBLE);
         }
@@ -541,9 +542,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         if (id != -1) {
             switch (currentShowing.showWhat) {
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_AND_ACTION:
-                    if (id < 10) {
+                    if (id < currentShowing.circleSlots.size()) {
                         indicateSlot(currentShowing.circleSlots.get(id));
-                    } else {
+                    } else if (id >= 10) {
                         indicateSlot(currentShowing.action.slots.get(id - 10));
                     }
                     break;
@@ -556,18 +557,24 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 case NewServicePresenter.Showing.SHOWING_NONE:
                     break;
             }
+        } else {
+            indicateSlot(null);
         }
     }
 
     @Override
     public void indicateSlot(Slot slot) {
-        backgroundView.findViewById(R.id.clock_linear_layout).setVisibility(View.GONE);
-        backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.VISIBLE);
+        if (slot != null) {
+            backgroundView.findViewById(R.id.clock_linear_layout).setVisibility(View.GONE);
+            backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.VISIBLE);
 
-        ImageView icon = (ImageView) backgroundView.findViewById(R.id.indicator_icon);
-        TextView label = (TextView) backgroundView.findViewById(R.id.indicator_label);
-        Utility.setSlotIcon(slot, this, icon, getPackageManager(), iconPack);
-        Utility.setSlotLabel(slot, this, label);
+            ImageView icon = (ImageView) backgroundView.findViewById(R.id.indicator_icon);
+            TextView label = (TextView) backgroundView.findViewById(R.id.indicator_label);
+            Utility.setSlotIcon(slot, this, icon, getPackageManager(), iconPack);
+            Utility.setSlotLabel(slot, this, label);
+        } else {
+            backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.GONE);
+        }
     }
 
     @Override

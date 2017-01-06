@@ -119,16 +119,30 @@ public class NewServiceModule {
     @Provides
     @Singleton
     @Named(COLLECTION_WINDOW_PARAMS_NAME)
-    WindowManager.LayoutParams gridParentViewPara(){
+    WindowManager.LayoutParams gridParentViewPara(@Named(Cons.M_SCALE_NAME) float mScale){
+//        return new WindowManager.LayoutParams(
+//                WindowManager.LayoutParams.MATCH_PARENT,
+//                WindowManager.LayoutParams.MATCH_PARENT,
+//                WindowManager.LayoutParams.TYPE_PHONE,
+//                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+//                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+//                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+//                PixelFormat.TRANSLUCENT);
+
+        int flag1 = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS|
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE |
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION ;
+        int height =(int) (mScale* (context.getResources().getConfiguration().screenHeightDp + 72));
         return new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
-                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                flag1,
                 PixelFormat.TRANSLUCENT);
     }
+
+
 
     @Provides
     @Singleton
@@ -201,9 +215,9 @@ public class NewServiceModule {
                 edge1HeightPxl = (int) (edge1Length * mScale);
                 edge1WidthPxl = (int) (edge1Sensivite * mScale);
             }
-            RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(edge1WidthPxl, edge1HeightPxl);
-            edge1ImageLayoutParams.height = edge1HeightPxl;
-            edge1ImageLayoutParams.width = edge1WidthPxl;
+            RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(200, edge1HeightPxl);
+//            edge1ImageLayoutParams.height = edge1HeightPxl;
+//            edge1ImageLayoutParams.width = edge1WidthPxl;
             Log.e(TAG, "edge1View: height = " + edge1HeightPxl + "\nwidth = " + edge1WidthPxl);
             edge1View.setLayoutParams(edge1ImageLayoutParams);
         }

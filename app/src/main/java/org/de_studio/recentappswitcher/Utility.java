@@ -2324,8 +2324,8 @@ public  class Utility {
         } else {
             edgePara.y = -(int) (edgeOffset * mScale);
         }
-        edgePara.width = edgeWidth;
-        edgePara.height = edgeHeight;
+        edgePara.width = (int) (edgeWidth * mScale);
+        edgePara.height = (int) (edgeHeight *mScale);
         return edgePara;
 
     }
