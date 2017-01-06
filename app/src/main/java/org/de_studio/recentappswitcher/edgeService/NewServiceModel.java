@@ -177,7 +177,9 @@ public class NewServiceModel extends BaseModel {
         double centerIconX, centerIconY;
         double xDouble = (double) x;
         double yDouble = (double) y;
-        float totalIconWidth = space * mScale * 2 + iconWidth;
+        float totalIconWidth = space * mScale + iconWidth;
+//        Log.e(TAG, "getGridActivatedId: total iconWidth = " + totalIconWidth + "\nspace = " + space
+//                + "\nmScale = " + mScale + "\niconWidth = " + iconWidth);
         double distance;
         double smallestDistance = 1000 * mScale;
         for (int i = 0; i < columnCount; i++) {
