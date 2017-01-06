@@ -140,6 +140,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     }
 
     private void showGrid(Collection collection, View view) {
+        currentHighlight = -1;
         view.showGrid(xInit, yInit, collection, currentEdge.position, currentShowing);
         currentShowing.showWhat = Showing.SHOWING_GRID;
         currentShowing.grid = collection;
@@ -279,15 +280,19 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     }
 
     private Slot getCurrentSlot() {
-        switch (currentShowing.showWhat) {
-            case Showing.SHOWING_CIRCLE_AND_ACTION:
-                if (currentHighlight < 10) {
-                    return currentShowing.circleSlots.get(currentHighlight);
-                } else {
-                    return currentShowing.action.slots.get(currentHighlight);
-                }
-            case Showing.SHOWING_GRID:
-                return currentShowing.grid.slots.get(currentHighlight);
+        if (currentHighlight!= -1) {
+            switch (currentShowing.showWhat) {
+                case Showing.SHOWING_CIRCLE_AND_ACTION:
+                    if (currentHighlight < 10) {
+                        if (currentHighlight < currentShowing.circleSlots.size()) {
+                            return currentShowing.circleSlots.get(currentHighlight);
+                        } else return null;
+                    } else {
+                        return currentShowing.action.slots.get(currentHighlight -10);
+                    }
+                case Showing.SHOWING_GRID:
+                    return currentShowing.grid.slots.get(currentHighlight);
+            }
         }
         return null;
     }

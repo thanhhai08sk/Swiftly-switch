@@ -52,6 +52,8 @@ import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.DataInfo;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
+import org.de_studio.recentappswitcher.service.Circle;
+import org.de_studio.recentappswitcher.service.CircleAngleAnimation;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.NotiDialog;
 import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
@@ -77,6 +79,7 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
+import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
@@ -125,6 +128,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Inject
     @Named(M_SCALE_NAME)
     float mScale;
+    @Inject
+    @Named(HOLD_TIME_NAME)
+    int holdTime;
     @Inject
     @Named(ICON_SCALE_NAME)
     float iconScale;
@@ -602,8 +608,17 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public void indicateSlot(Slot slot) {
         if (slot != null) {
+            Circle circle = (Circle) backgroundView.findViewById(R.id.circle);
             if (slot.type.equals(Slot.TYPE_FOLDER)) {
-
+                circle.setVisibility(View.VISIBLE);
+                circle.setAlpha(1f);
+                circle.setAngle(0);
+                CircleAngleAnimation angleAnimation = new CircleAngleAnimation(circle, 270);
+                angleAnimation.setDuration(holdTime);
+                circle.startAnimation(angleAnimation);
+            } else if (circle.isShown()){
+                circle.setAlpha(0f);
+                Log.e(TAG, "indicateSlot: hide circle");
             }
 
 
@@ -616,6 +631,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             Utility.setSlotLabel(slot, this, label);
         } else {
             backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.GONE);
+
         }
     }
 

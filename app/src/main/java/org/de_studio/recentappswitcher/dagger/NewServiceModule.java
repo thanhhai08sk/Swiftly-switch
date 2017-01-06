@@ -40,6 +40,7 @@ import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ANI_TIME_KEY;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.COLLECTION_WINDOW_PARAMS_NAME;
+import static org.de_studio.recentappswitcher.Cons.DEFAULT_HOLD_TIME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
@@ -50,6 +51,7 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_NAME;
+import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
@@ -142,6 +144,12 @@ public class NewServiceModule {
                 PixelFormat.TRANSLUCENT);
     }
 
+    @Provides
+    @Singleton
+    @Named(HOLD_TIME_NAME)
+    int holdTime(@Named(SHARED_PREFERENCE_NAME) SharedPreferences shared){
+        return shared.getInt(Cons.HOLD_TIME_KEY, DEFAULT_HOLD_TIME);
+    }
 
 
     @Provides
@@ -218,7 +226,6 @@ public class NewServiceModule {
             RelativeLayout.LayoutParams edge1ImageLayoutParams = new RelativeLayout.LayoutParams(200, edge1HeightPxl);
 //            edge1ImageLayoutParams.height = edge1HeightPxl;
 //            edge1ImageLayoutParams.width = edge1WidthPxl;
-            Log.e(TAG, "edge1View: height = " + edge1HeightPxl + "\nwidth = " + edge1WidthPxl);
             edge1View.setLayoutParams(edge1ImageLayoutParams);
         }
         return edge1View;
