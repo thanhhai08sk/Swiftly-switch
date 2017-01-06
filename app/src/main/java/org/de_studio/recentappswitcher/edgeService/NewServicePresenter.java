@@ -133,7 +133,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 longClickItemSubject.subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        Log.e(TAG, "call: longClick " + currentHighlight);
+                        if (currentShowing.showWhat == Showing.SHOWING_GRID && currentShowing.grid.slots.get(currentHighlight).type.equals(Slot.TYPE_FOLDER)) {
+                            view.hideAllCollections();
+                            view.showFolder(currentHighlight, currentShowing.grid.slots.get(currentHighlight), currentShowing.grid.collectionId, currentShowing.grid.space);
+                            currentHighlight = -1;
+                        }
                     }
                 })
         );
@@ -313,6 +317,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         void showGrid(float xInit, float yInit, Collection grid, int position, Showing currentShowing);
 
         void showCircle(NewServiceModel.IconsXY iconsXY, Collection circle, RealmList<Slot> slots, float xInit, float yInit);
+
+        void showFolder(int triggerPosition, Slot folder, final String gridId, int space);
 
         void actionDownVibrate();
 

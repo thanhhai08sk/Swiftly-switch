@@ -440,7 +440,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     }
 
-    public void showFolder(final float triggerX, final float triggerY, Slot folder, final String gridId, int space) {
+    public void showFolder(int triggerPosition, Slot folder, final String gridId, int space) {
         collectionViewsMap.get(gridId).setVisibility(View.GONE);
         if (collectionViewsMap.get(folder.slotId) == null) {
             RecyclerView folderView = new RecyclerView(this);
@@ -460,6 +460,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         }
         final RecyclerView folderView = (RecyclerView) collectionViewsMap.get(folder.slotId);
         final RecyclerView triggerGridView = (RecyclerView) collectionViewsMap.get(gridId);
+        final float triggerX = triggerGridView.getChildAt(triggerPosition).getX();
+        final float triggerY = triggerGridView.getChildAt(triggerPosition).getY();
         boolean needDelay = false;
         if (backgroundView.findViewById(folder.slotId.hashCode()) == null) {
             backgroundView.addView(folderView);
@@ -618,7 +620,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 circle.startAnimation(angleAnimation);
             } else if (circle.isShown()){
                 circle.setAlpha(0f);
-                Log.e(TAG, "indicateSlot: hide circle");
             }
 
 
