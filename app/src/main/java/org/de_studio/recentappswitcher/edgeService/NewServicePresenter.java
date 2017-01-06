@@ -70,6 +70,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         Log.e(TAG, "call: highlight " + integer);
                         view.unhighlightSlot(currentShowing, currentHighlight);
                         view.highlightSlot(currentShowing, integer);
+                        view.indicateCurrentShowing(currentShowing,integer);
 
                         currentHighlight = integer;
                         highlightFrom = System.currentTimeMillis();
@@ -191,7 +192,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 view.startSlot(slot, model.getLastApp());
             }
             view.unhighlightSlot(currentShowing, currentHighlight);
-            currentShowing.showWhat = -1;
+            currentShowing.showWhat = Showing.SHOWING_NONE;
             currentHighlight = -1;
         }
     }
@@ -288,6 +289,12 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         void actionMoveVibrate();
 
         void showClock();
+
+        void indicateSlot(Slot slot);
+
+        void indicateItem(Item item);
+
+        void indicateCurrentShowing(Showing currentShowing, int id);
 
         void highlightSlot(Showing currentShowing, int id);
 

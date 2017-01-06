@@ -511,6 +511,50 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
+    public void indicateCurrentShowing(NewServicePresenter.Showing currentShowing, int id) {
+        if (id != -1) {
+            switch (currentShowing.showWhat) {
+                case NewServicePresenter.Showing.SHOWING_CIRCLE_AND_ACTION:
+                    if (id < 10) {
+                        indicateSlot(currentShowing.circleSlots.get(id));
+                    } else {
+                        indicateSlot(currentShowing.action.slots.get(id - 10));
+                    }
+                    break;
+                case NewServicePresenter.Showing.SHOWING_GRID:
+                    indicateSlot(currentShowing.grid.slots.get(id));
+                    break;
+                case NewServicePresenter.Showing.SHOWING_FOLDER:
+                    indicateItem(currentShowing.folderItems.get(id));
+                    break;
+                case NewServicePresenter.Showing.SHOWING_NONE:
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void indicateSlot(Slot slot) {
+        backgroundView.findViewById(R.id.clock_linear_layout).setVisibility(View.GONE);
+        backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.VISIBLE);
+
+        ImageView icon = (ImageView) backgroundView.findViewById(R.id.indicator_icon);
+        TextView label = (TextView) backgroundView.findViewById(R.id.indicator_label);
+        Utility.setSlotIcon(slot, this, icon, getPackageManager(), iconPack);
+        Utility.setSlotLabel(slot, this, label);
+    }
+
+    @Override
+    public void indicateItem(Item item) {
+        backgroundView.findViewById(R.id.clock_linear_layout).setVisibility(View.GONE);
+        backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.VISIBLE);
+        ImageView icon = (ImageView) backgroundView.findViewById(R.id.indicator_icon);
+        TextView label = (TextView) backgroundView.findViewById(R.id.indicator_label);
+        Utility.setItemIcon(item, this, icon, getPackageManager(), iconPack);
+        label.setText(item.label);
+    }
+
+    @Override
     public void highlightSlot(NewServicePresenter.Showing currentShowing, int id) {
         if (id != -1) {
             switch (currentShowing.showWhat) {
