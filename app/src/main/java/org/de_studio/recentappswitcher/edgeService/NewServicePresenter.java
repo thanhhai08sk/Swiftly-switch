@@ -190,6 +190,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             if (slot != null) {
                 view.startSlot(slot, model.getLastApp());
             }
+            view.unhighlightSlot(currentShowing, currentHighlight);
+            currentShowing.showWhat = -1;
+            currentHighlight = -1;
         }
     }
 
