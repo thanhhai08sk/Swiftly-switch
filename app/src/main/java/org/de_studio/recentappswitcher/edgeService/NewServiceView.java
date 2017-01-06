@@ -15,6 +15,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
@@ -440,12 +441,29 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             collectionViewsMap.put(circle.collectionId, circleView);
         }
         FrameLayout frameLayout = (FrameLayout) collectionViewsMap.get(circle.collectionId);
+        float previousX = 0;
+        float previousY = 0;
         for (int i = 0; i < frameLayout.getChildCount(); i++) {
             if (i < slots.size()) {
-                frameLayout.getChildAt(i).setVisibility(View.VISIBLE);
-                Utility.setSlotIcon(slots.get(i), this, (ImageView) frameLayout.getChildAt(i), getPackageManager(), iconPack);
-                frameLayout.getChildAt(i).setX(iconsXY.xs[i]);
-                frameLayout.getChildAt(i).setY(iconsXY.ys[i]);
+                View icon = frameLayout.getChildAt(i);
+                icon.setVisibility(View.VISIBLE);
+//                icon.setAlpha(0f);
+                Utility.setSlotIcon(slots.get(i), this, (ImageView) icon, getPackageManager(), iconPack);
+
+                if (i == 0) {
+                    icon.setX(iconsXY.xs[i]);
+                    icon.setY(iconsXY.ys[i]);
+                    previousX = iconsXY.xs[i];
+                    previousY = iconsXY.ys[i];
+                } else {
+                    icon.setX(previousX);
+                    icon.setY(previousY);
+                }
+
+
+                ObjectAnimator animator = ObjectAnimator.ofFloat(icon, "x", "y", new Path());
+
+
             } else {
                 frameLayout.getChildAt(i).setVisibility(View.GONE);
             }
