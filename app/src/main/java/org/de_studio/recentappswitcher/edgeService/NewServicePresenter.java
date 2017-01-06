@@ -40,6 +40,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     PublishSubject<Void> longClickItemSubject = PublishSubject.create();
     PublishSubject<Long> longClickHelperSubject = PublishSubject.create();
     PublishSubject<String> showCollectionInstantlySubject = PublishSubject.create();
+    PublishSubject<Slot> onSlot = PublishSubject.create();
 
 
     public NewServicePresenter(NewServiceModel model, Edge edge1, Edge edge2, long holdTime) {
@@ -80,12 +81,23 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             view.actionMoveVibrate();
                         }
 
+                        onSlot.onNext(getCurrentSlot());
+
                         if (integer >= 10
                                 && currentShowing.showWhat == Showing.SHOWING_CIRCLE_AND_ACTION
                                 && currentShowing.action.slots.get(integer - 10).type.equals(Slot.TYPE_ITEM)
                                 && currentShowing.action.slots.get(integer - 10).stage1Item.type.equals(Item.TYPE_SHORTCUTS_SET)) {
                             showCollectionInstantlySubject.onNext(currentShowing.action.slots.get(integer - 10).stage1Item.collectionId);
                         }
+                    }
+                })
+        );
+
+        addSubscription(
+                onSlot.subscribe(new Action1<Slot>() {
+                    @Override
+                    public void call(Slot slot) {
+                        //nothing now
                     }
                 })
         );
@@ -266,6 +278,19 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         }
     }
 
+    private Slot getCurrentSlot() {
+        switch (currentShowing.showWhat) {
+            case Showing.SHOWING_CIRCLE_AND_ACTION:
+                if (currentHighlight < 10) {
+                    return currentShowing.circleSlots.get(currentHighlight);
+                } else {
+                    return currentShowing.action.slots.get(currentHighlight);
+                }
+            case Showing.SHOWING_GRID:
+                return currentShowing.grid.slots.get(currentHighlight);
+        }
+        return null;
+    }
 
     public interface View extends PresenterView, android.view.View.OnTouchListener {
         void addEdgesToWindowAndSetListener();

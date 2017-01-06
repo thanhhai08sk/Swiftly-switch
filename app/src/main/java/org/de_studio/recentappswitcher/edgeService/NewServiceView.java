@@ -43,6 +43,7 @@ import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.ServiceSlotAdapter;
+import org.de_studio.recentappswitcher.base.adapter.ItemsAdapter;
 import org.de_studio.recentappswitcher.dadaSetup.DataSetupService;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerNewServiceComponent;
@@ -381,7 +382,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         if (collectionViewsMap.get(grid.collectionId) == null) {
             RecyclerView gridView = new RecyclerView(this);
             gridView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//            SlotsAdapter slotsAdapter = new SlotsAdapter(getApplicationContext(), grid.slots, true, iconPack, Cons.ITEM_TYPE_ICON_ONLY);
             ServiceSlotAdapter adapter = new ServiceSlotAdapter(this, grid.slots, true, iconPack, mScale, iconScale);
             gridView.setLayoutManager(new GridLayoutManager(this, grid.columnCount));
             gridView.setAdapter(adapter);
@@ -390,16 +390,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             collectionViewsMap.put(grid.collectionId, gridView);
         }
         final RecyclerView recyclerView = (RecyclerView) collectionViewsMap.get(grid.collectionId);
-//        if (!recyclerView.isAttachedToWindow()) {
-//            windowManager.addView(recyclerView, gridParams);
-//        }
         boolean needDelay = false;
         if (backgroundView.findViewById(R.id.recycler_view) == null) {
             backgroundView.addView(recyclerView);
             needDelay = true;
         }
         hideAllCollections();
-        recyclerView.setVisibility(View.VISIBLE);
 
         if (needDelay) {
             Handler handlerClose = new Handler();
@@ -436,6 +432,47 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             currentShowing.gridXY.y = (int) recyclerView.getY();
         }
 
+    }
+
+    public void showFolder(final float triggerX, final float triggerY, Slot folder, final String gridId, int space) {
+        collectionViewsMap.get(gridId).setVisibility(View.GONE);
+        if (collectionViewsMap.get(folder.slotId) == null) {
+            RecyclerView folderView = new RecyclerView(this);
+            folderView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ItemsAdapter adapter = new ItemsAdapter(this, folder.items, true, getPackageManager(), iconPack, Cons.ITEM_TYPE_ICON_ONLY);
+            int columnCount = 0;
+            if (folder.items.size() > 4) {
+                columnCount = 4;
+            } else {
+                columnCount = folder.items.size();
+            }
+            folderView.setLayoutManager(new GridLayoutManager(this, columnCount));
+            folderView.setAdapter(adapter);
+            folderView.setId(folder.slotId.hashCode());
+            folderView.addItemDecoration(new GridSpacingItemDecoration((int)(space * mScale)));
+            collectionViewsMap.put(folder.slotId, folderView);
+        }
+        final RecyclerView folderView = (RecyclerView) collectionViewsMap.get(folder.slotId);
+        final RecyclerView triggerGridView = (RecyclerView) collectionViewsMap.get(gridId);
+        boolean needDelay = false;
+        if (backgroundView.findViewById(folder.slotId.hashCode()) == null) {
+            backgroundView.addView(folderView);
+            needDelay = true;
+        }
+
+        if (needDelay) {
+            Handler handlerClose = new Handler();
+            handlerClose.postDelayed(new Runnable() {
+                public void run() {
+                    Utility.setFolderPosition(triggerX, triggerY, folderView, triggerGridView, mScale);
+                    folderView.setVisibility(View.VISIBLE);
+                }
+            }, 20);
+        } else {
+            Utility.setFolderPosition(triggerX, triggerY, folderView, triggerGridView, mScale);
+            folderView.setVisibility(View.VISIBLE);
+
+        }
     }
 
     @Override
@@ -565,6 +602,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public void indicateSlot(Slot slot) {
         if (slot != null) {
+            if (slot.type.equals(Slot.TYPE_FOLDER)) {
+
+            }
+
+
             backgroundView.findViewById(R.id.clock_linear_layout).setVisibility(View.GONE);
             backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.VISIBLE);
 

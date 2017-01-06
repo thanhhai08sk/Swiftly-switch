@@ -43,6 +43,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -2821,6 +2822,19 @@ public  class Utility {
                 break;
 
         }
+    }
+
+    public static void setFolderPosition(float triggerX, float triggerY, RecyclerView folderView, RecyclerView gridView, float mScale) {
+        int gridWide = folderView.getWidth();
+        int gridTall = folderView.getHeight();
+        if (triggerX - gridWide / 2 + gridWide > gridView.getX() + gridView.getWidth()) {
+            folderView.setX(gridView.getX() + gridView.getWidth() - gridWide);
+        } else if (triggerX - gridWide / 2 < 10 * mScale) {
+            folderView.setX(10*mScale);
+        } else {
+            folderView.setX(triggerX - gridWide / 2);
+        }
+        folderView.setY(triggerY - gridTall + gridTall/2);
     }
 
 
