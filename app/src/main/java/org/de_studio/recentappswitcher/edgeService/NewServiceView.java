@@ -511,12 +511,28 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void highlightSlot(NewServicePresenter.Showing currentShowing, int id) {
+        if (id != -1) {
+            switch (currentShowing.showWhat) {
+                case NewServicePresenter.Showing.SHOWING_GRID:
+                    RecyclerView grid = (RecyclerView) collectionViewsMap.get(currentShowing.grid.collectionId);
+                    grid.getChildAt(id).setBackgroundColor(Color.argb(255, 42, 96, 70));
+                    break;
+            }
 
+        }
     }
 
     @Override
     public void unhighlightSlot(NewServicePresenter.Showing currentShowing, int id) {
+        if (id != -1) {
+            switch (currentShowing.showWhat) {
+                case NewServicePresenter.Showing.SHOWING_GRID:
+                    RecyclerView grid = (RecyclerView) collectionViewsMap.get(currentShowing.grid.collectionId);
+                    grid.getChildAt(id).setBackgroundColor(Color.argb(0, 42, 96, 70));
+                    break;
+            }
 
+        }
     }
 
     @Override

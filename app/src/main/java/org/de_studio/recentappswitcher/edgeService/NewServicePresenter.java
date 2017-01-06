@@ -70,6 +70,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         Log.e(TAG, "call: highlight " + integer);
                         view.unhighlightSlot(currentShowing, currentHighlight);
                         view.highlightSlot(currentShowing, integer);
+
                         currentHighlight = integer;
                         highlightFrom = System.currentTimeMillis();
                         holdingHelper = holdingHelper + integer;
