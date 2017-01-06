@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.edgeService;
 
+import android.animation.ObjectAnimator;
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -13,6 +14,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
@@ -355,6 +357,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         } else {
             backgroundView.setVisibility(View.VISIBLE);
         }
+        ObjectAnimator objectAnimator = ObjectAnimator.ofArgb(backgroundView, "backgroundColor", Color.argb(0, 255, 255, 255), Color.argb(100, 128, 128, 128));
+        objectAnimator.setDuration(200);
+        objectAnimator.start();
     }
 
     public ImageView getIconImageView() {
