@@ -24,6 +24,7 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -77,6 +78,7 @@ import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.SHARED_PREFERENCE_NAME;
+import static org.de_studio.recentappswitcher.Cons.SHOWING_RECENT_CIRCLE;
 
 /**
  * Created by HaiNguyen on 12/23/16.
@@ -517,6 +519,27 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     RecyclerView grid = (RecyclerView) collectionViewsMap.get(currentShowing.grid.collectionId);
                     grid.getChildAt(id).setBackgroundColor(Color.argb(255, 42, 96, 70));
                     break;
+                case SHOWING_RECENT_CIRCLE:
+                    if (id < 10) {
+                        FrameLayout recent = (FrameLayout) collectionViewsMap.get(currentShowing.circle.collectionId);
+                        View icon = recent.getChildAt(id);
+                        icon.setScaleX(1.2f);
+                        icon.setScaleY(1.2f);
+
+                        int height = (int) ((16 + 48 * iconScale) * mScale);
+                        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(height, height);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            icon.setBackground(getDrawable(R.drawable.icon_background));
+                        } else {
+                            icon.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
+                        }
+                        icon.setX(icon.getX() - 8 * mScale);
+                        icon.setY(icon.getY() - 8 * mScale);
+                        icon.setLayoutParams(layoutParams);
+                        icon.setPadding((int) (8 * mScale), (int) (8 * mScale), (int) (8 * mScale), (int) (8 * mScale));
+                    }
+                    break;
+
             }
 
         }
@@ -529,6 +552,28 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 case NewServicePresenter.Showing.SHOWING_GRID:
                     RecyclerView grid = (RecyclerView) collectionViewsMap.get(currentShowing.grid.collectionId);
                     grid.getChildAt(id).setBackgroundColor(Color.argb(0, 42, 96, 70));
+                    break;
+                case SHOWING_RECENT_CIRCLE:
+                    if (id < 10) {
+                        FrameLayout recent = (FrameLayout) collectionViewsMap.get(currentShowing.circle.collectionId);
+                        View icon = recent.getChildAt(id);
+
+                        icon.setScaleX(1f);
+                        icon.setScaleY(1f);
+
+
+
+                        FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(icon.getLayoutParams());
+                        layoutParams1.width = (int) (48 * mScale * iconScale);
+                        layoutParams1.height = (int) (48 * mScale * iconScale);
+                        float x = icon.getX();
+                        float y = icon.getY();
+                        icon.setBackground(null);
+                        icon.setX(x + 8 * mScale);
+                        icon.setY(y + 8 * mScale);
+                        icon.setLayoutParams(layoutParams1);
+                        icon.setPadding(0, 0, 0, 0);
+                    }
                     break;
             }
 
