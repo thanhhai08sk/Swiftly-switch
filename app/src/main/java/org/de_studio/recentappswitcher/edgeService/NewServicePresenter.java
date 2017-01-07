@@ -143,6 +143,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             case Showing.SHOWING_GRID:
                                 Slot slot = currentShowing.grid.slots.get(currentHighlight);
                                 if (slot.type.equals(Slot.TYPE_FOLDER)) {
+                                    view.unhighlightSlot(currentShowing, currentHighlight);
+                                    view.indicateCurrentShowing(currentShowing, -1);
+
                                     view.showFolder(currentHighlight, slot, currentShowing.grid.collectionId, currentShowing.grid.space, currentEdge.position);
                                     currentHighlight = -1;
                                     currentShowing.showWhat = Showing.SHOWING_FOLDER;

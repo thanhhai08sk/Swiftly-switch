@@ -404,6 +404,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         hideAllCollections();
 
         if (needDelay) {
+            recyclerView.setVisibility(View.VISIBLE);
+            recyclerView.setAlpha(0f);
             Handler handlerClose = new Handler();
             handlerClose.postDelayed(new Runnable() {
                 public void run() {
@@ -417,9 +419,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                             , windowManager
                             , grid.offsetHorizontal
                             , grid.offsetVertical);
-                    recyclerView.setVisibility(View.VISIBLE);
                     currentShowing.gridXY.x = (int) recyclerView.getX();
                     currentShowing.gridXY.y = (int) recyclerView.getY();
+                    recyclerView.setAlpha(1f);
                 }
             }, 20);
         } else {

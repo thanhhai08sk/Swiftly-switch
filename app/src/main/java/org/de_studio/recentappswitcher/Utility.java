@@ -2848,15 +2848,6 @@ public  class Utility {
         Log.e(TAG, "setFolderPosition: x = " + x + "\ny = " + y + "\nposition = "+ rightLeftOrBottom(edgePosition));
         folderView.setX(x);
         folderView.setY(y);
-//
-//        if (triggerX - folderWide / 2 + folderWide > gridView.getX() + gridView.getWidth()) {
-//            folderView.setX(gridView.getX() + gridView.getWidth() - folderWide);
-//        } else if (triggerX - folderWide / 2 < 10 * mScale) {
-//            folderView.setX(10*mScale);
-//        } else {
-//            folderView.setX(triggerX - folderWide / 2);
-//        }
-//        folderView.setY(triggerY - folderTall + folderTall/2);
     }
 
 
