@@ -168,7 +168,12 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 returnToGridSubject.subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-
+                        Log.e(TAG, "call: return to grid");
+                        view.hideCollection(currentShowing.folderSlotId);
+                        currentShowing.showWhat = Showing.SHOWING_GRID;
+                        currentShowing.grid = model.getCollection(previousGridId);
+                        currentShowing.gridXY = view.getGridXy(previousGridId);
+                        view.showCollection(currentShowing.grid.collectionId);
                     }
                 })
         );
@@ -385,6 +390,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         void hideCollection(String collectionId);
 
         void showCollection(String collectionId);
+
+        Point getGridXy(String collectionId);
+
         void hideAllCollections();
 
         void hideAllExceptEdges();

@@ -785,6 +785,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
+    public Point getGridXy(String collectionId) {
+        RecyclerView grid = (RecyclerView) collectionViewsMap.get(collectionId);
+        return new Point((int) grid.getX(),(int)grid.getY());
+    }
+
+    @Override
     public void hideAllCollections() {
         Set<String> collectionIds = collectionViewsMap.keySet();
         for (String collectionId : collectionIds) {
