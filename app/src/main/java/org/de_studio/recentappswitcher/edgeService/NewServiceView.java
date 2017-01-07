@@ -442,6 +442,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     }
 
+
     public void showFolder(int triggerPosition, Slot folder, final String gridId, int space, final int edgePosition, final NewServicePresenter.Showing currentShowing) {
         if (collectionViewsMap.get(folder.slotId) == null) {
             RecyclerView folderView = new RecyclerView(this);
@@ -765,6 +766,22 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public void startItem(Item item, String lastApp) {
         Utility.startItem(item, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION, Cons.DEFAULT_CONTACT_ACTION));
+    }
+
+    @Override
+    public void hideCollection(String collectionId) {
+        if (collectionId != null) {
+            if (collectionViewsMap.get(collectionId) != null) {
+                collectionViewsMap.get(collectionId).setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @Override
+    public void showCollection(String collectionId) {
+        if (collectionId != null && collectionViewsMap.get(collectionId)!=null) {
+            collectionViewsMap.get(collectionId).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

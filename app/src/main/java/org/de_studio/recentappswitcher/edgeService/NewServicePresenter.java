@@ -36,12 +36,14 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     long highlightFrom;
     int currentHighlight = -1;
     long holdingHelper;
+    String previousGridId;
 
     PublishSubject<Integer> highlightIdSubject = PublishSubject.create();
     PublishSubject<Void> longClickItemSubject = PublishSubject.create();
     PublishSubject<Long> longClickHelperSubject = PublishSubject.create();
     PublishSubject<String> showCollectionInstantlySubject = PublishSubject.create();
     PublishSubject<Slot> onSlot = PublishSubject.create();
+    PublishSubject<Void> returnToGridSubject = PublishSubject.create();
 
 
     public NewServicePresenter(NewServiceModel model, Edge edge1, Edge edge2, long holdTime) {
@@ -148,6 +150,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
                                     view.showFolder(currentHighlight, slot, currentShowing.grid.collectionId, currentShowing.grid.space, currentEdge.position, currentShowing);
                                     currentHighlight = -1;
+                                    previousGridId = currentShowing.grid.collectionId;
                                     currentShowing.showWhat = Showing.SHOWING_FOLDER;
                                     currentShowing.folderSlotId = slot.slotId;
                                     currentShowing.folderItems = slot.items;
@@ -156,6 +159,15 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                                 break;
 
                         }
+
+                    }
+                })
+        );
+
+        addSubscription(
+                returnToGridSubject.subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
 
                     }
                 })
@@ -202,6 +214,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 int rowCount = currentShowing.folderItems.size() / 4 + 1;
                 int folderItemHighlighted = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, rowCount, columCount, Cons.DEFAULT_FAVORITE_GRID_SPACE, true);
                 highlightIdSubject.onNext(folderItemHighlighted);
+                if (folderItemHighlighted == -2) {
+                    returnToGridSubject.onNext(null);
+                }
                 break;
         }
     }
@@ -367,6 +382,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void startItem(Item item, String lastApp);
 
+        void hideCollection(String collectionId);
+
+        void showCollection(String collectionId);
         void hideAllCollections();
 
         void hideAllExceptEdges();
