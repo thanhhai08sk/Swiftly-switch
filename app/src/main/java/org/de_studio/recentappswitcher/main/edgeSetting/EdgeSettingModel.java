@@ -1,5 +1,7 @@
 package org.de_studio.recentappswitcher.main.edgeSetting;
 
+import android.content.SharedPreferences;
+
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.model.Collection;
@@ -7,6 +9,7 @@ import org.de_studio.recentappswitcher.model.Edge;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by HaiNguyen on 11/5/16.
@@ -16,18 +19,41 @@ public class EdgeSettingModel extends BaseModel {
     Realm realm = Realm.getDefaultInstance();
     String edgeId;
     Edge edge;
+    PublishSubject<Edge> gotEdgeSubject = PublishSubject.create();
+    SharedPreferences sharedPreferences;
 
-    public EdgeSettingModel(String edgeId) {
+    public EdgeSettingModel(String edgeId, SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
         this.edgeId = edgeId;
     }
 
     public void setup() {
         edge = realm.where(Edge.class).equalTo(Cons.EDGE_ID, edgeId).findFirst();
+        if (edge != null) {
+            gotEdgeSubject.onNext(edge);
+        }
     }
 
 
     public Edge getEdge() {
+        if (edge == null) {
+            edge = realm.where(Edge.class).equalTo(Cons.EDGE_ID, edgeId).findFirst();
+        }
         return edge;
+    }
+
+    public boolean isEdgeEnabled() {
+        switch (edgeId) {
+            case "edge1":
+                return sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY, true);
+            case "edge2":
+                return sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false);
+        }
+        return false;
+    }
+
+    public PublishSubject<Edge> onGotEdge() {
+        return gotEdgeSubject;
     }
 
     public RealmResults<Collection> getRecentSetsList() {
