@@ -149,7 +149,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     private NotificationCompat.Builder notificationBuilder;
     Realm realm = Realm.getDefaultInstance();
     GenerateDataOkReceiver generateDataOkReceiver;
-
+    ObjectAnimator gridAlphaAnimator;
 
     @Override
     public void onCreate() {
@@ -471,6 +471,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         }
 
         if (needDelay) {
+            folderView.setVisibility(View.VISIBLE);
+            folderView.setAlpha(0f);
             Handler handlerClose = new Handler();
             handlerClose.postDelayed(new Runnable() {
                 public void run() {
@@ -478,6 +480,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     folderView.setVisibility(View.VISIBLE);
                     currentShowing.gridXY.x = (int) folderView.getX();
                     currentShowing.gridXY.y = (int) folderView.getY();
+                    folderView.setAlpha(1f);
                 }
             }, 20);
         } else {
@@ -600,7 +603,20 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     }
                     break;
                 case NewServicePresenter.Showing.SHOWING_GRID:
-                    indicateSlot(currentShowing.grid.slots.get(id));
+                    Slot slot = currentShowing.grid.slots.get(id);
+                    indicateSlot(slot);
+                    RecyclerView grid =(RecyclerView) collectionViewsMap.get(currentShowing.grid.collectionId);
+                    if (slot.type.equals(Slot.TYPE_FOLDER)) {
+                        gridAlphaAnimator = ObjectAnimator.ofFloat(grid, "alpha", 1f, 0f);
+                        gridAlphaAnimator.setDuration(holdTime);
+                        gridAlphaAnimator.start();
+                    } else {
+                        if (gridAlphaAnimator != null) {
+                            gridAlphaAnimator.cancel();
+                            grid.setAlpha(1f);
+                            gridAlphaAnimator = null;
+                        }
+                    }
                     break;
                 case NewServicePresenter.Showing.SHOWING_FOLDER:
                     if (id < currentShowing.folderItems.size()) {
