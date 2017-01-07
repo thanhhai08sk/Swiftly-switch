@@ -15,7 +15,7 @@ import org.de_studio.recentappswitcher.dagger.DaggerChooseContactComponent;
  * Created by HaiNguyen on 11/25/16.
  */
 
-public class ChooseContactFragmentView extends BaseChooseItemFragmentView {
+public class ChooseContactFragmentView extends BaseChooseItemFragmentView<ChooseContactPresenter> {
     private static final String TAG = ChooseContactFragmentView.class.getSimpleName();
 
 

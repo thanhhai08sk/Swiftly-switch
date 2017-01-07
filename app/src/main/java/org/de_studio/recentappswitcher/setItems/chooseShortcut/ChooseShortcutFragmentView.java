@@ -31,7 +31,7 @@ import io.realm.Realm;
  * Created by HaiNguyen on 11/25/16.
  */
 
-public class ChooseShortcutFragmentView extends BaseChooseItemFragmentView {
+public class ChooseShortcutFragmentView extends BaseChooseItemFragmentView<ChooseShortcutPresenter> {
     private static final String TAG = ChooseShortcutFragmentView.class.getSimpleName();
     private PackageManager packageManager;
     private ResolveInfo mResolveInfo;

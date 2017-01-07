@@ -4,10 +4,9 @@ import android.support.annotation.Nullable;
 
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
-import org.de_studio.recentappswitcher.base.BaseChooseItemPresenter;
 import org.de_studio.recentappswitcher.base.adapter.ItemsListAdapter;
-import org.de_studio.recentappswitcher.setItems.chooseContact.ChooseContactPresenter;
 import org.de_studio.recentappswitcher.setItems.chooseContact.ChooseContactFragmentView;
+import org.de_studio.recentappswitcher.setItems.chooseContact.ChooseContactPresenter;
 
 import javax.inject.Singleton;
 
@@ -28,7 +27,7 @@ public class ChooseContactModule {
 
     @Provides
     @Singleton
-    BaseChooseItemPresenter presenter() {
+    ChooseContactPresenter presenter() {
         return new ChooseContactPresenter(null);
     }
 

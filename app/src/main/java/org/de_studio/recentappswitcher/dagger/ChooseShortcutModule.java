@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
-import org.de_studio.recentappswitcher.base.BaseChooseItemPresenter;
 import org.de_studio.recentappswitcher.base.adapter.ItemsListAdapter;
 import org.de_studio.recentappswitcher.base.adapter.ShortcutListAdapter;
 import org.de_studio.recentappswitcher.setItems.chooseShortcut.ChooseShortcutFragmentView;
@@ -29,7 +28,7 @@ public class ChooseShortcutModule {
 
     @Provides
     @Singleton
-    BaseChooseItemPresenter presenter() {
+    ChooseShortcutPresenter presenter() {
         return new ChooseShortcutPresenter(null);
     }
 

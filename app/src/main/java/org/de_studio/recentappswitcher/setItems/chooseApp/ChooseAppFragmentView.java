@@ -21,7 +21,7 @@ import io.realm.Realm;
  * Created by HaiNguyen on 11/18/16.
  */
 
-public class ChooseAppFragmentView extends BaseChooseItemFragmentView {
+public class ChooseAppFragmentView extends BaseChooseItemFragmentView<ChooseAppPresenter> {
 
 
 

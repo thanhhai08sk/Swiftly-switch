@@ -22,7 +22,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 11/19/16.
  */
 
-public class ChooseActionFragmentView extends BaseChooseItemFragmentView {
+public class ChooseActionFragmentView extends BaseChooseItemFragmentView<ChooseActionPresenter> {
     private static final String TAG = ChooseActionFragmentView.class.getSimpleName();
 
     @Override

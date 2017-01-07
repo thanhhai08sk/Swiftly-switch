@@ -22,7 +22,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 11/25/16.
  */
 
-public abstract class BaseChooseItemFragmentView extends BaseFragment implements AdapterView.OnItemClickListener , BaseChooseItemPresenter.View{
+public abstract class BaseChooseItemFragmentView<P extends BaseChooseItemPresenter> extends BaseFragment<P> implements AdapterView.OnItemClickListener , BaseChooseItemPresenter.View{
     private static final String TAG = BaseChooseItemFragmentView.class.getSimpleName();
     @BindView(R.id.list_view)
     protected ListView listView;
@@ -31,8 +31,7 @@ public abstract class BaseChooseItemFragmentView extends BaseFragment implements
 
     @Inject
     protected ItemsListAdapter adapter;
-    @Inject
-    protected BaseChooseItemPresenter presenter;
+
 
 
     protected BehaviorSubject<Item> currentItemChangeSubject;
@@ -107,15 +106,7 @@ public abstract class BaseChooseItemFragmentView extends BaseFragment implements
         return R.layout.choose_app_view;
     }
 
-    @Override
-    protected BasePresenter getPresenter() {
-        return presenter;
-    }
 
-    @Override
-    protected PresenterView getPresenterView() {
-        return this;
-    }
 
     @Override
     public void dismissIfDialog() {
