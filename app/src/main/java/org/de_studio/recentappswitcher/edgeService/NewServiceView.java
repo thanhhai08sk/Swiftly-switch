@@ -629,6 +629,14 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             }
         } else {
             indicateSlot(null);
+            if (currentShowing.showWhat == NewServicePresenter.Showing.SHOWING_GRID) {
+                if (gridAlphaAnimator != null) {
+                    RecyclerView grid =(RecyclerView) collectionViewsMap.get(currentShowing.grid.collectionId);
+                    gridAlphaAnimator.cancel();
+                    grid.setAlpha(1f);
+                    gridAlphaAnimator = null;
+                }
+            }
         }
     }
 
@@ -781,6 +789,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     public void showCollection(String collectionId) {
         if (collectionId != null && collectionViewsMap.get(collectionId)!=null) {
             collectionViewsMap.get(collectionId).setVisibility(View.VISIBLE);
+            collectionViewsMap.get(collectionId).setAlpha(1f);
+
         }
     }
 
