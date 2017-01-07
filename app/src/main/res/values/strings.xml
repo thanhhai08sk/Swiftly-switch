@@ -248,4 +248,17 @@
     <string name="shortcuts_sets">Shortcuts sets</string>
     <string name="choose_shortcuts_type">Choose shortcut type</string>
 
+    //Edge setting
+    <string name="enable">Enable</string>
+    <string name="trigger_zone_setting">Trigger zone setting</string>
+    <string name="trigger_zone_setting_description">"Click here to set Edge's position, size,..."</string>
+    <string name="recent_set">Recent set</string>
+    <string name="recent_set_description">Click here to choose the items set for the Recent section</string>
+    <string name="quick_actions_set">Quick Actions set</string>
+    <string name="quick_actions_set_description">Click here to choose the items set for the Quick Actions section</string>
+    <string name="circle_favorite_set">Circle Favorite set</string>
+    <string name="circle_favorite_set_description">Click here to choose the items set for the Circle Favorite section</string>
+    <string name="grid_favorite_set">Grid Favorite set</string>
+    <string name="grid_favorite_set_description">Click here to choose the items set for the Grid Favorite section</string>
+
 </resources>
