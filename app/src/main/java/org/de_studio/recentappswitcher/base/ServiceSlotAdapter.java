@@ -18,8 +18,6 @@ import org.de_studio.recentappswitcher.model.Slot;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
-import rx.Observable;
-import rx.subjects.PublishSubject;
 
 /**
  * Created by HaiNguyen on 12/31/16.
@@ -27,7 +25,7 @@ import rx.subjects.PublishSubject;
 
 public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSlotAdapter.ViewHolder> {PackageManager packageManager;
     IconPackManager.IconPack iconPack;
-    private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
+//    private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
     float mScale, iconScale;
 
 
@@ -45,12 +43,12 @@ public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSl
         final Slot slot = getItem(position);
         if (slot != null) {
             Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack);
-            holder.view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onClickSubject.onNext(holder.getAdapterPosition());
-                }
-            });
+//            holder.view.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    onClickSubject.onNext(holder.getAdapterPosition());
+//                }
+//            });
         }
     }
 
@@ -77,9 +75,9 @@ public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSl
             icon = (ImageView) view.findViewById(R.id.item_icon);
         }
     }
-    public Observable<Integer> getKeyClicked() {
-        return onClickSubject.asObservable();
-    }
+//    public Observable<Integer> getKeyClicked() {
+//        return onClickSubject.asObservable();
+//    }
 
 
 }

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import io.realm.RealmList;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subjects.PublishSubject;
@@ -130,14 +131,28 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         );
 
         addSubscription(
-                longClickItemSubject.subscribe(new Action1<Void>() {
+                longClickItemSubject
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (currentShowing.showWhat == Showing.SHOWING_GRID && currentShowing.grid.slots.get(currentHighlight).type.equals(Slot.TYPE_FOLDER)) {
-                            view.hideAllCollections();
-                            view.showFolder(currentHighlight, currentShowing.grid.slots.get(currentHighlight), currentShowing.grid.collectionId, currentShowing.grid.space);
-                            currentHighlight = -1;
+                        if (currentHighlight == -1) {
+                            return;
                         }
+                        switch (currentShowing.showWhat) {
+                            case Showing.SHOWING_GRID:
+                                Slot slot = currentShowing.grid.slots.get(currentHighlight);
+                                if (slot.type.equals(Slot.TYPE_FOLDER)) {
+                                    view.hideAllCollections();
+                                    view.showFolder(currentHighlight, slot, currentShowing.grid.collectionId, currentShowing.grid.space);
+                                    currentHighlight = -1;
+                                    currentShowing.showWhat = Showing.SHOWING_FOLDER;
+                                    currentShowing.folderItems = slot.items;
+                                }
+                                break;
+
+                        }
+
                     }
                 })
         );

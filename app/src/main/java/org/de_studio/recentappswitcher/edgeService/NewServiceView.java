@@ -43,7 +43,7 @@ import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.ServiceSlotAdapter;
-import org.de_studio.recentappswitcher.base.adapter.ItemsAdapter;
+import org.de_studio.recentappswitcher.base.adapter.ServiceItemsAdapter;
 import org.de_studio.recentappswitcher.dadaSetup.DataSetupService;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerNewServiceComponent;
@@ -445,7 +445,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         if (collectionViewsMap.get(folder.slotId) == null) {
             RecyclerView folderView = new RecyclerView(this);
             folderView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ItemsAdapter adapter = new ItemsAdapter(this, folder.items, true, getPackageManager(), iconPack, Cons.ITEM_TYPE_ICON_ONLY);
+            ServiceItemsAdapter adapter = new ServiceItemsAdapter(this, folder.items, true, getPackageManager(), iconPack, mScale, iconScale);
             int columnCount = 0;
             if (folder.items.size() > 4) {
                 columnCount = 4;
@@ -456,6 +456,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             folderView.setAdapter(adapter);
             folderView.setId(folder.slotId.hashCode());
             folderView.addItemDecoration(new GridSpacingItemDecoration((int)(space * mScale)));
+            folderView.setBackgroundResource(R.color.background_dark);
             collectionViewsMap.put(folder.slotId, folderView);
         }
         final RecyclerView folderView = (RecyclerView) collectionViewsMap.get(folder.slotId);
