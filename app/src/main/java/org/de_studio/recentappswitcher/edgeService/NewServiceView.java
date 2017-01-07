@@ -440,8 +440,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     }
 
-    public void showFolder(int triggerPosition, Slot folder, final String gridId, int space) {
-        collectionViewsMap.get(gridId).setVisibility(View.GONE);
+    public void showFolder(int triggerPosition, Slot folder, final String gridId, int space, final int edgePosition) {
         if (collectionViewsMap.get(folder.slotId) == null) {
             RecyclerView folderView = new RecyclerView(this);
             folderView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -461,8 +460,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         }
         final RecyclerView folderView = (RecyclerView) collectionViewsMap.get(folder.slotId);
         final RecyclerView triggerGridView = (RecyclerView) collectionViewsMap.get(gridId);
-        final float triggerX = triggerGridView.getChildAt(triggerPosition).getX();
-        final float triggerY = triggerGridView.getChildAt(triggerPosition).getY();
+        final float triggerX = triggerGridView.getChildAt(triggerPosition).getX() + triggerGridView.getX() + (iconScale * Cons.DEFAULT_ICON_WIDTH + space)/2 * mScale;
+        final float triggerY = triggerGridView.getChildAt(triggerPosition).getY() + triggerGridView.getY() + (iconScale * Cons.DEFAULT_ICON_WIDTH + space) / 2 * mScale;
         boolean needDelay = false;
         if (backgroundView.findViewById(folder.slotId.hashCode()) == null) {
             backgroundView.addView(folderView);
@@ -473,15 +472,16 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             Handler handlerClose = new Handler();
             handlerClose.postDelayed(new Runnable() {
                 public void run() {
-                    Utility.setFolderPosition(triggerX, triggerY, folderView, triggerGridView, mScale);
+                    Utility.setFolderPosition(triggerX, triggerY, folderView, triggerGridView,edgePosition, mScale);
                     folderView.setVisibility(View.VISIBLE);
                 }
             }, 20);
         } else {
-            Utility.setFolderPosition(triggerX, triggerY, folderView, triggerGridView, mScale);
+            Utility.setFolderPosition(triggerX, triggerY, folderView, triggerGridView, edgePosition, mScale);
             folderView.setVisibility(View.VISIBLE);
 
         }
+        triggerGridView.setVisibility(View.GONE);
     }
 
     @Override

@@ -2824,17 +2824,39 @@ public  class Utility {
         }
     }
 
-    public static void setFolderPosition(float triggerX, float triggerY, RecyclerView folderView, RecyclerView gridView, float mScale) {
-        int gridWide = folderView.getWidth();
-        int gridTall = folderView.getHeight();
-        if (triggerX - gridWide / 2 + gridWide > gridView.getX() + gridView.getWidth()) {
-            folderView.setX(gridView.getX() + gridView.getWidth() - gridWide);
-        } else if (triggerX - gridWide / 2 < 10 * mScale) {
-            folderView.setX(10*mScale);
+    public static void setFolderPosition(float triggerX, float triggerY, RecyclerView folderView, RecyclerView gridView, int edgePosition, float mScale) {
+        int folderWide = folderView.getWidth();
+        int folderTall = folderView.getHeight();
+        float x;
+        float y;
+        Log.e(TAG, "setFolderPosition: folderWide = " + folderWide + "\nfolderTall = " + folderTall + "\ntriggerX = " + triggerX + "\ntriggerY = " + triggerY);
+
+        if (Utility.rightLeftOrBottom(edgePosition) == Cons.POSITION_RIGHT) {
+            if (triggerX + folderWide / 2 < gridView.getX() + gridView.getWidth()) {
+                x = triggerX - folderWide / 2;
+            } else {
+                x = gridView.getX() + gridView.getWidth() - folderWide;
+            }
         } else {
-            folderView.setX(triggerX - gridWide / 2);
+            if (triggerX - folderWide / 2 > gridView.getX()) {
+                x = triggerX - folderWide / 2;
+            } else {
+                x = gridView.getX();
+            }
         }
-        folderView.setY(triggerY - gridTall + gridTall/2);
+        y = triggerY - folderTall / 2;
+        Log.e(TAG, "setFolderPosition: x = " + x + "\ny = " + y + "\nposition = "+ rightLeftOrBottom(edgePosition));
+        folderView.setX(x);
+        folderView.setY(y);
+//
+//        if (triggerX - folderWide / 2 + folderWide > gridView.getX() + gridView.getWidth()) {
+//            folderView.setX(gridView.getX() + gridView.getWidth() - folderWide);
+//        } else if (triggerX - folderWide / 2 < 10 * mScale) {
+//            folderView.setX(10*mScale);
+//        } else {
+//            folderView.setX(triggerX - folderWide / 2);
+//        }
+//        folderView.setY(triggerY - folderTall + folderTall/2);
     }
 
 

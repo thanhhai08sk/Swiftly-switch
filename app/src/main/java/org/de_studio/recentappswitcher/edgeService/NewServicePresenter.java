@@ -143,8 +143,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             case Showing.SHOWING_GRID:
                                 Slot slot = currentShowing.grid.slots.get(currentHighlight);
                                 if (slot.type.equals(Slot.TYPE_FOLDER)) {
-                                    view.hideAllCollections();
-                                    view.showFolder(currentHighlight, slot, currentShowing.grid.collectionId, currentShowing.grid.space);
+                                    view.showFolder(currentHighlight, slot, currentShowing.grid.collectionId, currentShowing.grid.space, currentEdge.position);
                                     currentHighlight = -1;
                                     currentShowing.showWhat = Showing.SHOWING_FOLDER;
                                     currentShowing.folderItems = slot.items;
@@ -333,7 +332,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void showCircle(NewServiceModel.IconsXY iconsXY, Collection circle, RealmList<Slot> slots, float xInit, float yInit);
 
-        void showFolder(int triggerPosition, Slot folder, final String gridId, int space);
+        void showFolder(int triggerPosition, Slot folder, final String gridId, int space, int edgePosition);
 
         void actionDownVibrate();
 
