@@ -20,7 +20,7 @@ import butterknife.Unbinder;
 public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements PresenterView{
     Unbinder unbinder;
     @Inject
-    P presenter;
+    protected P presenter;
     @CallSuper
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

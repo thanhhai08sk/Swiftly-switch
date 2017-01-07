@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.main.edgeSetting;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BaseModel;
@@ -72,6 +73,15 @@ public class EdgeSettingModel extends BaseModel {
         return realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_GRID_FAVORITE).findAll();
     }
 
+    public void setMode(final int mode) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                edge.mode = mode;
+            }
+        });
+    }
+
     public void setRecentSet(final String id) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -129,8 +139,23 @@ public class EdgeSettingModel extends BaseModel {
         });
     }
 
+    public int getGuideColor() {
+        return Color.BLUE;
+    }
+
     public void setGuideColor(int color) {
 
+    }
+
+    public void setEnable(boolean enable) {
+        switch (edgeId) {
+            case "edge1":
+                sharedPreferences.edit().putBoolean(Cons.EDGE_1_ON_KEY, enable).commit();
+                break;
+            case "edge2":
+                sharedPreferences.edit().putBoolean(Cons.EDGE_2_ON_KEY, enable).commit();
+                break;
+        }
     }
 
 

@@ -45,7 +45,4 @@ public class QuickActionsSettingModule {
     SlotsAdapter adapter(@Nullable IconPackManager.IconPack iconPack){
         return new SlotsAdapter(view, null, false, iconPack, Cons.ITEM_TYPE_ICON_LABEL);
     }
-
-
-
 }

@@ -20,8 +20,7 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
     PublishSubject<String> setCircleSetSubject = PublishSubject.create();
     PublishSubject<String> setQuickActionsSetSubject = PublishSubject.create();
     PublishSubject<String> setGridSetSubject = PublishSubject.create();
-    PublishSubject<Boolean> setEnableSubject = PublishSubject.create();
-    PublishSubject<Boolean> setShowGuideSubject = PublishSubject.create();
+    PublishSubject<Integer> setGuideColorSubject = PublishSubject.create();
 
     public EdgeSettingPresenter(EdgeSettingModel model) {
         super(model);
@@ -49,6 +48,60 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
                     @Override
                     public void call(Void aVoid) {
                         showEdge(model.getEdge());
+                    }
+                })
+        );
+
+        addSubscription(
+                setModeSubject.subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        model.setMode(integer);
+                    }
+                })
+        );
+
+        addSubscription(
+                setRecentSetSubject.subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        model.setRecentSet(s);
+                    }
+                })
+        );
+
+        addSubscription(
+                setCircleSetSubject.subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        model.setCircleFavoriteSet(s);
+                    }
+                })
+        );
+
+        addSubscription(
+                setQuickActionsSetSubject.subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        model.setQuickActionsSet(s);
+                    }
+                })
+        );
+
+        addSubscription(
+                setGridSetSubject.subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        model.setGridFavoriteSet(s);
+                    }
+                })
+        );
+
+        addSubscription(
+                setGuideColorSubject.subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        model.setGuideColor(integer);
                     }
                 })
         );
@@ -84,6 +137,20 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
         view.showPositionSetting(model.getEdge());
     }
 
+    public void onEnable() {
+        model.setEnable(!model.isEdgeEnabled());
+        view.setEnable(model.isEdgeEnabled());
+    }
+
+    public void onSetShowGuide() {
+        model.setShowGuide(!model.getEdge().useGuide);
+        view.setShowGuideEnable(model.getEdge().useGuide);
+    }
+
+    public void onSetGuideColor() {
+        view.chooseGuideColor(model.getGuideColor(), setGuideColorSubject);
+    }
+
     private void showEdge(Edge edge) {
         view.setEnable(model.isEdgeEnabled());
         view.setShowGuideEnable(edge.useGuide);
@@ -115,6 +182,8 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
         void chooseCircle(RealmResults<Collection> circles, Collection currentCircle, PublishSubject<String> setCircleSj);
 
         void chooseGrid(RealmResults<Collection> grids, Collection currentGrid, PublishSubject<String> setGridSj);
+
+        void chooseGuideColor(int currentColor, PublishSubject<Integer> setGuideColorSj);
 
         void showPositionSetting(Edge edge);
 

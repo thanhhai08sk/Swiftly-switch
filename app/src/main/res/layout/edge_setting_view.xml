@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
+        android:id="@+id/enable_layout"
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize"
         android:orientation="horizontal"
@@ -25,6 +26,8 @@
             android:layout_height="wrap_content"
             android:paddingEnd="16dp"
             android:paddingStart="16dp"
+            android:clickable="false"
+            android:focusable="false"
             />
 
     </LinearLayout>
@@ -32,6 +35,7 @@
     <include layout="@layout/separator" />
 
     <LinearLayout
+        android:id="@+id/mode_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -182,6 +186,7 @@
 
     <include layout="@layout/separator" />
     <LinearLayout
+        android:id="@+id/show_guide"
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize"
         android:orientation="horizontal"
@@ -197,17 +202,19 @@
             style="@style/Main_text_primary"
             />
         <Switch
-            android:id="@+id/show_guide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="16dp"
             android:paddingStart="16dp"
+            android:clickable="false"
+            android:focusable="false"
             />
 
     </LinearLayout>
 
     <include layout="@layout/separator" />
     <LinearLayout
+        android:id="@+id/set_guide_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -221,12 +228,6 @@
             style="@style/Main_text_primary"
             />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/recent_apps_description"
-            style="@style/Main_text_secondary"
-            />
 
     </LinearLayout>
 
