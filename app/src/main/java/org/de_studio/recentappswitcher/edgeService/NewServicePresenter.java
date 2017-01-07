@@ -146,10 +146,12 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                                     view.unhighlightSlot(currentShowing, currentHighlight);
                                     view.indicateCurrentShowing(currentShowing, -1);
 
-                                    view.showFolder(currentHighlight, slot, currentShowing.grid.collectionId, currentShowing.grid.space, currentEdge.position);
+                                    view.showFolder(currentHighlight, slot, currentShowing.grid.collectionId, currentShowing.grid.space, currentEdge.position, currentShowing);
                                     currentHighlight = -1;
                                     currentShowing.showWhat = Showing.SHOWING_FOLDER;
+                                    currentShowing.folderSlotId = slot.slotId;
                                     currentShowing.folderItems = slot.items;
+
                                 }
                                 break;
 
@@ -195,6 +197,12 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 int onPosition = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, currentShowing.grid.rowsCount, currentShowing.grid.columnCount, currentShowing.grid.space, false);
                 highlightIdSubject.onNext(onPosition);
                 break;
+            case Showing.SHOWING_FOLDER:
+                int columCount = Math.min(currentShowing.folderItems.size(), 4);
+                int rowCount = currentShowing.folderItems.size() / 4 + 1;
+                int folderItemHighlighted = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, rowCount, columCount, Cons.DEFAULT_FAVORITE_GRID_SPACE, true);
+                highlightIdSubject.onNext(folderItemHighlighted);
+                break;
         }
     }
 
@@ -219,7 +227,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     slot = currentShowing.grid.slots.get(currentHighlight);
                     break;
                 case Showing.SHOWING_FOLDER:
-                    view.startItem(currentShowing.folderItems.get(currentHighlight), model.getLastApp());
+                    if (currentHighlight < currentShowing.folderItems.size()) {
+                        view.startItem(currentShowing.folderItems.get(currentHighlight), model.getLastApp());
+                    }
                     break;
             }
             if (slot != null) {
@@ -335,7 +345,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void showCircle(NewServiceModel.IconsXY iconsXY, Collection circle, RealmList<Slot> slots, float xInit, float yInit);
 
-        void showFolder(int triggerPosition, Slot folder, final String gridId, int space, int edgePosition);
+        void showFolder(int triggerPosition, Slot folder, final String gridId, int space, int edgePosition, Showing currentShowing);
 
         void actionDownVibrate();
 
@@ -377,6 +387,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         public Collection action;
         public RealmList<Slot> circleSlots;
         public RealmList<Item> folderItems;
+        public String folderSlotId;
         public NewServiceModel.IconsXY circleIconsXY;
         public Point gridXY = new Point(0, 0);
         public Showing() {

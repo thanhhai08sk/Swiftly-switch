@@ -442,7 +442,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     }
 
-    public void showFolder(int triggerPosition, Slot folder, final String gridId, int space, final int edgePosition) {
+    public void showFolder(int triggerPosition, Slot folder, final String gridId, int space, final int edgePosition, final NewServicePresenter.Showing currentShowing) {
         if (collectionViewsMap.get(folder.slotId) == null) {
             RecyclerView folderView = new RecyclerView(this);
             folderView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -476,12 +476,15 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 public void run() {
                     Utility.setFolderPosition(triggerX, triggerY, folderView, triggerGridView,edgePosition, mScale);
                     folderView.setVisibility(View.VISIBLE);
+                    currentShowing.gridXY.x = (int) folderView.getX();
+                    currentShowing.gridXY.y = (int) folderView.getY();
                 }
             }, 20);
         } else {
             Utility.setFolderPosition(triggerX, triggerY, folderView, triggerGridView, edgePosition, mScale);
             folderView.setVisibility(View.VISIBLE);
-
+            currentShowing.gridXY.x = (int) folderView.getX();
+            currentShowing.gridXY.y = (int) folderView.getY();
         }
         triggerGridView.setVisibility(View.GONE);
     }
@@ -587,7 +590,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void indicateCurrentShowing(NewServicePresenter.Showing currentShowing, int id) {
-        if (id != -1) {
+        if (id >= 0) {
             switch (currentShowing.showWhat) {
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_AND_ACTION:
                     if (id < currentShowing.circleSlots.size()) {
@@ -600,7 +603,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     indicateSlot(currentShowing.grid.slots.get(id));
                     break;
                 case NewServicePresenter.Showing.SHOWING_FOLDER:
-                    indicateItem(currentShowing.folderItems.get(id));
+                    if (id < currentShowing.folderItems.size()) {
+                        indicateItem(currentShowing.folderItems.get(id));
+                    }
                     break;
                 case NewServicePresenter.Showing.SHOWING_NONE:
                     break;
@@ -641,6 +646,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void indicateItem(Item item) {
+        backgroundView.findViewById(R.id.circle).setVisibility(View.GONE);
         backgroundView.findViewById(R.id.clock_linear_layout).setVisibility(View.GONE);
         backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.VISIBLE);
         ImageView icon = (ImageView) backgroundView.findViewById(R.id.indicator_icon);
@@ -651,7 +657,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void highlightSlot(NewServicePresenter.Showing currentShowing, int id) {
-        if (id != -1) {
+        if (id >= 0) {
             switch (currentShowing.showWhat) {
                 case NewServicePresenter.Showing.SHOWING_GRID:
                     RecyclerView grid = (RecyclerView) collectionViewsMap.get(currentShowing.grid.collectionId);
@@ -663,6 +669,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                         highlightCircleIcon(recent.getChildAt(id));
                     }
                     break;
+                case NewServicePresenter.Showing.SHOWING_FOLDER:
+                    if (id < currentShowing.folderItems.size()) {
+                        RecyclerView folder = (RecyclerView) collectionViewsMap.get(currentShowing.folderSlotId);
+                        folder.getChildAt(id).setBackgroundColor(Color.argb(255, 42, 96, 70));
+                    }
+                    break;
 
             }
 
@@ -671,7 +683,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void unhighlightSlot(NewServicePresenter.Showing currentShowing, int id) {
-        if (id != -1) {
+        if (id >= 0) {
             switch (currentShowing.showWhat) {
                 case NewServicePresenter.Showing.SHOWING_GRID:
                     RecyclerView grid = (RecyclerView) collectionViewsMap.get(currentShowing.grid.collectionId);
@@ -681,6 +693,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     if (id < 10) {
                         FrameLayout recent = (FrameLayout) collectionViewsMap.get(currentShowing.circle.collectionId);
                         unhighlightCircleIcon(recent.getChildAt(id));
+                    }
+                    break;
+                case NewServicePresenter.Showing.SHOWING_FOLDER:
+                    if (id < currentShowing.folderItems.size()) {
+                        RecyclerView folder = (RecyclerView) collectionViewsMap.get(currentShowing.folderSlotId);
+                        folder.getChildAt(id).setBackgroundColor(Color.argb(0, 42, 96, 70));
                     }
                     break;
             }
