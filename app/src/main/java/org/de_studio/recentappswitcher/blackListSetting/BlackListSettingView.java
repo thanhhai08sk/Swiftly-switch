@@ -18,7 +18,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 12/17/16.
  */
 
-public class BlackListSettingView extends BaseCollectionSettingView implements BlackListSettingPresenter.View{
+public class BlackListSettingView extends BaseCollectionSettingView<Void, BlackListSettingPresenter> implements BlackListSettingPresenter.View{
 
     @Override
     protected void inject() {

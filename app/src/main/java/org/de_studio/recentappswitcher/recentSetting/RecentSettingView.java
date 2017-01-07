@@ -18,7 +18,7 @@ import butterknife.OnClick;
  * Created by HaiNguyen on 12/17/16.
  */
 
-public class RecentSettingView extends BaseCollectionSettingView implements RecentSettingPresenter.View {
+public class RecentSettingView extends BaseCollectionSettingView<Void, RecentSettingPresenter> implements RecentSettingPresenter.View {
     private static final String TAG = RecentSettingView.class.getSimpleName();
     @BindView(R.id.size_text)
     TextView sizeText;

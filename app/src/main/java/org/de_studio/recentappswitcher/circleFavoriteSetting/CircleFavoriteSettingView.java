@@ -18,7 +18,7 @@ import butterknife.OnClick;
  * Created by HaiNguyen on 11/11/16.
  */
 
-public class CircleFavoriteSettingView extends BaseCollectionSettingView implements CircleFavoriteSettingPresenter.View {
+public class CircleFavoriteSettingView extends BaseCollectionSettingView<Void, CircleFavoriteSettingPresenter> implements CircleFavoriteSettingPresenter.View {
     private static final String TAG = CircleFavoriteSettingView.class.getSimpleName();
     @BindView(R.id.size_text)
     TextView sizeText;

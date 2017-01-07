@@ -15,7 +15,6 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseActivity;
-import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.DragAndDropCallback;
 import org.de_studio.recentappswitcher.base.OnDialogClosed;
 import org.de_studio.recentappswitcher.base.adapter.ItemsAdapter;
@@ -39,7 +38,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 12/2/16.
  */
 
-public class FolderSettingView extends BaseActivity implements FolderSettingPresenter.View, OnDialogClosed {
+public class FolderSettingView extends BaseActivity<Void, FolderSettingPresenter> implements FolderSettingPresenter.View, OnDialogClosed {
     private static final String TAG = FolderSettingView.class.getSimpleName();
     private String folderId;
 
@@ -48,8 +47,6 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
     @BindView(R.id.delete_image_button)
     ImageButton deleteButton;
 
-    @Inject
-    FolderSettingPresenter presenter;
     @Inject
     ItemsAdapter adapter;
 
@@ -87,11 +84,6 @@ public class FolderSettingView extends BaseActivity implements FolderSettingPres
                 .appModule(new AppModule(this))
                 .folderSettingModule(new FolderSettingModule(this,folderId))
                 .build().inject(this);
-    }
-
-    @Override
-    protected BasePresenter getPresenter() {
-        return presenter;
     }
 
     @Override

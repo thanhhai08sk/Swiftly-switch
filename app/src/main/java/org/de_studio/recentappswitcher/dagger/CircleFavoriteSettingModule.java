@@ -6,10 +6,9 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
-import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
-import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
 import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingModel;
 import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingPresenter;
+import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
 
 import javax.inject.Singleton;
 
@@ -31,7 +30,7 @@ public class CircleFavoriteSettingModule {
 
     @Provides
     @Singleton
-    BaseCollectionSettingPresenter presenter(CircleFavoriteSettingModel model) {
+    CircleFavoriteSettingPresenter presenter(CircleFavoriteSettingModel model) {
         return new CircleFavoriteSettingPresenter(model);
     }
 

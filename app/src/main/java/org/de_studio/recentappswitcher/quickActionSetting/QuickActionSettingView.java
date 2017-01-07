@@ -28,7 +28,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 12/10/16.
  */
 
-public class QuickActionSettingView extends BaseCollectionSettingView implements QuickActionSettingPresenter.View{
+public class QuickActionSettingView extends BaseCollectionSettingView<Void, QuickActionSettingPresenter> implements QuickActionSettingPresenter.View{
 
     PublishSubject<Void> loadItemsOkSubject = PublishSubject.create();
     PublishSubject<QuickActionSettingPresenter.SlotInfo> setSlotSubject = PublishSubject.create();

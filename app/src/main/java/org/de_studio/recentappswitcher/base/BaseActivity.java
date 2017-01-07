@@ -7,17 +7,22 @@ import android.support.v7.app.AppCompatActivity;
 
 import org.de_studio.recentappswitcher.utils.RetainFragment;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 
 /**
  * Created by HaiNguyen on 11/11/16.
  */
 
-public abstract class BaseActivity<T> extends AppCompatActivity implements PresenterView {
+public abstract class BaseActivity<T,P extends BasePresenter > extends AppCompatActivity implements PresenterView {
 
     protected RetainFragment<T> retainFragment;
     String tag = getClass().getCanonicalName();
     protected boolean destroyedBySystem;
+
+    @Inject
+    protected P presenter;
 
     @CallSuper
     @Override
@@ -28,12 +33,11 @@ public abstract class BaseActivity<T> extends AppCompatActivity implements Prese
         getDataFromRetainFragment();
         setContentView(getLayoutId());
         ButterKnife.bind(this);
-        getPresenter().onViewAttach(this);
+        presenter.onViewAttach(this);
     }
 
     protected abstract void inject();
 
-    protected abstract BasePresenter getPresenter();
 
     @LayoutRes
     protected abstract int getLayoutId();
@@ -55,7 +59,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity implements Prese
     @CallSuper
     @Override
     protected void onDestroy() {
-        getPresenter().onViewDetach();
+        presenter.onViewDetach();
         if(destroyedBySystem) onDestroyBySystem(); else onDestroyByUser();
         super.onDestroy();
     }

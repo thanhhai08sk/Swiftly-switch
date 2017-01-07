@@ -13,7 +13,6 @@ import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseActivity;
-import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerSetItemsComponent;
 import org.de_studio.recentappswitcher.dagger.SetItemsModule;
@@ -30,7 +29,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 11/18/16.
  */
 
-public class SetItemsView extends BaseActivity<SetItemsView.Subjects> {
+public class SetItemsView extends BaseActivity<SetItemsView.Subjects, SetItemsPresenter> {
     private static final String TAG = SetItemsView.class.getSimpleName();
     public static final int ITEMS_TYPE_STAGE_1 = 1;
     public static final int ITEMS_TYPE_STAGE_2 = 2;
@@ -55,8 +54,6 @@ public class SetItemsView extends BaseActivity<SetItemsView.Subjects> {
     String collectionId;
     String slotId;
 
-    @Inject
-    SetItemsPresenter presenter;
     @Inject
     SetItemsModel model;
     @Inject
@@ -132,11 +129,6 @@ public class SetItemsView extends BaseActivity<SetItemsView.Subjects> {
             icon.setImageDrawable(null);
         }
         index.setText(String.valueOf(itemIndex + 1));
-    }
-
-    @Override
-    protected BasePresenter getPresenter() {
-        return presenter;
     }
 
     @Override

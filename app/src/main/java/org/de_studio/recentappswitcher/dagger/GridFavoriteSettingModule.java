@@ -6,7 +6,6 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
-import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
 import org.de_studio.recentappswitcher.gridFavoriteSetting.GridFavoriteSettingModel;
 import org.de_studio.recentappswitcher.gridFavoriteSetting.GridFavoriteSettingPresenter;
 import org.de_studio.recentappswitcher.gridFavoriteSetting.GridFavoriteSettingView;
@@ -32,7 +31,7 @@ public class GridFavoriteSettingModule {
 
     @Provides
     @Singleton
-    BaseCollectionSettingPresenter presenter(GridFavoriteSettingModel model) {
+    GridFavoriteSettingPresenter presenter(GridFavoriteSettingModel model) {
         return new GridFavoriteSettingPresenter(model);
     }
 

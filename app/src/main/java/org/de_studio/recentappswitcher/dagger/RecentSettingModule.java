@@ -6,7 +6,6 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
-import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
 import org.de_studio.recentappswitcher.recentSetting.RecentSettingModel;
 import org.de_studio.recentappswitcher.recentSetting.RecentSettingPresenter;
 import org.de_studio.recentappswitcher.recentSetting.RecentSettingView;
@@ -31,7 +30,7 @@ public class RecentSettingModule {
 
     @Provides
     @Singleton
-    BaseCollectionSettingPresenter presenter(RecentSettingModel model) {
+    RecentSettingPresenter presenter(RecentSettingModel model) {
         return new RecentSettingPresenter(model);
     }
 

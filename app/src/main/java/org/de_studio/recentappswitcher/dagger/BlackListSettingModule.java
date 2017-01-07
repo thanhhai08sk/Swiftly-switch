@@ -6,7 +6,6 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
-import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
 import org.de_studio.recentappswitcher.blackListSetting.BlackListSettingModel;
 import org.de_studio.recentappswitcher.blackListSetting.BlackListSettingPresenter;
 import org.de_studio.recentappswitcher.blackListSetting.BlackListSettingView;
@@ -29,7 +28,7 @@ public class BlackListSettingModule {
 
     @Provides
     @Singleton
-    BaseCollectionSettingPresenter presenter(BlackListSettingModel model) {
+    BlackListSettingPresenter presenter(BlackListSettingModel model) {
         return new BlackListSettingPresenter(model);
     }
 

@@ -6,7 +6,6 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
-import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
 import org.de_studio.recentappswitcher.quickActionSetting.QuickActionSettingModel;
 import org.de_studio.recentappswitcher.quickActionSetting.QuickActionSettingPresenter;
 import org.de_studio.recentappswitcher.quickActionSetting.QuickActionSettingView;
@@ -31,7 +30,7 @@ public class QuickActionsSettingModule {
     
     @Provides
     @Singleton
-    BaseCollectionSettingPresenter presenter(QuickActionSettingModel model){
+    QuickActionSettingPresenter presenter(QuickActionSettingModel model){
         return new QuickActionSettingPresenter(model);
     }
     

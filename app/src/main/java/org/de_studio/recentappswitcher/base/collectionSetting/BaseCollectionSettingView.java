@@ -21,7 +21,6 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseActivity;
-import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.DragAndDropCallback;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
 import org.de_studio.recentappswitcher.folderSetting.FolderSettingView;
@@ -48,7 +47,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 11/26/16.
  */
 
-public abstract class BaseCollectionSettingView extends BaseActivity implements BaseCollectionSettingPresenter.View {
+public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSettingPresenter> extends BaseActivity<T , P> implements BaseCollectionSettingPresenter.View {
     private static final String TAG = BaseCollectionSettingView.class.getSimpleName();
     @Nullable
     @BindView(R.id.spinner)
@@ -59,8 +58,6 @@ public abstract class BaseCollectionSettingView extends BaseActivity implements 
     protected ImageButton deleteButton;
 
 
-    @Inject
-    protected BaseCollectionSettingPresenter presenter;
     @Inject
     protected SlotsAdapter adapter;
 
@@ -252,11 +249,6 @@ public abstract class BaseCollectionSettingView extends BaseActivity implements 
     @Override
     public int dpToPixel(int dp) {
         return Utility.dpToPixel(this, dp);
-    }
-
-    @Override
-    protected BasePresenter getPresenter() {
-        return presenter;
     }
 
     @CallSuper
