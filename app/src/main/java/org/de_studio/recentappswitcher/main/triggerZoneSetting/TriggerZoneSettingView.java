@@ -15,7 +15,7 @@ import android.widget.TextView;
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.base.BaseFragment;
+import org.de_studio.recentappswitcher.base.BaseDialogFragment;
 import org.de_studio.recentappswitcher.dagger.DaggerTriggerZoneSettingComponent;
 import org.de_studio.recentappswitcher.dagger.TriggerZoneSettingModule;
 
@@ -27,7 +27,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 1/13/17.
  */
 
-public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPresenter> implements TriggerZoneSettingPresenter.View {
+public class TriggerZoneSettingView extends BaseDialogFragment<TriggerZoneSettingPresenter> implements TriggerZoneSettingPresenter.View {
     private static final String TAG = TriggerZoneSettingView.class.getSimpleName();
     @BindView(R.id.position_spinner)
     Spinner positionSpinner;
@@ -53,7 +53,7 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
     int[] positionInts = new int[]{10, 11, 12, 20, 21, 22, 31};
     float mScale;
     String edgeId;
-
+    int statusbarHeight;
 
     PublishSubject<Integer> changePositionSJ = PublishSubject.create();
     PublishSubject<Integer> changeSensitiveSJ = PublishSubject.create();
@@ -70,12 +70,17 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
         return fragment;
     }
 
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         edgeId = getArguments().getString(Cons.EDGE_ID);
         super.onCreate(savedInstanceState);
         positionStrings = getResources().getStringArray(R.array.edge_positions_array);
         mScale = getResources().getDisplayMetrics().density;
+        setStatusBarHeight();
+        setStyle(STYLE_NORMAL, R.style.AppTheme);
+
     }
 
     @Override
@@ -108,6 +113,13 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
     @Override
     public PublishSubject<Integer> onChangeSensitive() {
         return changeSensitiveSJ;
+    }
+
+    private void setStatusBarHeight() {
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            statusbarHeight = getResources().getDimensionPixelSize(resourceId);
+        }
     }
 
     @Override
@@ -196,7 +208,7 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
                 break;
             default:
                 edge.setTranslationX(0);
-                edge.setTranslationY(-offset * mScale);
+                edge.setTranslationY(-offset * mScale - statusbarHeight);
                 break;
         }
     }
@@ -208,7 +220,7 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
 
     @OnClick(R.id.ok_button)
     void okClick(){
-
+        dismiss();
     }
 
     @Override
@@ -219,6 +231,7 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+
     }
 
     @Override

@@ -14,6 +14,11 @@
         <item name="android:backgroundDimEnabled">false</item>
 
     </style>
+    <style name="MyDialog_FullScreen" parent="android:Theme" >
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

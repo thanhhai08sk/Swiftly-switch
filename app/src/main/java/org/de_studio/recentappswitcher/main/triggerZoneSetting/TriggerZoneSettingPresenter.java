@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.main.triggerZoneSetting;
 
+import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.SeekBar;
 
@@ -19,6 +20,7 @@ import rx.subjects.PublishSubject;
  */
 
 public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettingPresenter.View, TriggerZoneSettingModel> {
+    private static final String TAG = TriggerZoneSettingPresenter.class.getSimpleName();
     Realm realm = Realm.getDefaultInstance();
     Edge edge;
     String edgeId;
@@ -30,13 +32,17 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
     }
 
     @Override
-    public void onViewAttach(View view) {
+    public void onViewAttach(final View view) {
         super.onViewAttach(view);
         edge = realm.where(Edge.class).equalTo(Cons.EDGE_ID, edgeId).findFirst();
         edge.addChangeListener(new RealmChangeListener<RealmModel>() {
             @Override
             public void onChange(RealmModel element) {
                 updateEdge();
+                if (view == null) {
+                    Log.e(TAG, "onChange: view null");
+                }
+
             }
         });
 
@@ -106,25 +112,30 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
         );
 
 
-
     }
 
     private void updateEdge() {
-        view.setCurrentSensitive(edge.sensitive, edge.position);
-        view.setCurrentLength(edge.length, edge.position);
-        view.setCurrentOffset(edge.offset, edge.position);
-        view.setCurrentPosition(edge.position);
+        if (view != null) {
+            view.setCurrentSensitive(edge.sensitive, edge.position);
+            view.setCurrentLength(edge.length, edge.position);
+            view.setCurrentOffset(edge.offset, edge.position);
+            view.setCurrentPosition(edge.position);
+        } else {
+            Log.e(TAG, "updateEdge: view null");
+        }
     }
 
     @Override
     public void onViewDetach() {
-        realm.removeAllChangeListeners();
+        Log.e(TAG, "onViewDetach: ");
+        edge.removeChangeListeners();
         realm.close();
         super.onViewDetach();
     }
 
-    public interface View extends PresenterView , SeekBar.OnSeekBarChangeListener, AdapterView.OnItemSelectedListener{
+    public interface View extends PresenterView, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemSelectedListener {
         PublishSubject<Integer> onChangePosition();
+
         PublishSubject<Integer> onChangeSensitive();
 
         PublishSubject<Integer> onChangeLength();
