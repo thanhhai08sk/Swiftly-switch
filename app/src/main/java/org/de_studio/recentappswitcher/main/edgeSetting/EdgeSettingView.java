@@ -3,7 +3,10 @@ package org.de_studio.recentappswitcher.main.edgeSetting;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -18,6 +21,7 @@ import org.de_studio.recentappswitcher.base.BaseFragment;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerEdgeSettingComponent;
 import org.de_studio.recentappswitcher.dagger.EdgeSettingModule;
+import org.de_studio.recentappswitcher.main.triggerZoneSetting.TriggerZoneSettingView;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Edge;
 
@@ -26,11 +30,13 @@ import butterknife.OnClick;
 import io.realm.RealmResults;
 import rx.subjects.PublishSubject;
 
+
 /**
  * Created by HaiNguyen on 11/5/16.
  */
 
 public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implements EdgeSettingPresenter.View{
+    private static final String TAG = EdgeSettingView.class.getSimpleName();
     @BindView(R.id.enable_edge)
     Switch enableSwitch;
     @BindView(R.id.show_guide_switch)
@@ -156,8 +162,25 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
 
     @Override
     public void showPositionSetting(Edge edge) {
-
+//        android.app.FragmentManager fragmentManager = getFragmentManager();
+//        EdgeSetting newFragment = new EdgeSetting();
+//        Bundle bundle = new Bundle();
+//        bundle.putInt(EdgeSetting.EDGE_NUMBER_KEY, 1);
+//        newFragment.setArguments(bundle);
+//        android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//        transaction.add(android.R.id.content, newFragment)
+//                .addToBackStack(null).commit();
+        Log.e(TAG, "showPositionSetting: ");
+        FragmentManager manager = getFragmentManager();
+        TriggerZoneSettingView view = TriggerZoneSettingView.newInstance(edge.edgeId);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.add(android.R.id.content,view)
+                .addToBackStack(null)
+                .commit();
     }
+
 
     @Override
     public void setEnable(boolean enable) {

@@ -53,7 +53,7 @@ public class Cons {
     public static final int POSITION_LEFT_TOP = 20;
     public static final int POSITION_LEFT_CENTRE = 21;
     public static final int POSITION_LEFT_BOTTOM = 22;
-    public static final int POSITION_BTTOM_CENTRE = 31;
+    public static final int POSITION_BOTTOM_CENTRE = 31;
     public static final int POSITION_RIGHT = 1;
     public static final int POSITION_LEFT = 2;
     public static final int POSITION_BOTTOM = 3;
@@ -249,7 +249,7 @@ public class Cons {
     public static final int HOLD_TIME_MIN = 150;
     public static final int EDGE_SENSITIVE_MIN = 5;
     public static final int EDGE_LENGTH_MIN = 40;
-    public static final int EDGE_OFFSET_MIN = -150;
+    public static final int EDGE_OFFSET_MIN = -300;
 
 
 

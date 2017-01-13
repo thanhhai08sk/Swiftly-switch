@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.main.triggerZoneSetting;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
@@ -18,6 +20,7 @@ import org.de_studio.recentappswitcher.dagger.DaggerTriggerZoneSettingComponent;
 import org.de_studio.recentappswitcher.dagger.TriggerZoneSettingModule;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import rx.subjects.PublishSubject;
 
 /**
@@ -25,6 +28,7 @@ import rx.subjects.PublishSubject;
  */
 
 public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPresenter> implements TriggerZoneSettingPresenter.View {
+    private static final String TAG = TriggerZoneSettingView.class.getSimpleName();
     @BindView(R.id.position_spinner)
     Spinner positionSpinner;
     @BindView(R.id.sensitive_seek_bar)
@@ -37,13 +41,18 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
     Button defaultButton;
     @BindView(R.id.ok_button)
     Button okButton;
+    @BindView(R.id.sensitive_value)
+    TextView sensitiveValue;
+    @BindView(R.id.length_value)
+    TextView lengthValue;
+    @BindView(R.id.offset_value)
+    TextView offsetValue;
     @BindView(R.id.edge)
     View edge;
     String[] positionStrings;
     int[] positionInts = new int[]{10, 11, 12, 20, 21, 22, 31};
     float mScale;
     String edgeId;
-
 
 
     PublishSubject<Integer> changePositionSJ = PublishSubject.create();
@@ -120,15 +129,27 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
     public void setCurrentPosition(int position) {
         positionSpinner.setSelection(Utility.getPositionOfStringArray(positionStrings, positionStrings[Utility.getPositionOfIntArray(positionInts, position)]));
         FrameLayout.LayoutParams lp2 = (FrameLayout.LayoutParams) edge.getLayoutParams();
-        switch (Utility.rightLeftOrBottom(position)){
-            case Cons.POSITION_RIGHT:
-                lp2.gravity = Gravity.RIGHT;
+        switch (position) {
+            case Cons.POSITION_RIGHT_TOP:
+                lp2.gravity = Gravity.RIGHT | Gravity.TOP;
                 break;
-            case Cons.POSITION_LEFT:
-                lp2.gravity =Gravity.LEFT;
+            case Cons.POSITION_RIGHT_CENTRE:
+                lp2.gravity = Gravity.RIGHT | Gravity.CENTER;
                 break;
-            case Cons.POSITION_BOTTOM:
-                lp2.gravity = Gravity.BOTTOM;
+            case Cons.POSITION_RIGHT_BOTTOM:
+                lp2.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+                break;
+            case Cons.POSITION_LEFT_TOP:
+                lp2.gravity = Gravity.LEFT | Gravity.TOP;
+                break;
+            case Cons.POSITION_LEFT_CENTRE:
+                lp2.gravity = Gravity.LEFT | Gravity.CENTER;
+                break;
+            case Cons.POSITION_LEFT_BOTTOM:
+                lp2.gravity = Gravity.LEFT | Gravity.BOTTOM;
+                break;
+            case Cons.POSITION_BOTTOM_CENTRE:
+                lp2.gravity = Gravity.BOTTOM | Gravity.CENTER;
                 break;
         }
         edge.setLayoutParams(lp2);
@@ -136,6 +157,7 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
 
     @Override
     public void setCurrentSensitive(int sensitive, int position) {
+        sensitiveValue.setText(String.valueOf(sensitive));
         FrameLayout.LayoutParams lp2 = (FrameLayout.LayoutParams) edge.getLayoutParams();
 
         switch (Utility.rightLeftOrBottom(position)) {
@@ -151,8 +173,8 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
 
     @Override
     public void setCurrentLength(int length, int position) {
+        lengthValue.setText(String.valueOf(length));
         FrameLayout.LayoutParams lp2 = (FrameLayout.LayoutParams) edge.getLayoutParams();
-
         switch (Utility.rightLeftOrBottom(position)) {
             case Cons.POSITION_BOTTOM:
                 lp2.width = (int) (length * mScale);
@@ -166,19 +188,39 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
 
     @Override
     public void setCurrentOffset(int offset, int position) {
-
+        offsetValue.setText(String.valueOf(offset));
         switch (Utility.rightLeftOrBottom(position)) {
             case Cons.POSITION_BOTTOM:
-                edge.setTranslationX(- offset*mScale);
+                edge.setTranslationX(-offset * mScale);
+                edge.setTranslationY(0);
                 break;
             default:
-                edge.setRotationY(-offset * mScale);
+                edge.setTranslationX(0);
+                edge.setTranslationY(-offset * mScale);
                 break;
         }
     }
+    
+    @OnClick(R.id.default_button)
+    void defaultClick(){
+
+    }
+
+    @OnClick(R.id.ok_button)
+    void okClick(){
+
+    }
 
     @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {}
+    public void clear() {
+        Log.e(TAG, "clear: ");
+        super.clear();
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+    }
+
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
@@ -192,9 +234,13 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
                 case R.id.offset_seek_bar:
                     changeOffsetSJ.onNext(progress);
                     break;
-            }}}
+            }
+        }
+    }
+
     @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {}
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
 
 
     @Override
@@ -205,7 +251,9 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
                 break;
         }
     }
+
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {}
+    public void onNothingSelected(AdapterView<?> parent) {
+    }
 }
 
