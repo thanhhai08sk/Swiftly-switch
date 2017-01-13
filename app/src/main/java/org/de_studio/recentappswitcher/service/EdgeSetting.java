@@ -162,6 +162,7 @@ public class EdgeSetting extends DialogFragment {
                         break;
                     case 2:
                         sharedPreferences.edit().putInt(EdgeSetting.CIRCLE_FAVORITE_MODE, 3).commit();
+                        break;
                 }
                 Utility.restartService(getActivity());
             }
