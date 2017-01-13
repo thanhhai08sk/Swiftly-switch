@@ -117,21 +117,20 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
     }
 
     public void onSetRecent() {
-        view.chooseRecent(model.getRecentSetsList(), model.getEdge().recent, setRecentSetSubject);
+        view.chooseCollection(model.getRecentSetsList(), model.getEdge().recent, setRecentSetSubject);
     }
 
     public void onSetQuickActions() {
-        view.chooseQuickActions(model.getQuickActionsSetsList(), model.getEdge().quickAction, setQuickActionsSetSubject);
+        view.chooseCollection(model.getQuickActionsSetsList(), model.getEdge().quickAction, setQuickActionsSetSubject);
     }
 
     public void onSetCircle() {
-        view.chooseCircle(model.getCircleFavoriteSetsList(), model.getEdge().circleFav, setCircleSetSubject);
+        view.chooseCollection(model.getCircleFavoriteSetsList(), model.getEdge().circleFav, setCircleSetSubject);
     }
 
     public void onSetGrid() {
-        view.chooseGrid(model.getGridFavoriteSetsList(), model.getEdge().grid, setGridSetSubject);
+        view.chooseCollection(model.getGridFavoriteSetsList(), model.getEdge().grid, setGridSetSubject);
     }
-
 
     public void onSetPosition() {
         view.showPositionSetting(model.getEdge());
@@ -175,13 +174,8 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
 
         void chooseMode(int currentMode, PublishSubject<Integer> setModeSubject);
 
-        void chooseRecent(RealmResults<Collection> recents, Collection currentRecent, PublishSubject<String> setRecentSetSj);
+        void chooseCollection(RealmResults<Collection> recents, Collection currentRecent, PublishSubject<String> setRecentSetSj);
 
-        void chooseQuickActions(RealmResults<Collection> quickActions, Collection currentQuickActions, PublishSubject<String> setQuickActionsSj);
-
-        void chooseCircle(RealmResults<Collection> circles, Collection currentCircle, PublishSubject<String> setCircleSj);
-
-        void chooseGrid(RealmResults<Collection> grids, Collection currentGrid, PublishSubject<String> setGridSj);
 
         void chooseGuideColor(int currentColor, PublishSubject<Integer> setGuideColorSj);
 
