@@ -247,6 +247,9 @@ public class Cons {
     public static final int DEFAULT_CONTACT_ACTION = ACTION_CHOOSE;
 
     public static final int HOLD_TIME_MIN = 150;
+    public static final int EDGE_SENSITIVE_MIN = 5;
+    public static final int EDGE_LENGTH_MIN = 40;
+    public static final int EDGE_OFFSET_MIN = -150;
 
 
 

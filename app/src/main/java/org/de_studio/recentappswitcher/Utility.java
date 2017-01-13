@@ -2850,6 +2850,23 @@ public  class Utility {
         folderView.setY(y);
     }
 
+    public static int getPositionOfIntArray(int[] array, int item) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == item) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static int getPositionOfStringArray(String[] array, String item) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].equals(item)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
 
 

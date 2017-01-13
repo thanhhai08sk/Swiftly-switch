@@ -1,5 +1,8 @@
 package org.de_studio.recentappswitcher.main.triggerZoneSetting;
 
+import android.widget.AdapterView;
+import android.widget.SeekBar;
+
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.PresenterView;
@@ -53,7 +56,7 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                edge.sensitive = integer;
+                                edge.sensitive = integer + Cons.EDGE_SENSITIVE_MIN;
                             }
                         });
                     }
@@ -67,7 +70,7 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                edge.length = integer;
+                                edge.length = integer + Cons.EDGE_LENGTH_MIN;
                             }
                         });
                     }
@@ -81,7 +84,7 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                edge.offset = integer;
+                                edge.offset = integer + Cons.EDGE_OFFSET_MIN;
                             }
                         });
                     }
@@ -107,9 +110,9 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
     }
 
     private void updateEdge() {
-        view.setCurrentSensitive(edge.sensitive);
-        view.setCurrentLength(edge.length);
-        view.setCurrentOffset(edge.offset);
+        view.setCurrentSensitive(edge.sensitive, edge.position);
+        view.setCurrentLength(edge.length, edge.position);
+        view.setCurrentOffset(edge.offset, edge.position);
         view.setCurrentPosition(edge.position);
     }
 
@@ -120,7 +123,7 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
         super.onViewDetach();
     }
 
-    public interface View extends PresenterView {
+    public interface View extends PresenterView , SeekBar.OnSeekBarChangeListener, AdapterView.OnItemSelectedListener{
         PublishSubject<Integer> onChangePosition();
         PublishSubject<Integer> onChangeSensitive();
 
@@ -132,11 +135,11 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
 
         void setCurrentPosition(int position);
 
-        void setCurrentSensitive(int sensitive);
+        void setCurrentSensitive(int sensitive, int position);
 
-        void setCurrentLength(int length);
+        void setCurrentLength(int length, int position);
 
-        void setCurrentOffset(int offset);
+        void setCurrentOffset(int offset, int position);
 
     }
 }

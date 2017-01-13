@@ -9,7 +9,7 @@
         android:layout_width="12dp"
         android:layout_height="150dp"
         android:background="@color/colorAccent"
-        android:layout_gravity="end|center_vertical"
+        android:layout_gravity="right|center_vertical"
         />
 
     <LinearLayout
@@ -156,7 +156,7 @@
 
         </LinearLayout>
         <android.support.v7.widget.AppCompatSeekBar
-            android:id="@+id/edge_dialog_offset_seek_bar"
+            android:id="@+id/offset_seek_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:progress="300"
@@ -183,18 +183,18 @@
         android:paddingStart="16dp"
         >
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/default_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/edge_dialog_default_button"
-            android:id="@+id/edge_dialog_default_button"
             style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
             />
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/ok_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/edge_dialog_ok_button"
-            android:id="@+id/edge_dialog_ok_button"
             style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
             />
 
