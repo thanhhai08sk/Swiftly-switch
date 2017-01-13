@@ -25,19 +25,27 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
     public void onViewAttach(final View view) {
         super.onViewAttach(view);
         view.loadItems();
-        view.setProgressBar(true);
-        results = getItemRealmResult();
-        if (results != null) {
-            view.setAdapter(results);
-            results.addChangeListener(new RealmChangeListener<RealmResults<Item>>() {
-                @Override
-                public void onChange(RealmResults<Item> element) {
-                    if (element.size()>0) {
-                        view.setProgressBar(false);
+
+        addSubscription(
+                view.onViewCreated().subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        results = getItemRealmResult();
+                        if (results != null) {
+                            view.setAdapter(results);
+                            results.addChangeListener(new RealmChangeListener<RealmResults<Item>>() {
+                                @Override
+                                public void onChange(RealmResults<Item> element) {
+                                    if (element.size()>0) {
+                                        view.setProgressBar(false);
+                                    }
+                                }
+                            });
+                        }
+
                     }
-                }
-            });
-        }
+                })
+        );
 
         if (view.onCurrentItemChange() != null) {
             addSubscription(
@@ -69,12 +77,14 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
         if (results != null) {
             results.removeChangeListeners();
         }
+        realm.removeAllChangeListeners();
         realm.close();
     }
 
     protected abstract RealmResults<Item> getItemRealmResult();
 
     public interface View extends PresenterView {
+        PublishSubject<Void> onViewCreated();
         PublishSubject<Item> onItemClick();
 
         PublishSubject<Item> onSetItemToSlot();

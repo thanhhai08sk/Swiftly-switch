@@ -38,6 +38,8 @@ public abstract class BaseChooseItemDialogView extends BaseDialogFragment implem
     protected BehaviorSubject<Item> currentItemChangeSubject;
     protected PublishSubject<Item> setItemSubject;
     protected PublishSubject<Item> itemClickSubject = PublishSubject.create();
+    protected PublishSubject<Void> onViewCreatedSJ = PublishSubject.create();
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +51,8 @@ public abstract class BaseChooseItemDialogView extends BaseDialogFragment implem
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         listView.setOnItemClickListener(this);
+        listView.setAdapter(adapter);
+        onViewCreatedSJ.onNext(null);
     }
 
     public void setSubjects(BehaviorSubject<Item> currentItemChangeSubject, PublishSubject<Item> setItemSubject) {
@@ -68,6 +72,11 @@ public abstract class BaseChooseItemDialogView extends BaseDialogFragment implem
     @Override
     public PublishSubject<Item> onSetItemToSlot() {
         return setItemSubject;
+    }
+
+    @Override
+    public PublishSubject<Void> onViewCreated() {
+        return onViewCreatedSJ;
     }
 
     public void setProgressBar(boolean show) {

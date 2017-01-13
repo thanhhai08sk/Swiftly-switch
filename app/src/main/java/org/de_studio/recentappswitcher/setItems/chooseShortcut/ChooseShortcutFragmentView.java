@@ -63,7 +63,6 @@ public class ChooseShortcutFragmentView extends BaseChooseItemFragmentView<Choos
         packageManager=getActivity().getPackageManager();
         resolveInfos =  packageManager.queryIntentActivities(shortcutsIntent, 0);
         adapter.setData(resolveInfos);
-        listView.setAdapter(adapter);
 
     }
 

@@ -1,237 +1,250 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
-        android:id="@+id/enable_layout"
-        android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        >
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/enable"
-            android:layout_weight="1"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            style="@style/Main_text_primary"
-            />
-        <Switch
-            android:id="@+id/enable_edge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
-            android:paddingStart="16dp"
-            android:clickable="false"
-            android:focusable="false"
-            />
-
-    </LinearLayout>
-
-    <include layout="@layout/separator" />
-
-    <LinearLayout
-        android:id="@+id/mode_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/edge_dialog_set_mode_text"
-            style="@style/Main_text_primary"
-            />
-
-        <TextView
-            android:id="@+id/mode_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Recent and Quick Actions"
-            style="@style/Main_text_secondary"
-            />
-
-    </LinearLayout>
-
-    <include layout="@layout/separator" />
-    <LinearLayout
-        android:id="@+id/trigger_zone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/trigger_zone_setting"
-            style="@style/Main_text_primary"
-            />
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/enable_layout"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/enable"
+                android:layout_weight="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                style="@style/Main_text_primary"
+                />
+            <Switch
+                android:id="@+id/enable_edge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:clickable="false"
+                android:focusable="false"
+                />
 
-        <TextView
-            android:layout_width="wrap_content"
+        </LinearLayout>
+
+        <include layout="@layout/separator" />
+
+        <LinearLayout
+            android:id="@+id/mode_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/trigger_zone_setting_description"
-            style="@style/Main_text_secondary"
-            />
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edge_dialog_set_mode_text"
+                style="@style/Main_text_primary"
+                />
+
+            <TextView
+                android:id="@+id/mode_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Recent and Quick Actions"
+                style="@style/Main_text_secondary"
+                />
+
+        </LinearLayout>
+
+        <include layout="@layout/separator" />
+
+        <LinearLayout
+            android:id="@+id/recent_set"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recent_set"
+                style="@style/Main_text_primary"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recent_set_description"
+                style="@style/Main_text_secondary"
+                android:paddingBottom="20dp"
+                />
+
+            <include layout="@layout/separator" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/circle_favorite_set"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/circle_favorite_set"
+                style="@style/Main_text_primary"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/circle_favorite_set_description"
+                style="@style/Main_text_secondary"
+                android:paddingBottom="20dp"
+                />
+
+            <include layout="@layout/separator" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/quick_actions_set"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/quick_actions_set"
+                style="@style/Main_text_primary"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/quick_actions_description"
+                style="@style/Main_text_secondary"
+                android:paddingBottom="20dp"
+                />
+
+            <include layout="@layout/separator" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/grid_favorite_set"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/grid_favorite_set"
+                style="@style/Main_text_primary"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/grid_favorites_description"
+                style="@style/Main_text_secondary"
+                android:paddingBottom="20dp"
+
+                />
+
+            <include layout="@layout/separator" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/trigger_zone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/trigger_zone_setting"
+                style="@style/Main_text_primary"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/trigger_zone_setting_description"
+                style="@style/Main_text_secondary"
+                android:paddingBottom="20dp"
+                />
+
+            <include layout="@layout/separator" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/show_guide"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/edge_dialog_show_guide_text"
+                android:layout_weight="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                style="@style/Main_text_primary"
+                />
+            <Switch
+                android:id="@+id/show_guide_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:clickable="false"
+                android:focusable="false"
+                />
+
+        </LinearLayout>
+
+        <include layout="@layout/separator" />
+        <LinearLayout
+            android:id="@+id/set_guide_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/main_set_guide_color"
+                style="@style/Main_text_primary"
+                />
+
+
+        </LinearLayout>
+
+        <include layout="@layout/separator" />
 
     </LinearLayout>
-
-    <include layout="@layout/separator" />
-    <LinearLayout
-        android:id="@+id/recent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/recent_set"
-            style="@style/Main_text_primary"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/recent_set_description"
-            style="@style/Main_text_secondary"
-            />
-
-    </LinearLayout>
-
-    <include layout="@layout/separator" />
-    <LinearLayout
-        android:id="@+id/quick_actions_set"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/quick_actions_set"
-            style="@style/Main_text_primary"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/quick_actions_description"
-            style="@style/Main_text_secondary"
-            />
-
-    </LinearLayout>
-
-    <include layout="@layout/separator" />
-    <LinearLayout
-        android:id="@+id/circle_favorite_set"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/circle_favorite_set"
-            style="@style/Main_text_primary"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/circle_favorite_set_description"
-            style="@style/Main_text_secondary"
-            />
-
-    </LinearLayout>
-
-    <include layout="@layout/separator" />
-    <LinearLayout
-        android:id="@+id/grid_favorite_set"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/grid_favorite_set"
-            style="@style/Main_text_primary"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/grid_favorites_description"
-            style="@style/Main_text_secondary"
-            />
-
-    </LinearLayout>
-
-    <include layout="@layout/separator" />
-    <LinearLayout
-        android:id="@+id/show_guide"
-        android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        >
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/edge_dialog_show_guide_text"
-            android:layout_weight="1"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            style="@style/Main_text_primary"
-            />
-        <Switch
-            android:id="@+id/show_guide_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
-            android:paddingStart="16dp"
-            android:clickable="false"
-            android:focusable="false"
-            />
-
-    </LinearLayout>
-
-    <include layout="@layout/separator" />
-    <LinearLayout
-        android:id="@+id/set_guide_color"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/main_set_guide_color"
-            style="@style/Main_text_primary"
-            />
-
-
-    </LinearLayout>
-
-    <include layout="@layout/separator" />
-
-</LinearLayout>
+</android.support.v4.widget.NestedScrollView>

@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -36,6 +37,14 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
     Switch showGuideSwitch;
     @BindView(R.id.mode_description)
     TextView currentModeText;
+    @BindView(R.id.recent_set)
+    View recent;
+    @BindView(R.id.quick_actions_set)
+    View quickAction;
+    @BindView(R.id.circle_favorite_set)
+    View circleFavorite;
+    @BindView(R.id.grid_favorite_set)
+    View gridFavorite;
 
     PublishSubject<Void> setDataCompleteSJ = PublishSubject.create();
     String edgeId;
@@ -82,6 +91,12 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
                     public void onClick(DialogInterface dialog, int which) {
                         setModeSubject.onNext(modeValues[which]);
                     }
+                })
+                .setPositiveButton(R.string.app_tab_fragment_ok_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
                 });
                 builder.create().show();
     }
@@ -104,6 +119,12 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         setCollectionSetSj.onNext(collections.where().equalTo(Cons.LABEL, labels[which].toString()).findFirst().collectionId);
+                    }
+                })
+                .setPositiveButton(R.string.app_tab_fragment_ok_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                     }
                 });
         builder.create().show();
@@ -149,12 +170,24 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
         switch (mode) {
             case Edge.MODE_RECENT_AND_QUICK_ACTION:
                 currentMode = getString(R.string.edge_mode__recent_and_quick_actions);
+                recent.setVisibility(View.VISIBLE);
+                quickAction.setVisibility(View.VISIBLE);
+                circleFavorite.setVisibility(View.GONE);
+                gridFavorite.setVisibility(View.GONE);
                 break;
             case Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION:
                 currentMode = getString(R.string.edge_mode__circle_favorite_and_quick_actions);
+                recent.setVisibility(View.GONE);
+                quickAction.setVisibility(View.VISIBLE);
+                circleFavorite.setVisibility(View.VISIBLE);
+                gridFavorite.setVisibility(View.GONE);
                 break;
             case Edge.MODE_GRID:
                 currentMode = getString(R.string.edge_mode__grid_favorite);
+                recent.setVisibility(View.GONE);
+                quickAction.setVisibility(View.GONE);
+                circleFavorite.setVisibility(View.GONE);
+                gridFavorite.setVisibility(View.VISIBLE);
                 break;
         }
         currentModeText.setText(currentMode);
@@ -218,7 +251,7 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
         presenter.onSetPosition();
     }
 
-    @OnClick(R.id.recent)
+    @OnClick(R.id.recent_set)
     void recenClick(){
         presenter.onSetRecent();
     }

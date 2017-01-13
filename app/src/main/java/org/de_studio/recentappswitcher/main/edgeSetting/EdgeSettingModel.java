@@ -9,7 +9,10 @@ import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Edge;
 
 import io.realm.Realm;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
+import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 /**
@@ -29,10 +32,20 @@ public class EdgeSettingModel extends BaseModel {
     }
 
     public void setup() {
-        edge = realm.where(Edge.class).equalTo(Cons.EDGE_ID, edgeId).findFirst();
-        if (edge != null) {
-            gotEdgeSubject.onNext(edge);
-        }
+        realm.where(Edge.class).equalTo(Cons.EDGE_ID, edgeId).findFirstAsync().asObservable()
+                .filter(new Func1<RealmObject, Boolean>() {
+                    @Override
+                    public Boolean call(RealmObject object) {
+                        return object != null && object.isValid();
+                    }
+                })
+                .subscribe(new Action1<RealmObject>() {
+                    @Override
+                    public void call(RealmObject object) {
+                        edge = (Edge) object;
+                        gotEdgeSubject.onNext(edge);
+                    }
+                });
     }
 
 
@@ -78,6 +91,29 @@ public class EdgeSettingModel extends BaseModel {
             @Override
             public void execute(Realm realm) {
                 edge.mode = mode;
+                switch (mode) {
+                    case Edge.MODE_RECENT_AND_QUICK_ACTION:
+                        if (edge.recent == null) {
+                            edge.recent = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_RECENT).findFirst();
+                        }
+                        if (edge.quickAction == null) {
+                            edge.quickAction = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_QUICK_ACTION).findFirst();
+                        }
+                        break;
+                    case Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION:
+                        if (edge.circleFav == null) {
+                            edge.circleFav = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_CIRCLE_FAVORITE).findFirst();
+                        }
+                        if (edge.quickAction == null) {
+                            edge.quickAction = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_QUICK_ACTION).findFirst();
+                        }
+                        break;
+                    case Edge.MODE_GRID:
+                        if (edge.grid == null) {
+                            edge.grid = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_GRID_FAVORITE).findFirst();
+                        }
+                        break;
+                }
             }
         });
     }
@@ -164,6 +200,7 @@ public class EdgeSettingModel extends BaseModel {
 
     @Override
     public void clear() {
+        realm.removeAllChangeListeners();
         realm.close();
     }
 }
