@@ -14,6 +14,8 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseFragment;
+import org.de_studio.recentappswitcher.dagger.DaggerTriggerZoneSettingComponent;
+import org.de_studio.recentappswitcher.dagger.TriggerZoneSettingModule;
 
 import butterknife.BindView;
 import rx.subjects.PublishSubject;
@@ -40,6 +42,7 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
     String[] positionStrings;
     int[] positionInts = new int[]{10, 11, 12, 20, 21, 22, 31};
     float mScale;
+    String edgeId;
 
 
 
@@ -49,8 +52,18 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
     PublishSubject<Integer> changeOffsetSJ = PublishSubject.create();
     PublishSubject<Void> viewCreatedSJ = PublishSubject.create();
 
+    public static TriggerZoneSettingView newInstance(String edgeId) {
+
+        Bundle args = new Bundle();
+        args.putString(Cons.EDGE_ID, edgeId);
+        TriggerZoneSettingView fragment = new TriggerZoneSettingView();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        edgeId = getArguments().getString(Cons.EDGE_ID);
         super.onCreate(savedInstanceState);
         positionStrings = getResources().getStringArray(R.array.edge_positions_array);
         mScale = getResources().getDisplayMetrics().density;
@@ -73,7 +86,9 @@ public class TriggerZoneSettingView extends BaseFragment<TriggerZoneSettingPrese
 
     @Override
     protected void inject() {
-
+        DaggerTriggerZoneSettingComponent.builder()
+                .triggerZoneSettingModule(new TriggerZoneSettingModule(this, edgeId))
+                .build().inject(this);
     }
 
     @Override
