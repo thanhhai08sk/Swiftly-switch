@@ -11,9 +11,7 @@ import android.widget.ProgressBar;
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.BaseDialogFragment;
-import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.OnDialogClosed;
-import org.de_studio.recentappswitcher.base.PresenterView;
 import org.de_studio.recentappswitcher.base.adapter.ItemsListWithCheckBoxAdapter;
 import org.de_studio.recentappswitcher.model.Item;
 
@@ -28,15 +26,13 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 12/3/16.
  */
 
-public abstract class BaseAddItemsToFolderView extends BaseDialogFragment implements BaseAddItemsToFolderPresenter.View , AdapterView.OnItemClickListener{
+public abstract class BaseAddItemsToFolderView extends BaseDialogFragment<BaseAddItemsToFolderPresenter> implements BaseAddItemsToFolderPresenter.View , AdapterView.OnItemClickListener{
     private static final String TAG = BaseAddItemsToFolderView.class.getSimpleName();
     @BindView(R.id.add_favorite_list_view)
     protected ListView listView;
     @BindView(R.id.progress_bar)
     protected ProgressBar progressBar;
 
-    @Inject
-    protected BaseAddItemsToFolderPresenter presenter;
     @Inject
     protected ItemsListWithCheckBoxAdapter adapter;
 
@@ -71,15 +67,6 @@ public abstract class BaseAddItemsToFolderView extends BaseDialogFragment implem
         return R.layout.add_favorite_app_fragment_list_view;
     }
 
-    @Override
-    protected PresenterView getPresenterView() {
-        return this;
-    }
-
-    @Override
-    protected BasePresenter getPresenter() {
-        return presenter;
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
