@@ -26,7 +26,73 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
-            </LinearLayout>
+
+            <include layout="@layout/drawer_top"/>
+
+            <FrameLayout
+                android:id="@+id/more_setting"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+
+                >
+                <ImageView
+                    style="@style/Drawer_Icon"
+                    app:srcCompat="@drawable/ic_settings_white_36px"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    style="@style/Drawer_Item"
+                    android:text="@string/main_more_setting_title"
+                    />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/review"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+
+                >
+                <ImageView
+                    style="@style/Drawer_Icon"
+                    app:srcCompat="@drawable/ic_rate_review_white_36dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    style="@style/Drawer_Item"
+                    android:text="@string/review_on_play_store"
+                    />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/send_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+
+                >
+                <ImageView
+                    style="@style/Drawer_Icon"
+                    app:srcCompat="@drawable/ic_email_white_36dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    style="@style/Drawer_Item"
+                    android:text="@string/email_us"
+                    />
+
+            </FrameLayout>
+
+        </LinearLayout>
 
     </android.support.design.widget.NavigationView>
 

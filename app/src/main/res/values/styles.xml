@@ -69,4 +69,17 @@
 
     </style>
 
+    <style name="Drawer_Icon">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:tint">@color/button_54_black</item>
+    </style>
+    <style name="Drawer_Item">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginStart">72dp</item>
+    </style>
+
 </resources>
