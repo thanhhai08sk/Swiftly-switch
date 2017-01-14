@@ -102,6 +102,7 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
                     @Override
                     public void call(Integer integer) {
                         model.setGuideColor(integer);
+                        view.restartService();
                     }
                 })
         );
@@ -150,7 +151,6 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
 
     public void onSetGuideColor() {
         view.chooseGuideColor(model.getGuideColor(), setGuideColorSubject);
-        view.restartService();
     }
 
     private void showEdge(Edge edge) {

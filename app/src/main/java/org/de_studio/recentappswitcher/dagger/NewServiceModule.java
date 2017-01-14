@@ -183,7 +183,7 @@ public class NewServiceModule {
     @Named(EDGE_1_VIEW_NAME)
     View edge1View(@Named(EDGE_1_NAME) Edge edge1
             , @Named(M_SCALE_NAME) float mScale
-            , @Named(GUIDE_COLOR_NAME) int guideColor) {
+            ) {
 
         View edge1View = new View(context);
         edge1View.setId(Cons.EDGE_1_ID_INT);
@@ -191,7 +191,7 @@ public class NewServiceModule {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
             shape.setCornerRadius(0);
-            shape.setStroke((int) (2 * mScale), guideColor);
+            shape.setStroke((int) (2 * mScale), edge1.guideColor == 0? Cons.GUIDE_COLOR_DEFAULT: edge1.guideColor);
             LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
             switch (edge1.position / 10) {
                 case 1:
@@ -249,7 +249,7 @@ public class NewServiceModule {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
             shape.setCornerRadius(0);
-            shape.setStroke((int) (2 * mScale), guideColor);
+            shape.setStroke((int) (2 * mScale), edge2.guideColor == 0? Cons.GUIDE_COLOR_DEFAULT: edge2.guideColor);
             LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
             switch (edge2.position / 10) {
                 case 1:
