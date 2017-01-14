@@ -1,5 +1,7 @@
 package org.de_studio.recentappswitcher.blackListSetting;
 
+import android.widget.AdapterView;
+
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.PresenterView;
@@ -80,7 +82,7 @@ public class BlackListSettingPresenter extends BasePresenter<BlackListSettingPre
         }
     }
 
-    public interface View extends PresenterView {
+    public interface View extends PresenterView, AdapterView.OnItemClickListener {
         void loadApps();
 
         void setProgressBar(boolean show);

@@ -66,7 +66,8 @@ public class GeneralView extends Fragment {
     }
 
     public void setBlackList() {
-        startActivity(BlackListSettingView.getIntent(getActivity(),null));
+        BlackListSettingView view = BlackListSettingView.newInstance();
+        view.show(getFragmentManager(), "blackList");
     }
 
     @OnClick(R.id.recent)
