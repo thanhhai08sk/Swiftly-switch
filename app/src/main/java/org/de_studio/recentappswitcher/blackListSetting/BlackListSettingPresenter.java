@@ -1,8 +1,16 @@
 package org.de_studio.recentappswitcher.blackListSetting;
 
 import org.de_studio.recentappswitcher.Cons;
-import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
+import org.de_studio.recentappswitcher.base.BasePresenter;
+import org.de_studio.recentappswitcher.base.PresenterView;
+import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.model.Item;
 
+import io.realm.OrderedRealmCollection;
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 
@@ -10,7 +18,10 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 12/17/16.
  */
 
-public class BlackListSettingPresenter extends BaseCollectionSettingPresenter<BlackListSettingPresenter.View, BlackListSettingModel> {
+public class BlackListSettingPresenter extends BasePresenter<BlackListSettingPresenter.View, BlackListSettingModel> {
+    RealmResults<Item> appsList;
+    RealmList<Item> blackListItems;
+    Realm realm = Realm.getDefaultInstance();
     public BlackListSettingPresenter(BlackListSettingModel model) {
         super(model);
     }
@@ -19,24 +30,63 @@ public class BlackListSettingPresenter extends BaseCollectionSettingPresenter<Bl
     @Override
     public void onViewAttach(final View view) {
         super.onViewAttach(view);
+        view.loadApps();
+        getBlackListItems();
+        view.setProgressBar(true);
+
+        appsList = realm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_APP).findAllAsync();
+        view.setAdapter(appsList, blackListItems);
+        appsList.addChangeListener(new RealmChangeListener<RealmResults<Item>>() {
+            @Override
+            public void onChange(RealmResults<Item> element) {
+                if (element.size()>0) {
+                    view.setProgressBar(false);
+
+                }
+            }
+        });
+
         addSubscription(
-                view.onAddApps().subscribe(new Action1<Void>() {
+                view.onSetItem().subscribe(new Action1<Item>() {
                     @Override
-                    public void call(Void aVoid) {
-                        view.addApps();
+                    public void call(final Item item) {
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                if (blackListItems.contains(item)) {
+                                    blackListItems.remove(item);
+                                } else {
+                                    blackListItems.add(item);
+                                }
+                            }
+                        });
                     }
                 })
         );
+
     }
 
     @Override
-    public void setRecyclerView() {
-        view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_LINEAR, -1),null);
+    public void onViewDetach() {
+        appsList.removeChangeListeners();
+        realm.close();
+        super.onViewDetach();
     }
 
-    public interface View extends BaseCollectionSettingPresenter.View {
-        PublishSubject<Void> onAddApps();
+    private void getBlackListItems() {
+        Collection blackList = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_BLACK_LIST).findFirst();
+        if (blackList != null) {
+            blackListItems = blackList.items;
+        }
+    }
 
-        void addApps();
+    public interface View extends PresenterView {
+        void loadApps();
+
+        void setProgressBar(boolean show);
+
+        void setAdapter(OrderedRealmCollection<Item> appList, RealmList<Item> blackListItems);
+
+        PublishSubject<Item> onSetItem();
     }
 }
