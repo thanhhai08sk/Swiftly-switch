@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -111,10 +110,9 @@ public class NewServiceModule {
     @Singleton
     NewServiceModel model(@Named(M_SCALE_NAME) float mScale
             , @Named(ICON_SCALE_NAME) float iconScale
-            , @Named(LAUNCHER_PACKAGENAME_NAME) String launcher
-            , Realm realm) {
+            , @Named(LAUNCHER_PACKAGENAME_NAME) String launcher) {
 
-        return new NewServiceModel(mScale, iconScale, launcher, realm);
+        return new NewServiceModel(mScale, iconScale, launcher);
     }
 
 

@@ -9,9 +9,12 @@ import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.PresenterView;
 import org.de_studio.recentappswitcher.model.Edge;
 
+import java.util.concurrent.TimeUnit;
+
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmModel;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 
@@ -24,6 +27,8 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
     Realm realm = Realm.getDefaultInstance();
     Edge edge;
     String edgeId;
+
+    PublishSubject<Void> applyChangesSJ = PublishSubject.create();
 
 
     public TriggerZoneSettingPresenter(TriggerZoneSettingModel model, String edgeId) {
@@ -70,15 +75,22 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
         );
 
         addSubscription(
-                view.onChangeLength().subscribe(new Action1<Integer>() {
+                view.onChangeLength()
+                        .sample(100, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<Integer>() {
                     @Override
                     public void call(final Integer integer) {
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                edge.length = integer + Cons.EDGE_LENGTH_MIN;
-                            }
-                        });
+                        if (!realm.isClosed()) {
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    edge.length = integer + Cons.EDGE_LENGTH_MIN;
+                                }
+                            });
+                        } else {
+                            Log.e(TAG, "call change length: realm is closed");
+                        }
                     }
                 })
         );
@@ -87,12 +99,16 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
                 view.onChangeOffset().subscribe(new Action1<Integer>() {
                     @Override
                     public void call(final Integer integer) {
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                edge.offset = integer + Cons.EDGE_OFFSET_MIN;
-                            }
-                        });
+                        if (!realm.isClosed()) {
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    edge.offset = integer + Cons.EDGE_OFFSET_MIN;
+                                }
+                            });
+                        } else {
+                            Log.e(TAG, "call change position: realm is close");
+                        }
                     }
                 })
         );
@@ -101,12 +117,37 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
                 view.onChangePosition().subscribe(new Action1<Integer>() {
                     @Override
                     public void call(final Integer integer) {
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                edge.position = integer;
-                            }
-                        });
+                        if (!realm.isClosed()) {
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    edge.position = integer;
+                                }
+                            });
+                            applyChangesSJ.onNext(null);
+                        } else {
+                            Log.e(TAG, "call change position: realm is closed");
+                        }
+                    }
+                })
+        );
+
+        addSubscription(
+                view.onStopTrackingSeekBar().subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        applyChangesSJ.onNext(null);
+                    }
+                })
+        );
+
+        addSubscription(
+                applyChangesSJ.sample(2,TimeUnit.SECONDS)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        view.restartService();
+
                     }
                 })
         );
@@ -127,7 +168,7 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
 
     @Override
     public void onViewDetach() {
-        Log.e(TAG, "onViewDetach: ");
+        Log.e(TAG, "onViewDetach: close realm ");
         edge.removeChangeListeners();
         realm.close();
         super.onViewDetach();
@@ -143,6 +184,10 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
         PublishSubject<Integer> onChangeOffset();
 
         PublishSubject<Void> onViewCreated();
+
+        PublishSubject<Void> onStopTrackingSeekBar();
+
+        void restartService();
 
         void setCurrentPosition(int position);
 

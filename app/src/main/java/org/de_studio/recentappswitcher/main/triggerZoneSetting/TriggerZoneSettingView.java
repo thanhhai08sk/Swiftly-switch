@@ -60,6 +60,7 @@ public class TriggerZoneSettingView extends BaseDialogFragment<TriggerZoneSettin
     PublishSubject<Integer> changeLengthSJ = PublishSubject.create();
     PublishSubject<Integer> changeOffsetSJ = PublishSubject.create();
     PublishSubject<Void> viewCreatedSJ = PublishSubject.create();
+    PublishSubject<Void> stopTrackingSeekBarSJ = PublishSubject.create();
 
     public static TriggerZoneSettingView newInstance(String edgeId) {
 
@@ -113,6 +114,16 @@ public class TriggerZoneSettingView extends BaseDialogFragment<TriggerZoneSettin
     @Override
     public PublishSubject<Integer> onChangeSensitive() {
         return changeSensitiveSJ;
+    }
+
+    @Override
+    public PublishSubject<Void> onStopTrackingSeekBar() {
+        return stopTrackingSeekBarSJ;
+    }
+
+    @Override
+    public void restartService() {
+        Utility.restartService(getActivity());
     }
 
     private void setStatusBarHeight() {
@@ -231,7 +242,7 @@ public class TriggerZoneSettingView extends BaseDialogFragment<TriggerZoneSettin
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-
+        stopTrackingSeekBarSJ.onNext(null);
     }
 
     @Override

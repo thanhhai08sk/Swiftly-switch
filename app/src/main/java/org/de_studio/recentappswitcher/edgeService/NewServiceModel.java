@@ -26,14 +26,13 @@ public class NewServiceModel extends BaseModel {
     float iconWidth, haftIconWidth;
     String launcherPackageName;
     String lastAppPackageName;
-    Realm realm;
+    Realm realm = Realm.getDefaultInstance();
     ArrayList<String> savedRecentShortcut;
 
-    public NewServiceModel(float mScale, float iconScale, String launcherPackageName, Realm realm) {
+    public NewServiceModel(float mScale, float iconScale, String launcherPackageName) {
         this.mScale = mScale;
         this.iconScale = iconScale;
         this.launcherPackageName = launcherPackageName;
-        this.realm = realm;
     }
 
     void setup() {
