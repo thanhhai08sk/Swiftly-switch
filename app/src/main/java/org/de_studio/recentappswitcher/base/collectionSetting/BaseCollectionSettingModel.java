@@ -68,9 +68,9 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
 
     public abstract String getCollectionType();
 
-    public void setCurrentCollection(String collectionLabel) {
-        if (collectionLabel != null) {
-            Collection collectionWithLabel = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).equalTo(Cons.LABEL, collectionLabel).findFirst();
+    public void setCurrentCollection(String collectionId) {
+        if (collectionId != null) {
+            Collection collectionWithLabel = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).equalTo(Cons.COLLECTION_ID, collectionId).findFirst();
             if (collectionWithLabel != null) {
                 if (collection != null) {
                     RealmObject.removeChangeListeners(collection);
@@ -78,9 +78,9 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
                 collection = collectionWithLabel;
                 RealmObject.addChangeListener(collection, this);
                 collectionChangedSubject.onNext(null);
-                collectionId = collection.collectionId;
+                this.collectionId = collection.collectionId;
             } else {
-                Log.e(TAG, "setCurrentCollection: no collection with this label found: " + collectionLabel);
+                Log.e(TAG, "setCurrentCollection: no collection with this label found: " + collectionId);
             }
             collectionReadySubject.onNext(collection);
         }

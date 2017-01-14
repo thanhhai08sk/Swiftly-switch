@@ -3,19 +3,16 @@ package org.de_studio.recentappswitcher.base.collectionSetting;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckedTextView;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
@@ -29,7 +26,6 @@ import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.setItems.SetItemsView;
 import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -38,7 +34,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
 import io.realm.OrderedRealmCollection;
-import io.realm.RealmResults;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
@@ -49,9 +44,8 @@ import rx.subjects.PublishSubject;
 
 public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSettingPresenter> extends BaseActivity<T , P> implements BaseCollectionSettingPresenter.View {
     private static final String TAG = BaseCollectionSettingView.class.getSimpleName();
-    @Nullable
-    @BindView(R.id.spinner)
-    protected AppCompatSpinner spinner;
+    @BindView(R.id.current_set_text)
+    TextView currentSetText;
     @BindView(R.id.recycler_view)
     protected RecyclerView recyclerView;
     @BindView(R.id.delete_image_button)
@@ -71,6 +65,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
     PublishSubject<DragAndDropCallback.MoveData> moveItemSubject = PublishSubject.create();
     PublishSubject<DragAndDropCallback.DropData> dropItemSubject = PublishSubject.create();
     PublishSubject<DragAndDropCallback.Coord> dragItemSubject = PublishSubject.create();
+    PublishSubject<String> chooseCurrentSetSJ = PublishSubject.create();
 
 
     @Override
@@ -130,35 +125,38 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
         return (x > deleteButton.getX() - deleteButton.getWidth()*2 && x < deleteButton.getX()) && y > deleteButton.getY() - deleteButton.getHeight()*2;
     }
 
-    public void setSpinner(RealmResults<Collection> collections, Collection currentCollection) {
 
-        final String addNew = getString(R.string.add_new);
-        List<CharSequence> itemsList = new ArrayList<>();
-        for (Collection collection : collections) {
-            itemsList.add(collection.label);
+    @Override
+    public void chooseCurrentCollection(final List<Collection> collections, Collection currentCollection) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        CharSequence[] items = new CharSequence[collections.size() + 1];
+        for (int i = 0; i < collections.size(); i++) {
+            items[i] = collections.get(i).label;
         }
-        itemsList.add(addNew);
-        spinnerAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_dropdown_item, itemsList);
-        spinner.setAdapter(spinnerAdapter);
-        spinner.setSelection(itemsList.indexOf(currentCollection.label));
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (view != null) {
-                    String itemLabel = ((CheckedTextView) view.findViewById(android.R.id.text1)).getText().toString();
-                    Log.e(TAG, "onItemSelected: label = " + itemLabel);
-                    if (itemLabel.equals(addNew)) {
-                        presenter.onAddNewCollection();
-                    } else {
-                        presenter.onSpinnerItemSelect(itemLabel);
+        items[items.length - 1] = getString(R.string.add_new);
+        builder.setTitle(R.string.choose_set)
+                .setSingleChoiceItems(items, collections.indexOf(currentCollection), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which < collections.size()) {
+                            chooseCurrentSetSJ.onNext(collections.get(which).collectionId);
+                        } else {
+                            presenter.onAddNewCollection();
+                        }
                     }
-                }
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                })
+                .setPositiveButton(R.string.app_tab_fragment_ok_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.create().show();
+    }
 
-            }
-        });
+    @Override
+    public PublishSubject<String> onChooseCurrentSet() {
+        return chooseCurrentSetSJ;
     }
 
     public void setRecyclerView(OrderedRealmCollection<Slot> slots, RecyclerView.LayoutManager layoutManager, GridSpacingItemDecoration decoration) {
@@ -220,11 +218,6 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
         adapter.updateData(slots);
     }
 
-    public void addCollectionToSpinner(String collectionLabel) {
-        int currentCount = spinnerAdapter.getCount();
-        spinnerAdapter.insert(collectionLabel, currentCount -1);
-        spinner.setSelection(spinnerAdapter.getCount() - 2);
-    }
 
     public void openSetItems(int slotIndex, String collectionId) {
         startActivity(SetItemsView.getIntent(this,SetItemsView.ITEMS_TYPE_STAGE_1,slotIndex,collectionId,null));
@@ -260,6 +253,11 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
     @OnClick(R.id.size)
     void onSizeClick(){
         presenter.onSizeClick();
+    }
+
+    @OnClick(R.id.current_set)
+    void currentSetClick(){
+        presenter.onCurrentSetClick();
     }
 
     @Override

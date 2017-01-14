@@ -9,8 +9,9 @@ import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
+import java.util.List;
+
 import io.realm.OrderedRealmCollection;
-import io.realm.RealmResults;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 
@@ -30,9 +31,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
     @Override
     public void onViewAttach(final V view) {
         super.onViewAttach(view);
-        model.setup();
-        view.setSpinner(model.getCollectionList(), model.getCurrentCollection());
-        setRecyclerView();
+
 
         addSubscription(
                 view.onMoveItem().subscribe(new Action1<DragAndDropCallback.MoveData>() {
@@ -86,20 +85,31 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
                 })
         );
 
+        addSubscription(
+                view.onChooseCurrentSet().subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String collectionId) {
+                        model.setCurrentCollection(collectionId);
+                        view.updateRecyclerView(model.getSlots());
+                    }
+                })
+        );
+
+        model.setup();
+        setRecyclerView();
     }
 
     public abstract void setRecyclerView();
 
-    public void onSpinnerItemSelect(String itemLabel) {
 
-        model.setCurrentCollection(itemLabel);
-        view.updateRecyclerView(model.getSlots());
+    public void onCurrentSetClick() {
+        view.chooseCurrentCollection(model.getCollectionList(), model.getCurrentCollection());
     }
 
     public void onAddNewCollection() {
-        String newLabel = model.createNewCollection();
-        view.addCollectionToSpinner(newLabel);
-        onSpinnerItemSelect(newLabel);
+        String newId = model.createNewCollection();
+        model.setCurrentCollection(newId);
+        view.updateRecyclerView(model.getSlots());
     }
 
     public void onSlotClick(int slotIndex) {
@@ -134,6 +144,8 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
         PublishSubject<DragAndDropCallback.Coord> onDragItem();
 
+        PublishSubject<String> onChooseCurrentSet();
+
         void notifyItemMove(int from, int to);
 
         void notifyItemRemove(int position);
@@ -147,10 +159,6 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         boolean isHoverOnDeleteButton(float x, float y);
 
         void updateRecyclerView(OrderedRealmCollection<Slot> slots);
-
-        void setSpinner(RealmResults<Collection> collections, Collection currentCollection);
-
-        void addCollectionToSpinner(String collectionLabel);
 
         void openSetItems(int slotIndex, String collectionId);
 
@@ -166,6 +174,8 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         int dpToPixel(int dp);
 
         void updateCollectionInfo(Collection collection);
+
+        void chooseCurrentCollection(List<Collection> collections, Collection currentCollection);
 
 
     }

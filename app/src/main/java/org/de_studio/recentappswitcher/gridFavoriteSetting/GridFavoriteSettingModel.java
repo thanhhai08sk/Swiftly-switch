@@ -32,13 +32,15 @@ public class GridFavoriteSettingModel extends BaseCollectionSettingModel {
     public String createNewCollection() {
         final long newCollectionNumber = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).count() + 1;
         final String newLabel = Utility.createCollectionLabel(defaultLabel, newCollectionNumber);
+        final String newId = Utility.createCollectionId(getCollectionType(), newCollectionNumber);
+
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 
                 Collection collection = new Collection();
                 collection.type = getCollectionType();
-                collection.collectionId = Utility.createCollectionId(getCollectionType(), newCollectionNumber);
+                collection.collectionId = newId;
                 collection.label = newLabel;
                 collection.rowsCount = Cons.DEFAULT_FAVORITE_GRID_ROW_COUNT;
                 collection.columnCount = Cons.DEFAULT_FAVORITE_GRID_COLUMN_COUNT;
@@ -59,7 +61,7 @@ public class GridFavoriteSettingModel extends BaseCollectionSettingModel {
                 }
             }
         });
-        return newLabel;
+        return newId;
     }
 
     public void setHorizontalMargin(final int value) {

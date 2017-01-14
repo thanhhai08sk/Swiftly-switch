@@ -95,19 +95,20 @@ public class QuickActionSettingModel extends BaseCollectionSettingModel {
     public String createNewCollection() {
         final long newCollectionNumber = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).count() + 1;
         final String newLabel = Utility.createCollectionLabel(defaultLabel, newCollectionNumber);
+        final String newId = Utility.createCollectionId(getCollectionType(), newCollectionNumber);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 
                 Collection collection = new Collection();
                 collection.type = getCollectionType();
-                collection.collectionId = Utility.createCollectionId(getCollectionType(), newCollectionNumber);
+                collection.collectionId = newId;
                 collection.label = newLabel;
                 collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
                 realm.copyToRealm(collection);
             }
         });
-        return newLabel;
+        return newId;
     }
 
     @Override

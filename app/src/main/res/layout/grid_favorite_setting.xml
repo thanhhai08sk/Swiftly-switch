@@ -16,24 +16,6 @@
             android:orientation="vertical"
             android:clipChildren="false"
             >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/choose_set"
-                    />
-
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    />
-            </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
@@ -42,6 +24,33 @@
                 android:layout_gravity="center_horizontal"
 
                 />
+
+            <include layout="@layout/separator" />
+            <LinearLayout
+                android:id="@+id/current_set"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/current_set"
+                    style="@style/Main_text_primary"
+                    />
+
+                <TextView
+                    android:id="@+id/current_set_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Recent set 1"
+                    style="@style/Main_text_secondary"
+                    />
+
+            </LinearLayout>
+
 
             <include layout="@layout/separator" />
             <LinearLayout

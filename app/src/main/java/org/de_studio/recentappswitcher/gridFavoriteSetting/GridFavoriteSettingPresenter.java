@@ -83,11 +83,6 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
         model.setRowsCount(rowsCount);
     }
 
-    @Override
-    public void onSpinnerItemSelect(String itemLabel) {
-        super.onSpinnerItemSelect(itemLabel);
-        setRecyclerView();
-    }
 
     public void onSetPosition(int position) {
         model.setPosition(position);
