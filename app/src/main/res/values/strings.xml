@@ -266,6 +266,12 @@
     <string name="edge_mode__grid_favorite">Grid Favorite</string>
     <string name="choose_recent_set">Choose Recent Set</string>
 
+    //More setting
+    <string name="general">General</string>
+    <string name="look">Look</string>
+    <string name="feel">Feel</string>
+    <string name="backup_and_restore">"Backup, Restore"</string>
+
 
 
 </resources>
