@@ -7,6 +7,7 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 
@@ -26,18 +27,32 @@ public class NewServiceModel extends BaseModel {
     float iconWidth, haftIconWidth;
     String launcherPackageName;
     String lastAppPackageName;
-    Realm realm = Realm.getDefaultInstance();
+    Realm realm;
+    Edge edge1, edge2;
     ArrayList<String> savedRecentShortcut;
 
-    public NewServiceModel(float mScale, float iconScale, String launcherPackageName) {
+    public NewServiceModel(float mScale, float iconScale, String launcherPackageName, Realm realm, Edge edge1, Edge edge2) {
         this.mScale = mScale;
+        this.realm = realm;
         this.iconScale = iconScale;
         this.launcherPackageName = launcherPackageName;
+        this.edge1 = edge1;
+        this.edge2 = edge2;
     }
 
     void setup() {
         iconWidth = Cons.DEFAULT_ICON_WIDTH * mScale * iconScale;
         haftIconWidth = iconWidth / 2;
+    }
+
+    public Edge getEdge(String edgeId) {
+        switch (edgeId) {
+            case Edge.EDGE_1_ID:
+                return edge1;
+            case Edge.EDGE_2_ID:
+                return edge2;
+        }
+        return null;
     }
 
     public float convertDpToPixel(int dp) {
@@ -299,7 +314,6 @@ public class NewServiceModel extends BaseModel {
 
     @Override
     public void clear() {
-        realm.close();
     }
 
     public class IconsXY {

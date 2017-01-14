@@ -65,7 +65,7 @@ public class NewServiceModule {
     private static final String TAG = NewServiceModule.class.getSimpleName();
     NewServiceView view;
     Context context;
-    Realm realm;
+    Realm realm = Realm.getDefaultInstance();
 
     public NewServiceModule(NewServiceView view, Context context, Realm realm) {
         this.view = view;
@@ -77,12 +77,9 @@ public class NewServiceModule {
     @Provides
     @Singleton
     NewServicePresenter presenter(NewServiceModel model
-            , Realm realm
-            , @Named(SHARED_PREFERENCE_NAME) SharedPreferences shared
-            , @Named(EDGE_1_NAME) Edge edge1
-            , @Named(EDGE_2_NAME) Edge edge2) {
+            , @Named(SHARED_PREFERENCE_NAME) SharedPreferences shared ){
 
-        return new NewServicePresenter(model, edge1, edge2, shared.getInt(Cons.HOLD_TIME_KEY, Cons.DEFAULT_HOLD_TIME));
+        return new NewServicePresenter(model, shared.getInt(Cons.HOLD_TIME_KEY, Cons.DEFAULT_HOLD_TIME));
     }
 
     @Provides
@@ -110,9 +107,11 @@ public class NewServiceModule {
     @Singleton
     NewServiceModel model(@Named(M_SCALE_NAME) float mScale
             , @Named(ICON_SCALE_NAME) float iconScale
-            , @Named(LAUNCHER_PACKAGENAME_NAME) String launcher) {
-
-        return new NewServiceModel(mScale, iconScale, launcher);
+            , @Named(LAUNCHER_PACKAGENAME_NAME) String launcher
+            , @Named(EDGE_1_NAME) Edge edge1
+            , @Named(EDGE_2_NAME) Edge edge2
+    ) {
+        return new NewServiceModel(mScale, iconScale, launcher, realm, edge1, edge2);
     }
 
 

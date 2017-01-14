@@ -26,8 +26,6 @@ import rx.subjects.PublishSubject;
 
 public class NewServicePresenter extends BasePresenter<NewServicePresenter.View, NewServiceModel> {
     private static final String TAG = NewServicePresenter.class.getSimpleName();
-    Edge edge1;
-    Edge edge2;
     long holdTime;
     float xInit, yInit;
     Edge currentEdge;
@@ -46,10 +44,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     PublishSubject<Void> returnToGridSubject = PublishSubject.create();
 
 
-    public NewServicePresenter(NewServiceModel model, Edge edge1, Edge edge2, long holdTime) {
+    public NewServicePresenter(NewServiceModel model,long holdTime) {
         super(model);
-        this.edge1 = edge1;
-        this.edge2 = edge2;
         this.holdTime = holdTime;
     }
 
@@ -322,10 +318,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     private void setCurrentEdge(int edgeId) {
         switch (edgeId) {
             case Cons.EDGE_1_ID_INT:
-                currentEdge = edge1;
+                currentEdge = model.getEdge(Edge.EDGE_1_ID);
                 break;
             case Cons.EDGE_2_ID_INT:
-                currentEdge = edge2;
+                currentEdge = model.getEdge(Edge.EDGE_2_ID);
                 break;
         }
     }
