@@ -385,19 +385,24 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void showGrid(final float xInit, final float yInit, final Collection grid, final int position, final NewServicePresenter.Showing currentShowing) {
+        if (grid != null) {
+            Log.e(TAG, "showGrid: label " + grid.label);
+        } else {
+            Log.e(TAG, "showGrid: grid null");
+        }
         if (collectionViewsMap.get(grid.collectionId) == null) {
             RecyclerView gridView = new RecyclerView(this);
             gridView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             ServiceSlotAdapter adapter = new ServiceSlotAdapter(this, grid.slots, true, iconPack, mScale, iconScale);
             gridView.setLayoutManager(new GridLayoutManager(this, grid.columnCount));
             gridView.setAdapter(adapter);
-            gridView.setId(R.id.recycler_view);
-            gridView.addItemDecoration(new GridSpacingItemDecoration((int)(grid.space * mScale)));
+            gridView.setId(getCollectionResId(grid));
+            gridView.addItemDecoration(new GridSpacingItemDecoration((int) (grid.space * mScale)));
             collectionViewsMap.put(grid.collectionId, gridView);
         }
         final RecyclerView recyclerView = (RecyclerView) collectionViewsMap.get(grid.collectionId);
         boolean needDelay = false;
-        if (backgroundView.findViewById(R.id.recycler_view) == null) {
+        if (backgroundView.findViewById(getCollectionResId(grid)) == null) {
             backgroundView.addView(recyclerView);
             needDelay = true;
         }
@@ -440,6 +445,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             currentShowing.gridXY.y = (int) recyclerView.getY();
         }
 
+    }
+
+    private int getCollectionResId(Collection grid) {
+        return Math.abs(grid.collectionId.hashCode());
     }
 
 
@@ -807,6 +816,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             collectionViewsMap.get(collectionId).setVisibility(View.GONE);
         }
     }
+
 
     @Override
     public void hideAllExceptEdges() {
