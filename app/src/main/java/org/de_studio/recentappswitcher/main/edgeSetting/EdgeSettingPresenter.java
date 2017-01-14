@@ -139,15 +139,18 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
     public void onEnable() {
         model.setEnable(!model.isEdgeEnabled());
         view.setEnable(model.isEdgeEnabled());
+        view.restartService();
     }
 
     public void onSetShowGuide() {
         model.setShowGuide(!model.getEdge().useGuide);
         view.setShowGuideEnable(model.getEdge().useGuide);
+        view.restartService();
     }
 
     public void onSetGuideColor() {
         view.chooseGuideColor(model.getGuideColor(), setGuideColorSubject);
+        view.restartService();
     }
 
     private void showEdge(Edge edge) {
@@ -196,6 +199,8 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
         void setShowGuideEnable(boolean enable);
 
         void registerSetDataCompleteEven();
+
+        void restartService();
     }
 
 }

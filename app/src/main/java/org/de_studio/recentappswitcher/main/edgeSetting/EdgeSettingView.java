@@ -15,6 +15,7 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseFragment;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerEdgeSettingComponent;
@@ -156,6 +157,11 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
                 })
                 .build()
                 .show();
+    }
+
+    @Override
+    public void restartService() {
+        Utility.restartService(getActivity());
     }
 
     @Override

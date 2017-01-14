@@ -179,8 +179,13 @@ public class EdgeSettingModel extends BaseModel {
         return Color.BLUE;
     }
 
-    public void setGuideColor(int color) {
-
+    public void setGuideColor(final int color) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                edge.guideColor = color;
+            }
+        });
     }
 
     public void setEnable(boolean enable) {

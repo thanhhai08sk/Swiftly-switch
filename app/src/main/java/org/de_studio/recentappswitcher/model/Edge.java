@@ -28,6 +28,7 @@ public class Edge extends RealmObject {
     public int length;
     public int offset;
     public boolean useGuide;
+    public int guideColor;
     public int keyboardOption;
 
     public Edge() {
@@ -127,5 +128,13 @@ public class Edge extends RealmObject {
 
     public void setOffset(int offset) {
         this.offset = offset;
+    }
+
+    public int getGuideColor() {
+        return guideColor;
+    }
+
+    public void setGuideColor(int guideColor) {
+        this.guideColor = guideColor;
     }
 }
