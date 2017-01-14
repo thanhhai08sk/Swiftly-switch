@@ -24,7 +24,7 @@ public abstract class BaseDialogFragment<P extends BasePresenter> extends Dialog
     private static final String TAG = BaseFragment.class.getSimpleName();
     Unbinder unbinder;
     @Inject
-    P presenter;
+    protected P presenter;
     @CallSuper
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

@@ -80,7 +80,7 @@ public class MoreSettingActivity extends AppCompatActivity {
 
 
 
-        disableAnimationSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.ANIMATION_KEY,Cons.USE_ANIMATION_DEFAULT));
+        disableAnimationSwitch.setChecked(sharedPreferencesDefautl.getBoolean(EdgeSetting.ANIMATION_KEY,Cons.DEFAULT_USE_ANIMATION));
         if (iconPackSettingButton != null) {
             iconPackSettingButton.setOnClickListener(new View.OnClickListener() {
                 @Override

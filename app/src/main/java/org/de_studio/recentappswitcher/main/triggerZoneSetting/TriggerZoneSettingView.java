@@ -239,6 +239,7 @@ public class TriggerZoneSettingView extends BaseDialogFragment<TriggerZoneSettin
     
     @OnClick(R.id.default_button)
     void defaultClick(){
+        presenter.onDefaultClick();
 
     }
 

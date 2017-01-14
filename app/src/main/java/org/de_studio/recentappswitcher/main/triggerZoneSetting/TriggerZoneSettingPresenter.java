@@ -155,6 +155,7 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
 
     }
 
+
     private void updateEdge() {
         if (view != null) {
             view.setCurrentSensitive(edge.sensitive, edge.position);
@@ -164,6 +165,27 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
         } else {
             Log.e(TAG, "updateEdge: view null");
         }
+    }
+
+    public void onDefaultClick() {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                switch (edgeId) {
+                    case Edge.EDGE_1_ID:
+                        edge.position = Cons.POSITION_RIGHT_CENTRE;
+                        break;
+                    case Edge.EDGE_2_ID:
+                        edge.position = Cons.POSITION_LEFT_BOTTOM;
+                        break;
+                }
+                edge.sensitive = Cons.DEFAULT_EDGE_SENSITIVE;
+                edge.length = Cons.DEFAULT_EDGE_LENGTH;
+                edge.offset = 0;
+            }
+        });
+        updateEdge();
+        applyChangesSJ.onNext(null);
     }
 
     @Override

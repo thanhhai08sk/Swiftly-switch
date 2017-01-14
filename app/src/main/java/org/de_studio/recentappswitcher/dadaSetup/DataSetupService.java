@@ -131,9 +131,9 @@ public class DataSetupService extends IntentService {
                     edge1.position = Cons.POSITION_RIGHT_CENTRE;
                     edge1.recent = recent;
                     edge1.quickAction = quickAction;
-                    edge1.sensitive = Cons.EDGE_SENSITIVE_DEFAULT;
-                    edge1.length = Cons.EDGE_LENGTH_DEFAULT;
-                    edge1.offset = Cons.EDGE_OFFSET_DEFAULT;
+                    edge1.sensitive = Cons.DEFAULT_EDGE_SENSITIVE;
+                    edge1.length = Cons.DEFAULT_EDGE_LENGTH;
+                    edge1.offset = Cons.DEFAULT_EDGE_OFFSET;
                     edge1.keyboardOption = Edge.KEYBOARD_OPTION_PLACE_UNDER;
 
                     realm.copyToRealm(edge1);
@@ -149,9 +149,9 @@ public class DataSetupService extends IntentService {
                     edge2.position = Cons.POSITION_LEFT_BOTTOM;
                     edge2.recent = recent;
                     edge2.quickAction = quickAction;
-                    edge2.sensitive = Cons.EDGE_SENSITIVE_DEFAULT;
-                    edge2.length = Cons.EDGE_LENGTH_DEFAULT;
-                    edge2.offset = Cons.EDGE_OFFSET_DEFAULT;
+                    edge2.sensitive = Cons.DEFAULT_EDGE_SENSITIVE;
+                    edge2.length = Cons.DEFAULT_EDGE_LENGTH;
+                    edge2.offset = Cons.DEFAULT_EDGE_OFFSET;
                     edge2.keyboardOption = Edge.KEYBOARD_OPTION_PLACE_UNDER;
 
                     realm.copyToRealm(edge2);

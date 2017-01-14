@@ -530,7 +530,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             case Cons.EDGE_2_ID_INT:
                 return edge2Sensitive;
         }
-        return Cons.EDGE_SENSITIVE_DEFAULT;
+        return Cons.DEFAULT_EDGE_SENSITIVE;
     }
 
     public int getEdgeOffset(int edgeId) {
@@ -540,7 +540,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             case Cons.EDGE_2_ID_INT:
                 return edge2Offset;
             default:
-                return Cons.EDGE_OFFSET_DEFAULT;
+                return Cons.DEFAULT_EDGE_OFFSET;
         }
     }
 

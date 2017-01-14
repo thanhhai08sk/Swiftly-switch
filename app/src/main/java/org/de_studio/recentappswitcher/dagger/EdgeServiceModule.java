@@ -139,7 +139,7 @@ import static org.de_studio.recentappswitcher.Cons.QUICK_ACTION_WITH_INSTANT_FAV
 import static org.de_studio.recentappswitcher.Cons.RAD_ICON_DEFAULT_DP;
 import static org.de_studio.recentappswitcher.Cons.USE_ACTION_DOW_VIBRATE_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_ACTION_MOVE_VIBRATE_NAME;
-import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_DEFAULT;
+import static org.de_studio.recentappswitcher.Cons.DEFAULT_USE_ANIMATION;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_KEY;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_CLOCK_NAME;
@@ -511,8 +511,8 @@ public class EdgeServiceModule {
             edge1View.setBackground(drawable);
 
 
-            int edge1Sensivite = edge1Shared.getInt(Cons.EDGE_SENSIIVE_KEY, Cons.EDGE_SENSITIVE_DEFAULT);
-            int edge1Length = edge1Shared.getInt(Cons.EDGE_LENGTH_KEY, Cons.EDGE_LENGTH_DEFAULT);
+            int edge1Sensivite = edge1Shared.getInt(Cons.EDGE_SENSIIVE_KEY, Cons.DEFAULT_EDGE_SENSITIVE);
+            int edge1Length = edge1Shared.getInt(Cons.EDGE_LENGTH_KEY, Cons.DEFAULT_EDGE_LENGTH);
             int edge1HeightPxl;
             int edge1WidthPxl;
 
@@ -564,8 +564,8 @@ public class EdgeServiceModule {
             }
             edge2View.setBackground(drawable);
 
-            int edge2Sensivite = edge2Shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.EDGE_SENSITIVE_DEFAULT);
-            int edge2Length = edge2Shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.EDGE_LENGTH_DEFAULT);
+            int edge2Sensivite = edge2Shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.DEFAULT_EDGE_SENSITIVE);
+            int edge2Length = edge2Shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.DEFAULT_EDGE_LENGTH);
             int edge2HeightPxl;
             int edge2WidthPxl;
 
@@ -668,8 +668,8 @@ public class EdgeServiceModule {
     int edge1Width(@Named(EDGE_1_SHARED_NAME) SharedPreferences shared
             , @Named(EDGE_1_POSITION_NAME) int  edgePosition
             ,@Named(M_SCALE_NAME) float mScale) {
-        int edgeSensivite = shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.EDGE_SENSITIVE_DEFAULT);
-        int edgeLength = shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.EDGE_LENGTH_DEFAULT);
+        int edgeSensivite = shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.DEFAULT_EDGE_SENSITIVE);
+        int edgeLength = shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.DEFAULT_EDGE_LENGTH);
         int edgeWidthPxl;
 
 
@@ -687,8 +687,8 @@ public class EdgeServiceModule {
     int edge2Width(@Named(EDGE_2_SHARED_NAME) SharedPreferences shared
             , @Named(EDGE_2_POSITION_NAME) int edgePosition
             , @Named(M_SCALE_NAME) float mScale) {
-        int edgeSensivite = shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.EDGE_SENSITIVE_DEFAULT);
-        int edgeLength = shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.EDGE_LENGTH_DEFAULT);
+        int edgeSensivite = shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.DEFAULT_EDGE_SENSITIVE);
+        int edgeLength = shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.DEFAULT_EDGE_LENGTH);
         int edgeWidthPxl;
 
 
@@ -706,8 +706,8 @@ public class EdgeServiceModule {
     int edge1Height(@Named(EDGE_1_SHARED_NAME) SharedPreferences shared
             , @Named(EDGE_1_POSITION_NAME) int  edgePosition
             ,@Named(M_SCALE_NAME) float mScale){
-        int edgeSensivite = shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.EDGE_SENSITIVE_DEFAULT);
-        int edgeLength = shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.EDGE_LENGTH_DEFAULT);
+        int edgeSensivite = shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.DEFAULT_EDGE_SENSITIVE);
+        int edgeLength = shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.DEFAULT_EDGE_LENGTH);
         int edgeHeightPxl;
 
 
@@ -725,8 +725,8 @@ public class EdgeServiceModule {
     int edge2Height(@Named(EDGE_2_SHARED_NAME) SharedPreferences shared
             , @Named(EDGE_2_POSITION_NAME) int edgePosition
             , @Named(M_SCALE_NAME) float mScale){
-        int edgeSensivite = shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.EDGE_SENSITIVE_DEFAULT);
-        int edgeLength = shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.EDGE_LENGTH_DEFAULT);
+        int edgeSensivite = shared.getInt(Cons.EDGE_SENSIIVE_KEY,Cons.DEFAULT_EDGE_SENSITIVE);
+        int edgeLength = shared.getInt(Cons.EDGE_LENGTH_KEY,Cons.DEFAULT_EDGE_LENGTH);
         int edgeHeightPxl;
 
 
@@ -756,28 +756,28 @@ public class EdgeServiceModule {
     @Singleton
     @Named(EDGE_1_SENSITIVE_NAME)
     int edge1Sensitive(@Named(EDGE_1_SHARED_NAME) SharedPreferences edge1Shared){
-        return edge1Shared.getInt(Cons.EDGE_SENSIIVE_KEY, Cons.EDGE_SENSITIVE_DEFAULT);
+        return edge1Shared.getInt(Cons.EDGE_SENSIIVE_KEY, Cons.DEFAULT_EDGE_SENSITIVE);
     }
 
     @Provides
     @Singleton
     @Named(EDGE_2_SENSITIVE_NAME)
     int edge2Sensitive(@Named(EDGE_2_SHARED_NAME) SharedPreferences edge2Shared){
-        return edge2Shared.getInt(Cons.EDGE_SENSIIVE_KEY, Cons.EDGE_SENSITIVE_DEFAULT);
+        return edge2Shared.getInt(Cons.EDGE_SENSIIVE_KEY, Cons.DEFAULT_EDGE_SENSITIVE);
     }
 
     @Provides
     @Singleton
     @Named(EDGE_1_OFFSET_NAME)
     int edge1offset(@Named(EDGE_1_SHARED_NAME) SharedPreferences edge1Shared){
-        return edge1Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
+        return edge1Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.DEFAULT_EDGE_OFFSET);
     }
 
     @Provides
     @Singleton
     @Named(EDGE_2_OFFSET_NAME)
     int edge2Offset(@Named(EDGE_2_SHARED_NAME) SharedPreferences edge2Shared){
-        return edge2Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.EDGE_OFFSET_DEFAULT);
+        return edge2Shared.getInt(Cons.EDGE_OFFSET_KEY, Cons.DEFAULT_EDGE_OFFSET);
     }
 
 
@@ -902,7 +902,7 @@ public class EdgeServiceModule {
     @Singleton
     @Named(USE_ANIMATION_NAME)
     boolean useAnimation(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
-        return defaultShared.getBoolean(USE_ANIMATION_KEY, USE_ANIMATION_DEFAULT);
+        return defaultShared.getBoolean(USE_ANIMATION_KEY, DEFAULT_USE_ANIMATION);
     }
 
     @Provides

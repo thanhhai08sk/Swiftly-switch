@@ -94,11 +94,11 @@ public class Cons {
     public static final int QUICK_ACTION_ID_NORMAL = 2;
 
 
-    public static final int EDGE_SENSITIVE_DEFAULT = 12;
-    public static final int EDGE_LENGTH_DEFAULT = 150;
+    public static final int DEFAULT_EDGE_SENSITIVE = 12;
+    public static final int DEFAULT_EDGE_LENGTH = 150;
     public static final float ICON_SCALE_DEFAULT = 1f;
-    public static final int EDGE_OFFSET_DEFAULT = 0;
-    public static final boolean USE_ANIMATION_DEFAULT = true;
+    public static final int DEFAULT_EDGE_OFFSET = 0;
+    public static final boolean DEFAULT_USE_ANIMATION = true;
 
     public static final String LAUNCHER_PACKAGENAME_NAME = "launcher_packagename";
     public static final String HAS_INTENT_PACKAGES_NAME = "noIntentPackages";
