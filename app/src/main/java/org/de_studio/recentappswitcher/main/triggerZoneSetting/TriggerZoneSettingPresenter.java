@@ -191,6 +191,7 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
     @Override
     public void onViewDetach() {
         Log.e(TAG, "onViewDetach: close realm ");
+        view.restartService();
         edge.removeChangeListeners();
         realm.close();
         super.onViewDetach();
