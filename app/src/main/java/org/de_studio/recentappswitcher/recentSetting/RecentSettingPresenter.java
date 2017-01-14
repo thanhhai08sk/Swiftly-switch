@@ -18,8 +18,9 @@ public class RecentSettingPresenter extends BaseCollectionSettingPresenter<Recen
         view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_LINEAR, -1),null);
     }
 
-    public interface View extends BaseCollectionSettingPresenter.View {
 
+
+    public interface View extends BaseCollectionSettingPresenter.View {
     }
 
 }

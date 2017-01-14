@@ -10,6 +10,7 @@ import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSett
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerCircleFavoriteSettingComponent;
 import org.de_studio.recentappswitcher.dagger.CircleFavoriteSettingModule;
+import org.de_studio.recentappswitcher.model.Collection;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,7 +27,10 @@ public class CircleFavoriteSettingView extends BaseCollectionSettingView<Void, C
     TextView longClickModeText;
 
 
-
+    @Override
+    public void updateCollectionInfo(Collection collection) {
+        sizeText.setText(String.valueOf(collection.slots.size()));
+    }
 
     @Override
     protected int getLayoutId() {

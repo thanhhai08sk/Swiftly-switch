@@ -10,6 +10,7 @@ import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSett
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerRecentSettingComponent;
 import org.de_studio.recentappswitcher.dagger.RecentSettingModule;
+import org.de_studio.recentappswitcher.model.Collection;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -30,6 +31,11 @@ public class RecentSettingView extends BaseCollectionSettingView<Void, RecentSet
                 .appModule(new AppModule(this))
                 .recentSettingModule(new RecentSettingModule(this, collectionId))
                 .build().inject(this);
+    }
+
+    @Override
+    public void updateCollectionInfo(Collection collection) {
+        sizeText.setText(String.valueOf(collection.slots.size()));
     }
 
     @Override

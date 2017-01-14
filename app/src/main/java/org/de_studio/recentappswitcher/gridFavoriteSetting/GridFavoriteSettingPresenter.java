@@ -32,7 +32,6 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
                     @Override
                     public void call(Integer integer) {
                         model.setHorizontalMargin(integer);
-                        updateTextValue();
                     }
                 })
         );
@@ -42,7 +41,6 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
                     @Override
                     public void call(Integer integer) {
                         model.setVerticalMargin(integer);
-                        updateTextValue();
                     }
                 })
         );
@@ -53,7 +51,6 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
                     public void call(Integer integer) {
                         model.setShortcutsSpace(integer);
                         view.setShorcutsSpace(integer);
-                        updateTextValue();
                     }
                 })
         );
@@ -64,7 +61,6 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
         view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_GRID, Cons.DEFAULT_FAVORITE_GRID_COLUMN_COUNT)
                 , new GridSpacingItemDecoration(view.dpToPixel(model.getCurrentCollection().space)));
         view.setChoosingMargins(model.getCurrentCollection().position == Collection.POSITION_TRIGGER);
-        updateTextValue();
     }
 
     @Override
@@ -80,13 +76,11 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     public void onSetColumnsCount(int columnsCount) {
         model.setColumnsCount(columnsCount);
         view.setGridColumn(columnsCount);
-        updateTextValue();
 
     }
 
     public void onSetRowsCount(int rowsCount) {
         model.setRowsCount(rowsCount);
-        updateTextValue();
     }
 
     @Override
@@ -105,7 +99,6 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
                 view.setChoosingMargins(false);
                 break;
         }
-        updateTextValue();
     }
 
     public void onSetShortcutsSpaceClick() {
@@ -140,14 +133,10 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     }
 
 
-    public void updateTextValue() {
-        view.updateValueText(model.getCurrentCollection());
-    }
 
     public interface View extends BaseCollectionSettingPresenter.View {
         void showChooseColumnsCountDialog();
 
-        void updateValueText(Collection collection);
 
         void setChoosingMargins(boolean enable);
 

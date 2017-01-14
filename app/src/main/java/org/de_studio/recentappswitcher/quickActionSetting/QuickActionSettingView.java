@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
@@ -12,6 +13,7 @@ import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSett
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerQuickActionsSettingComponent;
 import org.de_studio.recentappswitcher.dagger.QuickActionsSettingModule;
+import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionDialogView;
 import org.de_studio.recentappswitcher.setItems.chooseAction.ChooseActionFragmentView;
@@ -22,6 +24,7 @@ import org.de_studio.recentappswitcher.setItems.chooseShortcutsSet.ChooseShortcu
 
 import java.lang.ref.WeakReference;
 
+import butterknife.BindView;
 import rx.subjects.PublishSubject;
 
 /**
@@ -30,10 +33,19 @@ import rx.subjects.PublishSubject;
 
 public class QuickActionSettingView extends BaseCollectionSettingView<Void, QuickActionSettingPresenter> implements QuickActionSettingPresenter.View{
 
+
+    @BindView(R.id.size_text)
+    TextView sizeText;
+
     PublishSubject<Void> loadItemsOkSubject = PublishSubject.create();
     PublishSubject<QuickActionSettingPresenter.SlotInfo> setSlotSubject = PublishSubject.create();
     PublishSubject<Item> setItemToSlotSubject = PublishSubject.create();
 
+
+    @Override
+    public void updateCollectionInfo(Collection collection) {
+        sizeText.setText(String.valueOf(collection.slots.size()));
+    }
 
     @Override
     protected void inject() {

@@ -163,7 +163,8 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
 
     }
 
-    public void updateValueText(Collection collection) {
+    @Override
+    public void updateCollectionInfo(Collection collection) {
         columnsCount.setText(String.valueOf(collection.columnCount));
         rowsCount.setText(String.valueOf(collection.rowsCount));
         space.setText(String.valueOf(collection.space));
@@ -180,6 +181,7 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
         verticalMargin.setText(String.valueOf(collection.marginVertical));
         horizontalMargin.setText(String.valueOf(collection.marginHorizontal));
     }
+
 
 
     @OnClick(R.id.rows_count)

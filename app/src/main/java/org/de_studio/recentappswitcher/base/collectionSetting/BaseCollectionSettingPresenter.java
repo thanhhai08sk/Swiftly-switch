@@ -80,6 +80,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
                     public void call(Void aVoid) {
                         if (!onDragDrop) {
                             view.notifyAdapter();
+                            view.updateCollectionInfo(model.getCurrentCollection());
                         }
                     }
                 })
@@ -163,6 +164,8 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         RecyclerView.LayoutManager getLayoutManager(int layoutType, int column);
 
         int dpToPixel(int dp);
+
+        void updateCollectionInfo(Collection collection);
 
 
     }

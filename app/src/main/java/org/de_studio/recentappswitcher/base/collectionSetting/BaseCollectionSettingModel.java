@@ -77,6 +77,7 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
                 }
                 collection = collectionWithLabel;
                 RealmObject.addChangeListener(collection, this);
+                collectionChangedSubject.onNext(null);
                 collectionId = collection.collectionId;
             } else {
                 Log.e(TAG, "setCurrentCollection: no collection with this label found: " + collectionLabel);
