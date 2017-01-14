@@ -80,6 +80,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
                         if (!onDragDrop) {
                             view.notifyAdapter();
                             view.updateCollectionInfo(model.getCurrentCollection());
+                            setRecyclerView();
                         }
                     }
                 })
@@ -95,8 +96,8 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
                 })
         );
 
+
         model.setup();
-        setRecyclerView();
     }
 
     public abstract void setRecyclerView();

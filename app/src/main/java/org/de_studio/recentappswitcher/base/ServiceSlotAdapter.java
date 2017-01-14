@@ -42,7 +42,7 @@ public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSl
     public void onBindViewHolder(final ServiceSlotAdapter.ViewHolder holder, final int position) {
         final Slot slot = getItem(position);
         if (slot != null) {
-            Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack);
+            Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack, false);
 //            holder.view.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {

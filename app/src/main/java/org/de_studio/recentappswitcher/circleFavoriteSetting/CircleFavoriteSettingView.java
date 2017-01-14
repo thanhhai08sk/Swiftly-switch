@@ -8,8 +8,8 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingView;
 import org.de_studio.recentappswitcher.dagger.AppModule;
-import org.de_studio.recentappswitcher.dagger.DaggerCircleFavoriteSettingComponent;
 import org.de_studio.recentappswitcher.dagger.CircleFavoriteSettingModule;
+import org.de_studio.recentappswitcher.dagger.DaggerCircleFavoriteSettingComponent;
 import org.de_studio.recentappswitcher.model.Collection;
 
 import butterknife.BindView;
@@ -29,6 +29,7 @@ public class CircleFavoriteSettingView extends BaseCollectionSettingView<Void, C
 
     @Override
     public void updateCollectionInfo(Collection collection) {
+        super.updateCollectionInfo(collection);
         sizeText.setText(String.valueOf(collection.slots.size()));
     }
 

@@ -227,18 +227,20 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".circleFavoriteSetting.CircleFavoriteSettingView"
             android:label="@string/circle_favorites"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".main.MainView"
+            />
         <activity android:name=".recentSetting.RecentSettingView"
             android:label="@string/recent_apps"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".main.MainView"
+            />
         <activity
             android:name=".gridFavoriteSetting.GridFavoriteSettingView"
             android:label="@string/grid_favorites"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".main.MainView"/>
 
-        <activity android:name=".blackListSetting.BlackListSettingView"
-            android:label="@string/main_exclude_app_title"
-            android:theme="@style/AppTheme"/>
         <activity
             android:name=".setItems.SetItemsView"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -250,7 +252,9 @@
             />
         <activity android:name=".quickActionSetting.QuickActionSettingView"
             android:label="@string/main_outer_ring_setting"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".main.MainView"
+            />
 
 
         <service

@@ -43,6 +43,7 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
         }
         RealmObject.addChangeListener(collection,this);
         collectionReadySubject.onNext(collection);
+        collectionChangedSubject.onNext(null);
     }
 
     public PublishSubject<Void> onCollectionChanged() {
@@ -80,7 +81,7 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
                 collectionChangedSubject.onNext(null);
                 this.collectionId = collection.collectionId;
             } else {
-                Log.e(TAG, "setCurrentCollection: no collection with this label found: " + collectionId);
+                Log.e(TAG, "setCurrentCollection: no collection with this id found: " + collectionId);
             }
             collectionReadySubject.onNext(collection);
         }

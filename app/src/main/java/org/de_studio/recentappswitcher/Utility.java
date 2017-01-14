@@ -2376,7 +2376,7 @@ public  class Utility {
         builder.create().show();
     }
 
-    public static void setSlotIcon(Slot slot, Context context, ImageView icon, PackageManager packageManager, IconPackManager.IconPack iconPack) {
+    public static void setSlotIcon(Slot slot, Context context, ImageView icon, PackageManager packageManager, IconPackManager.IconPack iconPack, boolean isDark) {
         switch (slot.type) {
             case Slot.TYPE_ITEM:
                 setItemIcon(slot.stage1Item, context, icon, packageManager, iconPack);
@@ -2391,12 +2391,18 @@ public  class Utility {
                 break;
             case Slot.TYPE_RECENT:
                 icon.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+                if (isDark) {
+                    icon.setColorFilter(R.color.button_54_black);
+                }
                 break;
             case Slot.TYPE_EMPTY:
                 icon.setImageDrawable(null);
                 break;
             case Slot.TYPE_NULL:
                 icon.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+                if (isDark) {
+                    icon.setColorFilter(R.color.button_54_black);
+                }
                 break;
         }
     }

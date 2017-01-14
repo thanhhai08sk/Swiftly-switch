@@ -35,6 +35,7 @@ public class RecentSettingView extends BaseCollectionSettingView<Void, RecentSet
 
     @Override
     public void updateCollectionInfo(Collection collection) {
+        super.updateCollectionInfo(collection);
         sizeText.setText(String.valueOf(collection.slots.size()));
     }
 

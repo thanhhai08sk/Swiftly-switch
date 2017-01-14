@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tool="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center_vertical"
     android:paddingTop="4dp"
     android:background="?selectableItemBackground"
@@ -19,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/item_label"
-        android:textColor="@color/grey"
+        android:textColor="@color/text_primary_dark"
+        tools:text="Swiftly Switch"
         />
 
 </LinearLayout>

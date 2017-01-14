@@ -517,7 +517,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 View icon = frameLayout.getChildAt(i);
                 icon.setVisibility(View.VISIBLE);
 //                icon.setAlpha(0f);
-                Utility.setSlotIcon(slots.get(i), this, (ImageView) icon, getPackageManager(), iconPack);
+                Utility.setSlotIcon(slots.get(i), this, (ImageView) icon, getPackageManager(), iconPack,false);
 
                 if (i == 0) {
                     icon.setX(iconsXY.xs[i]);
@@ -670,7 +670,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
             ImageView icon = (ImageView) backgroundView.findViewById(R.id.indicator_icon);
             TextView label = (TextView) backgroundView.findViewById(R.id.indicator_label);
-            Utility.setSlotIcon(slot, this, icon, getPackageManager(), iconPack);
+            Utility.setSlotIcon(slot, this, icon, getPackageManager(), iconPack,false);
             Utility.setSlotLabel(slot, this, label);
         } else {
             backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.GONE);

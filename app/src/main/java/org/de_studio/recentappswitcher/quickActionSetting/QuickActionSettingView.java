@@ -44,6 +44,7 @@ public class QuickActionSettingView extends BaseCollectionSettingView<Void, Quic
 
     @Override
     public void updateCollectionInfo(Collection collection) {
+        super.updateCollectionInfo(collection);
         sizeText.setText(String.valueOf(collection.slots.size()));
     }
 

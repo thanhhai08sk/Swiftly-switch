@@ -76,6 +76,9 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                 , dropItemSubject
                 , dragItemSubject));
         itemTouchHelper.attachToRecyclerView(recyclerView);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
 
@@ -103,6 +106,11 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
     public void notifyItemRemove(int position) {
         adapter.notifyItemRemoved(position);
         adapter.notifyDataSetChanged();
+    }
+    @CallSuper
+    @Override
+    public void updateCollectionInfo(Collection collection) {
+        currentSetText.setText(collection.label);
     }
 
     @Override

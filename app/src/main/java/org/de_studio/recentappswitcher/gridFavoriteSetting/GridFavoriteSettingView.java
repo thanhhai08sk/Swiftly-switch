@@ -165,6 +165,7 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
 
     @Override
     public void updateCollectionInfo(Collection collection) {
+        super.updateCollectionInfo(collection);
         columnsCount.setText(String.valueOf(collection.columnCount));
         rowsCount.setText(String.valueOf(collection.rowsCount));
         space.setText(String.valueOf(collection.space));

@@ -58,7 +58,7 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
 
     @Override
     public void setRecyclerView() {
-        view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_GRID, Cons.DEFAULT_FAVORITE_GRID_COLUMN_COUNT)
+        view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_GRID, model.getCurrentCollection().columnCount)
                 , new GridSpacingItemDecoration(view.dpToPixel(model.getCurrentCollection().space)));
         view.setChoosingMargins(model.getCurrentCollection().position == Collection.POSITION_TRIGGER);
     }
