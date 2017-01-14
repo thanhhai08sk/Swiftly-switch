@@ -95,6 +95,19 @@ public class TriggerZoneSettingView extends BaseDialogFragment<TriggerZoneSettin
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        View decorView = getView();
+//            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN| View.SYSTEM_UI_FLAG_LAYOUT_STABLE| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+        if (decorView != null) {
+            decorView.setSystemUiVisibility(uiOptions);
+        }
+    }
+
+    @Override
     protected int getLayoutRes() {
         return R.layout.trigger_zone_setting_view;
     }
@@ -219,7 +232,7 @@ public class TriggerZoneSettingView extends BaseDialogFragment<TriggerZoneSettin
                 break;
             default:
                 edge.setTranslationX(0);
-                edge.setTranslationY(-offset * mScale - statusbarHeight);
+                edge.setTranslationY(-offset * mScale);
                 break;
         }
     }
