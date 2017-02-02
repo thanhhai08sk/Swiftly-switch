@@ -51,7 +51,7 @@ import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
-import static org.de_studio.recentappswitcher.Cons.ICON_SCALE;
+import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_KEY;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
@@ -346,7 +346,7 @@ public class NewServiceModule {
     @Singleton
     @Named(ICON_SCALE_NAME)
     float iconScale(@Named(SHARED_PREFERENCE_NAME) SharedPreferences defaultShared){
-        return defaultShared.getFloat(ICON_SCALE,1f);
+        return defaultShared.getFloat(ICON_SCALE_KEY,1f);
     }
 
 

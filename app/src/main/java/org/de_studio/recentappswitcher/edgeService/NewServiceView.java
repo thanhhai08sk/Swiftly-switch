@@ -777,12 +777,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public void startSlot(Slot slot, String lastApp) {
         Log.e(TAG, "startSlot: " + slot.toString());
-        Utility.startSlot(slot, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION, Cons.DEFAULT_CONTACT_ACTION));
+        Utility.startSlot(slot, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.DEFAULT_CONTACT_ACTION));
     }
 
     @Override
     public void startItem(Item item, String lastApp) {
-        Utility.startItem(item, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION, Cons.DEFAULT_CONTACT_ACTION));
+        Utility.startItem(item, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.DEFAULT_CONTACT_ACTION));
     }
 
     @Override

@@ -217,7 +217,7 @@ public class Cons {
     public static final String NUM_OF_GRID_ROW_KEY = "grid_row";
     public static final String NUM_OF_GRID_COLUMN_KEY = "grid_column";
     public static final String IS_CENTRE_FAVORITE = "is_centre";
-    public static final String IS_DISABLE_IN_LANSCAPE = "disable_in_lanscape";
+    public static final String IS_DISABLE_IN_LANDSCAPE_KEY = "disable_in_lanscape";
     public static final String GRID_GAP_KEY = "shortcut_gap";
     public static final String FAVORITE_GRID_PADDING_HORIZONTAL_KEY = "grid_distance_from_edge";
     public static final String GRID_DISTANCE_VERTICAL_FROM_EDGE_KEY = "grid_distance_vertical_from_edge";
@@ -237,10 +237,10 @@ public class Cons {
     public static final String GUIDE_COLOR_KEY = "guide_color";
     public static final String USE_GUIDE_KEY = "edge_guide";
     public static final String HAS_TELL_ABOUT_TRIAL_LIMIT = "has_tell_about_trial_limit";
-    public static final String CONTACT_ACTION = "contact_action";
+    public static final String CONTACT_ACTION_KEY = "contact_action";
     public static final String CIRCLE_FAVORITE_MODE = "circle_fovorite_mode";
     public static final String SERVICE_ID = "service_id";
-    public static final String ICON_SCALE = "icon_scale";
+    public static final String ICON_SCALE_KEY = "icon_scale";
     public static final int ACTION_CHOOSE = 0;
     public static final int ACTION_CALL = 1;
     public static final int ACTION_SMS = 2;

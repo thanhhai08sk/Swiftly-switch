@@ -120,7 +120,7 @@ import static org.de_studio.recentappswitcher.Cons.HALF_ICON_WIDTH_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.HAS_INTENT_PACKAGES_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_ENABLE_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
-import static org.de_studio.recentappswitcher.Cons.ICON_SCALE;
+import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_KEY;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SIZE_PXL_NAME;
 import static org.de_studio.recentappswitcher.Cons.INDICATOR_FRAME_LAYOUT_NAME;
@@ -286,7 +286,7 @@ public class EdgeServiceModule {
     @Singleton
     @Named(ICON_SCALE_NAME)
     float iconScale(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared){
-            return defaultShared.getFloat(ICON_SCALE,1f);
+            return defaultShared.getFloat(ICON_SCALE_KEY,1f);
     }
 
     @Provides
