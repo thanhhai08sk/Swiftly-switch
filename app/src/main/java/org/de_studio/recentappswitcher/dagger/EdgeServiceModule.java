@@ -54,7 +54,7 @@ import io.realm.Realm;
 
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_NAME;
-import static org.de_studio.recentappswitcher.Cons.ANI_TIME_KEY;
+import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_KEY;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_FRAME_NAME;
@@ -895,7 +895,7 @@ public class EdgeServiceModule {
     @Singleton
     @Named(ANIMATION_TIME_NAME)
     int animationTime(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences shared) {
-        return shared.getInt(ANI_TIME_KEY, ANIMATION_TIME_DEFAULT);
+        return shared.getInt(ANIMATION_TIME_KEY, ANIMATION_TIME_DEFAULT);
     }
 
     @Provides

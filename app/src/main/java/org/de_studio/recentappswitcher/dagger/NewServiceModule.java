@@ -36,7 +36,7 @@ import io.realm.RealmList;
 
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_NAME;
-import static org.de_studio.recentappswitcher.Cons.ANI_TIME_KEY;
+import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_KEY;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.COLLECTION_WINDOW_PARAMS_NAME;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_HOLD_TIME;
@@ -175,7 +175,7 @@ public class NewServiceModule {
     @Singleton
     @Named(ANIMATION_TIME_NAME)
     int animationTime(@Named(SHARED_PREFERENCE_NAME) SharedPreferences shared) {
-        return shared.getInt(ANI_TIME_KEY, ANIMATION_TIME_DEFAULT);
+        return shared.getInt(ANIMATION_TIME_KEY, ANIMATION_TIME_DEFAULT);
     }
 
     @Provides

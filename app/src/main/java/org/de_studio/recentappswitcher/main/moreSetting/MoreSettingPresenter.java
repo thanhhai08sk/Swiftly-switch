@@ -104,7 +104,7 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
     }
 
     public void onSetAnimationDuration(int duration) {
-        sharedPreferences.edit().putInt(Cons.ANI_TIME_KEY, duration).commit();
+        sharedPreferences.edit().putInt(Cons.ANIMATION_TIME_KEY, duration).commit();
         view.resetService();
     }
 
@@ -132,6 +132,13 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         view.updateViews();
+    }
+
+    @Override
+    public void onViewDetach() {
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        sharedPreferences = null;
+        super.onViewDetach();
     }
 
     public interface View extends PresenterView {

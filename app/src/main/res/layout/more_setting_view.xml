@@ -72,6 +72,7 @@
             <include layout="@layout/separator" />
 
             <LinearLayout
+                android:id="@+id/use_home_button_layout"
                 style="@style/MoreSetting_Item_Parent_With_Switch"
                 >
                 <TextView
@@ -83,7 +84,9 @@
                     style="@style/MoreSetting_Item_Switch"
                     />
             </LinearLayout>
-            <include layout="@layout/separator" />
+            <include layout="@layout/separator"
+                android:id="@+id/use_home_button_separator"
+                />
 
 
             <LinearLayout
@@ -168,11 +171,7 @@
                 <TextView
                     style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
                     android:text="@string/main_set_background_color"
-                    />
-                <TextView
-                    android:id="@+id/background_color_description"
-                    style="@style/MoreSetting_Item_Text_Secondary"
-                    tools:text="#fdfs88"
+                    android:paddingBottom="16dp"
                     />
             </LinearLayout>
             <include layout="@layout/separator" />

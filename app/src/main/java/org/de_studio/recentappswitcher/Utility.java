@@ -2875,5 +2875,15 @@ public  class Utility {
     }
 
 
+    public static String getLabelFromPackageName(String packageName, PackageManager packageManager) {
+        String label = null;
+        try {
+            label = packageManager.getApplicationLabel(packageManager.getApplicationInfo(packageName, 0)).toString();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return label;
+    }
+
 
 }
