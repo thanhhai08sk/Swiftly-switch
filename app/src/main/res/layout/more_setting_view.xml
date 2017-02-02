@@ -83,6 +83,36 @@
                     style="@style/MoreSetting_Item_Switch"
                     />
             </LinearLayout>
+            <include layout="@layout/separator" />
+
+
+            <LinearLayout
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/default_action_for_contact"
+                    />
+                <TextView
+                    android:id="@+id/contact_action_description"
+                    style="@style/MoreSetting_Item_Text_Secondary"
+                    tools:text="Sms"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
+            <LinearLayout
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/main_hold_time"
+                    />
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Secondary"
+                    android:text="@string/long_press_delay_description"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
 
 
         </LinearLayout>
@@ -108,16 +138,76 @@
                 >
                 <TextView
                     style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
-                    android:text="@string/main_disable_clock_text"
+                    android:text="@string/main_icon_pack_support"
                     />
                 <TextView
+                    android:id="@+id/icon_pack_description"
                     style="@style/MoreSetting_Item_Text_Secondary"
                     tools:text="System"
-
                     />
-
             </LinearLayout>
             <include layout="@layout/separator" />
+
+            <LinearLayout
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/main_icon_size"
+                    />
+                <TextView
+                    android:id="@+id/icon_size_description"
+                    style="@style/MoreSetting_Item_Text_Secondary"
+                    tools:text="100%"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
+            <LinearLayout
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/main_set_background_color"
+                    />
+                <TextView
+                    android:id="@+id/background_color_description"
+                    style="@style/MoreSetting_Item_Text_Secondary"
+                    tools:text="#fdfs88"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
+
+            <LinearLayout
+                style="@style/MoreSetting_Item_Parent_With_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary"
+                    android:text="@string/main_animation_text"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/animation_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+
+            <include layout="@layout/separator" />
+
+            <LinearLayout
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/main_ani_time"
+                    />
+                <TextView
+                    android:id="@+id/animation_time_description"
+                    style="@style/MoreSetting_Item_Text_Secondary"
+                    tools:text="300ms"
+                    />
+            </LinearLayout>
+
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -164,6 +254,23 @@
                     />
             </LinearLayout>
 
+            <include layout="@layout/separator" />
+            <LinearLayout
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/main_vibration_duration"
+                    />
+                <TextView
+                    android:id="@+id/vibration_duration_description"
+                    style="@style/MoreSetting_Item_Text_Secondary"
+                    tools:text="20ms"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
+
+
 
 
         </LinearLayout>
@@ -184,29 +291,47 @@
                 android:text="@string/backup_and_restore"
                 style="@style/Text_Header"
                 />
+            <LinearLayout
+
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+
+                <TextView
+                style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                android:text="@string/import_settings"
+                />
+                <TextView
+                style="@style/MoreSetting_Item_Text_Secondary"
+                android:text="@string/import_description"
+                />
+        </LinearLayout>
+    <include layout="@layout/separator" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
+
+                style="@style/MoreSetting_Item_Parent_No_Switch"
                 >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/main_outer_ring_setting"
-                    style="@style/Main_text_primary"
-                    />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/quick_actions_description"
-                    style="@style/Main_text_secondary"
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/backup"
+                    android:paddingBottom="16dp"
                     />
-
             </LinearLayout>
+            <include layout="@layout/separator" />
+
+            <LinearLayout
+
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/reset_to_default"
+                    android:paddingBottom="16dp"
+                    />
+            </LinearLayout>
+
         </LinearLayout>
 
 
