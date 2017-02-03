@@ -39,7 +39,7 @@ import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_KEY;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.COLLECTION_WINDOW_PARAMS_NAME;
-import static org.de_studio.recentappswitcher.Cons.DEFAULT_HOLD_TIME;
+import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
@@ -79,7 +79,7 @@ public class NewServiceModule {
     NewServicePresenter presenter(NewServiceModel model
             , @Named(SHARED_PREFERENCE_NAME) SharedPreferences shared ){
 
-        return new NewServicePresenter(model, shared.getInt(Cons.HOLD_TIME_KEY, Cons.DEFAULT_HOLD_TIME));
+        return new NewServicePresenter(model, shared.getInt(Cons.HOLD_TIME_KEY, Cons.HOLD_TIME_DEFAULT));
     }
 
     @Provides
@@ -145,7 +145,7 @@ public class NewServiceModule {
     @Singleton
     @Named(HOLD_TIME_NAME)
     int holdTime(@Named(SHARED_PREFERENCE_NAME) SharedPreferences shared){
-        return shared.getInt(Cons.HOLD_TIME_KEY, DEFAULT_HOLD_TIME);
+        return shared.getInt(Cons.HOLD_TIME_KEY, HOLD_TIME_DEFAULT);
     }
 
 

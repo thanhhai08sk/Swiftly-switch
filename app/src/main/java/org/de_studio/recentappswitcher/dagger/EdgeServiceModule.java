@@ -70,7 +70,7 @@ import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_FAVORITE_GRID_PADDING_VERTICAL;
-import static org.de_studio.recentappswitcher.Cons.DEFAULT_HOLD_TIME;
+import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_GAP_IN_GRID;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_ICON_WIDTH;
 import static org.de_studio.recentappswitcher.Cons.DEFAULT_VIBRATE_DURATION;
@@ -874,7 +874,7 @@ public class EdgeServiceModule {
     @Singleton
     @Named(HOLD_TIME_NAME)
     int holdTime(@Named(OLD_DEFAULT_SHARED_NAME) SharedPreferences shared){
-        return shared.getInt(Cons.HOLD_TIME_KEY, DEFAULT_HOLD_TIME);
+        return shared.getInt(Cons.HOLD_TIME_KEY, HOLD_TIME_DEFAULT);
     }
 
     @Provides

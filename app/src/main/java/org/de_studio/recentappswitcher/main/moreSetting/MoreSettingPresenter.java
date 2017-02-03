@@ -18,6 +18,8 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
     SharedPreferences sharedPreferences;
     PublishSubject<Integer> longPressDelaySJ = PublishSubject.create();
     PublishSubject<Integer> iconSizeSJ = PublishSubject.create();
+    PublishSubject<Integer> animationDurationSJ = PublishSubject.create();
+    PublishSubject<Integer> vibrationDurationSJ = PublishSubject.create();
 
 
     public MoreSettingPresenter(BaseModel model, SharedPreferences sharedPreferences) {
@@ -46,6 +48,26 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
                     }
                 })
         );
+
+        addSubscription(
+                animationDurationSJ.subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        onSetAnimationDuration(integer);
+                    }
+                })
+        );
+
+        addSubscription(
+                vibrationDurationSJ.subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        onSetVibrationDuration(integer);
+                    }
+                })
+        );
+
+
 
     }
 
@@ -122,7 +144,7 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
     }
 
     public void onAnimationDuration() {
-        view.animationDurationDialog();
+        view.animationDurationDialog(animationDurationSJ);
     }
 
     public void onSetAnimationDuration(int duration) {
@@ -143,7 +165,7 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
     }
 
     public void onVibratioDuration() {
-        view.vibrationDurationDialog();
+        view.vibrationDurationDialog(vibrationDurationSJ);
     }
 
     public void onSetVibrationDuration(int duration) {
@@ -181,8 +203,8 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
 
         void backgroundColorDialog();
 
-        void animationDurationDialog();
+        void animationDurationDialog(PublishSubject<Integer> subject);
 
-        void vibrationDurationDialog();
+        void vibrationDurationDialog(PublishSubject<Integer> subject);
     }
 }

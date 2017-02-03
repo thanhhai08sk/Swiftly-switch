@@ -12,6 +12,11 @@ import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackSettingDialogFragment;
 import org.de_studio.recentappswitcher.R;
@@ -176,7 +181,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         Utility.showDialogWithSeekBar(
                 Cons.HOLD_TIME_MIN,
                 Cons.HOLD_TIME_MAX,
-                sharedPreferences.getInt(Cons.HOLD_TIME_KEY, Cons.DEFAULT_HOLD_TIME),
+                sharedPreferences.getInt(Cons.HOLD_TIME_KEY, Cons.HOLD_TIME_DEFAULT),
                 "ms", getString(R.string.main_hold_time),
                 subject, this);
     }
@@ -232,17 +237,55 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @Override
     public void backgroundColorDialog() {
-
+        int currentColor = sharedPreferences.getInt(Cons.BACKGROUND_COLOR_KEY,Cons.BACKGROUND_COLOR_DEFAULT);
+        ColorPickerDialogBuilder
+                .with(this)
+                .setTitle(getApplicationContext().getString(R.string.main_set_background_color))
+                .initialColor(currentColor)
+                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                .density(12)
+                .setOnColorSelectedListener(new OnColorSelectedListener() {
+                    @Override
+                    public void onColorSelected(int selectedColor) {
+                    }
+                })
+                .setPositiveButton("ok", new ColorPickerClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                        presenter.onSetBackgroundColor(selectedColor);
+                    }
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .build()
+                .show();
     }
 
     @Override
-    public void animationDurationDialog() {
-
+    public void animationDurationDialog(PublishSubject<Integer> subject) {
+        Utility.showDialogWithSeekBar(
+                Cons.ANIMATION_TIME_MIN,
+                Cons.ANIMATION_TIME_MAX,
+                sharedPreferences.getInt(Cons.ANIMATION_TIME_KEY, Cons.ANIMATION_TIME_DEFAULT),
+                "ms",
+                getString(R.string.main_ani_time),
+                subject, this
+        );
     }
 
     @Override
-    public void vibrationDurationDialog() {
-
+    public void vibrationDurationDialog(PublishSubject<Integer> subject) {
+        Utility.showDialogWithSeekBar(
+                Cons.HOLD_TIME_MIN,
+                Cons.HOLD_TIME_MAX,
+                sharedPreferences.getInt(Cons.HOLD_TIME_KEY, Cons.HOLD_TIME_DEFAULT),
+                "ms",
+                getString(R.string.main_hold_time),
+                subject, this
+        );
     }
 
     @Override
