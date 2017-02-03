@@ -203,7 +203,7 @@ public class Cons {
     public static final String FAVORITE_KEY = "favorite";
     public static final String EXCLUDE_KEY = "exclude";
     public static final String TRIAL_TIME_PASS_KEY = "trial_time_pass";
-    public static final String BEGIN_DAY_KEY = "begin_trial_time";
+    public static final String TRIAL_START_TIME_KEY = "begin_trial_time";
     public static final String DISABLE_HAPTIC_FEEDBACK_KEY = "disable_haptic";
     public static final String HAPTIC_ON_ICON_KEY = "haptic_on_icon";
     public static final String DISABLE_CLOCK_KEY = "disable_clock";
@@ -247,6 +247,7 @@ public class Cons {
     public static final int DEFAULT_CONTACT_ACTION = ACTION_CHOOSE;
 
     public static final int HOLD_TIME_MIN = 150;
+    public static final int HOLD_TIME_MAX = 2000;
     public static final int EDGE_SENSITIVE_MIN = 5;
     public static final int EDGE_LENGTH_MIN = 40;
     public static final int EDGE_OFFSET_MIN = -300;

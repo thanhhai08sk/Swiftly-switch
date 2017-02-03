@@ -2885,5 +2885,14 @@ public  class Utility {
         return label;
     }
 
+    public static boolean isTrial(Context context) {
+        return context.getPackageName().equals(Cons.FREE_VERSION_PACKAGE_NAME);
+    }
+
+    public static boolean isTrialAndOutOfTrialTime(Context context, SharedPreferences sharedPreferences) {
+        return context.getPackageName().equals(Cons.FREE_VERSION_PACKAGE_NAME)
+                && System.currentTimeMillis() - sharedPreferences.getLong(Cons.TRIAL_START_TIME_KEY, System.currentTimeMillis()) > Cons.TRIAL_TIME;
+    }
+
 
 }

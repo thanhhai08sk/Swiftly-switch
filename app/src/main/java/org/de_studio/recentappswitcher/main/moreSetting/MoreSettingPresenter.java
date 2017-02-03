@@ -7,12 +7,17 @@ import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.PresenterView;
 
+import rx.functions.Action1;
+import rx.subjects.PublishSubject;
+
 /**
  * Created by HaiNguyen on 1/14/17.
  */
 
 public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.View, BaseModel> implements SharedPreferences.OnSharedPreferenceChangeListener {
     SharedPreferences sharedPreferences;
+    PublishSubject<Integer> longPressDelaySJ = PublishSubject.create();
+    PublishSubject<Integer> iconSizeSJ = PublishSubject.create();
 
 
     public MoreSettingPresenter(BaseModel model, SharedPreferences sharedPreferences) {
@@ -24,6 +29,23 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
     public void onViewAttach(View view) {
         super.onViewAttach(view);
         view.updateViews();
+        addSubscription(
+                longPressDelaySJ.subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        onSetLongPressDelay(integer);
+                    }
+                })
+        );
+
+        addSubscription(
+                iconSizeSJ.subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        onSetIconSize(((float) integer) / (100f));
+                    }
+                })
+        );
 
     }
 
@@ -58,7 +80,7 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
     }
 
     public void onLongPressDelay() {
-        view.longPressDelayDialog();
+        view.longPressDelayDialog(longPressDelaySJ);
     }
 
     public void onSetLongPressDelay(int time) {
@@ -76,7 +98,7 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
     }
 
     public void onIconSize() {
-        view.iconSizeDialog();
+        view.iconSizeDialog(iconSizeSJ);
     }
 
     public void onSetIconSize(float size) {
@@ -151,11 +173,11 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
 
         void contactActionDialog();
 
-        void longPressDelayDialog();
+        void longPressDelayDialog(PublishSubject<Integer> subject);
 
         void chooseIconPackDialog();
 
-        void iconSizeDialog();
+        void iconSizeDialog(PublishSubject<Integer> subject);
 
         void backgroundColorDialog();
 
