@@ -50,7 +50,7 @@ public class AppModule {
     @Singleton
     @Named(Cons.EDGE_2_SHARED_NAME)
     SharedPreferences edge2Shared(){
-        return context.getSharedPreferences(Cons.EDGE_2_SHARED_NAME, 0);
+            return context.getSharedPreferences(Cons.EDGE_2_SHARED_NAME, 0);
     }
 
     @Provides

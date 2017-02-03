@@ -22,6 +22,9 @@ import org.de_studio.recentappswitcher.IconPackSettingDialogFragment;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseActivity;
+import org.de_studio.recentappswitcher.dagger.AppModule;
+import org.de_studio.recentappswitcher.dagger.DaggerMoreSettingComponent;
+import org.de_studio.recentappswitcher.dagger.MoreSettingModule;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -290,7 +293,10 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @Override
     protected void inject() {
-        
+        DaggerMoreSettingComponent.builder()
+                .appModule(new AppModule(this))
+                .moreSettingModule(new MoreSettingModule(this))
+                .build().inject(this);
     }
 
     @Override
