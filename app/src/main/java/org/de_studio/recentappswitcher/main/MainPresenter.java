@@ -17,6 +17,7 @@ public class MainPresenter {
         view.setupViewPager();
     }
 
+
     public void onDestroy() {
         view.clear();
         model.clear();

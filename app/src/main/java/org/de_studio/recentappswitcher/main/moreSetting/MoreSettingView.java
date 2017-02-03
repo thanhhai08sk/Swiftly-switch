@@ -8,8 +8,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SwitchCompat;
 import android.view.View;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.flask.colorpicker.ColorPickerView;
@@ -40,11 +40,11 @@ import rx.subjects.PublishSubject;
 public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> implements MoreSettingPresenter.View {
     
     @BindView(R.id.disable_clock_switch)
-    Switch disableClockSwitch;
+    SwitchCompat disableClockSwitch;
     @BindView(R.id.avoid_keyboard_switch)
-    Switch avoidKeyboardSwitch;
+    SwitchCompat avoidKeyboardSwitch;
     @BindView(R.id.disable_in_landscape_switch)
-    Switch disableInLandscapeSwitch;
+    SwitchCompat disableInLandscapeSwitch;
     @BindView(R.id.contact_action_description)
     TextView contactActionDescription;
     @BindView(R.id.icon_pack_description)
@@ -52,17 +52,17 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     @BindView(R.id.icon_size_description)
     TextView iconSizeDescription;
     @BindView(R.id.animation_switch)
-    Switch animationSwitch;
+    SwitchCompat animationSwitch;
     @BindView(R.id.animation_time_description)
     TextView animationTimeDescription;
     @BindView(R.id.haptic_feedback_on_trigger_switch)
-    Switch hapticFeedbackOnTriggerSwitch;
+    SwitchCompat hapticFeedbackOnTriggerSwitch;
     @BindView(R.id.haptic_feedback_on_icon_switch)
-    Switch hapticFeedbackOnIconSwitch;
+    SwitchCompat hapticFeedbackOnIconSwitch;
     @BindView(R.id.vibration_duration_description)
     TextView vibrationDurationDescription;
     @BindView(R.id.use_home_button_switch)
-    Switch useHomeButtonSwitch;
+    SwitchCompat useHomeButtonSwitch;
     @BindView(R.id.use_home_button_layout)
     View useHomeButtonLayout;
     @BindView(R.id.use_home_button_separator)
@@ -115,12 +115,12 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         } else {
             iconPackDescription.setText(getString(R.string.system));
         }
-        iconSizeDescription.setText(String.valueOf(sharedPreferences.getFloat(Cons.ICON_SCALE_KEY, 1f)));
+        iconSizeDescription.setText(String.valueOf(100 * sharedPreferences.getFloat(Cons.ICON_SCALE_KEY, 1f)) + "%");
         animationSwitch.setChecked(sharedPreferences.getBoolean(Cons.USE_ANIMATION_KEY, true));
-        animationTimeDescription.setText(sharedPreferences.getInt(Cons.ANIMATION_TIME_KEY, Cons.ANIMATION_TIME_DEFAULT));
+        animationTimeDescription.setText(String.valueOf(sharedPreferences.getInt(Cons.ANIMATION_TIME_KEY, Cons.ANIMATION_TIME_DEFAULT)) + "ms" );
         hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferences.getBoolean(Cons.DISABLE_HAPTIC_FEEDBACK_KEY, true));
         hapticFeedbackOnIconSwitch.setChecked(sharedPreferences.getBoolean(Cons.HAPTIC_ON_ICON_KEY, false));
-        vibrationDurationDescription.setText(String.valueOf(sharedPreferences.getInt(Cons.VIBRATION_DURATION_KEY, Cons.DEFAULT_VIBRATE_DURATION)));
+        vibrationDurationDescription.setText(String.valueOf(sharedPreferences.getInt(Cons.VIBRATION_DURATION_KEY, Cons.DEFAULT_VIBRATE_DURATION)) + "ms");
 
 
 

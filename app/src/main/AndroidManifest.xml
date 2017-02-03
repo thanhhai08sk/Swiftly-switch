@@ -256,6 +256,11 @@
             android:parentActivityName=".main.MainView"
             />
 
+        <activity android:name=".main.moreSetting.MoreSettingView"
+            android:label="@string/main_more_setting_title"
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".main.MainView"
+            />
 
         <service
             android:name=".dadaSetup.DataSetupService"

@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.main;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -15,11 +16,13 @@ import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.dagger.DaggerMainComponent;
 import org.de_studio.recentappswitcher.dagger.MainModule;
+import org.de_studio.recentappswitcher.main.moreSetting.MoreSettingView;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainView extends AppCompatActivity {
     @BindView(R.id.tabs)
@@ -92,6 +95,11 @@ public class MainView extends AppCompatActivity {
         DaggerMainComponent.builder()
                 .mainModule(new MainModule(this))
                 .build().inject(this);
+    }
+
+    @OnClick(R.id.more_setting)
+    void moreSettingClick(){
+        startActivity(new Intent(this, MoreSettingView.class));
     }
 
 

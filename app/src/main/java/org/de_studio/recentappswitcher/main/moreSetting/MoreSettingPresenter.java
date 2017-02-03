@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.main.moreSetting;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BaseModel;
@@ -15,6 +16,7 @@ import rx.subjects.PublishSubject;
  */
 
 public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.View, BaseModel> implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private static final String TAG = MoreSettingPresenter.class.getSimpleName();
     SharedPreferences sharedPreferences;
     PublishSubject<Integer> longPressDelaySJ = PublishSubject.create();
     PublishSubject<Integer> iconSizeSJ = PublishSubject.create();
@@ -31,6 +33,7 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
     public void onViewAttach(View view) {
         super.onViewAttach(view);
         view.updateViews();
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         addSubscription(
                 longPressDelaySJ.subscribe(new Action1<Integer>() {
                     @Override
@@ -66,7 +69,6 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
                     }
                 })
         );
-
 
 
     }
@@ -187,6 +189,7 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.e(TAG, "onSharedPreferenceChanged: key = " + key);
         view.updateViews();
     }
 
@@ -199,6 +202,7 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
 
     public interface View extends PresenterView {
         void resetService();
+
         void updateViews();
 
         boolean isAssistApp();
