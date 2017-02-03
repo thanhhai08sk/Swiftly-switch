@@ -186,7 +186,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public void onDestroy() {
         Log.e(TAG, "onDestroy: ");
-        presenter.onViewDetach();
+        if (presenter != null) {
+            presenter.onViewDetach();
+        }
         super.onDestroy();
     }
 

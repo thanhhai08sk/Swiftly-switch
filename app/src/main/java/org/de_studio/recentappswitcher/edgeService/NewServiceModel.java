@@ -1,7 +1,6 @@
 package org.de_studio.recentappswitcher.edgeService;
 
 import android.os.Build;
-import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
@@ -62,9 +61,9 @@ public class NewServiceModel extends BaseModel {
 
     public RealmList<Slot> getRecent(ArrayList<String> packageNames, RealmList<Slot> slots) {
         RealmList<Slot> returnSlots = new RealmList<>();
-        for (String packageName : packageNames) {
-            Log.e(TAG, "getRecent: temp package " + packageName);
-        }
+//        for (String packageName : packageNames) {
+//            Log.e(TAG, "getRecent: temp package " + packageName);
+//        }
         long recentSlotsCount = slots.where().equalTo(Cons.TYPE, Slot.TYPE_RECENT).count();
         String removedPackage = null;
         if (packageNames.size() > 0) {
@@ -81,7 +80,9 @@ public class NewServiceModel extends BaseModel {
             if (slot.type.equals(Slot.TYPE_ITEM) && slot.stage1Item.type.equals(Item.TYPE_APP) && packageNames.contains(slot.stage1Item.packageName)) {
                 packageNames.remove(slot.stage1Item.packageName);
             }
-            if (slot.type.equals(Slot.TYPE_ITEM) && slot.stage1Item.type.equals(Item.TYPE_APP) && savedRecentShortcut.contains(slot.stage1Item.packageName)) {
+            if (savedRecentShortcut !=null &&
+                    slot.type.equals(Slot.TYPE_ITEM) && slot.stage1Item.type.equals(Item.TYPE_APP) &&
+                    savedRecentShortcut.contains(slot.stage1Item.packageName)) {
                 savedRecentShortcut.remove(slot.stage1Item.packageName);
             }
         }
@@ -121,9 +122,9 @@ public class NewServiceModel extends BaseModel {
             }
         }
 
-        for (Slot returnSlot : returnSlots) {
-            Log.e(TAG, "return slot " + returnSlot.toString());
-        }
+//        for (Slot returnSlot : returnSlots) {
+//            Log.e(TAG, "return slot " + returnSlot.toString());
+//        }
 
 
         return returnSlots;

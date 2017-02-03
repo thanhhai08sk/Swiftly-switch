@@ -67,7 +67,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 }).subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
-                        Log.e(TAG, "call: highlight " + integer);
+//                        Log.e(TAG, "call: highlight " + integer);
                         view.unhighlightSlot(currentShowing, currentHighlight);
                         view.highlightSlot(currentShowing, integer);
                         view.indicateCurrentShowing(currentShowing,integer);

@@ -1009,6 +1009,7 @@ public  class Utility {
     }
 
     public static void startBackAction(Context context) {
+        Log.e(TAG, "startBackAction: ");
         context.sendBroadcast(new Intent(Cons.ACTION_BACK));
         if (!Utility.isAccessibilityEnable(context)) {
             startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
@@ -1182,29 +1183,7 @@ public  class Utility {
     }
 
     public static void lastAppAction(Context context, String packageName) {
-        Intent extApp = null;
-
-        extApp = context.getPackageManager().getLaunchIntentForPackage(packageName);
-
-
-        if (extApp != null) {
-            ComponentName componentName = extApp.getComponent();
-//            Intent startApp = new Intent(Intent.ACTION_MAIN, null);
-//            startApp.addCategory(Intent.CATEGORY_LAUNCHER);
-//            startApp.setComponent(componentName);
-//            startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//            extApp.addFlags(805306368);
-//            context.startActivity(extApp);
-            Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
-            startAppIntent.setComponent(componentName);
-            startAppIntent.addFlags(1064960);
-            startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startAppIntent.setFlags(270532608);
-            startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-            context.startActivity(startAppIntent);
-            Log.e(TAG, "packageToSwitch = " + packageName);
-        } else Log.e(TAG, "extApp = null ");
+        startApp(packageName,context);
     }
 
     public static void callLogsAction(Context context) {
@@ -2685,10 +2664,10 @@ public  class Utility {
     }
 
     public static void startItem(Item item, String lastAppPackageName, Context context,int contactAction) {
+        Log.e(TAG, "startItem: start action " + item.toString());
         switch (item.type) {
             case Item.TYPE_APP:
-                Log.e(TAG, "startItem: start app");
-                startApp(item, context);
+                startApp(item.getPackageName(), context);
                 break;
             case Item.TYPE_ACTION:
                 startAction(item.action, context, lastAppPackageName);
@@ -2713,13 +2692,17 @@ public  class Utility {
         }
     }
 
-    private static void startApp(Item item, Context context) {
-        Intent extApp = context.getPackageManager().getLaunchIntentForPackage(item.getPackageName());
+    private static void startApp(String packageName, Context context) {
+        Intent extApp = context.getPackageManager().getLaunchIntentForPackage(packageName);
         if (extApp != null) {
-            if (item.getPackageName().equals("com.devhomc.search")) {
+            if (packageName.equals("com.devhomc.search")) {
                 extApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(extApp);
             } else {
+//                Log.e(TAG, "startApp: " + item.getPackageName() + "\nContext = " + context.toString());
+//                extApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                ContextCompat.startActivities(context, new Intent[]{extApp});
+//
                 ComponentName componentName = extApp.getComponent();
                 Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
                 startAppIntent.setComponent(componentName);
@@ -2728,7 +2711,8 @@ public  class Utility {
                 startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                context.startActivity(startAppIntent);
+//                context.startActivity(startAppIntent);
+                ContextCompat.startActivities(context, new Intent[]{startAppIntent});
             }
         } else {
             Log.e(TAG, "extApp of shortcut = null ");

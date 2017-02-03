@@ -171,4 +171,12 @@ public class Item extends RealmObject {
     public void setCollectionId(String collectionId) {
         this.collectionId = collectionId;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(itemId);
+        return builder.toString();
+
+    }
 }
