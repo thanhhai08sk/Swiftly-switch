@@ -37,6 +37,9 @@ import io.realm.RealmList;
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_KEY;
+import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_DEFAULT;
+import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_KEY;
+import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.COLLECTION_WINDOW_PARAMS_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_DEFAULT;
@@ -349,6 +352,12 @@ public class NewServiceModule {
         return defaultShared.getFloat(ICON_SCALE_KEY,1f);
     }
 
+    @Provides
+    @Singleton
+    @Named(BACKGROUND_COLOR_NAME)
+    int backgroundColor(@Named(SHARED_PREFERENCE_NAME) SharedPreferences shared) {
+        return shared.getInt(BACKGROUND_COLOR_KEY, BACKGROUND_COLOR_DEFAULT);
+    }
 
 
 

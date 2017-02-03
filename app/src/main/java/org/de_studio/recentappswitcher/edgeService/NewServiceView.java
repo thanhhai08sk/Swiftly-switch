@@ -137,6 +137,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Inject
     @Named(ANIMATION_TIME_NAME)
     int animationTime;
+    @Inject
+    @Named(Cons.BACKGROUND_COLOR_NAME)
+    int backgroundColor;
     @Named(SHARED_PREFERENCE_NAME)
     @Inject
     SharedPreferences sharedPreferences;
@@ -371,7 +374,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         } else {
             backgroundView.setVisibility(View.VISIBLE);
         }
-        ObjectAnimator objectAnimator = ObjectAnimator.ofArgb(backgroundView, "backgroundColor", Color.argb(0, 255, 255, 255), Color.argb(100, 128, 128, 128));
+        ObjectAnimator objectAnimator = ObjectAnimator.ofArgb(backgroundView, "backgroundColor", Color.argb(0, 255, 255, 255), backgroundColor);
         objectAnimator.setDuration(200);
         objectAnimator.start();
     }
