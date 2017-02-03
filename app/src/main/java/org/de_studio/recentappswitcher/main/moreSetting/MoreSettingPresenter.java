@@ -173,6 +173,18 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
         view.resetService();
     }
 
+    public void onImportSetting() {
+
+    }
+
+    public void onBackup() {
+
+    }
+
+    public void onResetSettings() {
+
+    }
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         view.updateViews();

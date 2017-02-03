@@ -30,25 +30,12 @@
                 />
 
             <LinearLayout
+                android:id="@+id/disable_clock"
                 style="@style/MoreSetting_Item_Parent_With_Switch"
                 >
                 <TextView
                     style="@style/MoreSetting_Item_Text_Primary"
                     android:text="@string/main_disable_clock_text"
-                    />
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/avoid_keyboard_switch"
-                    style="@style/MoreSetting_Item_Switch"
-                    />
-            </LinearLayout>
-            <include layout="@layout/separator" />
-
-            <LinearLayout
-                style="@style/MoreSetting_Item_Parent_With_Switch"
-                >
-                <TextView
-                    style="@style/MoreSetting_Item_Text_Primary"
-                    android:text="@string/avoid_keyboard"
                     />
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/disable_clock_switch"
@@ -58,6 +45,22 @@
             <include layout="@layout/separator" />
 
             <LinearLayout
+                android:id="@+id/avoid_keyboard"
+                style="@style/MoreSetting_Item_Parent_With_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary"
+                    android:text="@string/avoid_keyboard"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/avoid_keyboard_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
+
+            <LinearLayout
+                android:id="@+id/disable_in_landscape"
                 style="@style/MoreSetting_Item_Parent_With_Switch"
                 >
                 <TextView
@@ -90,6 +93,7 @@
 
 
             <LinearLayout
+                android:id="@+id/contact_action"
                 style="@style/MoreSetting_Item_Parent_No_Switch"
                 >
                 <TextView
@@ -104,6 +108,7 @@
             </LinearLayout>
             <include layout="@layout/separator" />
             <LinearLayout
+                android:id="@+id/long_press_delay"
                 style="@style/MoreSetting_Item_Parent_No_Switch"
                 >
                 <TextView
@@ -137,6 +142,7 @@
                 />
 
             <LinearLayout
+                android:id="@+id/icon_pack"
                 style="@style/MoreSetting_Item_Parent_No_Switch"
                 >
                 <TextView
@@ -152,6 +158,7 @@
             <include layout="@layout/separator" />
 
             <LinearLayout
+                android:id="@+id/icon_size"
                 style="@style/MoreSetting_Item_Parent_No_Switch"
                 >
                 <TextView
@@ -166,6 +173,7 @@
             </LinearLayout>
             <include layout="@layout/separator" />
             <LinearLayout
+                android:id="@+id/background_color"
                 style="@style/MoreSetting_Item_Parent_No_Switch"
                 >
                 <TextView
@@ -177,6 +185,7 @@
             <include layout="@layout/separator" />
 
             <LinearLayout
+                android:id="@+id/use_animation"
                 style="@style/MoreSetting_Item_Parent_With_Switch"
                 >
                 <TextView
@@ -192,6 +201,7 @@
             <include layout="@layout/separator" />
 
             <LinearLayout
+                android:id="@+id/animation_time"
                 style="@style/MoreSetting_Item_Parent_No_Switch"
                 >
                 <TextView
@@ -227,6 +237,7 @@
                 />
 
             <LinearLayout
+                android:id="@+id/haptic_feedback_on_trigger"
                 style="@style/MoreSetting_Item_Parent_With_Switch"
                 >
                 <TextView
@@ -241,6 +252,7 @@
 
             <include layout="@layout/separator" />
             <LinearLayout
+                android:id="@+id/haptic_feedback_on_icon"
                 style="@style/MoreSetting_Item_Parent_With_Switch"
                 >
                 <TextView
@@ -255,6 +267,7 @@
 
             <include layout="@layout/separator" />
             <LinearLayout
+                android:id="@+id/vibration_duration"
                 style="@style/MoreSetting_Item_Parent_No_Switch"
                 >
                 <TextView
@@ -291,7 +304,7 @@
                 style="@style/Text_Header"
                 />
             <LinearLayout
-
+                android:id="@+id/import_settings"
                 style="@style/MoreSetting_Item_Parent_No_Switch"
                 >
 
@@ -307,7 +320,7 @@
     <include layout="@layout/separator" />
 
             <LinearLayout
-
+                android:id="@+id/backup"
                 style="@style/MoreSetting_Item_Parent_No_Switch"
                 >
 
@@ -320,7 +333,7 @@
             <include layout="@layout/separator" />
 
             <LinearLayout
-
+                android:id="@+id/reset_to_default"
                 style="@style/MoreSetting_Item_Parent_No_Switch"
                 >
 

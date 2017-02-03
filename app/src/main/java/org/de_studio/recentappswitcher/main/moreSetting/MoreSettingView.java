@@ -30,6 +30,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import rx.subjects.PublishSubject;
 
 /**
@@ -318,4 +319,91 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     public void clear() {
         sharedPreferences = null;
     }
+
+    @OnClick(R.id.disable_clock)
+    void onDisableClockClick(){
+        presenter.onDisableClock();
+    }
+
+    @OnClick(R.id.avoid_keyboard)
+    void onAvoidKeyboardClick(){
+        presenter.onAvoidKeyboard();
+    }
+
+    @OnClick(R.id.disable_in_landscape)
+    void onDisableInLandscapeClick(){
+        presenter.onDisableInLandscape();
+    }
+
+    @OnClick(R.id.use_home_button_layout)
+    void onUseHomeClick(){
+        presenter.onUseHomeButton();
+    }
+
+    @OnClick(R.id.contact_action)
+    void onContactActionClick(){
+        presenter.onDefaultActionForContacts();
+    }
+
+    @OnClick(R.id.long_press_delay)
+    void onLongPressDelayClick(){
+        presenter.onLongPressDelay();
+    }
+
+    @OnClick(R.id.icon_pack)
+    void onIconPackClick(){
+        presenter.onIconPack();
+    }
+
+    @OnClick(R.id.icon_size)
+    void onIconSizeClick(){
+        presenter.onIconSize();
+    }
+
+    @OnClick(R.id.background_color)
+    void onBackgroudnColorClick(){
+        presenter.onBackgroundColor();
+    }
+
+    @OnClick(R.id.use_animation)
+    void onUseAnimationClick(){
+        presenter.onAnimation();
+    }
+
+    @OnClick(R.id.animation_time)
+    void onAnimationTimeClick(){
+        presenter.onAnimationDuration();
+    }
+
+    @OnClick(R.id.haptic_feedback_on_trigger)
+    void onHapticOnTriggerClick(){
+        presenter.onHapticOnTrigger();
+    }
+
+    @OnClick(R.id.haptic_feedback_on_icon)
+    void onHapticIconClick(){
+        presenter.onHapticOnIcon();
+    }
+
+    @OnClick(R.id.vibration_duration)
+    void onVibrationDurationClick(){
+        presenter.onVibratioDuration();
+    }
+
+    @OnClick(R.id.import_settings)
+    void onImportSettingClick(){
+        presenter.onImportSetting();
+    }
+
+    @OnClick(R.id.backup)
+    void onBackupClick(){
+        presenter.onBackup();
+    }
+
+    @OnClick(R.id.reset_to_default)
+    void onResetClick(){
+        presenter.onResetSettings();
+    }
+
+
 }
