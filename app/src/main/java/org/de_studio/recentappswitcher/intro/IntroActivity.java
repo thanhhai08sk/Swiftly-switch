@@ -85,7 +85,7 @@ public class IntroActivity extends AppIntro2 {
     @Override
     public void onNextPressed() {
         if (pager.getCurrentItem() == 4 && startPage == 4) {
-            finish();
+            startServiceAndFinish();
         }
     }
 
@@ -99,7 +99,7 @@ public class IntroActivity extends AppIntro2 {
         }
         Log.e(LOG_TAG, "finish Intro");
         if (isOk) {
-            finish();
+            startServiceAndFinish();
         } else {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(IntroActivity.this);
             builder.setMessage(R.string.you_have_not_finished_all_permission_yet)
@@ -112,12 +112,17 @@ public class IntroActivity extends AppIntro2 {
                     .setNegativeButton(R.string.skip, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            finish();
+                            startServiceAndFinish();
                         }
                     });
             builder.show();
         }
 
+    }
+
+    public void startServiceAndFinish() {
+        Utility.restartService(this);
+        finish();
     }
 
     @Override
@@ -131,8 +136,6 @@ public class IntroActivity extends AppIntro2 {
                     android.os.Process.myUid(), this.getPackageName());
             return mode == AppOpsManager.MODE_ALLOWED;
         } else return true;
-
-
     }
 
 }

@@ -166,6 +166,22 @@ public class EdgeSettingModel extends BaseModel {
         });
     }
 
+    public void setAvoidKeyboard() {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                switch (edge.keyboardOption) {
+                    case Edge.KEYBOARD_OPTION_NONE:
+                        edge.keyboardOption = Edge.KEYBOARD_OPTION_PLACE_UNDER;
+                        break;
+                    default:
+                        edge.keyboardOption = Edge.KEYBOARD_OPTION_NONE;
+                        break;
+                }
+            }
+        });
+    }
+
     public void setShowGuide(final boolean showGuide) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override

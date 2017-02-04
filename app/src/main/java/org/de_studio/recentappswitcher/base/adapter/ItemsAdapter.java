@@ -55,7 +55,7 @@ public class ItemsAdapter extends RealmRecyclerViewAdapter<Item,ItemsAdapter
                     holder.label.setText(item.label);
                     break;
             }
-            Utility.setItemIcon(item,context,holder.icon,packageManager, iconPack);
+            Utility.setItemIcon(item, context, holder.icon, packageManager, iconPack, false);
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

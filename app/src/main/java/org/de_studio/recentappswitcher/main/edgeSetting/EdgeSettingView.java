@@ -38,6 +38,8 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
     private static final String TAG = EdgeSettingView.class.getSimpleName();
     @BindView(R.id.enable_edge)
     Switch enableSwitch;
+    @BindView(R.id.avoid_keyboard_switch)
+    Switch avoidKeyboardSwitch;
     @BindView(R.id.show_guide_switch)
     Switch showGuideSwitch;
     @BindView(R.id.mode_description)
@@ -52,6 +54,7 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
     View gridFavorite;
 
     PublishSubject<Void> setDataCompleteSJ = PublishSubject.create();
+    PublishSubject<Void> updateLayoutRequestSJ = PublishSubject.create();
     String edgeId;
 
     public static EdgeSettingView newInstance(String edgeId) {
@@ -70,8 +73,19 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        updateLayoutRequestSJ.onNext(null);
+    }
+
+    @Override
     public PublishSubject<Void> onSetDataComplete() {
         return setDataCompleteSJ;
+    }
+
+    @Override
+    public PublishSubject<Void> onUpdateLayoutRequest() {
+        return updateLayoutRequestSJ;
     }
 
     @Override
@@ -227,6 +241,11 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
     }
 
     @Override
+    public void setAvoidKeyboard(boolean enable) {
+        avoidKeyboardSwitch.setChecked(enable);
+    }
+
+    @Override
     public void setShowGuideEnable(boolean enable) {
         showGuideSwitch.setChecked(enable);
     }
@@ -281,6 +300,10 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
     @OnClick(R.id.grid_favorite_set)
     void gridClick(){
         presenter.onSetGrid();
+    }
+    @OnClick(R.id.avoid_keyboard)
+    void avoidKeyboardClick(){
+        presenter.onSetAvoidKeyboard();
     }
     @OnClick(R.id.show_guide)
     void showGuideClick(){

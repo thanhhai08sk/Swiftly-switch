@@ -10,7 +10,7 @@ import dagger.Component;
  * Created by HaiNguyen on 11/12/16.
  */
 @Singleton
-@Component(modules = MainModule.class)
+@Component(modules = {MainModule.class, AppModule.class})
 public interface MainComponent {
     void inject(MainView view);
 }

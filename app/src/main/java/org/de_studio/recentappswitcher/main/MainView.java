@@ -1,30 +1,36 @@
 package org.de_studio.recentappswitcher.main;
 
+import android.app.AppOpsManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.base.BaseActivity;
+import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerMainComponent;
 import org.de_studio.recentappswitcher.dagger.MainModule;
+import org.de_studio.recentappswitcher.intro.IntroActivity;
 import org.de_studio.recentappswitcher.main.moreSetting.MoreSettingView;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainView extends AppCompatActivity {
+public class MainView extends BaseActivity<Void,MainPresenter> implements MainPresenter.View{
     @BindView(R.id.tabs)
     TabLayout tabLayout;
     @BindView(R.id.container)
@@ -33,41 +39,72 @@ public class MainView extends AppCompatActivity {
     DrawerLayout drawer;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.permission_missing)
+    View permissionMissing;
 
 
 
-    @Inject
-    MainPresenter presenter;
-    @Inject
-    MainModel model;
+
     @Inject
     MainViewPagerAdapter pagerAdapter;
+    @Inject
+    @Named(Cons.SHARED_PREFERENCE_NAME)
+    SharedPreferences shared;
+
+
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        inject();
-        setContentView(R.layout.main_view);
-        ButterKnife.bind(this);
-        presenter.onViewAttach();
+    public void startIntroIfNeeded() {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean isFirstStart = shared.getBoolean(Cons.FIRST_START_KEY, true);
+                if (isFirstStart) {
+                    SharedPreferences.Editor e = shared.edit();
+                    e.putBoolean(Cons.FIRST_START_KEY, false);
+                    e.commit();
+                    Intent i = new Intent(MainView.this, IntroActivity.class);
+                    startActivity(i);
+                }
+            }
+        });
+        t.start();
+    }
 
+    @Override
+    public boolean checkIfAllPermissionOk() {
+        boolean isOk;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            isOk = isStep1Ok() && Settings.canDrawOverlays(this) && Utility.isAccessibilityEnable(this);
 
+        } else {
+            isOk = isStep1Ok() && Utility.isAccessibilityEnable(this);
+        }
+        return isOk;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.resume();
+    }
+
+    @Override
+    public void displayPermissionNeeded(boolean show) {
+        permissionMissing.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void restartServiceIfPossible() {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
             Utility.restartService(this);
 
         } else {
             if (Settings.canDrawOverlays(this)) {
                 Utility.restartService(this);
-
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        presenter.onDestroy();
-        super.onDestroy();
     }
 
     public void setupViewPager() {
@@ -87,14 +124,43 @@ public class MainView extends AppCompatActivity {
         }
     }
 
+    private boolean isStep1Ok() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+            int mode = appOps.checkOpNoThrow("android:get_usage_stats",
+                    android.os.Process.myUid(), getPackageName());
+            return mode == AppOpsManager.MODE_ALLOWED;
+        } else return true;
+
+
+    }
+
     public void clear() {
 
     }
 
-    void inject() {
+    @Override
+    protected void inject() {
         DaggerMainComponent.builder()
+                .appModule(new AppModule(this))
                 .mainModule(new MainModule(this))
                 .build().inject(this);
+
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.main_view;
+    }
+
+    @Override
+    public void getDataFromRetainFragment() {
+
+    }
+
+    @Override
+    public void onDestroyBySystem() {
+
     }
 
     @OnClick(R.id.more_setting)
@@ -102,9 +168,12 @@ public class MainView extends AppCompatActivity {
         startActivity(new Intent(this, MoreSettingView.class));
     }
 
-
-
-
+    @OnClick(R.id.permission_missing)
+    void onPermissionClick(){
+        Intent intent = new Intent(this, IntroActivity.class);
+        intent.putExtra("page",4);
+        startActivity(intent);
+    }
 
 
 }

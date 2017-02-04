@@ -44,20 +44,20 @@
             </LinearLayout>
             <include layout="@layout/separator" />
 
-            <LinearLayout
-                android:id="@+id/avoid_keyboard"
-                style="@style/MoreSetting_Item_Parent_With_Switch"
-                >
-                <TextView
-                    style="@style/MoreSetting_Item_Text_Primary"
-                    android:text="@string/avoid_keyboard"
-                    />
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/avoid_keyboard_switch"
-                    style="@style/MoreSetting_Item_Switch"
-                    />
-            </LinearLayout>
-            <include layout="@layout/separator" />
+            <!--<LinearLayout-->
+                <!--android:id="@+id/avoid_keyboard"-->
+                <!--style="@style/MoreSetting_Item_Parent_With_Switch"-->
+                <!--&gt;-->
+                <!--<TextView-->
+                    <!--style="@style/MoreSetting_Item_Text_Primary"-->
+                    <!--android:text="@string/avoid_keyboard"-->
+                    <!--/>-->
+                <!--<android.support.v7.widget.SwitchCompat-->
+                    <!--android:id="@+id/avoid_keyboard_switch"-->
+                    <!--style="@style/MoreSetting_Item_Switch"-->
+                    <!--/>-->
+            <!--</LinearLayout>-->
+            <!--<include layout="@layout/separator" />-->
 
             <LinearLayout
                 android:id="@+id/disable_in_landscape"

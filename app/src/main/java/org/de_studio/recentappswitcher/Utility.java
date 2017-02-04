@@ -99,6 +99,10 @@ import java.util.Set;
 import io.realm.Realm;
 import rx.subjects.PublishSubject;
 
+import static org.de_studio.recentappswitcher.Cons.RINGER_MODE_NORMAL;
+import static org.de_studio.recentappswitcher.Cons.RINGER_MODE_SILENT;
+import static org.de_studio.recentappswitcher.Cons.RINGER_MODE_VIBRATE;
+
 /**
  * Created by hai on 12/19/2015.
  */
@@ -464,7 +468,8 @@ public  class Utility {
     }
 
     public static void setFavoriteGridViewPosition(View gridView,boolean isCenter ,  float gridTall, float gridWide, float xInit, float yInit, float mScale, int edgePosition, WindowManager windowManager, int distanceFromEdgeDp, int distanceVertical) {
-        Log.e(TAG, "setFavoriteGridViewPosition: width " + gridWide + "\ntall " + gridTall + "\nxInit " + xInit + "\nyInit " + yInit);
+        Log.e(TAG, "setFavoriteGridViewPosition: width " + gridWide + "\ntall " + gridTall + "\nxInit " + xInit + "\nyInit " + yInit +
+                "\noffsetHorizontal " + distanceFromEdgeDp + "\noffsetVertical " + distanceVertical);
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
         float distanceVerticalFromEdge = ((float)distanceVertical)* mScale;
         Point point = new Point();
@@ -2355,10 +2360,10 @@ public  class Utility {
         builder.create().show();
     }
 
-    public static void setSlotIcon(Slot slot, Context context, ImageView icon, PackageManager packageManager, IconPackManager.IconPack iconPack, boolean isDark) {
+    public static void setSlotIcon(Slot slot, Context context, ImageView icon, PackageManager packageManager, IconPackManager.IconPack iconPack, boolean isDark, boolean showIconState) {
         switch (slot.type) {
             case Slot.TYPE_ITEM:
-                setItemIcon(slot.stage1Item, context, icon, packageManager, iconPack);
+                setItemIcon(slot.stage1Item, context, icon, packageManager, iconPack, showIconState);
                 break;
             case Slot.TYPE_FOLDER:
                 byte[] byteArray = slot.iconBitmap;
@@ -2387,7 +2392,7 @@ public  class Utility {
     }
 
 
-    public static void setItemIcon(Item item, Context context, ImageView icon, PackageManager packageManager, IconPackManager.IconPack iconPack) {
+    public static void setItemIcon(Item item, Context context, ImageView icon, PackageManager packageManager, IconPackManager.IconPack iconPack, boolean showIconState) {
         if (item == null) {
             return;
         }
@@ -2411,7 +2416,11 @@ public  class Utility {
                 }
                 break;
             case Item.TYPE_ACTION:
-                icon.setImageResource(item.iconResourceId);
+                if (showIconState) {
+                    setActionIconWithState(item, icon, context);
+                } else {
+                    icon.setImageResource(item.iconResourceId);
+                }
                 break;
             case Item.TYPE_DEVICE_SHORTCUT:
                 byte[] byteArray = item.iconBitmap;
@@ -2471,6 +2480,56 @@ public  class Utility {
                 break;
             case Slot.TYPE_NULL:
                 label.setText(context.getString(R.string.empty));
+                break;
+        }
+    }
+
+
+    public static void setActionIconWithState(Item item, ImageView icon, Context context) {
+        switch (item.action) {
+            case Item.ACTION_WIFI:
+                if (getWifiState(context)) {
+                    icon.setImageResource(item.iconResourceId);
+                } else {
+                    icon.setImageResource(item.iconResourceId2);
+                }
+                break;
+            case Item.ACTION_BLUETOOTH:
+                if (getBluetoothState(context)) {
+                    icon.setImageResource(item.iconResourceId);
+                } else {
+                    icon.setImageResource(item.iconResourceId2);
+                }
+                break;
+            case Item.ACTION_ROTATION:
+                if (getIsRotationAuto(context)) {
+                    icon.setImageResource(item.iconResourceId);
+                } else {
+                    icon.setImageResource(item.iconResourceId2);
+                }
+                break;
+            case Item.ACTION_RINGER_MODE:
+                switch (getRingerMode(context)) {
+                    case RINGER_MODE_NORMAL:
+                        icon.setImageResource(item.iconResourceId);
+                        break;
+                    case RINGER_MODE_VIBRATE:
+                        icon.setImageResource(item.iconResourceId2);
+                        break;
+                    case RINGER_MODE_SILENT:
+                        icon.setImageResource(item.iconResourceId3);
+                        break;
+                }
+                break;
+            case Item.ACTION_FLASH_LIGHT:
+                if (NewServiceView.FLASH_LIGHT_ON) {
+                    icon.setImageResource(item.iconResourceId);
+                } else {
+                    icon.setImageResource(item.iconResourceId2);
+                }
+                break;
+            default:
+                icon.setImageResource(item.iconResourceId);
                 break;
         }
     }

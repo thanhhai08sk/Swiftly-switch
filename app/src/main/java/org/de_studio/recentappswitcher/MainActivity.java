@@ -98,7 +98,6 @@ public class MainActivity extends Activity {
                     e.commit();
                     Intent i = new Intent(MainActivity.this, IntroActivity.class);
                     startActivity(i);
-
                 }
             }
         });

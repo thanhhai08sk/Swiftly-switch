@@ -1,25 +1,41 @@
 package org.de_studio.recentappswitcher.main;
 
+import org.de_studio.recentappswitcher.base.BasePresenter;
+import org.de_studio.recentappswitcher.base.PresenterView;
+
 /**
  * Created by HaiNguyen on 11/5/16.
  */
 
-public class MainPresenter {
-    MainView view;
-    MainModel model;
+public class MainPresenter extends BasePresenter<MainPresenter.View,MainModel> {
 
-    public MainPresenter(MainView view, MainModel model) {
-        this.view = view;
-        this.model = model;
+
+    public MainPresenter(MainModel model) {
+        super(model);
     }
 
-    public void onViewAttach() {
+    @Override
+    public void onViewAttach(View view) {
+        super.onViewAttach(view);
+        view.startIntroIfNeeded();
         view.setupViewPager();
     }
 
+    public void resume() {
+        view.displayPermissionNeeded(!view.checkIfAllPermissionOk());
+    }
 
-    public void onDestroy() {
-        view.clear();
-        model.clear();
+
+
+    public interface View extends PresenterView {
+        void setupViewPager();
+
+        void startIntroIfNeeded();
+
+        void restartServiceIfPossible();
+
+        boolean checkIfAllPermissionOk();
+
+        void displayPermissionNeeded(boolean show);
     }
 }

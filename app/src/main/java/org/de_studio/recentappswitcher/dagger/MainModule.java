@@ -25,7 +25,7 @@ public class MainModule {
     @Provides
     @Singleton
     MainPresenter presenter(MainModel model){
-        return new MainPresenter(view, model);
+        return new MainPresenter(model);
     }
 
     @Provides

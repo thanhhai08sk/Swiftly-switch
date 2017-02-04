@@ -53,7 +53,7 @@ public class ItemsListWithCheckBoxAdapter extends RealmBaseAdapter<Item> {
         TextView label = ((TextView) view.findViewById(R.id.label));
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.check_box);
         if (item != null) {
-            Utility.setItemIcon(item, context, icon, packageManager, iconPack);
+            Utility.setItemIcon(item, context, icon, packageManager, iconPack,false);
             label.setText(item.label);
             checkBox.setChecked(checkedItems.contains(item));
         }

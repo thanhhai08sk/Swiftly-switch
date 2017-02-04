@@ -124,7 +124,7 @@ public class SetItemsView extends BaseActivity<SetItemsView.Subjects, SetItemsPr
 
     public void showCurrentIconAndIndex(Item currentItem, int itemIndex) {
         if (currentItem != null) {
-            Utility.setItemIcon(currentItem, this, icon, getPackageManager(), iconPack);
+            Utility.setItemIcon(currentItem, this, icon, getPackageManager(), iconPack,false);
         } else {
             icon.setImageDrawable(null);
         }

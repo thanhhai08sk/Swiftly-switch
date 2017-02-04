@@ -58,6 +58,9 @@ public class Cons {
     public static final int POSITION_LEFT = 2;
     public static final int POSITION_BOTTOM = 3;
     public static final int CIRCLE_ICON_NUMBER_DEFAULT = 6;
+    public static final int RINGER_MODE_NORMAL = 0;
+    public static final int RINGER_MODE_VIBRATE = 1;
+    public static final int RINGER_MODE_SILENT = 2;
 
     public static final int QUICK_ACTION_GAP_DP = 35;
     public static final int DEFAULT_ICON_WIDTH = 48;
@@ -243,6 +246,7 @@ public class Cons {
     public static final String CIRCLE_FAVORITE_MODE = "circle_fovorite_mode";
     public static final String SERVICE_ID = "service_id";
     public static final String ICON_SCALE_KEY = "icon_scale";
+    public static final String FIRST_START_KEY = "firstStart";
     public static final int ACTION_CHOOSE = 0;
     public static final int ACTION_CALL = 1;
     public static final int ACTION_SMS = 2;

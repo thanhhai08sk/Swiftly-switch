@@ -177,7 +177,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="20dp"
+            android:paddingTop="16dp"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -198,11 +198,58 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/show_guide"
+            android:id="@+id/avoid_keyboard"
             android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            >
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/avoid_keyboard"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    style="@style/Main_text_primary"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Main_text_secondary"
+                    android:text="@string/avoid_keyboard_description"
+                    />
+
+            </LinearLayout>
+            <Switch
+                android:id="@+id/avoid_keyboard_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:clickable="false"
+                android:focusable="false"
+                />
+
+        </LinearLayout>
+
+        <include layout="@layout/separator" />
+
+        <LinearLayout
+            android:id="@+id/show_guide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
             >
             <TextView
                 android:layout_width="0dp"

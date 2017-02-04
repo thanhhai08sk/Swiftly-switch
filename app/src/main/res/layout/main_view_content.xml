@@ -24,11 +24,39 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
         </android.support.v7.widget.Toolbar>
-
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/permission_missing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            android:background="@color/redButton"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:text="@string/one_or_more_permission_are_missing"
+                android:textSize="16sp"
+                android:textColor="@color/text_primary_light"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="4dp"
+                android:tint="@color/light_icon"
+                android:src="@drawable/ic_navigate_next_black_36dp"
+                />
+
+        </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
 

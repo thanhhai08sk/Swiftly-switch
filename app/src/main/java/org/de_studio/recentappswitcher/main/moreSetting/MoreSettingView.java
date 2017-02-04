@@ -41,8 +41,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     
     @BindView(R.id.disable_clock_switch)
     SwitchCompat disableClockSwitch;
-    @BindView(R.id.avoid_keyboard_switch)
-    SwitchCompat avoidKeyboardSwitch;
+//    @BindView(R.id.avoid_keyboard_switch)
+//    SwitchCompat avoidKeyboardSwitch;
     @BindView(R.id.disable_in_landscape_switch)
     SwitchCompat disableInLandscapeSwitch;
     @BindView(R.id.contact_action_description)
@@ -84,7 +84,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     @Override
     public void updateViews() {
         disableClockSwitch.setChecked(sharedPreferences.getBoolean(Cons.DISABLE_CLOCK_KEY, false));
-        avoidKeyboardSwitch.setChecked(sharedPreferences.getBoolean(Cons.AVOID_KEYBOARD_KEY, true));
+//        avoidKeyboardSwitch.setChecked(sharedPreferences.getBoolean(Cons.AVOID_KEYBOARD_KEY, true));
         disableInLandscapeSwitch.setChecked(sharedPreferences.getBoolean(Cons.IS_DISABLE_IN_LANDSCAPE_KEY, false));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -325,10 +325,10 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         presenter.onDisableClock();
     }
 
-    @OnClick(R.id.avoid_keyboard)
-    void onAvoidKeyboardClick(){
-        presenter.onAvoidKeyboard();
-    }
+//    @OnClick(R.id.avoid_keyboard)
+//    void onAvoidKeyboardClick(){
+//        presenter.onAvoidKeyboard();
+//    }
 
     @OnClick(R.id.disable_in_landscape)
     void onDisableInLandscapeClick(){

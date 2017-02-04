@@ -66,7 +66,7 @@ public class ItemsListAdapter extends RealmBaseAdapter<Item> {
             icon = ((ImageView) view.findViewById(R.id.icon));
             label = ((TextView) view.findViewById(R.id.label));
 
-            Utility.setItemIcon(item, context, icon, packageManager, iconPack);
+            Utility.setItemIcon(item, context, icon, packageManager, iconPack,false);
             label.setText(item.label);
             if (currentItem != null) {
                 if (radioButton != null) {

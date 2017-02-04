@@ -397,6 +397,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         }
         if (collectionViewsMap.get(grid.collectionId) == null) {
             RecyclerView gridView = new RecyclerView(this);
+            gridView.setItemAnimator(null);
             gridView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             ServiceSlotAdapter adapter = new ServiceSlotAdapter(this, grid.slots, true, iconPack, mScale, iconScale);
             gridView.setLayoutManager(new GridLayoutManager(this, grid.columnCount));
@@ -427,11 +428,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                             , mScale
                             , position
                             , windowManager
-                            , grid.offsetHorizontal
-                            , grid.offsetVertical);
+                            , grid.marginHorizontal
+                            , grid.marginVertical);
                     currentShowing.gridXY.x = (int) recyclerView.getX();
                     currentShowing.gridXY.y = (int) recyclerView.getY();
                     recyclerView.setAlpha(1f);
+                    ((ServiceSlotAdapter) recyclerView.getAdapter()).updateIconsState();
                 }
             }, 20);
         } else {
@@ -443,9 +445,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     , mScale
                     , position
                     , windowManager
-                    , grid.offsetHorizontal
-                    , grid.offsetVertical);
+                    , grid.marginHorizontal
+                    , grid.marginVertical);
             recyclerView.setVisibility(View.VISIBLE);
+            ((ServiceSlotAdapter) recyclerView.getAdapter()).updateIconsState();
             currentShowing.gridXY.x = (int) recyclerView.getX();
             currentShowing.gridXY.y = (int) recyclerView.getY();
         }
@@ -522,7 +525,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 View icon = frameLayout.getChildAt(i);
                 icon.setVisibility(View.VISIBLE);
 //                icon.setAlpha(0f);
-                Utility.setSlotIcon(slots.get(i), this, (ImageView) icon, getPackageManager(), iconPack,false);
+                Utility.setSlotIcon(slots.get(i), this, (ImageView) icon, getPackageManager(), iconPack, false, true);
 
                 if (i == 0) {
                     icon.setX(iconsXY.xs[i]);
@@ -675,7 +678,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
             ImageView icon = (ImageView) backgroundView.findViewById(R.id.indicator_icon);
             TextView label = (TextView) backgroundView.findViewById(R.id.indicator_label);
-            Utility.setSlotIcon(slot, this, icon, getPackageManager(), iconPack,false);
+            Utility.setSlotIcon(slot, this, icon, getPackageManager(), iconPack,false,true);
             Utility.setSlotLabel(slot, this, label);
         } else {
             backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.GONE);
@@ -690,7 +693,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.VISIBLE);
         ImageView icon = (ImageView) backgroundView.findViewById(R.id.indicator_icon);
         TextView label = (TextView) backgroundView.findViewById(R.id.indicator_label);
-        Utility.setItemIcon(item, this, icon, getPackageManager(), iconPack);
+        Utility.setItemIcon(item, this, icon, getPackageManager(), iconPack,true);
         label.setText(item.label);
     }
 

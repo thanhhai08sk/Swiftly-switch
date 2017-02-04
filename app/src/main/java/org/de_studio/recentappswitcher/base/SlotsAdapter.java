@@ -51,7 +51,7 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
                     Utility.setSlotLabel(slot, context, holder.label);
                     break;
             }
-            Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack, true);
+            Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack, true, false);
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

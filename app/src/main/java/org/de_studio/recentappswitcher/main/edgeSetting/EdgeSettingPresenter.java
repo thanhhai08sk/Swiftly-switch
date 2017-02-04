@@ -6,7 +6,9 @@ import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Edge;
 
 import io.realm.RealmResults;
+import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Func2;
 import rx.subjects.PublishSubject;
 
 /**
@@ -30,8 +32,26 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
     public void onViewAttach(final View view) {
         super.onViewAttach(view);
 
+//        addSubscription(
+//                model.onGotEdge().subscribe(new Action1<Edge>() {
+//                    @Override
+//                    public void call(Edge edge) {
+//                        if (edge != null) {
+//                            showEdge(edge);
+//                        } else {
+//                            view.registerSetDataCompleteEven();
+//                        }
+//                    }
+//                })
+//        );
+
         addSubscription(
-                model.onGotEdge().subscribe(new Action1<Edge>() {
+                Observable.combineLatest(model.onGotEdge(), view.onUpdateLayoutRequest(), new Func2<Edge, Void, Edge>() {
+                    @Override
+                    public Edge call(Edge edge, Void aVoid) {
+                        return edge;
+                    }
+                }).subscribe(new Action1<Edge>() {
                     @Override
                     public void call(Edge edge) {
                         if (edge != null) {
@@ -143,6 +163,12 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
         view.restartService();
     }
 
+    public void onSetAvoidKeyboard() {
+        model.setAvoidKeyboard();
+        view.setAvoidKeyboard(model.getEdge().keyboardOption != Edge.KEYBOARD_OPTION_NONE);
+        view.restartService();
+    }
+
     public void onSetShowGuide() {
         model.setShowGuide(!model.getEdge().useGuide);
         view.setShowGuideEnable(model.getEdge().useGuide);
@@ -155,6 +181,7 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
 
     private void showEdge(Edge edge) {
         view.setEnable(model.isEdgeEnabled());
+        view.setAvoidKeyboard(edge.keyboardOption != Edge.KEYBOARD_OPTION_NONE);
         view.setShowGuideEnable(edge.useGuide);
         view.setCurrentMode(edge.mode);
         if (edge.recent != null) {
@@ -174,6 +201,8 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
     public interface View extends PresenterView {
 
         PublishSubject<Void> onSetDataComplete();
+
+        PublishSubject<Void> onUpdateLayoutRequest();
 
         void chooseMode(int currentMode, PublishSubject<Integer> setModeSubject);
 
@@ -196,7 +225,10 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
 
         void setCurrentGrid(String label);
 
+        void setAvoidKeyboard(boolean enable);
+
         void setShowGuideEnable(boolean enable);
+
 
         void registerSetDataCompleteEven();
 

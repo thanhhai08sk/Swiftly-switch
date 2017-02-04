@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -14,6 +15,7 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 
 import io.realm.OrderedRealmCollection;
@@ -25,7 +27,7 @@ import io.realm.RealmRecyclerViewAdapter;
 
 public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSlotAdapter.ViewHolder> {PackageManager packageManager;
     IconPackManager.IconPack iconPack;
-//    private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
+    private static final String TAG = ServiceSlotAdapter.class.getSimpleName();
     float mScale, iconScale;
 
 
@@ -37,12 +39,33 @@ public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSl
         this.iconScale = iconScale;
     }
 
+    public void updateIconsState() {
+        long time = System.currentTimeMillis();
+        if (getData() != null) {
+            Slot slot = null;
+            for (int i = 0; i < getData().size(); i++) {
+                slot = getData().get(i);
+                if (slot.type.equals(Slot.TYPE_ITEM) && slot.stage1Item.type.equals(Item.TYPE_ACTION)
+                        && (slot.stage1Item.action == Item.ACTION_WIFI ||
+                        slot.stage1Item.action == Item.ACTION_BLUETOOTH ||
+                        slot.stage1Item.action == Item.ACTION_RINGER_MODE ||
+                        slot.stage1Item.action == Item.ACTION_ROTATION ||
+                        slot.stage1Item.action == Item.ACTION_FLASH_LIGHT)) {
+
+                    notifyItemChanged(i);
+                }
+            }
+        }
+        Log.e(TAG, "updateIconsState: time = " + (System.currentTimeMillis() - time));
+    }
+
 
     @Override
     public void onBindViewHolder(final ServiceSlotAdapter.ViewHolder holder, final int position) {
+        Log.e(TAG, "onBindViewHolder: "+ position + "\ntime = " + System.currentTimeMillis());
         final Slot slot = getItem(position);
         if (slot != null) {
-            Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack, false);
+            Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack, false, true);
 //            holder.view.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
