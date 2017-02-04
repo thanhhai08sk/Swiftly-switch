@@ -19,6 +19,7 @@ public class MainPresenter extends BasePresenter<MainPresenter.View,MainModel> {
         super.onViewAttach(view);
         view.startIntroIfNeeded();
         view.setupViewPager();
+        view.restartServiceIfPossible();
     }
 
     public void resume() {

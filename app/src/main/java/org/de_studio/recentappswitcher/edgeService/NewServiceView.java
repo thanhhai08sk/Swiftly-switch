@@ -34,6 +34,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -449,6 +450,26 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     , grid.marginVertical);
             recyclerView.setVisibility(View.VISIBLE);
             ((ServiceSlotAdapter) recyclerView.getAdapter()).updateIconsState();
+            View child;
+            float childCenterX;
+            float childCenterY;
+            float halfIcon = 24 * mScale;
+            float centerX = recyclerView.getWidth()/2;
+            float centerY = recyclerView.getHeight()/2;
+            for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                child = recyclerView.getChildAt(i);
+                childCenterX = child.getX() + halfIcon;
+                childCenterY = child.getY() + halfIcon;
+                child.setTranslationY((childCenterY - centerY)/2);
+                child.setTranslationX((childCenterX - centerX)/2);
+                child.setAlpha(0f);
+                child.animate().translationY(0)
+                        .translationX(0)
+                        .alpha(1f)
+                        .setInterpolator(new DecelerateInterpolator(3f))
+                        .setDuration(animationTime)
+                        .start();
+            }
             currentShowing.gridXY.x = (int) recyclerView.getX();
             currentShowing.gridXY.y = (int) recyclerView.getY();
         }
@@ -527,13 +548,24 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 //                icon.setAlpha(0f);
                 Utility.setSlotIcon(slots.get(i), this, (ImageView) icon, getPackageManager(), iconPack, false, true);
 
+                icon.setX(iconsXY.xs[i]);
+                icon.setY(iconsXY.ys[i]);
+
                 if (i == 0) {
-                    icon.setX(iconsXY.xs[i]);
-                    icon.setY(iconsXY.ys[i]);
+                    if (iconsXY.xs.length >= 2) {
+                        icon.setX(iconsXY.xs[0] - (iconsXY.xs[1] - iconsXY.xs[0]));
+                        icon.setY(iconsXY.ys[0] - (iconsXY.ys[1] - iconsXY.ys[0]));
+                    } else {
+                        icon.setX(iconsXY.xs[0]);
+                        icon.setY(iconsXY.ys[0]);
+                    }
+
                 } else {
+
                     icon.setX(previousX);
                     icon.setY(previousY);
                 }
+                icon.setAlpha(0f);
                 previousX = iconsXY.xs[i];
                 previousY = iconsXY.ys[i];
 
@@ -541,9 +573,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 path.moveTo(icon.getX(),icon.getY());
                 path.lineTo(iconsXY.xs[i], iconsXY.ys[i]);
                 ObjectAnimator animator = ObjectAnimator.ofFloat(icon, "x", "y", path);
-                animator.setStartDelay(animationTime / (frameLayout.getChildCount() - i));
+                animator.setStartDelay(animationTime / (frameLayout.getChildCount() - i)/2);
                 animator.setDuration(animationTime);
                 animator.start();
+                ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(icon, "alpha", 0f, 1f);
+                alphaAnimator.setStartDelay(animationTime / (frameLayout.getChildCount() - i)/2);
+                alphaAnimator.setDuration(animationTime);
+                alphaAnimator.start();
 
             } else {
                 frameLayout.getChildAt(i).setVisibility(View.GONE);
