@@ -98,6 +98,16 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
         }
     }
 
+    public void setCurrentCollectionCircleSize(final int size) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Collection collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, getCollectionId()).findFirst();
+                collection.radius = size;
+            }
+        });
+    }
+
     public void setSlotAsFolder(int slotIndex) {
         Slot slot = collection.slots.get(slotIndex);
         if (slot != null) {

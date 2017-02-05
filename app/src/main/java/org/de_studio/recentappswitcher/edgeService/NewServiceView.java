@@ -353,8 +353,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                                     ) {
                                 tempPackageName.add(packa);
                             }
-                            if (tempPackageName.size() >= 7) {
-                                Log.e(TAG, "tempackage >= " + 7);
+                            if (tempPackageName.size() >= 10) {
+                                Log.e(TAG, "tempackage >= " + 10);
                                 break;
                             }
                         }

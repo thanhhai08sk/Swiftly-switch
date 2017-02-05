@@ -23,8 +23,9 @@ public class RecentSettingView extends BaseCollectionSettingView<Void, RecentSet
     private static final String TAG = RecentSettingView.class.getSimpleName();
     @BindView(R.id.size_text)
     TextView sizeText;
-    @BindView(R.id.long_click_mode_text)
-    TextView longClickModeText;
+    @BindView(R.id.circle_size_description)
+    TextView circleSizeDescription;
+
     @Override
     protected void inject() {
         DaggerRecentSettingComponent.builder()
@@ -37,6 +38,8 @@ public class RecentSettingView extends BaseCollectionSettingView<Void, RecentSet
     public void updateCollectionInfo(Collection collection) {
         super.updateCollectionInfo(collection);
         sizeText.setText(String.valueOf(collection.slots.size()));
+        circleSizeDescription.setText(String.valueOf(collection.radius) + " dp");
+
     }
 
     @Override
@@ -46,10 +49,11 @@ public class RecentSettingView extends BaseCollectionSettingView<Void, RecentSet
 
 
 
-    @OnClick(R.id.long_click_mode)
-    void onLongClickModeClick(){
-        presenter.onLongClickModeClick();
+    @OnClick(R.id.circle_size)
+    void onCircleSizeModeClick(){
+        presenter.onCircleSize();
     }
+
 
     @Override
     protected int getLayoutId() {

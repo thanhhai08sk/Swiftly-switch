@@ -133,6 +133,16 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
         return (x > deleteButton.getX() - deleteButton.getWidth()*2 && x < deleteButton.getX()) && y > deleteButton.getY() - deleteButton.getHeight()*2;
     }
 
+    @Override
+    public void setCircleSizeDialog(PublishSubject<Integer> subject, int currentValue) {
+        Utility.showDialogWithSeekBar(
+                Cons.CIRCLE_SIZE_MIN,
+                Cons.CIRCLE_SIZE_MAX,
+                currentValue,
+                "dp", getString(R.string.edge_dialog_set_circle_size_text),
+                subject, this);
+    }
+
 
     @Override
     public void chooseCurrentCollection(final List<Collection> collections, Collection currentCollection) {

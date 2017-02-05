@@ -88,7 +88,7 @@ public class Cons {
     public static final int BACKGROUND_COLOR_DEFAULT = Color.argb(172, 0, 0, 0);
     public static final int HOLD_TIME_DEFAULT = 800;
     public static final int DEFAULT_VIBRATE_DURATION = 15;
-    public static final int ANIMATION_TIME_DEFAULT = 170;
+    public static final int ANIMATION_TIME_DEFAULT = 250;
     public static final int ANIMATION_TIME_MIN = 50;
     public static final int ANIMATION_TIME_MAX = 1500;
 
@@ -254,6 +254,8 @@ public class Cons {
 
     public static final int HOLD_TIME_MIN = 150;
     public static final int HOLD_TIME_MAX = 2000;
+    public static final int CIRCLE_SIZE_MAX = 150;
+    public static final int CIRCLE_SIZE_MIN = 70;
     public static final int EDGE_SENSITIVE_MIN = 5;
     public static final int EDGE_LENGTH_MIN = 40;
     public static final int EDGE_OFFSET_MIN = -300;

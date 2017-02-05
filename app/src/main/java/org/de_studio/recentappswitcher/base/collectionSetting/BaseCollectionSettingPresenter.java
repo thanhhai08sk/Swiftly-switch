@@ -21,6 +21,7 @@ import rx.subjects.PublishSubject;
 
 public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSettingPresenter.View, M extends BaseCollectionSettingModel> extends BasePresenter<V, M> {
     private static final String TAG = BaseCollectionSettingPresenter.class.getSimpleName();
+    PublishSubject<Integer> setCircleSizeSJ = PublishSubject.create();
 
     boolean onDragDrop = false;
 
@@ -96,6 +97,15 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
                 })
         );
 
+        addSubscription(
+                setCircleSizeSJ.subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        model.setCurrentCollectionCircleSize(integer);
+                    }
+                })
+        );
+
 
         model.setup();
     }
@@ -134,9 +144,10 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         view.showChooseSizeDialog();
     }
 
-    public void onLongClickModeClick() {
-
+    public void onCircleSize() {
+        view.setCircleSizeDialog(setCircleSizeSJ, model.getCurrentCollection().radius);
     }
+
 
     public interface View extends PresenterView {
         PublishSubject<DragAndDropCallback.MoveData> onMoveItem();
@@ -177,6 +188,8 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         void updateCollectionInfo(Collection collection);
 
         void chooseCurrentCollection(List<Collection> collections, Collection currentCollection);
+
+        void setCircleSizeDialog(PublishSubject<Integer> subject, int currentValue);
 
 
     }
