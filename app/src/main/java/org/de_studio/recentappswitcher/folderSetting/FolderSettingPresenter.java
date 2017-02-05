@@ -4,8 +4,10 @@ import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.DragAndDropCallback;
 import org.de_studio.recentappswitcher.base.PresenterView;
 import org.de_studio.recentappswitcher.model.Item;
+import org.de_studio.recentappswitcher.model.Slot;
 
 import io.realm.OrderedRealmCollection;
+import io.realm.Realm;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 
@@ -108,6 +110,15 @@ public class FolderSettingPresenter extends BasePresenter<FolderSettingPresenter
                 })
         );
 
+        addSubscription(
+                view.onDialogClosed().subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        view.createFolderThumbnail(model.getRealm(), model.getFolder());
+                    }
+                })
+        );
+
 
 
 
@@ -125,6 +136,8 @@ public class FolderSettingPresenter extends BasePresenter<FolderSettingPresenter
         PublishSubject<Void> onAddContacts();
 
         PublishSubject<Void> onAddShortcuts();
+
+        PublishSubject<Void> onDialogClosed();
 
         PublishSubject<DragAndDropCallback.MoveData> onMoveItem();
 
@@ -155,6 +168,8 @@ public class FolderSettingPresenter extends BasePresenter<FolderSettingPresenter
         void setDeleteButtonColor(boolean redColor);
 
         float getDeleteButtonY();
+
+        void createFolderThumbnail(Realm realm, Slot folder);
 
     }
 }

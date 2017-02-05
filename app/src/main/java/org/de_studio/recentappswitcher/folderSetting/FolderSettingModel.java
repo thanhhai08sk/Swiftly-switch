@@ -33,6 +33,14 @@ public class FolderSettingModel extends BaseModel {
         return folder.items;
     }
 
+    public Realm getRealm() {
+        return realm;
+    }
+
+    public Slot getFolder() {
+        return folder;
+    }
+
     public void moveItem(int from, int to) {
         realm.beginTransaction();
         folder.items.move(from,to);

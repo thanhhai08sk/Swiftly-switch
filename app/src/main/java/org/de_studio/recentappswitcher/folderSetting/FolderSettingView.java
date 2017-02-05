@@ -26,12 +26,14 @@ import org.de_studio.recentappswitcher.folderSetting.addAppToFolder.AddAppToFold
 import org.de_studio.recentappswitcher.folderSetting.addContactToFolder.AddContactToFolderView;
 import org.de_studio.recentappswitcher.folderSetting.addShortcutToFolder.AddShortcutToFolderView;
 import org.de_studio.recentappswitcher.model.Item;
+import org.de_studio.recentappswitcher.model.Slot;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.realm.OrderedRealmCollection;
+import io.realm.Realm;
 import rx.subjects.PublishSubject;
 
 /**
@@ -53,7 +55,7 @@ public class FolderSettingView extends BaseActivity<Void, FolderSettingPresenter
     PublishSubject<DragAndDropCallback.MoveData> moveItemSubject = PublishSubject.create();
     PublishSubject<DragAndDropCallback.DropData> dropItemSubject = PublishSubject.create();
     PublishSubject<DragAndDropCallback.Coord> currentlyDragSubject = PublishSubject.create();
-
+    PublishSubject<Void> dialogClosedSJ = PublishSubject.create();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         folderId = getIntent().getStringExtra(Cons.SLOT_ID);
@@ -124,6 +126,11 @@ public class FolderSettingView extends BaseActivity<Void, FolderSettingPresenter
     @Override
     public PublishSubject<Void> onAddShortcuts() {
         return addShortcutsSubject;
+    }
+
+    @Override
+    public PublishSubject<Void> onDialogClosed() {
+        return dialogClosedSJ;
     }
 
     @Override
@@ -230,9 +237,12 @@ public class FolderSettingView extends BaseActivity<Void, FolderSettingPresenter
     public void dialogClosed() {
         if (adapter != null) {
             adapter.notifyDataSetChanged();
+            dialogClosedSJ.onNext(null);
         }
     }
 
-
-
+    @Override
+    public void createFolderThumbnail(Realm realm, Slot folder) {
+        Utility.createAndSaveFolderThumbnail(folder,realm,this);
+    }
 }
