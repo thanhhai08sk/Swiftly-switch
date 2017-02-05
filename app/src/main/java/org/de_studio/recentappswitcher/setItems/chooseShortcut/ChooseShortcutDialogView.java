@@ -8,7 +8,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,12 +44,20 @@ public class ChooseShortcutDialogView extends BaseChooseItemDialogView {
     private Realm realm = Realm.getDefaultInstance();
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        listView.setAdapter(adapter);
+    }
+
+    @Override
     public void loadItems() {
+        Log.e(TAG, "loadItems: ");
         Intent shortcutsIntent = new Intent(Intent.ACTION_CREATE_SHORTCUT);
         packageManager=getActivity().getPackageManager();
         resolveInfos =  packageManager.queryIntentActivities(shortcutsIntent, 0);
         adapter.setData(resolveInfos);
-        listView.setAdapter(adapter);
+        Log.e(TAG, "loadItems: finish loading item, size = " + resolveInfos.size());
+
     }
 
     @Override

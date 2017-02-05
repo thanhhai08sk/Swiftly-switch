@@ -39,7 +39,8 @@ public abstract class BaseAddItemsToFolderPresenter extends BasePresenter<BaseAd
         super.onViewAttach(view);
         view.loadItems();
         loadFolderItems();
-        view.setProgressBar(true);
+
+//        view.setProgressBar(true);
         results = getItemRealmResult();
         if (results != null) {
             view.setAdapter(results, folderItems);
@@ -102,6 +103,8 @@ public abstract class BaseAddItemsToFolderPresenter extends BasePresenter<BaseAd
         void setAdapter(OrderedRealmCollection<Item> result, RealmList<Item> folderItems);
 
         PublishSubject<Item> onSetItem();
+
+        PublishSubject<Void> onLayouted();
 
     }
 }

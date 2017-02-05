@@ -30,6 +30,7 @@ public abstract class BaseDialogFragment<P extends BasePresenter> extends Dialog
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         inject();
+        presenter.onViewAttach(this);
     }
 
     @CallSuper
@@ -43,7 +44,6 @@ public abstract class BaseDialogFragment<P extends BasePresenter> extends Dialog
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        presenter.onViewAttach(this);
         super.onViewCreated(view, savedInstanceState);
     }
 

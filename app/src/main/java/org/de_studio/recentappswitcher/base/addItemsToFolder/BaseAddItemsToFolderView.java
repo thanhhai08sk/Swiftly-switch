@@ -38,6 +38,7 @@ public abstract class BaseAddItemsToFolderView extends BaseDialogFragment<BaseAd
 
 
     protected PublishSubject<Item> setItemSubject = PublishSubject.create();
+    protected PublishSubject<Void> layoutedSJ = PublishSubject.create();
     protected String slotId;
 
 
@@ -71,6 +72,11 @@ public abstract class BaseAddItemsToFolderView extends BaseDialogFragment<BaseAd
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
          setItemSubject.onNext(adapter.getItem(position));
+    }
+
+    @Override
+    public PublishSubject<Void> onLayouted() {
+        return layoutedSJ;
     }
 
     @Override

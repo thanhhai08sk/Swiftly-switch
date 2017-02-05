@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -51,6 +52,11 @@ public class AddShortcutToFolderView extends BaseAddItemsToFolderView {
         return fragment;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        listView.setAdapter(adapter);
+    }
 
     @Override
     public void clear() {
@@ -64,7 +70,6 @@ public class AddShortcutToFolderView extends BaseAddItemsToFolderView {
         packageManager=getActivity().getPackageManager();
         resolveInfos =  packageManager.queryIntentActivities(shortcutsIntent, 0);
         adapter.setData(resolveInfos);
-        listView.setAdapter(adapter);
 
     }
 
@@ -86,42 +91,46 @@ public class AddShortcutToFolderView extends BaseAddItemsToFolderView {
             String label = (String) data.getExtras().get(Intent.EXTRA_SHORTCUT_NAME);
             String stringIntent = ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0);
             String packageName =  mResolveInfo.activityInfo.packageName;
+            String itemId = Item.TYPE_DEVICE_SHORTCUT + stringIntent;
+            Item realmItem = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
+            if (realmItem == null) {
 
-            int iconResId = 0;
+                int iconResId = 0;
 
-            Bitmap bmp = null;
-            Parcelable extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON);
-            if (extra != null && extra instanceof Bitmap)
-                bmp = (Bitmap) extra;
-            if (bmp == null) {
-                extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
-                if (extra != null && extra instanceof Intent.ShortcutIconResource) {
-                    try {
-                        Intent.ShortcutIconResource iconResource = (Intent.ShortcutIconResource) extra;
-                        packageName = iconResource.packageName;
-                        Resources resources = packageManager.getResourcesForApplication(iconResource.packageName);
-                        iconResId = resources.getIdentifier(iconResource.resourceName, null, null);
-                    } catch (Exception e) {
-                        Log.e(TAG, "onActivityResult: Could not load shortcut icon:");
+                Bitmap bmp = null;
+                Parcelable extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON);
+                if (extra != null && extra instanceof Bitmap)
+                    bmp = (Bitmap) extra;
+                if (bmp == null) {
+                    extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
+                    if (extra != null && extra instanceof Intent.ShortcutIconResource) {
+                        try {
+                            Intent.ShortcutIconResource iconResource = (Intent.ShortcutIconResource) extra;
+                            packageName = iconResource.packageName;
+                            Resources resources = packageManager.getResourcesForApplication(iconResource.packageName);
+                            iconResId = resources.getIdentifier(iconResource.resourceName, null, null);
+                        } catch (Exception e) {
+                            Log.e(TAG, "onActivityResult: Could not load shortcut icon:");
+                        }
                     }
                 }
+                realm.beginTransaction();
+                Item item = new Item();
+                item.type = Item.TYPE_DEVICE_SHORTCUT;
+                item.itemId = itemId;
+                item.label = label;
+                item.packageName = packageName;
+                item.intent = stringIntent;
+                if (bmp != null) {
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    item.iconBitmap = stream.toByteArray();
+                } else {
+                    item.iconResourceId = iconResId;
+                }
+                realmItem = realm.copyToRealm(item);
+                realm.commitTransaction();
             }
-            realm.beginTransaction();
-            Item item = new Item();
-            item.type = Item.TYPE_DEVICE_SHORTCUT;
-            item.itemId = Item.TYPE_DEVICE_SHORTCUT + stringIntent;
-            item.label = label;
-            item.packageName = packageName;
-            item.intent = stringIntent;
-            if (bmp != null) {
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                item.iconBitmap = stream.toByteArray();
-            } else {
-                item.iconResourceId = iconResId;
-            }
-            Item realmItem = realm.copyToRealm(item);
-            realm.commitTransaction();
             setItemSubject.onNext(realmItem);
 
         }

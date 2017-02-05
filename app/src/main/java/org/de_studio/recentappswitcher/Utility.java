@@ -88,6 +88,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -1702,42 +1703,40 @@ public  class Utility {
 
     public static Drawable getDrawableForAction(Context context, int action) {
         switch (action) {
-            case Shortcut.ACTION_WIFI:
+            case Item.ACTION_WIFI:
                 return ContextCompat.getDrawable(context, R.drawable.ic_wifi);
-            case Shortcut.ACTION_BLUETOOTH:
+            case Item.ACTION_BLUETOOTH:
                 return ContextCompat.getDrawable(context, R.drawable.ic_bluetooth);
-            case Shortcut.ACTION_ROTATION:
+            case Item.ACTION_ROTATION:
                 return ContextCompat.getDrawable(context, R.drawable.ic_rotation);
-            case Shortcut.ACTION_POWER_MENU:
+            case Item.ACTION_POWER_MENU:
                 return ContextCompat.getDrawable(context, R.drawable.ic_power_menu);
-            case Shortcut.ACTION_HOME:
+            case Item.ACTION_HOME:
                 return ContextCompat.getDrawable(context, R.drawable.ic_home);
-            case Shortcut.ACTION_BACK:
+            case Item.ACTION_BACK:
                 return ContextCompat.getDrawable(context, R.drawable.ic_back);
-            case Shortcut.ACTION_NOTI:
+            case Item.ACTION_NOTI:
                 return ContextCompat.getDrawable(context, R.drawable.ic_notification);
-            case Shortcut.ACTION_LAST_APP:
+            case Item.ACTION_LAST_APP:
                 return ContextCompat.getDrawable(context, R.drawable.ic_last_app);
-            case Shortcut.ACTION_CALL_LOGS:
+            case Item.ACTION_CALL_LOGS:
                 return ContextCompat.getDrawable(context, R.drawable.ic_call_log);
-            case Shortcut.ACTION_DIAL:
+            case Item.ACTION_DIAL:
                 return ContextCompat.getDrawable(context, R.drawable.ic_dial);
-            case Shortcut.ACTION_CONTACT:
+            case Item.ACTION_CONTACT:
                 return ContextCompat.getDrawable(context, R.drawable.ic_contact);
-            case Shortcut.ACTION_RECENT:
+            case Item.ACTION_RECENT:
                 return ContextCompat.getDrawable(context, R.drawable.ic_recent);
-            case Shortcut.ACTION_VOLUME:
+            case Item.ACTION_VOLUME:
                 return ContextCompat.getDrawable(context, R.drawable.ic_volume);
-            case Shortcut.ACTION_BRIGHTNESS:
+            case Item.ACTION_BRIGHTNESS:
                 return ContextCompat.getDrawable(context, R.drawable.ic_screen_brightness);
-            case Shortcut.ACTION_RINGER_MODE:
+            case Item.ACTION_RINGER_MODE:
                 return ContextCompat.getDrawable(context, R.drawable.ic_sound_normal);
-            case Shortcut.ACTION_FLASH_LIGHT:
+            case Item.ACTION_FLASH_LIGHT:
                 return ContextCompat.getDrawable(context, R.drawable.ic_flash_light);
-            case Shortcut.ACTION_SCREEN_LOCK:
+            case Item.ACTION_SCREEN_LOCK:
                 return ContextCompat.getDrawable(context, R.drawable.ic_screen_lock);
-            case Shortcut.ACTION_NONE:
-                return null;
         }
         return null;
     }
@@ -1827,49 +1826,11 @@ public  class Utility {
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
-                if (drawable != null) {
-                    switch (i) {
-                        case 0:
-                            drawable.setBounds(0,0,smallWidth - gap1dp,smallHeight - gap1dp);
-                            drawable.draw(canvas);
-                            break;
-                        case 1:
-                            drawable.setBounds(smallWidth+ gap1dp,0,width,smallHeight - gap1dp);
-                            drawable.draw(canvas);
-                            break;
-                        case 2:
-                            drawable.setBounds(0,smallHeight+ gap1dp,smallWidth - gap1dp,height);
-                            drawable.draw(canvas);
-                            break;
-                        case 3:
-                            drawable.setBounds(smallWidth+ gap1dp,smallHeight + gap1dp,width,height);
-                            drawable.draw(canvas);
-                            break;
-                    }
-                }
+                drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
             } else if (shortcut != null && shortcut.getType() == Shortcut.TYPE_ACTION) {
                 isFolderEmpty = false;
                 drawable = getDrawableForAction(context, shortcut.getAction());
-                if (drawable != null) {
-                    switch (i) {
-                        case 0:
-                            drawable.setBounds(0,0,smallWidth - gap1dp,smallHeight - gap1dp);
-                            drawable.draw(canvas);
-                            break;
-                        case 1:
-                            drawable.setBounds(smallWidth+ gap1dp,0,width,smallHeight - gap1dp);
-                            drawable.draw(canvas);
-                            break;
-                        case 2:
-                            drawable.setBounds(0,smallHeight+ gap1dp,smallWidth - gap1dp,height);
-                            drawable.draw(canvas);
-                            break;
-                        case 3:
-                            drawable.setBounds(smallWidth+ gap1dp,smallHeight + gap1dp,width,height);
-                            drawable.draw(canvas);
-                            break;
-                    }
-                }
+                drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
             }else if (shortcut != null && shortcut.getType() == Shortcut.TYPE_CONTACT) {
                 isFolderEmpty = false;
                 String uri = shortcut.getThumbnaiUri();
@@ -1887,26 +1848,7 @@ public  class Utility {
                     drawable = ContextCompat. getDrawable(context , R.drawable.ic_contact_default);
 //                    drawable = context.getDrawable(R.drawable.ic_contact_default);
                 }
-                if (drawable != null) {
-                    switch (i) {
-                        case 0:
-                            drawable.setBounds(0,0,smallWidth - gap1dp,smallHeight - gap1dp);
-                            drawable.draw(canvas);
-                            break;
-                        case 1:
-                            drawable.setBounds(smallWidth+ gap1dp,0,width,smallHeight - gap1dp);
-                            drawable.draw(canvas);
-                            break;
-                        case 2:
-                            drawable.setBounds(0,smallHeight+ gap1dp,smallWidth - gap1dp,height);
-                            drawable.draw(canvas);
-                            break;
-                        case 3:
-                            drawable.setBounds(smallWidth+ gap1dp,smallHeight + gap1dp,width,height);
-                            drawable.draw(canvas);
-                            break;
-                    }
-                }
+                drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
             } else if (shortcut != null && shortcut.getType() == Shortcut.TYPE_SHORTCUT) {
                 Log.e(TAG, "getFolderThumbnail: draw shortcut");
                 isFolderEmpty = false;
@@ -1928,26 +1870,7 @@ public  class Utility {
 //                        bmp =BitmapFactory.decodeResource(resources,shortcut.getResId(), options);
 //                        Log.e(TAG, "getFolderThumbnail: resource");
                     }
-                    if (drawable != null) {
-                        switch (i) {
-                            case 0:
-                                drawable.setBounds(0,0,smallWidth - gap1dp,smallHeight - gap1dp);
-                                drawable.draw(canvas);
-                                break;
-                            case 1:
-                                drawable.setBounds(smallWidth+ gap1dp,0,width,smallHeight - gap1dp);
-                                drawable.draw(canvas);
-                                break;
-                            case 2:
-                                drawable.setBounds(0,smallHeight+ gap1dp,smallWidth - gap1dp,height);
-                                drawable.draw(canvas);
-                                break;
-                            case 3:
-                                drawable.setBounds(smallWidth+ gap1dp,smallHeight + gap1dp,width,height);
-                                drawable.draw(canvas);
-                                break;
-                        }
-                    }
+                    drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
 //                    if (bmp != null) {
 //
 //                        bmp = Bitmap.createScaledBitmap(bmp, smallWidth - gap1dp, smallHeight - gap1dp, false);
@@ -1994,6 +1917,120 @@ public  class Utility {
             e.printStackTrace();
         }
         return bitmap;
+    }
+
+    public static void createAndSaveFolderThumbnail(Slot folder, Realm realm, Context context, float mScale) {
+        int width =(int)( 48*mScale);
+        int height = (int) (48 * mScale);
+        int smallWidth, smallHeight;
+        smallWidth = width/2;
+        smallHeight = height/2;
+        PackageManager packageManager = context.getPackageManager();
+        Bitmap.Config config = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap = Bitmap.createBitmap(width, height, config);
+        Canvas canvas = new Canvas(bitmap);
+        Drawable drawable;
+        Item item;
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setColor(Color.WHITE);
+        int gap1dp = (int) (mScale);
+        boolean isFolderEmpty = true;
+
+        for (int i = 0; i < 4; i++) {
+            drawable = null;
+            item = folder.items.get(i);
+            if (item != null) {
+                isFolderEmpty = false;
+                switch (item.type) {
+                    case Item.TYPE_APP:
+                        try {
+                            drawable = packageManager.getApplicationIcon(item.getPackageName());
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case Item.TYPE_ACTION:
+                        drawable = getDrawableForAction(context, item.getAction());
+                        break;
+                    case Item.TYPE_CONTACT:
+                        String uri = item.iconUri;
+                        if (uri != null) {
+                            try {
+                                Bitmap bitmap1 = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(uri));
+                                drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap1);
+                                ((RoundedBitmapDrawable) drawable).setCircular(true);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                drawable = ContextCompat.getDrawable(context, R.drawable.ic_contact_default);
+                            }
+                        } else {
+                            drawable = ContextCompat.getDrawable(context, R.drawable.ic_contact_default);
+                        }
+                        break;
+                    case Item.TYPE_DEVICE_SHORTCUT:
+                        byte[] byteArray = item.iconBitmap;
+                        try {
+                            Bitmap bmp;
+                            Resources resources = packageManager.getResourcesForApplication(item.getPackageName());
+                            if (byteArray != null) {
+
+                                bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                                drawable = new BitmapDrawable(resources, bmp);
+
+                            } else {
+                                BitmapFactory.Options options = new BitmapFactory.Options();
+                                Log.e(TAG, "getFolderThumbnail: resourcesCompat");
+                                drawable = ResourcesCompat.getDrawable(resources, item.iconResourceId, null);
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, "getView: can not set imageview for item item");
+                        }
+                        break;
+
+                }
+                drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
+
+            }
+        }
+        if (isFolderEmpty) {
+//            drawable = context.getDrawable(R.drawable.ic_folder);
+            drawable = ContextCompat.getDrawable(context, R.drawable.ic_folder);
+            if (drawable != null) {
+                drawable.setBounds(0, 0, width, height);
+                drawable.draw(canvas);
+            }
+
+        }
+        realm.beginTransaction();
+        int size = bitmap.getRowBytes() * bitmap.getHeight();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(size);
+        bitmap.copyPixelsToBuffer(byteBuffer);
+        folder.iconBitmap = byteBuffer.array();
+        realm.commitTransaction();
+    }
+
+    private static void drawIconToFolderCanvas(int width, int height, int smallWidth, int smallHeight, Canvas canvas, Drawable drawable, int gap1dp, int i) {
+        if (drawable != null) {
+            switch (i) {
+                case 0:
+                    drawable.setBounds(0,0,smallWidth - gap1dp,smallHeight - gap1dp);
+                    drawable.draw(canvas);
+                    break;
+                case 1:
+                    drawable.setBounds(smallWidth+ gap1dp,0,width,smallHeight - gap1dp);
+                    drawable.draw(canvas);
+                    break;
+                case 2:
+                    drawable.setBounds(0,smallHeight+ gap1dp,smallWidth - gap1dp,height);
+                    drawable.draw(canvas);
+                    break;
+                case 3:
+                    drawable.setBounds(smallWidth+ gap1dp,smallHeight + gap1dp,width,height);
+                    drawable.draw(canvas);
+                    break;
+            }
+        }
     }
 
 
