@@ -242,7 +242,7 @@ public class FolderSettingView extends BaseActivity<Void, FolderSettingPresenter
     }
 
     @Override
-    public void createFolderThumbnail(Realm realm, Slot folder) {
+    public void updateFolderThumbnail(Realm realm, Slot folder) {
         Utility.createAndSaveFolderThumbnail(folder,realm,this);
     }
 }

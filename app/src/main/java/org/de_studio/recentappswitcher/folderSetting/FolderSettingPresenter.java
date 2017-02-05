@@ -92,6 +92,8 @@ public class FolderSettingPresenter extends BasePresenter<FolderSettingPresenter
                             view.notifyItemRemove(dropData.position);
                         }
                         view.setDeleteButtonVisibility(false);
+                        view.updateFolderThumbnail(model.getRealm(), model.getFolder());
+
                     }
                 })
         );
@@ -114,7 +116,7 @@ public class FolderSettingPresenter extends BasePresenter<FolderSettingPresenter
                 view.onDialogClosed().subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        view.createFolderThumbnail(model.getRealm(), model.getFolder());
+                        view.updateFolderThumbnail(model.getRealm(), model.getFolder());
                     }
                 })
         );
@@ -169,7 +171,7 @@ public class FolderSettingPresenter extends BasePresenter<FolderSettingPresenter
 
         float getDeleteButtonY();
 
-        void createFolderThumbnail(Realm realm, Slot folder);
+        void updateFolderThumbnail(Realm realm, Slot folder);
 
     }
 }
