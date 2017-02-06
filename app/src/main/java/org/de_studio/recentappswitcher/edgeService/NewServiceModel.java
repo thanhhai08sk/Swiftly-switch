@@ -138,45 +138,68 @@ public class NewServiceModel extends BaseModel {
         return realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, id).findFirst();
     }
 
-    public int getCircleAndQuickActionTriggerId(IconsXY iconsXY, int radius, float x_init, float y_init, float x, float y, int position, int iconsCount) {
+    public int getCircleAndQuickActionTriggerId(IconsXY iconsXY, int radius, float x_init, float y_init, float x, float y, int position, int iconsCount, boolean hasQuickActions) {
         float circleSizePxl = radius * mScale;
         double xInitDouble = (double) x_init;
         double yInitDouble = (double) y_init;
         double xDouble = (double) x;
         double yDouble = (double) y;
+        double distanceFromInitPxl = Math.sqrt(Math.pow(xDouble - xInitDouble, 2) + Math.pow(yDouble - yInitDouble, 2));
 
-        double distanceFromInitPxl = Math.sqrt(Math.pow(xDouble - xInitDouble,2) + Math.pow(yDouble - yInitDouble, 2));
-        double startQuickActionZonePxl = (double) (35 * mScale + circleSizePxl);
+        if (hasQuickActions) {
+            double startQuickActionZonePxl = (double) (35 * mScale + circleSizePxl);
 
-        double ang30 = 0.1666*Math.PI;
-        double ang70 = 0.3889*Math.PI;
-        double ang110 = 0.6111*Math.PI;
-        double alpha;
-        if (distanceFromInitPxl < startQuickActionZonePxl) {
-            double distance;
-            double distanceNeeded = 35 * mScale;
-            for (int i = 0; i < iconsCount; i++) {
-                distance = Math.sqrt(Math.pow(xDouble - (double) (iconsXY.xs[i] + haftIconWidth), 2) + Math.pow(yDouble - (double) (iconsXY.ys[i] + haftIconWidth), 2));
-                if (distance <= distanceNeeded) {
-                    return i;
+            double ang30 = 0.1666 * Math.PI;
+            double ang70 = 0.3889 * Math.PI;
+            double ang110 = 0.6111 * Math.PI;
+            double alpha;
+            if (distanceFromInitPxl < startQuickActionZonePxl) {
+                double distance;
+                double distanceNeeded = 35 * mScale;
+                for (int i = 0; i < iconsCount; i++) {
+                    distance = Math.sqrt(Math.pow(xDouble - (double) (iconsXY.xs[i] + haftIconWidth), 2) + Math.pow(yDouble - (double) (iconsXY.ys[i] + haftIconWidth), 2));
+                    if (distance <= distanceNeeded) {
+                        return i;
+                    }
                 }
+            } else {
+                if (Utility.rightLeftOrBottom(position) == Cons.POSITION_BOTTOM) {
+                    alpha = Math.acos((x_init - x) / distanceFromInitPxl);
+                } else {
+                    alpha = Math.acos((y_init - y) / distanceFromInitPxl);
+                }
+                if (alpha < ang30) {
+                    return 10;
+                } else if (alpha < ang70) {
+                    return 11;
+                } else if (alpha < ang110) {
+                    return 12;
+                } else return 13;
             }
+            return -1;
         } else {
+            double alpha;
+            double halfIconAngle;
+            double angleToMidOfFirstIcon;
             if (Utility.rightLeftOrBottom(position) == Cons.POSITION_BOTTOM) {
                 alpha = Math.acos((x_init - x) / distanceFromInitPxl);
-            }else {
-                alpha = Math.acos((y_init-y)/distanceFromInitPxl);
+            } else {
+                alpha = Math.acos((y_init - y) / distanceFromInitPxl);
             }
-            if (alpha < ang30) {
-                return 10;
-            }else if (alpha < ang70) {
-                return 11;
-            }else if (alpha < ang110) {
-                return 12;
-            }else return 13;
+            if (iconsCount < 6) {
+                angleToMidOfFirstIcon = Cons.CIRCLE_INIT_ANGLE_LESS_THAN_6_ITEMS;
+            } else {
+                angleToMidOfFirstIcon = Cons.CIRCLE_INIT_ANGLE_GREATER_OR_EQUAL_6_ITEMS;
+            }
+            halfIconAngle = (Math.PI * 2 - 2 * angleToMidOfFirstIcon) / (iconsCount - 1);
+
+            for (int i = 1; i < iconsCount * 2; i = i + 2) {
+                if (alpha < angleToMidOfFirstIcon + i * halfIconAngle) {
+                    return (i - 1) / 2;
+                }
+            }
         }
         return -1;
-
     }
 
     public int getGridActivatedId(float x, float y, float gridX, float gridY, int rowsCount, int columnCount, int space, boolean folderMode) {
@@ -227,19 +250,19 @@ public class NewServiceModel extends BaseModel {
         double[] alphaN = new double[iconCount];
         switch (iconCount) {
             case 4:
-                alpha = 0.111 * Math.PI; // 20 degree
+                alpha = Cons.CIRCLE_INIT_ANGLE_LESS_THAN_6_ITEMS; // 20 degree
                 break;
             case 5:
-                alpha = 0.111 * Math.PI; // 20 degree
+                alpha = Cons.CIRCLE_INIT_ANGLE_LESS_THAN_6_ITEMS; // 20 degree
                 break;
             case 6:
-                alpha = 0.0556 * Math.PI; // 10 degree
+                alpha = Cons.CIRCLE_INIT_ANGLE_GREATER_OR_EQUAL_6_ITEMS; // 10 degree
                 break;
             case 7:
-                alpha = 0.0566 * Math.PI;
+                alpha = Cons.CIRCLE_INIT_ANGLE_GREATER_OR_EQUAL_6_ITEMS;
                 break;
             default:
-                alpha = 0.0556 * Math.PI;
+                alpha = Cons.CIRCLE_INIT_ANGLE_GREATER_OR_EQUAL_6_ITEMS;
                 break;
         }
         beta = Math.PI - 2 * alpha;

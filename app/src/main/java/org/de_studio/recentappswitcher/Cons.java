@@ -259,6 +259,8 @@ public class Cons {
     public static final int EDGE_SENSITIVE_MIN = 5;
     public static final int EDGE_LENGTH_MIN = 40;
     public static final int EDGE_OFFSET_MIN = -300;
+    public static final double CIRCLE_INIT_ANGLE_LESS_THAN_6_ITEMS = 0.111 * Math.PI;
+    public static final double CIRCLE_INIT_ANGLE_GREATER_OR_EQUAL_6_ITEMS = 0.0566 * Math.PI;
 
 
 

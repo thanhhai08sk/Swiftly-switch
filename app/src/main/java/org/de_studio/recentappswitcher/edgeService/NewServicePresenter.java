@@ -35,6 +35,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     int currentHighlight = -1;
     long holdingHelper;
     String previousGridId;
+    ArrayList<String> tempRecentPackages;
 
     PublishSubject<Integer> highlightIdSubject = PublishSubject.create();
     PublishSubject<Void> longClickItemSubject = PublishSubject.create();
@@ -109,6 +110,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         Collection collection = model.getCollection(s);
                         if (collection.type.equals(Collection.TYPE_GRID_FAVORITE)) {
                             showGrid(collection, view);
+                        } else if (collection.type.equals(Collection.TYPE_CIRCLE_FAVORITE)) {
+                            if (tempRecentPackages == null) {
+                                tempRecentPackages = view.getRecentApp();
+                            }
+                            showCollection(tempRecentPackages);
                         }
                     }
                 })
@@ -192,9 +198,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         setCurrentEdge(edgeId);
         setTriggerPoint(x, y);
 
-        ArrayList<String> tempPackages = view.getRecentApp();
+        tempRecentPackages = view.getRecentApp();
         view.showBackground();
-        showCollection(tempPackages);
+        showCollection(tempRecentPackages);
         view.actionDownVibrate();
         view.showClock();
         holdingHelper = 0;
@@ -255,6 +261,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             currentShowing.showWhat = Showing.SHOWING_NONE;
             currentHighlight = -1;
         }
+        tempRecentPackages = null;
     }
 
     public void onActionOutSide() {

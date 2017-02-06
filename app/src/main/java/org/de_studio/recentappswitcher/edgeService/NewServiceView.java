@@ -416,6 +416,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         hideAllCollections();
 
         if (needDelay) {
+            Log.e(TAG, "showGrid: with delay");
             recyclerView.setVisibility(View.VISIBLE);
             recyclerView.setAlpha(0f);
             Handler handlerClose = new Handler();
@@ -438,6 +439,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 }
             }, 20);
         } else {
+            Log.e(TAG, "showGrid: without delay");
             Utility.setFavoriteGridViewPosition(recyclerView
                     , grid.position == Collection.POSITION_CENTER
                     , recyclerView.getHeight()
@@ -468,6 +470,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                         .alpha(1f)
                         .setInterpolator(new DecelerateInterpolator(3f))
                         .setDuration(animationTime)
+                        .setStartDelay(animationTime)
                         .start();
             }
             currentShowing.gridXY.x = (int) recyclerView.getX();
