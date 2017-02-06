@@ -11,6 +11,8 @@ public class Edge extends RealmObject {
     public static final int MODE_RECENT_AND_QUICK_ACTION = 0;
     public static final int MODE_CIRCLE_FAV_AND_QUICK_ACTION = 1;
     public static final int MODE_GRID = 2;
+    public static final int MODE_RECENT_ONLY = 3;
+    public static final int MODE_CIRCLE_FAVORITE_ONLY = 4;
     public static final int KEYBOARD_OPTION_STEP_ASIDE = 1;
     public static final int KEYBOARD_OPTION_PLACE_UNDER = 0;
     public static final int KEYBOARD_OPTION_NONE = 3;

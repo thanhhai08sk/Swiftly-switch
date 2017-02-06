@@ -195,7 +195,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     }
 
     public void onActionDown(float x, float y, int edgeId) {
-        setCurrentEdge(edgeId);
+        setCurrentEdgeAndCurrentShowing(edgeId);
         setTriggerPoint(x, y);
 
         tempRecentPackages = view.getRecentApp();
@@ -209,7 +209,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     public void onActionMove(float x, float y) {
         switch (currentShowing.showWhat) {
             case Showing.SHOWING_CIRCLE_AND_ACTION:
-                int highlight = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size());
+                int highlight = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), true);
                 highlightIdSubject.onNext(highlight);
                 break;
             case Showing.SHOWING_GRID:
@@ -322,13 +322,29 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         }
     }
 
-    private void setCurrentEdge(int edgeId) {
+    private void setCurrentEdgeAndCurrentShowing(int edgeId) {
         switch (edgeId) {
             case Cons.EDGE_1_ID_INT:
                 currentEdge = model.getEdge(Edge.EDGE_1_ID);
                 break;
             case Cons.EDGE_2_ID_INT:
                 currentEdge = model.getEdge(Edge.EDGE_2_ID);
+                break;
+        }
+        currentShowing.showWhat = currentEdge.mode;
+        currentHighlight = -1;
+        switch (currentEdge.mode) {
+            case Edge.MODE_GRID:
+                currentShowing.grid = currentEdge.grid;
+                break;
+            case Edge.MODE_RECENT_AND_QUICK_ACTION:
+
+                break;
+            case Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION:
+                break;
+            case Edge.MODE_RECENT_ONLY:
+                break;
+            case Edge.MODE_CIRCLE_FAVORITE_ONLY:
                 break;
         }
     }
@@ -410,6 +426,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         public static final int SHOWING_CIRCLE_AND_ACTION = 1;
         public static final int SHOWING_NONE = 2;
         public static final int SHOWING_FOLDER = 3;
+        public static final int SHOWING_CIRCLE_ONLY = 4;
         public int showWhat;
         public Collection grid;
         public Collection circle;
