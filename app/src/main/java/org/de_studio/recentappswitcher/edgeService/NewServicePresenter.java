@@ -117,6 +117,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
                             currentShowing.circle = collection;
                             currentShowing.circleSlots = collection.slots;
+                            view.hideAllCollections();
                             showCollection(Showing.SHOWING_CIRCLE_ONLY);
                         } else if (collection.type.equals(Collection.TYPE_RECENT)) {
                             if (tempRecentPackages == null) {
@@ -125,6 +126,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
                             currentShowing.circle = collection;
                             currentShowing.circleSlots = model.getRecent(tempRecentPackages, collection.slots);
+                            view.hideAllCollections();
                             showCollection(currentShowing.showWhat);
                         }
                     }
