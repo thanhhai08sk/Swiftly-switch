@@ -659,6 +659,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                         indicateSlot(currentShowing.action.slots.get(id - 10));
                     }
                     break;
+                case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:
+                    if (id < currentShowing.circleSlots.size()) {
+                        indicateSlot(currentShowing.circleSlots.get(id));
+                    }
+                    break;
                 case NewServicePresenter.Showing.SHOWING_GRID:
                     Slot slot = currentShowing.grid.slots.get(id);
                     indicateSlot(slot);
@@ -810,12 +815,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         } else {
             icon.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
         }
-//        icon.setX(icon.getX() - 8 * mScale);
-//        icon.setY(icon.getY() - 8 * mScale);
-        Log.e(TAG, "highlightCircleIcon: x before = " + icon.getX() );
+
         icon.setX(iconX - 8 * mScale);
         icon.setY(iconY - 8 * mScale);
-        Log.e(TAG, "highlightCircleIcon: x after = " + icon.getX() );
 
         icon.setLayoutParams(layoutParams);
         icon.setPadding((int) (8 * mScale), (int) (8 * mScale), (int) (8 * mScale), (int) (8 * mScale));
@@ -830,16 +832,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(icon.getLayoutParams());
             layoutParams1.width = (int) (48 * mScale * iconScale);
             layoutParams1.height = (int) (48 * mScale * iconScale);
-            float x = icon.getX();
-            float y = icon.getY();
+
             icon.setBackground(null);
-//            icon.setX(x + 8 * mScale);
-//            icon.setY(y + 8 * mScale);
-            Log.e(TAG, "highlightCircleIcon: x before = " + icon.getX() );
 
             icon.setX(iconX);
             icon.setY(iconY);
-            Log.e(TAG, "highlightCircleIcon: x after = " + icon.getX() );
 
             icon.setLayoutParams(layoutParams1);
             icon.setPadding(0, 0, 0, 0);

@@ -265,6 +265,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         slot = currentShowing.action.slots.get(currentHighlight - 10);
                     }
                     break;
+                case Showing.SHOWING_CIRCLE_ONLY:
+                    if (currentHighlight < currentShowing.circleSlots.size()) {
+                        slot = currentShowing.circleSlots.get(currentHighlight);
+                    }
+                    break;
                 case Showing.SHOWING_GRID:
                     slot = currentShowing.grid.slots.get(currentHighlight);
                     break;
