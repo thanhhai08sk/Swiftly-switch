@@ -114,7 +114,18 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             if (tempRecentPackages == null) {
                                 tempRecentPackages = view.getRecentApp();
                             }
-                            showCollection(tempRecentPackages);
+                            currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
+                            currentShowing.circle = collection;
+                            currentShowing.circleSlots = collection.slots;
+                            showCollection(Showing.SHOWING_CIRCLE_ONLY);
+                        } else if (collection.type.equals(Collection.TYPE_RECENT)) {
+                            if (tempRecentPackages == null) {
+                                tempRecentPackages = view.getRecentApp();
+                            }
+                            currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
+                            currentShowing.circle = collection;
+                            currentShowing.circleSlots = model.getRecent(tempRecentPackages, collection.slots);
+                            showCollection(currentShowing.showWhat);
                         }
                     }
                 })
@@ -280,37 +291,6 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     }
 
 
-
-    private void showCollection(ArrayList<String> tempPackages) {
-        switch (currentEdge.mode) {
-            case Edge.MODE_GRID:
-                Log.e(TAG, "showCollection: grid");
-                showGrid(currentEdge.grid, view);
-                break;
-            case Edge.MODE_RECENT_AND_QUICK_ACTION:
-                Log.e(TAG, "showCollection: recent and quick action");
-                currentShowing.circleIconsXY = model.calculateCircleIconPositions(currentEdge.recent.radius, currentEdge.position
-                        , xInit, yInit, currentEdge.recent.slots.size());
-                RealmList<Slot> slots = model.getRecent(tempPackages, currentEdge.recent.slots);
-                view.showCircle(currentShowing.circleIconsXY, currentEdge.recent
-                        , slots, xInit,yInit);
-                currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
-                currentShowing.circle = currentEdge.recent;
-                currentShowing.circleSlots = slots;
-                currentShowing.action = currentEdge.quickAction;
-                break;
-            case Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION:
-                Log.e(TAG, "showCollection: circle and quick action");
-                currentShowing.circleIconsXY = model.calculateCircleIconPositions(currentEdge.circleFav.radius, currentEdge.position
-                        , xInit, yInit, currentEdge.circleFav.slots.size());
-                view.showCircle(currentShowing.circleIconsXY, currentEdge.circleFav, currentEdge.circleFav.slots,xInit,yInit);
-                currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
-                currentShowing.circle = currentEdge.circleFav;
-                currentShowing.circleSlots = currentShowing.circle.slots;
-                currentShowing.action = currentEdge.quickAction;
-                break;
-        }
-    }
 
     private void showCollection(int showWhat) {
         switch (showWhat) {
