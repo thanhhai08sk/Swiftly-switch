@@ -2528,7 +2528,64 @@ public  class Utility {
         }
     }
 
+    public static Bitmap getItemBitmap(Item item, Context context, IconPackManager.IconPack iconPack) {
+        switch (item.type) {
+            case Item.TYPE_APP:
+                try {
+                    Drawable defaultDrawable = context.getPackageManager().getApplicationIcon(item.getPackageName());
+                    Drawable iconPackDrawable;
+                    if (iconPack!=null) {
+                        iconPackDrawable = iconPack.getDrawableIconForPackage(item.getPackageName(), defaultDrawable);
+                        if (iconPackDrawable == null) {
+                            iconPackDrawable = defaultDrawable;
+                        }
+                        return ((BitmapDrawable) iconPackDrawable).getBitmap();
+                    } else {
+                        return ((BitmapDrawable) defaultDrawable).getBitmap();
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    Log.e(TAG, "NameNotFound " + e);
+                }
+                break;
+            case Item.TYPE_ACTION:
+                return ((BitmapDrawable) context.getDrawable(item.iconResourceId)).getBitmap();
+            case Item.TYPE_DEVICE_SHORTCUT:
+                byte[] byteArray = item.iconBitmap;
+                try {
+                    if (byteArray != null) {
+                        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                    } else {
+                        Resources resources = context.getPackageManager().getResourcesForApplication(item.getPackageName());
+                        return BitmapFactory.decodeResource(resources, item.iconResourceId);
+                    }
 
+                } catch (Exception e) {
+                    Log.e(TAG, "getView: can not set imageview for shortcut shortcut");
+                }
+                break;
+            case Item.TYPE_CONTACT:
+                String thumbnaiUri = item.iconUri;
+                if (thumbnaiUri != null) {
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(thumbnaiUri));
+                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+                        drawable.setCircular(true);
+                        return drawable.getBitmap();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return ((BitmapDrawable) context.getDrawable(R.drawable.ic_contact_default)).getBitmap();
+                    } catch (SecurityException e) {
+                        Toast.makeText(context, context.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    return ((BitmapDrawable) context.getDrawable(R.drawable.ic_contact_default)).getBitmap();
+                }
+                break;
+            case Item.TYPE_SHORTCUTS_SET:
+                return ((BitmapDrawable) context.getDrawable(item.iconResourceId)).getBitmap();
+        }
+        return null;
+    }
 
     public static void setSlotLabel(Slot slot, Context context, TextView label) {
         switch (slot.type) {
