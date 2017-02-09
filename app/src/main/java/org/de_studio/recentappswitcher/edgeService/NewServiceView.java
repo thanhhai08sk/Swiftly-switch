@@ -747,12 +747,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_AND_ACTION:
                     if (id < 10) {
                         FrameLayout recent = (FrameLayout) collectionViewsMap.get(currentShowing.circle.collectionId);
-                        highlightCircleIcon(recent.getChildAt(id));
+                        highlightCircleIcon(recent.getChildAt(id), currentShowing.circleIconsXY.xs[id], currentShowing.circleIconsXY.ys[id]);
+
                     }
                     break;
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:
                     ViewGroup circleView = (ViewGroup) collectionViewsMap.get(currentShowing.circle.collectionId);
-                    highlightCircleIcon(circleView.getChildAt(id));
+                    highlightCircleIcon(circleView.getChildAt(id), currentShowing.circleIconsXY.xs[id], currentShowing.circleIconsXY.ys[id]);
                     break;
                 case NewServicePresenter.Showing.SHOWING_FOLDER:
                     if (id < currentShowing.folderItems.size()) {
@@ -778,12 +779,14 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_AND_ACTION:
                     if (id < 10) {
                         FrameLayout recent = (FrameLayout) collectionViewsMap.get(currentShowing.circle.collectionId);
-                        unhighlightCircleIcon(recent.getChildAt(id));
+                        unhighlightCircleIcon(recent.getChildAt(id), currentShowing.circleIconsXY.xs[id], currentShowing.circleIconsXY.ys[id]);
                     }
                     break;
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:
-                    ViewGroup circleView = (ViewGroup) collectionViewsMap.get(currentShowing.circle.collectionId);
-                    unhighlightCircleIcon(circleView.getChildAt(id));
+                    if (id < currentShowing.circleSlots.size()) {
+                        ViewGroup circleView = (ViewGroup) collectionViewsMap.get(currentShowing.circle.collectionId);
+                        unhighlightCircleIcon(circleView.getChildAt(id), currentShowing.circleIconsXY.xs[id], currentShowing.circleIconsXY.ys[id]);
+                    }
                     break;
                 case NewServicePresenter.Showing.SHOWING_FOLDER:
                     if (id < currentShowing.folderItems.size()) {
@@ -796,7 +799,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         }
     }
 
-    private void highlightCircleIcon(View icon) {
+    private void highlightCircleIcon(View icon, float iconX, float iconY) {
         icon.setScaleX(1.2f);
         icon.setScaleY(1.2f);
 
@@ -807,13 +810,18 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         } else {
             icon.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
         }
-        icon.setX(icon.getX() - 8 * mScale);
-        icon.setY(icon.getY() - 8 * mScale);
+//        icon.setX(icon.getX() - 8 * mScale);
+//        icon.setY(icon.getY() - 8 * mScale);
+        Log.e(TAG, "highlightCircleIcon: x before = " + icon.getX() );
+        icon.setX(iconX - 8 * mScale);
+        icon.setY(iconY - 8 * mScale);
+        Log.e(TAG, "highlightCircleIcon: x after = " + icon.getX() );
+
         icon.setLayoutParams(layoutParams);
         icon.setPadding((int) (8 * mScale), (int) (8 * mScale), (int) (8 * mScale), (int) (8 * mScale));
     }
 
-    private void unhighlightCircleIcon(View icon) {
+    private void unhighlightCircleIcon(View icon, float iconX, float iconY) {
         if (icon != null) {
             icon.setScaleX(1f);
             icon.setScaleY(1f);
@@ -825,8 +833,14 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             float x = icon.getX();
             float y = icon.getY();
             icon.setBackground(null);
-            icon.setX(x + 8 * mScale);
-            icon.setY(y + 8 * mScale);
+//            icon.setX(x + 8 * mScale);
+//            icon.setY(y + 8 * mScale);
+            Log.e(TAG, "highlightCircleIcon: x before = " + icon.getX() );
+
+            icon.setX(iconX);
+            icon.setY(iconY);
+            Log.e(TAG, "highlightCircleIcon: x after = " + icon.getX() );
+
             icon.setLayoutParams(layoutParams1);
             icon.setPadding(0, 0, 0, 0);
         }
