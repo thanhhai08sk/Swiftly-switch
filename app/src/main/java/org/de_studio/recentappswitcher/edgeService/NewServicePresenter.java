@@ -195,15 +195,18 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     }
 
     public void onActionDown(float x, float y, int edgeId) {
+        long time = System.currentTimeMillis();
+        tempRecentPackages = view.getRecentApp();
         setCurrentEdgeAndCurrentShowing(edgeId);
         setTriggerPoint(x, y);
 
-        tempRecentPackages = view.getRecentApp();
         view.showBackground();
-        showCollection(tempRecentPackages);
+//        showCollection(tempRecentPackages);
+        showCollection(currentShowing.showWhat);
         view.actionDownVibrate();
         view.showClock();
         holdingHelper = 0;
+        Log.e(TAG, "onActionDown: time to finish = " + (System.currentTimeMillis() - time));
     }
 
     public void onActionMove(float x, float y) {
@@ -309,6 +312,27 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         }
     }
 
+    private void showCollection(int showWhat) {
+        switch (showWhat) {
+            case Showing.SHOWING_GRID:
+                view.showGrid(xInit, yInit, currentShowing.grid, currentEdge.position, currentShowing);
+                break;
+            case Showing.SHOWING_CIRCLE_AND_ACTION:
+                updateCircleIconPosition();
+                view.showCircle(currentShowing.circleIconsXY, currentShowing.circle, currentShowing.circleSlots, xInit, yInit);
+                break;
+            case Showing.SHOWING_CIRCLE_ONLY:
+                updateCircleIconPosition();
+                view.showCircle(currentShowing.circleIconsXY, currentShowing.circle, currentShowing.circleSlots, xInit, yInit);
+                break;
+        }
+    }
+
+    private void updateCircleIconPosition() {
+        currentShowing.circleIconsXY = model.calculateCircleIconPositions(currentShowing.circle.radius, currentEdge.position
+                , xInit, yInit, currentShowing.circle.slots.size());
+    }
+
     private void setTriggerPoint(float x, float y) {
         if (currentEdge.mode== Edge.MODE_RECENT_AND_QUICK_ACTION) {
             xInit = model.getXInit(currentEdge.position, x, view.getWindowSize().x, currentEdge.recent.radius);
@@ -331,20 +355,34 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 currentEdge = model.getEdge(Edge.EDGE_2_ID);
                 break;
         }
-        currentShowing.showWhat = currentEdge.mode;
+
         currentHighlight = -1;
         switch (currentEdge.mode) {
             case Edge.MODE_GRID:
+                currentShowing.showWhat = Showing.SHOWING_GRID;
                 currentShowing.grid = currentEdge.grid;
                 break;
             case Edge.MODE_RECENT_AND_QUICK_ACTION:
-
+                currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
+                currentShowing.circle = currentEdge.recent;
+                currentShowing.action = currentEdge.quickAction;
+                currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots);
                 break;
             case Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION:
-                break;
-            case Edge.MODE_RECENT_ONLY:
+                currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
+                currentShowing.circle = currentEdge.circleFav;
+                currentShowing.action = currentEdge.quickAction;
+                currentShowing.circleSlots = currentShowing.circle.slots;
                 break;
             case Edge.MODE_CIRCLE_FAVORITE_ONLY:
+                currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
+                currentShowing.circle = currentEdge.circleFav;
+                currentShowing.circleSlots = currentShowing.circle.slots;
+                break;
+            case Edge.MODE_RECENT_ONLY:
+                currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
+                currentShowing.circle = currentEdge.recent;
+                currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots);
                 break;
         }
     }

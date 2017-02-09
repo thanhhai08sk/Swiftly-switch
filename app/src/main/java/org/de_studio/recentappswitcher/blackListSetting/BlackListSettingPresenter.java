@@ -34,7 +34,7 @@ public class BlackListSettingPresenter extends BasePresenter<BlackListSettingPre
         super.onViewAttach(view);
         view.loadApps();
         getBlackListItems();
-        view.setProgressBar(true);
+//        view.setProgressBar(true);
 
         appsList = realm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_APP).findAllAsync();
         view.setAdapter(appsList, blackListItems);
