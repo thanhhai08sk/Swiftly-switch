@@ -781,6 +781,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                         unhighlightCircleIcon(recent.getChildAt(id));
                     }
                     break;
+                case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:
+                    ViewGroup circleView = (ViewGroup) collectionViewsMap.get(currentShowing.circle.collectionId);
+                    unhighlightCircleIcon(circleView.getChildAt(id));
+                    break;
                 case NewServicePresenter.Showing.SHOWING_FOLDER:
                     if (id < currentShowing.folderItems.size()) {
                         RecyclerView folder = (RecyclerView) collectionViewsMap.get(currentShowing.folderSlotId);
@@ -810,20 +814,22 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     private void unhighlightCircleIcon(View icon) {
-        icon.setScaleX(1f);
-        icon.setScaleY(1f);
+        if (icon != null) {
+            icon.setScaleX(1f);
+            icon.setScaleY(1f);
 
 
-        FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(icon.getLayoutParams());
-        layoutParams1.width = (int) (48 * mScale * iconScale);
-        layoutParams1.height = (int) (48 * mScale * iconScale);
-        float x = icon.getX();
-        float y = icon.getY();
-        icon.setBackground(null);
-        icon.setX(x + 8 * mScale);
-        icon.setY(y + 8 * mScale);
-        icon.setLayoutParams(layoutParams1);
-        icon.setPadding(0, 0, 0, 0);
+            FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(icon.getLayoutParams());
+            layoutParams1.width = (int) (48 * mScale * iconScale);
+            layoutParams1.height = (int) (48 * mScale * iconScale);
+            float x = icon.getX();
+            float y = icon.getY();
+            icon.setBackground(null);
+            icon.setX(x + 8 * mScale);
+            icon.setY(y + 8 * mScale);
+            icon.setLayoutParams(layoutParams1);
+            icon.setPadding(0, 0, 0, 0);
+        }
     }
 
     @Override
