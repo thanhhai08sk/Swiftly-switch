@@ -68,7 +68,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 }).subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
-//                        Log.e(TAG, "call: highlight " + integer);
+                        Log.e(TAG, "call: highlight " + integer);
                         view.unhighlightSlot(currentShowing, currentHighlight);
                         view.highlightSlot(currentShowing, integer);
                         view.indicateCurrentShowing(currentShowing,integer);
@@ -227,6 +227,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             case Showing.SHOWING_CIRCLE_AND_ACTION:
                 int highlight = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), true);
                 highlightIdSubject.onNext(highlight);
+                break;
+            case Showing.SHOWING_CIRCLE_ONLY:
+                int highlight1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), false);
+                highlightIdSubject.onNext(highlight1);
                 break;
             case Showing.SHOWING_GRID:
                 int onPosition = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, currentShowing.grid.rowsCount, currentShowing.grid.columnCount, currentShowing.grid.space, false);

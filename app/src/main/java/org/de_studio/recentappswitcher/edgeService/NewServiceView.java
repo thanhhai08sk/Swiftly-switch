@@ -750,12 +750,17 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                         highlightCircleIcon(recent.getChildAt(id));
                     }
                     break;
+                case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:
+                    ViewGroup circleView = (ViewGroup) collectionViewsMap.get(currentShowing.circle.collectionId);
+                    highlightCircleIcon(circleView.getChildAt(id));
+                    break;
                 case NewServicePresenter.Showing.SHOWING_FOLDER:
                     if (id < currentShowing.folderItems.size()) {
                         RecyclerView folder = (RecyclerView) collectionViewsMap.get(currentShowing.folderSlotId);
                         folder.getChildAt(id).setBackgroundColor(Color.argb(255, 42, 96, 70));
                     }
                     break;
+
 
             }
 

@@ -181,21 +181,24 @@ public class NewServiceModel extends BaseModel {
             double alpha;
             double halfIconAngle;
             double angleToMidOfFirstIcon;
-            if (Utility.rightLeftOrBottom(position) == Cons.POSITION_BOTTOM) {
-                alpha = Math.acos((x_init - x) / distanceFromInitPxl);
-            } else {
-                alpha = Math.acos((y_init - y) / distanceFromInitPxl);
-            }
-            if (iconsCount < 6) {
-                angleToMidOfFirstIcon = Cons.CIRCLE_INIT_ANGLE_LESS_THAN_6_ITEMS;
-            } else {
-                angleToMidOfFirstIcon = Cons.CIRCLE_INIT_ANGLE_GREATER_OR_EQUAL_6_ITEMS;
-            }
-            halfIconAngle = (Math.PI * 2 - 2 * angleToMidOfFirstIcon) / (iconsCount - 1);
+            double minDistance = (double) (circleSizePxl - mScale * 35);
+            if (distanceFromInitPxl > minDistance) {
+                if (Utility.rightLeftOrBottom(position) == Cons.POSITION_BOTTOM) {
+                    alpha = Math.acos((x_init - x) / distanceFromInitPxl);
+                } else {
+                    alpha = Math.acos((y_init - y) / distanceFromInitPxl);
+                }
+                if (iconsCount < 6) {
+                    angleToMidOfFirstIcon = Cons.CIRCLE_INIT_ANGLE_LESS_THAN_6_ITEMS;
+                } else {
+                    angleToMidOfFirstIcon = Cons.CIRCLE_INIT_ANGLE_GREATER_OR_EQUAL_6_ITEMS;
+                }
+                halfIconAngle = (Math.PI - 2 * angleToMidOfFirstIcon) / ((iconsCount - 1)*2);
 
-            for (int i = 1; i < iconsCount * 2; i = i + 2) {
-                if (alpha < angleToMidOfFirstIcon + i * halfIconAngle) {
-                    return (i - 1) / 2;
+                for (int i = 1; i < iconsCount * 2; i = i + 2) {
+                    if (alpha < angleToMidOfFirstIcon + i * halfIconAngle) {
+                        return (i - 1) / 2;
+                    }
                 }
             }
         }
