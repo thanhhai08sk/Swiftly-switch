@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
@@ -20,6 +21,7 @@ import org.de_studio.recentappswitcher.model.DataInfo;
 import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
+import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import java.util.Random;
 import java.util.Set;
@@ -434,9 +436,14 @@ public class DataSetupService extends IntentService {
     }
 
     private void convertOldRealmToNewRealm(Realm newRealm) {
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder().build();
-        Realm oldRealm = Realm.getInstance(realmConfig);
-        Log.e(TAG, "convertOldRealmToNewRealm: oldRealm size = " + oldRealm.where(Shortcut.class).findAll().size());
+        Realm oldRealm = Realm.getInstance(new RealmConfiguration.Builder()
+                .name("default.realm")
+                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
+
+        Log.e(TAG, "convertOldRealmToNewRealm: oldRealm size = " + oldRealm.where(Shortcut.class).findAll().size()
+                + "\nisEmpty = " + oldRealm.isEmpty());
 
     }
 }
