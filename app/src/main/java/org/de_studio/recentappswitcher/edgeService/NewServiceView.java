@@ -57,6 +57,7 @@ import org.de_studio.recentappswitcher.service.Circle;
 import org.de_studio.recentappswitcher.service.CircleAngleAnimation;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.NotiDialog;
+import org.de_studio.recentappswitcher.ui.QuickActionsView;
 import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
 import java.text.SimpleDateFormat;
@@ -387,6 +388,31 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale), (int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale)));
         imageView.setId(R.id.item_icon);
         return imageView;
+    }
+
+    public void showQuickActions(float xInit, float yInit, int position, NewServicePresenter.Showing currentShowing) {
+        if (currentShowing.action != null) {
+            if (collectionViewsMap.get(currentShowing.action.collectionId) == null) {
+                QuickActionsView actionsView = new QuickActionsView(this, iconPack, currentShowing.action.slots);
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams((int) (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale), (int) (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale));
+                actionsView.setLayoutParams(layoutParams);
+                actionsView.setId(getCollectionResId(currentShowing.action));
+                collectionViewsMap.put(currentShowing.action.collectionId, actionsView);
+            }
+            QuickActionsView quickActionsView = (QuickActionsView) collectionViewsMap.get(currentShowing.action.collectionId);
+            boolean needDelay = false;
+            if (backgroundView.findViewById(getCollectionResId(currentShowing.action)) == null) {
+                backgroundView.addView(quickActionsView);
+                needDelay = true;
+            }
+
+            quickActionsView.setVisibility(View.VISIBLE);
+            quickActionsView.setAlpha(1f);
+            quickActionsView.show(position);
+            quickActionsView.setX(xInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
+            quickActionsView.setY(yInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
+
+        }
     }
 
     @Override

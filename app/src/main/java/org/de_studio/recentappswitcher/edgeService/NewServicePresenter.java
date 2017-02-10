@@ -68,11 +68,14 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 }).subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
-                        Log.e(TAG, "call: highlight " + integer);
+//                        Log.e(TAG, "call: highlight " + integer);
                         view.unhighlightSlot(currentShowing, currentHighlight);
                         view.highlightSlot(currentShowing, integer);
                         view.indicateCurrentShowing(currentShowing,integer);
-
+                        if (currentShowing.showWhat == Showing.SHOWING_CIRCLE_AND_ACTION && integer >= 10) {
+                            Log.e(TAG, "call: showQuickActions " + (integer - 10));
+                            view.showQuickActions(xInit, yInit, integer - 10, currentShowing);
+                        }
                         currentHighlight = integer;
                         highlightFrom = System.currentTimeMillis();
                         holdingHelper = holdingHelper + integer;
@@ -414,6 +417,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         void showCircle(NewServiceModel.IconsXY iconsXY, Collection circle, RealmList<Slot> slots, float xInit, float yInit);
 
         void showFolder(int triggerPosition, Slot folder, final String gridId, int space, int edgePosition, Showing currentShowing);
+
+        void showQuickActions(float xInit, float yInit, int position, NewServicePresenter.Showing currentShowing);
 
         void actionDownVibrate();
 

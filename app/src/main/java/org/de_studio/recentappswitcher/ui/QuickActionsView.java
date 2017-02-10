@@ -12,9 +12,9 @@ import android.view.View;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.model.Item;
+import org.de_studio.recentappswitcher.model.Slot;
 
-import java.util.ArrayList;
+import io.realm.RealmList;
 
 /**
  * Created by HaiNguyen on 2/9/17.
@@ -26,7 +26,7 @@ public class QuickActionsView extends View {
     float radius;
     float mScale;
     int visibleItem = 0;
-    ArrayList<Item> actions;
+    RealmList<Slot> actions;
     Bitmap[] bitmaps;
     RectF[] rectFs;
     Path path;
@@ -36,7 +36,7 @@ public class QuickActionsView extends View {
     int lastItemArc = 69;
     IconPackManager.IconPack iconPack;
 
-    public QuickActionsView(Context context, IconPackManager.IconPack iconPack, ArrayList<Item> actions) {
+    public QuickActionsView(Context context, IconPackManager.IconPack iconPack, RealmList<Slot> actions) {
         super(context);
         this.iconPack = iconPack;
         this.actions = actions;
@@ -54,8 +54,10 @@ public class QuickActionsView extends View {
         backgroundPaint.setStrokeWidth(ARC_SIZE_DP * mScale);
         radius = ARC_SIZE_DP * mScale;
         path = new Path();
+        rectFs = new RectF[actions.size()];
+        bitmaps = new Bitmap[actions.size()];
         for (int i = 0; i < actions.size(); i++) {
-            bitmaps[i] = Utility.getItemBitmap(actions.get(i), getContext(), iconPack);
+            bitmaps[i] = Utility.getItemBitmap(actions.get(i).stage1Item, getContext(), iconPack);
             rectFs[i] = new RectF();
         }
 
