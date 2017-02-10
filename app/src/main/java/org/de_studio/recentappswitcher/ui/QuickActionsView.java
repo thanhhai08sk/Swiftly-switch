@@ -101,6 +101,7 @@ public class QuickActionsView extends View {
                         startAngle = startAngle + sweepAngles[i - 1];
                     }
                 }
+                Log.e(TAG, "onDraw: left");
                 break;
             case Cons.POSITION_BOTTOM:
                 startAngle = -180;

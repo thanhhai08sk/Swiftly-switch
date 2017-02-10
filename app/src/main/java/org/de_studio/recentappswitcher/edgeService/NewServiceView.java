@@ -392,16 +392,16 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     public void showQuickActions(float xInit, float yInit, int edgePosition, int actionPosition, NewServicePresenter.Showing currentShowing) {
         if (currentShowing.action != null) {
-            if (collectionViewsMap.get(currentShowing.action.collectionId) == null) {
+            if (collectionViewsMap.get(currentShowing.action.collectionId + String.valueOf(edgePosition)) == null) {
                 QuickActionsView actionsView = new QuickActionsView(this, iconPack, currentShowing.action.slots, edgePosition);
                 FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams((int) (currentShowing.circle.radius * 2 * mScale + 60 * 2 * mScale), (int) (currentShowing.circle.radius * 2 * mScale + 60 * 2 * mScale));
                 actionsView.setLayoutParams(layoutParams);
-                actionsView.setId(getCollectionResId(currentShowing.action));
-                collectionViewsMap.put(currentShowing.action.collectionId, actionsView);
+                actionsView.setId(getQuickActionsResId(currentShowing.action, edgePosition));
+                collectionViewsMap.put(currentShowing.action.collectionId + String.valueOf(edgePosition), actionsView);
             }
-            QuickActionsView quickActionsView = (QuickActionsView) collectionViewsMap.get(currentShowing.action.collectionId);
+            QuickActionsView quickActionsView = (QuickActionsView) collectionViewsMap.get(currentShowing.action.collectionId + String.valueOf(edgePosition));
             boolean needDelay = false;
-            if (backgroundView.findViewById(getCollectionResId(currentShowing.action)) == null) {
+            if (backgroundView.findViewById(getQuickActionsResId(currentShowing.action, edgePosition)) == null) {
                 backgroundView.addView(quickActionsView);
                 needDelay = true;
             }
@@ -507,6 +507,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     private int getCollectionResId(Collection grid) {
         return Math.abs(grid.collectionId.hashCode());
+    }
+
+    private int getQuickActionsResId(Collection quickActions, int position) {
+        return Math.abs(quickActions.collectionId.hashCode()) + position;
     }
 
 
