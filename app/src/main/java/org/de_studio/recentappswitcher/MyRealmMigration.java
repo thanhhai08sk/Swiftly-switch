@@ -42,6 +42,61 @@ public class MyRealmMigration implements RealmMigration {
             }
             oldVersion++;
         }
+
+        if (oldVersion == 2) {
+            schema.create("Item")
+                    .addField("itemId", String.class)
+                    .addField("type", String.class)
+                    .addField("label", String.class)
+                    .addField("action", int.class)
+                    .addField("packageName", String.class)
+                    .addField("number", String.class)
+                    .addField("contactId", long.class)
+                    .addField("intent", String.class)
+                    .addField("appForegroundTime", long.class)
+                    .addField("iconResourceId", int.class)
+                    .addField("iconResourceId2", int.class)
+                    .addField("iconResourceId3", int.class)
+                    .addField("iconBitmap", byte[].class)
+                    .addField("iconUri", String.class)
+                    .addField("collectionId", String.class);
+
+            schema.create("Slot")
+                    .addField("type", String.class)
+                    .addField("slotId", String.class)
+                    .addRealmObjectField("stage1Item", schema.get("Item"))
+                    .addRealmObjectField("stage2Item", schema.get("Item"))
+                    .addField("longClickMode", int.class)
+                    .addRealmListField("items", schema.get("Item"))
+                    .addField("iconBitmap", byte[].class);
+
+            schema.create("Edge")
+                    .addField("")
+
+
+            schema.create("Collection")
+                    .addField("type", String.class)
+                    .addField("collectionId", String.class)
+                    .addField("label", String.class)
+                    .addRealmListField("slots", schema.get("Slot"))
+                    .addRealmListField("items", schema.get("Item"))
+                    .addField("longClickMode", int.class)
+                    .addField("longClickCollection", String.class)
+                    .addField("rowsCount", int.class)
+                    .addField("columnCount", int.class)
+                    .addField("marginHorizontal", int.class)
+                    .addField("marginVertical", int.class)
+                    .addField("offsetHorizontal", int.class)
+                    .addField("offsetVertical", int.class)
+                    .addField("space", int.class)
+                    .addField("radius", int.class)
+                    .addField("position", int.class);
+
+
+            oldVersion++;
+
+        }
+
     }
 
     @Override
