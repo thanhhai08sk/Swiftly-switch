@@ -11,8 +11,10 @@ import io.realm.RealmSchema;
  * Created by HaiNguyen on 6/9/16.
  */
 public class MyRealmMigration implements RealmMigration {
+    private static final String TAG = MyRealmMigration.class.getSimpleName();
     @Override
     public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
+        Log.e(TAG, "migrate: old = " + oldVersion + "\nnew = " + newVersion);
         RealmSchema schema = realm.getSchema();
         if (oldVersion == 0) {
             RealmObjectSchema shortcutSchema =  schema.get("Shortcut");
