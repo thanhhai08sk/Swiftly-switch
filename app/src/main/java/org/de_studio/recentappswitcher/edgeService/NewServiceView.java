@@ -23,6 +23,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -390,28 +391,37 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         return imageView;
     }
 
-    public void showQuickActions(float xInit, float yInit, int edgePosition, int actionPosition, NewServicePresenter.Showing currentShowing) {
+    public void showQuickActions(int edgePosition, int actionPosition, NewServicePresenter.Showing currentShowing) {
         if (currentShowing.action != null) {
-            if (collectionViewsMap.get(currentShowing.action.collectionId + String.valueOf(edgePosition)) == null) {
+            if (collectionViewsMap.get(getQuickActionsKey(edgePosition, currentShowing.action)) == null) {
                 QuickActionsView actionsView = new QuickActionsView(this, iconPack, currentShowing.action.slots, edgePosition);
                 FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams((int) (currentShowing.circle.radius * 2 * mScale + 60 * 2 * mScale), (int) (currentShowing.circle.radius * 2 * mScale + 60 * 2 * mScale));
                 actionsView.setLayoutParams(layoutParams);
                 actionsView.setId(getQuickActionsResId(currentShowing.action, edgePosition));
-                collectionViewsMap.put(currentShowing.action.collectionId + String.valueOf(edgePosition), actionsView);
+                collectionViewsMap.put(getQuickActionsKey(edgePosition, currentShowing.action), actionsView);
             }
-            QuickActionsView quickActionsView = (QuickActionsView) collectionViewsMap.get(currentShowing.action.collectionId + String.valueOf(edgePosition));
-            boolean needDelay = false;
+            QuickActionsView quickActionsView = (QuickActionsView) collectionViewsMap.get(getQuickActionsKey(edgePosition, currentShowing.action));
             if (backgroundView.findViewById(getQuickActionsResId(currentShowing.action, edgePosition)) == null) {
                 backgroundView.addView(quickActionsView);
-                needDelay = true;
             }
 
             quickActionsView.setVisibility(View.VISIBLE);
             quickActionsView.setAlpha(1f);
             quickActionsView.show(actionPosition);
-            quickActionsView.setX(xInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
-            quickActionsView.setY(yInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
+            quickActionsView.setX(currentShowing.xInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
+            quickActionsView.setY(currentShowing.yInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
 
+        }
+    }
+
+    @NonNull
+    private String getQuickActionsKey(int edgePosition, Collection quickAction) {
+        return quickAction.collectionId + String.valueOf(edgePosition);
+    }
+
+    public void hideQuickActions(NewServicePresenter.Showing currentShowing) {
+        if (collectionViewsMap.get(getQuickActionsKey(currentShowing.edgePosition, currentShowing.action)) != null) {
+            collectionViewsMap.get(getQuickActionsKey(currentShowing.edgePosition, currentShowing.action)).setVisibility(View.GONE);
         }
     }
 
@@ -685,8 +695,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_AND_ACTION:
                     if (id < currentShowing.circleSlots.size()) {
                         indicateSlot(currentShowing.circleSlots.get(id));
+                        hideQuickActions(currentShowing);
+
                     } else if (id >= 10) {
                         indicateSlot(currentShowing.action.slots.get(id - 10));
+                        showQuickActions(currentShowing.edgePosition, id - 10, currentShowing);
                     }
                     break;
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:

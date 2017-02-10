@@ -72,10 +72,6 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         view.unhighlightSlot(currentShowing, currentHighlight);
                         view.highlightSlot(currentShowing, integer);
                         view.indicateCurrentShowing(currentShowing,integer);
-                        if (currentShowing.showWhat == Showing.SHOWING_CIRCLE_AND_ACTION && integer >= 10) {
-                            Log.e(TAG, "call: showQuickActions " + (integer - 10));
-                            view.showQuickActions(xInit, yInit,currentEdge.position, integer - 10, currentShowing);
-                        }
                         currentHighlight = integer;
                         highlightFrom = System.currentTimeMillis();
                         holdingHelper = holdingHelper + integer;
@@ -338,6 +334,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             xInit = x;
             yInit = y;
         }
+        currentShowing.xInit = xInit;
+        currentShowing.yInit = yInit;
     }
 
     private void setCurrentEdgeAndCurrentShowing(int edgeId) {
@@ -379,6 +377,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots);
                 break;
         }
+        currentShowing.edgePosition = currentEdge.position;
     }
 
     private Slot getCurrentSlot() {
@@ -418,7 +417,6 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void showFolder(int triggerPosition, Slot folder, final String gridId, int space, int edgePosition, Showing currentShowing);
 
-        void showQuickActions(float xInit, float yInit, int edgePosition, int actionPosition, NewServicePresenter.Showing currentShowing);
 
         void actionDownVibrate();
 
@@ -470,6 +468,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         public String folderSlotId;
         public NewServiceModel.IconsXY circleIconsXY;
         public Point gridXY = new Point(0, 0);
+        public float xInit, yInit;
+        public int edgePosition;
         public Showing() {
         }
 

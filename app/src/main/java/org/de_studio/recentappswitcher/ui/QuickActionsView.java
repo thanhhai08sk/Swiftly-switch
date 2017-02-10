@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -72,14 +71,15 @@ public class QuickActionsView extends View {
     }
 
     public void show(int itemPosition) {
-        if (itemPosition != -1) {
             visibleItem = itemPosition;
             invalidate();
-        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
+        if (visibleItem == -1) {
+            return;
+        }
         int canvasWidth = canvas.getWidth();
         int canvasHeight = canvas.getHeight();
         int centerX = Math.round(canvasWidth * 0.5f);
@@ -97,22 +97,20 @@ public class QuickActionsView extends View {
             case Cons.POSITION_LEFT:
                 startAngle = -90;
                 for (int i = 0; i <= visibleItem; i++) {
-                    if (i - 1 > 0) {
+                    if (i - 1 >= 0) {
                         startAngle = startAngle + sweepAngles[i - 1];
                     }
                 }
-                Log.e(TAG, "onDraw: left");
                 break;
             case Cons.POSITION_BOTTOM:
                 startAngle = -180;
                 for (int i = 0; i <= visibleItem; i++) {
-                    if (i - 1 > 0) {
+                    if (i - 1 >= 0) {
                         startAngle = startAngle + sweepAngles[i - 1];
                     }
                 }
                 break;
         }
-        Log.e(TAG, "onDraw: startAngle = " + startAngle);
 
         double iconAngle;
         path.reset();
@@ -121,7 +119,6 @@ public class QuickActionsView extends View {
         setIconRectF(centerX, centerY, centerX, iconAngle);
         canvas.drawPath(path, backgroundPaint);
         canvas.drawBitmap(bitmaps[visibleItem], null, rectFs[visibleItem], backgroundPaint);
-
 
 
     }
