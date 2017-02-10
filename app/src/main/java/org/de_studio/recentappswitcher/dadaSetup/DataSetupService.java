@@ -14,6 +14,7 @@ import android.util.Log;
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.DataInfo;
 import org.de_studio.recentappswitcher.model.Edge;
@@ -24,6 +25,7 @@ import java.util.Random;
 import java.util.Set;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmList;
 
 import static org.de_studio.recentappswitcher.MyApplication.getContext;
@@ -67,14 +69,13 @@ public class DataSetupService extends IntentService {
                     realm.copyToRealm(dataInfo1);
                 }
             });
-
-
         }
 
         dataInfo = realm.where(DataInfo.class).findFirst();
         generateItems(realm);
         generateCollections(realm,dataInfo);
         generateEdges(realm);
+        convertOldRealmToNewRealm(realm);
         realm.close();
         sendBroadcast(new Intent(BROADCAST_GENERATE_DATA_OK));
     }
@@ -430,5 +431,12 @@ public class DataSetupService extends IntentService {
             }
 
         }
+    }
+
+    private void convertOldRealmToNewRealm(Realm newRealm) {
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder().build();
+        Realm oldRealm = Realm.getInstance(realmConfig);
+        Log.e(TAG, "convertOldRealmToNewRealm: oldRealm size = " + oldRealm.where(Shortcut.class).findAll().size());
+
     }
 }
