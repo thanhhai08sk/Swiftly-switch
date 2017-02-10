@@ -74,7 +74,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         view.indicateCurrentShowing(currentShowing,integer);
                         if (currentShowing.showWhat == Showing.SHOWING_CIRCLE_AND_ACTION && integer >= 10) {
                             Log.e(TAG, "call: showQuickActions " + (integer - 10));
-                            view.showQuickActions(xInit, yInit, integer - 10, currentShowing);
+                            view.showQuickActions(xInit, yInit,currentEdge.position, integer - 10, currentShowing);
                         }
                         currentHighlight = integer;
                         highlightFrom = System.currentTimeMillis();
@@ -418,7 +418,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void showFolder(int triggerPosition, Slot folder, final String gridId, int space, int edgePosition, Showing currentShowing);
 
-        void showQuickActions(float xInit, float yInit, int position, NewServicePresenter.Showing currentShowing);
+        void showQuickActions(float xInit, float yInit, int edgePosition, int actionPosition, NewServicePresenter.Showing currentShowing);
 
         void actionDownVibrate();
 

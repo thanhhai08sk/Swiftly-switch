@@ -390,10 +390,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         return imageView;
     }
 
-    public void showQuickActions(float xInit, float yInit, int position, NewServicePresenter.Showing currentShowing) {
+    public void showQuickActions(float xInit, float yInit, int edgePosition, int actionPosition, NewServicePresenter.Showing currentShowing) {
         if (currentShowing.action != null) {
             if (collectionViewsMap.get(currentShowing.action.collectionId) == null) {
-                QuickActionsView actionsView = new QuickActionsView(this, iconPack, currentShowing.action.slots);
+                QuickActionsView actionsView = new QuickActionsView(this, iconPack, currentShowing.action.slots, edgePosition);
                 FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams((int) (currentShowing.circle.radius * 2 * mScale + 60 * 2 * mScale), (int) (currentShowing.circle.radius * 2 * mScale + 60 * 2 * mScale));
                 actionsView.setLayoutParams(layoutParams);
                 actionsView.setId(getCollectionResId(currentShowing.action));
@@ -408,7 +408,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
             quickActionsView.setVisibility(View.VISIBLE);
             quickActionsView.setAlpha(1f);
-            quickActionsView.show(position);
+            quickActionsView.show(actionPosition);
             quickActionsView.setX(xInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
             quickActionsView.setY(yInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
 
