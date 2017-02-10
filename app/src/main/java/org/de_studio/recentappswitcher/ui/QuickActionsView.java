@@ -50,10 +50,11 @@ public class QuickActionsView extends View {
     private void init() {
         mScale = getResources().getDisplayMetrics().density;
         iconSize = 36 * mScale;
-        backgroundPaint = new Paint();
-        backgroundPaint.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        backgroundPaint.setColor(ContextCompat.getColor(getContext(), R.color.quick_actions_background));
         backgroundPaint.setStyle(Paint.Style.STROKE);
         backgroundPaint.setStrokeWidth(ARC_SIZE_DP * mScale);
+
         arcSize = ARC_SIZE_DP * mScale;
         path = new Path();
         rectFs = new RectF[actions.size()];

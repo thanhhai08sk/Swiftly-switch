@@ -394,7 +394,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         if (currentShowing.action != null) {
             if (collectionViewsMap.get(currentShowing.action.collectionId) == null) {
                 QuickActionsView actionsView = new QuickActionsView(this, iconPack, currentShowing.action.slots);
-                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams((int) (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale), (int) (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale));
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams((int) (currentShowing.circle.radius * 2 * mScale + 60 * 2 * mScale), (int) (currentShowing.circle.radius * 2 * mScale + 60 * 2 * mScale));
                 actionsView.setLayoutParams(layoutParams);
                 actionsView.setId(getCollectionResId(currentShowing.action));
                 collectionViewsMap.put(currentShowing.action.collectionId, actionsView);

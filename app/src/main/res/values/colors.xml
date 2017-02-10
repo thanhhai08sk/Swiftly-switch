@@ -23,6 +23,7 @@
     <color name="blue">#176789</color>
     <color name="text_guide_background">#c3184279</color>
     <color name="guide_color">#9b0731</color>
+    <color name="quick_actions_background">#192738</color>
 
     <color name="button_54_black">#8c000000</color>
     <color name="text_entries_list_progress">#288b49</color>
