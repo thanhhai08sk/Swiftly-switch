@@ -71,6 +71,25 @@ public class MyRealmMigration implements RealmMigration {
                     .addRealmListField("items", schema.get("Item"))
                     .addField("iconBitmap", byte[].class);
 
+            schema.create("Collection")
+                    .addField("type", String.class)
+                    .addField("collectionId", String.class)
+                    .addField("label", String.class)
+                    .addRealmListField("slots", schema.get("Slot"))
+                    .addRealmListField("items", schema.get("Item"))
+                    .addField("longClickMode", int.class)
+                    .addField("longClickCollection", String.class)
+                    .addField("rowsCount", int.class)
+                    .addField("columnCount", int.class)
+                    .addField("marginHorizontal", int.class)
+                    .addField("marginVertical", int.class)
+                    .addField("offsetHorizontal", int.class)
+                    .addField("offsetVertical", int.class)
+                    .addField("space", int.class)
+                    .addField("radius", int.class)
+                    .addField("position", int.class);
+
+
             schema.create("Edge")
                     .addField("mode", int.class)
                     .addField("position", int.class)
@@ -97,23 +116,6 @@ public class MyRealmMigration implements RealmMigration {
 
 
 
-            schema.create("Collection")
-                    .addField("type", String.class)
-                    .addField("collectionId", String.class)
-                    .addField("label", String.class)
-                    .addRealmListField("slots", schema.get("Slot"))
-                    .addRealmListField("items", schema.get("Item"))
-                    .addField("longClickMode", int.class)
-                    .addField("longClickCollection", String.class)
-                    .addField("rowsCount", int.class)
-                    .addField("columnCount", int.class)
-                    .addField("marginHorizontal", int.class)
-                    .addField("marginVertical", int.class)
-                    .addField("offsetHorizontal", int.class)
-                    .addField("offsetVertical", int.class)
-                    .addField("space", int.class)
-                    .addField("radius", int.class)
-                    .addField("position", int.class);
 
 
             oldVersion++;
