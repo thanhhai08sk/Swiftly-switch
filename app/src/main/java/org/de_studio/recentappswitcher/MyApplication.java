@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import org.de_studio.recentappswitcher.dadaSetup.MyNewRealmMigration;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -20,7 +22,8 @@ public class MyApplication extends Application {
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder()
                 .name(Cons.DEFAULT_REALM_NAME)
                 .schemaVersion(Cons.REALM_SCHEMA_VERSION)
-                .deleteRealmIfMigrationNeeded().build());
+                .migration(new MyNewRealmMigration())
+                .build());
         this.mContext = this;
     }
 

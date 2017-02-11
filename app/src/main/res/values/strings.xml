@@ -1,7 +1,7 @@
 <resources>
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="MissingTranslation"
-    <string name="app_name">Swiftly switch</string>
+    <string name="app_name">Swiftly Switch Pro</string>
     <string name="edge_gesture_notification_title">Recent App Switcher</string>
     <string name="edge_gesture_notification_content_text">App running</string>
     <string name="main_edge1_section_text">Edge 1</string>

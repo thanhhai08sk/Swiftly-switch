@@ -4,6 +4,7 @@ import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.design.widget.TabLayout;
@@ -13,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
@@ -173,6 +175,28 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
         Intent intent = new Intent(this, IntroActivity.class);
         intent.putExtra("page",4);
         startActivity(intent);
+    }
+    @OnClick(R.id.send_feedback)
+    void emailClick(){
+        sendEmail();
+
+    }
+    protected void sendEmail() {
+        String[] TO = {"thanhhai08sk@gmail.com"};
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            finish();
+        }
+        catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(MainView.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

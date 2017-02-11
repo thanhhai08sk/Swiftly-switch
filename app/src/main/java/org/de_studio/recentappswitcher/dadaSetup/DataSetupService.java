@@ -633,6 +633,8 @@ public class DataSetupService extends IntentService {
 
         final int length1 = edge1Shared.getInt(EdgeSetting.EDGE_LENGTH_KEY, Cons.DEFAULT_EDGE_LENGTH);
         final int length2 = edge2Shared.getInt(EdgeSetting.EDGE_LENGTH_KEY, Cons.DEFAULT_EDGE_LENGTH);
+        final boolean isOnlyFavorite1 = edge1Shared.getBoolean(EdgeSetting.IS_ONLY_FAVORITE_KEY, false);
+        final boolean isOnlyFavorite2 = edge2Shared.getBoolean(EdgeSetting.IS_ONLY_FAVORITE_KEY, false);
         final int offset1 = edge1Shared.getInt(EdgeSetting.EDGE_OFFSET_KEY, 0);
         final int offset2 = edge2Shared.getInt(EdgeSetting.EDGE_OFFSET_KEY, 0);
         final int sensitive1 = edge1Shared.getInt(EdgeSetting.EDGE_SENSIIVE_KEY, Cons.DEFAULT_EDGE_SENSITIVE);
@@ -654,11 +656,26 @@ public class DataSetupService extends IntentService {
                         edge.length = length1;
                         edge.offset = offset1;
                         edge.sensitive = sensitive1;
+                        if (isOnlyFavorite1) {
+                            edge.mode = Edge.MODE_GRID;
+                            Collection grid = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_GRID_FAVORITE).findFirst();
+                            if (grid != null) {
+                                edge.grid = grid;
+                            }
+                        }
+                        edge.mode = isOnlyFavorite1 ? Edge.MODE_GRID : Edge.MODE_RECENT_AND_QUICK_ACTION;
                     } else if (edge.edgeId.equals(Edge.EDGE_2_ID)) {
                         edge.position = position2;
                         edge.length = length2;
                         edge.offset = offset2;
                         edge.sensitive = sensitive2;
+                        if (isOnlyFavorite2) {
+                            edge.mode = Edge.MODE_GRID;
+                            Collection grid = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_GRID_FAVORITE).findFirst();
+                            if (grid != null) {
+                                edge.grid = grid;
+                            }
+                        }
                     }
 
                 }

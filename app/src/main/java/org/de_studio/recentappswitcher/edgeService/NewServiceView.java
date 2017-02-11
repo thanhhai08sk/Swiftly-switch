@@ -431,6 +431,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             Log.e(TAG, "showGrid: label " + grid.label);
         } else {
             Log.e(TAG, "showGrid: grid null");
+            return;
         }
         if (collectionViewsMap.get(grid.collectionId) == null) {
             RecyclerView gridView = new RecyclerView(this);

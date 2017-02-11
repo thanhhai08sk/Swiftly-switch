@@ -38,5 +38,6 @@ public class MainPresenter extends BasePresenter<MainPresenter.View,MainModel> {
         boolean checkIfAllPermissionOk();
 
         void displayPermissionNeeded(boolean show);
+
     }
 }
