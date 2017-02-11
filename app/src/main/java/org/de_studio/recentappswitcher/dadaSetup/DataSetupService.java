@@ -514,6 +514,7 @@ public class DataSetupService extends IntentService {
                     if (item != null) {
                         slot.type = Slot.TYPE_ITEM;
                         slot.stage1Item = item;
+                        Log.e(TAG, "convertGrid: ok, label = " + shortcut.getLabel());
                     } else {
                         Log.e(TAG, "convertGrid: cannot find item with label " + shortcut.getLabel());
                     }
