@@ -464,7 +464,7 @@ public class DataSetupService extends IntentService {
         convertPinnedShortcuts(pinRealm, newRealm);
         convertBlackList(oldExcludeShared, newRealm);
         convertQuickActions(newRealm,oldDefaultShared);
-        convertSettings(newRealm, oldDefaultShared, newShared);
+        convertSettings(newRealm, oldDefaultShared,oldEdge1Shared,oldEdge2Shared, newShared);
 
 
         Log.e(TAG, "convertOldRealmToNewRealm: gridRealm size = " + gridRealm.where(Shortcut.class).findAll().size()
@@ -606,7 +606,7 @@ public class DataSetupService extends IntentService {
         newRealm.commitTransaction();
     }
 
-    public void convertSettings(Realm newRealm, SharedPreferences oldShared, SharedPreferences newShared) {
+    public void convertSettings(Realm newRealm, SharedPreferences oldShared, SharedPreferences edge1Shared, SharedPreferences edge2Shared, SharedPreferences newShared) {
         newShared.edit().putBoolean(Cons.DISABLE_CLOCK_KEY, oldShared.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY, false))
                 .putBoolean(Cons.IS_DISABLE_IN_LANDSCAPE_KEY, oldShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE, false))
                 .putInt(Cons.CONTACT_ACTION_KEY, oldShared.getInt(EdgeSetting.CONTACT_ACTION, Cons.ACTION_CHOOSE))
@@ -619,18 +619,54 @@ public class DataSetupService extends IntentService {
                 .putBoolean(Cons.DISABLE_HAPTIC_FEEDBACK_KEY, oldShared.getBoolean(EdgeSetting.DISABLE_HAPTIC_FEEDBACK_KEY, true))
                 .putBoolean(Cons.HAPTIC_ON_ICON_KEY, oldShared.getBoolean(EdgeSetting.HAPTIC_ON_ICON_KEY, false))
                 .putInt(Cons.VIBRATION_DURATION_KEY, oldShared.getInt(EdgeSetting.VIBRATION_DURATION_KEY, Cons.DEFAULT_VIBRATE_DURATION))
+                .putBoolean(Cons.EDGE_1_ON_KEY, edge1Shared.getBoolean(EdgeSetting.EDGE_ON_KEY,true))
+                .putBoolean(Cons.EDGE_2_ON_KEY,edge2Shared.getBoolean(EdgeSetting.EDGE_ON_KEY,false))
                 .commit();
+
+        String[]  edgePositionsArray = getResources().getStringArray(R.array.edge_positions_array);
+
         final boolean useGuide = oldShared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true);
         final int guideColor = oldShared.getInt(EdgeSetting.GUIDE_COLOR_KEY, Cons.GUIDE_COLOR_DEFAULT);
         final boolean keyboardOption = oldShared.getBoolean(EdgeSetting.AVOID_KEYBOARD_KEY, true);
+        final int position1 = Utility.getPositionIntFromString(edge1Shared.getString(EdgeSetting.EDGE_POSITION_KEY, edgePositionsArray[1]), this);
+        final int position2 = Utility.getPositionIntFromString(edge2Shared.getString(EdgeSetting.EDGE_POSITION_KEY, edgePositionsArray[5]),this);
+
+        final int length1 = edge1Shared.getInt(EdgeSetting.EDGE_LENGTH_KEY, Cons.DEFAULT_EDGE_LENGTH);
+        final int length2 = edge2Shared.getInt(EdgeSetting.EDGE_LENGTH_KEY, Cons.DEFAULT_EDGE_LENGTH);
+        final int offset1 = edge1Shared.getInt(EdgeSetting.EDGE_OFFSET_KEY, 0);
+        final int offset2 = edge2Shared.getInt(EdgeSetting.EDGE_OFFSET_KEY, 0);
+        final int sensitive1 = edge1Shared.getInt(EdgeSetting.EDGE_SENSIIVE_KEY, Cons.DEFAULT_EDGE_SENSITIVE);
+        final int sensitive2 = edge2Shared.getInt(EdgeSetting.EDGE_SENSIIVE_KEY, Cons.DEFAULT_EDGE_SENSITIVE);
+        final int circleSize = oldShared.getInt(EdgeSetting.CIRCLE_SIZE_KEY, Cons.CIRCLE_RADIUS_DEFAULT);
+
         newRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmResults<Edge> edges = realm.where(Edge.class).findAll();
+                Collection recent = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_RECENT).findFirst();
+                Collection circle = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_CIRCLE_FAVORITE).findFirst();
                 for (Edge edge : edges) {
                     edge.guideColor = guideColor;
                     edge.useGuide = useGuide;
                     edge.keyboardOption = keyboardOption ? Edge.KEYBOARD_OPTION_PLACE_UNDER : Edge.KEYBOARD_OPTION_NONE;
+                    if (edge.edgeId.equals(Edge.EDGE_1_ID)) {
+                        edge.position = position1;
+                        edge.length = length1;
+                        edge.offset = offset1;
+                        edge.sensitive = sensitive1;
+                    } else if (edge.edgeId.equals(Edge.EDGE_2_ID)) {
+                        edge.position = position2;
+                        edge.length = length2;
+                        edge.offset = offset2;
+                        edge.sensitive = sensitive2;
+                    }
+
+                }
+                if (recent != null) {
+                    recent.radius = circleSize;
+                }
+                if (circle != null) {
+                    circle.radius = circleSize;
                 }
             }
         });
