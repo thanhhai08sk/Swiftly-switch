@@ -444,7 +444,7 @@ public class DataSetupService extends IntentService {
                 .migration(new MyRealmMigration())
                 .build());
         Realm pinRealm = Realm.getInstance(new RealmConfiguration.Builder()
-                .name("circleFavo.realm")
+                .name("pinApp.realm")
                 .schemaVersion(CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
@@ -463,6 +463,9 @@ public class DataSetupService extends IntentService {
         convertCircleFav(circleFavoRealm, newRealm);
         convertPinnedShortcuts(pinRealm, newRealm);
         convertBlackList(oldExcludeShared, newRealm);
+        convertQuickActions(newRealm,oldDefaultShared);
+        convertSettings(newRealm, oldDefaultShared, newShared);
+
 
         Log.e(TAG, "convertOldRealmToNewRealm: gridRealm size = " + gridRealm.where(Shortcut.class).findAll().size()
                 + "\nisEmpty = " + gridRealm.isEmpty());
@@ -480,6 +483,7 @@ public class DataSetupService extends IntentService {
 
         if (newGrid != null) {
             newRealm.beginTransaction();
+            Utility.setCollectionSlotsSize(newRealm, newGrid, gridRow * gridColumn);
             newGrid.columnCount = gridColumn;
             newGrid.rowsCount = gridRow;
             newGrid.marginHorizontal = marginHorizontal;
@@ -572,4 +576,68 @@ public class DataSetupService extends IntentService {
             }
         }
     }
+
+    private void convertQuickActions(Realm newRealm, SharedPreferences oldShared) {
+        String[] actions = new String[4];
+        actions[0] = oldShared.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO);
+        actions[1] = oldShared.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_HOME);
+        actions[2] = oldShared.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_BACK);
+        actions[3] = oldShared.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
+        Collection quickActions = newRealm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_QUICK_ACTION).findFirst();
+        newRealm.beginTransaction();
+        if (quickActions != null) {
+            for (int i = 0; i < actions.length; i++) {
+                Log.e(TAG, "convertQuickActions: action = " + actions[i]);
+                Slot slot = quickActions.slots.get(i);
+                if (slot != null) {
+                    Item item;
+                    if (actions[i].equals(MainActivity.ACTION_INSTANT_FAVO)) {
+                        item = newRealm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_SHORTCUTS_SET).findFirst();
+                    } else {
+                        item = newRealm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_ACTION).equalTo(Cons.ACTION, Utility.getActionFromStringAction(actions[i])).findFirst();
+                    }
+                    if (item != null) {
+                        slot.type = Slot.TYPE_ITEM;
+                        slot.stage1Item = item;
+                    }else Log.e(TAG, "convertQuickActions: item null");
+                }else Log.e(TAG, "convertQuickActions: cannot get quickActions's slot");
+            }
+        }else Log.e(TAG, "convertQuickActions: can not find quickActions collection");
+        newRealm.commitTransaction();
+    }
+
+    public void convertSettings(Realm newRealm, SharedPreferences oldShared, SharedPreferences newShared) {
+        newShared.edit().putBoolean(Cons.DISABLE_CLOCK_KEY, oldShared.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY, false))
+                .putBoolean(Cons.IS_DISABLE_IN_LANDSCAPE_KEY, oldShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE, false))
+                .putInt(Cons.CONTACT_ACTION_KEY, oldShared.getInt(EdgeSetting.CONTACT_ACTION, Cons.ACTION_CHOOSE))
+                .putInt(Cons.HOLD_TIME_KEY, oldShared.getInt(EdgeSetting.HOLD_TIME_KEY, Cons.HOLD_TIME_DEFAULT))
+                .putString(Cons.ICON_PACK_PACKAGE_NAME_KEY, oldShared.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, null))
+                .putFloat(Cons.ICON_SCALE_KEY, oldShared.getFloat(EdgeSetting.ICON_SCALE, 1f))
+                .putInt(Cons.BACKGROUND_COLOR_KEY, oldShared.getInt(EdgeSetting.BACKGROUND_COLOR_KEY, Cons.BACKGROUND_COLOR_DEFAULT))
+                .putBoolean(Cons.USE_ANIMATION_KEY, oldShared.getBoolean(EdgeSetting.ANIMATION_KEY, true))
+                .putInt(Cons.ANIMATION_TIME_KEY, oldShared.getInt(EdgeSetting.ANI_TIME_KEY, Cons.ANIMATION_TIME_DEFAULT))
+                .putBoolean(Cons.DISABLE_HAPTIC_FEEDBACK_KEY, oldShared.getBoolean(EdgeSetting.DISABLE_HAPTIC_FEEDBACK_KEY, true))
+                .putBoolean(Cons.HAPTIC_ON_ICON_KEY, oldShared.getBoolean(EdgeSetting.HAPTIC_ON_ICON_KEY, false))
+                .putInt(Cons.VIBRATION_DURATION_KEY, oldShared.getInt(EdgeSetting.VIBRATION_DURATION_KEY, Cons.DEFAULT_VIBRATE_DURATION))
+                .commit();
+        final boolean useGuide = oldShared.getBoolean(EdgeSetting.USE_GUIDE_KEY, true);
+        final int guideColor = oldShared.getInt(EdgeSetting.GUIDE_COLOR_KEY, Cons.GUIDE_COLOR_DEFAULT);
+        final boolean keyboardOption = oldShared.getBoolean(EdgeSetting.AVOID_KEYBOARD_KEY, true);
+        newRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Edge> edges = realm.where(Edge.class).findAll();
+                for (Edge edge : edges) {
+                    edge.guideColor = guideColor;
+                    edge.useGuide = useGuide;
+                    edge.keyboardOption = keyboardOption ? Edge.KEYBOARD_OPTION_PLACE_UNDER : Edge.KEYBOARD_OPTION_NONE;
+                }
+            }
+        });
+
+
+
+    }
+
+
 }

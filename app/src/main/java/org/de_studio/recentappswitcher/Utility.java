@@ -98,6 +98,7 @@ import java.util.Random;
 import java.util.Set;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import rx.subjects.PublishSubject;
 
 import static org.de_studio.recentappswitcher.Cons.RINGER_MODE_NORMAL;
@@ -3067,5 +3068,54 @@ public  class Utility {
         return Item.TYPE_DEVICE_SHORTCUT + intent;
     }
 
+    public static int getActionFromStringAction(String action) {
+        switch (action) {
+            case MainActivity.ACTION_HOME:
+                return Item.ACTION_HOME;
+            case MainActivity.ACTION_BACK:
+                return Item.ACTION_BACK;
+            case MainActivity.ACTION_WIFI:
+                return Item.ACTION_WIFI;
+            case MainActivity.ACTION_NOTI:
+                return Item.ACTION_NOTI;
+            case MainActivity.ACTION_BLUETOOTH:
+                return Item.ACTION_BLUETOOTH;
+            case MainActivity.ACTION_ROTATE:
+                return Item.ACTION_ROTATION;
+            case MainActivity.ACTION_POWER_MENU:
+                return Item.ACTION_POWER_MENU;
+            case MainActivity.ACTION_LAST_APP:
+                return Item.ACTION_LAST_APP;
+            case MainActivity.ACTION_CALL_LOGS:
+                return Item.ACTION_CALL_LOGS;
+            case MainActivity.ACTION_CONTACT:
+                return Item.ACTION_CONTACT;
+            case MainActivity.ACTION_DIAL:
+                return Item.ACTION_DIAL;
+            case MainActivity.ACTION_RECENT:
+                return Item.ACTION_RECENT;
+            case MainActivity.ACTION_VOLUME:
+                return Item.ACTION_VOLUME;
+            case MainActivity.ACTION_BRIGHTNESS:
+                return Item.ACTION_BRIGHTNESS;
+            case MainActivity.ACTION_RINGER_MODE:
+                return Item.ACTION_RINGER_MODE;
+            case MainActivity.ACTION_FLASH_LIGHT:
+                return Item.ACTION_FLASH_LIGHT;
+            case MainActivity.ACTION_SCREEN_LOCK:
+                return Item.ACTION_SCREEN_LOCK;
+        }
+        return -1;
+    }
+
+    public static void setCollectionSlotsSize(Realm inTransitionRealm, Collection collection, int size) {
+        final RealmList<Slot> slots = collection.slots;
+        while (slots.size() > size) {
+            slots.remove(slots.size() - 1);
+        }
+        while (slots.size() < size) {
+            slots.add(createSlotAndAddToRealm(inTransitionRealm, Slot.TYPE_ITEM));
+        }
+    }
 
 }
