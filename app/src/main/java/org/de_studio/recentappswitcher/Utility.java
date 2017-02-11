@@ -3063,5 +3063,9 @@ public  class Utility {
                 && System.currentTimeMillis() - sharedPreferences.getLong(Cons.TRIAL_START_TIME_KEY, System.currentTimeMillis()) > Cons.TRIAL_TIME;
     }
 
+    public static String getDeviceShortcutItemId(String intent) {
+        return Item.TYPE_DEVICE_SHORTCUT + intent;
+    }
+
 
 }

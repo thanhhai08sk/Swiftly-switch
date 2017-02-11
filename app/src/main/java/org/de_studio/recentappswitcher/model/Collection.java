@@ -30,8 +30,6 @@ public class Collection extends RealmObject {
     public int columnCount;
     public int marginHorizontal;
     public int marginVertical;
-    public int offsetHorizontal;
-    public int offsetVertical;
     public int space;
     public int radius;
     public int position;
@@ -87,21 +85,6 @@ public class Collection extends RealmObject {
         this.marginVertical = marginVertical;
     }
 
-    public int getOffsetHorizontal() {
-        return offsetHorizontal;
-    }
-
-    public void setOffsetHorizontal(int offsetHorizontal) {
-        this.offsetHorizontal = offsetHorizontal;
-    }
-
-    public int getOffsetVertical() {
-        return offsetVertical;
-    }
-
-    public void setOffsetVertical(int offsetVertical) {
-        this.offsetVertical = offsetVertical;
-    }
 
     public String getType() {
         return type;

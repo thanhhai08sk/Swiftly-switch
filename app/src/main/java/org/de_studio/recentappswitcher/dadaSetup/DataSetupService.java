@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.IntentService;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -12,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
@@ -21,7 +23,7 @@ import org.de_studio.recentappswitcher.model.DataInfo;
 import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
+import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.util.Random;
 import java.util.Set;
@@ -29,8 +31,11 @@ import java.util.Set;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmList;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static org.de_studio.recentappswitcher.MyApplication.getContext;
+import static org.de_studio.recentappswitcher.service.EdgeGestureService.CURRENT_SCHEMA_VERSION;
 
 
 public class DataSetupService extends IntentService {
@@ -249,11 +254,7 @@ public class DataSetupService extends IntentService {
                     Collection realmCollection = realm.copyToRealm(collection);
 
                     for (int i = 0; i < collection.rowsCount * collection.columnCount; i++) {
-                        Slot nullSlot = new Slot();
-                        nullSlot.type = Slot.TYPE_NULL;
-                        nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
-                        Log.e(TAG, "new slot, id = " + nullSlot.slotId);
-                        Slot realmSlot = realm.copyToRealm(nullSlot);
+                        Slot realmSlot = Utility.createSlotAndAddToRealm(realm, Slot.TYPE_NULL);
                         realmCollection.slots.add(realmSlot);
                     }
                     DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
@@ -436,14 +437,91 @@ public class DataSetupService extends IntentService {
     }
 
     private void convertOldRealmToNewRealm(Realm newRealm) {
-        Realm oldRealm = Realm.getInstance(new RealmConfiguration.Builder()
+        Realm gridRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
-                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                .schemaVersion(CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
+        Realm pinRealm = Realm.getInstance(new RealmConfiguration.Builder()
+                .name("circleFavo.realm")
+                .schemaVersion(CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
+        Realm circleFavoRealm = Realm.getInstance(new RealmConfiguration.Builder()
+                .name("circleFavo.realm")
+                .schemaVersion(CURRENT_SCHEMA_VERSION)
+                .migration(new MyRealmMigration())
+                .build());
+        SharedPreferences oldDefaultShared = getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
+        SharedPreferences oldExcludeShared = getSharedPreferences(MainActivity.EXCLUDE_SHAREDPREFERENCE, 0);
+        SharedPreferences oldEdge1Shared = getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE, 0);
+        SharedPreferences oldEdge2Shared = getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
 
-        Log.e(TAG, "convertOldRealmToNewRealm: oldRealm size = " + oldRealm.where(Shortcut.class).findAll().size()
-                + "\nisEmpty = " + oldRealm.isEmpty());
+        SharedPreferences newShared = getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
+        convertGrid(gridRealm, newRealm, oldDefaultShared);
 
+        Log.e(TAG, "convertOldRealmToNewRealm: gridRealm size = " + gridRealm.where(Shortcut.class).findAll().size()
+                + "\nisEmpty = " + gridRealm.isEmpty());
+
+    }
+
+    private void convertGrid(Realm oldRealm, Realm newRealm, SharedPreferences oldShared) {
+        int gridRow = oldShared.getInt(EdgeSetting.NUM_OF_GRID_ROW_KEY, 5);
+        int gridColumn = oldShared.getInt(EdgeSetting.NUM_OF_GRID_COLUMN_KEY, 4);
+        int gridGap = oldShared.getInt(EdgeSetting.GAP_OF_SHORTCUT_KEY, 5);
+        int marginHorizontal = oldShared.getInt(EdgeSetting.GRID_DISTANCE_FROM_EDGE_KEY, 20);
+        int marginVertical = oldShared.getInt(EdgeSetting.GRID_DISTANCE_VERTICAL_FROM_EDGE_KEY, 20);
+        Collection newGrid = newRealm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_GRID_FAVORITE).findFirst();
+        RealmResults<Shortcut> results = oldRealm.where(Shortcut.class).lessThan("id", 100).findAllSorted("id", Sort.ASCENDING);
+
+        if (newGrid != null) {
+            newRealm.beginTransaction();
+            newGrid.columnCount = gridColumn;
+            newGrid.rowsCount = gridRow;
+            newGrid.marginHorizontal = marginHorizontal;
+            newGrid.marginVertical = marginVertical;
+            newGrid.space = gridGap;
+            for (Shortcut shortcut : results) {
+                Slot slot = newGrid.slots.get(shortcut.getId());
+                if (slot != null) {
+                    Item item = null;
+                    switch (shortcut.getType()) {
+                        case Shortcut.TYPE_APP:
+                            item = newRealm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_APP).equalTo(Cons.PACKAGENAME, shortcut.getPackageName()).findFirst();
+                            break;
+                        case Shortcut.TYPE_ACTION:
+                            item = newRealm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_ACTION).equalTo(Cons.ACTION, shortcut.getAction()).findFirst();
+                            break;
+                        case Shortcut.TYPE_CONTACT:
+                            item = newRealm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_CONTACT).equalTo(Cons.CONTACT_ID, shortcut.getContactId()).findFirst();
+                            break;
+                        case Shortcut.TYPE_SHORTCUT:
+                            Item item1 = new Item();
+                            item1.type = Item.TYPE_DEVICE_SHORTCUT;
+                            item1.itemId = Utility.getDeviceShortcutItemId(shortcut.getIntent());
+                            item1.label = shortcut.getLabel();
+                            item1.packageName = shortcut.getPackageName();
+                            item1.intent = shortcut.getIntent();
+                            item1.iconBitmap = shortcut.getBitmap();
+                            item1.iconResourceId = shortcut.getResId();
+                            item = newRealm.copyToRealmOrUpdate(item1);
+                            break;
+                        case Shortcut.TYPE_FOLDER:
+                            item = null;
+                            slot.type = Slot.TYPE_FOLDER;
+                            break;
+                    }
+                    if (item != null) {
+                        slot.type = Slot.TYPE_ITEM;
+                        slot.stage1Item = item;
+                    } else {
+                        Log.e(TAG, "convertGrid: cannot find item with label " + shortcut.getLabel());
+                    }
+                }
+            }
+            newRealm.commitTransaction();
+        } else {
+            Log.e(TAG, "convertGrid: cannot find grid collection");
+        }
     }
 }
