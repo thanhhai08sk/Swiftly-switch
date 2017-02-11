@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher;
 import android.util.Log;
 
 import io.realm.DynamicRealm;
+import io.realm.FieldAttribute;
 import io.realm.RealmMigration;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
@@ -45,11 +46,11 @@ public class MyRealmMigration implements RealmMigration {
 
         if (oldVersion == 2) {
             schema.create("Item")
-                    .addField("itemId", String.class)
+                    .addField("itemId", String.class, FieldAttribute.PRIMARY_KEY)
                     .addField("type", String.class)
                     .addField("label", String.class)
                     .addField("action", int.class)
-                    .addField("packageName", String.class)
+                    .addField("packageName", String.class,FieldAttribute.INDEXED)
                     .addField("number", String.class)
                     .addField("contactId", long.class)
                     .addField("intent", String.class)
@@ -63,7 +64,7 @@ public class MyRealmMigration implements RealmMigration {
 
             schema.create("Slot")
                     .addField("type", String.class)
-                    .addField("slotId", String.class)
+                    .addField("slotId", String.class, FieldAttribute.PRIMARY_KEY)
                     .addRealmObjectField("stage1Item", schema.get("Item"))
                     .addRealmObjectField("stage2Item", schema.get("Item"))
                     .addField("longClickMode", int.class)
@@ -71,7 +72,29 @@ public class MyRealmMigration implements RealmMigration {
                     .addField("iconBitmap", byte[].class);
 
             schema.create("Edge")
-                    .addField("")
+                    .addField("mode", int.class)
+                    .addField("position", int.class)
+                    .addField("edgeId", String.class, FieldAttribute.PRIMARY_KEY)
+                    .addRealmObjectField("recent", schema.get("Collection"))
+                    .addRealmObjectField("circleFav", schema.get("Collection"))
+                    .addRealmObjectField("grid", schema.get("Collection"))
+                    .addField("sensitive", int.class)
+                    .addField("length", int.class)
+                    .addField("offset", int.class)
+                    .addField("useGuide", boolean.class)
+                    .addField("guideColor", int.class)
+                    .addField("keyboardOption", int.class);
+
+            schema.create("DataInfo")
+                    .addField("recentOk", boolean.class)
+                    .addField("circleFavoriteOk", boolean.class)
+                    .addField("gridOk", boolean.class)
+                    .addField("blackListOk", boolean.class)
+                    .addField("quickActionOk", boolean.class)
+                    .addField("edge1Ok", boolean.class)
+                    .addField("edge2Ok", boolean.class)
+                    .addField("id", String.class, FieldAttribute.PRIMARY_KEY);
+
 
 
             schema.create("Collection")

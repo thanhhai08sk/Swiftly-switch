@@ -87,7 +87,7 @@ public class EdgeGestureService extends Service {
         }
     };
     private static final int NOTIFICATION_ID = 111;
-    public static final int CURRENT_SCHEMA_VERSION = 2;
+    public static final int CURRENT_SCHEMA_VERSION = 3;
     float mScale;
     static final String TAG = EdgeGestureService.class.getSimpleName();
     static final int EDGE_GESTURE_NOTIFICAION_ID = 10;
