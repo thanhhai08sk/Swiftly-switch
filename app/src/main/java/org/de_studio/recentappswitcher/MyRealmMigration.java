@@ -83,8 +83,6 @@ public class MyRealmMigration implements RealmMigration {
                     .addField("columnCount", int.class)
                     .addField("marginHorizontal", int.class)
                     .addField("marginVertical", int.class)
-                    .addField("offsetHorizontal", int.class)
-                    .addField("offsetVertical", int.class)
                     .addField("space", int.class)
                     .addField("radius", int.class)
                     .addField("position", int.class);
