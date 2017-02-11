@@ -96,6 +96,7 @@ public class MyRealmMigration implements RealmMigration {
                     .addField("edgeId", String.class, FieldAttribute.PRIMARY_KEY)
                     .addRealmObjectField("recent", schema.get("Collection"))
                     .addRealmObjectField("circleFav", schema.get("Collection"))
+                    .addRealmObjectField("quickAction",schema.get("Collection"))
                     .addRealmObjectField("grid", schema.get("Collection"))
                     .addField("sensitive", int.class)
                     .addField("length", int.class)
