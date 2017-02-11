@@ -73,7 +73,7 @@ public class MyRealmMigration implements RealmMigration {
 
             schema.create("Collection")
                     .addField("type", String.class)
-                    .addField("collectionId", String.class)
+                    .addField("collectionId", String.class,FieldAttribute.PRIMARY_KEY)
                     .addField("label", String.class)
                     .addRealmListField("slots", schema.get("Slot"))
                     .addRealmListField("items", schema.get("Item"))
