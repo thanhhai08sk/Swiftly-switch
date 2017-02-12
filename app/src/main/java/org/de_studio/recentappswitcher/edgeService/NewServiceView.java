@@ -619,6 +619,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 ObjectAnimator animator = ObjectAnimator.ofFloat(icon, "x", "y", path);
                 animator.setStartDelay(animationTime / (frameLayout.getChildCount() - i)/2);
                 animator.setDuration(animationTime);
+                animator.setInterpolator(new DecelerateInterpolator());
                 animator.start();
                 ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(icon, "alpha", 0f, 1f);
                 alphaAnimator.setStartDelay(animationTime / (frameLayout.getChildCount() - i)/2);
