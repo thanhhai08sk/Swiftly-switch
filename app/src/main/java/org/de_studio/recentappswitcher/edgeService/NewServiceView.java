@@ -379,7 +379,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         } else {
             backgroundView.setVisibility(View.VISIBLE);
         }
-        ObjectAnimator objectAnimator = ObjectAnimator.ofArgb(backgroundView, "backgroundColor", Color.argb(0, 255, 255, 255), backgroundColor);
+        ObjectAnimator objectAnimator = ObjectAnimator.ofArgb(backgroundView, "backgroundColor", Color.argb(0, 0, 0, 0), backgroundColor);
         objectAnimator.setDuration(200);
         objectAnimator.start();
     }
