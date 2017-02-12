@@ -1099,8 +1099,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(DataSetupService.BROADCAST_GENERATE_DATA_OK)) {
                 Log.e(TAG, "onReceive: generate data ok");
-                inject();
-                presenter.onViewAttach(NewServiceView.this);
+                if (presenter == null) {
+                    inject();
+                    presenter.onViewAttach(NewServiceView.this);
+                }
             }
         }
     }

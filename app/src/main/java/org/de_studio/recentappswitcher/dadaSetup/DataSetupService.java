@@ -489,7 +489,7 @@ public class DataSetupService extends IntentService {
             newGrid.marginHorizontal = marginHorizontal;
             newGrid.marginVertical = marginVertical;
             newGrid.space = gridGap;
-            convertShortcutsToSlotsOfCollection(newRealm, newGrid, results);
+            convertShortcutsToSlotsOfCollection(newRealm, newGrid, results,oldRealm);
             newRealm.commitTransaction();
         } else {
             Log.e(TAG, "convertGrid: cannot find grid collection");
@@ -503,7 +503,7 @@ public class DataSetupService extends IntentService {
 
         if (newCircle != null) {
             newRealm.beginTransaction();
-            convertShortcutsToSlotsOfCollection(newRealm, newCircle, shortcuts);
+            convertShortcutsToSlotsOfCollection(newRealm, newCircle, shortcuts,oldRealm);
             newRealm.commitTransaction();
         } else {
             Log.e(TAG, "convertGrid: cannot find grid collection");
@@ -515,7 +515,7 @@ public class DataSetupService extends IntentService {
         RealmResults<Shortcut> shortcuts = oldRealm.where(Shortcut.class).findAll();
         if (recent != null) {
             newRealm.beginTransaction();
-            convertShortcutsToSlotsOfCollection(newRealm, recent, shortcuts);
+            convertShortcutsToSlotsOfCollection(newRealm, recent, shortcuts,oldRealm);
             newRealm.commitTransaction();
         }
     }
@@ -535,38 +535,30 @@ public class DataSetupService extends IntentService {
         }
     }
 
-    private void convertShortcutsToSlotsOfCollection(Realm newRealm, Collection newCircle, RealmResults<Shortcut> results) {
+    private void convertShortcutsToSlotsOfCollection(Realm newRealm, Collection newCircle, RealmResults<Shortcut> results, Realm oldRealm) {
         for (Shortcut shortcut : results) {
             Slot slot = newCircle.slots.get(shortcut.getId());
             if (slot != null) {
                 Item item = null;
                 switch (shortcut.getType()) {
-                    case Shortcut.TYPE_APP:
-                        item = newRealm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_APP).equalTo(Cons.PACKAGENAME, shortcut.getPackageName()).findFirst();
-                        break;
-                    case Shortcut.TYPE_ACTION:
-                        item = newRealm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_ACTION).equalTo(Cons.ACTION, shortcut.getAction()).findFirst();
-                        break;
-                    case Shortcut.TYPE_CONTACT:
-                        item = newRealm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_CONTACT).equalTo(Cons.CONTACT_ID, shortcut.getContactId()).findFirst();
-                        break;
-                    case Shortcut.TYPE_SHORTCUT:
-                        Item item1 = new Item();
-                        item1.type = Item.TYPE_DEVICE_SHORTCUT;
-                        item1.itemId = Utility.getDeviceShortcutItemId(shortcut.getIntent());
-                        item1.label = shortcut.getLabel();
-                        item1.packageName = shortcut.getPackageName();
-                        item1.intent = shortcut.getIntent();
-                        item1.iconBitmap = shortcut.getBitmap();
-                        item1.iconResourceId = shortcut.getResId();
-                        item = newRealm.copyToRealmOrUpdate(item1);
-                        break;
+
                     case Shortcut.TYPE_FOLDER:
                         item = null;
                         slot.type = Slot.TYPE_FOLDER;
+                        RealmResults<Shortcut> shortcuts = oldRealm.where(Shortcut.class).greaterThan("id", (shortcut.getId() + 1) * 1000 - 1)
+                                .lessThan("id", (shortcut.getId() + 2) * 1000).findAll();
+                        for (Shortcut shortcut1 : shortcuts) {
+                            Item item2 = converShortcutToItem(newRealm, shortcut1);
+                            if (item2 != null) {
+                                slot.items.add(item2);
+                            }
+                        }
+                        break;
+                    default:
+                        item = converShortcutToItem(newRealm, shortcut);
                         break;
                 }
-                if (item != null) {
+                if (item != null && shortcut.getType() != Shortcut.TYPE_FOLDER) {
                     slot.type = Slot.TYPE_ITEM;
                     slot.stage1Item = item;
                     Log.e(TAG, "convertGrid: ok, label = " + shortcut.getLabel());
@@ -575,6 +567,30 @@ public class DataSetupService extends IntentService {
                 }
             }
         }
+    }
+
+    private Item converShortcutToItem(Realm newRealm, Shortcut shortcut) {
+        switch (shortcut.getType()) {
+            case Shortcut.TYPE_APP:
+                return newRealm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_APP).equalTo(Cons.PACKAGENAME, shortcut.getPackageName()).findFirst();
+
+            case Shortcut.TYPE_ACTION:
+                return newRealm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_ACTION).equalTo(Cons.ACTION, shortcut.getAction()).findFirst();
+            case Shortcut.TYPE_CONTACT:
+                return newRealm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_CONTACT).equalTo(Cons.CONTACT_ID, shortcut.getContactId()).findFirst();
+
+            case Shortcut.TYPE_SHORTCUT:
+                Item item1 = new Item();
+                item1.type = Item.TYPE_DEVICE_SHORTCUT;
+                item1.itemId = Utility.getDeviceShortcutItemId(shortcut.getIntent());
+                item1.label = shortcut.getLabel();
+                item1.packageName = shortcut.getPackageName();
+                item1.intent = shortcut.getIntent();
+                item1.iconBitmap = shortcut.getBitmap();
+                item1.iconResourceId = shortcut.getResId();
+                return newRealm.copyToRealmOrUpdate(item1);
+        }
+        return null;
     }
 
     private void convertQuickActions(Realm newRealm, SharedPreferences oldShared) {

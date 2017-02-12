@@ -213,7 +213,7 @@
 
         <activity
             android:name=".main.MainView"
-            android:label="@string/title_activity_main_view"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             >
             <intent-filter>
@@ -221,10 +221,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".main.MainView1"
-            android:label="@string/title_activity_main_view1"
-            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".circleFavoriteSetting.CircleFavoriteSettingView"
             android:label="@string/circle_favorites"
             android:theme="@style/AppTheme"

@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.edgeService;
 
 import android.os.Build;
+import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
@@ -101,19 +102,20 @@ public class NewServiceModel extends BaseModel {
         }
 
         savedRecentShortcut = packageNames;
+        int i = 0;
 
         for (Slot slot : slots) {
             switch (slot.type) {
                 case Slot.TYPE_RECENT:
-                    if (packageNames.size()>0) {
-                        Item item = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(packageNames.get(0))).findFirst();
+                    if (packageNames.size() > i) {
+                        Item item = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(packageNames.get(i))).findFirst();
                         if (item != null) {
                             Slot slot1 = new Slot();
                             slot1.type = Slot.TYPE_ITEM;
                             slot1.stage1Item = item;
                             returnSlots.add(slot1);
                         }
-                        packageNames.remove(0);
+                        i++;
                     }
                     break;
                 default:
@@ -121,6 +123,8 @@ public class NewServiceModel extends BaseModel {
                     break;
             }
         }
+
+        Log.e(TAG, "getRecent: saved size = " + savedRecentShortcut.size());
 
 //        for (Slot returnSlot : returnSlots) {
 //            Log.e(TAG, "return slot " + returnSlot.toString());
