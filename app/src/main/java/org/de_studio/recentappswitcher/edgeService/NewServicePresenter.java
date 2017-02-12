@@ -252,9 +252,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         onHolding = false;
         Slot slot = null;
         view.hideAllExceptEdges();
+        String collectionId = null;
         if (currentHighlight >=0) {
             switch (currentShowing.showWhat) {
                 case Showing.SHOWING_CIRCLE_AND_ACTION:
+                    collectionId = currentShowing.circle.collectionId;
                     if (currentHighlight < 10) {
                         Log.e(TAG, "onActionUp: size = " + currentShowing.circleSlots.size() + "\nhighlight "+ currentHighlight) ;
                         if (currentShowing.circleSlots.size() > currentHighlight) {
@@ -265,11 +267,13 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     }
                     break;
                 case Showing.SHOWING_CIRCLE_ONLY:
+                    collectionId = currentShowing.circle.collectionId;
                     if (currentHighlight < currentShowing.circleSlots.size()) {
                         slot = currentShowing.circleSlots.get(currentHighlight);
                     }
                     break;
                 case Showing.SHOWING_GRID:
+                    collectionId = currentShowing.grid.collectionId;
                     slot = currentShowing.grid.slots.get(currentHighlight);
                     break;
                 case Showing.SHOWING_FOLDER:
@@ -279,7 +283,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     break;
             }
             if (slot != null) {
-                view.startSlot(slot, model.getLastApp());
+                view.startSlot(slot, model.getLastApp(), currentShowing.showWhat, collectionId);
             }
             view.unhighlightSlot(currentShowing, currentHighlight);
             currentShowing.showWhat = Showing.SHOWING_NONE;
@@ -434,7 +438,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void unhighlightSlot(Showing currentShowing, int id);
 
-        void startSlot(Slot slot, String lastApp);
+        void startSlot(Slot slot, String lastApp, int showing, String collectionId);
 
         void startItem(Item item, String lastApp);
 

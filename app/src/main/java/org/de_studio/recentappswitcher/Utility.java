@@ -63,10 +63,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
+import org.de_studio.recentappswitcher.edgeService.NewServicePresenter;
 import org.de_studio.recentappswitcher.edgeService.NewServiceView;
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
+import org.de_studio.recentappswitcher.gridFavoriteSetting.GridFavoriteSettingView;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Item;
@@ -2839,12 +2842,32 @@ public  class Utility {
         return Item.TYPE_APP + packageName;
     }
 
-    public static void startSlot(Slot slot, String lastAppPackageName, Context context, int contactAction) {
+    public static void startSlot(Slot slot, String lastAppPackageName, Context context, int contactAction, int showing, String collectionId) {
         switch (slot.type) {
             case Slot.TYPE_ITEM:
-                startItem(slot.stage1Item,lastAppPackageName,context,contactAction);
+                startItem(slot.stage1Item, lastAppPackageName, context, contactAction);
                 break;
             case Slot.TYPE_NULL:
+                if (collectionId != null) {
+                    Intent intent;
+                    switch (showing) {
+                        case NewServicePresenter.Showing.SHOWING_GRID:
+                            intent = GridFavoriteSettingView.getIntent(context, collectionId);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(intent);
+                            break;
+                        case NewServicePresenter.Showing.SHOWING_CIRCLE_AND_ACTION:
+                            intent = CircleFavoriteSettingView.getIntent(context, collectionId);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(intent);
+                            break;
+                        case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:
+                            intent = CircleFavoriteSettingView.getIntent(context, collectionId);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(intent);
+                            break;
+                    }
+                }
                 break;
         }
     }
