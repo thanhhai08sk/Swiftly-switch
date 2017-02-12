@@ -2842,6 +2842,10 @@ public  class Utility {
         return Item.TYPE_APP + packageName;
     }
 
+    public static String createActionItemId(int action) {
+        return Item.TYPE_ACTION + action;
+    }
+
     public static void startSlot(Slot slot, String lastAppPackageName, Context context, int contactAction, int showing, String collectionId) {
         switch (slot.type) {
             case Slot.TYPE_ITEM:

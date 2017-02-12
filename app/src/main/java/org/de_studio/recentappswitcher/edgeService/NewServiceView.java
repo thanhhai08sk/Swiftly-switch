@@ -335,7 +335,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             if (stats != null) {
                 SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(Cons.DATE_DECENDING_COMPARATOR);
                 for (UsageStats usageStats : stats) {
-                    mySortedMap.put(usageStats.getLastTimeUsed(), usageStats);
+                    long lastTimeUsed = usageStats.getLastTimeUsed();
+                    if (mySortedMap.containsKey(lastTimeUsed)) {
+                        lastTimeUsed = lastTimeUsed - 1;
+                    }
+                    mySortedMap.put(lastTimeUsed, usageStats);
                 }
                 Set<Long> setKey = mySortedMap.keySet();
                 Log.e(TAG, "mySortedMap size   = " + mySortedMap.size());

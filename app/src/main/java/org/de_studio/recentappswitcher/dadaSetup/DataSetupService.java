@@ -2,14 +2,18 @@ package org.de_studio.recentappswitcher.dadaSetup;
 
 import android.Manifest;
 import android.app.IntentService;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
+import android.util.ArraySet;
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -26,8 +30,11 @@ import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -83,7 +90,7 @@ public class DataSetupService extends IntentService {
         generateItems(realm);
         generateCollections(realm,dataInfo);
         generateEdges(realm);
-        convertOldRealmToNewRealm(realm);
+        restoreFromOldRealmOrGenerateInitData(realm);
         realm.close();
         sendBroadcast(new Intent(BROADCAST_GENERATE_DATA_OK));
     }
@@ -437,7 +444,7 @@ public class DataSetupService extends IntentService {
         }
     }
 
-    private void convertOldRealmToNewRealm(Realm newRealm) {
+    private void restoreFromOldRealmOrGenerateInitData(Realm newRealm) {
         Realm gridRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
                 .schemaVersion(CURRENT_SCHEMA_VERSION)
@@ -453,21 +460,27 @@ public class DataSetupService extends IntentService {
                 .schemaVersion(CURRENT_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
-        SharedPreferences oldDefaultShared = getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
-        SharedPreferences oldExcludeShared = getSharedPreferences(MainActivity.EXCLUDE_SHAREDPREFERENCE, 0);
-        SharedPreferences oldEdge1Shared = getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE, 0);
-        SharedPreferences oldEdge2Shared = getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
+        if (!gridRealm.isEmpty()) {
+            Log.e(TAG, "restoreFromOldRealmOrGenerateInitData: restore");
+            SharedPreferences oldDefaultShared = getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
+            SharedPreferences oldExcludeShared = getSharedPreferences(MainActivity.EXCLUDE_SHAREDPREFERENCE, 0);
+            SharedPreferences oldEdge1Shared = getSharedPreferences(MainActivity.EDGE_1_SHAREDPREFERENCE, 0);
+            SharedPreferences oldEdge2Shared = getSharedPreferences(MainActivity.EDGE_2_SHAREDPREFERENCE, 0);
 
-        SharedPreferences newShared = getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
-        convertGrid(gridRealm, newRealm, oldDefaultShared);
-        convertCircleFav(circleFavoRealm, newRealm);
-        convertPinnedShortcuts(pinRealm, newRealm);
-        convertBlackList(oldExcludeShared, newRealm);
-        convertQuickActions(newRealm,oldDefaultShared);
-        convertSettings(newRealm, oldDefaultShared,oldEdge1Shared,oldEdge2Shared, newShared);
+            SharedPreferences newShared = getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
+            convertGrid(gridRealm, newRealm, oldDefaultShared);
+            convertCircleFav(circleFavoRealm, newRealm);
+            convertPinnedShortcuts(pinRealm, newRealm);
+            convertBlackList(oldExcludeShared, newRealm);
+            convertQuickActions(newRealm, oldDefaultShared);
+            convertSettings(newRealm, oldDefaultShared, oldEdge1Shared, oldEdge2Shared, newShared);
+        } else {
+            Log.e(TAG, "restoreFromOldRealmOrGenerateInitData: generate init data");
+            generateInitSetForGrid(newRealm);
+        }
 
 
-        Log.e(TAG, "convertOldRealmToNewRealm: gridRealm size = " + gridRealm.where(Shortcut.class).findAll().size()
+        Log.e(TAG, "restoreFromOldRealmOrGenerateInitData: gridRealm size = " + gridRealm.where(Shortcut.class).findAll().size()
                 + "\nisEmpty = " + gridRealm.isEmpty());
 
     }
@@ -706,6 +719,74 @@ public class DataSetupService extends IntentService {
 
 
 
+    }
+
+    private void generateInitSetForGrid(Realm realm) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return;
+        }
+        Collection grid = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_GRID_FAVORITE).findFirst();
+        if (grid == null) {
+            return;
+        }
+
+        realm.beginTransaction();
+        Item[] items = new Item[grid.columnCount * grid.rowsCount];
+        items[0] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createActionItemId(Item.ACTION_WIFI)).findFirst();
+        items[1] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createActionItemId(Item.ACTION_FLASH_LIGHT)).findFirst();
+        items[2] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createActionItemId(Item.ACTION_VOLUME)).findFirst();
+        items[3] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createActionItemId(Item.ACTION_BRIGHTNESS)).findFirst();
+
+        long currentTimeMillis = System.currentTimeMillis();
+        UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
+        List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_WEEKLY, currentTimeMillis - 7 * 24 * 60 * 60 * 1000, currentTimeMillis);
+        Set<String> packageSet = new ArraySet<>();
+        if (stats != null) {
+            SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(Cons.DATE_DECENDING_COMPARATOR);
+            for (UsageStats usageStats : stats) {
+                long timeGround = usageStats.getTotalTimeInForeground();
+                if (mySortedMap.containsKey(timeGround)) {
+                    timeGround = timeGround + 1;
+                }
+                if (!packageSet.contains(usageStats.getPackageName())) {
+                    mySortedMap.put(timeGround, usageStats);
+                    packageSet.add(usageStats.getPackageName());
+                }
+            }
+            Set<Long> keysSet = mySortedMap.keySet();
+            int i = 4;
+            Item item;
+            String packa;
+            UsageStats usageStats;
+            for (Long key : keysSet) {
+                if (i < items.length) {
+                    usageStats = mySortedMap.get(key);
+                    if (usageStats != null) {
+                        packa = usageStats.getPackageName();
+                        if (packa != null) {
+                            item = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(packa)).findFirst();
+                            if (item != null) {
+                                Log.e(TAG, "generateInitSetForGrid: add item " + packa + "\ntime foreground = " + key);
+                                items[i] = item;
+                                i++;
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            Slot slot;
+            for (int i1 = 0; i1 < items.length; i1++) {
+                slot = grid.slots.get(i1);
+                slot.type = Slot.TYPE_ITEM;
+                slot.stage1Item = items[i1];
+            }
+
+
+        }
+
+        realm.commitTransaction();
     }
 
 
