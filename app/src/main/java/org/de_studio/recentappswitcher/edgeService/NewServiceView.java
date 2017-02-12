@@ -796,7 +796,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             switch (currentShowing.showWhat) {
                 case NewServicePresenter.Showing.SHOWING_GRID:
                     RecyclerView grid = (RecyclerView) collectionViewsMap.get(currentShowing.grid.collectionId);
-                    grid.getChildAt(id).setBackgroundColor(Color.argb(255, 42, 96, 70));
+                    grid.getChildAt(id).setBackgroundColor(Color.argb(214, 255, 255, 255));
                     break;
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_AND_ACTION:
                     if (id < 10) {
