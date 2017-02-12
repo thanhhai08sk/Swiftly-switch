@@ -90,6 +90,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -786,41 +787,39 @@ public  class Utility {
 
     public static int getActionFromLabel(Context context, String label) {
         if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_wifi))) {
-            return Shortcut.ACTION_WIFI;
+            return Item.ACTION_WIFI;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_bluetooth))) {
-            return Shortcut.ACTION_BLUETOOTH;
+            return Item.ACTION_BLUETOOTH;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_rotation))) {
-            return Shortcut.ACTION_ROTATION;
+            return Item.ACTION_ROTATION;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_power_menu))) {
-            return Shortcut.ACTION_POWER_MENU;
+            return Item.ACTION_POWER_MENU;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_home))) {
-            return Shortcut.ACTION_HOME;
+            return Item.ACTION_HOME;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_back))) {
-            return Shortcut.ACTION_BACK;
+            return Item.ACTION_BACK;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_noti))) {
-            return Shortcut.ACTION_NOTI;
+            return Item.ACTION_NOTI;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_last_app))) {
-            return Shortcut.ACTION_LAST_APP;
+            return Item.ACTION_LAST_APP;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_call_log))) {
-            return Shortcut.ACTION_CALL_LOGS;
+            return Item.ACTION_CALL_LOGS;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_contact))) {
-            return Shortcut.ACTION_CONTACT;
+            return Item.ACTION_CONTACT;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_recent))) {
-            return Shortcut.ACTION_RECENT;
+            return Item.ACTION_RECENT;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_volume))) {
-            return Shortcut.ACTION_VOLUME;
+            return Item.ACTION_VOLUME;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_brightness))) {
-            return Shortcut.ACTION_BRIGHTNESS;
+            return Item.ACTION_BRIGHTNESS;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_ringer_mode))) {
-            return Shortcut.ACTION_RINGER_MODE;
+            return Item.ACTION_RINGER_MODE;
         }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_dial))) {
-            return Shortcut.ACTION_DIAL;
+            return Item.ACTION_DIAL;
         }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_flash_light))) {
-            return Shortcut.ACTION_FLASH_LIGHT;
+            return Item.ACTION_FLASH_LIGHT;
         }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_screen_lock))) {
-            return Shortcut.ACTION_SCREEN_LOCK;
-        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_none))) {
-            return Shortcut.ACTION_NONE;
+            return Item.ACTION_SCREEN_LOCK;
         }else return -1;
     }
 
@@ -3143,6 +3142,37 @@ public  class Utility {
         while (slots.size() < size) {
             slots.add(createSlotAndAddToRealm(inTransitionRealm, Slot.TYPE_ITEM));
         }
+    }
+
+    public static void generateActionItems(Realm realm, final WeakReference<Context> contextWeakReference) {
+        final String[] actionStrings = contextWeakReference.get().getResources().getStringArray(R.array.setting_shortcut_array_no_folder);
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for (String string : actionStrings) {
+                    int action = Utility.getActionFromLabel(contextWeakReference.get(), string);
+                    if (action != Item.ACTION_SCREEN_LOCK ||
+                            !(android.os.Build.MANUFACTURER.toLowerCase().contains("sam") || android.os.Build.MANUFACTURER.toLowerCase().contains("zte"))) {
+                        Log.e(TAG, "generate action action = " + action + "\nmanufacture = " + Build.MANUFACTURER.toLowerCase());
+
+                        String itemId = Item.TYPE_ACTION + action;
+                        Item item = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
+                        if (item == null) {
+                            Log.e(TAG, "LoadActions - add action " + string);
+                            Item newItem = new Item();
+                            newItem.type = Item.TYPE_ACTION;
+                            newItem.itemId = itemId;
+                            newItem.label = string;
+                            newItem.action = action;
+                            Utility.setIconResourceIdsForAction(newItem);
+                            realm.copyToRealm(newItem);
+                        }
+                    }
+
+                }
+
+            }
+        });
     }
 
 }

@@ -5,6 +5,7 @@ import android.app.IntentService;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -29,6 +30,7 @@ import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
+import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -375,27 +377,7 @@ public class DataSetupService extends IntentService {
 
     private void generateActionItems(Realm realm) {
         final String[] actionStrings = getResources().getStringArray(R.array.setting_shortcut_array_no_folder);
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                for (String string : actionStrings) {
-                    int action = Utility.getActionFromLabel(getApplicationContext(), string);
-                    String itemId = Item.TYPE_ACTION + action;
-                    Item item = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
-                    if (item == null) {
-                        Log.e(TAG, "LoadActions - add action " + string);
-                        Item newItem = new Item();
-                        newItem.type = Item.TYPE_ACTION;
-                        newItem.itemId = itemId;
-                        newItem.label = string;
-                        newItem.action = action;
-                        Utility.setIconResourceIdsForAction(newItem);
-                        realm.copyToRealm(newItem);
-                        Log.e(TAG, "generate action item: " + string);
-                    }
-                }
-            }
-        });
+        Utility.generateActionItems(realm, new WeakReference<Context>(getApplicationContext()));
     }
 
     private void generateContactItems(Realm realm) {
