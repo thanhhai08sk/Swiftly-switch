@@ -17,7 +17,7 @@ public class MainPresenter extends BasePresenter<MainPresenter.View,MainModel> {
     @Override
     public void onViewAttach(View view) {
         super.onViewAttach(view);
-        view.startIntroIfNeeded();
+        view.startIntroAndDataSetupIfNeeded();
         view.setupViewPager();
         view.restartServiceIfPossible();
     }
@@ -31,7 +31,7 @@ public class MainPresenter extends BasePresenter<MainPresenter.View,MainModel> {
     public interface View extends PresenterView {
         void setupViewPager();
 
-        void startIntroIfNeeded();
+        void startIntroAndDataSetupIfNeeded();
 
         void restartServiceIfPossible();
 

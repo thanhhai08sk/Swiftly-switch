@@ -78,6 +78,7 @@ public class IntroSettingFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     try {
+
                         startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
                     } catch (ActivityNotFoundException e) {
                         Log.e(LOG_TAG, "Can not found usage access setting");
@@ -134,8 +135,6 @@ public class IntroSettingFragment extends Fragment {
         setPermission1Layout();
         setPermission2Layout();
         setPermission3Layout();
-
-
     }
 
     public boolean checkPermissionBeforeFinish() {

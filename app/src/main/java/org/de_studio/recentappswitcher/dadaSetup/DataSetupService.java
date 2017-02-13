@@ -53,7 +53,7 @@ public class DataSetupService extends IntentService {
     // TODO: Rename actions, choose action names that describe tasks that this
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     public static final String ACTION_GENERATE_DATA = "org.de_studio.recentappswitcher.dadaSetup.action.GENERATE_DATA";
-    public static final String ACTION_CONVERT = "org.de_studio.recentappswitcher.dadaSetup.action.CONVERT";
+    public static final String ACTION_SETUP_GRID = "org.de_studio.recentappswitcher.dadaSetup.action.SETUP_GRID";
 
     public static final String BROADCAST_GENERATE_DATA_OK = "org.de_studio.recentappswitcher.dadaSetup.action.GENERATE_DATA_OK";
 
@@ -68,8 +68,8 @@ public class DataSetupService extends IntentService {
             final String action = intent.getAction();
             if (ACTION_GENERATE_DATA.equals(action)) {
                 handleGenerateData();
-            } else if (ACTION_CONVERT.equals(action)) {
-                handleActionConvert();
+            } else if (ACTION_SETUP_GRID.equals(action)) {
+                handleSetupGrid();
             }
         }
     }
@@ -98,8 +98,14 @@ public class DataSetupService extends IntentService {
     }
 
 
-    private void handleActionConvert() {
-
+    private void handleSetupGrid() {
+        Log.e(TAG, "handleSetupGrid: ");
+        Realm realm = Realm.getDefaultInstance();
+        DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+        if (dataInfo.everyThingsOk()) {
+            generateInitSetForGrid(realm);
+        }
+        realm.close();
     }
 
 
@@ -740,6 +746,7 @@ public class DataSetupService extends IntentService {
             Item item;
             String packa;
             UsageStats usageStats;
+            Log.e(TAG, "generateInitSetForGrid: keysSet size = "+ keysSet.size());
             for (Long key : keysSet) {
                 if (i < items.length) {
                     usageStats = mySortedMap.get(key);
@@ -751,6 +758,8 @@ public class DataSetupService extends IntentService {
                                 Log.e(TAG, "generateInitSetForGrid: add item " + packa + "\ntime foreground = " + key);
                                 items[i] = item;
                                 i++;
+                            } else {
+                                Log.e(TAG, "generateInitSetForGrid: cannot find item " + packa);
                             }
                         }
                     }
@@ -760,9 +769,13 @@ public class DataSetupService extends IntentService {
 
             Slot slot;
             for (int i1 = 0; i1 < items.length; i1++) {
-                slot = grid.slots.get(i1);
-                slot.type = Slot.TYPE_ITEM;
-                slot.stage1Item = items[i1];
+                if (items[i1] != null) {
+                    slot = grid.slots.get(i1);
+                    slot.type = Slot.TYPE_ITEM;
+                    slot.stage1Item = items[i1];
+                } else {
+                    Log.e(TAG, "generateInitSetForGrid: item null, cannot add");
+                }
             }
 
 

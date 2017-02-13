@@ -57,7 +57,7 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
 
 
     @Override
-    public void startIntroIfNeeded() {
+    public void startIntroAndDataSetupIfNeeded() {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -67,7 +67,11 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
                     e.putBoolean(Cons.FIRST_START_KEY, false);
                     e.commit();
                     Intent i = new Intent(MainView.this, IntroActivity.class);
+//                    Intent intent = new Intent(MainView.this, DataSetupService.class);
+//                    intent.setAction(DataSetupService.ACTION_GENERATE_DATA);
+//                    startService(intent);
                     startActivity(i);
+
                 }
             }
         });

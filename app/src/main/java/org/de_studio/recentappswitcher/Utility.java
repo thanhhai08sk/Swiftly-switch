@@ -3153,7 +3153,6 @@ public  class Utility {
                     int action = Utility.getActionFromLabel(contextWeakReference.get(), string);
                     if (action != Item.ACTION_SCREEN_LOCK ||
                             !(android.os.Build.MANUFACTURER.toLowerCase().contains("sam") || android.os.Build.MANUFACTURER.toLowerCase().contains("zte"))) {
-                        Log.e(TAG, "generate action action = " + action + "\nmanufacture = " + Build.MANUFACTURER.toLowerCase());
 
                         String itemId = Item.TYPE_ACTION + action;
                         Item item = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();

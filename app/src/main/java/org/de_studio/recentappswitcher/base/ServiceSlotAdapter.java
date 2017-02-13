@@ -45,12 +45,14 @@ public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSl
             Slot slot = null;
             for (int i = 0; i < getData().size(); i++) {
                 slot = getData().get(i);
-                if (slot.type.equals(Slot.TYPE_ITEM) && slot.stage1Item.type.equals(Item.TYPE_ACTION)
-                        && (slot.stage1Item.action == Item.ACTION_WIFI ||
-                        slot.stage1Item.action == Item.ACTION_BLUETOOTH ||
-                        slot.stage1Item.action == Item.ACTION_RINGER_MODE ||
-                        slot.stage1Item.action == Item.ACTION_ROTATION ||
-                        slot.stage1Item.action == Item.ACTION_FLASH_LIGHT)) {
+                if (slot.type.equals(Slot.TYPE_ITEM) &&
+                        slot.stage1Item != null &&
+                        slot.stage1Item.type.equals(Item.TYPE_ACTION) &&
+                        (slot.stage1Item.action == Item.ACTION_WIFI ||
+                                slot.stage1Item.action == Item.ACTION_BLUETOOTH ||
+                                slot.stage1Item.action == Item.ACTION_RINGER_MODE ||
+                                slot.stage1Item.action == Item.ACTION_ROTATION ||
+                                slot.stage1Item.action == Item.ACTION_FLASH_LIGHT)) {
 
                     notifyItemChanged(i);
                 }
