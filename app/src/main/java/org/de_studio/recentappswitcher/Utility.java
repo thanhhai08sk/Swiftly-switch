@@ -2551,7 +2551,7 @@ public  class Utility {
                 }
                 break;
             case Item.TYPE_ACTION:
-                return ((BitmapDrawable) context.getDrawable(item.iconResourceId)).getBitmap();
+                return ((BitmapDrawable) ContextCompat.getDrawable(context, item.iconResourceId)).getBitmap();
             case Item.TYPE_DEVICE_SHORTCUT:
                 byte[] byteArray = item.iconBitmap;
                 try {
@@ -2576,16 +2576,16 @@ public  class Utility {
                         return drawable.getBitmap();
                     } catch (IOException e) {
                         e.printStackTrace();
-                        return ((BitmapDrawable) context.getDrawable(R.drawable.ic_contact_default)).getBitmap();
+                        return ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_contact_default)).getBitmap();
                     } catch (SecurityException e) {
                         Toast.makeText(context, context.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    return ((BitmapDrawable) context.getDrawable(R.drawable.ic_contact_default)).getBitmap();
+                    return ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_contact_default)).getBitmap();
                 }
                 break;
             case Item.TYPE_SHORTCUTS_SET:
-                return ((BitmapDrawable) context.getDrawable(item.iconResourceId)).getBitmap();
+                return ((BitmapDrawable) ContextCompat.getDrawable(context, item.iconResourceId)).getBitmap();
         }
         return null;
     }

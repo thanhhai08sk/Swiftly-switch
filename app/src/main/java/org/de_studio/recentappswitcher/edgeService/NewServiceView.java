@@ -383,9 +383,17 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         } else {
             backgroundView.setVisibility(View.VISIBLE);
         }
-        ObjectAnimator objectAnimator = ObjectAnimator.ofArgb(backgroundView, "backgroundColor", Color.argb(0, 0, 0, 0), backgroundColor);
-        objectAnimator.setDuration(200);
-        objectAnimator.start();
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            backgroundView.setBackgroundColor(backgroundColor);
+            ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(backgroundView, "alpha", 0f, 1f);
+            objectAnimator.setDuration(animationTime).start();
+
+        } else {
+            ObjectAnimator objectAnimator = ObjectAnimator.ofArgb(backgroundView, "backgroundColor", Color.argb(0, 0, 0, 0), backgroundColor);
+            objectAnimator.setDuration(animationTime);
+            objectAnimator.start();
+        }
     }
 
     public ImageView getIconImageView() {
@@ -596,35 +604,42 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 //                icon.setAlpha(0f);
                 Utility.setSlotIcon(slots.get(i), this, (ImageView) icon, getPackageManager(), iconPack, false, true);
 
-                icon.setX(iconsXY.xs[i]);
-                icon.setY(iconsXY.ys[i]);
 
-                if (i == 0) {
-                    if (iconsXY.xs.length >= 2) {
-                        icon.setX(iconsXY.xs[0] - (iconsXY.xs[1] - iconsXY.xs[0]));
-                        icon.setY(iconsXY.ys[0] - (iconsXY.ys[1] - iconsXY.ys[0]));
-                    } else {
-                        icon.setX(iconsXY.xs[0]);
-                        icon.setY(iconsXY.ys[0]);
-                    }
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    icon.setX(iconsXY.xs[i]);
+                    icon.setY(iconsXY.ys[i]);
 
                 } else {
+                    icon.setX(iconsXY.xs[i]);
+                    icon.setY(iconsXY.ys[i]);
 
-                    icon.setX(previousX);
-                    icon.setY(previousY);
+                    if (i == 0) {
+                        if (iconsXY.xs.length >= 2) {
+                            icon.setX(iconsXY.xs[0] - (iconsXY.xs[1] - iconsXY.xs[0]));
+                            icon.setY(iconsXY.ys[0] - (iconsXY.ys[1] - iconsXY.ys[0]));
+                        } else {
+                            icon.setX(iconsXY.xs[0]);
+                            icon.setY(iconsXY.ys[0]);
+                        }
+
+                    } else {
+
+                        icon.setX(previousX);
+                        icon.setY(previousY);
+                    }
+                    icon.setAlpha(0f);
+                    previousX = iconsXY.xs[i];
+                    previousY = iconsXY.ys[i];
+
+                    Path path = new Path();
+                    path.moveTo(icon.getX(),icon.getY());
+                    path.lineTo(iconsXY.xs[i], iconsXY.ys[i]);
+                    ObjectAnimator animator = ObjectAnimator.ofFloat(icon, "x", "y", path);
+                    animator.setStartDelay(animationTime / (frameLayout.getChildCount() - i)/2);
+                    animator.setDuration(animationTime);
+                    animator.setInterpolator(new DecelerateInterpolator());
+                    animator.start();
                 }
-                icon.setAlpha(0f);
-                previousX = iconsXY.xs[i];
-                previousY = iconsXY.ys[i];
-
-                Path path = new Path();
-                path.moveTo(icon.getX(),icon.getY());
-                path.lineTo(iconsXY.xs[i], iconsXY.ys[i]);
-                ObjectAnimator animator = ObjectAnimator.ofFloat(icon, "x", "y", path);
-                animator.setStartDelay(animationTime / (frameLayout.getChildCount() - i)/2);
-                animator.setDuration(animationTime);
-                animator.setInterpolator(new DecelerateInterpolator());
-                animator.start();
                 ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(icon, "alpha", 0f, 1f);
                 alphaAnimator.setStartDelay(animationTime / (frameLayout.getChildCount() - i)/2);
                 alphaAnimator.setDuration(animationTime);
