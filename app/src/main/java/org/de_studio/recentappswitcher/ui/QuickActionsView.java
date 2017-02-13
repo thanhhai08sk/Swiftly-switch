@@ -58,10 +58,10 @@ public class QuickActionsView extends View {
 
         arcSize = ARC_SIZE_DP * mScale;
         path = new Path();
-        rectFs = new RectF[actions.size()];
-        bitmaps = new Bitmap[actions.size()];
-        sweepAngles = new int[actions.size()];
-        for (int i = 0; i < actions.size(); i++) {
+        rectFs = new RectF[getSize()];
+        bitmaps = new Bitmap[getSize()];
+        sweepAngles = new int[getSize()];
+        for (int i = 0; i < getSize(); i++) {
             bitmaps[i] = Utility.getItemBitmap(actions.get(i).stage1Item, getContext(), iconPack);
             rectFs[i] = new RectF();
         }
@@ -75,6 +75,9 @@ public class QuickActionsView extends View {
             invalidate();
     }
 
+    private int getSize() {
+        return 4;
+    }
     @Override
     protected void onDraw(Canvas canvas) {
         if (visibleItem == -1) {
@@ -88,8 +91,8 @@ public class QuickActionsView extends View {
         switch (Utility.rightLeftOrBottom(edgePosition)) {
             case Cons.POSITION_RIGHT:
                 startAngle = -270;
-                for (int i = visibleItem; i < actions.size(); i++) {
-                    if (i + 1 < actions.size()) {
+                for (int i = visibleItem; i < getSize(); i++) {
+                    if (i + 1 < getSize()) {
                         startAngle = startAngle + sweepAngles[i + 1];
                     }
                 }

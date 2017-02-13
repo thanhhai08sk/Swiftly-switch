@@ -1050,6 +1050,17 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (sharedPreferences.getBoolean(Cons.IS_DISABLE_IN_LANDSCAPE_KEY, false) && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            removeEdgeImage();
+        } else {
+            addEdgeImage();
+        }
+        hideAllCollections();
+        Log.e(TAG, "onConfigurationChanged: ");
+        super.onConfigurationChanged(newConfig);
+    }
 
     public class EdgesToggleReceiver extends BroadcastReceiver {
         public EdgesToggleReceiver() {
