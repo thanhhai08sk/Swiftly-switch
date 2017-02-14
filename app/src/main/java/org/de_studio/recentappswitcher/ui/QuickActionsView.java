@@ -62,8 +62,10 @@ public class QuickActionsView extends View {
         bitmaps = new Bitmap[getSize()];
         sweepAngles = new int[getSize()];
         for (int i = 0; i < getSize(); i++) {
-            bitmaps[i] = Utility.getItemBitmap(actions.get(i).stage1Item, getContext(), iconPack);
-            rectFs[i] = new RectF();
+            if (actions.get(i).stage1Item != null) {
+                bitmaps[i] = Utility.getItemBitmap(actions.get(i).stage1Item, getContext(), iconPack);
+                rectFs[i] = new RectF();
+            }
         }
         sweepAngles[0] = 30;
         sweepAngles[1] = sweepAngles[2] = 40;
@@ -121,7 +123,9 @@ public class QuickActionsView extends View {
         iconAngle = Math.toRadians(startAngle + sweepAngles[visibleItem] * 0.5);
         setIconRectF(centerX, centerY, centerX, iconAngle);
         canvas.drawPath(path, backgroundPaint);
-        canvas.drawBitmap(bitmaps[visibleItem], null, rectFs[visibleItem], backgroundPaint);
+        if (bitmaps[visibleItem] != null) {
+            canvas.drawBitmap(bitmaps[visibleItem], null, rectFs[visibleItem], backgroundPaint);
+        }
 
 
     }
@@ -131,9 +135,11 @@ public class QuickActionsView extends View {
         float top;
         left = (float) (centerX + radius * Math.cos(iconAngular) - iconSize/2);
         top = (float) (centerY + radius * Math.sin(iconAngular) - iconSize/2);
-        rectFs[visibleItem].set(left
-                , top
-                , left + iconSize
-                , top + iconSize);
+        if (rectFs[visibleItem] != null) {
+            rectFs[visibleItem].set(left
+                    , top
+                    , left + iconSize
+                    , top + iconSize);
+        }
     }
 }

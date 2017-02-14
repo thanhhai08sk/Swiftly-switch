@@ -2906,7 +2906,7 @@ public  class Utility {
 
     private static void startApp(String packageName, Context context) {
         Intent extApp = context.getPackageManager().getLaunchIntentForPackage(packageName);
-        if (extApp != null) {
+        if (packageName != null && extApp != null) {
             if (packageName.equals("com.devhomc.search")) {
                 extApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(extApp);
