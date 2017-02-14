@@ -45,7 +45,8 @@ public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSl
             Slot slot = null;
             for (int i = 0; i < getData().size(); i++) {
                 slot = getData().get(i);
-                if (slot.type.equals(Slot.TYPE_ITEM) &&
+                if (slot != null &&
+                        slot.type.equals(Slot.TYPE_ITEM) &&
                         slot.stage1Item != null &&
                         slot.stage1Item.type.equals(Item.TYPE_ACTION) &&
                         (slot.stage1Item.action == Item.ACTION_WIFI ||
