@@ -137,6 +137,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
     public void onChooseCollectionSize(int size) {
         model.setCurrentCollectionSize(size);
+        view.restartService();
     }
 
 
@@ -190,6 +191,8 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         void chooseCurrentCollection(List<Collection> collections, Collection currentCollection);
 
         void setCircleSizeDialog(PublishSubject<Integer> subject, int currentValue);
+
+        void restartService();
 
 
     }

@@ -76,11 +76,12 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     public void onSetColumnsCount(int columnsCount) {
         model.setColumnsCount(columnsCount);
         view.setGridColumn(columnsCount);
-
+        view.restartService();
     }
 
     public void onSetRowsCount(int rowsCount) {
         model.setRowsCount(rowsCount);
+        view.restartService();
     }
 
 

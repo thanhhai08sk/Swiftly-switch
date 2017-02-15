@@ -873,22 +873,25 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     private void highlightCircleIcon(View icon, float iconX, float iconY) {
-        icon.setScaleX(1.2f);
-        icon.setScaleY(1.2f);
+        if (icon != null) {
 
-        int height = (int) ((16 + 48 * iconScale) * mScale);
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(height, height);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            icon.setBackground(getDrawable(R.drawable.icon_background));
-        } else {
-            icon.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
+            icon.setScaleX(1.2f);
+            icon.setScaleY(1.2f);
+
+            int height = (int) ((16 + 48 * iconScale) * mScale);
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(height, height);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                icon.setBackground(getDrawable(R.drawable.icon_background));
+            } else {
+                icon.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
+            }
+
+            icon.setX(iconX - 8 * mScale);
+            icon.setY(iconY - 8 * mScale);
+
+            icon.setLayoutParams(layoutParams);
+            icon.setPadding((int) (8 * mScale), (int) (8 * mScale), (int) (8 * mScale), (int) (8 * mScale));
         }
-
-        icon.setX(iconX - 8 * mScale);
-        icon.setY(iconY - 8 * mScale);
-
-        icon.setLayoutParams(layoutParams);
-        icon.setPadding((int) (8 * mScale), (int) (8 * mScale), (int) (8 * mScale), (int) (8 * mScale));
     }
 
     private void unhighlightCircleIcon(View icon, float iconX, float iconY) {

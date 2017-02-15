@@ -287,4 +287,9 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
     public void onDestroyBySystem() {
 
     }
+
+    @Override
+    public void restartService() {
+        Utility.restartService(this);
+    }
 }
