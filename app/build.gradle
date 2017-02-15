@@ -33,8 +33,8 @@ android {
         applicationId "org.de_studio.recentappswitcher"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 82
-        versionName "3.0.0.3"
+        versionCode 83
+        versionName "3.0.0.4"
     }
 
     buildTypes {
