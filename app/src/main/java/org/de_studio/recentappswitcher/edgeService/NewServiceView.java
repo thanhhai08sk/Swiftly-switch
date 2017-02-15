@@ -532,6 +532,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         return Math.abs(grid.collectionId.hashCode());
     }
 
+    private int getFolderResId(Slot folder) {
+        return Math.abs(folder.slotId.hashCode());
+    }
+
     private int getQuickActionsResId(Collection quickActions, int position) {
         return Math.abs(quickActions.collectionId.hashCode()) + position;
     }
@@ -550,7 +554,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             }
             folderView.setLayoutManager(new GridLayoutManager(this, columnCount));
             folderView.setAdapter(adapter);
-            folderView.setId(folder.slotId.hashCode());
+            folderView.setId(getFolderResId(folder));
             folderView.addItemDecoration(new GridSpacingItemDecoration((int)(space * mScale)));
             folderView.setBackgroundResource(R.color.background_dark);
             collectionViewsMap.put(folder.slotId, folderView);
@@ -560,7 +564,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         final float triggerX = triggerGridView.getChildAt(triggerPosition).getX() + triggerGridView.getX() + (iconScale * Cons.DEFAULT_ICON_WIDTH + space)/2 * mScale;
         final float triggerY = triggerGridView.getChildAt(triggerPosition).getY() + triggerGridView.getY() + (iconScale * Cons.DEFAULT_ICON_WIDTH + space) / 2 * mScale;
         boolean needDelay = false;
-        if (backgroundView.findViewById(folder.slotId.hashCode()) == null) {
+        if (backgroundView.findViewById(getFolderResId(folder)) == null) {
             backgroundView.addView(folderView);
             needDelay = true;
         }
