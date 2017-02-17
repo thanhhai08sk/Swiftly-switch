@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.base.collectionSetting.BaseCircleCollectionSettingView;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingView;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.CircleFavoriteSettingModule;
@@ -19,7 +20,7 @@ import butterknife.OnClick;
  * Created by HaiNguyen on 11/11/16.
  */
 
-public class CircleFavoriteSettingView extends BaseCollectionSettingView<Void, CircleFavoriteSettingPresenter> implements CircleFavoriteSettingPresenter.View {
+public class CircleFavoriteSettingView extends BaseCircleCollectionSettingView<Void, CircleFavoriteSettingPresenter> implements CircleFavoriteSettingPresenter.View {
     private static final String TAG = CircleFavoriteSettingView.class.getSimpleName();
     @BindView(R.id.size_text)
     TextView sizeText;
@@ -47,10 +48,6 @@ public class CircleFavoriteSettingView extends BaseCollectionSettingView<Void, C
                 .build().inject(this);
     }
 
-    @Override
-    public boolean isHoverOnDeleteButton(float x, float y) {
-        return  y > deleteButton.getY() - deleteButton.getHeight()*2;
-    }
 
 
 

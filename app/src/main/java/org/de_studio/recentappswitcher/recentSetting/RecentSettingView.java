@@ -42,10 +42,6 @@ public class RecentSettingView extends BaseCircleCollectionSettingView<Void, Rec
 
     }
 
-    @Override
-    public boolean isHoverOnDeleteButton(float x, float y) {
-        return  y > deleteButton.getY() - deleteButton.getHeight()*2;
-    }
 
 
 

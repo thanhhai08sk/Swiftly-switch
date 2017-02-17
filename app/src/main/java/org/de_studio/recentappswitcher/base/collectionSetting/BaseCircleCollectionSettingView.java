@@ -7,4 +7,9 @@ package org.de_studio.recentappswitcher.base.collectionSetting;
 public abstract class BaseCircleCollectionSettingView<T, P extends BaseCircleCollectionSettingPresenter> extends BaseCollectionSettingView<T,P> implements BaseCircleCollectionSettingPresenter.View {
 
 
+    @Override
+    public boolean isHoverOnDeleteButton(float x, float y) {
+        return  y > deleteButton.getY() - deleteButton.getHeight()*2;
+    }
+
 }
