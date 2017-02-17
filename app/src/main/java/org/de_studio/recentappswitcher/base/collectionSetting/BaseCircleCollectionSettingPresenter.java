@@ -15,7 +15,7 @@ public abstract class BaseCircleCollectionSettingPresenter<V extends BaseCircleC
 
     PublishSubject<Item> chooseLongPressCollectionSJ = PublishSubject.create();
     @Override
-    public void onViewAttach(V view) {
+    public void onViewAttach(final V view) {
         super.onViewAttach(view);
         addSubscription(
                 view.onChooseLongPressMode().subscribe(new Action1<Integer>() {
@@ -23,7 +23,7 @@ public abstract class BaseCircleCollectionSettingPresenter<V extends BaseCircleC
                     public void call(Integer integer) {
                         switch (integer) {
                             case Collection.LONG_CLICK_MODE_OPEN_COLLECTION:
-
+                                view.chooseLongPressCollection(chooseLongPressCollectionSJ);
                                 break;
                             case Collection.LONG_CLICK_MODE_NONE:
                                 break;
