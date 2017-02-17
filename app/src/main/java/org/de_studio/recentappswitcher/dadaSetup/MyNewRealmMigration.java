@@ -16,5 +16,12 @@ public class MyNewRealmMigration implements RealmMigration {
     public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
         Log.e(TAG, "migrate: old = " + oldVersion + "\nnew = " + newVersion);
         RealmSchema schema = realm.getSchema();
+        if (oldVersion == 0) {
+            schema.get("Collection")
+                    .removeField("longClickCollection")
+                    .addRealmObjectField("longPressCollection", schema.get("Collection"));
+
+            oldVersion++;
+        }
     }
 }

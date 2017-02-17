@@ -14,9 +14,12 @@ import butterknife.OnClick;
 
 public abstract class BaseCircleCollectionSettingView<T, P extends BaseCircleCollectionSettingPresenter> extends BaseCollectionSettingView<T,P> implements BaseCircleCollectionSettingPresenter.View {
     @BindView(R.id.size_text)
-    TextView sizeText;
+    TextView sizeDescription;
     @BindView(R.id.circle_size_description)
     TextView circleSizeDescription;
+    @BindView(R.id.long_press_description)
+    TextView longPressDescription;
+
 
 
     @Override
@@ -31,8 +34,9 @@ public abstract class BaseCircleCollectionSettingView<T, P extends BaseCircleCol
     @Override
     public void updateCollectionInfo(Collection collection) {
         super.updateCollectionInfo(collection);
-        sizeText.setText(String.valueOf(collection.slots.size()));
+        sizeDescription.setText(String.valueOf(collection.slots.size()));
         circleSizeDescription.setText(String.valueOf(collection.radius) + " dp");
+
 
     }
 

@@ -25,7 +25,7 @@ public class Collection extends RealmObject {
     public RealmList<Slot> slots;
     public RealmList<Item> items; //For blacklist
     public int longClickMode;
-    public String longClickCollection;
+    public Collection longPressCollection;
     public int rowsCount;
     public int columnCount;
     public int marginHorizontal;
@@ -37,13 +37,6 @@ public class Collection extends RealmObject {
     public Collection() {
     }
 
-    public String getLongClickCollection() {
-        return longClickCollection;
-    }
-
-    public void setLongClickCollection(String longClickCollection) {
-        this.longClickCollection = longClickCollection;
-    }
 
     public RealmList<Item> getItems() {
         return items;
@@ -148,5 +141,13 @@ public class Collection extends RealmObject {
 
     public void setRadius(int radius) {
         this.radius = radius;
+    }
+
+    public Collection getLongPressCollection() {
+        return longPressCollection;
+    }
+
+    public void setLongPressCollection(Collection longPressCollection) {
+        this.longPressCollection = longPressCollection;
     }
 }

@@ -183,7 +183,7 @@ public class Cons {
 
 
     public static final int OLD_REALM_SCHEMA_VERSION = 2;
-    public static final int REALM_SCHEMA_VERSION = 0;
+    public static final int REALM_SCHEMA_VERSION = 1;
     public static final String PIN_REALM_NAME = "pinApp.realm";
     public static final String FAVORITE_GRID_REALM_NAME = "default.realm";
     public static final String FAVORITE_CIRCLE_REALM_NAME = "circleFavo.realm";
