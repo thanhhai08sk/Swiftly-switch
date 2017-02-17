@@ -345,6 +345,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 Log.e(TAG, "mySortedMap size   = " + mySortedMap.size());
                 UsageStats usageStats;
                 String packa;
+                int i = 0;
                 for (Long key : setKey) {
                     if (key <= currentTimeMillis) {
                         usageStats = mySortedMap.get(key);
@@ -353,11 +354,19 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                             if (packa != null &&
                                     (usageStats.getTotalTimeInForeground() > 500
                                             && !packa.contains("systemui")
-                                            && (excludeSet == null || excludeSet.where().equalTo(Cons.PACKAGENAME, packa).findFirst() == null)
-                                            && !tempPackageName.contains(packa)
-                                            || packa.equals(launcherPackageName))
+                                            && (i == 0 || (excludeSet == null || excludeSet.where().equalTo(Cons.PACKAGENAME, packa).findFirst() == null))
+                                            && !tempPackageName.contains(packa))
                                     ) {
+
                                 tempPackageName.add(packa);
+                                i++;
+                            } else {
+                                Log.e(TAG, "getRecentApp: removed package = " + packa + "\ni = " + i +
+                                        "\nfirst && = " + (usageStats.getTotalTimeInForeground() > 500) + "value = " + usageStats.getTotalTimeInForeground() +
+                                        "\nsecond && = " + (!packa.contains("systemui")) +
+                                        "\nthird && = " + ((i == 0 || (excludeSet == null || excludeSet.where().equalTo(Cons.PACKAGENAME, packa).findFirst() == null))) +
+                                        "\nfourth && = " + !tempPackageName.contains(packa));
+
                             }
                             if (tempPackageName.size() >= 10) {
                                 Log.e(TAG, "tempackage >= " + 10);
