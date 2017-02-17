@@ -186,6 +186,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
                         if (onCircle && currentShowing.circle.longClickMode == Collection.LONG_CLICK_MODE_OPEN_COLLECTION &&
                                 currentShowing.circle.longPressCollection != null) {
+                            view.unhighlightSlot(currentShowing,currentHighlight);
                             showCollectionInstantlySubject.onNext(currentShowing.circle.longPressCollection.collectionId);
                         }
 
