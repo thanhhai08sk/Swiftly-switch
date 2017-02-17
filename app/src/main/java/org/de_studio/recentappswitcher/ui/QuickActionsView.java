@@ -82,7 +82,7 @@ public class QuickActionsView extends View {
     }
     @Override
     protected void onDraw(Canvas canvas) {
-        if (visibleItem == -1) {
+        if (visibleItem == -1 || bitmaps[visibleItem] == null) {
             return;
         }
         int canvasWidth = canvas.getWidth();
@@ -123,9 +123,7 @@ public class QuickActionsView extends View {
         iconAngle = Math.toRadians(startAngle + sweepAngles[visibleItem] * 0.5);
         setIconRectF(centerX, centerY, centerX, iconAngle);
         canvas.drawPath(path, backgroundPaint);
-        if (bitmaps[visibleItem] != null) {
-            canvas.drawBitmap(bitmaps[visibleItem], null, rectFs[visibleItem], backgroundPaint);
-        }
+        canvas.drawBitmap(bitmaps[visibleItem], null, rectFs[visibleItem], backgroundPaint);
 
 
     }

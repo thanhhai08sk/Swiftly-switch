@@ -81,6 +81,11 @@ public class QuickActionSettingView extends BaseCollectionSettingView<Void, Quic
     }
 
     @Override
+    public boolean isHoverOnDeleteButton(float x, float y) {
+        return  y > deleteButton.getY() - deleteButton.getHeight()*2;
+    }
+
+    @Override
     public PublishSubject<Void> onLoadItemsOk() {
         return loadItemsOkSubject;
     }
