@@ -55,6 +55,11 @@ public class NewServiceModel extends BaseModel {
         return null;
     }
 
+
+    public void setSavedRecentShortcuts(ArrayList<String> recents) {
+        this.savedRecentShortcut = recents;
+    }
+
     public float convertDpToPixel(int dp) {
         return dp * mScale;
     }

@@ -58,6 +58,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         view.addEdgesToWindowAndSetListener();
         view.setupNotification();
         view.setupReceiver();
+        model.setSavedRecentShortcuts(view.getRecentApp(Cons.TIME_INTERVAL_LONG));
+
 
         addSubscription(
                 highlightIdSubject.filter(new Func1<Integer, Boolean>() {
@@ -111,7 +113,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             showGrid(collection, view);
                         } else if (collection.type.equals(Collection.TYPE_CIRCLE_FAVORITE)) {
                             if (tempRecentPackages == null) {
-                                tempRecentPackages = view.getRecentApp();
+                                tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
                             }
                             currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
                             currentShowing.circle = collection;
@@ -120,7 +122,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             showCollection(Showing.SHOWING_CIRCLE_ONLY);
                         } else if (collection.type.equals(Collection.TYPE_RECENT)) {
                             if (tempRecentPackages == null) {
-                                tempRecentPackages = view.getRecentApp();
+                                tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
                             }
                             currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
                             currentShowing.circle = collection;
@@ -208,7 +210,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
     public void onActionDown(float x, float y, int edgeId) {
         long time = System.currentTimeMillis();
-        tempRecentPackages = view.getRecentApp();
+        tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
         setCurrentEdgeAndCurrentShowing(edgeId);
         setTriggerPoint(x, y);
 
@@ -411,7 +413,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         Point getWindowSize();
 
-        ArrayList<String> getRecentApp();
+        ArrayList<String> getRecentApp(long timeInterval);
 
         void showBackground();
 

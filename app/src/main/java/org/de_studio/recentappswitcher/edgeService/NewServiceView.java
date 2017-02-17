@@ -161,6 +161,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     public void onCreate() {
         super.onCreate();
         DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
+        }
         if (dataInfo == null || !dataInfo.everyThingsOk()) {
             Log.e(TAG, "onCreate: start DataSetupService");
             IntentFilter filter = new IntentFilter();
@@ -176,9 +179,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             presenter.onViewAttach(this);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        }
+
     }
 
     @Override
@@ -309,7 +310,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
-    public ArrayList<String> getRecentApp() {
+    public ArrayList<String> getRecentApp(long timeInterval) {
         Log.e(TAG, "getRecentApp: launcher = " + launcherPackageName);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -330,7 +331,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             long timeStart = System.currentTimeMillis();
             long currentTimeMillis = System.currentTimeMillis() + 2000;
 
-            List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - 1000 * 1000, currentTimeMillis);
+            List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - timeInterval, currentTimeMillis);
             ArrayList<String> tempPackageName = new ArrayList<String>();
             if (stats != null) {
                 SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>(Cons.DATE_DECENDING_COMPARATOR);

@@ -85,12 +85,14 @@ public class Cons {
     public static final int OVAL_OFFSET = 70;
     public static final int GRID_GAP_DEFAULT = 5;
     public static final int GUIDE_COLOR_DEFAULT = Color.argb(255, 255, 64, 129);
-    public static final int BACKGROUND_COLOR_DEFAULT = Color.argb(172, 0, 0, 0);
+    public static final int BACKGROUND_COLOR_DEFAULT = Color.argb(195, 0, 0, 0);
     public static final int HOLD_TIME_DEFAULT = 800;
     public static final int DEFAULT_VIBRATE_DURATION = 15;
     public static final int ANIMATION_TIME_DEFAULT = 250;
     public static final int ANIMATION_TIME_MIN = 50;
     public static final int ANIMATION_TIME_MAX = 1500;
+    public static final long TIME_INTERVAL_SHORT = 1000000;
+    public static final long TIME_INTERVAL_LONG = 604800000;
 
 
     public static final int EDGE_1_ID_INT = 11;
