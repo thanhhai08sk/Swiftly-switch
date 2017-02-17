@@ -132,7 +132,7 @@
                         android:id="@+id/long_press_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="@string/long_press_action_description"
+                        android:text="@string/long_press_action_description"
                         style="@style/Main_text_secondary"
                         />
 

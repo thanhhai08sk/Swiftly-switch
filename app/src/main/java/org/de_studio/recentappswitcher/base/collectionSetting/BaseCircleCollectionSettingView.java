@@ -50,6 +50,8 @@ public abstract class BaseCircleCollectionSettingView<T, P extends BaseCircleCol
         if (collection.longClickMode == Collection.LONG_CLICK_MODE_OPEN_COLLECTION &&
                 collection.longPressCollection != null) {
             longPressDescription.setText(collection.longPressCollection.label);
+        } else {
+            longPressDescription.setText(R.string.long_press_action_description);
         }
 
     }
