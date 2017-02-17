@@ -4,7 +4,7 @@ import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingModel;
+import org.de_studio.recentappswitcher.base.collectionSetting.BaseCircleCollectionSettingModel;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
 
@@ -16,7 +16,7 @@ import io.realm.Realm;
  * Created by HaiNguyen on 12/17/16.
  */
 
-public class RecentSettingModel extends BaseCollectionSettingModel {
+public class RecentSettingModel extends BaseCircleCollectionSettingModel {
     private static final String TAG = RecentSettingModel.class.getSimpleName();
     public RecentSettingModel(String defaultLabel, String collectionId) {
         super(defaultLabel, collectionId);

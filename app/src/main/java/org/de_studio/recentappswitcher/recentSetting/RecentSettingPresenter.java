@@ -1,13 +1,13 @@
 package org.de_studio.recentappswitcher.recentSetting;
 
 import org.de_studio.recentappswitcher.Cons;
-import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
+import org.de_studio.recentappswitcher.base.collectionSetting.BaseCircleCollectionSettingPresenter;
 
 /**
  * Created by HaiNguyen on 12/17/16.
  */
 
-public class RecentSettingPresenter extends BaseCollectionSettingPresenter<RecentSettingPresenter.View, RecentSettingModel> {
+public class RecentSettingPresenter extends BaseCircleCollectionSettingPresenter<RecentSettingPresenter.View, RecentSettingModel> {
 
     public RecentSettingPresenter(RecentSettingModel model) {
         super(model);
@@ -20,7 +20,7 @@ public class RecentSettingPresenter extends BaseCollectionSettingPresenter<Recen
 
 
 
-    public interface View extends BaseCollectionSettingPresenter.View {
+    public interface View extends BaseCircleCollectionSettingPresenter.View {
     }
 
 }
