@@ -66,6 +66,11 @@ public class NewServiceModel extends BaseModel {
 
 
     public RealmList<Slot> getRecent(ArrayList<String> packageNames, RealmList<Slot> slots) {
+        if (savedRecentShortcut != null) {
+            for (String s : savedRecentShortcut) {
+                Log.e(TAG, "getRecent: savedShortcut = " + s);
+            }
+        }
         RealmList<Slot> returnSlots = new RealmList<>();
         for (String packageName : packageNames) {
             Log.e(TAG, "getRecent: temp package " + packageName);
@@ -110,6 +115,10 @@ public class NewServiceModel extends BaseModel {
                 }
             }
         }
+        Log.e(TAG, "getRecent: recentSlotsCount = " + recentSlotsCount);
+        for (String packageName : packageNames) {
+            Log.e(TAG, "getRecent: after combine from saved = " + packageName);
+        }
 
         savedRecentShortcut = packageNames;
         int i = 0;
@@ -118,14 +127,18 @@ public class NewServiceModel extends BaseModel {
             switch (slot.type) {
                 case Slot.TYPE_RECENT:
                     if (packageNames.size() > i) {
-                        Item item = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(packageNames.get(i))).findFirst();
-                        if (item != null) {
-                            Slot slot1 = new Slot();
-                            slot1.type = Slot.TYPE_ITEM;
-                            slot1.stage1Item = item;
-                            returnSlots.add(slot1);
+                        Item item = null;
+                        while (item == null && i < packageNames.size()) {
+                            item = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(packageNames.get(i))).findFirst();
+                            if (item != null) {
+                                Slot slot1 = new Slot();
+                                slot1.type = Slot.TYPE_ITEM;
+                                slot1.stage1Item = item;
+                                returnSlots.add(slot1);
+                            }
                             i++;
                         }
+
                     }
                     break;
                 default:

@@ -236,6 +236,7 @@
     <string name="current_set">Current set</string>
     <string name="long_press_action">Long press action</string>
     <string name="long_press_action_description">Choose the action to perform when you long press on one of the items</string>
+    <string name="no_action">No action</string>
 
     //Grid favorite
     <string name="columns_count">Columns count</string>
