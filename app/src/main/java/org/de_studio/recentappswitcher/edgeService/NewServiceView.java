@@ -732,7 +732,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                         hideQuickActions(currentShowing);
 
                     } else if (id >= 10) {
-                        indicateSlot(currentShowing.action.slots.get(id - 10));
+                        Slot slot = currentShowing.action.slots.get(id - 10);
+                        if (slot.type.equals(Slot.TYPE_NULL) || slot.type.equals(Slot.TYPE_EMPTY)) {
+                            indicateSlot(null);
+                        } else {
+                            indicateSlot(slot);
+                        }
                         showQuickActions(currentShowing.edgePosition, id - 10, currentShowing);
                     }
                     break;
