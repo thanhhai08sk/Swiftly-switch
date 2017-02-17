@@ -266,6 +266,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         }
                     } else {
                         slot = currentShowing.action.slots.get(currentHighlight - 10);
+                        if (slot.type.equals(Slot.TYPE_EMPTY) || slot.type.equals(Slot.TYPE_NULL)) {
+                            slot = null;
+                        }
                     }
                     break;
                 case Showing.SHOWING_CIRCLE_ONLY:
