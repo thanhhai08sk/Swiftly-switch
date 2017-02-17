@@ -352,8 +352,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                         if (usageStats != null) {
                             packa = usageStats.getPackageName();
                             if (packa != null &&
-                                    (usageStats.getTotalTimeInForeground() > 500
-                                            && !packa.contains("systemui")
+                                    (!packa.contains("systemui")
                                             && (i == 0 || (excludeSet == null || excludeSet.where().equalTo(Cons.PACKAGENAME, packa).findFirst() == null))
                                             && !tempPackageName.contains(packa))
                                     ) {
