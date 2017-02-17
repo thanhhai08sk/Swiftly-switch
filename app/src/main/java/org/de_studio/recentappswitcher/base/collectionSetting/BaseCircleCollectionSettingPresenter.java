@@ -26,6 +26,7 @@ public abstract class BaseCircleCollectionSettingPresenter<V extends BaseCircleC
                                 view.chooseLongPressCollection(chooseLongPressCollectionSJ);
                                 break;
                             case Collection.LONG_CLICK_MODE_NONE:
+                                model.setLongPress(Collection.LONG_CLICK_MODE_NONE, null);
                                 break;
                         }
                     }
