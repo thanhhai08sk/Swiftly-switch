@@ -119,6 +119,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
                             currentShowing.circle = collection;
                             currentShowing.circleSlots = collection.slots;
+                            currentShowing.stayOnScreen = false;
                             view.hideAllCollections();
                             showCollection(Showing.SHOWING_CIRCLE_ONLY);
                         } else if (collection.type.equals(Collection.TYPE_RECENT)) {
@@ -126,6 +127,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                                 tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
                             }
                             currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
+                            currentShowing.stayOnScreen = false;
                             currentShowing.circle = collection;
                             currentShowing.circleSlots = model.getRecent(tempRecentPackages, collection.slots);
                             view.hideAllCollections();
@@ -203,6 +205,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         view.hideCollection(currentShowing.folderSlotId);
                         currentShowing.showWhat = Showing.SHOWING_GRID;
                         currentShowing.grid = model.getCollection(previousGridId);
+                        currentShowing.stayOnScreen = currentShowing.grid.stayOnScreen == null ? true : currentShowing.grid.stayOnScreen;
                         currentShowing.gridXY = view.getGridXy(previousGridId);
                         view.showCollection(currentShowing.grid.collectionId);
                     }
@@ -215,6 +218,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         view.showGrid(xInit, yInit, collection, currentEdge.position, currentShowing);
         currentShowing.showWhat = Showing.SHOWING_GRID;
         currentShowing.grid = collection;
+        currentShowing.stayOnScreen = currentShowing.grid.stayOnScreen == null ? true : currentShowing.grid.stayOnScreen;
     }
 
     @Override
@@ -268,7 +272,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         Log.e(TAG, "onActionUp: currentHighlight = " + currentHighlight);
         onHolding = false;
         Slot slot = null;
-        if (currentShowing.showWhat != Showing.SHOWING_GRID) {
+        if (!currentShowing.stayOnScreen) {
             view.hideAllExceptEdges();
         }
         String collectionId = null;
@@ -296,8 +300,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     break;
                 case Showing.SHOWING_GRID:
                     collectionId = currentShowing.grid.collectionId;
-//                    slot = currentShowing.grid.slots.get(currentHighlight);
-                    slot = null;
+                    slot = currentShowing.grid.slots.get(currentHighlight);
                     break;
                 case Showing.SHOWING_FOLDER:
                     if (currentHighlight < currentShowing.folderItems.size()) {
@@ -306,6 +309,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     break;
             }
             if (slot != null) {
+                if (currentShowing.stayOnScreen) {
+                    view.hideAllExceptEdges();
+                }
                 view.startSlot(slot, model.getLastApp(), currentShowing.showWhat, collectionId);
             }
             view.unhighlightSlot(currentShowing, currentHighlight);
@@ -392,28 +398,33 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             case Edge.MODE_GRID:
                 currentShowing.showWhat = Showing.SHOWING_GRID;
                 currentShowing.grid = currentEdge.grid;
+                currentShowing.stayOnScreen = currentEdge.grid.stayOnScreen == null ? true : currentEdge.grid.stayOnScreen;
                 break;
             case Edge.MODE_RECENT_AND_QUICK_ACTION:
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
                 currentShowing.circle = currentEdge.recent;
                 currentShowing.action = currentEdge.quickAction;
                 currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots);
+                currentShowing.stayOnScreen = false;
                 break;
             case Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION:
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
                 currentShowing.circle = currentEdge.circleFav;
                 currentShowing.action = currentEdge.quickAction;
                 currentShowing.circleSlots = currentShowing.circle.slots;
+                currentShowing.stayOnScreen = false;
                 break;
             case Edge.MODE_CIRCLE_FAVORITE_ONLY:
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
                 currentShowing.circle = currentEdge.circleFav;
                 currentShowing.circleSlots = currentShowing.circle.slots;
+                currentShowing.stayOnScreen = false;
                 break;
             case Edge.MODE_RECENT_ONLY:
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
                 currentShowing.circle = currentEdge.recent;
                 currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots);
+                currentShowing.stayOnScreen = false;
                 break;
         }
         currentShowing.edgePosition = currentEdge.position;
@@ -511,6 +522,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         public Point gridXY = new Point(0, 0);
         public float xInit, yInit;
         public int edgePosition;
+        boolean stayOnScreen;
         public Showing() {
         }
 

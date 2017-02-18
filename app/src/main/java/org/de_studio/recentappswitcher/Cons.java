@@ -20,6 +20,9 @@ public class Cons {
         }
     };
 
+    public static final int OLD_REALM_SCHEMA_VERSION = 2;
+    public static final int REALM_SCHEMA_VERSION = 2;
+
     public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.pro";
     public static final String FREE_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.trial";
     public static final int TRIAL_TIME =  1000 * 60 * 60 * 24 * 14;
@@ -177,14 +180,12 @@ public class Cons {
     public static final String GRID_NUMBER_COLUMNS_NAME = "gridNumberColumns";
     public static final String GRID_NUMBER_ROWS_NAME = "gridNumberRows";
     public static final String EDGE_1_NAME = "edge1";
+
+
+
+
+
     public static final String EDGE_2_NAME = "edge2";
-
-
-
-
-
-    public static final int OLD_REALM_SCHEMA_VERSION = 2;
-    public static final int REALM_SCHEMA_VERSION = 1;
     public static final String PIN_REALM_NAME = "pinApp.realm";
     public static final String FAVORITE_GRID_REALM_NAME = "default.realm";
     public static final String FAVORITE_CIRCLE_REALM_NAME = "circleFavo.realm";

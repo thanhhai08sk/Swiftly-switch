@@ -23,5 +23,11 @@ public class MyNewRealmMigration implements RealmMigration {
 
             oldVersion++;
         }
+
+        if (oldVersion ==1) {
+            schema.get("Collection")
+                    .addField("stayOnScreen", Boolean.class);
+            oldVersion++;
+        }
     }
 }

@@ -33,6 +33,7 @@ public class Collection extends RealmObject {
     public int space;
     public int radius;
     public int position;
+    public Boolean stayOnScreen;
 
     public Collection() {
     }
@@ -149,5 +150,13 @@ public class Collection extends RealmObject {
 
     public void setLongPressCollection(Collection longPressCollection) {
         this.longPressCollection = longPressCollection;
+    }
+
+    public Boolean isStayOnScreen() {
+        return stayOnScreen;
+    }
+
+    public void setStayOnScreen(Boolean stayOnScreen) {
+        this.stayOnScreen = stayOnScreen;
     }
 }
