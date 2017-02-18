@@ -2845,7 +2845,7 @@ public  class Utility {
         return Item.TYPE_ACTION + action;
     }
 
-    public static void startSlot(Slot slot, String lastAppPackageName, Context context, int contactAction, int showing, String collectionId) {
+    public static void startSlot(Slot slot, String lastAppPackageName, Context context, int contactAction, int showing, String collectionId, NewServicePresenter presenter) {
         switch (slot.type) {
             case Slot.TYPE_ITEM:
                 startItem(slot.stage1Item, lastAppPackageName, context, contactAction);
@@ -2871,6 +2871,9 @@ public  class Utility {
                             break;
                     }
                 }
+                break;
+            case Slot.TYPE_FOLDER:
+                presenter.requestShowingFolder(slot);
                 break;
         }
     }

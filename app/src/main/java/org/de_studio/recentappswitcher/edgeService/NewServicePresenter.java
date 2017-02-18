@@ -35,13 +35,13 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     long highlightFrom;
     int currentHighlight = -1;
     long holdingHelper;
-    String previousGridId;
     ArrayList<String> tempRecentPackages;
 
     PublishSubject<Integer> highlightIdSubject = PublishSubject.create();
     PublishSubject<Void> longClickItemSubject = PublishSubject.create();
     PublishSubject<Long> longClickHelperSubject = PublishSubject.create();
     PublishSubject<String> showCollectionInstantlySubject = PublishSubject.create();
+    PublishSubject<Slot> showFolderSJ = PublishSubject.create();
     PublishSubject<Slot> onSlot = PublishSubject.create();
     PublishSubject<Void> returnToGridSubject = PublishSubject.create();
 
@@ -165,15 +165,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             case Showing.SHOWING_GRID:
                                 Slot slot = currentShowing.grid.slots.get(currentHighlight);
                                 if (slot.type.equals(Slot.TYPE_FOLDER)) {
-                                    view.unhighlightSlot(currentShowing, currentHighlight);
-                                    view.indicateCurrentShowing(currentShowing, -1);
-
-                                    view.showFolder(currentHighlight, slot, currentShowing.grid.collectionId, currentShowing.grid.space, currentEdge.position, currentShowing);
-                                    currentHighlight = -1;
-                                    previousGridId = currentShowing.grid.collectionId;
-                                    currentShowing.showWhat = Showing.SHOWING_FOLDER;
-                                    currentShowing.folderSlotId = slot.slotId;
-                                    currentShowing.folderItems = slot.items;
+                                    showFolderSJ.onNext(slot);
 
                                 }
                                 break;
@@ -198,15 +190,29 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         );
 
         addSubscription(
+                showFolderSJ.subscribe(new Action1<Slot>() {
+                    @Override
+                    public void call(Slot slot) {
+                        view.unhighlightSlot(currentShowing, currentHighlight);
+                        view.indicateCurrentShowing(currentShowing, -1);
+                        view.showFolder(currentShowing.grid.slots.indexOf(slot), slot, currentShowing.grid.collectionId, currentShowing.grid.space, currentEdge.position, currentShowing);
+                        currentHighlight = -1;
+                        currentShowing.showWhat = Showing.SHOWING_FOLDER;
+                        currentShowing.folderSlotId = slot.slotId;
+                        currentShowing.folderItems = slot.items;
+                    }
+                })
+        );
+
+        addSubscription(
                 returnToGridSubject.subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
                         Log.e(TAG, "call: return to grid");
                         view.hideCollection(currentShowing.folderSlotId);
                         currentShowing.showWhat = Showing.SHOWING_GRID;
-                        currentShowing.grid = model.getCollection(previousGridId);
                         currentShowing.stayOnScreen = currentShowing.grid.stayOnScreen == null ? true : currentShowing.grid.stayOnScreen;
-                        currentShowing.gridXY = view.getGridXy(previousGridId);
+                        currentShowing.gridXY = view.getGridXy(currentShowing.grid.collectionId);
                         view.showCollection(currentShowing.grid.collectionId);
                     }
                 })
@@ -226,6 +232,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         view.removeAll();
         super.onViewDetach();
     }
+
 
     public void onActionDown(float x, float y, int edgeId) {
         long time = System.currentTimeMillis();
@@ -333,15 +340,39 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         onHolding = false;
     }
 
+    public void requestShowingFolder(Slot slot) {
+        showFolderSJ.onNext(slot);
+    }
+
     public void onClickBackground(float x, float y) {
-        view.hideAllExceptEdges();
-        int onPosition = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, currentShowing.grid.rowsCount, currentShowing.grid.columnCount, currentShowing.grid.space, false);
-        if (onPosition != -1) {
-            String collectionId = currentShowing.grid.collectionId;
-            Slot slot = currentShowing.grid.slots.get(onPosition);
-            if (slot != null) {
-                view.startSlot(slot, model.getLastApp(), currentShowing.showWhat, collectionId);
-            }
+        switch (currentShowing.showWhat) {
+            case Showing.SHOWING_GRID:
+                int onPosition = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, currentShowing.grid.rowsCount, currentShowing.grid.columnCount, currentShowing.grid.space, false);
+                if (onPosition != -1) {
+                    String collectionId = currentShowing.grid.collectionId;
+                    Slot slot = currentShowing.grid.slots.get(onPosition);
+                    if (slot != null) {
+                        view.startSlot(slot, model.getLastApp(), currentShowing.showWhat, collectionId);
+                        if (!slot.type.equals(Slot.TYPE_FOLDER)) {
+                            view.hideAllExceptEdges();
+                        }
+                    }
+                } else {
+                    view.hideAllExceptEdges();
+
+                }
+                break;
+            case Showing.SHOWING_FOLDER:
+                int columCount = Math.min(currentShowing.folderItems.size(), 4);
+                int rowCount = currentShowing.folderItems.size() / 4 + 1;
+                int position1 = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, rowCount, columCount, currentShowing.grid.space, true);
+                if (position1 >=0 && position1 <currentShowing.folderItems.size()) {
+                    view.startItem(currentShowing.folderItems.get(position1), model.getLastApp());
+                    view.hideAllExceptEdges();
+                } else {
+                    returnToGridSubject.onNext(null);
+                }
+                break;
         }
     }
 
