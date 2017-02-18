@@ -52,6 +52,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     PublishSubject<Slot> showFolderSJ = PublishSubject.create();
     PublishSubject<Slot> onSlot = PublishSubject.create();
     PublishSubject<Void> returnToGridSubject = PublishSubject.create();
+    PublishSubject<Void> finishSectionSJ = PublishSubject.create();
 
 
     public NewServicePresenter(NewServiceModel model,long holdTime) {
@@ -225,6 +226,19 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     }
                 })
         );
+
+        addSubscription(
+                finishSectionSJ.subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        view.unhighlightSlot(currentShowing, currentHighlight);
+                        view.hideAllExceptEdges();
+                        currentHighlight = -1;
+                        currentShowing.showWhat = Showing.SHOWING_NONE;
+                        tempRecentPackages = null;
+                    }
+                })
+        );
     }
 
     private void showGrid(Collection collection, View view) {
@@ -290,36 +304,44 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         onHolding = false;
         Slot slot = null;
         String collectionId = null;
-        if (currentHighlight >=0) {
             switch (currentShowing.showWhat) {
                 case Showing.SHOWING_CIRCLE_AND_ACTION:
-                    collectionId = currentShowing.circle.collectionId;
-                    if (currentHighlight < 10) {
-                        Log.e(TAG, "onActionUp: size = " + currentShowing.circleSlots.size() + "\nhighlight "+ currentHighlight) ;
-                        if (currentShowing.circleSlots.size() > currentHighlight) {
-                            slot = currentShowing.circleSlots.get(currentHighlight);
-                        }
-                    } else {
-                        slot = currentShowing.action.slots.get(currentHighlight - 10);
-                        if (slot.type.equals(Slot.TYPE_EMPTY) || slot.type.equals(Slot.TYPE_NULL)) {
-                            slot = null;
+                    if (currentHighlight >= 0) {
+                        collectionId = currentShowing.circle.collectionId;
+                        if (currentHighlight < 10) {
+                            Log.e(TAG, "onActionUp: size = " + currentShowing.circleSlots.size() + "\nhighlight " + currentHighlight);
+                            if (currentShowing.circleSlots.size() > currentHighlight) {
+                                slot = currentShowing.circleSlots.get(currentHighlight);
+                            }
+                        } else {
+                            slot = currentShowing.action.slots.get(currentHighlight - 10);
+                            if (slot.type.equals(Slot.TYPE_EMPTY) || slot.type.equals(Slot.TYPE_NULL)) {
+                                slot = null;
+                            }
                         }
                     }
                     break;
                 case Showing.SHOWING_CIRCLE_ONLY:
-                    collectionId = currentShowing.circle.collectionId;
-                    if (currentHighlight < currentShowing.circleSlots.size()) {
-                        slot = currentShowing.circleSlots.get(currentHighlight);
+                    if (currentHighlight >= 0) {
+                        collectionId = currentShowing.circle.collectionId;
+                        if (currentHighlight < currentShowing.circleSlots.size()) {
+                            slot = currentShowing.circleSlots.get(currentHighlight);
+                        }
                     }
                     break;
                 case Showing.SHOWING_GRID:
-                    collectionId = currentShowing.grid.collectionId;
-                    slot = currentShowing.grid.slots.get(currentHighlight);
+                    if (currentHighlight >= 0) {
+                        collectionId = currentShowing.grid.collectionId;
+                        slot = currentShowing.grid.slots.get(currentHighlight);
+                    }
                     break;
                 case Showing.SHOWING_FOLDER:
-                    if (currentHighlight < currentShowing.folderItems.size()) {
-                        view.startItem(currentShowing.folderItems.get(currentHighlight), model.getLastApp());
+                    if (currentHighlight >= 0) {
+                        if (currentHighlight < currentShowing.folderItems.size()) {
+                            view.startItem(currentShowing.folderItems.get(currentHighlight), model.getLastApp());
+                        }
                     }
+                    finishSectionSJ.onNext(null);
                     break;
             }
 
@@ -331,12 +353,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 view.startSlot(slot, model.getLastApp(), currentShowing.showWhat, collectionId);
             }
 
-            view.unhighlightSlot(currentShowing, currentHighlight);
-        }
         if (!(currentShowing.stayOnScreen || (slot!=null && slot.type.equals(Slot.TYPE_FOLDER)))) {
-            Log.e(TAG, "onActionUp: hide all");
-            view.hideAllExceptEdges();
-            currentShowing.showWhat = Showing.SHOWING_NONE;
+            finishSectionSJ.onNext(null);
         }
         currentHighlight = -1;
         tempRecentPackages = null;
