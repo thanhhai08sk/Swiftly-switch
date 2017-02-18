@@ -97,6 +97,7 @@ public class Cons {
 
     public static final int EDGE_1_ID_INT = 11;
     public static final int EDGE_2_ID_INT = 22;
+    public static final int BACKGROUND_ID_INT = 33;
     public static final int QUICK_ACTION_ID_INSTANT_GRID = 1;
     public static final int QUICK_ACTION_ID_NORMAL = 2;
 

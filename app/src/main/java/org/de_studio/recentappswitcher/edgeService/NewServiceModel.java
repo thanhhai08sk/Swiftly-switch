@@ -30,6 +30,7 @@ public class NewServiceModel extends BaseModel {
     Realm realm;
     Edge edge1, edge2;
     ArrayList<String> savedRecentShortcut;
+    Boolean backgroundTouchable = null;
 
     public NewServiceModel(float mScale, float iconScale, String launcherPackageName, Realm realm, Edge edge1, Edge edge2) {
         this.mScale = mScale;
@@ -368,6 +369,21 @@ public class NewServiceModel extends BaseModel {
 
     @Override
     public void clear() {
+    }
+
+    public Boolean shouldBackgroundTouchable() {
+        if (backgroundTouchable != null) {
+            return backgroundTouchable;
+        }
+        if (edge1 != null) {
+            if (edge1.grid != null) {
+                backgroundTouchable = true;
+            }
+            if (edge1.quickAction != null) {
+                backgroundTouchable = true;
+            }
+        }
+        return backgroundTouchable;
     }
 
     public class IconsXY {

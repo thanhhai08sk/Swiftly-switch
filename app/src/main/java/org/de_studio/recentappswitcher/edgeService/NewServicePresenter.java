@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.edgeService;
 
 import android.graphics.Point;
 import android.util.Log;
+import android.view.GestureDetector;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BasePresenter;
@@ -228,7 +229,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         setCurrentEdgeAndCurrentShowing(edgeId);
         setTriggerPoint(x, y);
 
-        view.showBackground();
+        view.showBackground(model.shouldBackgroundTouchable());
 //        showCollection(tempRecentPackages);
         showCollection(currentShowing.showWhat);
         view.actionDownVibrate();
@@ -267,7 +268,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         Log.e(TAG, "onActionUp: currentHighlight = " + currentHighlight);
         onHolding = false;
         Slot slot = null;
-        view.hideAllExceptEdges();
+        if (currentShowing.showWhat != Showing.SHOWING_GRID) {
+            view.hideAllExceptEdges();
+        }
         String collectionId = null;
         if (currentHighlight >=0) {
             switch (currentShowing.showWhat) {
@@ -293,7 +296,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     break;
                 case Showing.SHOWING_GRID:
                     collectionId = currentShowing.grid.collectionId;
-                    slot = currentShowing.grid.slots.get(currentHighlight);
+//                    slot = currentShowing.grid.slots.get(currentHighlight);
+                    slot = null;
                     break;
                 case Showing.SHOWING_FOLDER:
                     if (currentHighlight < currentShowing.folderItems.size()) {
@@ -321,6 +325,18 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         Log.e(TAG, "onActionCancel: ");
         view.hideAllExceptEdges();
         onHolding = false;
+    }
+
+    public void onClickBackground(float x, float y) {
+        view.hideAllExceptEdges();
+        int onPosition = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, currentShowing.grid.rowsCount, currentShowing.grid.columnCount, currentShowing.grid.space, false);
+        if (onPosition != -1) {
+            String collectionId = currentShowing.grid.collectionId;
+            Slot slot = currentShowing.grid.slots.get(onPosition);
+            if (slot != null) {
+                view.startSlot(slot, model.getLastApp(), currentShowing.showWhat, collectionId);
+            }
+        }
     }
 
 
@@ -421,7 +437,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         return null;
     }
 
-    public interface View extends PresenterView, android.view.View.OnTouchListener {
+
+
+    public interface View extends PresenterView, android.view.View.OnTouchListener,GestureDetector.OnGestureListener{
         void addEdgesToWindowAndSetListener();
 
         void setupNotification();
@@ -432,7 +450,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         ArrayList<String> getRecentApp(long timeInterval);
 
-        void showBackground();
+        void showBackground(boolean backgroundTouchable);
 
         void showGrid(float xInit, float yInit, Collection grid, int position, Showing currentShowing);
 

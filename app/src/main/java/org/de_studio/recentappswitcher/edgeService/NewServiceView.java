@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Path;
+import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
@@ -27,6 +28,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -95,12 +98,33 @@ import static org.de_studio.recentappswitcher.Cons.SHARED_PREFERENCE_NAME;
 public class NewServiceView extends Service implements NewServicePresenter.View {
     private static final String TAG = NewServiceView.class.getSimpleName();
     public static boolean FLASH_LIGHT_ON = false;
+    static final int WINDOW_FLAG_NO_TOUCH = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE |
+            WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+    static final int WINDOW_FLAG_TOUCHABLE =
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+
+    WindowManager.LayoutParams WINDOW_PARAMS_NO_TOUCH =new WindowManager.LayoutParams(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.TYPE_PHONE,
+            WINDOW_FLAG_NO_TOUCH,
+            PixelFormat.TRANSLUCENT);
+    WindowManager.LayoutParams WINDOW_PARAMS_TOUCHABLE =new WindowManager.LayoutParams(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.TYPE_PHONE,
+            WINDOW_FLAG_TOUCHABLE,
+            PixelFormat.TRANSLUCENT);
+
+
+
     @Nullable
     @Inject
     IconPackManager.IconPack iconPack;
-    @Inject
-    @Named(Cons.COLLECTION_WINDOW_PARAMS_NAME)
-    WindowManager.LayoutParams collectionWindowPapams;
     @Inject
     @Named(Cons.GRID_WINDOW_PARAMS_NAME)
     WindowManager.LayoutParams gridParams;
@@ -155,7 +179,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     private NotificationCompat.Builder notificationBuilder;
     Realm realm = Realm.getDefaultInstance();
     GenerateDataOkReceiver generateDataOkReceiver;
+
     ObjectAnimator gridAlphaAnimator;
+
+    private GestureDetectorCompat mDetector;
 
     @Override
     public void onCreate() {
@@ -385,10 +412,17 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
-    public void showBackground() {
+    public void showBackground(boolean backgroundTouchable) {
         if (!backgroundView.isAttachedToWindow()) {
-            windowManager.addView(backgroundView, collectionWindowPapams);
-
+            windowManager.addView(backgroundView, backgroundTouchable ? WINDOW_PARAMS_TOUCHABLE : WINDOW_PARAMS_NO_TOUCH);
+            mDetector = new GestureDetectorCompat(this,this);
+            backgroundView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    mDetector.onTouchEvent(event);
+                    return true;
+                }
+            });
         } else {
             backgroundView.setVisibility(View.VISIBLE);
         }
@@ -468,6 +502,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         final RecyclerView recyclerView = (RecyclerView) collectionViewsMap.get(grid.collectionId);
         boolean needDelay = false;
         if (backgroundView.findViewById(getCollectionResId(grid)) == null) {
+            recyclerView.setClickable(false);
+            recyclerView.setFocusable(false);
             backgroundView.addView(recyclerView);
             needDelay = true;
         }
@@ -663,7 +699,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             }
         }
         if (!frameLayout.isAttachedToWindow()) {
-            windowManager.addView(frameLayout, collectionWindowPapams);
+            windowManager.addView(frameLayout, WINDOW_PARAMS_NO_TOUCH);
         }
         frameLayout.setVisibility(View.VISIBLE);
     }
@@ -1019,28 +1055,70 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public boolean onTouch(View view, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                Log.e(TAG, "onTouch: action down");
-                presenter.onActionDown(getXCord(event), getYCord(event), view.getId());
-                break;
-            case MotionEvent.ACTION_MOVE:
-                presenter.onActionMove(getXCord(event), getYCord(event));
-                break;
-            case MotionEvent.ACTION_UP:
-                Log.e(TAG, "onTouch: action up");
-                presenter.onActionUp(getXCord(event), getYCord(event));
-                break;
-            case MotionEvent.ACTION_OUTSIDE:
-                presenter.onActionOutSide();
-                Log.e(TAG, "onTouch: action outside");
-                break;
-            case MotionEvent.ACTION_CANCEL:
-                presenter.onActionCancel();
-                Log.e(TAG, "onTouch: action cancel");
-                break;
+        int action = MotionEventCompat.getActionMasked(event);
+        if (view.getId() == Cons.EDGE_1_ID_INT || view.getId() == Cons.EDGE_2_ID_INT) {
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    Log.e(TAG, "onTouch: action down");
+                    presenter.onActionDown(getXCord(event), getYCord(event), view.getId());
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    presenter.onActionMove(getXCord(event), getYCord(event));
+                    break;
+                case MotionEvent.ACTION_UP:
+                    Log.e(TAG, "onTouch: action up");
+                    presenter.onActionUp(getXCord(event), getYCord(event));
+                    break;
+                case MotionEvent.ACTION_OUTSIDE:
+                    presenter.onActionOutSide();
+                    Log.e(TAG, "onTouch: action outside");
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    presenter.onActionCancel();
+                    Log.e(TAG, "onTouch: action cancel");
+                    break;
+            }
+            return true;
+        } else if (view.getId() == Cons.BACKGROUND_ID_INT) {
+
         }
         return true;
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        Log.e(TAG, "onDown: ");
+        return true;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+        Log.e(TAG, "onShowPress: ");
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        Log.e(TAG, "onSingleTapUp: ");
+        presenter.onClickBackground(getXCord(e), getYCord(e));
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+        Log.e(TAG, "onLongPress: ");
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        Log.e(TAG, "onFling: ");
+        return false;
     }
 
     private float getXCord(MotionEvent motionEvent) {
@@ -1093,7 +1171,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         } else {
             addEdgeImage();
         }
-        hideAllCollections();
+        hideAllExceptEdges();
         Log.e(TAG, "onConfigurationChanged: ");
         super.onConfigurationChanged(newConfig);
     }
