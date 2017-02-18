@@ -45,6 +45,8 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
     TextView verticalMargin;
     @BindView(R.id.stay_on_screen_switch)
     Switch stayOnScreenSwitch;
+    @BindView(R.id.stay_on_screen_description)
+    TextView stayOnScreenDescription;
     
     @Override
     protected void inject() {
@@ -184,7 +186,12 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
         position.setText(positionValue);
         verticalMargin.setText(String.valueOf(collection.marginVertical));
         horizontalMargin.setText(String.valueOf(collection.marginHorizontal));
-        stayOnScreenSwitch.setChecked(collection.stayOnScreen == null ? true : collection.stayOnScreen);
+        boolean stayOnScreen = collection.stayOnScreen == null ? true : collection.stayOnScreen;
+        stayOnScreenSwitch.setChecked(stayOnScreen);
+        if (stayOnScreen) {
+            stayOnScreenDescription.setText(R.string.stay_on_screen_enable_description);
+        } else stayOnScreenDescription.setText(R.string.stay_on_screen_disable_description);
+
     }
 
 

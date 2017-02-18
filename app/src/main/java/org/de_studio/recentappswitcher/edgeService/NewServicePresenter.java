@@ -279,9 +279,6 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         Log.e(TAG, "onActionUp: currentHighlight = " + currentHighlight);
         onHolding = false;
         Slot slot = null;
-        if (!currentShowing.stayOnScreen) {
-            view.hideAllExceptEdges();
-        }
         String collectionId = null;
         if (currentHighlight >=0) {
             switch (currentShowing.showWhat) {
@@ -315,16 +312,23 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     }
                     break;
             }
+
+
             if (slot != null) {
-                if (currentShowing.stayOnScreen) {
+                if (currentShowing.stayOnScreen && !slot.type.equals(Slot.TYPE_FOLDER)) {
                     view.hideAllExceptEdges();
                 }
                 view.startSlot(slot, model.getLastApp(), currentShowing.showWhat, collectionId);
             }
+
             view.unhighlightSlot(currentShowing, currentHighlight);
-            currentShowing.showWhat = Showing.SHOWING_NONE;
-            currentHighlight = -1;
         }
+        if (!(currentShowing.stayOnScreen || (slot!=null && slot.type.equals(Slot.TYPE_FOLDER)))) {
+            Log.e(TAG, "onActionUp: hide all");
+            view.hideAllExceptEdges();
+            currentShowing.showWhat = Showing.SHOWING_NONE;
+        }
+        currentHighlight = -1;
         tempRecentPackages = null;
     }
 
@@ -370,7 +374,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     view.startItem(currentShowing.folderItems.get(position1), model.getLastApp());
                     view.hideAllExceptEdges();
                 } else {
-                    returnToGridSubject.onNext(null);
+                    if (currentShowing.grid.stayOnScreen == null ? true : currentShowing.grid.stayOnScreen) {
+                        returnToGridSubject.onNext(null);
+                    } else {
+                        view.hideAllExceptEdges();
+                    }
                 }
                 break;
         }

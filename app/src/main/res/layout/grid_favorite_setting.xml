@@ -130,6 +130,7 @@
                         style="@style/Main_text_primary"
                         />
                     <TextView
+                        android:id="@+id/stay_on_screen_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/Main_text_secondary"
