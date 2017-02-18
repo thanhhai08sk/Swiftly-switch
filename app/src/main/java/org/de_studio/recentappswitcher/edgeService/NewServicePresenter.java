@@ -348,7 +348,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
             if (slot != null) {
                 if (currentShowing.stayOnScreen && !slot.type.equals(Slot.TYPE_FOLDER)) {
-                    view.hideAllExceptEdges();
+                    finishSectionSJ.onNext(null);
                 }
                 view.startSlot(slot, model.getLastApp(), currentShowing.showWhat, collectionId);
             }
