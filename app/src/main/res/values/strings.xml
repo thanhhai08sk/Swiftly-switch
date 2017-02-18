@@ -246,6 +246,9 @@
     <string name="grid_position_trigger_position">Trigger position</string>
     <string name="grid_position_center">Center of screen</string>
     <string name="app_shortcut_contact">Apps, shortcuts,...</string>
+    <string name="stay_on_screen">Stay on screen</string>
+    <string name="stay_on_screen_enable_description">Keep the grid on screen until you have chosen an item to switch</string>
+    <string name="stay_on_screen_disable_description">The grid will disappear after your first swipe</string>
 
     //Quick action
     <string name="device_shortcuts">"Device's shortcuts"</string>

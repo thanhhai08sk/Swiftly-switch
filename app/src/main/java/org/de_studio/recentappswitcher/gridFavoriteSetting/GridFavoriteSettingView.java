@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -42,6 +43,8 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
     TextView horizontalMargin;
     @BindView(R.id.vertical_margin_value)
     TextView verticalMargin;
+    @BindView(R.id.stay_on_screen_switch)
+    Switch stayOnScreenSwitch;
     
     @Override
     protected void inject() {
@@ -181,6 +184,7 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
         position.setText(positionValue);
         verticalMargin.setText(String.valueOf(collection.marginVertical));
         horizontalMargin.setText(String.valueOf(collection.marginHorizontal));
+        stayOnScreenSwitch.setChecked(collection.stayOnScreen == null ? true : collection.stayOnScreen);
     }
 
 
@@ -211,5 +215,9 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
     @OnClick(R.id.position)
     void onPositionClick(){
         getGridPresenter().onSetPositionClick();
+    }
+    @OnClick(R.id.stay_on_screen)
+    void onStayOnScreenClick(){
+        getGridPresenter().onSetStayOnScreen();
     }
 }

@@ -128,6 +128,9 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
         view.showChoosePositionDialog();
     }
 
+    public void onSetStayOnScreen() {
+        model.setStayOnScreen();
+    }
 
 
     public interface View extends BaseCollectionSettingPresenter.View {
