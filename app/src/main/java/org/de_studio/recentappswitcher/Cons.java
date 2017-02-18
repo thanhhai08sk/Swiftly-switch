@@ -68,8 +68,8 @@ public class Cons {
     public static final int QUICK_ACTION_GAP_DP = 35;
     public static final int DEFAULT_ICON_WIDTH = 48;
     public static final int DEFAULT_ICON_GAP_IN_GRID = 10;
-    public static final int DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL = 20;
-    public static final int DEFAULT_FAVORITE_GRID_PADDING_VERTICAL = 20;
+    public static final int DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL = 40;
+    public static final int DEFAULT_FAVORITE_GRID_PADDING_VERTICAL = 40;
     public static final int DEFAULT_FAVORITE_GRID_COLUMN_COUNT = 4;
     public static final int DEFAULT_FAVORITE_GRID_ROW_COUNT = 5;
     public static final int DEFAULT_FAVORITE_GRID_VERTICAL_MARGIN = 20;
@@ -79,8 +79,8 @@ public class Cons {
     public static final int FAVORITE_GRID_MAX_VERTICAL_MARGIN = 120;
     public static final int FAVORITE_GRID_MIN_HORIZONTAL_MARGIN = 0;
     public static final int FAVORITE_GRID_MAX_HORIZONTAL_MARGIN = 120;
-    public static final int FAVORITE_GRID_MIN_SHORTCUTS_SPACE = 10;
-    public static final int FAVORITE_GRID_MAX_SHORTCUTS_SPACE = 50;
+    public static final int FAVORITE_GRID_MIN_SHORTCUTS_SPACE = 5;
+    public static final int FAVORITE_GRID_MAX_SHORTCUTS_SPACE = 40;
     public static final int INIT_OFFSET = 10;
     public static final int CIRCLE_RADIUS_DEFAULT = 105;
     public static final int CIRCLE_AND_QUICK_ACTION_GAP = 35;

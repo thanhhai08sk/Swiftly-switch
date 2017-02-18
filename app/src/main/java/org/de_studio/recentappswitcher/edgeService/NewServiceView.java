@@ -601,7 +601,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             folderView.setAdapter(adapter);
             folderView.setId(getFolderResId(folder));
             folderView.addItemDecoration(new GridSpacingItemDecoration((int)(space * mScale)));
-            folderView.setBackgroundResource(R.color.background_dark);
+            folderView.setBackgroundResource(R.color.background_lightish);
             collectionViewsMap.put(folder.slotId, folderView);
         }
         final RecyclerView folderView = (RecyclerView) collectionViewsMap.get(folder.slotId);
