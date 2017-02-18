@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.edgeService;
 
 import android.graphics.Point;
+import android.os.Handler;
 import android.util.Log;
 import android.view.GestureDetector;
 
@@ -27,6 +28,13 @@ import rx.subjects.PublishSubject;
 
 public class NewServicePresenter extends BasePresenter<NewServicePresenter.View, NewServiceModel> {
     private static final String TAG = NewServicePresenter.class.getSimpleName();
+    private Runnable hideAllExceptEdgesRunnable = new Runnable() {
+        @Override
+        public void run() {
+            view.hideAllExceptEdges();
+        }
+    };
+    Handler handler = new Handler();
     long holdTime;
     float xInit, yInit;
     Edge currentEdge;
@@ -235,6 +243,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
 
     public void onActionDown(float x, float y, int edgeId) {
+        stopHideViewsHandler();
+        hideAllExceptEdgesAfter10Seconds();
         long time = System.currentTimeMillis();
         tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
         setCurrentEdgeAndCurrentShowing(edgeId);
@@ -420,6 +430,14 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         }
         currentShowing.xInit = xInit;
         currentShowing.yInit = yInit;
+    }
+
+    private void hideAllExceptEdgesAfter10Seconds() {
+        handler.postDelayed(hideAllExceptEdgesRunnable, 10 * 1000);
+    }
+
+    private void stopHideViewsHandler() {
+        handler.removeCallbacks(hideAllExceptEdgesRunnable);
     }
 
     private void setCurrentEdgeAndCurrentShowing(int edgeId) {
