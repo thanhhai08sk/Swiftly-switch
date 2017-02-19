@@ -112,13 +112,12 @@ public class MyRealmMigration implements RealmMigration {
                     .addField("edge1Ok", boolean.class)
                     .addField("edge2Ok", boolean.class)
                     .addField("id", String.class, FieldAttribute.PRIMARY_KEY);
-
-
-
-
-
             oldVersion++;
+        }
 
+        if (oldVersion == 3) {
+            schema.get("Collection")
+                    .addField("stayOnScreen", Boolean.class);
         }
 
     }

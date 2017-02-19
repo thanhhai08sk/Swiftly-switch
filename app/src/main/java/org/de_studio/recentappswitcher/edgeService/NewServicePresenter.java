@@ -31,7 +31,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     private Runnable hideAllExceptEdgesRunnable = new Runnable() {
         @Override
         public void run() {
-            view.hideAllExceptEdges();
+            if (view != null) {
+                view.hideAllExceptEdges();
+            }
         }
     };
     Handler handler = new Handler();
@@ -252,6 +254,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     @Override
     public void onViewDetach() {
         view.removeAll();
+        handler.removeCallbacks(hideAllExceptEdgesRunnable);
+        handler = null;
+        hideAllExceptEdgesRunnable = null;
         super.onViewDetach();
     }
 

@@ -20,7 +20,7 @@ public class Cons {
         }
     };
 
-    public static final int OLD_REALM_SCHEMA_VERSION = 2;
+    public static final int OLD_REALM_SCHEMA_VERSION = 4;
     public static final int REALM_SCHEMA_VERSION = 2;
 
     public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.pro";
