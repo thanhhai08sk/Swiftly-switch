@@ -166,7 +166,7 @@ public class NewServiceModel extends BaseModel {
         return realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, id).findFirst();
     }
 
-    public int getCircleAndQuickActionTriggerId(IconsXY iconsXY, int radius, float x_init, float y_init, float x, float y, int position, int iconsCount, boolean hasQuickActions) {
+    public int getCircleAndQuickActionTriggerId(IconsXY iconsXY, int radius, float x_init, float y_init, float x, float y, int position, int iconsCount, boolean hasQuickActions, int quickActionsCount) {
         float circleSizePxl = radius * mScale;
         double xInitDouble = (double) x_init;
         double yInitDouble = (double) y_init;
@@ -180,7 +180,7 @@ public class NewServiceModel extends BaseModel {
             double ang30 = 0.1666 * Math.PI;
             double ang70 = 0.3889 * Math.PI;
             double ang110 = 0.6111 * Math.PI;
-            double alpha;
+            double angle;
             if (distanceFromInitPxl < startQuickActionZonePxl) {
                 double distance;
                 double distanceNeeded = 35 * mScale;
@@ -192,17 +192,22 @@ public class NewServiceModel extends BaseModel {
                 }
             } else {
                 if (Utility.rightLeftOrBottom(position) == Cons.POSITION_BOTTOM) {
-                    alpha = Math.acos((x_init - x) / distanceFromInitPxl);
+                    angle = Math.acos((x_init - x) / distanceFromInitPxl);
                 } else {
-                    alpha = Math.acos((y_init - y) / distanceFromInitPxl);
+                    angle = Math.acos((y_init - y) / distanceFromInitPxl);
                 }
-                if (alpha < ang30) {
-                    return 10;
-                } else if (alpha < ang70) {
-                    return 11;
-                } else if (alpha < ang110) {
-                    return 12;
-                } else return 13;
+
+                if (quickActionsCount == 4) {
+                    if (angle < ang30) {
+                        return 10;
+                    } else if (angle < ang70) {
+                        return 11;
+                    } else if (angle < ang110) {
+                        return 12;
+                    } else return 13;
+                } else {
+                    return 10 + (int)(angle / (Math.PI / quickActionsCount));
+                }
             }
             return -1;
         } else {

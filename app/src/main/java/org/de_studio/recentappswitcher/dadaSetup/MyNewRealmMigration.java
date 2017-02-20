@@ -29,5 +29,7 @@ public class MyNewRealmMigration implements RealmMigration {
                     .addField("stayOnScreen", Boolean.class);
             oldVersion++;
         }
+
+        //// TODO: 2/20/17 don't forget to implement the old realmMigration
     }
 }

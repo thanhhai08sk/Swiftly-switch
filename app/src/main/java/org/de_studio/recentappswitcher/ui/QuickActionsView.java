@@ -67,9 +67,15 @@ public class QuickActionsView extends View {
                 rectFs[i] = new RectF();
             }
         }
-        sweepAngles[0] = 30;
-        sweepAngles[1] = sweepAngles[2] = 40;
-        sweepAngles[3] = 70;
+        if (getSize() == 4) {
+            sweepAngles[0] = 30;
+            sweepAngles[1] = sweepAngles[2] = 40;
+            sweepAngles[3] = 70;
+        } else {
+            for (int i = 0; i < sweepAngles.length; i++) {
+                sweepAngles[i] = 180 / getSize();
+            }
+        }
     }
 
     public void show(int itemPosition) {
@@ -78,7 +84,7 @@ public class QuickActionsView extends View {
     }
 
     private int getSize() {
-        return 4;
+        return actions.size();
     }
     @Override
     protected void onDraw(Canvas canvas) {

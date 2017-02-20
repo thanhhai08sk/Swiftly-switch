@@ -281,11 +281,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     public void onActionMove(float x, float y) {
         switch (currentShowing.showWhat) {
             case Showing.SHOWING_CIRCLE_AND_ACTION:
-                int highlight = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), true);
+                int highlight = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), true,currentShowing.action.slots.size());
                 highlightIdSubject.onNext(highlight);
                 break;
             case Showing.SHOWING_CIRCLE_ONLY:
-                int highlight1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), false);
+                int highlight1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), false, -1);
                 highlightIdSubject.onNext(highlight1);
                 break;
             case Showing.SHOWING_GRID:

@@ -118,6 +118,7 @@ public class MyRealmMigration implements RealmMigration {
         if (oldVersion == 3) {
             schema.get("Collection")
                     .addField("stayOnScreen", Boolean.class);
+            oldVersion++;
         }
 
     }
