@@ -26,6 +26,7 @@ public class QuickActionsView extends View {
     public static final float ARC_SIZE_DP = 56;
     public static final int ICON_SIZE_DP = 36;
     private Paint backgroundPaint;
+    private Paint iconPaint;
     float arcSize;
     float mScale;
     int visibleItem = 0;
@@ -33,7 +34,7 @@ public class QuickActionsView extends View {
     Bitmap[] bitmaps;
     RectF[] rectFs;
     Path path;
-    float iconSize;
+    int iconSize;
     int[] sweepAngles;
     float[] startAngle;
     IconPackManager.IconPack iconPack;
@@ -53,11 +54,12 @@ public class QuickActionsView extends View {
 
     private void init() {
         mScale = getResources().getDisplayMetrics().density;
-        iconSize = ICON_SIZE_DP * mScale;
+        iconSize = (int) (ICON_SIZE_DP * mScale);
         backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         backgroundPaint.setColor(ContextCompat.getColor(getContext(), R.color.quick_actions_background));
         backgroundPaint.setStyle(Paint.Style.STROKE);
         backgroundPaint.setStrokeWidth(ARC_SIZE_DP * mScale);
+        iconPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         arcSize = ARC_SIZE_DP * mScale;
         path = new Path();
@@ -78,7 +80,8 @@ public class QuickActionsView extends View {
         startAngle = new float[getSize()];
         for (int i = 0; i < getSize(); i++) {
             if (actions.get(i).stage1Item != null) {
-                bitmaps[i] = Utility.getItemBitmap(actions.get(i).stage1Item, getContext(), iconPack);
+//                bitmaps[i] = Utility.getItemBitmap(actions.get(i).stage1Item, getContext(), iconPack);
+                bitmaps[i] = Bitmap.createScaledBitmap(Utility.getItemBitmap(actions.get(i).stage1Item, getContext(), iconPack), iconSize, iconSize, true);
                 rectFs[i] = new RectF();
 
                 switch (Utility.rightLeftOrBottom(edgePosition)) {
@@ -151,7 +154,8 @@ public class QuickActionsView extends View {
         double iconAngle;
         iconAngle = Math.toRadians(startAngle[i] + sweepAngles[i] * 0.5);
         setIconRectF(centerX, centerY, centerX, iconAngle, i);
-        canvas.drawBitmap(bitmaps[i], null, rectFs[i], backgroundPaint);
+//        canvas.drawBitmap(bitmaps[i], null, rectFs[i], backgroundPaint);
+        canvas.drawBitmap(bitmaps[i], rectFs[i].left,rectFs[i].top,iconPaint);
     }
 
     private void setIconRectF(int centerX, int centerY, float radius, double iconAngular,int iconPosition) {

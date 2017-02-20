@@ -446,7 +446,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         return imageView;
     }
 
-    public void showQuickActions(int edgePosition, int actionPosition, NewServicePresenter.Showing currentShowing) {
+    public void showQuickActions(int edgePosition, int actionPosition, NewServicePresenter.Showing currentShowing, boolean delay, boolean animate) {
+        Log.e(TAG, "showQuickActions: ");
         if (currentShowing.action != null) {
             if (collectionViewsMap.get(getQuickActionsKey(edgePosition, currentShowing.action)) == null) {
                 QuickActionsView actionsView = new QuickActionsView(this, iconPack, currentShowing.action.slots, edgePosition, currentShowing.action.visibilityOption != Collection.VISIBILITY_OPTION_ONLY_TRIGGERED_ONE_VISIBLE);
@@ -460,11 +461,26 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 backgroundView.addView(quickActionsView);
             }
 
+
             quickActionsView.setVisibility(View.VISIBLE);
-            quickActionsView.setAlpha(1f);
             quickActionsView.show(actionPosition);
             quickActionsView.setX(currentShowing.xInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
             quickActionsView.setY(currentShowing.yInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
+//            if (animate) {
+//                quickActionsView.setAlpha(0f);
+//                ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(quickActionsView, "alpha", 0f, 1f);
+//                objectAnimator.setDuration(animationTime);
+//                objectAnimator.setInterpolator(new DecelerateInterpolator());
+//                if (delay) {
+//                    objectAnimator.setStartDelay(animationTime);
+//                    objectAnimator.start();
+//                } else {
+//                    objectAnimator.start();
+//                }
+//
+//            } else {
+//                quickActionsView.setAlpha(1f);
+//            }
 
         }
     }
@@ -475,6 +491,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     public void hideQuickActions(NewServicePresenter.Showing currentShowing) {
+        Log.e(TAG, "hideQuickActions: ");
         if (collectionViewsMap.get(getQuickActionsKey(currentShowing.edgePosition, currentShowing.action)) != null) {
             collectionViewsMap.get(getQuickActionsKey(currentShowing.edgePosition, currentShowing.action)).setVisibility(View.GONE);
         }
@@ -765,7 +782,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_AND_ACTION:
                     if (id < currentShowing.circleSlots.size()) {
                         indicateSlot(currentShowing.circleSlots.get(id));
-                        hideQuickActions(currentShowing);
+                        if (currentShowing.action.visibilityOption != Collection.VISIBILITY_OPTION_ALWAYS_VISIBLE) {
+                            hideQuickActions(currentShowing);
+                        }
 
                     } else if (id >= 10) {
                         Slot slot = currentShowing.action.slots.get(id - 10);
@@ -774,7 +793,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                         } else {
                             indicateSlot(slot);
                         }
-                        showQuickActions(currentShowing.edgePosition, id - 10, currentShowing);
+                        showQuickActions(currentShowing.edgePosition, id - 10, currentShowing, false, false);
                     }
                     break;
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:
@@ -871,7 +890,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     if (id < 10) {
                         FrameLayout recent = (FrameLayout) collectionViewsMap.get(currentShowing.circle.collectionId);
                         highlightCircleIcon(recent.getChildAt(id), currentShowing.circleIconsXY.xs[id], currentShowing.circleIconsXY.ys[id]);
-
                     }
                     break;
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:
@@ -903,6 +921,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     if (id < 10) {
                         FrameLayout recent = (FrameLayout) collectionViewsMap.get(currentShowing.circle.collectionId);
                         unhighlightCircleIcon(recent.getChildAt(id), currentShowing.circleIconsXY.xs[id], currentShowing.circleIconsXY.ys[id]);
+                    } else {
+                        ((QuickActionsView) collectionViewsMap.get(getQuickActionsKey(currentShowing.edgePosition, currentShowing.action))).show(-1);
                     }
                     break;
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:
@@ -1002,6 +1022,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void hideAllCollections() {
+        Log.e(TAG, "hideAllCollections: ");
         Set<String> collectionIds = collectionViewsMap.keySet();
         for (String collectionId : collectionIds) {
             collectionViewsMap.get(collectionId).setVisibility(View.GONE);
@@ -1013,6 +1034,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     public void hideAllExceptEdges() {
         hideAllCollections();
         if (backgroundView != null) {
+            Log.e(TAG, "hideAllExceptEdges: ");
             backgroundView.setVisibility(View.GONE);
         }
     }
