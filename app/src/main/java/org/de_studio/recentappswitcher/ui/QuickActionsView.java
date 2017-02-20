@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -35,6 +36,7 @@ public class QuickActionsView extends View {
     Path path;
     float iconSize;
     int[] sweepAngles;
+    float[] startAngle;
     IconPackManager.IconPack iconPack;
     int edgePosition;
 
@@ -60,13 +62,8 @@ public class QuickActionsView extends View {
         path = new Path();
         rectFs = new RectF[getSize()];
         bitmaps = new Bitmap[getSize()];
+
         sweepAngles = new int[getSize()];
-        for (int i = 0; i < getSize(); i++) {
-            if (actions.get(i).stage1Item != null) {
-                bitmaps[i] = Utility.getItemBitmap(actions.get(i).stage1Item, getContext(), iconPack);
-                rectFs[i] = new RectF();
-            }
-        }
         if (getSize() == 4) {
             sweepAngles[0] = 30;
             sweepAngles[1] = sweepAngles[2] = 40;
@@ -76,6 +73,43 @@ public class QuickActionsView extends View {
                 sweepAngles[i] = 180 / getSize();
             }
         }
+
+        startAngle = new float[getSize()];
+        for (int i = 0; i < getSize(); i++) {
+            if (actions.get(i).stage1Item != null) {
+                bitmaps[i] = Utility.getItemBitmap(actions.get(i).stage1Item, getContext(), iconPack);
+                rectFs[i] = new RectF();
+
+                switch (Utility.rightLeftOrBottom(edgePosition)) {
+                    case Cons.POSITION_RIGHT:
+                        startAngle[i] = -270;
+                        for (int j = i; j < getSize(); j++) {
+                            if (j + 1 < getSize()) {
+                                startAngle[i] = startAngle[i] + sweepAngles[j + 1];
+                            }
+                        }
+                        break;
+                    case Cons.POSITION_LEFT:
+                        startAngle[i] = -90;
+                        for (int j = 0; j <= i; j++) {
+                            if (j - 1 >= 0) {
+                                startAngle[i] = startAngle[i] + sweepAngles[j - 1];
+                            }
+                        }
+                        break;
+                    case Cons.POSITION_BOTTOM:
+                        startAngle[i] = -180;
+                        for (int j = 0; j <= i; j++) {
+                            if (j - 1 >= 0) {
+                                startAngle[i] = startAngle[i] + sweepAngles[j - 1];
+                            }
+                        }
+                        break;
+                }
+
+            }
+        }
+
     }
 
     public void show(int itemPosition) {
@@ -95,52 +129,29 @@ public class QuickActionsView extends View {
         int canvasHeight = canvas.getHeight();
         int centerX = Math.round(canvasWidth * 0.5f);
         int centerY = Math.round(canvasHeight * 0.5f);
-        float startAngle = 0;
-        switch (Utility.rightLeftOrBottom(edgePosition)) {
-            case Cons.POSITION_RIGHT:
-                startAngle = -270;
-                for (int i = visibleItem; i < getSize(); i++) {
-                    if (i + 1 < getSize()) {
-                        startAngle = startAngle + sweepAngles[i + 1];
-                    }
-                }
-                break;
-            case Cons.POSITION_LEFT:
-                startAngle = -90;
-                for (int i = 0; i <= visibleItem; i++) {
-                    if (i - 1 >= 0) {
-                        startAngle = startAngle + sweepAngles[i - 1];
-                    }
-                }
-                break;
-            case Cons.POSITION_BOTTOM:
-                startAngle = -180;
-                for (int i = 0; i <= visibleItem; i++) {
-                    if (i - 1 >= 0) {
-                        startAngle = startAngle + sweepAngles[i - 1];
-                    }
-                }
-                break;
-        }
 
-        double iconAngle;
         path.reset();
-        path.addArc(0, 0, canvasWidth, canvasHeight, startAngle, sweepAngles[visibleItem]);
-        iconAngle = Math.toRadians(startAngle + sweepAngles[visibleItem] * 0.5);
-        setIconRectF(centerX, centerY, centerX, iconAngle);
+        path.addArc(0, 0, canvasWidth, canvasHeight, startAngle[visibleItem], sweepAngles[visibleItem]);
         canvas.drawPath(path, backgroundPaint);
-        canvas.drawBitmap(bitmaps[visibleItem], null, rectFs[visibleItem], backgroundPaint);
+
+        for (int i = 0; i < bitmaps.length; i++) {
+            Log.e(TAG, "onDraw: draw bitmap of item " + i + "\nstartAngle = " + startAngle[i]);
+            double iconAngle;
+            iconAngle = Math.toRadians(startAngle[i] + sweepAngles[i] * 0.5);
+            setIconRectF(centerX, centerY, centerX, iconAngle,i);
+            canvas.drawBitmap(bitmaps[i], null, rectFs[i], backgroundPaint);
+        }
 
 
     }
 
-    private void setIconRectF(int centerX, int centerY, float radius, double iconAngular) {
+    private void setIconRectF(int centerX, int centerY, float radius, double iconAngular,int iconPosition) {
         float left;
         float top;
         left = (float) (centerX + radius * Math.cos(iconAngular) - iconSize/2);
         top = (float) (centerY + radius * Math.sin(iconAngular) - iconSize/2);
-        if (rectFs[visibleItem] != null) {
-            rectFs[visibleItem].set(left
+        if (rectFs[iconPosition] != null) {
+            rectFs[iconPosition].set(left
                     , top
                     , left + iconSize
                     , top + iconSize);
