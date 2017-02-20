@@ -84,6 +84,7 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
 
     public void setVisibilityOption(int option) {
         model.setVisibilityOption(option);
+        view.restartService();
     }
 
     @Override

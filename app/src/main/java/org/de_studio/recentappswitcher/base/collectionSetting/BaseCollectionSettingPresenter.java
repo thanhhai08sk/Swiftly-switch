@@ -102,6 +102,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
                     @Override
                     public void call(Integer integer) {
                         model.setCurrentCollectionCircleSize(integer);
+                        view.restartService();
                     }
                 })
         );

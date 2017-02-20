@@ -38,6 +38,8 @@ public class QuickActionSettingView extends BaseCollectionSettingView<Void, Quic
 
     @BindView(R.id.size_text)
     TextView sizeText;
+    @BindView(R.id.visibility_option_description)
+    TextView visibilityOptionDescription;
 
     PublishSubject<Void> loadItemsOkSubject = PublishSubject.create();
     PublishSubject<QuickActionSettingPresenter.SlotInfo> setSlotSubject = PublishSubject.create();
@@ -48,6 +50,17 @@ public class QuickActionSettingView extends BaseCollectionSettingView<Void, Quic
     public void updateCollectionInfo(Collection collection) {
         super.updateCollectionInfo(collection);
         sizeText.setText(String.valueOf(collection.slots.size()));
+        switch (collection.visibilityOption) {
+            case Collection.VISIBILITY_OPTION_ONLY_TRIGGERED_ONE_VISIBLE:
+                visibilityOptionDescription.setText(R.string.only_triggered_one_visible);
+                break;
+            case Collection.VISIBILITY_OPTION_TRIGGER_ONE_MAKE_ALL_VISIBLE:
+                visibilityOptionDescription.setText(R.string.trigger_one_make_all_visible);
+                break;
+            case Collection.VISIBILITY_OPTION_ALWAYS_VISIBLE:
+                visibilityOptionDescription.setText(R.string.always_visible);
+                break;
+        }
     }
 
     @Override
