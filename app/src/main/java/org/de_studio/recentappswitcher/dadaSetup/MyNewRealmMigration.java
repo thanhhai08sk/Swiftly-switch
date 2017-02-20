@@ -30,6 +30,11 @@ public class MyNewRealmMigration implements RealmMigration {
             oldVersion++;
         }
 
+        if (oldVersion == 2) {
+            schema.get("Collection")
+                    .addField("visibilityOption", int.class);
+            oldVersion++;
+        }
         //// TODO: 2/20/17 don't forget to implement the old realmMigration
     }
 }

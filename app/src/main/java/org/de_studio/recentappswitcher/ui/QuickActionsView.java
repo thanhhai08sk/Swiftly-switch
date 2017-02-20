@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -39,12 +38,14 @@ public class QuickActionsView extends View {
     float[] startAngle;
     IconPackManager.IconPack iconPack;
     int edgePosition;
+    boolean showAll;
 
-    public QuickActionsView(Context context, IconPackManager.IconPack iconPack, RealmList<Slot> actions, int edgePosition) {
+    public QuickActionsView(Context context, IconPackManager.IconPack iconPack, RealmList<Slot> actions, int edgePosition, boolean showAll) {
         super(context);
         this.iconPack = iconPack;
         this.actions = actions;
         this.edgePosition = edgePosition;
+        this.showAll = showAll;
         init();
 
     }
@@ -122,27 +123,35 @@ public class QuickActionsView extends View {
     }
     @Override
     protected void onDraw(Canvas canvas) {
-        if (visibleItem == -1 || bitmaps[visibleItem] == null) {
-            return;
-        }
+
         int canvasWidth = canvas.getWidth();
         int canvasHeight = canvas.getHeight();
         int centerX = Math.round(canvasWidth * 0.5f);
         int centerY = Math.round(canvasHeight * 0.5f);
 
-        path.reset();
-        path.addArc(0, 0, canvasWidth, canvasHeight, startAngle[visibleItem], sweepAngles[visibleItem]);
-        canvas.drawPath(path, backgroundPaint);
 
-        for (int i = 0; i < bitmaps.length; i++) {
-            Log.e(TAG, "onDraw: draw bitmap of item " + i + "\nstartAngle = " + startAngle[i]);
-            double iconAngle;
-            iconAngle = Math.toRadians(startAngle[i] + sweepAngles[i] * 0.5);
-            setIconRectF(centerX, centerY, centerX, iconAngle,i);
-            canvas.drawBitmap(bitmaps[i], null, rectFs[i], backgroundPaint);
+        if (visibleItem != -1 && bitmaps[visibleItem] != null) {
+            path.reset();
+            path.addArc(0, 0, canvasWidth, canvasHeight, startAngle[visibleItem], sweepAngles[visibleItem]);
+            canvas.drawPath(path, backgroundPaint);
+        }
+
+        if (showAll) {
+            for (int i = 0; i < bitmaps.length; i++) {
+                drawIconBitmap(canvas, centerX, centerY, i);
+            }
+        } else if (visibleItem != -1 && bitmaps[visibleItem] != null) {
+            drawIconBitmap(canvas, centerX, centerY, visibleItem);
         }
 
 
+    }
+
+    private void drawIconBitmap(Canvas canvas, int centerX, int centerY, int i) {
+        double iconAngle;
+        iconAngle = Math.toRadians(startAngle[i] + sweepAngles[i] * 0.5);
+        setIconRectF(centerX, centerY, centerX, iconAngle, i);
+        canvas.drawBitmap(bitmaps[i], null, rectFs[i], backgroundPaint);
     }
 
     private void setIconRectF(int centerX, int centerY, float radius, double iconAngular,int iconPosition) {

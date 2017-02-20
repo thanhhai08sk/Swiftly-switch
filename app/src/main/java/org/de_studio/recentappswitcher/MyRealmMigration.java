@@ -121,6 +121,13 @@ public class MyRealmMigration implements RealmMigration {
             oldVersion++;
         }
 
+        if (oldVersion == 4) {
+            schema.get("Collection")
+                    .addField("visibilityOption", int.class);
+            oldVersion++;
+        }
+
+
     }
 
     @Override

@@ -18,6 +18,11 @@ public class Collection extends RealmObject {
     public static final int POSITION_CENTER = 1;
     public static final int LONG_CLICK_MODE_NONE = 1;
     public static final int LONG_CLICK_MODE_OPEN_COLLECTION = 2;
+    public static final int VISIBILITY_OPTION_ONLY_TRIGGERED_ONE_VISIBLE = 0;
+    public static final int VISIBILITY_OPTION_TRIGGER_ONE_MAKE_ALL_VISIBLE = 1;
+    public static final int VISIBILITY_OPTION_ALWAYS_VISIBLE = 2;
+
+
     public String type;
     @PrimaryKey
     public String collectionId;  // collection_type_number, numbers start from 1
@@ -34,6 +39,7 @@ public class Collection extends RealmObject {
     public int radius;
     public int position;
     public Boolean stayOnScreen;
+    public int visibilityOption;
 
     public Collection() {
     }
@@ -158,5 +164,13 @@ public class Collection extends RealmObject {
 
     public void setStayOnScreen(Boolean stayOnScreen) {
         this.stayOnScreen = stayOnScreen;
+    }
+
+    public int getVisibilityOption() {
+        return visibilityOption;
+    }
+
+    public void setVisibilityOption(int visibilityOption) {
+        this.visibilityOption = visibilityOption;
     }
 }

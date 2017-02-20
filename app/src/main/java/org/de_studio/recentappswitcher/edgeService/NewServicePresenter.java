@@ -427,6 +427,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             case Showing.SHOWING_CIRCLE_AND_ACTION:
                 updateCircleIconPosition();
                 view.showCircle(currentShowing.circleIconsXY, currentShowing.circle, currentShowing.circleSlots, xInit, yInit);
+                if (currentShowing.action.visibilityOption == Collection.VISIBILITY_OPTION_ALWAYS_VISIBLE) {
+                    view.showQuickActions(currentEdge.position, -1, currentShowing);
+                }
                 break;
             case Showing.SHOWING_CIRCLE_ONLY:
                 updateCircleIconPosition();
@@ -549,6 +552,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void showFolder(int triggerPosition, Slot folder, final String gridId, int space, int edgePosition, Showing currentShowing);
 
+        void showQuickActions(int edgePosition, int actionPosition, NewServicePresenter.Showing currentShowing);
 
         void actionDownVibrate();
 
