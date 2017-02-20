@@ -2837,6 +2837,19 @@ public  class Utility {
         builder.create().show();
     }
 
+    public static void showDialogWithOptionToChoose(Context context, int titleId, int[] optionsResId, DialogInterface.OnClickListener onClickListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        if (titleId > 0) {
+            builder.setTitle(titleId);
+        }
+        CharSequence[] options = new CharSequence[optionsResId.length];
+        for (int i = 0; i < options.length; i++) {
+            options[i] = context.getString(optionsResId[i]);
+        }
+        builder.setItems(options, onClickListener);
+        builder.create().show();
+    }
+
     public static String createAppItemId(String packageName) {
         return Item.TYPE_APP + packageName;
     }

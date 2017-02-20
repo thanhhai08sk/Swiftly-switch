@@ -55,6 +55,7 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
                                 view.setShortcutsSetToSlot(slotInfo.slotId);
                                 break;
                         }
+                        view.restartService();
                     }
                 })
         );
@@ -64,6 +65,7 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
                     @Override
                     public void call(Item item) {
                         model.setItemToSlotStage1(item, slotOnsettingId);
+                        view.restartService();
                     }
                 })
         );
@@ -74,6 +76,14 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
     public void onSlotClick(int slotIndex) {
         slotOnsettingId = model.getSlotId(slotIndex);
         view.chooseItemTypeToAdd(slotOnsettingId);
+    }
+
+    public void onSetVisibilityOption() {
+        view.chooseVisibilityOption();
+    }
+
+    public void setVisibilityOption(int option) {
+        model.setVisibilityOption(option);
     }
 
     @Override
@@ -92,6 +102,8 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
         void loadItems();
 
         void chooseItemTypeToAdd(String slotId);
+
+        void chooseVisibilityOption();
 
         void setAppToSlot(String slotId);
 

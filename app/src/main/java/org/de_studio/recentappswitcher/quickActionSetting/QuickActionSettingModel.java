@@ -91,6 +91,17 @@ public class QuickActionSettingModel extends BaseCollectionSettingModel {
     }
 
 
+    public void setVisibilityOption(final int option) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Collection collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, getCollectionId()).findFirst();
+                if (collection != null) {
+                    collection.visibilityOption = option;
+                }
+            }
+        });
+    }
     @Override
     public String createNewCollection() {
         final long newCollectionNumber = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).count() + 1;

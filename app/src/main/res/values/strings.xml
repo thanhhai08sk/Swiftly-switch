@@ -254,6 +254,10 @@
     <string name="device_shortcuts">"Device's shortcuts"</string>
     <string name="shortcuts_sets">Shortcuts sets</string>
     <string name="choose_shortcuts_type">Choose shortcut type</string>
+    <string name="visibility_option">Visibility option</string>
+    <string name="always_visible">Always visible</string>
+    <string name="trigger_one_make_all_visible">Trigger one make all visible</string>
+    <string name="only_triggered_one_visible">Only triggered one visible</string>
 
     //Edge setting
     <string name="enable">Enable</string>

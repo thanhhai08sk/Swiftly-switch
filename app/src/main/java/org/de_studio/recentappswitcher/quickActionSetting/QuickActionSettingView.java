@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingView;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerQuickActionsSettingComponent;
@@ -25,6 +26,7 @@ import org.de_studio.recentappswitcher.setItems.chooseShortcutsSet.ChooseShortcu
 import java.lang.ref.WeakReference;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import rx.subjects.PublishSubject;
 
 /**
@@ -133,6 +135,18 @@ public class QuickActionSettingView extends BaseCollectionSettingView<Void, Quic
     }
 
     @Override
+    public void chooseVisibilityOption() {
+        Utility.showDialogWithOptionToChoose(this, R.string.visibility_option,
+                new int[]{R.string.only_triggered_one_visible, R.string.trigger_one_make_all_visible, R.string.always_visible},
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        presenter.setVisibilityOption(which);
+                    }
+                });
+    }
+
+    @Override
     public void setAppToSlot(String slotId) {
         FragmentManager fragmentManager1 = getSupportFragmentManager();
         ChooseAppDialogView chooseAppDialogView = new ChooseAppDialogView();
@@ -172,11 +186,17 @@ public class QuickActionSettingView extends BaseCollectionSettingView<Void, Quic
         dialogView.show(fragmentManager1, "chooseShortcutsSetDialog");
     }
 
+    @OnClick(R.id.visibility_option)
+    void onVisibilityOptionClick(){
+        presenter.onSetVisibilityOption();
+    }
+
     public static Intent getIntent(Context context, String collectionId) {
         Intent intent = new Intent(context, QuickActionSettingView.class);
         intent.putExtra(Cons.COLLECTION_ID, collectionId);
         return intent;
     }
+
 
 
 }
