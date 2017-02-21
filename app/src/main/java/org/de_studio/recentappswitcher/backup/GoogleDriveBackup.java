@@ -19,6 +19,7 @@ import java.lang.ref.WeakReference;
  */
 
 public class GoogleDriveBackup implements GoogleApiClient.OnConnectionFailedListener {
+    private static final String TAG = GoogleDriveBackup.class.getSimpleName();
     @Nullable
     private GoogleApiClient googleApiClient;
 
@@ -36,10 +37,12 @@ public class GoogleDriveBackup implements GoogleApiClient.OnConnectionFailedList
                     @Override
                     public void onConnected(Bundle bundle) {
                         // Do nothing
+                        Log.e(TAG, "onConnected: ");
                     }
 
                     @Override
                     public void onConnectionSuspended(int i) {
+                        Log.e(TAG, "onConnectionSuspended: ");
 
                     }
                 })
@@ -54,6 +57,7 @@ public class GoogleDriveBackup implements GoogleApiClient.OnConnectionFailedList
 
     public void start() {
         if (googleApiClient != null) {
+            Log.e(TAG, "start: connect");
             googleApiClient.connect();
         } else {
             throw new IllegalStateException("You should call init before start");
@@ -62,6 +66,7 @@ public class GoogleDriveBackup implements GoogleApiClient.OnConnectionFailedList
 
     public void stop() {
         if (googleApiClient != null) {
+            Log.e(TAG, "stop: disconnect");
             googleApiClient.disconnect();
         } else {
             throw new IllegalStateException("You should call init before start");
@@ -70,12 +75,13 @@ public class GoogleDriveBackup implements GoogleApiClient.OnConnectionFailedList
 
     @Override
     public void onConnectionFailed(@NonNull final ConnectionResult result) {
-        Log.i("Connection Failed", "GoogleApiClient connection failed: " + result.toString());
+        Log.e(TAG, "GoogleApiClient connection failed: " + result.toString());
 
         if (result.hasResolution() && activityRef != null && activityRef.get() != null) {
             Activity a = activityRef.get();
             // show the localized error dialog.
             try {
+                Log.e(TAG, "onConnectionFailed: start resolution");
                 result.startResolutionForResult(a, 1);
             } catch (IntentSender.SendIntentException e) {
                 e.printStackTrace();

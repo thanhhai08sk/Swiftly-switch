@@ -3,24 +3,35 @@ package org.de_studio.recentappswitcher.main.moreSetting;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveFile;
+import com.google.android.gms.drive.DriveFolder;
+import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.OpenFileActivityBuilder;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackSettingDialogFragment;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.backup.GoogleDriveBackup;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerMoreSettingComponent;
@@ -38,6 +49,9 @@ import rx.subjects.PublishSubject;
  */
 
 public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> implements MoreSettingPresenter.View {
+    private static final String TAG = MoreSettingView.class.getSimpleName();
+    private int REQUEST_CODE_PICKER = 2;
+    private int REQUEST_CODE_SELECT = 3;
     
     @BindView(R.id.disable_clock_switch)
     SwitchCompat disableClockSwitch;
@@ -67,14 +81,67 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     View useHomeButtonLayout;
     @BindView(R.id.use_home_button_separator)
     View useHomeButtonSeparator;
+    GoogleDriveBackup backup;
+    GoogleApiClient mGoogleApiClient;
+    private IntentSender intentPicker;
 
-    
 
 
     @Inject
     @Named(Cons.SHARED_PREFERENCE_NAME)
     SharedPreferences sharedPreferences;
 
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        backup = new GoogleDriveBackup();
+        backup.init(this);
+        connectClient();
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    backup.start();
+                }
+                break;
+            // REQUEST_CODE_PICKER
+            case 2:
+                intentPicker = null;
+
+                if (resultCode == RESULT_OK) {
+                    //Get the folder drive id
+                    DriveId mFolderDriveId = data.getParcelableExtra(
+                            OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
+
+//                    uploadToDrive(mFolderDriveId);
+                }
+                break;
+
+            // REQUEST_CODE_SELECT
+            case 3:
+                if (resultCode == RESULT_OK) {
+                    // get the selected item's ID
+                    DriveId driveId = data.getParcelableExtra(
+                            OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
+
+                    DriveFile file = driveId.asDriveFile();
+//                    downloadFromDrive(file);
+
+                } else {
+                    showErrorDialog();
+                }
+                finish();
+                break;
+
+        }
+    }
 
     @Override
     public void resetService() {
@@ -398,6 +465,9 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     @OnClick(R.id.backup)
     void onBackupClick(){
         presenter.onBackup();
+        mGoogleApiClient = backup.getClient();
+        openFolderPicker();
+
     }
 
     @OnClick(R.id.reset_to_default)
@@ -405,5 +475,39 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         presenter.onResetSettings();
     }
 
+    public void connectClient() {
+        backup.start();
+    }
 
+    public void disconnectClient() {
+        backup.stop();
+    }
+
+    private void openFolderPicker() {
+        Log.e(TAG, "openFolderPicker: ");
+        try {
+            if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+                if (intentPicker == null)
+                    intentPicker = buildIntent();
+                //Start the picker to choose a folder
+                startIntentSenderForResult(
+                        intentPicker, REQUEST_CODE_PICKER, null, 0, 0, 0);
+            } else {
+                Log.e(TAG, "openFolderPicker: error");
+            }
+        } catch (IntentSender.SendIntentException e) {
+            Log.e(TAG, "Unable to send intent", e);
+            showErrorDialog();
+        }
+    }
+
+    private IntentSender buildIntent() {
+        return Drive.DriveApi
+                .newOpenFileActivityBuilder()
+                .setMimeType(new String[]{DriveFolder.MIME_TYPE})
+                .build(mGoogleApiClient);
+    }
+    private void showErrorDialog() {
+        Toast.makeText(getApplicationContext(), R.string.backup_fail, Toast.LENGTH_SHORT).show();
+    }
 }

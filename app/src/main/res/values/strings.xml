@@ -287,5 +287,6 @@
     <string name="import_description">Import shortcuts, settings from backup file</string>
     <string name="backup">Backup</string>
     <string name="reset_to_default">Reset to defaults</string>
+    <string name="backup_fail">Backup fail</string>
 
 </resources>
