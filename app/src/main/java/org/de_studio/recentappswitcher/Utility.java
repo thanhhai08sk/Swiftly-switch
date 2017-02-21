@@ -15,6 +15,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,6 +33,7 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
@@ -2618,47 +2620,47 @@ public  class Utility {
         switch (item.action) {
             case Item.ACTION_WIFI:
                 if (getWifiState(context)) {
-                    icon.setImageResource(item.iconResourceId);
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                 } else {
-                    icon.setImageResource(item.iconResourceId2);
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap2, 0, item.iconBitmap2.length));
                 }
                 break;
             case Item.ACTION_BLUETOOTH:
                 if (getBluetoothState(context)) {
-                    icon.setImageResource(item.iconResourceId);
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                 } else {
-                    icon.setImageResource(item.iconResourceId2);
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap2, 0, item.iconBitmap2.length));
                 }
                 break;
             case Item.ACTION_ROTATION:
                 if (getIsRotationAuto(context)) {
-                    icon.setImageResource(item.iconResourceId);
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                 } else {
-                    icon.setImageResource(item.iconResourceId2);
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap2, 0, item.iconBitmap2.length));
                 }
                 break;
             case Item.ACTION_RINGER_MODE:
                 switch (getRingerMode(context)) {
                     case RINGER_MODE_NORMAL:
-                        icon.setImageResource(item.iconResourceId);
+                        icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                         break;
                     case RINGER_MODE_VIBRATE:
-                        icon.setImageResource(item.iconResourceId2);
+                        icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap2, 0, item.iconBitmap2.length));
                         break;
                     case RINGER_MODE_SILENT:
-                        icon.setImageResource(item.iconResourceId3);
+                        icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap3, 0, item.iconBitmap3.length));
                         break;
                 }
                 break;
             case Item.ACTION_FLASH_LIGHT:
                 if (NewServiceView.FLASH_LIGHT_ON) {
-                    icon.setImageResource(item.iconResourceId);
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                 } else {
-                    icon.setImageResource(item.iconResourceId2);
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap2, 0, item.iconBitmap2.length));
                 }
                 break;
             default:
-                icon.setImageResource(item.iconResourceId);
+                icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                 break;
         }
     }
@@ -2727,6 +2729,66 @@ public  class Utility {
 
         }
 
+    }
+
+    public static Item getActionItemFromResult(ResolveInfo mResolveInfo, PackageManager packageManager, Realm realm, Intent data) {
+        String label = (String) data.getExtras().get(Intent.EXTRA_SHORTCUT_NAME);
+        String stringIntent = ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0);
+        String packageName =  mResolveInfo.activityInfo.packageName;
+        String itemId = Item.TYPE_DEVICE_SHORTCUT + stringIntent;
+        Item realmItem = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
+        if (realmItem == null) {
+
+            int iconResId = 0;
+
+            Bitmap bmp = null;
+            Parcelable extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON);
+            if (extra != null && extra instanceof Bitmap)
+                bmp = (Bitmap) extra;
+            if (bmp == null) {
+                extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
+                if (extra != null && extra instanceof Intent.ShortcutIconResource) {
+                    try {
+                        Intent.ShortcutIconResource iconResource = (Intent.ShortcutIconResource) extra;
+                        packageName = iconResource.packageName;
+                        Resources resources = packageManager.getResourcesForApplication(iconResource.packageName);
+                        iconResId = resources.getIdentifier(iconResource.resourceName, null, null);
+                    } catch (Exception e) {
+                        Log.e(TAG, "onActivityResult: Could not load shortcut icon:");
+                    }
+                }
+            }
+            realm.beginTransaction();
+            Item item = new Item();
+            item.type = Item.TYPE_DEVICE_SHORTCUT;
+            item.itemId = itemId;
+            item.label = label;
+            item.packageName = packageName;
+            item.intent = stringIntent;
+            if (bmp != null) {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                item.iconBitmap = stream.toByteArray();
+            } else {
+                try {
+                    Resources resources = packageManager.getResourcesForApplication(item.getPackageName());
+                    Bitmap bmp2 = BitmapFactory.decodeResource(resources, iconResId);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bmp2.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    item.iconBitmap = stream.toByteArray();
+                    bmp2.recycle();
+                    stream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "onActivityResult: exception when setting item bitmap");
+                }
+
+
+            }
+            realmItem = realm.copyToRealm(item);
+            realm.commitTransaction();
+        }
+        return realmItem;
     }
 
     private static void setBitMapForActionItemFromResId(Item item, int position, int resourceId, Context context) {

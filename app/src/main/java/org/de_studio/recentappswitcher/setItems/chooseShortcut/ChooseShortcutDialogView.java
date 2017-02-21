@@ -6,15 +6,13 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseChooseItemDialogView;
 import org.de_studio.recentappswitcher.base.adapter.ShortcutListAdapter;
 import org.de_studio.recentappswitcher.dagger.AppModule;
@@ -22,7 +20,6 @@ import org.de_studio.recentappswitcher.dagger.ChooseShortcutDialogModule;
 import org.de_studio.recentappswitcher.dagger.DaggerChooseShortcutDialogComponent;
 import org.de_studio.recentappswitcher.model.Item;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -83,45 +80,7 @@ public class ChooseShortcutDialogView extends BaseChooseItemDialogView {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            String label = (String) data.getExtras().get(Intent.EXTRA_SHORTCUT_NAME);
-            String stringIntent = ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0);
-            String packageName =  mResolveInfo.activityInfo.packageName;
-
-            int iconResId = 0;
-
-            Bitmap bmp = null;
-            Parcelable extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON);
-            if (extra != null && extra instanceof Bitmap)
-                bmp = (Bitmap) extra;
-            if (bmp == null) {
-                extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
-                if (extra != null && extra instanceof Intent.ShortcutIconResource) {
-                    try {
-                        Intent.ShortcutIconResource iconResource = (Intent.ShortcutIconResource) extra;
-                        packageName = iconResource.packageName;
-                        Resources resources = packageManager.getResourcesForApplication(iconResource.packageName);
-                        iconResId = resources.getIdentifier(iconResource.resourceName, null, null);
-                    } catch (Exception e) {
-                        Log.e(TAG, "onActivityResult: Could not load shortcut icon:");
-                    }
-                }
-            }
-            realm.beginTransaction();
-            Item item = new Item();
-            item.type = Item.TYPE_DEVICE_SHORTCUT;
-            item.itemId = Item.TYPE_DEVICE_SHORTCUT + stringIntent;
-            item.label = label;
-            item.packageName = packageName;
-            item.intent = stringIntent;
-            if (bmp != null) {
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                item.iconBitmap = stream.toByteArray();
-            } else {
-                item.iconResourceId = iconResId;
-            }
-            Item realmItem = realm.copyToRealm(item);
-            realm.commitTransaction();
+            Item realmItem = Utility.getActionItemFromResult(mResolveInfo, packageManager, realm, data);
             itemClickSubject.onNext(realmItem);
 
         }

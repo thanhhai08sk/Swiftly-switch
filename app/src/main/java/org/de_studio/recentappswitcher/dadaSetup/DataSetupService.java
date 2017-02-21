@@ -10,7 +10,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
@@ -30,6 +33,7 @@ import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.List;
@@ -586,8 +590,23 @@ public class DataSetupService extends IntentService {
                 item1.label = shortcut.getLabel();
                 item1.packageName = shortcut.getPackageName();
                 item1.intent = shortcut.getIntent();
-                item1.iconBitmap = shortcut.getBitmap();
-                item1.iconResourceId = shortcut.getResId();
+                if (shortcut.getBitmap() == null) {
+                    try {
+                        Resources resources = getApplicationContext().getPackageManager().getResourcesForApplication(item1.getPackageName());
+                        Bitmap bmp2 = BitmapFactory.decodeResource(resources, shortcut.getResId());
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bmp2.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        item1.iconBitmap = stream.toByteArray();
+                        bmp2.recycle();
+                        stream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "onActivityResult: exception when setting item bitmap");
+                    }
+                } else {
+                    item1.iconBitmap = shortcut.getBitmap();
+                }
+
                 return newRealm.copyToRealmOrUpdate(item1);
         }
         return null;
