@@ -1994,10 +1994,6 @@ public  class Utility {
                                 bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
                                 drawable = new BitmapDrawable(resources, bmp);
 
-                            } else {
-                                BitmapFactory.Options options = new BitmapFactory.Options();
-                                Log.e(TAG, "getFolderThumbnail: resourcesCompat");
-                                drawable = ResourcesCompat.getDrawable(resources, item.iconResourceId, null);
                             }
                         } catch (Exception e) {
                             Log.e(TAG, "getView: can not set imageview for item item");
@@ -2491,7 +2487,7 @@ public  class Utility {
                 if (showIconState) {
                     setActionIconWithState(item, icon, context);
                 } else {
-                    icon.setImageResource(item.iconResourceId);
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                 }
                 break;
             case Item.TYPE_DEVICE_SHORTCUT:
@@ -2501,7 +2497,7 @@ public  class Utility {
                         icon.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
                     } else {
                         Resources resources = packageManager.getResourcesForApplication(item.getPackageName());
-                        icon.setImageBitmap(BitmapFactory.decodeResource(resources,item.iconResourceId));
+                        icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                     }
 
                 } catch (Exception e) {
@@ -2528,7 +2524,7 @@ public  class Utility {
                 }
                 break;
             case Item.TYPE_SHORTCUTS_SET:
-                icon.setImageResource(item.iconResourceId);
+                icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                 break;
         }
     }
@@ -2553,17 +2549,13 @@ public  class Utility {
                 }
                 break;
             case Item.TYPE_ACTION:
-                return ((BitmapDrawable) ContextCompat.getDrawable(context, item.iconResourceId)).getBitmap();
+                return BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length);
             case Item.TYPE_DEVICE_SHORTCUT:
                 byte[] byteArray = item.iconBitmap;
                 try {
                     if (byteArray != null) {
                         return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-                    } else {
-                        Resources resources = context.getPackageManager().getResourcesForApplication(item.getPackageName());
-                        return BitmapFactory.decodeResource(resources, item.iconResourceId);
                     }
-
                 } catch (Exception e) {
                     Log.e(TAG, "getView: can not set imageview for shortcut shortcut");
                 }
@@ -2587,7 +2579,7 @@ public  class Utility {
                 }
                 break;
             case Item.TYPE_SHORTCUTS_SET:
-                return ((BitmapDrawable) ContextCompat.getDrawable(context, item.iconResourceId)).getBitmap();
+                return BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length);
         }
         return null;
     }
@@ -2818,15 +2810,30 @@ public  class Utility {
 
 
 
-    public static void setIconResourceIdsForShortcutsSet(Item item) {
+    public static void setIconResourceIdsForShortcutsSet(Context context, Item item) {
         String itemId = item.itemId;
         if (itemId.contains(Collection.TYPE_GRID_FAVORITE)) {
-            item.iconResourceId = R.drawable.ic_action_instant_favorite_512;
+            item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_action_instant_favorite_512);
         } else if (itemId.contains(Collection.TYPE_CIRCLE_FAVORITE)) {
-            item.iconResourceId = R.drawable.ic_action_instant_favorite_512;
+            item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_action_instant_favorite_512);
         } else if (itemId.contains(Collection.TYPE_RECENT)) {
-            item.iconResourceId = R.drawable.ic_action_instant_favorite_512;
+            item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_action_instant_favorite_512);
         }
+    }
+
+    public static byte[] getBitmapByteArrayFromResId(Context context, int resId) {
+        Bitmap bmp = ((BitmapDrawable) ContextCompat.getDrawable(context, resId)).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        bmp.recycle();
+        try {
+            stream.close();
+        } catch (IOException e) {
+            Log.e(TAG, "getBitmapByteArrayFromResId: IOException");
+            e.printStackTrace();
+        }
+        return byteArray;
     }
 
     public static String getContactItemLabel(int type, String name, Context context) {
