@@ -108,7 +108,10 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         switch (requestCode) {
             case 1:
                 if (resultCode == RESULT_OK) {
+                    Log.e(TAG, "onActivityResult: connect result ok");
                     backup.start();
+                } else {
+                    Log.e(TAG, "onActivityResult: connect result fail");
                 }
                 break;
             // REQUEST_CODE_PICKER

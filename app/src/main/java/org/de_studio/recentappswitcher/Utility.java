@@ -2665,69 +2665,96 @@ public  class Utility {
 
 
 
-    public static void setIconResourceIdsForAction(Item item) {
+    public static void setIconBitmapsForActionItem(Context context, Item item) {
         switch (item.action) {
             case Item.ACTION_WIFI:
-                item.iconResourceId = R.drawable.ic_wifi;
-                item.iconResourceId2 = R.drawable.ic_wifi_off;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_wifi, context);
+                setBitMapForActionItemFromResId(item, 2, R.drawable.ic_wifi_off, context);
                 break;
             case Item.ACTION_BLUETOOTH:
-                item.iconResourceId = R.drawable.ic_bluetooth;
-                item.iconResourceId2 = R.drawable.ic_bluetooth_off;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_bluetooth, context);
+                setBitMapForActionItemFromResId(item, 2, R.drawable.ic_bluetooth_off, context);
                 break;
             case Item.ACTION_ROTATION:
-                item.iconResourceId = R.drawable.ic_rotation;
-                item.iconResourceId2 = R.drawable.ic_rotation_lock;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_rotation, context);
+                setBitMapForActionItemFromResId(item, 2, R.drawable.ic_rotation_lock, context);
                 break;
             case Item.ACTION_POWER_MENU:
-                item.iconResourceId = R.drawable.ic_power_menu;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_power_menu, context);
                 break;
             case Item.ACTION_HOME:
-                item.iconResourceId = R.drawable.ic_home;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_home, context);
                 break;
             case Item.ACTION_BACK:
-                item.iconResourceId = R.drawable.ic_back;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_back, context);
                 break;
             case Item.ACTION_NOTI:
-                item.iconResourceId = R.drawable.ic_notification;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_notification, context);
                 break;
             case Item.ACTION_LAST_APP:
-                item.iconResourceId = R.drawable.ic_last_app;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_last_app, context);
                 break;
             case Item.ACTION_CALL_LOGS:
-                item.iconResourceId = R.drawable.ic_call_log;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_call_log, context);
                 break;
             case Item.ACTION_DIAL:
-                item.iconResourceId = R.drawable.ic_dial;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_dial, context);
                 break;
             case Item.ACTION_CONTACT:
-                item.iconResourceId = R.drawable.ic_contact;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_contact, context);
                 break;
             case Item.ACTION_RECENT:
-                item.iconResourceId = R.drawable.ic_recent;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_recent, context);
                 break;
             case Item.ACTION_VOLUME:
-                item.iconResourceId = R.drawable.ic_volume;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_volume, context);
                 break;
             case Item.ACTION_BRIGHTNESS:
-                item.iconResourceId = R.drawable.ic_screen_brightness;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_screen_brightness, context);
                 break;
             case Item.ACTION_RINGER_MODE:
-                item.iconResourceId = R.drawable.ic_sound_normal;
-                item.iconResourceId2 = R.drawable.ic_sound_vibrate;
-                item.iconResourceId3 = R.drawable.ic_sound_silent;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_sound_normal, context);
+                setBitMapForActionItemFromResId(item, 2, R.drawable.ic_sound_vibrate, context);
+                setBitMapForActionItemFromResId(item, 3, R.drawable.ic_sound_silent, context);
                 break;
             case Item.ACTION_FLASH_LIGHT:
-                item.iconResourceId = R.drawable.ic_flash_light;
-                item.iconResourceId2 = R.drawable.ic_flash_light_off;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_flash_light, context);
+                setBitMapForActionItemFromResId(item, 2, R.drawable.ic_flash_light_off, context);
                 break;
             case Item.ACTION_SCREEN_LOCK:
-                item.iconResourceId = R.drawable.ic_screen_lock;
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_screen_lock, context);
                 break;
 
         }
 
     }
+
+    private static void setBitMapForActionItemFromResId(Item item, int position, int resourceId, Context context) {
+        Bitmap bmp = ((BitmapDrawable) ContextCompat.getDrawable(context, resourceId)).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+        switch (position) {
+            case 1:
+                item.iconBitmap = stream.toByteArray();
+                break;
+            case 2:
+                item.iconBitmap2 = stream.toByteArray();
+                break;
+            case 3:
+                item.iconBitmap3 = stream.toByteArray();
+                break;
+        }
+        try {
+            bmp.recycle();
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "setBitMapForActionItemFromResId: IOException");
+        }
+    }
+
+
 
     public static void setIconResourceIdsForShortcutsSet(Item item) {
         String itemId = item.itemId;
@@ -3179,8 +3206,11 @@ public  class Utility {
                             newItem.itemId = itemId;
                             newItem.label = string;
                             newItem.action = action;
-                            Utility.setIconResourceIdsForAction(newItem);
+                            Utility.setIconBitmapsForActionItem(contextWeakReference.get(), newItem);
                             realm.copyToRealm(newItem);
+                        } else if (item.iconBitmap == null) {
+                            Log.e(TAG, "execute: need to update action icon " + item.toString());
+                            setIconBitmapsForActionItem(contextWeakReference.get(), item);
                         }
                     }
 

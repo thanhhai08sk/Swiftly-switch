@@ -35,6 +35,14 @@ public class MyNewRealmMigration implements RealmMigration {
                     .addField("visibilityOption", int.class);
             oldVersion++;
         }
+
+        if (oldVersion == 3) {
+            schema.get("Item")
+                    .addField("iconBitmap2", byte[].class)
+                    .addField("iconBitmap3", byte[].class);
+            oldVersion++;
+        }
+
         //// TODO: 2/20/17 don't forget to implement the old realmMigration
     }
 }

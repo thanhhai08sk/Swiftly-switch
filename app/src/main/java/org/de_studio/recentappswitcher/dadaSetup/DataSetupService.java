@@ -382,7 +382,6 @@ public class DataSetupService extends IntentService {
     }
 
     private void generateActionItems(Realm realm) {
-        final String[] actionStrings = getResources().getStringArray(R.array.setting_shortcut_array_no_folder);
         Utility.generateActionItems(realm, new WeakReference<Context>(getApplicationContext()));
     }
 

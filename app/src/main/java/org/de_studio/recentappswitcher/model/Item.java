@@ -46,6 +46,8 @@ public class Item extends RealmObject {
     public int iconResourceId2;
     public int iconResourceId3;
     public byte[] iconBitmap;
+    public byte[] iconBitmap2;
+    public byte[] iconBitmap3;
     public String iconUri;
     public String collectionId;
 
@@ -170,6 +172,22 @@ public class Item extends RealmObject {
 
     public void setCollectionId(String collectionId) {
         this.collectionId = collectionId;
+    }
+
+    public byte[] getIconBitmap2() {
+        return iconBitmap2;
+    }
+
+    public void setIconBitmap2(byte[] iconBitmap2) {
+        this.iconBitmap2 = iconBitmap2;
+    }
+
+    public byte[] getIconBitmap3() {
+        return iconBitmap3;
+    }
+
+    public void setIconBitmap3(byte[] iconBitmap3) {
+        this.iconBitmap3 = iconBitmap3;
     }
 
     @Override

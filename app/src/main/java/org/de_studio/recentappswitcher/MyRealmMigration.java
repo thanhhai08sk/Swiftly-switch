@@ -127,6 +127,14 @@ public class MyRealmMigration implements RealmMigration {
             oldVersion++;
         }
 
+        if (oldVersion == 5) {
+            schema.get("Item")
+                    .addField("iconBitmap2", byte[].class)
+                    .addField("iconBitmap3", byte[].class);
+            oldVersion++;
+        }
+
+
 
     }
 
