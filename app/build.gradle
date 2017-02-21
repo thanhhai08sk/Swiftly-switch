@@ -90,6 +90,11 @@ dependencies {
     //range seekBar
     compile 'org.florescu.android.rangeseekbar:rangeseekbar-library:0.3.0'
 
+    //google drive
+    compile 'com.google.android.gms:play-services:10.0.1'
+    compile 'com.google.android.gms:play-services-drive:10.0.1'
+
+
 
 
 
