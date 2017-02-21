@@ -315,7 +315,7 @@ public class DataSetupService extends IntentService {
                         newItem.itemId = Item.TYPE_SHORTCUTS_SET + firstGridFavoriteCollection.collectionId;
                         newItem.label = firstGridFavoriteCollection.label;
                         newItem.collectionId = firstGridFavoriteCollection.collectionId;
-                        Utility.setIconResourceIdsForShortcutsSet(newItem);
+                        Utility.setIconResourceIdsForShortcutsSet(getApplicationContext(), newItem);
                         Item realmItem = realm.copyToRealm(newItem);
                         items[0] = realmItem;
                     }

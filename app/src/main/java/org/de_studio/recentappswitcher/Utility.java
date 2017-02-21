@@ -2484,6 +2484,9 @@ public  class Utility {
                 }
                 break;
             case Item.TYPE_ACTION:
+                if (item.iconBitmap == null) {
+                    break;
+                }
                 if (showIconState) {
                     setActionIconWithState(item, icon, context);
                 } else {
@@ -2495,9 +2498,6 @@ public  class Utility {
                 try {
                     if (byteArray != null) {
                         icon.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
-                    } else {
-                        Resources resources = packageManager.getResourcesForApplication(item.getPackageName());
-                        icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                     }
 
                 } catch (Exception e) {
@@ -2524,7 +2524,9 @@ public  class Utility {
                 }
                 break;
             case Item.TYPE_SHORTCUTS_SET:
-                icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
+                if (item.iconBitmap != null) {
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
+                }
                 break;
         }
     }
@@ -2579,6 +2581,9 @@ public  class Utility {
                 }
                 break;
             case Item.TYPE_SHORTCUTS_SET:
+                if (item.iconBitmap == null) {
+                    return null;
+                }
                 return BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length);
         }
         return null;
@@ -2609,6 +2614,9 @@ public  class Utility {
 
 
     public static void setActionIconWithState(Item item, ImageView icon, Context context) {
+        if (item.iconBitmap == null) {
+            return;
+        }
         switch (item.action) {
             case Item.ACTION_WIFI:
                 if (getWifiState(context)) {
@@ -2723,11 +2731,11 @@ public  class Utility {
 
     }
 
-    public static Item getActionItemFromResult(ResolveInfo mResolveInfo, PackageManager packageManager, Realm realm, Intent data) {
+    public static Item getActionItemFromResult(ResolveInfo mResolveInfo,final PackageManager packageManager, Realm realm, Intent data) {
         String label = (String) data.getExtras().get(Intent.EXTRA_SHORTCUT_NAME);
         String stringIntent = ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0);
         String packageName =  mResolveInfo.activityInfo.packageName;
-        String itemId = Item.TYPE_DEVICE_SHORTCUT + stringIntent;
+        final String itemId = Item.TYPE_DEVICE_SHORTCUT + stringIntent;
         Item realmItem = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
         if (realmItem == null) {
 
@@ -2779,6 +2787,28 @@ public  class Utility {
             }
             realmItem = realm.copyToRealm(item);
             realm.commitTransaction();
+        } else {
+            if (realmItem.iconBitmap == null && realmItem.iconResourceId != 0) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        Item realmItem = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
+
+                        try {
+                            Resources resources = packageManager.getResourcesForApplication(realmItem.getPackageName());
+                            Bitmap bmp2 = BitmapFactory.decodeResource(resources, realmItem.iconResourceId);
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            bmp2.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                            realmItem.iconBitmap = stream.toByteArray();
+                            bmp2.recycle();
+                            stream.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.e(TAG, "onActivityResult: exception when setting item bitmap");
+                        }
+                    }
+                });
+            }
         }
         return realmItem;
     }
@@ -2811,13 +2841,15 @@ public  class Utility {
 
 
     public static void setIconResourceIdsForShortcutsSet(Context context, Item item) {
-        String itemId = item.itemId;
-        if (itemId.contains(Collection.TYPE_GRID_FAVORITE)) {
-            item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_action_instant_favorite_512);
-        } else if (itemId.contains(Collection.TYPE_CIRCLE_FAVORITE)) {
-            item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_action_instant_favorite_512);
-        } else if (itemId.contains(Collection.TYPE_RECENT)) {
-            item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_action_instant_favorite_512);
+        if (context != null) {
+            String itemId = item.itemId;
+            if (itemId.contains(Collection.TYPE_GRID_FAVORITE)) {
+                item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_action_instant_favorite_512);
+            } else if (itemId.contains(Collection.TYPE_CIRCLE_FAVORITE)) {
+                item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_action_instant_favorite_512);
+            } else if (itemId.contains(Collection.TYPE_RECENT)) {
+                item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_action_instant_favorite_512);
+            }
         }
     }
 

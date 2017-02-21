@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -81,7 +82,13 @@ public class QuickActionsView extends View {
         for (int i = 0; i < getSize(); i++) {
             if (actions.get(i).stage1Item != null) {
 //                bitmaps[i] = Utility.getItemBitmap(actions.get(i).stage1Item, getContext(), iconPack);
-                bitmaps[i] = Bitmap.createScaledBitmap(Utility.getItemBitmap(actions.get(i).stage1Item, getContext(), iconPack), iconSize, iconSize, true);
+                try {
+                    bitmaps[i] = Bitmap.createScaledBitmap(Utility.getItemBitmap(actions.get(i).stage1Item, getContext(), iconPack), iconSize, iconSize, true);
+
+                } catch (NullPointerException e) {
+                    Log.e(TAG, "init: Null");
+                    e.printStackTrace();
+                }
                 rectFs[i] = new RectF();
 
                 switch (Utility.rightLeftOrBottom(edgePosition)) {
