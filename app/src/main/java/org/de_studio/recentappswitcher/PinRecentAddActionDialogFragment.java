@@ -50,7 +50,7 @@ public class PinRecentAddActionDialogFragment extends DialogFragment{
         View rootView = inflater.inflate(R.layout.add_favorite_app_fragment_list_view, container);
         myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("pinApp.realm")
-                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
         stringArray = getActivity().getResources().getStringArray(R.array.setting_shortcut_array_no_folder);

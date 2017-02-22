@@ -66,7 +66,7 @@ public class PinRecentAddShortcutDialogFragment extends DialogFragment {
         mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
         myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("pinApp.realm")
-                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
 

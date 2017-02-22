@@ -16,9 +16,9 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import java.io.IOException;
 
@@ -48,13 +48,13 @@ public class ContactCursorAdapter extends CursorAdapter {
         if (mode == FavoriteSettingActivity.MODE_GRID || mode == FavoriteSettingActivity.MODE_FOLDER) {
             myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                     .name("default.realm")
-                    .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                    .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())
                     .build());
         } else {
             myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                     .name("circleFavo.realm")
-                    .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                    .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())
                     .build());
         }

@@ -67,7 +67,7 @@ public class ChooseShortcutsSetDialogView extends BaseChooseItemDialogView {
                             item.itemId = Item.TYPE_SHORTCUTS_SET + collection.collectionId;
                             item.collectionId = collection.collectionId;
                             item.label = collection.label;
-                            Utility.setIconResourceIdsForShortcutsSet(contextWeakReference.get(), item);
+                            Utility.setItemBitmapForShortcutsSet(contextWeakReference.get(), item);
                             realm.copyToRealm(item);
                         }
                     }

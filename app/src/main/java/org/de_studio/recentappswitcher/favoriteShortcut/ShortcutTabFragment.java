@@ -19,10 +19,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -73,13 +73,13 @@ public class ShortcutTabFragment extends Fragment {
         if (mode == FavoriteSettingActivity.MODE_GRID) {
             myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                     .name("default.realm")
-                    .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                    .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())
                     .build());
         } else {
             myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                     .name("circleFavo.realm")
-                    .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                    .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())
                     .build());
         }

@@ -23,11 +23,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.MyApplication;
 import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -57,7 +57,7 @@ public class AddShortcutToFolderDialogFragment extends DialogFragment {
         mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
         myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
-                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
 

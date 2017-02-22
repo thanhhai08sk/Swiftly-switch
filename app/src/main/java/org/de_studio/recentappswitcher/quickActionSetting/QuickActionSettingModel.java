@@ -61,7 +61,7 @@ public class QuickActionSettingModel extends BaseCollectionSettingModel {
                                         newItem.itemId = Item.TYPE_SHORTCUTS_SET + firstGridFavoriteCollection.collectionId;
                                         newItem.label = firstGridFavoriteCollection.label;
                                         newItem.collectionId = firstGridFavoriteCollection.collectionId;
-                                        Utility.setIconResourceIdsForShortcutsSet(MyApplication.getContext(), newItem);
+                                        Utility.setItemBitmapForShortcutsSet(MyApplication.getContext(), newItem);
                                         Item realmItem = realm.copyToRealm(newItem);
                                         items[0] = realmItem;
                                     }

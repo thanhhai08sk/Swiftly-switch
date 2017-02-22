@@ -17,12 +17,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.util.List;
@@ -84,13 +84,13 @@ public class ChooseShortcutActivity extends AppCompatActivity implements AppList
         if (mode == FavoriteSettingActivity.MODE_GRID) {
             myRealm =Realm.getInstance(new RealmConfiguration.Builder()
                     .name("default.realm")
-                    .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                    .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())
                     .build());
         } else {
             myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                     .name("circleFavo.realm")
-                    .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                    .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())
                     .build());
         }

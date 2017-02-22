@@ -21,11 +21,11 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.AppInfors;
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.MyApplication;
 import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,7 +55,7 @@ public class AddAppToFolderDialogFragment  extends DialogFragment{
         mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
         myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
-                .schemaVersion(EdgeGestureService. CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
         final int startId = (mPosition +1)*1000;

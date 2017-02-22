@@ -16,10 +16,10 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -46,13 +46,13 @@ public class ActionListAdapter extends BaseAdapter {
         if (mode == FavoriteSettingActivity.MODE_GRID) {
             myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                     .name("default.realm")
-                    .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                    .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())
                     .build());
         } else {
             myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                     .name("circleFavo.realm")
-                    .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                    .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                     .migration(new MyRealmMigration())
                     .build());
         }

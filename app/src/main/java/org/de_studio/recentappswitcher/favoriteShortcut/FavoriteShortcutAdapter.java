@@ -18,7 +18,6 @@ import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import io.realm.Realm;
@@ -54,7 +53,7 @@ public class FavoriteShortcutAdapter extends BaseAdapter {
         iconPadding = (int)mContext.getResources().getDimension(R.dimen.icon_padding);
         myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
-                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
 

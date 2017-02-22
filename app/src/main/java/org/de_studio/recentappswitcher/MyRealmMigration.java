@@ -17,7 +17,9 @@ public class MyRealmMigration implements RealmMigration {
     public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
         Log.e(TAG, "migrate: old = " + oldVersion + "\nnew = " + newVersion);
         RealmSchema schema = realm.getSchema();
+
         if (oldVersion == 0) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
             RealmObjectSchema shortcutSchema =  schema.get("Shortcut");
             try {
                 shortcutSchema.addField("thumbnaiUri", String.class)
@@ -32,6 +34,7 @@ public class MyRealmMigration implements RealmMigration {
             oldVersion++;
         }
         if (oldVersion == 1) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
             RealmObjectSchema shortcutSchema =  schema.get("Shortcut");
             try {
                 shortcutSchema.addField("bitmap", byte[].class)
@@ -45,6 +48,7 @@ public class MyRealmMigration implements RealmMigration {
         }
 
         if (oldVersion == 2) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
             schema.create("Item")
                     .addField("itemId", String.class, FieldAttribute.PRIMARY_KEY)
                     .addField("type", String.class)
@@ -78,7 +82,7 @@ public class MyRealmMigration implements RealmMigration {
                     .addRealmListField("slots", schema.get("Slot"))
                     .addRealmListField("items", schema.get("Item"))
                     .addField("longClickMode", int.class)
-                    .addField("longClickCollection", String.class)
+                    .addRealmObjectField("longPressCollection", schema.get("Collection"))
                     .addField("rowsCount", int.class)
                     .addField("columnCount", int.class)
                     .addField("marginHorizontal", int.class)
@@ -116,18 +120,21 @@ public class MyRealmMigration implements RealmMigration {
         }
 
         if (oldVersion == 3) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
             schema.get("Collection")
                     .addField("stayOnScreen", Boolean.class);
             oldVersion++;
         }
 
         if (oldVersion == 4) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
             schema.get("Collection")
                     .addField("visibilityOption", int.class);
             oldVersion++;
         }
 
         if (oldVersion == 5) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
             schema.get("Item")
                     .addField("iconBitmap2", byte[].class)
                     .addField("iconBitmap3", byte[].class);

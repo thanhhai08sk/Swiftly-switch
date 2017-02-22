@@ -53,7 +53,7 @@ public class PinAppDialogFragment extends DialogFragment {
         mListView = (ListView) rootView.findViewById(R.id.add_favorite_list_view);
         pinRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("pinApp.realm")
-                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

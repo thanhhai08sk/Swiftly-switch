@@ -17,6 +17,7 @@ public class MyNewRealmMigration implements RealmMigration {
         Log.e(TAG, "migrate: old = " + oldVersion + "\nnew = " + newVersion);
         RealmSchema schema = realm.getSchema();
         if (oldVersion == 0) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
             schema.get("Collection")
                     .removeField("longClickCollection")
                     .addRealmObjectField("longPressCollection", schema.get("Collection"));
@@ -25,18 +26,21 @@ public class MyNewRealmMigration implements RealmMigration {
         }
 
         if (oldVersion ==1) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
             schema.get("Collection")
                     .addField("stayOnScreen", Boolean.class);
             oldVersion++;
         }
 
         if (oldVersion == 2) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
             schema.get("Collection")
                     .addField("visibilityOption", int.class);
             oldVersion++;
         }
 
         if (oldVersion == 3) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
             schema.get("Item")
                     .addField("iconBitmap2", byte[].class)
                     .addField("iconBitmap3", byte[].class);

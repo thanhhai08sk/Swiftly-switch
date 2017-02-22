@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import io.realm.Realm;
@@ -41,7 +40,7 @@ public class PinAppAdapter extends BaseAdapter{
         packageManager = context.getPackageManager();
         pinRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("pinApp.realm")
-                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
         sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);

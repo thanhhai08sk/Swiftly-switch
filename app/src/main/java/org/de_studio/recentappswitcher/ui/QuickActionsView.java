@@ -34,6 +34,7 @@ public class QuickActionsView extends View {
     RealmList<Slot> actions;
     Bitmap[] bitmaps;
     RectF[] rectFs;
+    RectF rectF;
     Path path;
     int iconSize;
     int[] sweepAngles;
@@ -65,6 +66,7 @@ public class QuickActionsView extends View {
         arcSize = ARC_SIZE_DP * mScale;
         path = new Path();
         rectFs = new RectF[getSize()];
+        rectF = new RectF();
         bitmaps = new Bitmap[getSize()];
 
         sweepAngles = new int[getSize()];
@@ -142,7 +144,9 @@ public class QuickActionsView extends View {
 
         if (visibleItem != -1 && bitmaps[visibleItem] != null) {
             path.reset();
-            path.addArc(0, 0, canvasWidth, canvasHeight, startAngle[visibleItem], sweepAngles[visibleItem]);
+//            path.addArc(0, 0, canvasWidth, canvasHeight, startAngle[visibleItem], sweepAngles[visibleItem]);
+            rectF.set(0, 0, canvasWidth, canvasHeight);
+            path.addArc(rectF, startAngle[visibleItem], sweepAngles[visibleItem]);
             canvas.drawPath(path, backgroundPaint);
         }
 
@@ -158,11 +162,13 @@ public class QuickActionsView extends View {
     }
 
     private void drawIconBitmap(Canvas canvas, int centerX, int centerY, int i) {
-        double iconAngle;
-        iconAngle = Math.toRadians(startAngle[i] + sweepAngles[i] * 0.5);
-        setIconRectF(centerX, centerY, centerX, iconAngle, i);
+        if (bitmaps[i] != null) {
+            double iconAngle;
+            iconAngle = Math.toRadians(startAngle[i] + sweepAngles[i] * 0.5);
+            setIconRectF(centerX, centerY, centerX, iconAngle, i);
 //        canvas.drawBitmap(bitmaps[i], null, rectFs[i], backgroundPaint);
-        canvas.drawBitmap(bitmaps[i], rectFs[i].left,rectFs[i].top,iconPaint);
+            canvas.drawBitmap(bitmaps[i], rectFs[i].left,rectFs[i].top,iconPaint);
+        }
     }
 
     private void setIconRectF(int centerX, int centerY, float radius, double iconAngular,int iconPosition) {

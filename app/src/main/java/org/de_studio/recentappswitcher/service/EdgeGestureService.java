@@ -75,6 +75,7 @@ import io.realm.RealmResults;
  * Created by hai on 12/15/2015.
  */
 public class EdgeGestureService extends Service {
+    public static final int CURRENT_SCHEMA_VERSION = 6;
 
     public static final Comparator<Long> DATE_DECENDING_COMPARATOR = new Comparator<Long>() {
         @Override

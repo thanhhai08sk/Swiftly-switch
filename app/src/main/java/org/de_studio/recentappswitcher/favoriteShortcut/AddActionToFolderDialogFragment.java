@@ -21,11 +21,11 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.MyApplication;
 import org.de_studio.recentappswitcher.MyRealmMigration;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -52,7 +52,7 @@ public class AddActionToFolderDialogFragment extends DialogFragment {
         stringArray = getActivity().getResources().getStringArray(R.array.setting_shortcut_array);
         myRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
-                .schemaVersion(EdgeGestureService.CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
         mAdapter = new AddActionToFolderAdapter(getActivity(), myRealm, mPosition);

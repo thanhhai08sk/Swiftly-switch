@@ -2846,7 +2846,7 @@ public  class Utility {
 
 
 
-    public static void setIconResourceIdsForShortcutsSet(Context context, Item item) {
+    public static void setItemBitmapForShortcutsSet(Context context, Item item) {
         if (context != null) {
             String itemId = item.itemId;
             if (itemId.contains(Collection.TYPE_GRID_FAVORITE)) {
@@ -2862,15 +2862,21 @@ public  class Utility {
     public static byte[] getBitmapByteArrayFromResId(Context context, int resId) {
         Bitmap bmp = ((BitmapDrawable) ContextCompat.getDrawable(context, resId)).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        try {
+
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            Log.e(TAG, "getBitmapByteArrayFromResId: ");
+        }
         byte[] byteArray = stream.toByteArray();
-        bmp.recycle();
         try {
             stream.close();
         } catch (IOException e) {
             Log.e(TAG, "getBitmapByteArrayFromResId: IOException");
             e.printStackTrace();
         }
+        bmp.recycle();
         return byteArray;
     }
 
