@@ -1,7 +1,7 @@
 package org.de_studio.recentappswitcher;
 
-import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.dadaSetup.MyNewRealmMigration;
@@ -12,7 +12,7 @@ import io.realm.RealmConfiguration;
 /**
  * Created by hai on 3/24/2016.
  */
-public class MyApplication extends Application {
+public class MyApplication extends MultiDexApplication {
     private static final String TAG = MyApplication.class.getSimpleName();
     private static Context mContext;
     @Override

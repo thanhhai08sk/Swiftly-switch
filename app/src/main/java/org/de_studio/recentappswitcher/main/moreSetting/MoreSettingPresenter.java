@@ -3,12 +3,19 @@ package org.de_studio.recentappswitcher.main.moreSetting;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.drive.DriveFile;
+import com.google.android.gms.drive.DriveId;
+
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.PresenterView;
 
+import io.realm.Realm;
+import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Func2;
 import rx.subjects.PublishSubject;
 
 /**
@@ -22,6 +29,7 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
     PublishSubject<Integer> iconSizeSJ = PublishSubject.create();
     PublishSubject<Integer> animationDurationSJ = PublishSubject.create();
     PublishSubject<Integer> vibrationDurationSJ = PublishSubject.create();
+    Realm realm = Realm.getDefaultInstance();
 
 
     public MoreSettingPresenter(BaseModel model, SharedPreferences sharedPreferences) {
@@ -30,7 +38,7 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
     }
 
     @Override
-    public void onViewAttach(View view) {
+    public void onViewAttach(final View view) {
         super.onViewAttach(view);
         view.updateViews();
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -66,6 +74,97 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
                     @Override
                     public void call(Integer integer) {
                         onSetVibrationDuration(integer);
+                    }
+                })
+        );
+
+
+        addSubscription(
+                view.onBackupOrRestoreSJ().subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        switch (integer) {
+                            case MoreSettingView.REQUEST_BACKUP:
+                                view.showBackupGuideDialog();
+                                break;
+                            case MoreSettingView.REQUEST_RESTORE:
+                                view.showImportGuideDialog();
+                                break;
+                        }
+                    }
+                })
+        );
+
+        addSubscription(
+                view.onFinishReadingGuide().subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        view.connectClient();
+                        view.showConnectingDialog();
+                    }
+                })
+        );
+
+        addSubscription(
+                Observable.combineLatest(view.onGoogleApiClientConnected(), view.onBackupOrRestoreSJ(), new Func2<Void, Integer, Integer>() {
+                    @Override
+                    public Integer call(Void aVoid, Integer integer) {
+                        return integer;
+                    }
+                }).subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        view.hideConnectingDialog();
+                        switch (integer) {
+                            case MoreSettingView.REQUEST_BACKUP:
+                                view.openFolderPicker();
+                                break;
+                            case MoreSettingView.REQUEST_RESTORE:
+                                view.openFilePicker();
+                                break;
+                        }
+                    }
+                })
+        );
+
+        addSubscription(
+                view.onPickFolderSuccess().subscribe(new Action1<DriveId>() {
+                    @Override
+                    public void call(DriveId driveId) {
+//                        view.showUploadingDialog();
+                        view.uploadToDrive(realm, driveId);
+                    }
+                })
+        );
+
+        addSubscription(
+                view.onPickFileToRestoreSuccess().subscribe(new Action1<DriveFile>() {
+                    @Override
+                    public void call(DriveFile driveFile) {
+                        view.showDownloadingDialog();
+                        view.downloadFromDrive(realm, driveFile);
+                    }
+                })
+        );
+
+
+        addSubscription(
+                view.onSomethingWrong().subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        switch (integer) {
+                            case MoreSettingView.REQUEST_BACKUP:
+                                view.showErrorDialog();
+                        }
+                    }
+                })
+        );
+
+        addSubscription(
+                view.onBackupSuccessful().subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        view.showSuccessDialog();
                     }
                 })
         );
@@ -175,14 +274,6 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
         view.resetService();
     }
 
-    public void onImportSetting() {
-
-    }
-
-    public void onBackup() {
-
-
-    }
 
     public void onResetSettings() {
 
@@ -198,10 +289,11 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
     public void onViewDetach() {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         sharedPreferences = null;
+        realm.close();
         super.onViewDetach();
     }
 
-    public interface View extends PresenterView {
+    public interface View extends PresenterView, GoogleApiClient.ConnectionCallbacks {
         void resetService();
 
         void updateViews();
@@ -223,5 +315,53 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
         void animationDurationDialog(PublishSubject<Integer> subject);
 
         void vibrationDurationDialog(PublishSubject<Integer> subject);
+
+        void openFolderPicker();
+
+        void openFilePicker();
+
+        void connectClient();
+
+        void disconnectClient();
+
+        PublishSubject<Void> onFinishReadingGuide();
+
+        PublishSubject<Void> onGoogleApiClientConnected();
+
+        PublishSubject<Integer> onBackupOrRestoreSJ();
+
+        PublishSubject<DriveId> onPickFolderSuccess();
+
+        PublishSubject<DriveFile> onPickFileToRestoreSuccess();
+
+        PublishSubject<Integer> onSomethingWrong();
+
+        PublishSubject<Void> onBackupSuccessful();
+
+
+        void showBackupGuideDialog();
+
+        void showImportGuideDialog();
+
+        void showConnectingDialog();
+
+        void hideConnectingDialog();
+
+        void showDownloadingDialog();
+
+        void showErrorDialog();
+
+        void showSuccessDialog();
+
+        void hideDownloadingDialog();
+
+        void showUploadingDialog();
+
+        void hideUploadingDialog();
+
+        void uploadToDrive(final Realm realm, DriveId mFolderDriveId);
+
+        void downloadFromDrive(final Realm realm, DriveFile file);
+
     }
 }

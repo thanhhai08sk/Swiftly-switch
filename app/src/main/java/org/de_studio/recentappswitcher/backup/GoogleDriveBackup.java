@@ -2,7 +2,6 @@ package org.de_studio.recentappswitcher.backup;
 
 import android.app.Activity;
 import android.content.IntentSender;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -27,25 +26,13 @@ public class GoogleDriveBackup implements GoogleApiClient.OnConnectionFailedList
     private WeakReference<Activity> activityRef;
 
 
-    public void init(@NonNull final Activity activity) {
+    public void init(@NonNull final Activity activity, GoogleApiClient.ConnectionCallbacks callbacks) {
         this.activityRef = new WeakReference<>(activity);
 
         googleApiClient = new GoogleApiClient.Builder(activity)
                 .addApi(Drive.API)
                 .addScope(Drive.SCOPE_FILE)
-                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                    @Override
-                    public void onConnected(Bundle bundle) {
-                        // Do nothing
-                        Log.e(TAG, "onConnected: ");
-                    }
-
-                    @Override
-                    public void onConnectionSuspended(int i) {
-                        Log.e(TAG, "onConnectionSuspended: ");
-
-                    }
-                })
+                .addConnectionCallbacks(callbacks)
                 .addOnConnectionFailedListener(this)
                 .build();
 

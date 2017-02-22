@@ -288,5 +288,12 @@
     <string name="backup">Backup</string>
     <string name="reset_to_default">Reset to defaults</string>
     <string name="backup_fail">Backup fail</string>
-
+    <string name="something_wrong_happen">Something wrong happens, please try again later!</string>
+    <string name="backup_successful">Backup successfully</string>
+    <string name="please_wait">Please wait</string>
+    <string name="connecting">Connecting</string>
+    <string name="downloading">Downloading</string>
+    <string name="uploading">Uploading</string>
+    <string name="backup_guide">The backup file will be stored in your Google Drive. Please connect to your Google account and then choose the folder to upload.</string>
+    <string name="import_guide">Choose the backup file from Google Drive.</string>
 </resources>

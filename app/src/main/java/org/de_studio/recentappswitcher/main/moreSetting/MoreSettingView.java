@@ -1,6 +1,9 @@
 package org.de_studio.recentappswitcher.main.moreSetting;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -9,22 +12,27 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveApi;
+import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.drive.OpenFileActivityBuilder;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -36,12 +44,22 @@ import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerMoreSettingComponent;
 import org.de_studio.recentappswitcher.dagger.MoreSettingModule;
+import org.de_studio.recentappswitcher.main.MainView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.realm.Realm;
 import rx.subjects.PublishSubject;
 
 /**
@@ -52,6 +70,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     private static final String TAG = MoreSettingView.class.getSimpleName();
     private int REQUEST_CODE_PICKER = 2;
     private int REQUEST_CODE_SELECT = 3;
+    public static final int REQUEST_BACKUP = 11;
+    public static final int REQUEST_RESTORE = 12;
     
     @BindView(R.id.disable_clock_switch)
     SwitchCompat disableClockSwitch;
@@ -85,6 +105,18 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     GoogleApiClient mGoogleApiClient;
     private IntentSender intentPicker;
 
+    PublishSubject<Void> googleClientConnectedSJ = PublishSubject.create();
+    PublishSubject<Integer> backupOrRestoreRequestSJ = PublishSubject.create();
+    PublishSubject<Integer> somethingWrongSJ = PublishSubject.create();
+    PublishSubject<DriveId> pickupFolderSuccessSJ = PublishSubject.create();
+    PublishSubject<DriveFile> pickupFileSuccessSJ = PublishSubject.create();
+    PublishSubject<Void> backupSuccessful = PublishSubject.create();
+    PublishSubject<Void> finishReadingGuideSJ = PublishSubject.create();
+
+    MaterialDialog connectingDialog;
+    MaterialDialog downloadingDialog;
+    MaterialDialog uploadingDialog;
+
 
 
     @Inject
@@ -96,9 +128,6 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        backup = new GoogleDriveBackup();
-        backup.init(this);
-        connectClient();
 
     }
 
@@ -122,8 +151,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                     //Get the folder drive id
                     DriveId mFolderDriveId = data.getParcelableExtra(
                             OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
-
-//                    uploadToDrive(mFolderDriveId);
+                    pickupFolderSuccessSJ.onNext(mFolderDriveId);
                 }
                 break;
 
@@ -135,7 +163,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                             OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
 
                     DriveFile file = driveId.asDriveFile();
-//                    downloadFromDrive(file);
+                    pickupFileSuccessSJ.onNext(file);
 
                 } else {
                     showErrorDialog();
@@ -144,6 +172,54 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                 break;
 
         }
+    }
+
+
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        mGoogleApiClient = backup.getClient();
+        googleClientConnectedSJ.onNext(null);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public PublishSubject<Void> onGoogleApiClientConnected() {
+        return googleClientConnectedSJ;
+    }
+
+    @Override
+    public PublishSubject<Void> onFinishReadingGuide() {
+        return finishReadingGuideSJ;
+    }
+
+    @Override
+    public PublishSubject<Integer> onBackupOrRestoreSJ() {
+        return backupOrRestoreRequestSJ;
+    }
+
+    @Override
+    public PublishSubject<DriveId> onPickFolderSuccess() {
+        return pickupFolderSuccessSJ;
+    }
+
+    @Override
+    public PublishSubject<DriveFile> onPickFileToRestoreSuccess() {
+        return pickupFileSuccessSJ;
+    }
+
+    @Override
+    public PublishSubject<Integer> onSomethingWrong() {
+        return somethingWrongSJ;
+    }
+
+    @Override
+    public PublishSubject<Void> onBackupSuccessful() {
+        return backupSuccessful;
     }
 
     @Override
@@ -353,11 +429,11 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     @Override
     public void vibrationDurationDialog(PublishSubject<Integer> subject) {
         Utility.showDialogWithSeekBar(
-                Cons.HOLD_TIME_MIN,
-                Cons.HOLD_TIME_MAX,
-                sharedPreferences.getInt(Cons.HOLD_TIME_KEY, Cons.HOLD_TIME_DEFAULT),
+                Cons.VIBRATION_TIME_MIN,
+                Cons.VIBRATION_TIME_MAX,
+                sharedPreferences.getInt(Cons.VIBRATION_DURATION_KEY, Cons.VIBRATION_TIME_DEFAULT),
                 "ms",
-                getString(R.string.main_hold_time),
+                getString(R.string.main_vibration_duration),
                 subject, this
         );
     }
@@ -388,6 +464,9 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     @Override
     public void clear() {
         sharedPreferences = null;
+        connectingDialog = null;
+        downloadingDialog = null;
+        uploadingDialog = null;
     }
 
     @OnClick(R.id.disable_clock)
@@ -395,9 +474,6 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         presenter.onDisableClock();
     }
 
-//    @OnClick(R.id.avoid_keyboard)
-//    void onAvoidKeyboardClick(){
-//        presenter.onAvoidKeyboard();
 //    }
 
     @OnClick(R.id.disable_in_landscape)
@@ -462,15 +538,12 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @OnClick(R.id.import_settings)
     void onImportSettingClick(){
-        presenter.onImportSetting();
+        backupOrRestoreRequestSJ.onNext(REQUEST_RESTORE);
     }
 
     @OnClick(R.id.backup)
     void onBackupClick(){
-        presenter.onBackup();
-        mGoogleApiClient = backup.getClient();
-        openFolderPicker();
-
+        backupOrRestoreRequestSJ.onNext(REQUEST_BACKUP);
     }
 
     @OnClick(R.id.reset_to_default)
@@ -479,6 +552,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     }
 
     public void connectClient() {
+        backup = new GoogleDriveBackup();
+        backup.init(this,this);
         backup.start();
     }
 
@@ -486,7 +561,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         backup.stop();
     }
 
-    private void openFolderPicker() {
+    public void openFolderPicker() {
         Log.e(TAG, "openFolderPicker: ");
         try {
             if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
@@ -503,14 +578,246 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
             showErrorDialog();
         }
     }
-
     private IntentSender buildIntent() {
         return Drive.DriveApi
                 .newOpenFileActivityBuilder()
                 .setMimeType(new String[]{DriveFolder.MIME_TYPE})
                 .build(mGoogleApiClient);
     }
-    private void showErrorDialog() {
-        Toast.makeText(getApplicationContext(), R.string.backup_fail, Toast.LENGTH_SHORT).show();
+    public void showErrorDialog() {
+        new MaterialDialog.Builder(this)
+                .content(R.string.something_wrong_happen)
+                .positiveText(R.string.app_tab_fragment_ok_button)
+                .show();
+    }
+
+    public void showSuccessDialog() {
+        new MaterialDialog.Builder(this)
+                .content(R.string.backup_successful)
+                .positiveText(R.string.app_tab_fragment_ok_button)
+                .show();
+    }
+
+
+
+    public void showLoadingDialog(int titleRes) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setView(R.layout.loading_dialog);
+//        builder.show();
+        new MaterialDialog.Builder(this)
+                .title(titleRes)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .show();
+    }
+
+    @Override
+    public void showBackupGuideDialog() {
+        new MaterialDialog.Builder(this)
+                .content(R.string.backup_guide)
+                .positiveText(R.string.app_tab_fragment_ok_button)
+                .dismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        finishReadingGuideSJ.onNext(null);
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    public void showImportGuideDialog() {
+        new MaterialDialog.Builder(this)
+                .content(R.string.import_guide)
+                .positiveText(R.string.app_tab_fragment_ok_button)
+                .dismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        finishReadingGuideSJ.onNext(null);
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    public void showConnectingDialog() {
+        connectingDialog = new  MaterialDialog.Builder(this)
+                .title(R.string.connecting)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .show();
+    }
+
+    @Override
+    public void hideConnectingDialog() {
+        connectingDialog.dismiss();
+    }
+
+    @Override
+    public void showDownloadingDialog() {
+        downloadingDialog =  new  MaterialDialog.Builder(this)
+                .title(R.string.downloading)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .show();
+    }
+
+    @Override
+    public void hideDownloadingDialog() {
+        downloadingDialog.dismiss();
+    }
+
+    @Override
+    public void showUploadingDialog() {
+        uploadingDialog = new MaterialDialog.Builder(this)
+                .title(R.string.uploading)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .show();
+    }
+
+    @Override
+    public void hideUploadingDialog() {
+        uploadingDialog.dismiss();
+    }
+
+    public void openFilePicker() {
+        //        build an intent that we'll use to start the open file activity
+        IntentSender intentSender = Drive.DriveApi
+                .newOpenFileActivityBuilder()
+//                these mimetypes enable these folders/files types to be selected
+                .setMimeType(new String[]{DriveFolder.MIME_TYPE, "text/plain"})
+                .build(mGoogleApiClient);
+        try {
+            startIntentSenderForResult(
+                    intentSender, REQUEST_CODE_SELECT, null, 0, 0, 0);
+        } catch (IntentSender.SendIntentException e) {
+            Log.e(TAG, "Unable to send intent", e);
+            somethingWrongSJ.onNext(REQUEST_RESTORE);
+        }
+    }
+
+    public void uploadToDrive(final Realm realm, DriveId mFolderDriveId) {
+        if (mFolderDriveId != null) {
+            //Create the file on GDrive
+            final DriveFolder folder = mFolderDriveId.asDriveFolder();
+            Drive.DriveApi.newDriveContents(mGoogleApiClient)
+                    .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
+                        @Override
+                        public void onResult(DriveApi.DriveContentsResult result) {
+                            if (!result.getStatus().isSuccess()) {
+                                Log.e(TAG, "Error while trying to create new file contents");
+                                somethingWrongSJ.onNext(REQUEST_BACKUP);
+                                return;
+                            }
+                            final DriveContents driveContents = result.getDriveContents();
+
+                            // Perform I/O off the UI thread.
+                            new Thread() {
+                                @Override
+                                public void run() {
+                                    // write content to DriveContents
+                                    OutputStream outputStream = driveContents.getOutputStream();
+
+                                    FileInputStream inputStream = null;
+                                    try {
+                                        inputStream = new FileInputStream(new File(realm.getPath()));
+                                    } catch (FileNotFoundException e) {
+                                        somethingWrongSJ.onNext(REQUEST_BACKUP);
+                                        e.printStackTrace();
+                                    }
+
+                                    byte[] buf = new byte[1024];
+                                    int bytesRead;
+                                    try {
+                                        if (inputStream != null) {
+                                            while ((bytesRead = inputStream.read(buf)) > 0) {
+                                                outputStream.write(buf, 0, bytesRead);
+                                            }
+                                        }
+                                    } catch (IOException e) {
+                                        somethingWrongSJ.onNext(REQUEST_BACKUP);
+                                        e.printStackTrace();
+                                    }
+
+
+                                    MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                                            .setTitle(Cons.DEFAULT_REALM_NAME)
+                                            .setMimeType("text/plain")
+                                            .build();
+
+                                    // create a file in selected folder
+                                    folder.createFile(mGoogleApiClient, changeSet, driveContents)
+                                            .setResultCallback(new ResultCallback<DriveFolder.DriveFileResult>() {
+                                                @Override
+                                                public void onResult(DriveFolder.DriveFileResult result) {
+                                                    if (!result.getStatus().isSuccess()) {
+                                                        Log.e(TAG, "Error while trying to create the file");
+                                                        somethingWrongSJ.onNext(REQUEST_BACKUP);
+                                                        return;
+                                                    }
+                                                    backupSuccessful.onNext(null);
+                                                }
+                                            });
+                                }
+                            }.start();
+                        }
+                    });
+        }
+    }
+
+    public void downloadFromDrive(final Realm realm, DriveFile file) {
+        file.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
+                .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
+                    @Override
+                    public void onResult(DriveApi.DriveContentsResult result) {
+                        if (!result.getStatus().isSuccess()) {
+                            somethingWrongSJ.onNext(REQUEST_RESTORE);
+                            return;
+                        }
+
+                        // DriveContents object contains pointers
+                        // to the actual byte stream
+                        DriveContents contents = result.getDriveContents();
+                        InputStream input = contents.getInputStream();
+
+                        try {
+                            File file = new File(realm.getPath());
+                            OutputStream output = new FileOutputStream(file);
+                            try {
+                                try {
+                                    byte[] buffer = new byte[4 * 1024]; // or other buffer size
+                                    int read;
+
+                                    while ((read = input.read(buffer)) != -1) {
+                                        output.write(buffer, 0, read);
+                                    }
+                                    output.flush();
+                                } finally {
+                                    output.close();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } finally {
+                            try {
+                                input.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                        // Reboot app
+                        Intent mStartActivity = new Intent(getApplicationContext(), MainView.class);
+                        int mPendingIntentId = 123456;
+                        PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                        AlarmManager mgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                        System.exit(0);
+                    }
+                });
     }
 }
