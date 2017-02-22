@@ -166,10 +166,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                     DriveFile file = driveId.asDriveFile();
                     pickupFileSuccessSJ.onNext(file);
 
-                } else {
-                    showErrorDialog();
                 }
-                finish();
                 break;
 
         }
@@ -464,6 +461,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @Override
     public void clear() {
+        disconnectClient();
         sharedPreferences = null;
         connectingDialog = null;
         downloadingDialog = null;
@@ -559,7 +557,10 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     }
 
     public void disconnectClient() {
-        backup.stop();
+        if (backup != null) {
+            backup.stop();
+            backup = null;
+        }
     }
 
     public void openFolderPicker() {

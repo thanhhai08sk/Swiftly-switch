@@ -166,6 +166,7 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
                     @Override
                     public void call(Void aVoid) {
                         view.showSuccessDialog();
+                        view.disconnectClient();
                     }
                 })
         );
