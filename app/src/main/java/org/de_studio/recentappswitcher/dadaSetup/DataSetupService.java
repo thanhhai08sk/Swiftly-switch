@@ -49,7 +49,6 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 import static org.de_studio.recentappswitcher.MyApplication.getContext;
-import static org.de_studio.recentappswitcher.service.EdgeGestureService.CURRENT_SCHEMA_VERSION;
 
 
 public class DataSetupService extends IntentService {
@@ -438,17 +437,17 @@ public class DataSetupService extends IntentService {
     private void restoreFromOldRealmOrGenerateInitData(Realm newRealm) {
         Realm gridRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
-                .schemaVersion(CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
         Realm pinRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("pinApp.realm")
-                .schemaVersion(CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
         Realm circleFavoRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("circleFavo.realm")
-                .schemaVersion(CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
         if (!gridRealm.isEmpty()) {

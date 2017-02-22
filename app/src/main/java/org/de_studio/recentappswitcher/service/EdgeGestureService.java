@@ -87,7 +87,6 @@ public class EdgeGestureService extends Service {
         }
     };
     private static final int NOTIFICATION_ID = 111;
-    public static final int CURRENT_SCHEMA_VERSION = 3;
     float mScale;
     static final String TAG = EdgeGestureService.class.getSimpleName();
     static final int EDGE_GESTURE_NOTIFICAION_ID = 10;
@@ -1821,17 +1820,17 @@ public class EdgeGestureService extends Service {
         edge2Position = Utility.getPositionIntFromString(sharedPreferences2.getString(EdgeSetting.EDGE_POSITION_KEY, edgePositionsArray[5]), getApplicationContext());
         pinAppRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("pinApp.realm")
-                .schemaVersion(CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
         circleFavoRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("circleFavo.realm")
-                .schemaVersion(CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
         favoriteRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
-                .schemaVersion(CURRENT_SCHEMA_VERSION)
+                .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
                 .migration(new MyRealmMigration())
                 .build());
 
