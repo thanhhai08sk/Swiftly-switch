@@ -88,8 +88,11 @@ import org.de_studio.recentappswitcher.shortcut.FlashService;
 import org.de_studio.recentappswitcher.shortcut.FlashServiceM;
 import org.de_studio.recentappswitcher.shortcut.LockAdmin;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -102,6 +105,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -3319,6 +3325,97 @@ public  class Utility {
 
             }
         });
+    }
+
+    public static void zip(String[] files, File zipFile) throws IOException {
+        BufferedInputStream origin = null;
+        ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipFile)));
+        try {
+            byte data[] = new byte[1024];
+
+            for (int i = 0; i < files.length; i++) {
+                FileInputStream fi = new FileInputStream(files[i]);
+                origin = new BufferedInputStream(fi, 1024);
+                try {
+                    ZipEntry entry = new ZipEntry(files[i].substring(files[i].lastIndexOf("/") + 1));
+                    out.putNextEntry(entry);
+                    int count;
+                    while ((count = origin.read(data, 0, 1024)) != -1) {
+                        out.write(data, 0, count);
+                    }
+                }
+                finally {
+                    origin.close();
+                }
+            }
+        }
+        finally {
+            out.close();
+        }
+    }
+
+    public static void unzip(String zipFile, String realmLocation,String sharedPreferenceLocation) throws IOException {
+        int size;
+        byte[] buffer = new byte[1024];
+
+        try {
+            if ( !realmLocation.endsWith("/") ) {
+                realmLocation += "/";
+            }
+            File f = new File(realmLocation);
+            if(!f.isDirectory()) {
+                f.mkdirs();
+            }
+            ZipInputStream zin = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFile), 1024));
+            try {
+                ZipEntry ze = null;
+                while ((ze = zin.getNextEntry()) != null) {
+                    String path;
+                    if (ze.getName().contains("realm")) {
+                        path = realmLocation + ze.getName();
+                    } else {
+                        path = sharedPreferenceLocation + ze.getName();
+                    }
+                    File unzipFile = new File(path);
+
+
+                    if (ze.isDirectory()) {
+                        if(!unzipFile.isDirectory()) {
+                            unzipFile.mkdirs();
+                        }
+                    } else {
+                        // check for and create parent directories if they don't exist
+                        File parentDir = unzipFile.getParentFile();
+                        if ( null != parentDir ) {
+                            if ( !parentDir.isDirectory() ) {
+                                parentDir.mkdirs();
+                            }
+                        }
+
+                        // unzip the file
+                        FileOutputStream out = new FileOutputStream(unzipFile, false);
+                        BufferedOutputStream fout = new BufferedOutputStream(out, 1024);
+                        try {
+                            while ( (size = zin.read(buffer, 0, 1024)) != -1 ) {
+                                fout.write(buffer, 0, size);
+                            }
+
+                            zin.closeEntry();
+                        }
+                        finally {
+                            fout.flush();
+                            fout.close();
+                        }
+                    }
+                }
+            }
+            finally {
+                zin.close();
+            }
+        }
+        catch (Exception e) {
+            Log.e(TAG, "Unzip exception", e);
+        }
     }
 
 }

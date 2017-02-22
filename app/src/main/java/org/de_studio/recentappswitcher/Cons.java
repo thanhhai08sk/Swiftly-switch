@@ -297,6 +297,8 @@ public class Cons {
     public static final int ITEM_TYPE_ICON_LABEL = 0;
     public static final int ITEM_TYPE_ICON_ONLY = 1;
 
+    public static final String SHARED_PREFERENCE_FOLDER_NAME = "shared_prefs";
+
 
 
 

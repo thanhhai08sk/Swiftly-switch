@@ -767,6 +767,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     }
 
     public void downloadFromDrive(final Realm realm, DriveFile file) {
+        getApplicationInfo().dataDir
         file.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
                 .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
                     @Override

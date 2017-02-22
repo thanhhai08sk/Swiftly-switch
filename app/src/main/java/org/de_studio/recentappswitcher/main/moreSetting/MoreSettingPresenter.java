@@ -35,6 +35,7 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
     public MoreSettingPresenter(BaseModel model, SharedPreferences sharedPreferences) {
         super(model);
         this.sharedPreferences = sharedPreferences;
+
     }
 
     @Override
