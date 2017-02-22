@@ -298,6 +298,7 @@ public class Cons {
     public static final int ITEM_TYPE_ICON_ONLY = 1;
 
     public static final String SHARED_PREFERENCE_FOLDER_NAME = "shared_prefs";
+    public static final String BACKUP_FILE_NAME = "backup.swiftly_switch";
 
 
 

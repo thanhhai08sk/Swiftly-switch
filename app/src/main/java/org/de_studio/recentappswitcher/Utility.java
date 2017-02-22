@@ -3334,6 +3334,7 @@ public  class Utility {
             byte data[] = new byte[1024];
 
             for (int i = 0; i < files.length; i++) {
+                Log.e(TAG, "zip: file = " + files[i]);
                 FileInputStream fi = new FileInputStream(files[i]);
                 origin = new BufferedInputStream(fi, 1024);
                 try {
@@ -3362,19 +3363,30 @@ public  class Utility {
             if ( !realmLocation.endsWith("/") ) {
                 realmLocation += "/";
             }
-            File f = new File(realmLocation);
-            if(!f.isDirectory()) {
-                f.mkdirs();
+            File realmFile = new File(realmLocation);
+            if(!realmFile.isDirectory()) {
+                realmFile.mkdirs();
             }
+
+            if ( !sharedPreferenceLocation.endsWith("/") ) {
+                sharedPreferenceLocation += "/";
+            }
+            File sharedFile = new File(sharedPreferenceLocation);
+            if(!sharedFile.isDirectory()) {
+                sharedFile.mkdirs();
+            }
+
             ZipInputStream zin = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFile), 1024));
             try {
                 ZipEntry ze = null;
                 while ((ze = zin.getNextEntry()) != null) {
-                    String path;
-                    if (ze.getName().contains("realm")) {
+                    String path = null;
+                    if (ze.getName().equals(Cons.DEFAULT_REALM_NAME)) {
                         path = realmLocation + ze.getName();
-                    } else {
+                    } else if (ze.getName().equals(Cons.SHARED_PREFERENCE_NAME +".xml")) {
                         path = sharedPreferenceLocation + ze.getName();
+                    } else {
+                        Log.e(TAG, "unzip: ZipEntry name = " + ze.getName());
                     }
                     File unzipFile = new File(path);
 

@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -712,6 +713,31 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                             }
                             final DriveContents driveContents = result.getDriveContents();
 
+                            String sharedFile = Environment.getDataDirectory().getAbsolutePath() + "/data/" + getPackageName() + "/" + Cons.SHARED_PREFERENCE_FOLDER_NAME + "/" + Cons.SHARED_PREFERENCE_NAME+".xml";
+
+                            File file = new File(sharedFile);
+                            if (!file.exists()) {
+                                Log.e(TAG, "onResult: file not exist " + sharedFile +
+                                "\nrealm file = " + realm.getPath());
+                                File file1 = new File("/data/data/org.de_studio.recentappswitcher.fastbuild/shared_prefs/");
+                                for (File file2 : file1.listFiles()) {
+                                    Log.e(TAG, "onResult: file = " + file2.getAbsolutePath());
+
+                                }
+                                return;
+                            }
+                            String realmFile = realm.getPath();
+                            final File zipFile = new File(getApplicationInfo().dataDir + "/" + Cons.BACKUP_FILE_NAME);
+                            try {
+                                Utility.zip(new String[]{sharedFile, realmFile}, zipFile);
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                Log.e(TAG, "onResult: IOException when zip");
+                                somethingWrongSJ.onNext(REQUEST_BACKUP);
+                                return;
+                            }
+
                             // Perform I/O off the UI thread.
                             new Thread() {
                                 @Override
@@ -721,9 +747,10 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
                                     FileInputStream inputStream = null;
                                     try {
-                                        inputStream = new FileInputStream(new File(realm.getPath()));
+                                        inputStream = new FileInputStream(zipFile);
                                     } catch (FileNotFoundException e) {
                                         somethingWrongSJ.onNext(REQUEST_BACKUP);
+                                        Log.e(TAG, "run: file not found");
                                         e.printStackTrace();
                                     }
 
@@ -742,7 +769,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
 
                                     MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                                            .setTitle(Cons.DEFAULT_REALM_NAME)
+                                            .setTitle(Cons.BACKUP_FILE_NAME)
                                             .setMimeType("text/plain")
                                             .build();
 
@@ -767,7 +794,6 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     }
 
     public void downloadFromDrive(final Realm realm, DriveFile file) {
-        getApplicationInfo().dataDir
         file.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
                 .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
                     @Override
@@ -783,8 +809,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                         InputStream input = contents.getInputStream();
 
                         try {
-                            File file = new File(realm.getPath());
-                            OutputStream output = new FileOutputStream(file);
+                            File zipFile = new File(getApplicationInfo().dataDir + "/" + Cons.BACKUP_FILE_NAME);
+                            OutputStream output = new FileOutputStream(zipFile);
                             try {
                                 try {
                                     byte[] buffer = new byte[4 * 1024]; // or other buffer size
@@ -797,6 +823,9 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                                 } finally {
                                     output.close();
                                 }
+
+                                Utility.unzip(zipFile.getAbsolutePath(),getFilesDir().getAbsolutePath(),
+                                        Environment.getDataDirectory().getAbsolutePath() + "/data/" + getPackageName() + "/" + Cons.SHARED_PREFERENCE_FOLDER_NAME + "/");
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
