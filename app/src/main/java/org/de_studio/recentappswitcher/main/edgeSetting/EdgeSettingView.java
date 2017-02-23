@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
@@ -132,34 +131,17 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
 
     @Override
     public void chooseMode(int currentMode, final PublishSubject<Integer> setModeSubject) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        CharSequence[] modes = new CharSequence[]{getString(R.string.edge_mode__recent_and_quick_actions)
-                , getString(R.string.edge_mode__circle_favorite_and_quick_actions)
-                , getString(R.string.edge_mode__grid_favorite)};
-        final int[] modeValues = new int[]{Edge.MODE_RECENT_AND_QUICK_ACTION
-                , Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION
-                , Edge.MODE_GRID};
-        int currentChoice = 0;
-        for (int i = 0; i < modeValues.length; i++) {
-            if (currentMode == modeValues[i]) {
-                currentChoice = i;
-            }
-        }
 
-        builder.setTitle(R.string.edge_dialog_set_mode_text)
-                .setSingleChoiceItems(modes, currentChoice, new DialogInterface.OnClickListener() {
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.edge_dialog_set_mode_text)
+                .items(R.array.edge_modes)
+                .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setModeSubject.onNext(modeValues[which]);
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        setModeSubject.onNext(which);
                     }
                 })
-                .setPositiveButton(R.string.app_tab_fragment_ok_button, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.create().show();
+                .show();
     }
 
     @Override

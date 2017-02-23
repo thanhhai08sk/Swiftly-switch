@@ -122,4 +122,10 @@
 
     </string-array>
 
+    <string-array name="edge_modes">
+        <item>@string/edge_mode__recent_and_quick_actions</item>
+        <item>@string/edge_mode__circle_favorite_and_quick_actions</item>
+        <item>@string/edge_mode__grid_favorite</item>
+    </string-array>
+
 </resources>
