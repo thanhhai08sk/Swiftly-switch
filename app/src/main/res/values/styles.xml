@@ -66,14 +66,33 @@
         <item name="android:textAppearance">@style/TextAppearance_Body1_Secondary_Dark</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
-
     </style>
 
+    <style name="GeneralTextPrimary" parent="Main_text_primary">
+        <item name="android:paddingStart">0dp</item>
+    </style>
+    <style name="GeneralTextSecondary" parent="Main_text_secondary">
+        <item name="android:paddingStart">0dp</item>
+    </style>
+    <style name="ItemLinearLayout">
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
     <style name="Text_Header">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
+    </style>
+
+    <style name="GeneralTabIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:tint">@color/colorAccent</item>
+
     </style>
 
     <style name="Drawer_Icon">

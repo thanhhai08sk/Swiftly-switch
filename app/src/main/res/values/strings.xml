@@ -221,7 +221,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="recent_apps_description">Click to set size, pinned shortcuts and the behavior of recent section</string>
-    <string name="quick_actions_description">Quick Actions are placed outside of recent apps semi-circle, click to choose the items set for the Quick Actions section</string>
+    <string name="quick_actions_description">Quick Actions are placed outside of recent apps semi-circle, click to customize it</string>
     <string name="grid_favorites">Grid Favorites</string>
     <string name="grid_favorites_description">"Place a large set of your favorite shortcuts here. Click to set size, content and position"</string>
     <string name="circle_favorites">Circle favorites</string>

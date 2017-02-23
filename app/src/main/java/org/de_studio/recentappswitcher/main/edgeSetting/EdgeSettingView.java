@@ -46,12 +46,20 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
     TextView currentModeText;
     @BindView(R.id.recent_set)
     View recent;
+    @BindView(R.id.recent_set_separator)
+    View recentSeparator;
     @BindView(R.id.quick_actions_set)
     View quickAction;
+    @BindView(R.id.quick_actions_set_separator)
+    View quickActionSeparator;
     @BindView(R.id.circle_favorite_set)
     View circleFavorite;
+    @BindView(R.id.circle_favorite_set_separator)
+    View circleFavoriteSeparator;
     @BindView(R.id.grid_favorite_set)
     View gridFavorite;
+    @BindView(R.id.grid_favorite_set_separator)
+    View gridFavoriteSeparator;
     @BindView(R.id.recent_set_description)
     TextView recentSetDescription;
     @BindView(R.id.quick_actions_set_description)
@@ -226,23 +234,35 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
             case Edge.MODE_RECENT_AND_QUICK_ACTION:
                 currentMode = getString(R.string.edge_mode__recent_and_quick_actions);
                 recent.setVisibility(View.VISIBLE);
+                recentSeparator.setVisibility(View.VISIBLE);
                 quickAction.setVisibility(View.VISIBLE);
+                quickActionSeparator.setVisibility(View.VISIBLE);
                 circleFavorite.setVisibility(View.GONE);
+                circleFavoriteSeparator.setVisibility(View.GONE);
                 gridFavorite.setVisibility(View.GONE);
+                gridFavoriteSeparator.setVisibility(View.GONE);
                 break;
             case Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION:
                 currentMode = getString(R.string.edge_mode__circle_favorite_and_quick_actions);
                 recent.setVisibility(View.GONE);
+                recentSeparator.setVisibility(View.GONE);
                 quickAction.setVisibility(View.VISIBLE);
+                quickActionSeparator.setVisibility(View.VISIBLE);
                 circleFavorite.setVisibility(View.VISIBLE);
+                circleFavoriteSeparator.setVisibility(View.VISIBLE);
                 gridFavorite.setVisibility(View.GONE);
+                gridFavoriteSeparator.setVisibility(View.GONE);
                 break;
             case Edge.MODE_GRID:
                 currentMode = getString(R.string.edge_mode__grid_favorite);
                 recent.setVisibility(View.GONE);
+                recentSeparator.setVisibility(View.GONE);
                 quickAction.setVisibility(View.GONE);
+                quickActionSeparator.setVisibility(View.GONE);
                 circleFavorite.setVisibility(View.GONE);
+                circleFavoriteSeparator.setVisibility(View.GONE);
                 gridFavorite.setVisibility(View.VISIBLE);
+                gridFavoriteSeparator.setVisibility(View.VISIBLE);
                 break;
         }
         currentModeText.setText(currentMode);

@@ -14,9 +14,10 @@
         <LinearLayout
             android:id="@+id/enable_layout"
             android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
+            style="@style/ItemLinearLayout"
             >
             <TextView
                 android:layout_width="0dp"
@@ -46,8 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
+            style="@style/ItemLinearLayout"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -73,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="20dp"
+            style="@style/ItemLinearLayout"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -88,18 +88,19 @@
                 android:layout_height="wrap_content"
                 tools:text="Recent 1"
                 style="@style/Main_text_secondary"
-                android:paddingBottom="20dp"
                 />
 
-            <include layout="@layout/separator" />
-        </LinearLayout>
 
+        </LinearLayout>
+        <include
+            android:id="@+id/recent_set_separator"
+            layout="@layout/separator" />
         <LinearLayout
             android:id="@+id/circle_favorite_set"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="20dp"
+            style="@style/ItemLinearLayout"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -114,11 +115,12 @@
                 android:layout_height="wrap_content"
                 tools:text="Circle Favorite 1"
                 style="@style/Main_text_secondary"
-                android:paddingBottom="20dp"
                 />
 
-            <include layout="@layout/separator" />
         </LinearLayout>
+        <include
+            android:id="@+id/circle_favorite_set_separator"
+            layout="@layout/separator" />
 
 
         <LinearLayout
@@ -126,7 +128,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="20dp"
+            style="@style/ItemLinearLayout"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -141,11 +143,12 @@
                 android:layout_height="wrap_content"
                 tools:text="Quick Actions 1"
                 style="@style/Main_text_secondary"
-                android:paddingBottom="20dp"
                 />
 
-            <include layout="@layout/separator" />
         </LinearLayout>
+        <include
+            android:id="@+id/quick_actions_set_separator"
+            layout="@layout/separator" />
 
 
         <LinearLayout
@@ -153,7 +156,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="20dp"
+            style="@style/ItemLinearLayout"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -168,20 +171,21 @@
                 android:layout_height="wrap_content"
                 tools:text="Grid Favorite 1"
                 style="@style/Main_text_secondary"
-                android:paddingBottom="20dp"
 
                 />
 
-            <include layout="@layout/separator" />
 
         </LinearLayout>
+        <include
+            android:id="@+id/grid_favorite_set_separator"
+            layout="@layout/separator" />
 
         <LinearLayout
             android:id="@+id/trigger_zone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="16dp"
+            style="@style/ItemLinearLayout"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -195,11 +199,10 @@
                 android:layout_height="wrap_content"
                 android:text="@string/trigger_zone_setting_description"
                 style="@style/Main_text_secondary"
-                android:paddingBottom="20dp"
                 />
 
-            <include layout="@layout/separator" />
         </LinearLayout>
+        <include layout="@layout/separator" />
 
         <LinearLayout
             android:id="@+id/avoid_keyboard"
@@ -207,8 +210,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
+            style="@style/ItemLinearLayout"
             >
             <LinearLayout
                 android:layout_width="0dp"
@@ -252,8 +254,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
+            style="@style/ItemLinearLayout"
             >
 
             <LinearLayout
@@ -297,8 +298,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
+            style="@style/ItemLinearLayout"
             >
             <TextView
                 android:layout_width="wrap_content"
