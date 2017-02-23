@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.base.collectionSetting;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.v7.app.AlertDialog;
@@ -13,6 +14,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
+import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
@@ -190,22 +195,53 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
     }
 
     public void showChooseBetweenSetFolderAndSetItems(final int slotIndex) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder
-                .setItems(new CharSequence[]{getString(R.string.app_shortcut_contact), getString(R.string.setting_shortcut_folder)}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                presenter.setItems(slotIndex);
-                                break;
-                            case 1:
-                                presenter.setFolder(slotIndex);
-                                break;
-                        }
-                    }
-                });
-        builder.create().show();
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder
+//                .setItems(new CharSequence[]{getString(R.string.app_shortcut_contact), getString(R.string.setting_shortcut_folder)}, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        switch (which) {
+//                            case 0:
+//                                presenter.setItems(slotIndex);
+//                                break;
+//                            case 1:
+//                                presenter.setFolder(slotIndex);
+//                                break;
+//                        }
+//                    }
+//                });
+//        builder.create().show();
+
+        final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
+            @Override
+            public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem item) {
+                switch (index) {
+                    case 0:
+                        presenter.setItems(slotIndex);
+                        break;
+                    case 1:
+                        presenter.setFolder(slotIndex);
+                        break;
+                }
+                dialog.dismiss();
+            }
+        });
+
+        adapter.add(new MaterialSimpleListItem.Builder(this)
+                .content(R.string.shortcut)
+                .icon(R.drawable.ic_shortcuts)
+                .backgroundColor(Color.WHITE)
+                .build());
+        adapter.add(new MaterialSimpleListItem.Builder(this)
+                .content(R.string.setting_shortcut_folder)
+                .icon(R.drawable.ic_folder)
+                .backgroundColor(Color.WHITE)
+                .build());
+
+
+        new MaterialDialog.Builder(this)
+                .adapter(adapter, null)
+                .show();
     }
 
     public RecyclerView.LayoutManager getLayoutManager(int layoutType, int column) {

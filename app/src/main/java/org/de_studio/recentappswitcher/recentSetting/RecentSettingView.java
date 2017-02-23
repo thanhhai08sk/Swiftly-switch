@@ -2,9 +2,11 @@ package org.de_studio.recentappswitcher.recentSetting;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
+import android.graphics.Color;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
+import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
@@ -30,22 +32,53 @@ public class RecentSettingView extends BaseCircleCollectionSettingView<Void, Rec
 
     @Override
     public void chooseToSetRecentOrShortcutToSlot(final int slotIndex) {
-        new MaterialDialog.Builder(this)
-                .items(R.array.recent_slot_options)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
-                        switch (position) {
-                            case 0:
-                                presenter.setThisSlotAsRecent(slotIndex);
-                                break;
-                            case 1:
+//        new MaterialDialog.Builder(this)
+//                .items(R.array.recent_slot_options)
+//                .itemsCallback(new MaterialDialog.ListCallback() {
+//                    @Override
+//                    public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+//                        switch (position) {
+//                            case 0:
+//                                presenter.setThisSlotAsRecent(slotIndex);
+//                                break;
+//                            case 1:
+//                                presenter.setItems(slotIndex);
+//                                break;
+//                        }
+//                    }
+//                }).show();
 
-                                presenter.setItems(slotIndex);
-                                break;
-                        }
-                    }
-                }).show();
+
+        final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
+            @Override
+            public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem item) {
+                switch (index) {
+                    case 0:
+                        presenter.setThisSlotAsRecent(slotIndex);
+                        break;
+                    case 1:
+                        presenter.setItems(slotIndex);
+                        break;
+                }
+                dialog.dismiss();
+            }
+        });
+
+        adapter.add(new MaterialSimpleListItem.Builder(this)
+                .content(R.string.recent_app)
+                .icon(R.drawable.ic_recent_app_slot)
+                .backgroundColor(Color.WHITE)
+                .build());
+        adapter.add(new MaterialSimpleListItem.Builder(this)
+                .content(R.string.shortcut)
+                .icon(R.drawable.ic_shortcuts)
+                .backgroundColor(Color.WHITE)
+                .build());
+
+
+        new MaterialDialog.Builder(this)
+                .adapter(adapter, null)
+                .show();
     }
 
     public static Intent getIntent(Context context, String collectionId) {
