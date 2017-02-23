@@ -99,6 +99,7 @@ dependencies {
 
     //Material dialog
     compile 'com.afollestad.material-dialogs:core:0.9.3.0'
+    compile 'com.afollestad.material-dialogs:commons:0.9.3.0'
 
 
 

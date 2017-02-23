@@ -2850,11 +2850,11 @@ public  class Utility {
         if (context != null) {
             String itemId = item.itemId;
             if (itemId.contains(Collection.TYPE_GRID_FAVORITE)) {
-                item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_action_instant_favorite_512);
+                item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_grid_favorite_set);
             } else if (itemId.contains(Collection.TYPE_CIRCLE_FAVORITE)) {
-                item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_action_instant_favorite_512);
+                item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_circle_favorite_set);
             } else if (itemId.contains(Collection.TYPE_RECENT)) {
-                item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_action_instant_favorite_512);
+                item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_recent_set);
             }
         }
     }

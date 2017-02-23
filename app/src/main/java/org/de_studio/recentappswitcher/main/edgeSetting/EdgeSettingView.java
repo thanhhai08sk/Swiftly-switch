@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.main.edgeSetting;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -9,6 +10,9 @@ import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
+import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
@@ -160,31 +164,47 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
 
     @Override
     public void chooseCollection(final RealmResults<Collection> collections, Collection currentCollection, final PublishSubject<String> setCollectionSetSj) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final CharSequence[] labels = new CharSequence[collections.size()];
         for (int i = 0; i < collections.size(); i++) {
             labels[i] = collections.get(i).label;
         }
-        int currentChoice = 0;
-        for (int i = 0; i < labels.length; i++) {
-            if (currentCollection.label.equals(labels[i])) {
-                currentChoice = i;
+
+        final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
+            @Override
+            public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem item) {
+                setCollectionSetSj.onNext(collections.where().equalTo(Cons.LABEL, labels[index].toString()).findFirst().collectionId);
+                dialog.dismiss();
             }
+        });
+
+        int icon = 0;
+        switch (currentCollection.type) {
+            case Collection.TYPE_CIRCLE_FAVORITE:
+                icon = R.drawable.ic_circle_favorite_set;
+                break;
+            case Collection.TYPE_QUICK_ACTION:
+                icon = R.drawable.ic_quick_actions_set;
+                break;
+            case Collection.TYPE_RECENT:
+                icon = R.drawable.ic_recent_set;
+                break;
+            case Collection.TYPE_GRID_FAVORITE:
+                icon = R.drawable.ic_grid_favorite_set;
+                break;
         }
-        builder.setTitle(R.string.choose_recent_set)
-                .setSingleChoiceItems(labels, currentChoice, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setCollectionSetSj.onNext(collections.where().equalTo(Cons.LABEL, labels[which].toString()).findFirst().collectionId);
-                    }
-                })
-                .setPositiveButton(R.string.app_tab_fragment_ok_button, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        builder.create().show();
+
+
+        for (Collection collection : collections) {
+            adapter.add(new MaterialSimpleListItem.Builder(getActivity())
+                    .content(collection.label)
+                    .icon(icon)
+                    .backgroundColor(Color.WHITE)
+                    .build());
+
+        }
+        new MaterialDialog.Builder(getActivity())
+                .adapter(adapter, null)
+                .show();
     }
 
 
