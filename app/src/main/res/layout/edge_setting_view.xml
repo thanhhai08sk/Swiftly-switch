@@ -131,6 +131,8 @@
                     tools:text="Recent 1"
                     style="@style/GeneralTextSecondary"
                     />
+
+
             </LinearLayout>
 
 
@@ -187,12 +189,10 @@
             android:background="@color/mid_grey"
             android:layout_marginStart="64dp"
             />
-
-
         <LinearLayout
             android:id="@+id/quick_actions_set"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
             style="@style/ItemLinearLayout"
             >
@@ -224,6 +224,8 @@
             </LinearLayout>
 
         </LinearLayout>
+
+
 
         <View
             android:id="@+id/quick_actions_set_separator"
@@ -281,6 +283,7 @@
             android:layout_marginStart="64dp"
             />
 
+
         <LinearLayout
             android:id="@+id/trigger_zone"
             android:layout_width="match_parent"
@@ -315,7 +318,12 @@
             </LinearLayout>
 
         </LinearLayout>
-        <include layout="@layout/separator" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mid_grey"
+            android:layout_marginStart="64dp"
+            />
 
         <LinearLayout
             android:id="@+id/avoid_keyboard"
@@ -361,7 +369,12 @@
 
         </LinearLayout>
 
-        <include layout="@layout/separator" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mid_grey"
+            android:layout_marginStart="64dp"
+            />
 
         <LinearLayout
             android:id="@+id/show_guide"
@@ -411,7 +424,12 @@
 
         </LinearLayout>
 
-        <include layout="@layout/separator" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mid_grey"
+            android:layout_marginStart="64dp"
+            />
         <LinearLayout
             android:id="@+id/set_guide_color"
             android:layout_width="match_parent"
@@ -437,7 +455,12 @@
 
         </LinearLayout>
 
-        <include layout="@layout/separator" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mid_grey"
+            android:layout_marginStart="64dp"
+            />
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
