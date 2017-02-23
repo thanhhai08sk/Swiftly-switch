@@ -71,4 +71,20 @@ public class RecentSettingModel extends BaseCircleCollectionSettingModel {
         }
         realm.commitTransaction();
     }
+
+    public void setSlotAsRecent(int slotIndex) {
+        Slot slot = collection.slots.get(slotIndex);
+        if (slot != null) {
+            final String slotId = slot.slotId;
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Slot slot1 = realm.where(Slot.class).equalTo(Cons.SLOT_ID, slotId).findFirst();
+                    if (slot1 != null) {
+                        slot1.type = Slot.TYPE_RECENT;
+                    }
+                }
+            });
+        }
+    }
 }

@@ -127,5 +127,9 @@
         <item>@string/edge_mode__circle_favorite_and_quick_actions</item>
         <item>@string/edge_mode__grid_favorite</item>
     </string-array>
+    <string-array name="recent_slot_options">
+        <item>@string/recent_app</item>
+        <item>@string/shortcut</item>
+    </string-array>
 
 </resources>

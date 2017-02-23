@@ -14,6 +14,15 @@ public class RecentSettingPresenter extends BaseCircleCollectionSettingPresenter
     }
 
     @Override
+    public void onSlotClick(int slotIndex) {
+        view.chooseToSetRecentOrShortcutToSlot(slotIndex);
+    }
+
+    public void setThisSlotAsRecent(int slotIndex) {
+        model.setSlotAsRecent(slotIndex);
+    }
+
+    @Override
     public void setRecyclerView() {
         view.setRecyclerView(model.getSlots(), view.getLayoutManager(Cons.LAYOUT_TYPE_LINEAR, -1),null);
     }
@@ -21,6 +30,7 @@ public class RecentSettingPresenter extends BaseCircleCollectionSettingPresenter
 
 
     public interface View extends BaseCircleCollectionSettingPresenter.View {
+        void chooseToSetRecentOrShortcutToSlot(int slotIndex);
     }
 
 }

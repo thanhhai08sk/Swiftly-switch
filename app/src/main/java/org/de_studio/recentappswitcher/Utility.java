@@ -2448,7 +2448,7 @@ public  class Utility {
 
                 break;
             case Slot.TYPE_RECENT:
-                icon.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+                icon.setImageResource(R.drawable.ic_recent_app_slot);
                 if (isDark) {
                     icon.setColorFilter(R.color.button_54_black);
                 }
