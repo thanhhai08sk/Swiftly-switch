@@ -264,18 +264,15 @@
     <string name="trigger_zone_setting">Trigger zone setting</string>
     <string name="trigger_zone_setting_description">"Click here to set Edge's position, size,..."</string>
     <string name="recent_set">Recent set</string>
-    <string name="recent_set_description">Click here to choose the items set for the Recent section</string>
     <string name="quick_actions_set">Quick Actions set</string>
-    <string name="quick_actions_set_description">Click here to choose the items set for the Quick Actions section</string>
     <string name="circle_favorite_set">Circle Favorite set</string>
-    <string name="circle_favorite_set_description">Click here to choose the items set for the Circle Favorite section</string>
     <string name="grid_favorite_set">Grid Favorite set</string>
-    <string name="grid_favorite_set_description">Click here to choose the items set for the Grid Favorite section</string>
     <string name="edge_mode__recent_and_quick_actions">Recent apps and Quick Actions</string>
     <string name="edge_mode__circle_favorite_and_quick_actions">Circle Favorite and Quick Actions</string>
     <string name="edge_mode__grid_favorite">Grid Favorite</string>
     <string name="choose_recent_set">Choose Recent Set</string>
     <string name="avoid_keyboard_description">Prevent from interfering with the keyboard</string>
+    <string name="show_guide_description">Show a line to indicate the trigger zone</string>
 
     //More setting
     <string name="general">General</string>

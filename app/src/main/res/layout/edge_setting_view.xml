@@ -83,9 +83,10 @@
                 />
 
             <TextView
+                android:id="@+id/recent_set_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/recent_set_description"
+                tools:text="Recent 1"
                 style="@style/Main_text_secondary"
                 android:paddingBottom="20dp"
                 />
@@ -108,9 +109,10 @@
                 />
 
             <TextView
+                android:id="@+id/circle_favorite_set_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/circle_favorite_set_description"
+                tools:text="Circle Favorite 1"
                 style="@style/Main_text_secondary"
                 android:paddingBottom="20dp"
                 />
@@ -134,9 +136,10 @@
                 />
 
             <TextView
+                android:id="@+id/quick_actions_set_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/quick_actions_description"
+                tools:text="Quick Actions 1"
                 style="@style/Main_text_secondary"
                 android:paddingBottom="20dp"
                 />
@@ -160,9 +163,10 @@
                 />
 
             <TextView
+                android:id="@+id/grid_favorite_set_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/grid_favorites_description"
+                tools:text="Grid Favorite 1"
                 style="@style/Main_text_secondary"
                 android:paddingBottom="20dp"
 
@@ -251,15 +255,30 @@
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
             >
-            <TextView
+
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/edge_dialog_show_guide_text"
                 android:layout_weight="1"
+                android:orientation="vertical"
+                >
+                <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edge_dialog_show_guide_text"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 style="@style/Main_text_primary"
                 />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Main_text_secondary"
+                    android:text="@string/show_guide_description"
+                    />
+
+            </LinearLayout>
+
             <Switch
                 android:id="@+id/show_guide_switch"
                 android:layout_width="wrap_content"
