@@ -19,187 +19,300 @@
             android:gravity="center_vertical"
             style="@style/ItemLinearLayout"
             >
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/enable"
-                android:layout_weight="1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Main_text_primary"
+
+            <ImageView
+                style="@style/GeneralTabIcon"
+                android:src="@drawable/ic_switch"
                 />
-            <Switch
-                android:id="@+id/enable_edge"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingEnd="16dp"
-                android:paddingStart="16dp"
-                android:clickable="false"
-                android:focusable="false"
-                />
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/enable"
+                    android:layout_weight="1"
+                    style="@style/GeneralTextPrimary"
+                    />
+                <Switch
+                    android:id="@+id/enable_edge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="16dp"
+                    android:paddingStart="16dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    />
+            </LinearLayout>
 
         </LinearLayout>
 
-        <include layout="@layout/separator" />
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mid_grey"
+            android:layout_marginStart="64dp"
+            />
         <LinearLayout
             android:id="@+id/mode_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             style="@style/ItemLinearLayout"
             >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/edge_dialog_set_mode_text"
-                style="@style/Main_text_primary"
-                />
 
-            <TextView
-                android:id="@+id/mode_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Recent and Quick Actions"
-                style="@style/Main_text_secondary"
+            <ImageView
+                style="@style/GeneralTabIcon"
+                android:src="@drawable/ic_mode"
                 />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edge_dialog_set_mode_text"
+                    style="@style/GeneralTextPrimary"
+                    />
+
+                <TextView
+                    android:id="@+id/mode_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Recent and Quick Actions"
+                    style="@style/GeneralTextSecondary"
+                    />
+            </LinearLayout>
 
         </LinearLayout>
 
-        <include layout="@layout/separator" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mid_grey"
+            android:layout_marginStart="64dp"
+            />
 
         <LinearLayout
             android:id="@+id/recent_set"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             style="@style/ItemLinearLayout"
             >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/recent_set"
-                style="@style/Main_text_primary"
+            <ImageView
+                style="@style/GeneralTabIcon"
+                android:src="@drawable/ic_recents_5"
                 />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recent_set"
+                    style="@style/GeneralTextPrimary"
+                    />
 
-            <TextView
-                android:id="@+id/recent_set_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Recent 1"
-                style="@style/Main_text_secondary"
-                />
+                <TextView
+                    android:id="@+id/recent_set_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Recent 1"
+                    style="@style/GeneralTextSecondary"
+                    />
+            </LinearLayout>
 
 
         </LinearLayout>
-        <include
+        <View
             android:id="@+id/recent_set_separator"
-            layout="@layout/separator" />
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mid_grey"
+            android:layout_marginStart="64dp"
+            />
         <LinearLayout
             android:id="@+id/circle_favorite_set"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             style="@style/ItemLinearLayout"
             >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/circle_favorite_set"
-                style="@style/Main_text_primary"
-                />
 
-            <TextView
-                android:id="@+id/circle_favorite_set_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Circle Favorite 1"
-                style="@style/Main_text_secondary"
+
+            <ImageView
+                style="@style/GeneralTabIcon"
+                android:src="@drawable/ic_circle_favorite"
                 />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/circle_favorite_set"
+                    style="@style/GeneralTextPrimary"
+                    />
+
+                <TextView
+                    android:id="@+id/circle_favorite_set_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Circle Favorite 1"
+                    style="@style/GeneralTextSecondary"
+                    />
+            </LinearLayout>
 
         </LinearLayout>
-        <include
+
+        <View
             android:id="@+id/circle_favorite_set_separator"
-            layout="@layout/separator" />
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mid_grey"
+            android:layout_marginStart="64dp"
+            />
 
 
         <LinearLayout
             android:id="@+id/quick_actions_set"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             style="@style/ItemLinearLayout"
             >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/quick_actions_set"
-                style="@style/Main_text_primary"
-                />
 
-            <TextView
-                android:id="@+id/quick_actions_set_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Quick Actions 1"
-                style="@style/Main_text_secondary"
+            <ImageView
+                style="@style/GeneralTabIcon"
+                android:src="@drawable/ic_quick_actions"
                 />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quick_actions_set"
+                    style="@style/GeneralTextPrimary"
+                    />
+
+                <TextView
+                    android:id="@+id/quick_actions_set_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Quick Actions 1"
+                    style="@style/GeneralTextSecondary"
+                    />
+            </LinearLayout>
 
         </LinearLayout>
-        <include
+
+        <View
             android:id="@+id/quick_actions_set_separator"
-            layout="@layout/separator" />
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mid_grey"
+            android:layout_marginStart="64dp"
+            />
 
 
         <LinearLayout
             android:id="@+id/grid_favorite_set"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             style="@style/ItemLinearLayout"
             >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/grid_favorite_set"
-                style="@style/Main_text_primary"
-                />
 
-            <TextView
-                android:id="@+id/grid_favorite_set_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Grid Favorite 1"
-                style="@style/Main_text_secondary"
-
+            <ImageView
+                style="@style/GeneralTabIcon"
+                android:src="@drawable/ic_grid_favorite"
                 />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/grid_favorite_set"
+                    style="@style/GeneralTextPrimary"
+                    />
+
+                <TextView
+                    android:id="@+id/grid_favorite_set_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Grid Favorite 1"
+                    style="@style/GeneralTextSecondary"
+
+                    />
+            </LinearLayout>
 
 
         </LinearLayout>
-        <include
+
+        <View
             android:id="@+id/grid_favorite_set_separator"
-            layout="@layout/separator" />
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mid_grey"
+            android:layout_marginStart="64dp"
+            />
 
         <LinearLayout
             android:id="@+id/trigger_zone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             style="@style/ItemLinearLayout"
             >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/trigger_zone_setting"
-                style="@style/Main_text_primary"
-                />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/trigger_zone_setting_description"
-                style="@style/Main_text_secondary"
+            <ImageView
+                style="@style/GeneralTabIcon"
+                android:src="@drawable/ic_trigger_zone"
                 />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/trigger_zone_setting"
+                    style="@style/GeneralTextPrimary"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/trigger_zone_setting_description"
+                    style="@style/GeneralTextSecondary"
+                    />
+            </LinearLayout>
 
         </LinearLayout>
         <include layout="@layout/separator" />
@@ -212,6 +325,10 @@
             android:gravity="center_vertical"
             style="@style/ItemLinearLayout"
             >
+            <ImageView
+                style="@style/GeneralTabIcon"
+                android:src="@drawable/ic_keyboard"
+                />
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -222,14 +339,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/avoid_keyboard"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    style="@style/Main_text_primary"
+                    style="@style/GeneralTextPrimary"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/Main_text_secondary"
+                    style="@style/GeneralTextSecondary"
                     android:text="@string/avoid_keyboard_description"
                     />
 
@@ -257,6 +372,11 @@
             style="@style/ItemLinearLayout"
             >
 
+            <ImageView
+                style="@style/GeneralTabIcon"
+                android:src="@drawable/ic_guide"
+                />
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -267,14 +387,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/edge_dialog_show_guide_text"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Main_text_primary"
+
+                    style="@style/GeneralTextPrimary"
                 />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/Main_text_secondary"
+                    style="@style/GeneralTextSecondary"
                     android:text="@string/show_guide_description"
                     />
 
@@ -297,14 +416,22 @@
             android:id="@+id/set_guide_color"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             style="@style/ItemLinearLayout"
+
             >
+            <ImageView
+                style="@style/GeneralTabIcon"
+                android:src="@drawable/ic_color"
+                />
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/main_set_guide_color"
-                style="@style/Main_text_primary"
+                style="@style/GeneralTextPrimary"
+                android:layout_gravity="center_vertical"
                 />
 
 

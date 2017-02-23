@@ -151,30 +151,79 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
 
     @Override
     public void chooseCurrentCollection(final List<Collection> collections, Collection currentCollection) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        CharSequence[] items = new CharSequence[collections.size() + 1];
-        for (int i = 0; i < collections.size(); i++) {
-            items[i] = collections.get(i).label;
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        CharSequence[] items = new CharSequence[collections.size() + 1];
+//        for (int i = 0; i < collections.size(); i++) {
+//            items[i] = collections.get(i).label;
+//        }
+//        items[items.length - 1] = getString(R.string.add_new);
+//        builder.setTitle(R.string.choose_set)
+//                .setSingleChoiceItems(items, collections.indexOf(currentCollection), new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        if (which < collections.size()) {
+//                            chooseCurrentSetSJ.onNext(collections.get(which).collectionId);
+//                        } else {
+//                            presenter.onAddNewCollection();
+//                        }
+//                    }
+//                })
+//                .setPositiveButton(R.string.app_tab_fragment_ok_button, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//        builder.create().show();
+
+
+        final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
+            @Override
+            public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem item) {
+                if (index < collections.size()) {
+                    chooseCurrentSetSJ.onNext(collections.get(index).collectionId);
+                } else {
+                    presenter.onAddNewCollection();
+                }
+
+                dialog.dismiss();
+            }
+        });
+
+        int icon = 0;
+        switch (currentCollection.type) {
+            case Collection.TYPE_CIRCLE_FAVORITE:
+                icon = R.drawable.ic_circle_favorite_set;
+                break;
+            case Collection.TYPE_QUICK_ACTION:
+                icon = R.drawable.ic_quick_actions_set;
+                break;
+            case Collection.TYPE_RECENT:
+                icon = R.drawable.ic_recent_set;
+                break;
+            case Collection.TYPE_GRID_FAVORITE:
+                icon = R.drawable.ic_grid_favorite_set;
+                break;
         }
-        items[items.length - 1] = getString(R.string.add_new);
-        builder.setTitle(R.string.choose_set)
-                .setSingleChoiceItems(items, collections.indexOf(currentCollection), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which < collections.size()) {
-                            chooseCurrentSetSJ.onNext(collections.get(which).collectionId);
-                        } else {
-                            presenter.onAddNewCollection();
-                        }
-                    }
-                })
-                .setPositiveButton(R.string.app_tab_fragment_ok_button, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        builder.create().show();
+
+        for (Collection collection : collections) {
+            adapter.add(new MaterialSimpleListItem.Builder(this)
+                    .content(collection.label)
+                    .icon(icon)
+                    .backgroundColor(Color.WHITE)
+                    .build());
+        }
+
+        adapter.add(new MaterialSimpleListItem.Builder(this)
+                .content(R.string.add_new)
+                .icon(R.drawable.ic_add)
+                .backgroundColor(Color.WHITE)
+                .build());
+
+
+        new MaterialDialog.Builder(this)
+                .adapter(adapter, null)
+                .show();
     }
 
     @Override
