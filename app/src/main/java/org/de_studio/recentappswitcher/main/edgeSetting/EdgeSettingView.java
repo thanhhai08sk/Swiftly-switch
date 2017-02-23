@@ -52,6 +52,15 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
     View circleFavorite;
     @BindView(R.id.grid_favorite_set)
     View gridFavorite;
+    @BindView(R.id.recent_set_description)
+    TextView recentSetDescription;
+    @BindView(R.id.quick_actions_set_description)
+    TextView quickActionsSetDescription;
+    @BindView(R.id.grid_favorite_set_description)
+    TextView gridFavoriteSetDescription;
+    @BindView(R.id.circle_favorite_set_description)
+    TextView circleFavoriteSetDescription;
+
 
     PublishSubject<Void> setDataCompleteSJ = PublishSubject.create();
     PublishSubject<Void> updateLayoutRequestSJ = PublishSubject.create();
@@ -78,6 +87,7 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
         updateLayoutRequestSJ.onNext(null);
     }
 
+
     @Override
     public PublishSubject<Void> onSetDataComplete() {
         return setDataCompleteSJ;
@@ -86,6 +96,26 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
     @Override
     public PublishSubject<Void> onUpdateLayoutRequest() {
         return updateLayoutRequestSJ;
+    }
+
+    @Override
+    public void showEdge(Edge edge, boolean enable) {
+        setEnable(enable);
+        avoidKeyboardSwitch.setChecked(edge.keyboardOption != Edge.KEYBOARD_OPTION_NONE);
+        showGuideSwitch.setChecked(edge.useGuide);
+        setCurrentMode(edge.mode);
+        if (edge.recent != null) {
+            recentSetDescription.setText(edge.recent.label);
+        }
+        if (edge.quickAction != null) {
+            quickActionsSetDescription.setText(edge.quickAction.label);
+        }
+        if (edge.circleFav != null) {
+            circleFavoriteSetDescription.setText(edge.circleFav.label);
+        }
+        if (edge.grid != null) {
+            gridFavoriteSetDescription.setText(edge.grid.label);
+        }
     }
 
     @Override
@@ -186,12 +216,10 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
     }
 
 
-    @Override
     public void setEnable(boolean enable) {
         enableSwitch.setChecked(enable);
     }
 
-    @Override
     public void setCurrentMode(int mode) {
         String currentMode = null;
         switch (mode) {
@@ -218,36 +246,6 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
                 break;
         }
         currentModeText.setText(currentMode);
-    }
-
-    @Override
-    public void setCurrentRecent(String label) {
-
-    }
-
-    @Override
-    public void setCurrentQuickActions(String label) {
-
-    }
-
-    @Override
-    public void setCurrentCircle(String label) {
-
-    }
-
-    @Override
-    public void setCurrentGrid(String label) {
-
-    }
-
-    @Override
-    public void setAvoidKeyboard(boolean enable) {
-        avoidKeyboardSwitch.setChecked(enable);
-    }
-
-    @Override
-    public void setShowGuideEnable(boolean enable) {
-        showGuideSwitch.setChecked(enable);
     }
 
     @Override

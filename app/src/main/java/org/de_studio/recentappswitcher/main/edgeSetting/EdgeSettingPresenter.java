@@ -159,19 +159,19 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
 
     public void onEnable() {
         model.setEnable(!model.isEdgeEnabled());
-        view.setEnable(model.isEdgeEnabled());
+        showEdge(model.getEdge());
         view.restartService();
     }
 
     public void onSetAvoidKeyboard() {
         model.setAvoidKeyboard();
-        view.setAvoidKeyboard(model.getEdge().keyboardOption != Edge.KEYBOARD_OPTION_NONE);
+        showEdge(model.getEdge());
         view.restartService();
     }
 
     public void onSetShowGuide() {
         model.setShowGuide(!model.getEdge().useGuide);
-        view.setShowGuideEnable(model.getEdge().useGuide);
+        showEdge(model.getEdge());
         view.restartService();
     }
 
@@ -180,22 +180,7 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
     }
 
     private void showEdge(Edge edge) {
-        view.setEnable(model.isEdgeEnabled());
-        view.setAvoidKeyboard(edge.keyboardOption != Edge.KEYBOARD_OPTION_NONE);
-        view.setShowGuideEnable(edge.useGuide);
-        view.setCurrentMode(edge.mode);
-        if (edge.recent != null) {
-            view.setCurrentRecent(edge.recent.label);
-        }
-        if (edge.quickAction != null) {
-            view.setCurrentQuickActions(edge.quickAction.label);
-        }
-        if (edge.circleFav != null) {
-            view.setCurrentCircle(edge.circleFav.label);
-        }
-        if (edge.grid != null) {
-            view.setCurrentGrid(edge.grid.label);
-        }
+        view.showEdge(edge, model.isEdgeEnabled());
     }
 
     public interface View extends PresenterView {
@@ -203,6 +188,8 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
         PublishSubject<Void> onSetDataComplete();
 
         PublishSubject<Void> onUpdateLayoutRequest();
+
+        void showEdge(Edge edge, boolean enable);
 
         void chooseMode(int currentMode, PublishSubject<Integer> setModeSubject);
 
@@ -212,22 +199,6 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
         void chooseGuideColor(int currentColor, PublishSubject<Integer> setGuideColorSj);
 
         void showPositionSetting(Edge edge);
-
-        void setEnable(boolean enable);
-
-        void setCurrentMode(int mode);
-
-        void setCurrentRecent(String label);
-
-        void setCurrentQuickActions(String label);
-
-        void setCurrentCircle(String label);
-
-        void setCurrentGrid(String label);
-
-        void setAvoidKeyboard(boolean enable);
-
-        void setShowGuideEnable(boolean enable);
 
 
         void registerSetDataCompleteEven();
