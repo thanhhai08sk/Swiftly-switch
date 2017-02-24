@@ -301,8 +301,9 @@
 
     <string name="notification_description">Notification needed to keep Swiftly Switch stay in background. Disable it in App Info window.\n\n
     If you see the \"Screen overlay detected\" window when giving permission for other app, please pause Swiftly Switch from the notification, give the permission, then resume the app.\n\n
-        If the notification is hidden, you can assign the \"Pause for 5s\" shortcut and use it when giving permissions.
+        If the notification is hidden, you can assign the \"Pause for 10s\" shortcut and use it when giving permissions.
     </string>
+    <string name="pause_for_10_second_toast">Swiftly Switch: auto pause for 10s while giving permission. Change this in Swiftly Switch setting.</string>
     <string name="hide_notification">Hide notification</string>
     <string name="open_swiftly_switch">Open Swiftly Switch</string>
 

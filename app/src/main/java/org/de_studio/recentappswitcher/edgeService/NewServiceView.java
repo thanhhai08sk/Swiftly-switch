@@ -414,8 +414,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public void showBackground(boolean backgroundTouchable) {
         if (!backgroundView.isAttachedToWindow()) {
+            Log.e(TAG, "showBackground: add background");
             windowManager.addView(backgroundView, backgroundTouchable ? WINDOW_PARAMS_TOUCHABLE : WINDOW_PARAMS_NO_TOUCH);
             mDetector = new GestureDetectorCompat(this,this);
+            backgroundView.setAlpha(1f);
+            backgroundView.setVisibility(View.VISIBLE);
             backgroundView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -424,6 +427,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 }
             });
         } else {
+            Log.e(TAG, "showBackground: set background visible");
             backgroundView.setVisibility(View.VISIBLE);
         }
 
@@ -1108,7 +1112,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
-    public void showToast(String message) {
+    public void showToast(int message) {
         Toast.makeText(NewServiceView.this.getApplicationContext(),message,Toast.LENGTH_LONG).show();
     }
 

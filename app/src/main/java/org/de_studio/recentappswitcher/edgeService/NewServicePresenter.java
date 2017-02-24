@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.PresenterView;
@@ -37,7 +38,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             }
         }
     };
-    private Runnable pause5SecondRunnable = new Runnable() {
+    private Runnable pause10SecondRunnable = new Runnable() {
         @Override
         public void run() {
             if (view != null) {
@@ -258,11 +259,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 onGivingPermissionSJ.subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        Log.e(TAG, "call: pause for 5 second");
+                        Log.e(TAG, "call: pause for 10 second");
                         view.removeEdgeImage();
-                        view.removeAllExceptEdges();
-                        handler.postDelayed(pause5SecondRunnable, 5000);
-                        view.showToast("Auto pause for 5s while giving permission. Change this in Swiftly Switch setting.");
+                        finishSectionSJ.onNext(null);
+                        handler.postDelayed(pause10SecondRunnable, 10000);
+                        view.showToast(R.string.pause_for_10_second_toast);
                     }
                 })
         );
@@ -282,7 +283,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         handler.removeCallbacks(hideAllExceptEdgesRunnable);
         handler = null;
         hideAllExceptEdgesRunnable = null;
-        pause5SecondRunnable = null;
+        pause10SecondRunnable = null;
         super.onViewDetach();
     }
 
@@ -623,7 +624,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void removeEdgeImage();
 
-        void showToast(String message);
+        void showToast(int message);
 
     }
 
