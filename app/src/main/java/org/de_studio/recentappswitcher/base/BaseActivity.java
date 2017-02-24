@@ -33,7 +33,9 @@ public abstract class BaseActivity<T,P extends BasePresenter > extends AppCompat
         getDataFromRetainFragment();
         setContentView(getLayoutId());
         ButterKnife.bind(this);
-        presenter.onViewAttach(this);
+        if (presenter != null) {
+            presenter.onViewAttach(this);
+        }
     }
 
     protected abstract void inject();

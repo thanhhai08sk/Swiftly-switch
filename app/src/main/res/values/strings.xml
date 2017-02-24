@@ -308,6 +308,15 @@
     <string name="hide_notification">Hide notification</string>
     <string name="open_swiftly_switch">Open Swiftly Switch</string>
 
+
+    //FAQs
+    <string name="faqs">FAQs</string>
+    <string name="faq_how_to_hide_the_notification">How to hide the notification?</string>
+    <string name="faq_how_to_hide_the_notification_answer">Persistent notification is for keeping Swiftly Switch stay in background</string>
+
+    <string name="faq_app_take_few_seconds_to_launch">Why sometime it take few seconds to launch an app?</string>
+    <string name="faq_app_take_few_seconds_to_launch_answer">Swiftly switch can\'t start apps within 5 seconds from the point you return the Home Screen. This is the how Android limit services. It\'s not a problem if you return home by the
+     in app Home Shortcut, or even better - do not return to the Home Screen.</string>
     //What new
     <string name="what_new_3.0.0.8" translatable="false">VERSION 3.0.0.8 (beta):\n
         - Fix bugs

@@ -30,6 +30,7 @@ import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerMainComponent;
 import org.de_studio.recentappswitcher.dagger.MainModule;
+import org.de_studio.recentappswitcher.faqs.FaqsView;
 import org.de_studio.recentappswitcher.intro.IntroActivity;
 import org.de_studio.recentappswitcher.main.moreSetting.MoreSettingView;
 
@@ -193,6 +194,11 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     @OnClick(R.id.review)
     void onReviewClick(){
         review();
+    }
+
+    @OnClick(R.id.faqs)
+    void onFAQsClick(){
+        startActivity(new Intent(this, FaqsView.class));
     }
 
     private void review() {

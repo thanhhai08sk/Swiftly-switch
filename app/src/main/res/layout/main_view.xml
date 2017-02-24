@@ -52,6 +52,29 @@
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/faqs"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                style="@style/Drawer_Item"
+
+                >
+                <ImageView
+                    style="@style/Drawer_Icon"
+                    app:srcCompat="@drawable/ic_faqs"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    style="@style/Drawer_Item_text"
+                    android:text="@string/faqs"
+                    />
+
+            </FrameLayout>
+
+
+            <FrameLayout
                 android:id="@+id/changelog"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"

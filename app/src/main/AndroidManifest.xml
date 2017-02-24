@@ -262,6 +262,11 @@
         <service
             android:name=".dadaSetup.DataSetupService"
             android:exported="false"/>
+        <activity android:name=".faqs.FaqsView"
+            android:label="@string/faqs"
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".main.MainView"
+            />
     </application>
 
 </manifest>
