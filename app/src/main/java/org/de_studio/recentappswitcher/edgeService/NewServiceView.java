@@ -18,12 +18,10 @@ import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -285,16 +283,17 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void setupNotification() {
-        Intent hideNotiIntent = new Intent();
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-            hideNotiIntent.setClassName("com.android.settings", "com.android.settings.Settings$AppNotificationSettingsActivity");
-            hideNotiIntent.putExtra("app_package", getPackageName());
-            hideNotiIntent.putExtra("app_uid", getApplicationInfo().uid);
-        } else {
-            hideNotiIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            hideNotiIntent.addCategory(Intent.CATEGORY_DEFAULT);
-            hideNotiIntent.setData(Uri.parse("package:" + getPackageName()));
-        }
+        Intent notiClickIntent = new Intent();
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+//            notiClickIntent.setClassName("com.android.settings", "com.android.settings.Settings$AppNotificationSettingsActivity");
+//            notiClickIntent.putExtra("app_package", getPackageName());
+//            notiClickIntent.putExtra("app_uid", getApplicationInfo().uid);
+//        } else {
+//            notiClickIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//            notiClickIntent.addCategory(Intent.CATEGORY_DEFAULT);
+//            notiClickIntent.setData(Uri.parse("package:" + getPackageName()));
+//        }
+        notiClickIntent = NotiDialog.getIntent(this, NotiDialog.NOTIFICATION_INFO);
 
         Intent remoteIntent = new Intent();
         remoteIntent.setAction(Cons.ACTION_TOGGLE_EDGES);
@@ -308,7 +307,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                         getString(R.string.pause),
                         pendingIntent).build();
 
-        PendingIntent notiPending = PendingIntent.getActivity(getApplicationContext(), 0, hideNotiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent notiPending = PendingIntent.getActivity(getApplicationContext(), 0, notiClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         notificationBuilder = new NotificationCompat.Builder(this);
         notificationBuilder.setSmallIcon(R.drawable.ic_stat_ic_looks_white_48dp1)
                 .setContentIntent(notiPending)

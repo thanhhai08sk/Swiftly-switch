@@ -209,6 +209,7 @@
     <string name="off"> (OFF)</string>
     <string name="pause">Pause</string>
     <string name="resume">Resume</string>
+    <string name="pause_resume">Pause/Resume</string>
     <string name="recent_app">Recent app</string>
     <string name="recent_apps">Recent apps</string>
     <string name="title_activity_pin_shortcuts">Pin shortcuts</string>
@@ -297,6 +298,13 @@
     <string name="backup_guide">The backup file will be stored in your Google Drive. Please connect to your Google account and then choose the folder to upload.</string>
     <string name="import_guide">Choose the backup file from Google Drive.</string>
 
+
+    <string name="notification_description">Notification needed to keep Swiftly Switch stay in background. Disable it in App Info window.\n\n
+    If you see the \"Screen overlay detected\" window when giving permission for other app, please pause Swiftly Switch from the notification, give the permission, then resume the app.\n\n
+        If the notification is hidden, you can assign the \"Pause for 5s\" shortcut and use it when giving permissions.
+    </string>
+    <string name="hide_notification">Hide notification</string>
+    <string name="open_swiftly_switch">Open Swiftly Switch</string>
 
     //What new
     <string name="what_new_3.0.0.8" translatable="false">VERSION 3.0.0.8 (beta):\n

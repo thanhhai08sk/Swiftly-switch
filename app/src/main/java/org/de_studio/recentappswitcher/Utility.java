@@ -1056,12 +1056,9 @@ public  class Utility {
     }
 
     public static void startNotiDialog(Context context, int type) {
-        Intent intent = new Intent(context, NotiDialog.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        intent.putExtra(NotiDialog.TYPE_KEY, type);
-        context.startActivity(intent);
+        context.startActivity(NotiDialog.getIntent(context, type));
     }
+
 
     public static void flashLightAction(Context context, boolean actionOn) {
         Intent i = new Intent(context, Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? FlashServiceM.class : FlashService.class);
@@ -3434,6 +3431,26 @@ public  class Utility {
         catch (Exception e) {
             Log.e(TAG, "Unzip exception", e);
         }
+    }
+
+    public static void hideNotification(Context context) {
+        Intent hideNotiIntent = new Intent();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            hideNotiIntent.setClassName("com.android.settings", "com.android.settings.Settings$AppNotificationSettingsActivity");
+            hideNotiIntent.putExtra("app_package", context.getPackageName());
+            hideNotiIntent.putExtra("app_uid", context.getApplicationInfo().uid);
+        } else {
+            hideNotiIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            hideNotiIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            hideNotiIntent.setData(Uri.parse("package:" + context.getPackageName()));
+        }
+        ContextCompat.startActivity(context, hideNotiIntent, null);
+    }
+
+    public static void pauseEdgeService(Context context) {
+        Intent intent = new Intent();
+        intent.setAction(Cons.ACTION_TOGGLE_EDGES);
+        context.sendBroadcast(intent);
     }
 
 }
