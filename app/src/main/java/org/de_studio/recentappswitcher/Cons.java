@@ -194,7 +194,7 @@ public class Cons {
     public static final int SHOWING_GRID = 3;
     public static final int SHOWING_FOLDER = 4;
 
-
+    public static final String APP_VERSION_KEY = "app_version";
     public static final String AUTO_SHOW_WHAT_NEW_KEY = "auto_show_what_new";
     public static final String AVOID_KEYBOARD_KEY = "avoid_keyboard";
     public static final String AVOID_KEYBOARD_OPTION_KEY = "avoid_keyboard_option";

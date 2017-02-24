@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import org.de_studio.recentappswitcher.BuildConfig;
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
@@ -209,6 +210,19 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
 
     @OnClick(R.id.changelog)
     void whatNewClick(){
+        showWhatNew();
+    }
+
+    @Override
+    public void showWhatNewIfNeeded() {
+        if (shared.getInt(Cons.APP_VERSION_KEY, 0) < BuildConfig.VERSION_CODE) {
+            showWhatNew();
+            shared.edit().putInt(Cons.APP_VERSION_KEY, BuildConfig.VERSION_CODE).apply();
+        }
+    }
+
+    @Override
+    public void showWhatNew() {
         new MaterialDialog.Builder(this)
                 .positiveText(R.string.app_tab_fragment_ok_button)
                 .negativeText(R.string.vote_now)
@@ -226,15 +240,16 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
                         review();
                     }
                 })
-                .checkBoxPromptRes(R.string.show_this_after_an_update, true, new CompoundButton.OnCheckedChangeListener() {
+                .checkBoxPromptRes(R.string.show_this_after_an_update, shared.getBoolean(Cons.AUTO_SHOW_WHAT_NEW_KEY,true), new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                         shared.edit().putBoolean(Cons.AUTO_SHOW_WHAT_NEW_KEY, b).commit();
                     }
                 })
                 .show();
+
     }
-    
+
     protected void sendEmail() {
         String[] TO = {"thanhhai08sk@gmail.com"};
         Intent emailIntent = new Intent(Intent.ACTION_SEND);

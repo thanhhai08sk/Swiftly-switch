@@ -20,6 +20,7 @@ public class MainPresenter extends BasePresenter<MainPresenter.View,MainModel> {
         view.startIntroAndDataSetupIfNeeded();
         view.setupViewPager();
         view.restartServiceIfPossible();
+        view.showWhatNewIfNeeded();
     }
 
     public void resume() {
@@ -38,6 +39,10 @@ public class MainPresenter extends BasePresenter<MainPresenter.View,MainModel> {
         boolean checkIfAllPermissionOk();
 
         void displayPermissionNeeded(boolean show);
+
+        void showWhatNewIfNeeded();
+
+        void showWhatNew();
 
     }
 }
