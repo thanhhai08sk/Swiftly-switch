@@ -11,4 +11,14 @@
     <style name="step_button.">
         <item name="android:elevation">0dp</item>
     </style>
+
+    <style name="ItemLinearLayout">
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:foreground">?android:selectableItemBackground</item>
+        <item name="android:stateListAnimator">@animator/raise</item>
+        <item name="android:background">@color/background_light</item>
+    </style>
+
+
 </resources>
