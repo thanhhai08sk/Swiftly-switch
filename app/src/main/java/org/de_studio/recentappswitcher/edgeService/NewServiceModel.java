@@ -57,6 +57,7 @@ public class NewServiceModel extends BaseModel {
     }
 
 
+
     public void setSavedRecentShortcuts(ArrayList<String> recents) {
         this.savedRecentShortcut = recents;
     }
@@ -67,15 +68,17 @@ public class NewServiceModel extends BaseModel {
 
 
     public RealmList<Slot> getRecent(ArrayList<String> packageNames, RealmList<Slot> slots) {
-        if (savedRecentShortcut != null) {
-            for (String s : savedRecentShortcut) {
-                Log.e(TAG, "getRecent: savedShortcut = " + s);
-            }
-        }
+//        if (savedRecentShortcut != null) {
+//            for (String s : savedRecentShortcut) {
+//                Log.e(TAG, "getRecent: savedShortcut = " + s);
+//            }
+//        }
         RealmList<Slot> returnSlots = new RealmList<>();
         for (String packageName : packageNames) {
             Log.e(TAG, "getRecent: temp package " + packageName);
         }
+
+
         long recentSlotsCount = slots.where().equalTo(Cons.TYPE, Slot.TYPE_RECENT).count();
         String removedPackage = null;
         if (packageNames.size() > 0) {

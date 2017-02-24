@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.PresenterView;
 import org.de_studio.recentappswitcher.model.Collection;
@@ -36,6 +37,15 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             }
         }
     };
+    private Runnable pause5SecondRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (view != null) {
+                view.addEdgeImage();
+            }
+        }
+    };
+
     Handler handler = new Handler();
     long holdTime;
     float xInit, yInit;
@@ -55,6 +65,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     PublishSubject<Slot> onSlot = PublishSubject.create();
     PublishSubject<Void> returnToGridSubject = PublishSubject.create();
     PublishSubject<Void> finishSectionSJ = PublishSubject.create();
+    private PublishSubject<Void> onGivingPermissionSJ = PublishSubject.create();
+
 
 
     public NewServicePresenter(NewServiceModel model,long holdTime) {
@@ -241,6 +253,19 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     }
                 })
         );
+
+        addSubscription(
+                onGivingPermissionSJ.subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Log.e(TAG, "call: pause for 5 second");
+                        view.removeEdgeImage();
+                        view.removeAllExceptEdges();
+                        handler.postDelayed(pause5SecondRunnable, 5000);
+                        view.showToast("Auto pause for 5s while giving permission. Change this in Swiftly Switch setting.");
+                    }
+                })
+        );
     }
 
     private void showGrid(Collection collection, View view) {
@@ -257,6 +282,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         handler.removeCallbacks(hideAllExceptEdgesRunnable);
         handler = null;
         hideAllExceptEdgesRunnable = null;
+        pause5SecondRunnable = null;
         super.onViewDetach();
     }
 
@@ -266,16 +292,21 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         hideAllExceptEdgesAfter10Seconds();
         long time = System.currentTimeMillis();
         tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
-        setCurrentEdgeAndCurrentShowing(edgeId);
-        setTriggerPoint(x, y);
+        if (tempRecentPackages.size() > 0 && tempRecentPackages.get(0).equals("com.google.android.packageinstaller") && Utility.isMashmallow()) {
+            onGivingPermissionSJ.onNext(null);
+        } else {
+            setCurrentEdgeAndCurrentShowing(edgeId);
+            setTriggerPoint(x, y);
 
-        view.showBackground(model.shouldBackgroundTouchable());
+            view.showBackground(model.shouldBackgroundTouchable());
+            view.actionDownVibrate();
+            view.showClock();
 //        showCollection(tempRecentPackages);
-        showCollection(currentShowing.showWhat);
-        view.actionDownVibrate();
-        view.showClock();
-        holdingHelper = 0;
-        Log.e(TAG, "onActionDown: time to finish = " + (System.currentTimeMillis() - time));
+            showCollection(currentShowing.showWhat);
+            holdingHelper = 0;
+            Log.e(TAG, "onActionDown: time to finish = " + (System.currentTimeMillis() - time));
+
+        }
     }
 
     public void onActionMove(float x, float y) {
@@ -587,6 +618,13 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         void removeAllExceptEdges();
 
         void removeAll();
+
+        void addEdgeImage();
+
+        void removeEdgeImage();
+
+        void showToast(String message);
+
     }
 
     public class Showing {

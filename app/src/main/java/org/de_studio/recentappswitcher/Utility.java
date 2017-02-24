@@ -3453,4 +3453,8 @@ public  class Utility {
         context.sendBroadcast(intent);
     }
 
+    public static boolean isMashmallow() {
+        return Build.VERSION.SDK_INT == Build.VERSION_CODES.M;
+    }
+
 }

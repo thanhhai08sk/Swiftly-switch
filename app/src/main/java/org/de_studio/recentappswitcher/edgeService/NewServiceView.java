@@ -40,6 +40,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
@@ -1107,6 +1108,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
+    public void showToast(String message) {
+        Toast.makeText(NewServiceView.this.getApplicationContext(),message,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
     public boolean onDown(MotionEvent e) {
         Log.e(TAG, "onDown: ");
         return true;
@@ -1204,7 +1210,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Cons.ACTION_TOGGLE_EDGES)) {
-                Log.e(TAG, "onReceive: receive broadbast success");
+                Log.e(TAG, "onReceive: receive broadcast success");
                 Intent remoteIntent = new Intent();
                 remoteIntent.setAction(Cons.ACTION_TOGGLE_EDGES);
                 NotificationCompat.Action remoteAction;
