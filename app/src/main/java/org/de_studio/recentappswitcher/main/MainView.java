@@ -1,12 +1,14 @@
 package org.de_studio.recentappswitcher.main;
 
 import android.app.AppOpsManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -14,7 +16,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
@@ -52,7 +58,6 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     @Inject
     @Named(Cons.SHARED_PREFERENCE_NAME)
     SharedPreferences shared;
-
 
 
 
@@ -183,8 +188,53 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     @OnClick(R.id.send_feedback)
     void emailClick(){
         sendEmail();
-
     }
+    @OnClick(R.id.review)
+    void onReviewClick(){
+        review();
+    }
+
+    private void review() {
+        Uri uri = Uri.parse("mbarket://details?id=" + getPackageName());
+        Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+        gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            startActivity(gotoMarket);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+        }
+    }
+
+    @OnClick(R.id.changelog)
+    void whatNewClick(){
+        new MaterialDialog.Builder(this)
+                .positiveText(R.string.app_tab_fragment_ok_button)
+                .negativeText(R.string.vote_now)
+                .title(R.string.what_new)
+                .items(R.array.what_new)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        review();
+                    }
+                })
+                .checkBoxPromptRes(R.string.show_this_after_an_update, true, new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        shared.edit().putBoolean(Cons.AUTO_SHOW_WHAT_NEW_KEY, b).commit();
+                    }
+                })
+                .show();
+    }
+    
     protected void sendEmail() {
         String[] TO = {"thanhhai08sk@gmail.com"};
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
@@ -202,6 +252,8 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
             Toast.makeText(MainView.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
         }
     }
+
+    
 
 
 }

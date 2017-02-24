@@ -34,6 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="8dp"
+                style="@style/Drawer_Item"
 
                 >
                 <ImageView
@@ -44,17 +45,41 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    style="@style/Drawer_Item"
+                    style="@style/Drawer_Item_text"
                     android:text="@string/main_more_setting_title"
                     />
 
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/changelog"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                style="@style/Drawer_Item"
+
+                >
+                <ImageView
+                    style="@style/Drawer_Icon"
+                    app:srcCompat="@drawable/ic_changelog"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    style="@style/Drawer_Item_text"
+                    android:text="@string/what_new"
+                    />
+
+            </FrameLayout>
+
+
+            <FrameLayout
                 android:id="@+id/review"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="8dp"
+                style="@style/Drawer_Item"
 
                 >
                 <ImageView
@@ -65,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    style="@style/Drawer_Item"
+                    style="@style/Drawer_Item_text"
                     android:text="@string/review_on_play_store"
                     />
 
@@ -76,6 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="8dp"
+                style="@style/Drawer_Item"
 
                 >
                 <ImageView
@@ -86,7 +112,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    style="@style/Drawer_Item"
+                    style="@style/Drawer_Item_text"
                     android:text="@string/email_us"
                     />
 

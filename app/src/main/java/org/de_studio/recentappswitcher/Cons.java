@@ -195,8 +195,7 @@ public class Cons {
     public static final int SHOWING_FOLDER = 4;
 
 
-
-//    edge setting
+    public static final String AUTO_SHOW_WHAT_NEW_KEY = "auto_show_what_new";
     public static final String AVOID_KEYBOARD_KEY = "avoid_keyboard";
     public static final String AVOID_KEYBOARD_OPTION_KEY = "avoid_keyboard_option";
     public static final int  AVOID_KEYBOARD_OPTION_STEP_ASIDE = 1;

@@ -186,7 +186,7 @@
     <string name="write_setting_permission_explain">Swiftly Switch need the "Write setting" permission to take this action. Please find Swiftly Switch in the setting then enable the permission.</string>
     <string name="go_to_setting">Go to setting</string>
     <string name="shortcut">Shortcuts</string>
-    <string name="vote_now">Vote now</string>
+    <string name="vote_now">Review now</string>
     <string name="pin_shortcuts_to_recent">Pin shortcuts to recent</string>
     <string name="sale_50">Pro -50%</string>
     <string name="avoid_keyboard">Avoid keyboard</string>
@@ -226,6 +226,9 @@
     <string name="grid_favorites_description">"Place a large set of your favorite shortcuts here. Click to set size, content and position"</string>
     <string name="circle_favorites">Circle favorites</string>
     <string name="circle_favorites_description">Place a small set of your favorite shortcuts in a semi-circle manner</string>
+    <string name="show_this_after_an_update">Show this after an update</string>
+
+
 
     //Recent/Circle favorite
     <string name="choose_set">Set</string>
@@ -293,4 +296,15 @@
     <string name="uploading">Uploading</string>
     <string name="backup_guide">The backup file will be stored in your Google Drive. Please connect to your Google account and then choose the folder to upload.</string>
     <string name="import_guide">Choose the backup file from Google Drive.</string>
+
+
+    //What new
+    <string name="what_new_3.0.0.8" translatable="false">VERSION 3.0.0.8 (beta):\n
+        - Fix bugs
+
+    </string>
+    <string name="what_new_3_0_0_7" translatable="false">VERSION 3.0.0.7 (beta):\n
+        - Backup/import data to/from Google Drive \n
+        - Customize Quick Actions size, visibility\n
+        - Fix vibration duration in More setting</string>
 </resources>
