@@ -314,7 +314,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 .setContentIntent(notiPending)
                 .addAction(remoteAction)
                 .setPriority(Notification.PRIORITY_MIN)
-                .setContentText(getString(R.string.notification_text)).setContentTitle(getString(R.string.notification_title));
+                .setContentText(getString(R.string.notification_short_description)).setContentTitle(getString(R.string.notification_title));
         Notification notificationCompat = notificationBuilder.build();
         startForeground(Cons.NOTIFICATION_ID, notificationCompat);
     }
