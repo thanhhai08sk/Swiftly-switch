@@ -30,6 +30,21 @@
                 />
 
             <LinearLayout
+                android:id="@+id/disable_in_fullscreen"
+                style="@style/MoreSetting_Item_Parent_With_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary"
+                    android:text="@string/disable_in_fullscreen"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/disable_in_fullscreen_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
+
+            <LinearLayout
                 android:id="@+id/disable_clock"
                 style="@style/MoreSetting_Item_Parent_With_Switch"
                 >

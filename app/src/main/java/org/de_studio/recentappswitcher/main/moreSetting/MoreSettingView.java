@@ -73,7 +73,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     private int REQUEST_CODE_SELECT = 3;
     public static final int REQUEST_BACKUP = 11;
     public static final int REQUEST_RESTORE = 12;
-    
+    @BindView(R.id.disable_in_fullscreen_switch)
+    SwitchCompat disableInFullScreenSwitch;
     @BindView(R.id.disable_clock_switch)
     SwitchCompat disableClockSwitch;
 //    @BindView(R.id.avoid_keyboard_switch)
@@ -227,6 +228,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @Override
     public void updateViews() {
+        disableInFullScreenSwitch.setChecked(sharedPreferences.getBoolean(Cons.DISABLE_IN_FULLSCREEN_KEY,false));
         disableClockSwitch.setChecked(sharedPreferences.getBoolean(Cons.DISABLE_CLOCK_KEY, false));
 //        avoidKeyboardSwitch.setChecked(sharedPreferences.getBoolean(Cons.AVOID_KEYBOARD_KEY, true));
         disableInLandscapeSwitch.setChecked(sharedPreferences.getBoolean(Cons.IS_DISABLE_IN_LANDSCAPE_KEY, false));
@@ -468,6 +470,11 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         uploadingDialog = null;
     }
 
+
+    @OnClick(R.id.disable_in_fullscreen)
+    void onDisableInFullscreenClick(){
+        presenter.onDisableInFullscreen();
+    }
     @OnClick(R.id.disable_clock)
     void onDisableClockClick(){
         presenter.onDisableClock();

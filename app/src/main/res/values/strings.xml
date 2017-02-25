@@ -279,6 +279,7 @@
     <string name="show_guide_description">Show a line to indicate the trigger zone</string>
 
     //More setting
+    <string name="disable_in_fullscreen">Disable in fullscreen app</string>
     <string name="general">General</string>
     <string name="look">Look</string>
     <string name="feel">Feel</string>

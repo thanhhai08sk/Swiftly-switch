@@ -173,6 +173,11 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
 
     }
 
+    public void onDisableInFullscreen() {
+        boolean currentSetting = sharedPreferences.getBoolean(Cons.DISABLE_IN_FULLSCREEN_KEY, false);
+        sharedPreferences.edit().putBoolean(Cons.DISABLE_IN_FULLSCREEN_KEY, !currentSetting).commit();
+        view.resetService();
+    }
     public void onDisableClock() {
         boolean currentSetting = sharedPreferences.getBoolean(Cons.DISABLE_CLOCK_KEY, false);
         sharedPreferences.edit().putBoolean(Cons.DISABLE_CLOCK_KEY, !currentSetting).commit();
