@@ -134,12 +134,30 @@
 
     <string-array name="faq_titles" >
         <item>@string/faq_how_to_hide_the_notification</item>
+        <item>@string/faq_screen_overlay_detected</item>
+        <item>@string/faq_how_to_auto_disable_when_play_game</item>
         <item>@string/faq_app_take_few_seconds_to_launch</item>
+        <item>@string/faq_closed_app_in_recent_list</item>
+        <item>@string/faq_why_not_mobile_networking_shortcut</item>
+        <item>@string/faq_can_not_uninstall</item>
+        <item>@string/faq_problem_on_huawei_device</item>
+        <item>@string/faq_problem_on_one_plus_device</item>
+        <item>@string/faq_problem_on_xiaomi_device</item>
+
+
     </string-array>
 
     <string-array name="faq_answers">
         <item>@string/faq_how_to_hide_the_notification_answer</item>
+        <item>@string/faq_screen_overlay_detected_answer</item>
+        <item>@string/faq_how_to_auto_disable_when_play_game_answer</item>
         <item>@string/faq_app_take_few_seconds_to_launch_answer</item>
+        <item>@string/faq_closed_app_in_recent_list_answer</item>
+        <item>@string/faq_why_not_mobile_networking_shortcut_answer</item>
+        <item>@string/faq_can_not_uninstall_answer</item>
+        <item>@string/faq_problem_on_huawei_device_answer</item>
+        <item>@string/faq_problem_on_one_plus_device_answer</item>
+        <item>@string/faq_problem_on_xiaomi_device_answer</item>
     </string-array>
 
     <string-array name="what_new">

@@ -61,7 +61,9 @@ public abstract class BaseActivity<T,P extends BasePresenter > extends AppCompat
     @CallSuper
     @Override
     protected void onDestroy() {
-        presenter.onViewDetach();
+        if (presenter != null) {
+            presenter.onViewDetach();
+        }
         if(destroyedBySystem) onDestroyBySystem(); else onDestroyByUser();
         super.onDestroy();
     }

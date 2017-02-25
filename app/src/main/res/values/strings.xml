@@ -279,7 +279,7 @@
     <string name="show_guide_description">Show a line to indicate the trigger zone</string>
 
     //More setting
-    <string name="disable_in_fullscreen">Disable in fullscreen app</string>
+    <string name="disable_in_fullscreen">Disable in fullscreen apps</string>
     <string name="general">General</string>
     <string name="look">Look</string>
     <string name="feel">Feel</string>
@@ -313,13 +313,40 @@
     //FAQs
     <string name="faqs">FAQs</string>
     <string name="faq_how_to_hide_the_notification">How to hide the notification?</string>
-    <string name="faq_how_to_hide_the_notification_answer">Persistent notification is for keeping Swiftly Switch stay in background</string>
+    <string name="faq_how_to_hide_the_notification_answer">Persistent notification is for keeping Swiftly Switch stay in background but you can hide it by blocking all of the notification from Swiftly Switch in the App Info. To hide it: click to the notification > Hide notification > Block notification.</string>
+
+    <string name="faq_screen_overlay_detected">What is \"Screen overlay detected\"?</string>
+    <string name="faq_screen_overlay_detected_answer">This is the security feature of Android 6.0. You\'ll see this dialog when giving permission to other app while a \"Floating app\" is running. When this happens, just trigger Swiftly Switch by swipe in from the edge, Swiftly Switch will be automatically disable for 10 seconds so you can give permission to other app as normal. Alternatively, you can disable Swiftly Switch from the Notification > give permission > enable the app again.
+     </string>
+
+    <string name="faq_how_to_auto_disable_when_play_game">How to auto disable the app when playing game?</string>
+    <string name="faq_how_to_auto_disable_when_play_game_answer">Go to More Setting and turn on the \"Disable In Fullscreen apps\" or \"Disable in landscape mode\"</string>
 
     <string name="faq_app_take_few_seconds_to_launch">Why sometime it take few seconds to launch an app?</string>
     <string name="faq_app_take_few_seconds_to_launch_answer">Swiftly switch can\'t start apps within 5 seconds from the point you return the Home Screen. This is the how Android limit services. It\'s not a problem if you return home by the
-     in app Home Shortcut, or even better - do not return to the Home Screen.</string>
+     in app Home Shortcut.</string>
+
+    <string name="faq_problem_on_xiaomi_device">Problem on Xiaomi devices</string>
+    <string name="faq_problem_on_xiaomi_device_answer">On MIUI 7, you need to enable the \"Display pop-up\" permission to make it work. Go to Setting > Apps > Swiftly switch > Permission > Display pop-up > restart the app. \n\nOn MIUI 8, you need to locking the app in the recent menu and turning off the Background Restriction. To Lock the app in the recent menu: Press the Recent button > Swipe down from the window that indicate Swiftly Switch > Click the Lock icon.\n\n
+        To turn off the Background restriction: Setting > Battery and performance > Manage apps battery usage > Choose Apps > Swiftly Switch > click to No restrictions.
+    </string>
+
+    <string name="faq_problem_on_huawei_device">Problem on Huawei devices</string>
+    <string name="faq_problem_on_huawei_device_answer">Please try to turn on the option for Swiftly Switch in Dropzone Manager. Also turn on the option for Swiftly Switch in \"Protected Apps\" setting to keep it running in background.</string>
 
 
+
+    <string name="faq_problem_on_one_plus_device">Problem on Oppo devices</string>
+    <string name="faq_problem_on_one_plus_device_answer">Please turn off the Deep Clear option in Setting. This will stop all the background process once you exit the app</string>
+
+    <string name="faq_closed_app_in_recent_list">Why closed app still on recent list?</string>
+    <string name="faq_closed_app_in_recent_list_answer">Due to the limitation from Android 4.4, 3rd party app can only access your recent used apps, not which app is currently running on your device.</string>
+
+    <string name="faq_why_not_mobile_networking_shortcut">Why there is no shortcut for switching mobile network or airplane mode?</string>
+    <string name="faq_why_not_mobile_networking_shortcut_answer">Due to restrictions from Android, Swiftly Switch does not have the authority to directly access and switch your mobile network or airplane mode.</string>
+
+    <string name="faq_can_not_uninstall">Why I can\'t uninstall the app on my device?</string>
+    <string name="faq_can_not_uninstall_answer">You can uninstall the app as other applications. If you have set the app to \"Phone administrator\" (for Screen lock shortcut) you\'ll need to disable it first: Setting > Security > Phone administrator > disable the option for Swiftly Switch).</string>
 
 
     //What new

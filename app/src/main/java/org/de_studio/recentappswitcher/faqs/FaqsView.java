@@ -31,6 +31,7 @@ public class FaqsView extends BaseActivity {
         recyclerView.setAdapter(adapter);
     }
 
+
     @Override
     protected void inject() {
         // do nothing
