@@ -184,10 +184,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     private GestureDetectorCompat mDetector;
     PublishSubject<Boolean> enterOrExitFullScreenSJ = PublishSubject.create();
+    boolean isFree;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        isFree = Utility.isFree(this);
         DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
@@ -277,7 +279,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
                 }
             }
-            if (sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false)) {
+            if (!isFree && sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false)) {
                 try {
                     windowManager.addView(edge2View, edge2Para);
                     edge2View.setOnTouchListener(null);
@@ -293,7 +295,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             if (sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY, true)) {
                 Log.e(TAG, "addEdgesToWindowAndSetListener: edge1 attached");
                 edge1View.setOnSystemUiVisibilityChangeListener(this);
-            } else if (sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false)) {
+            } else if (!isFree && sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false)) {
                 Log.e(TAG, "addEdgesToWindowAndSetListener: edge2 attached");
                 edge2View.setOnSystemUiVisibilityChangeListener(this);
             }
@@ -1187,7 +1189,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             }
 
         }
-        if (sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false) && edge2View != null && !edge2View.isAttachedToWindow()) {
+        if (!isFree && sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false) && edge2View != null && !edge2View.isAttachedToWindow()) {
             try {
                 windowManager.addView(edge2View, edge2Para);
             } catch (IllegalStateException e) {
