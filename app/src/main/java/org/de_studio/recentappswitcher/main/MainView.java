@@ -201,6 +201,20 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
         startActivity(new Intent(this, FaqsView.class));
     }
 
+    @OnClick(R.id.about_pro_version)
+    void aboutProClick() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.about_pro_version)
+                .content(R.string.about_pro_text)
+                .positiveText(R.string.main_buy_pro_button_text)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Utility.getProVersion(MainView.this);
+                    }
+                }).show();
+    }
+
     private void review() {
         Uri uri = Uri.parse("mbarket://details?id=" + getPackageName());
         Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -264,6 +278,7 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
         emailIntent.setType("text/plain");
         emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+        emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.email_prompt));
 
         try {
             startActivity(Intent.createChooser(emailIntent, "Send mail..."));

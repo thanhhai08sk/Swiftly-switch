@@ -228,6 +228,23 @@
     <string name="circle_favorites">Circle favorites</string>
     <string name="circle_favorites_description">Place a small set of your favorite shortcuts in a semi-circle manner</string>
     <string name="show_this_after_an_update">Show this after an update</string>
+    <string name="send_feedback">Send feedback</string>
+    <string name="email_prompt">Please fill out appropriate information!\n\n
+        Device: \n\n
+    Android version:\n\n
+        Bug report:\n\n
+        Suggestion:\n\n
+        Question:\n\n
+        Additional information:\n\n
+    </string>
+    <string name="about_pro_version">About Pro version</string>
+    <string name="about_pro_text">Get the Pro version to:\n\n
+     - Unlock second Edge\n\n
+     - Customize column count and row count of Grid Favorite\n\n
+         - Icon pack support\n\n
+     - Auto disable Swiftly Switch in full-screen apps</string>
+    <string name="about">About</string>
+
 
 
 

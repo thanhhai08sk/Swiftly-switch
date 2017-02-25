@@ -31,10 +31,18 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
     private static final String TAG = GridFavoriteSettingView.class.getSimpleName();
     @BindView(R.id.margin)
     LinearLayout marginLayout;
+    @BindView(R.id.columns_count)
+    View columnsCount;
+    @BindView(R.id.columns_count_title)
+    TextView columnsCountTitle;
+    @BindView(R.id.rows_count_title)
+    TextView rowsCountTitle;
     @BindView(R.id.columns_count_value)
-    TextView columnsCount;
+    TextView columnsCountValue;
+    @BindView(R.id.rows_count)
+    View rowsCount;
     @BindView(R.id.rows_count_value)
-    TextView rowsCount;
+    TextView rowsCountValue;
     @BindView(R.id.shortcuts_space_value)
     TextView space;
     @BindView(R.id.position_value)
@@ -171,8 +179,9 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
     @Override
     public void updateCollectionInfo(Collection collection) {
         super.updateCollectionInfo(collection);
-        columnsCount.setText(String.valueOf(collection.columnCount));
-        rowsCount.setText(String.valueOf(collection.rowsCount));
+
+        columnsCountValue.setText(String.valueOf(collection.columnCount));
+        rowsCountValue.setText(String.valueOf(collection.rowsCount));
         space.setText(String.valueOf(collection.space));
         String positionValue = "";
         switch (collection.position) {
@@ -198,11 +207,19 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
 
     @OnClick(R.id.rows_count)
     void onSetRowsClick(){
-        getGridPresenter().onSetRowsCountClick();
+        if (Utility.isFree(this)) {
+            Utility.showProOnlyDialog(this);
+        } else {
+            getGridPresenter().onSetRowsCountClick();
+        }
     }
     @OnClick(R.id.columns_count)
     void onSetColumnsCountClick(){
-        getGridPresenter().onSetColumnsCountClick();
+        if (Utility.isFree(this)) {
+            Utility.showProOnlyDialog(this);
+        } else {
+            getGridPresenter().onSetColumnsCountClick();
+        }
     }
     @OnClick(R.id.shortcuts_space)
     void onSetShortcutsSpaceClick(){

@@ -39,6 +39,7 @@ import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -65,6 +66,9 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
@@ -3477,5 +3481,20 @@ public  class Utility {
             context.startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("http://play.google.com/store/apps/details?id=" + Cons.PRO_VERSION_PACKAGE_NAME)));
         }
+    }
+
+    public static void showProOnlyDialog(final Context context) {
+        new MaterialDialog.Builder(context)
+                .title(R.string.pro_only)
+                .content(R.string.pro_only_content)
+                .positiveText(R.string.main_edge_switch_2_trial_buy_pro_button)
+                .negativeText(R.string.edge_dialog_cancel_button)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Utility.getProVersion(context);
+                    }
+                })
+                .show();
     }
 }

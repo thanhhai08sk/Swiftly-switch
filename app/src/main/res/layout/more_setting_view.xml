@@ -35,6 +35,7 @@
                 >
                 <TextView
                     style="@style/MoreSetting_Item_Text_Primary"
+                    android:textColor="@color/text_primary_dark_enable_disable"
                     android:text="@string/disable_in_fullscreen"
                     />
                 <android.support.v7.widget.SwitchCompat
@@ -163,6 +164,7 @@
                 >
                 <TextView
                     style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:textColor="@color/text_primary_dark_enable_disable"
                     android:text="@string/main_icon_pack_support"
                     />
                 <TextView
@@ -351,6 +353,7 @@
             <LinearLayout
                 android:id="@+id/reset_to_default"
                 style="@style/MoreSetting_Item_Parent_No_Switch"
+                android:visibility="gone"
                 >
 
                 <TextView

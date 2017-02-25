@@ -2,13 +2,11 @@ package org.de_studio.recentappswitcher.main.moreSetting;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -338,33 +336,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @Override
     public void chooseIconPackDialog() {
-        if (Utility.isTrial(this)) {
-            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-            builder.setMessage(R.string.main_icon_pack_trial_dialog_message)
-                    .setPositiveButton(R.string.main_edge_switch_2_trial_buy_pro_button, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Uri uri = Uri.parse("mbarket://details?id=" + Cons.PRO_VERSION_PACKAGE_NAME);
-                            Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
-                            gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                            try {
-                                startActivity(gotoMarket);
-                            } catch (ActivityNotFoundException e) {
-                                startActivity(new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse("http://play.google.com/store/apps/details?id=" + Cons.PRO_VERSION_PACKAGE_NAME)));
-                            }
-                        }
-                    })
-                    .setNegativeButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // do nothing
-                        }
-                    });
-            builder.show();
-
-
+        if (Utility.isFree(this)) {
+            Utility.showProOnlyDialog(this);
         } else {
             android.app.FragmentManager fragmentManager = getFragmentManager();
             IconPackSettingDialogFragment newFragment = new IconPackSettingDialogFragment();
@@ -473,7 +446,11 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @OnClick(R.id.disable_in_fullscreen)
     void onDisableInFullscreenClick(){
-        presenter.onDisableInFullscreen();
+        if (Utility.isFree(this)) {
+            Utility.showProOnlyDialog(this);
+        } else {
+            presenter.onDisableInFullscreen();
+        }
     }
     @OnClick(R.id.disable_clock)
     void onDisableClockClick(){

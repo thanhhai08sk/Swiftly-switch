@@ -111,6 +111,9 @@
     <style name="Drawer_Item">
         <item name="android:foreground">?android:selectableItemBackground</item>
     </style>
+    <style name="Drawer_Item.pro_and_free">
+        <item name="android:visibility">gone</item>
+    </style>
 
 
     //MoreSetting
