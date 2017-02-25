@@ -277,6 +277,9 @@
     <string name="choose_recent_set">Choose Recent Set</string>
     <string name="avoid_keyboard_description">Prevent from interfering with the keyboard</string>
     <string name="show_guide_description">Show a line to indicate the trigger zone</string>
+    <string name="pro_only">Pro only</string>
+    <string name="pro_only_content">This feature is only available for Pro version</string>
+
 
     //More setting
     <string name="disable_in_fullscreen">Disable in fullscreen apps</string>

@@ -3,12 +3,14 @@ package org.de_studio.recentappswitcher.main.edgeSetting;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
@@ -268,6 +270,27 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
                 break;
         }
         currentModeText.setText(currentMode);
+    }
+
+    @Override
+    public boolean isEnablable(String edgeId) {
+        return edgeId.equals(Edge.EDGE_1_ID) || !Utility.isFree(getActivity());
+    }
+
+    @Override
+    public void showOnlyForProVersion() {
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.pro_only)
+                .content(R.string.pro_only_content)
+                .positiveText(R.string.main_edge_switch_2_trial_buy_pro_button)
+                .negativeText(R.string.edge_dialog_cancel_button)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Utility.getProVersion(getActivity());
+                    }
+                })
+                .show();
     }
 
     @Override

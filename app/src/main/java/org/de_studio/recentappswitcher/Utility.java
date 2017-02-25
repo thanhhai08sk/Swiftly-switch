@@ -7,6 +7,7 @@ import android.app.ActivityManager;
 import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -3457,4 +3458,24 @@ public  class Utility {
         return Build.VERSION.SDK_INT == Build.VERSION_CODES.M;
     }
 
+    public static boolean isFree(Context context) {
+        return context.getPackageName().equals(Cons.FREE_VERSION_PACKAGE_NAME);
+    }
+
+    public static boolean isFreeAndOutOfTrial(Context context, SharedPreferences sharedPreferences) {
+        return isFree(context) && System.currentTimeMillis() - sharedPreferences.getLong(Cons.BEGIN_DAY_KEY, System.currentTimeMillis()) > Cons.TRIAL_TIME;
+    }
+
+    public static void getProVersion(Context context) {
+        Uri uri = Uri.parse("mbarket://details?id=" + Cons.PRO_VERSION_PACKAGE_NAME);
+        Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+        gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            context.startActivity(gotoMarket);
+        } catch (ActivityNotFoundException e) {
+            context.startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + Cons.PRO_VERSION_PACKAGE_NAME)));
+        }
+    }
 }

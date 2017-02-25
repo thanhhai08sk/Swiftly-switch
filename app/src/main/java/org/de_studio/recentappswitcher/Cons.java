@@ -25,7 +25,6 @@ public class Cons {
 
     public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.pro";
     public static final String FREE_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.trial";
-    public static final int TRIAL_TIME =  1000 * 60 * 60 * 24 * 14;
     public static final int NOTIFICATION_ID = 2323;
 
     public static final String SHARED_PREFERENCE_NAME = "org.de_studio.recentappswitcher.shared";
@@ -68,12 +67,12 @@ public class Cons {
     public static final int QUICK_ACTION_GAP_DP = 35;
     public static final int DEFAULT_ICON_WIDTH = 48;
     public static final int DEFAULT_ICON_GAP_IN_GRID = 10;
-    public static final int DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL = 40;
-    public static final int DEFAULT_FAVORITE_GRID_PADDING_VERTICAL = 40;
+    public static final int DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL = 40; //no use
+    public static final int DEFAULT_FAVORITE_GRID_PADDING_VERTICAL = 40;  //no use
     public static final int DEFAULT_FAVORITE_GRID_COLUMN_COUNT = 4;
     public static final int DEFAULT_FAVORITE_GRID_ROW_COUNT = 5;
-    public static final int DEFAULT_FAVORITE_GRID_VERTICAL_MARGIN = 20;
-    public static final int DEFAULT_FAVORITE_GRID_HORIZONTAL_MARGIN = 20;
+    public static final int DEFAULT_FAVORITE_GRID_VERTICAL_MARGIN = 40;
+    public static final int DEFAULT_FAVORITE_GRID_HORIZONTAL_MARGIN = 40;
     public static final int DEFAULT_FAVORITE_GRID_SPACE = 15;
     public static final int FAVORITE_GRID_MIN_VERTICAL_MARGIN = 20;
     public static final int FAVORITE_GRID_MAX_VERTICAL_MARGIN = 120;
@@ -96,6 +95,7 @@ public class Cons {
     public static final int ANIMATION_TIME_MAX = 1500;
     public static final long TIME_INTERVAL_SHORT = 1000000;
     public static final long TIME_INTERVAL_LONG = 604800000;
+    public static final long TRIAL_TIME = 1000 * 60 * 60 * 24 * 14;
 
 
     public static final int EDGE_1_ID_INT = 11;
@@ -195,6 +195,7 @@ public class Cons {
     public static final int SHOWING_FOLDER = 4;
 
 
+    public static final String BEGIN_DAY_KEY = "begin_trial_time";
     public static final String DISABLE_IN_FULLSCREEN_KEY = "disable_in_fullscreen";
     public static final String APP_VERSION_KEY = "app_version";
     public static final String AUTO_SHOW_WHAT_NEW_KEY = "auto_show_what_new";

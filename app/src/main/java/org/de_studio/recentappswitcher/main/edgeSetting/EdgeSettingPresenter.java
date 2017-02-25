@@ -158,9 +158,14 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
     }
 
     public void onEnable() {
-        model.setEnable(!model.isEdgeEnabled());
-        showEdge(model.getEdge());
-        view.restartService();
+
+        if (view.isEnablable(model.getEdge().edgeId)) {
+            model.setEnable(!model.isEdgeEnabled());
+            showEdge(model.getEdge());
+            view.restartService();
+        } else {
+            view.showOnlyForProVersion();
+        }
     }
 
     public void onSetAvoidKeyboard() {
@@ -204,6 +209,10 @@ public class EdgeSettingPresenter extends BasePresenter<EdgeSettingPresenter.Vie
         void registerSetDataCompleteEven();
 
         void restartService();
+
+        boolean isEnablable(String edgeId);
+
+        void showOnlyForProVersion();
     }
 
 }
