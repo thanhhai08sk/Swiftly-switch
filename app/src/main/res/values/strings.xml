@@ -370,6 +370,16 @@
 
 
     //What new
+    <string name="what_new_3.0.0.9" translatable="false">VERSION 3.0.0.9 (beta):\n
+        - Improve UI \n
+        - Option to disable Edges in full-screen apps\n
+        - Redesign notification\n
+        - Auto pause for 10 seconds when trigger Edge while giving permission(Android 6.0)\n
+        - FAQs, What new\n
+        - Fix does not show new installed app in recent and other bugs
+
+    </string>
+
     <string name="what_new_3.0.0.8" translatable="false">VERSION 3.0.0.8 (beta):\n
         - Fix bugs
 
