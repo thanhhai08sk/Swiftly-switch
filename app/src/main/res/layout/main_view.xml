@@ -160,12 +160,15 @@
                     android:text="@string/about_pro_version"
                     />
 
-            </FrameLayout><FrameLayout
+            </FrameLayout>
+            <FrameLayout
                 android:id="@+id/about"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="8dp"
                 style="@style/Drawer_Item"
+                android:visibility="gone"
+                tools:visibility="visible"
 
                 >
                 <ImageView

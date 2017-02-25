@@ -3252,6 +3252,10 @@ public  class Utility {
         return Item.TYPE_DEVICE_SHORTCUT + intent;
     }
 
+    public static String getAppItemId(String packageName) {
+        return Item.TYPE_APP + packageName;
+    }
+
     public static int getActionFromStringAction(String action) {
         switch (action) {
             case MainActivity.ACTION_HOME:

@@ -579,6 +579,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         return null;
     }
 
+    public void newPackageInstalled(String packageName, String label) {
+        model.addPackageToData(packageName, label);
+    }
+
 
     public interface View extends PresenterView, android.view.View.OnTouchListener, GestureDetector.OnGestureListener
             , android.view.View.OnSystemUiVisibilityChangeListener {

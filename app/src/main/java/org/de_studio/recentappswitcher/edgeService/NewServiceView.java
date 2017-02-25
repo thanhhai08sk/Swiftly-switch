@@ -175,6 +175,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     HashMap<String, View> collectionViewsMap = new HashMap<>();
     UsageStatsManager usageStatsManager;
     NewServiceView.EdgesToggleReceiver receiver;
+    NewServiceView.PackageChangedReceiver receiver1;
     boolean working = true;
     private NotificationCompat.Builder notificationBuilder;
     Realm realm = Realm.getDefaultInstance();
@@ -262,6 +263,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             this.unregisterReceiver(receiver);
             receiver = null;
         }
+        if (receiver1 != null) {
+            this.unregisterReceiver(receiver1);
+            receiver1 = null;
+        }
         realm.close();
 
     }
@@ -345,8 +350,18 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         filter.addAction(Cons.ACTION_TOGGLE_EDGES);
         filter.addAction(Intent.ACTION_USER_PRESENT);
         filter.addAction(Cons.ACTION_REFRESH_FAVORITE);
+        filter.addAction(Intent.ACTION_PACKAGE_ADDED);
         receiver = new NewServiceView.EdgesToggleReceiver();
         this.registerReceiver(receiver, filter);
+
+
+        IntentFilter filter1 = new IntentFilter();
+        filter1.addAction(Intent.ACTION_PACKAGE_ADDED);
+        filter1.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        filter1.addDataScheme("package");
+        receiver1 = new NewServiceView.PackageChangedReceiver();
+        this.registerReceiver(receiver1, filter1);
+
     }
 
     @Override
@@ -1297,6 +1312,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             } else if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
                 Log.e(TAG, "onReceive: userPresent");
                 hideAllExceptEdges();
+            } else if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
+
             }
         }
     }
@@ -1312,6 +1329,30 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 if (presenter == null) {
                     inject();
                     presenter.onViewAttach(NewServiceView.this);
+                }
+            }
+        }
+    }
+
+    public class PackageChangedReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED)) {
+                Log.e(TAG, "onReceive: action package removed");
+                if (!intent.getExtras().getBoolean(Intent.EXTRA_REPLACING)) {
+                    //nothing now
+                }
+            } else if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
+                Log.e(TAG, "onReceive: action package added");
+                if (!intent.getExtras().getBoolean(Intent.EXTRA_REPLACING)) {
+                    int uid = intent.getExtras().getInt(Intent.EXTRA_UID);
+                    String[] packageName = getPackageManager().getPackagesForUid(uid);
+                    if (packageName != null) {
+                        for (String s : packageName) {
+                            Log.e(TAG, "onReceive: new app " + s);
+                            presenter.newPackageInstalled(s, Utility.getLabelFromPackageName(s, getPackageManager()));
+                        }
+                    }
                 }
             }
         }

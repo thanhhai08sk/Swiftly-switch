@@ -373,6 +373,26 @@ public class NewServiceModel extends BaseModel {
         return haftIconWidth + radius*mScale;
     }
 
+    public void addPackageToData(final String packageName, final String label) {
+        final String itemId = Utility.createAppItemId(packageName);
+        Item item = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
+        if (item == null) {
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Item item = new Item();
+                    item.type = Item.TYPE_APP;
+                    item.itemId = itemId;
+                    item.packageName = packageName;
+                    item.label = label;
+                    realm.copyToRealm(item);
+                    Log.e(TAG, "generate app item: " + label);
+
+                }
+            });
+        }
+
+    }
 
 
     @Override
