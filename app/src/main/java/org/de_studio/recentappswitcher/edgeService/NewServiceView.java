@@ -77,6 +77,7 @@ import javax.inject.Named;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import rx.subjects.PublishSubject;
 
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
@@ -182,6 +183,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     ObjectAnimator gridAlphaAnimator;
 
     private GestureDetectorCompat mDetector;
+    PublishSubject<Boolean> enterOrExitFullScreenSJ = PublishSubject.create();
 
     @Override
     public void onCreate() {
@@ -220,6 +222,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             presenter.onViewDetach();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public PublishSubject<Boolean> onEnterOrExitFullScreen() {
+        return enterOrExitFullScreenSJ;
     }
 
     private void inject() {
@@ -278,6 +285,17 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 } catch (Exception e) {
                     Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
                 }
+            }
+        }
+
+        if (sharedPreferences.getBoolean(Cons.DISABLE_IN_FULLSCREEN_KEY, false)) {
+            Log.e(TAG, "addEdgesToWindowAndSetListener: true");
+            if (sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY, true)) {
+                Log.e(TAG, "addEdgesToWindowAndSetListener: edge1 attached");
+                edge1View.setOnSystemUiVisibilityChangeListener(this);
+            } else if (sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false)) {
+                Log.e(TAG, "addEdgesToWindowAndSetListener: edge2 attached");
+                edge2View.setOnSystemUiVisibilityChangeListener(this);
             }
         }
     }
@@ -1160,12 +1178,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         return motionEvent.getRawY();
     }
 
-    public final synchronized void addEdgeImage() {
+    public final synchronized void addEdgeViews() {
         if (sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY, true) && edge1View != null && !edge1View.isAttachedToWindow()) {
             try {
                 windowManager.addView(edge1View, edge1Para);
             } catch (IllegalStateException e) {
-                Log.e(TAG, "addEdgeImage: fail when add edge1Image");
+                Log.e(TAG, "addEdgeViews: fail when add edge1Image");
             }
 
         }
@@ -1173,14 +1191,14 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             try {
                 windowManager.addView(edge2View, edge2Para);
             } catch (IllegalStateException e) {
-                Log.e(TAG, "addEdgeImage: fail when add edge2Image");
+                Log.e(TAG, "addEdgeViews: fail when add edge2Image");
             }
 
         }
     }
 
-    public final synchronized void removeEdgeImage() {
-        Log.e(TAG, "removeEdgeImage: ");
+    public final synchronized void removeEdgeViews() {
+        Log.e(TAG, "removeEdgeViews: ");
         try {
             windowManager.removeView(edge1View);
         } catch (Exception e) {
@@ -1196,15 +1214,43 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
+    public void disableEdgeViews(boolean disable) {
+        if (disable) {
+            if (edge1View != null && edge1View.isAttachedToWindow()) {
+                Log.e(TAG, "disableEdgeViews: invisible");
+                edge1View.setVisibility(View.INVISIBLE);
+            }
+            if (edge2View != null && edge2View.isAttachedToWindow()) {
+                edge2View.setVisibility(View.INVISIBLE);
+            }
+        } else {
+            if (edge1View != null && edge1View.isAttachedToWindow()) {
+                Log.e(TAG, "disableEdgeViews: visible");
+                edge1View.setVisibility(View.VISIBLE);
+            }
+            if (edge2View != null && edge2View.isAttachedToWindow()) {
+                edge2View.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         if (sharedPreferences.getBoolean(Cons.IS_DISABLE_IN_LANDSCAPE_KEY, false) && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            removeEdgeImage();
+            removeEdgeViews();
         } else {
-            addEdgeImage();
+            addEdgeViews();
         }
         hideAllExceptEdges();
         Log.e(TAG, "onConfigurationChanged: ");
         super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onSystemUiVisibilityChange(int i) {
+        Log.e(TAG, "onSystemUiVisibilityChange: i = " + i);
+        int flag = i & View.SYSTEM_UI_FLAG_FULLSCREEN;
+        enterOrExitFullScreenSJ.onNext(flag != 0);
     }
 
     public class EdgesToggleReceiver extends BroadcastReceiver {
@@ -1221,7 +1267,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(NewServiceView.this, 0, remoteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 if (working) {
-                    removeEdgeImage();
+                    removeEdgeViews();
                     working = !working;
 
 
@@ -1231,7 +1277,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                                     getString(R.string.resume),
                                     pendingIntent).build();
                 } else {
-                    addEdgeImage();
+                    addEdgeViews();
                     working = !working;
 
 

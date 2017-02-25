@@ -758,7 +758,7 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             try {
                 windowManager.addView(edge1View,edge1Para);
             } catch (IllegalStateException e) {
-                Log.e(TAG, "addEdgeImage: fail when add edge1Image");
+                Log.e(TAG, "addEdgeViews: fail when add edge1Image");
             }
 
         }
@@ -766,14 +766,14 @@ public class EdgeServiceView extends Service implements View.OnTouchListener {
             try {
                 windowManager.addView(edge2View,edge2Para);
             } catch (IllegalStateException e) {
-                Log.e(TAG, "addEdgeImage: fail when add edge2Image");
+                Log.e(TAG, "addEdgeViews: fail when add edge2Image");
             }
 
         }
     }
 
     public final synchronized void removeEdgeImage() {
-        Log.e(TAG, "removeEdgeImage: ");
+        Log.e(TAG, "removeEdgeViews: ");
         try {
             windowManager.removeView(edge1View);
         } catch (Exception e) {

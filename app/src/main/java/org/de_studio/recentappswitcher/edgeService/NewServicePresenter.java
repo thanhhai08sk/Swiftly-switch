@@ -42,7 +42,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         @Override
         public void run() {
             if (view != null) {
-                view.addEdgeImage();
+                view.addEdgeViews();
             }
         }
     };
@@ -260,10 +260,26 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     @Override
                     public void call(Void aVoid) {
                         Log.e(TAG, "call: pause for 10 second");
-                        view.removeEdgeImage();
+                        view.removeEdgeViews();
                         finishSectionSJ.onNext(null);
                         handler.postDelayed(pause10SecondRunnable, 10000);
                         view.showToast(R.string.pause_for_10_second_toast);
+                    }
+                })
+        );
+
+        addSubscription(
+                view.onEnterOrExitFullScreen().subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean aBoolean) {
+//                        if (aBoolean) {
+//                            Log.e(TAG, "call: enter fullscreen");
+//                            view.removeEdgeViews();
+//                        } else {
+//                            Log.e(TAG, "call: exit fullscreen");
+//                            view.addEdgeViews();
+//                        }
+                        view.disableEdgeViews(aBoolean);
                     }
                 })
         );
@@ -564,8 +580,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     }
 
 
+    public interface View extends PresenterView, android.view.View.OnTouchListener, GestureDetector.OnGestureListener
+            , android.view.View.OnSystemUiVisibilityChangeListener {
 
-    public interface View extends PresenterView, android.view.View.OnTouchListener,GestureDetector.OnGestureListener{
+        PublishSubject<Boolean> onEnterOrExitFullScreen();
         void addEdgesToWindowAndSetListener();
 
         void setupNotification();
@@ -620,9 +638,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void removeAll();
 
-        void addEdgeImage();
+        void addEdgeViews();
 
-        void removeEdgeImage();
+        void removeEdgeViews();
+
+        void disableEdgeViews(boolean disable);
 
         void showToast(int message);
 

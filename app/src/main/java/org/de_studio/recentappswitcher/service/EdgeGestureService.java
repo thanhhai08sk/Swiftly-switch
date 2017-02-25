@@ -2011,7 +2011,7 @@ public class EdgeGestureService extends Service {
     }
 
     public final synchronized void removeEdgeImage() {
-        Log.e(TAG, "removeEdgeImage: ");
+        Log.e(TAG, "removeEdgeViews: ");
         try {
             windowManager.removeView(edge1Image);
         } catch (Exception e) {
@@ -2031,7 +2031,7 @@ public class EdgeGestureService extends Service {
             try {
                 windowManager.addView(edge1Image,paramsEdge1);
             } catch (IllegalStateException e) {
-                Log.e(TAG, "addEdgeImage: fail when add edge1Image");
+                Log.e(TAG, "addEdgeViews: fail when add edge1Image");
             }
 
         }
@@ -2039,7 +2039,7 @@ public class EdgeGestureService extends Service {
             try {
                 windowManager.addView(edge2Image,paramsEdge2);
             } catch (IllegalStateException e) {
-                Log.e(TAG, "addEdgeImage: fail when add edge2Image");
+                Log.e(TAG, "addEdgeViews: fail when add edge2Image");
             }
 
         }
