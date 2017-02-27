@@ -43,6 +43,8 @@ public abstract class BaseCircleCollectionSettingPresenter<V extends BaseCircleC
         );
     }
 
+
+
     public BaseCircleCollectionSettingPresenter(M model) {
         super(model);
     }

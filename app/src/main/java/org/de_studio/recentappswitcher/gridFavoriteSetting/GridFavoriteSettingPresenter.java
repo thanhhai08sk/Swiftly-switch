@@ -154,10 +154,6 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
         view.showChoosePositionDialog();
     }
 
-    public void onSetStayOnScreen() {
-        model.setStayOnScreen();
-    }
-
     @Override
     protected void onMoveItem(DragAndDropCallback.MoveData moveData) {
         if (moveData != null) {

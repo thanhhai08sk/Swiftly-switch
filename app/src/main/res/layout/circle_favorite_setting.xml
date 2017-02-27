@@ -111,6 +111,50 @@
 
 
                 <LinearLayout
+                    android:id="@+id/stay_on_screen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    style="@style/ItemLinearLayout"
+                    >
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/stay_on_screen"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            style="@style/Main_text_primary"
+                            />
+                        <TextView
+                            android:id="@+id/stay_on_screen_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/Main_text_secondary"
+                            android:text="@string/stay_on_screen_enable_description"
+                            />
+
+                    </LinearLayout>
+                    <Switch
+                        android:id="@+id/stay_on_screen_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="16dp"
+                        android:paddingStart="16dp"
+                        android:clickable="false"
+                        android:focusable="false"
+                        />
+
+                </LinearLayout>
+                <include layout="@layout/separator" />
+
+                <LinearLayout
                     android:id="@+id/long_press_action"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

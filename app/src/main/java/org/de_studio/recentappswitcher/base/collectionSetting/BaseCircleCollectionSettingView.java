@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.base.collectionSetting;
 
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import org.de_studio.recentappswitcher.R;
@@ -24,6 +25,11 @@ public abstract class BaseCircleCollectionSettingView<T, P extends BaseCircleCol
     TextView circleSizeDescription;
     @BindView(R.id.long_press_description)
     TextView longPressDescription;
+    @BindView(R.id.stay_on_screen_switch)
+    Switch stayOnScreenSwitch;
+    @BindView(R.id.stay_on_screen_description)
+    TextView stayOnScreenDescription;
+
 
     PublishSubject<Integer> chooseLongPressModeSJ = PublishSubject.create();
 
@@ -53,6 +59,13 @@ public abstract class BaseCircleCollectionSettingView<T, P extends BaseCircleCol
         } else {
             longPressDescription.setText(R.string.long_press_action_description);
         }
+
+
+        boolean stayOnScreen = collection.stayOnScreen == null ? true : collection.stayOnScreen;
+        stayOnScreenSwitch.setChecked(stayOnScreen);
+        if (stayOnScreen) {
+            stayOnScreenDescription.setText(R.string.stay_on_screen_enable_description);
+        } else stayOnScreenDescription.setText(R.string.stay_on_screen_disable_description);
 
     }
 
@@ -94,6 +107,11 @@ public abstract class BaseCircleCollectionSettingView<T, P extends BaseCircleCol
     @OnClick(R.id.long_press_action)
     void onLongPressClick(){
         presenter.onLongPressAction();
+    }
+
+    @OnClick(R.id.stay_on_screen)
+    void onStayOnScreenClick(){
+        presenter.onSetStayOnScreen();
     }
 
 }

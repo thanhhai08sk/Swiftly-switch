@@ -218,6 +218,15 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
         });
     }
 
+    public void setStayOnScreen() {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                collection.stayOnScreen = collection.stayOnScreen!=null &&!collection.stayOnScreen;
+            }
+        });
+    }
+
     public void clear() {
         realm.close();
     }

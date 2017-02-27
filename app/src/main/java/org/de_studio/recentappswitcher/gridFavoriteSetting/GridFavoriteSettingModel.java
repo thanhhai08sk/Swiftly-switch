@@ -120,13 +120,6 @@ public class GridFavoriteSettingModel extends BaseCollectionSettingModel {
         });
     }
 
-    public void setStayOnScreen() {
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                collection.stayOnScreen = collection.stayOnScreen!=null &&!collection.stayOnScreen;
-            }
-        });
-    }
+
 
 }

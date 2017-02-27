@@ -357,56 +357,56 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         onHolding = false;
         Slot slot = null;
         String collectionId = null;
-            switch (currentShowing.showWhat) {
-                case Showing.SHOWING_CIRCLE_AND_ACTION:
-                    if (currentHighlight >= 0) {
-                        collectionId = currentShowing.circle.collectionId;
-                        if (currentHighlight < 10) {
-                            Log.e(TAG, "onActionUp: size = " + currentShowing.circleSlots.size() + "\nhighlight " + currentHighlight);
-                            if (currentShowing.circleSlots.size() > currentHighlight) {
-                                slot = currentShowing.circleSlots.get(currentHighlight);
-                            }
-                        } else {
-                            slot = currentShowing.action.slots.get(currentHighlight - 10);
-                            if (slot.type.equals(Slot.TYPE_EMPTY) || slot.type.equals(Slot.TYPE_NULL)) {
-                                slot = null;
-                            }
-                        }
-                    }
-                    break;
-                case Showing.SHOWING_CIRCLE_ONLY:
-                    if (currentHighlight >= 0) {
-                        collectionId = currentShowing.circle.collectionId;
-                        if (currentHighlight < currentShowing.circleSlots.size()) {
+        switch (currentShowing.showWhat) {
+            case Showing.SHOWING_CIRCLE_AND_ACTION:
+                if (currentHighlight >= 0) {
+                    collectionId = currentShowing.circle.collectionId;
+                    if (currentHighlight < 10) {
+                        Log.e(TAG, "onActionUp: size = " + currentShowing.circleSlots.size() + "\nhighlight " + currentHighlight);
+                        if (currentShowing.circleSlots.size() > currentHighlight) {
                             slot = currentShowing.circleSlots.get(currentHighlight);
                         }
-                    }
-                    break;
-                case Showing.SHOWING_GRID:
-                    if (currentHighlight >= 0) {
-                        collectionId = currentShowing.grid.collectionId;
-                        slot = currentShowing.grid.slots.get(currentHighlight);
-                    }
-                    break;
-                case Showing.SHOWING_FOLDER:
-                    if (currentHighlight >= 0) {
-                        if (currentHighlight < currentShowing.folderItems.size()) {
-                            view.startItem(currentShowing.folderItems.get(currentHighlight), model.getLastApp());
+                    } else {
+                        slot = currentShowing.action.slots.get(currentHighlight - 10);
+                        if (slot.type.equals(Slot.TYPE_EMPTY) || slot.type.equals(Slot.TYPE_NULL)) {
+                            slot = null;
                         }
                     }
-                    finishSectionSJ.onNext(null);
-                    break;
-            }
-
-
-            if (slot != null) {
-                if (currentShowing.stayOnScreen && !slot.type.equals(Slot.TYPE_FOLDER)) {
-                    finishSectionSJ.onNext(null);
                 }
-                view.startSlot(slot, model.getLastApp(), currentShowing.showWhat, collectionId);
-            }
+                break;
+            case Showing.SHOWING_CIRCLE_ONLY:
+                if (currentHighlight >= 0) {
+                    collectionId = currentShowing.circle.collectionId;
+                    if (currentHighlight < currentShowing.circleSlots.size()) {
+                        slot = currentShowing.circleSlots.get(currentHighlight);
+                    }
+                }
+                break;
+            case Showing.SHOWING_GRID:
+                if (currentHighlight >= 0) {
+                    collectionId = currentShowing.grid.collectionId;
+                    slot = currentShowing.grid.slots.get(currentHighlight);
+                }
+                break;
+            case Showing.SHOWING_FOLDER:
+                if (currentHighlight >= 0) {
+                    if (currentHighlight < currentShowing.folderItems.size()) {
+                        view.startItem(currentShowing.folderItems.get(currentHighlight), model.getLastApp());
+                    }
+                }
+                finishSectionSJ.onNext(null);
+                break;
+        }
 
-        if (!(currentShowing.stayOnScreen || (slot!=null && slot.type.equals(Slot.TYPE_FOLDER)))) {
+
+        if (slot != null) {
+            if (currentShowing.stayOnScreen && !slot.type.equals(Slot.TYPE_FOLDER)) {
+                finishSectionSJ.onNext(null);
+            }
+            view.startSlot(slot, model.getLastApp(), currentShowing.showWhat, collectionId);
+        }
+
+        if (!(currentShowing.stayOnScreen || (slot != null && slot.type.equals(Slot.TYPE_FOLDER)))) {
             finishSectionSJ.onNext(null);
         }
         currentHighlight = -1;
@@ -439,11 +439,13 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     if (slot != null) {
                         view.startSlot(slot, model.getLastApp(), currentShowing.showWhat, collectionId);
                         if (!slot.type.equals(Slot.TYPE_FOLDER)) {
-                            view.hideAllExceptEdges();
+//                            view.hideAllExceptEdges();
+                            finishSectionSJ.onNext(null);
                         }
                     }
                 } else {
-                    view.hideAllExceptEdges();
+//                    view.hideAllExceptEdges();
+                    finishSectionSJ.onNext(null);
 
                 }
                 break;
@@ -458,9 +460,23 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     if (currentShowing.grid.stayOnScreen == null ? true : currentShowing.grid.stayOnScreen) {
                         returnToGridSubject.onNext(null);
                     } else {
-                        view.hideAllExceptEdges();
+//                        view.hideAllExceptEdges();
+                        finishSectionSJ.onNext(null);
                     }
                 }
+                break;
+            case Showing.SHOWING_CIRCLE_AND_ACTION:
+                int onPosition1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(), true, currentShowing.action.slots.size());
+                if (onPosition1 != -1) {
+                    String collectionId = currentShowing.circle.collectionId;
+                    if (onPosition1 < 10) {
+                        Slot slot = currentShowing.circleSlots.get(onPosition1);
+                        if (slot != null) {
+                            view.startSlot(slot, model.getLastApp(), currentShowing.showWhat, collectionId);
+                        }
+                    }
+                }
+                finishSectionSJ.onNext(null);
                 break;
         }
     }
@@ -536,7 +552,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 currentShowing.circle = currentEdge.recent;
                 currentShowing.action = currentEdge.quickAction;
                 currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots);
-                currentShowing.stayOnScreen = false;
+                currentShowing.stayOnScreen = true;
                 break;
             case Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION:
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;

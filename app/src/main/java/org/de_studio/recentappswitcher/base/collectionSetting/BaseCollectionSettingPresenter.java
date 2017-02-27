@@ -152,6 +152,10 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         view.restartService();
     }
 
+    public void onSetStayOnScreen() {
+        model.setStayOnScreen();
+    }
+
 
     public void onSizeClick() {
         view.showChooseSizeDialog();

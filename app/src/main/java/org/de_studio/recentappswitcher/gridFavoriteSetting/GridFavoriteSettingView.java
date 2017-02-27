@@ -210,7 +210,7 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
         if (Utility.isFree(this)) {
             Utility.showProOnlyDialog(this);
         } else {
-            getGridPresenter().onSetRowsCountClick();
+            presenter.onSetRowsCountClick();
         }
     }
     @OnClick(R.id.columns_count)
@@ -218,30 +218,30 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
         if (Utility.isFree(this)) {
             Utility.showProOnlyDialog(this);
         } else {
-            getGridPresenter().onSetColumnsCountClick();
+            presenter.onSetColumnsCountClick();
         }
     }
     @OnClick(R.id.shortcuts_space)
     void onSetShortcutsSpaceClick(){
-        getGridPresenter().onSetShortcutsSpaceClick();
+        presenter.onSetShortcutsSpaceClick();
     }
 
     @OnClick(R.id.horizontal_margin)
     void onMarginHorizontalClick(){
-        getGridPresenter().onSetMarginHorizontalClick();
+        presenter.onSetMarginHorizontalClick();
     }
 
     @OnClick(R.id.vertical_margin)
     void onMarginVerticalClick(){
-        getGridPresenter().onSetMarginVerticalClick();
+        presenter.onSetMarginVerticalClick();
     }
 
     @OnClick(R.id.position)
     void onPositionClick(){
-        getGridPresenter().onSetPositionClick();
+        presenter.onSetPositionClick();
     }
     @OnClick(R.id.stay_on_screen)
     void onStayOnScreenClick(){
-        getGridPresenter().onSetStayOnScreen();
+        presenter.onSetStayOnScreen();
     }
 }

@@ -61,7 +61,7 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
                 }
             });
             if (position == highlightItem) {
-                holder.view.setBackgroundColor(R.color.hint_disabled_dark);
+                holder.view.setBackgroundColor(R.color.background_4);
             } else {
                 holder.view.setBackgroundColor(Color.TRANSPARENT);
             }
