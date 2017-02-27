@@ -103,6 +103,7 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
         builder.create().show();
     }
 
+
     public void showChoosePositionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.edge_dialog_set_position_text)

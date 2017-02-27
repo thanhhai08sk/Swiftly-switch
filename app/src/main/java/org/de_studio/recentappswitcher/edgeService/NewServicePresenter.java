@@ -552,26 +552,26 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 currentShowing.circle = currentEdge.recent;
                 currentShowing.action = currentEdge.quickAction;
                 currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots);
-                currentShowing.stayOnScreen = true;
+                currentShowing.stayOnScreen = currentShowing.circle.stayOnScreen;
                 break;
             case Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION:
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
                 currentShowing.circle = currentEdge.circleFav;
                 currentShowing.action = currentEdge.quickAction;
                 currentShowing.circleSlots = currentShowing.circle.slots;
-                currentShowing.stayOnScreen = false;
+                currentShowing.stayOnScreen = currentShowing.circle.stayOnScreen;
                 break;
             case Edge.MODE_CIRCLE_FAVORITE_ONLY:
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
                 currentShowing.circle = currentEdge.circleFav;
                 currentShowing.circleSlots = currentShowing.circle.slots;
-                currentShowing.stayOnScreen = false;
+                currentShowing.stayOnScreen = currentShowing.circle.stayOnScreen;
                 break;
             case Edge.MODE_RECENT_ONLY:
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
                 currentShowing.circle = currentEdge.recent;
                 currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots);
-                currentShowing.stayOnScreen = false;
+                currentShowing.stayOnScreen = currentShowing.circle.stayOnScreen;
                 break;
         }
         currentShowing.edgePosition = currentEdge.position;
