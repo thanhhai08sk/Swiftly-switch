@@ -50,6 +50,8 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     protected abstract void inject();
     @CallSuper
     public void clear(){
-        unbinder.unbind();
+        if (unbinder != null) {
+            unbinder.unbind();
+        }
     }
 }

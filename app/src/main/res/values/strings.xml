@@ -336,7 +336,7 @@
     <string name="faq_how_to_hide_the_notification_answer">Persistent notification is for keeping Swiftly Switch stay in background but you can hide it by blocking all of the notification from Swiftly Switch in the App Info. To hide it: click to the notification > Hide notification > Block notification.</string>
 
     <string name="faq_screen_overlay_detected">What is \"Screen overlay detected\"?</string>
-    <string name="faq_screen_overlay_detected_answer">This is the security feature of Android 6.0. You\'ll see this dialog when giving permission to other app while a \"Floating app\" is running. When this happens, just trigger Swiftly Switch by swipe in from the edge, Swiftly Switch will be automatically disable for 10 seconds so you can give permission to other app as normal. Alternatively, you can disable Swiftly Switch from the Notification > give permission > enable the app again.
+    <string name="faq_screen_overlay_detected_answer">This is the security feature of Android 6.0. You\'ll see this dialog when giving permission to other app while a \"Floating app\" is running. When this happens, just trigger Swiftly Switch by swipe in from the edge, Swiftly Switch will be automatically paused for 10 seconds so you can give permission to other app as normal. Alternatively, you can pause Swiftly Switch from the Notification and resume when you finish
      </string>
 
     <string name="faq_how_to_auto_disable_when_play_game">How to auto disable the app when playing game?</string>
@@ -360,7 +360,7 @@
     <string name="faq_problem_on_one_plus_device_answer">Please turn off the Deep Clear option in Setting. This will stop all the background process once you exit the app</string>
 
     <string name="faq_closed_app_in_recent_list">Why closed app still on recent list?</string>
-    <string name="faq_closed_app_in_recent_list_answer">Due to the limitation from Android 4.4, 3rd party app can only access your recent used apps, not which app is currently running on your device.</string>
+    <string name="faq_closed_app_in_recent_list_answer">Due to the limitation from Android 5.0, 3rd party app can only access your recent used apps, not which app is currently running on your device.</string>
 
     <string name="faq_why_not_mobile_networking_shortcut">Why there is no shortcut for switching mobile network or airplane mode?</string>
     <string name="faq_why_not_mobile_networking_shortcut_answer">Due to restrictions from Android, Swiftly Switch does not have the authority to directly access and switch your mobile network or airplane mode.</string>
