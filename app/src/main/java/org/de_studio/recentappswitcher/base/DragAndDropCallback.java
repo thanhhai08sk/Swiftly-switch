@@ -52,6 +52,7 @@ public class DragAndDropCallback extends ItemTouchHelper.Callback {
 
     }
 
+
     @Override
     public boolean isLongPressDragEnabled() {
         return true;
@@ -74,6 +75,11 @@ public class DragAndDropCallback extends ItemTouchHelper.Callback {
         }
         if (isCurrentlyActive) {
             currentlyDragSubject.onNext(new Coord(viewHolder.itemView.getX(), viewHolder.itemView.getY()));
+            viewHolder.itemView.setScaleX(1.3f);
+            viewHolder.itemView.setScaleY(1.3f);
+        } else {
+            viewHolder.itemView.setScaleX(1.0f);
+            viewHolder.itemView.setScaleY(1.0f);
         }
         isLastCallActive = isCurrentlyActive;
 

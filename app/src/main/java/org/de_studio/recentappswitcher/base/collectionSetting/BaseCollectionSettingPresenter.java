@@ -1,7 +1,6 @@
 package org.de_studio.recentappswitcher.base.collectionSetting;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.DragAndDropCallback;
@@ -117,7 +116,6 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
     }
 
     protected void onMoveItem(DragAndDropCallback.MoveData moveData) {
-        Log.e(TAG, "onMoveItem: from " + moveData.from + " to " + moveData.to);
         if (moveData != null) {
             model.moveItem(moveData.from, moveData.to);
             view.notifyItemMove(moveData.from, moveData.to);
