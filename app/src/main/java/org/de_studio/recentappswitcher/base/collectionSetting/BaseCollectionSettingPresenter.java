@@ -36,12 +36,11 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
 
         addSubscription(
-                view.onMoveItem().subscribe(new Action1<DragAndDropCallback.MoveData>() {
+                view.onMoveItem().distinctUntilChanged().subscribe(new Action1<DragAndDropCallback.MoveData>() {
                     @Override
                     public void call(DragAndDropCallback.MoveData moveData) {
-//                        model.moveItem(moveData.from, moveData.to);
-//                        view.notifyItemMove(moveData.from, moveData.to);
-                        Log.e(TAG, "call: move from " + moveData.from + "\nto " + moveData.to);
+                        onMoveItem(moveData);
+//                        Log.e(TAG, "call: move from " + moveData.from + "\nto " + moveData.to);
 
                     }
                 })
@@ -51,12 +50,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
                 view.onDropItem().subscribe(new Action1<DragAndDropCallback.DropData>() {
                     @Override
                     public void call(DragAndDropCallback.DropData dropData) {
-                        if (view.isHoverOnDeleteButton(dropData.dropX, dropData.dropY)) {
-                            model.removeItem(dropData.position);
-                            view.notifyItemRemove(dropData.position);
-                        }
-                        view.setDeleteButtonVisibility(false);
-                        onDragDrop = false;
+                        onDropItem(dropData);
                     }
                 })
         );
@@ -113,6 +107,23 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         model.setup();
     }
 
+    protected void onDropItem(DragAndDropCallback.DropData dropData) {
+        if (view.isHoverOnDeleteButton(dropData.dropX, dropData.dropY)) {
+            model.removeItem(dropData.position);
+            view.notifyItemRemove(dropData.position);
+        }
+        view.setDeleteButtonVisibility(false);
+        onDragDrop = false;
+    }
+
+    protected void onMoveItem(DragAndDropCallback.MoveData moveData) {
+        Log.e(TAG, "onMoveItem: from " + moveData.from + " to " + moveData.to);
+        if (moveData != null) {
+            model.moveItem(moveData.from, moveData.to);
+            view.notifyItemMove(moveData.from, moveData.to);
+        }
+    }
+
     public abstract void setRecyclerView();
 
 
@@ -161,6 +172,8 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         PublishSubject<DragAndDropCallback.Coord> onDragItem();
 
         PublishSubject<String> onChooseCurrentSet();
+
+        void highlightItem(int position);
 
         void notifyItemMove(int from, int to);
 

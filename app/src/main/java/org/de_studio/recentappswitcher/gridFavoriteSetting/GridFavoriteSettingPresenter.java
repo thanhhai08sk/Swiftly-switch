@@ -1,12 +1,16 @@
 package org.de_studio.recentappswitcher.gridFavoriteSetting;
 
+import android.util.Log;
+
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.base.DragAndDropCallback;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
 import rx.functions.Action1;
+import rx.functions.Func2;
 import rx.subjects.PublishSubject;
 
 /**
@@ -18,6 +22,8 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     private PublishSubject<Integer> setMarginHorizontalSubject = PublishSubject.create();
     private PublishSubject<Integer> setMarginVerticalSubject = PublishSubject.create();
     private PublishSubject<Integer> setShortcutsSpaceSubject = PublishSubject.create();
+
+    int moveItemFrom = -1;
 
 
     public GridFavoriteSettingPresenter(GridFavoriteSettingModel model) {
@@ -51,6 +57,26 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
                     public void call(Integer integer) {
                         model.setShortcutsSpace(integer);
                         view.setShorcutsSpace(integer);
+                    }
+                })
+        );
+
+        addSubscription(
+                view.onDropItem().withLatestFrom(view.onMoveItem(), new Func2<DragAndDropCallback.DropData, DragAndDropCallback.MoveData, DragAndDropCallback.MoveData>() {
+                    @Override
+                    public DragAndDropCallback.MoveData call(DragAndDropCallback.DropData dropData, DragAndDropCallback.MoveData moveData) {
+                        if (!view.isHoverOnDeleteButton(dropData.dropX, dropData.dropY)) {
+                            return moveData;
+                        }
+                        return null;
+                    }
+                }).subscribe(new Action1<DragAndDropCallback.MoveData>() {
+                    @Override
+                    public void call(DragAndDropCallback.MoveData moveData) {
+                        if (moveData != null) {
+                            model.swapItem(moveData.from, moveData.to);
+                            view.highlightItem(-1);
+                        }
                     }
                 })
         );
@@ -132,6 +158,19 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
         model.setStayOnScreen();
     }
 
+    @Override
+    protected void onMoveItem(DragAndDropCallback.MoveData moveData) {
+        if (moveData != null) {
+            view.highlightItem(moveData.to);
+            moveItemFrom = moveData.from;
+            Log.e(TAG, "onMoveItem: from " + moveData.from + " to " + moveData.to);
+        }
+    }
+
+    @Override
+    protected void onDropItem(DragAndDropCallback.DropData dropData) {
+        super.onDropItem(dropData);
+    }
 
     public interface View extends BaseCollectionSettingPresenter.View {
         void showChooseColumnsCountDialog();
@@ -156,6 +195,8 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
         void showChoosePositionDialog();
 
         void showChooseRowsCountDialog();
+
+
 
 
 

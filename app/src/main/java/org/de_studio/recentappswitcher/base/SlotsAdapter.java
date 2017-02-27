@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.base;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -32,6 +33,7 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
     IconPackManager.IconPack iconPack;
     private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
     int itemType;
+    int highlightItem = -1;
 
 
     public SlotsAdapter(@NonNull Context context, @Nullable OrderedRealmCollection data, boolean autoUpdate, IconPackManager.IconPack iconPack, int itemType) {
@@ -58,6 +60,27 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
                     onClickSubject.onNext(holder.getAdapterPosition());
                 }
             });
+            if (position == highlightItem) {
+                holder.view.setBackgroundColor(R.color.hint_disabled_dark);
+            } else {
+                holder.view.setBackgroundColor(Color.TRANSPARENT);
+            }
+        }
+    }
+
+    public void setHighlightItem(int position) {
+        int oldItemHighlighted = highlightItem;
+        if (position == -1) {
+            highlightItem = position;
+            notifyItemChanged(oldItemHighlighted);
+        } else {
+            if (highlightItem != position) {
+                this.highlightItem = position;
+                notifyItemChanged(oldItemHighlighted);
+                notifyItemChanged(position);
+
+            }
+
         }
     }
 

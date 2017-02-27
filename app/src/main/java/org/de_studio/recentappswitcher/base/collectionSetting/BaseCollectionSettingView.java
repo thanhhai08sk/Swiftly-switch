@@ -103,6 +103,11 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
     }
 
     @Override
+    public void highlightItem(int position) {
+        adapter.setHighlightItem(position);
+    }
+
+    @Override
     public void notifyItemMove(int from, int to) {
         adapter.notifyItemMoved(from,to);
     }

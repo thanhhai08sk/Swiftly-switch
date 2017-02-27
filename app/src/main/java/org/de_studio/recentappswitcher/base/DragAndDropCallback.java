@@ -27,6 +27,10 @@ public class DragAndDropCallback extends ItemTouchHelper.Callback {
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         super.onSelectedChanged(viewHolder, actionState);
+        Log.e(TAG, "onSelectedChanged: ");
+        if (viewHolder != null) {
+            moveItemSubject.onNext(null);
+        }
     }
 
     @Override
@@ -66,6 +70,7 @@ public class DragAndDropCallback extends ItemTouchHelper.Callback {
             Log.e(TAG, "onChildDraw: drop item " + viewHolder.getAdapterPosition());
             dropItemSubject.onNext(new DropData(viewHolder.getAdapterPosition(),viewHolder .itemView.getX(), viewHolder.itemView.getY()));
 //            clearView(recyclerView,viewHolder);
+
         }
         if (isCurrentlyActive) {
             currentlyDragSubject.onNext(new Coord(viewHolder.itemView.getX(), viewHolder.itemView.getY()));
@@ -80,6 +85,25 @@ public class DragAndDropCallback extends ItemTouchHelper.Callback {
         public MoveData(int from, int to) {
             this.from = from;
             this.to = to;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            MoveData moveData = (MoveData) o;
+
+            if (from != moveData.from) return false;
+            return to == moveData.to;
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = from;
+            result = 31 * result + to;
+            return result;
         }
     }
 

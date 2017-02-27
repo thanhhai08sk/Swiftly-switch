@@ -174,6 +174,14 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
         realm.commitTransaction();
     }
 
+    public void swapItem(int first, int second) {
+        Log.e(TAG, "swapItem: first = " + first + " second = " + second);
+        realm.beginTransaction();
+        collection.slots.move(first, second);
+        collection.slots.move(first < second ? second - 1 : second + 1, first);
+        realm.commitTransaction();
+    }
+
     public void removeItem(int position) {
         realm.beginTransaction();
         Slot removeSlot = collection.slots.get(position);
