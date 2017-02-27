@@ -5,11 +5,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
-import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingView;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerQuickActionsSettingComponent;
@@ -149,14 +151,29 @@ public class QuickActionSettingView extends BaseCollectionSettingView<Void, Quic
 
     @Override
     public void chooseVisibilityOption() {
-        Utility.showDialogWithOptionToChoose(this, R.string.visibility_option,
-                new int[]{R.string.only_triggered_one_visible, R.string.trigger_one_make_all_visible, R.string.always_visible},
-                new DialogInterface.OnClickListener() {
+//        Utility.showDialogWithOptionToChoose(this, R.string.visibility_option,
+//                new int[]{R.string.only_triggered_one_visible, R.string.trigger_one_make_all_visible, R.string.always_visible},
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        presenter.setVisibilityOption(which);
+//                    }
+//                });
+        new MaterialDialog.Builder(this)
+                .title(R.string.visibility_option)
+                .items(R.array.visibility_options)
+                .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        presenter.setVisibilityOption(which);
+                    public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                        int returnPosition = position;
+                        if (position == 2) {
+                            returnPosition = 3;
+                        } else if (position == 3) {
+                            returnPosition = 2;
+                        }
+                        presenter.setVisibilityOption(returnPosition);
                     }
-                });
+                }).show();
     }
 
     @Override

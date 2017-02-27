@@ -132,6 +132,13 @@
         <item>@string/shortcut</item>
     </string-array>
 
+    <string-array name="visibility_options">
+        <item>@string/only_triggered_one_visible</item>
+        <item>@string/trigger_one_make_all_visible</item>
+        <item>@string/visible_after_lifting_finger</item>
+        <item>@string/always_visible</item>
+    </string-array>
+
     <string-array name="faq_titles" >
         <item>@string/faq_how_to_hide_the_notification</item>
         <item>@string/faq_screen_overlay_detected</item>

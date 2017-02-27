@@ -21,6 +21,7 @@ public class Collection extends RealmObject {
     public static final int VISIBILITY_OPTION_ONLY_TRIGGERED_ONE_VISIBLE = 0;
     public static final int VISIBILITY_OPTION_TRIGGER_ONE_MAKE_ALL_VISIBLE = 1;
     public static final int VISIBILITY_OPTION_ALWAYS_VISIBLE = 2;
+    public static final int VISIBILITY_OPTION_VISIBLE_AFTER_LIFTING = 3;
 
 
     public String type;

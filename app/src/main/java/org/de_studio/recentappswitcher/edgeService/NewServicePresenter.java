@@ -545,36 +545,40 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             case Edge.MODE_GRID:
                 currentShowing.showWhat = Showing.SHOWING_GRID;
                 currentShowing.grid = currentEdge.grid;
-                currentShowing.stayOnScreen = currentEdge.grid.stayOnScreen == null ? true : currentEdge.grid.stayOnScreen;
+                currentShowing.stayOnScreen = isStayOnScreen(currentEdge.grid);
                 break;
             case Edge.MODE_RECENT_AND_QUICK_ACTION:
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
                 currentShowing.circle = currentEdge.recent;
                 currentShowing.action = currentEdge.quickAction;
                 currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots);
-                currentShowing.stayOnScreen = currentShowing.circle.stayOnScreen;
+                currentShowing.stayOnScreen = isStayOnScreen(currentShowing.circle);
                 break;
             case Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION:
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
                 currentShowing.circle = currentEdge.circleFav;
                 currentShowing.action = currentEdge.quickAction;
                 currentShowing.circleSlots = currentShowing.circle.slots;
-                currentShowing.stayOnScreen = currentShowing.circle.stayOnScreen;
+                currentShowing.stayOnScreen = isStayOnScreen(currentShowing.circle);
                 break;
             case Edge.MODE_CIRCLE_FAVORITE_ONLY:
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
                 currentShowing.circle = currentEdge.circleFav;
                 currentShowing.circleSlots = currentShowing.circle.slots;
-                currentShowing.stayOnScreen = currentShowing.circle.stayOnScreen;
+                currentShowing.stayOnScreen = isStayOnScreen(currentShowing.circle);
                 break;
             case Edge.MODE_RECENT_ONLY:
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
                 currentShowing.circle = currentEdge.recent;
                 currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots);
-                currentShowing.stayOnScreen = currentShowing.circle.stayOnScreen;
+                currentShowing.stayOnScreen = isStayOnScreen(currentShowing.circle);
                 break;
         }
         currentShowing.edgePosition = currentEdge.position;
+    }
+
+    private boolean isStayOnScreen(Collection collection) {
+        return collection.stayOnScreen == null ? true : collection.stayOnScreen;
     }
 
     private Slot getCurrentSlot() {
