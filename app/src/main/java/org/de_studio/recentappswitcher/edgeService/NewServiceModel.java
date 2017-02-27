@@ -67,33 +67,15 @@ public class NewServiceModel extends BaseModel {
     }
 
 
-    public RealmList<Slot> getRecent(ArrayList<String> packageNames, RealmList<Slot> slots) {
-//        if (savedRecentShortcut != null) {
-//            for (String s : savedRecentShortcut) {
-//                Log.e(TAG, "getRecent: savedShortcut = " + s);
-//            }
-//        }
-        RealmList<Slot> returnSlots = new RealmList<>();
-        for (String packageName : packageNames) {
-            Log.e(TAG, "getRecent: temp package " + packageName);
-        }
+    public RealmList<Slot> getRecent(ArrayList<String> packageNames, RealmList<Slot> slots, NewServicePresenter.Showing currentShowing) {
 
+        long time = System.currentTimeMillis();
+        RealmList<Slot> returnSlots = new RealmList<>();
 
         long recentSlotsCount = slots.where().equalTo(Cons.TYPE, Slot.TYPE_RECENT).count();
-        String removedPackage = null;
-        if (packageNames.size() > 0) {
-            removedPackage = packageNames.get(0);
-            packageNames.remove(0);
-            packageNames.remove(launcherPackageName);
-            if (packageNames.size()>0) {
-                lastAppPackageName = packageNames.get(0);
-            }
-        }
 
-        for (String packageName : packageNames) {
-            Log.e(TAG, "getRecent: after removing launcher: " + packageName);
-        }
-        Log.e(TAG, "getRecent: lastApp = " + lastAppPackageName);
+        String removedPackage = removeLauncherAndCurrentAppAndSetLastApp(packageNames);
+        currentShowing.lastApp = lastAppPackageName;
 
 
         for (Slot slot : slots) {
@@ -118,10 +100,6 @@ public class NewServiceModel extends BaseModel {
                     i++;
                 }
             }
-        }
-        Log.e(TAG, "getRecent: recentSlotsCount = " + recentSlotsCount);
-        for (String packageName : packageNames) {
-            Log.e(TAG, "getRecent: after combine from saved = " + packageName);
         }
 
         savedRecentShortcut = packageNames;
@@ -150,18 +128,26 @@ public class NewServiceModel extends BaseModel {
                     break;
             }
         }
-
-        Log.e(TAG, "getRecent: saved size = " + savedRecentShortcut.size());
-
-
-        for (Slot returnSlot : returnSlots) {
-            Log.e(TAG, "return slot " + returnSlot.toString());
-        }
+        Log.e(TAG, "getRecent: time to get last app " + (System.currentTimeMillis() - time));
 
         return returnSlots;
     }
 
-    public String getLastApp() {
+    private String removeLauncherAndCurrentAppAndSetLastApp(ArrayList<String> packageNames) {
+        String removedPackage = null;
+        if (packageNames.size() > 0) {
+            removedPackage = packageNames.get(0);
+            packageNames.remove(0);
+            packageNames.remove(launcherPackageName);
+            if (packageNames.size()>0) {
+                lastAppPackageName = packageNames.get(0);
+            }
+        }
+        return removedPackage;
+    }
+
+    public String getLastApp(ArrayList<String> packageNames) {
+        removeLauncherAndCurrentAppAndSetLastApp(packageNames);
         return lastAppPackageName;
     }
 

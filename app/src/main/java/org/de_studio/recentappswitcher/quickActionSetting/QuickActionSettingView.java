@@ -62,6 +62,9 @@ public class QuickActionSettingView extends BaseCollectionSettingView<Void, Quic
             case Collection.VISIBILITY_OPTION_ALWAYS_VISIBLE:
                 visibilityOptionDescription.setText(R.string.always_visible);
                 break;
+            case Collection.VISIBILITY_OPTION_VISIBLE_AFTER_LIFTING:
+                visibilityOptionDescription.setText(R.string.visible_after_lifting_finger);
+                break;
         }
     }
 

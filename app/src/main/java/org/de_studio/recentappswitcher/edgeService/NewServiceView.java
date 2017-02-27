@@ -485,7 +485,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         return imageView;
     }
 
-    public void showQuickActions(int edgePosition, int actionPosition, NewServicePresenter.Showing currentShowing, boolean delay, boolean animate) {
+    public void showQuickActions(int edgePosition, int highlighPosition, NewServicePresenter.Showing currentShowing, boolean delay, boolean animate) {
         Log.e(TAG, "showQuickActions: ");
         if (currentShowing.action != null) {
             if (collectionViewsMap.get(getQuickActionsKey(edgePosition, currentShowing.action)) == null) {
@@ -502,7 +502,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
 
             quickActionsView.setVisibility(View.VISIBLE);
-            quickActionsView.show(actionPosition);
+            quickActionsView.show(highlighPosition);
             quickActionsView.setX(currentShowing.xInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
             quickActionsView.setY(currentShowing.yInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
 //            if (animate) {

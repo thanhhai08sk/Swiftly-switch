@@ -153,7 +153,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
                             currentShowing.stayOnScreen = false;
                             currentShowing.circle = collection;
-                            currentShowing.circleSlots = model.getRecent(tempRecentPackages, collection.slots);
+                            currentShowing.circleSlots = model.getRecent(tempRecentPackages, collection.slots, currentShowing);
                             view.hideAllCollections();
                             showCollection(currentShowing.showWhat);
                         }
@@ -246,6 +246,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 finishSectionSJ.subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        Log.e(TAG, "call: finish section");
                         view.unhighlightSlot(currentShowing, currentHighlight);
                         view.hideAllExceptEdges();
                         currentHighlight = -1;
@@ -372,6 +373,12 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             slot = null;
                         }
                     }
+                } else if (isStayOnScreen(currentShowing.circle)) {
+                    if (currentShowing.action.visibilityOption == Collection.VISIBILITY_OPTION_VISIBLE_AFTER_LIFTING) {
+                        view.showQuickActions(currentEdge.position, currentHighlight, currentShowing, false, false);
+                    } else {
+                        currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
+                    }
                 }
                 break;
             case Showing.SHOWING_CIRCLE_ONLY:
@@ -391,7 +398,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             case Showing.SHOWING_FOLDER:
                 if (currentHighlight >= 0) {
                     if (currentHighlight < currentShowing.folderItems.size()) {
-                        view.startItem(currentShowing.folderItems.get(currentHighlight), model.getLastApp());
+                        view.startItem(currentShowing.folderItems.get(currentHighlight), getLastApp());
                     }
                 }
                 finishSectionSJ.onNext(null);
@@ -400,10 +407,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
 
         if (slot != null) {
+            view.startSlot(slot, getLastApp(), currentShowing.showWhat, collectionId);
             if (currentShowing.stayOnScreen && !slot.type.equals(Slot.TYPE_FOLDER)) {
                 finishSectionSJ.onNext(null);
             }
-            view.startSlot(slot, model.getLastApp(), currentShowing.showWhat, collectionId);
         }
 
         if (!(currentShowing.stayOnScreen || (slot != null && slot.type.equals(Slot.TYPE_FOLDER)))) {
@@ -437,7 +444,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     String collectionId = currentShowing.grid.collectionId;
                     Slot slot = currentShowing.grid.slots.get(onPosition);
                     if (slot != null) {
-                        view.startSlot(slot, model.getLastApp(), currentShowing.showWhat, collectionId);
+                        view.startSlot(slot, getLastApp(), currentShowing.showWhat, collectionId);
                         if (!slot.type.equals(Slot.TYPE_FOLDER)) {
 //                            view.hideAllExceptEdges();
                             finishSectionSJ.onNext(null);
@@ -454,7 +461,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 int rowCount = currentShowing.folderItems.size() / 4 + 1;
                 int position1 = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, rowCount, columCount, currentShowing.grid.space, true);
                 if (position1 >=0 && position1 <currentShowing.folderItems.size()) {
-                    view.startItem(currentShowing.folderItems.get(position1), model.getLastApp());
+                    view.startItem(currentShowing.folderItems.get(position1), getLastApp());
                     view.hideAllExceptEdges();
                 } else {
                     if (currentShowing.grid.stayOnScreen == null ? true : currentShowing.grid.stayOnScreen) {
@@ -472,7 +479,25 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     if (onPosition1 < 10) {
                         Slot slot = currentShowing.circleSlots.get(onPosition1);
                         if (slot != null) {
-                            view.startSlot(slot, model.getLastApp(), currentShowing.showWhat, collectionId);
+                            view.startSlot(slot, getLastApp(), currentShowing.showWhat, collectionId);
+                        }
+                    } else {
+                        Slot slot = currentShowing.action.slots.get(onPosition1 - 10);
+                        if (slot != null) {
+                            view.startSlot(slot, getLastApp(), currentShowing.showWhat, collectionId);
+                        }
+                    }
+                }
+                finishSectionSJ.onNext(null);
+                break;
+            case Showing.SHOWING_CIRCLE_ONLY:
+                int onPosition2 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(), true, currentShowing.action.slots.size());
+                if (onPosition2 != -1) {
+                    String collectionId = currentShowing.circle.collectionId;
+                    if (onPosition2 < 10) {
+                        Slot slot = currentShowing.circleSlots.get(onPosition2);
+                        if (slot != null) {
+                            view.startSlot(slot, getLastApp(), currentShowing.showWhat, collectionId);
                         }
                     }
                 }
@@ -551,7 +576,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_AND_ACTION;
                 currentShowing.circle = currentEdge.recent;
                 currentShowing.action = currentEdge.quickAction;
-                currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots);
+                currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots,currentShowing);
                 currentShowing.stayOnScreen = isStayOnScreen(currentShowing.circle);
                 break;
             case Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION:
@@ -570,7 +595,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             case Edge.MODE_RECENT_ONLY:
                 currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
                 currentShowing.circle = currentEdge.recent;
-                currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots);
+                currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots,currentShowing);
                 currentShowing.stayOnScreen = isStayOnScreen(currentShowing.circle);
                 break;
         }
@@ -580,6 +605,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     private boolean isStayOnScreen(Collection collection) {
         return collection.stayOnScreen == null ? true : collection.stayOnScreen;
     }
+
 
     private Slot getCurrentSlot() {
         if (currentHighlight!= -1) {
@@ -597,6 +623,13 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             }
         }
         return null;
+    }
+
+    private String getLastApp() {
+        if (currentShowing.lastApp == null) {
+            currentShowing.lastApp = model.getLastApp(tempRecentPackages);
+        }
+        return currentShowing.lastApp;
     }
 
     public void newPackageInstalled(String packageName, String label) {
@@ -626,7 +659,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void showFolder(int triggerPosition, Slot folder, final String gridId, int space, int edgePosition, Showing currentShowing);
 
-        void showQuickActions(int edgePosition, int actionPosition, NewServicePresenter.Showing currentShowing, boolean delay, boolean animate);
+        void showQuickActions(int edgePosition, int highlightPosition, NewServicePresenter.Showing currentShowing, boolean delay, boolean animate);
 
         void actionDownVibrate();
 
@@ -690,6 +723,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         public float xInit, yInit;
         public int edgePosition;
         boolean stayOnScreen;
+        String lastApp;
         public Showing() {
         }
 
