@@ -64,7 +64,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     PublishSubject<Long> longClickHelperSubject = PublishSubject.create();
     PublishSubject<String> showCollectionInstantlySubject = PublishSubject.create();
     PublishSubject<Slot> showFolderSJ = PublishSubject.create();
-    PublishSubject<Slot> onSlot = PublishSubject.create();
+    PublishSubject<Slot> onSlotSJ = PublishSubject.create();
     PublishSubject<Void> returnToGridSubject = PublishSubject.create();
     PublishSubject<Void> finishSectionSJ = PublishSubject.create();
     private PublishSubject<Void> onGivingPermissionSJ = PublishSubject.create();
@@ -108,24 +108,21 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         if (integer!= -1) {
                             view.actionMoveVibrate();
                         }
-
-                        onSlot.onNext(getCurrentSlot());
-
-                        if (integer >= 10
-                                && currentShowing.showWhat == Showing.SHOWING_CIRCLE_AND_ACTION
-                                && currentShowing.action.slots.get(integer - 10).type.equals(Slot.TYPE_ITEM)
-                                && currentShowing.action.slots.get(integer - 10).stage1Item.type.equals(Item.TYPE_SHORTCUTS_SET)) {
-                            showCollectionInstantlySubject.onNext(currentShowing.action.slots.get(integer - 10).stage1Item.collectionId);
-                        }
+                        onSlotSJ.onNext(getCurrentSlot());
                     }
                 })
         );
 
         addSubscription(
-                onSlot.subscribe(new Action1<Slot>() {
+                onSlotSJ.subscribe(new Action1<Slot>() {
                     @Override
                     public void call(Slot slot) {
-                        //nothing now
+                        if (slot != null) {
+                            if (slot.type.equals(Slot.TYPE_ITEM) && slot.stage1Item.type.equals(Item.TYPE_SHORTCUTS_SET)) {
+                                showCollectionInstantlySubject.onNext(slot.stage1Item.collectionId);
+
+                            }
+                        }
                     }
                 })
         );
@@ -284,16 +281,24 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 startSlotSJ.subscribe(new Action1<Slot>() {
                     @Override
                     public void call(Slot slot) {
-                        switch (slot.type) {
-                            case Slot.TYPE_ITEM:
-                                view.startItem(slot.stage1Item, getLastApp());
-                                break;
-                            case Slot.TYPE_NULL:
-                                view.setNullSlot(currentShowing.showWhat, getCurrentCollectionId());
-                                break;
-                            case Slot.TYPE_FOLDER:
-                                showFolderSJ.onNext(slot);
-                                break;
+                        if (slot != null) {
+                            switch (slot.type) {
+                                case Slot.TYPE_ITEM:
+                                    if (slot.stage1Item.type.equals(Item.TYPE_SHORTCUTS_SET)) {
+                                        showCollectionInstantlySubject.onNext(slot.stage1Item.collectionId);
+                                    } else {
+                                        view.startItem(slot.stage1Item, getLastApp());
+                                        finishSectionSJ.onNext(null);
+                                    }
+                                    break;
+                                case Slot.TYPE_NULL:
+                                    view.setNullSlot(currentShowing.showWhat, getCurrentCollectionId());
+                                    finishSectionSJ.onNext(null);
+                                    break;
+                                case Slot.TYPE_FOLDER:
+                                    showFolderSJ.onNext(slot);
+                                    break;
+                            }
                         }
                     }
                 })
@@ -440,11 +445,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
 
         if (slot != null) {
-//            view.startSlot(slot, getLastApp(), currentShowing.showWhat, collectionId);
             startSlotSJ.onNext(slot);
-            if (currentShowing.stayOnScreen && !slot.type.equals(Slot.TYPE_FOLDER)) {
-                finishSectionSJ.onNext(null);
-            }
+//            if (currentShowing.stayOnScreen && !slot.type.equals(Slot.TYPE_FOLDER)) {
+//                finishSectionSJ.onNext(null);
+//            }
         }
 
         if (!(currentShowing.stayOnScreen || (slot != null && slot.type.equals(Slot.TYPE_FOLDER)))) {
@@ -475,19 +479,12 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             case Showing.SHOWING_GRID:
                 int onPosition = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, currentShowing.grid.rowsCount, currentShowing.grid.columnCount, currentShowing.grid.space, false);
                 if (onPosition != -1) {
-                    String collectionId = currentShowing.grid.collectionId;
                     Slot slot = currentShowing.grid.slots.get(onPosition);
                     if (slot != null) {
-                        view.startSlot(slot, getLastApp(), currentShowing.showWhat, collectionId);
-                        if (!slot.type.equals(Slot.TYPE_FOLDER)) {
-//                            view.hideAllExceptEdges();
-                            finishSectionSJ.onNext(null);
-                        }
+                        startSlotSJ.onNext(slot);
                     }
                 } else {
-//                    view.hideAllExceptEdges();
                     finishSectionSJ.onNext(null);
-
                 }
                 break;
             case Showing.SHOWING_FOLDER:
@@ -509,33 +506,21 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             case Showing.SHOWING_CIRCLE_AND_ACTION:
                 int onPosition1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(), true, currentShowing.action.slots.size(),true);
                 if (onPosition1 != -1) {
-                    String collectionId = currentShowing.circle.collectionId;
                     if (onPosition1 < 10) {
-                        Slot slot = currentShowing.circleSlots.get(onPosition1);
-                        if (slot != null) {
-                            view.startSlot(slot, getLastApp(), currentShowing.showWhat, collectionId);
-                        }
+                        startSlotSJ.onNext(currentShowing.circleSlots.get(onPosition1));
+
                     } else {
-                        Slot slot = currentShowing.action.slots.get(onPosition1 - 10);
-                        if (slot != null) {
-                            view.startSlot(slot, getLastApp(), currentShowing.showWhat, collectionId);
-                        }
+                        startSlotSJ.onNext(currentShowing.action.slots.get(onPosition1 - 10));
                     }
-                }
-                finishSectionSJ.onNext(null);
+                }else finishSectionSJ.onNext(null);
                 break;
             case Showing.SHOWING_CIRCLE_ONLY:
                 int onPosition2 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(), true, currentShowing.action.slots.size(),true);
                 if (onPosition2 != -1) {
-                    String collectionId = currentShowing.circle.collectionId;
                     if (onPosition2 < 10) {
-                        Slot slot = currentShowing.circleSlots.get(onPosition2);
-                        if (slot != null) {
-                            view.startSlot(slot, getLastApp(), currentShowing.showWhat, collectionId);
-                        }
-                    }
-                }
-                finishSectionSJ.onNext(null);
+                        startSlotSJ.onNext(currentShowing.circleSlots.get(onPosition2));
+                    }else finishSectionSJ.onNext(null);
+                }else finishSectionSJ.onNext(null);
                 break;
         }
     }
@@ -711,7 +696,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void unhighlightSlot(Showing currentShowing, int id);
 
-        void startSlot(Slot slot, String lastApp, int showing, String currentCollectionId);
+//        void startSlot(Slot slot, String lastApp, int showing, String currentCollectionId);
 
         void startItem(Item item, String lastApp);
 
