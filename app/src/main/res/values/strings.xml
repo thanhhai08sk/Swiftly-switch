@@ -244,6 +244,7 @@
          - Icon pack support\n\n
      - Auto disable Swiftly Switch in full-screen apps</string>
     <string name="about">About</string>
+    <string name="privacy_policy">Privacy policy</string>
 
 
 
@@ -376,6 +377,13 @@
 
 
     //What new
+    <string name="what_new_3.0.0.10" translatable="false"> VERSION 3.0.0.10 (beta):\n
+        - Option to keep Recent apps and Circle Favorite stay on screen (enabled by default) \n
+        - Delete shortcuts set \n
+        - Improve rearranging in Grid setting\n
+        - Fix bugs
+    </string>
+
     <string name="what_new_3.0.0.9" translatable="false">VERSION 3.0.0.9 (beta):\n
         - Improve UI \n
         - Option to disable Edges in full-screen apps\n

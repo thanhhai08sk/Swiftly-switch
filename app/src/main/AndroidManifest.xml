@@ -267,6 +267,11 @@
             android:theme="@style/AppTheme"
             android:parentActivityName=".main.MainView"
             />
+        <activity android:name=".main.about.AboutView"
+            android:label="@string/about"
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".main.MainView"
+            />
     </application>
 
 </manifest>

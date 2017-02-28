@@ -32,6 +32,7 @@ import org.de_studio.recentappswitcher.dagger.DaggerMainComponent;
 import org.de_studio.recentappswitcher.dagger.MainModule;
 import org.de_studio.recentappswitcher.faqs.FaqsView;
 import org.de_studio.recentappswitcher.intro.IntroActivity;
+import org.de_studio.recentappswitcher.main.about.AboutView;
 import org.de_studio.recentappswitcher.main.moreSetting.MoreSettingView;
 
 import javax.inject.Inject;
@@ -231,6 +232,11 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     @OnClick(R.id.changelog)
     void whatNewClick(){
         showWhatNew();
+    }
+
+    @OnClick(R.id.about)
+    void onAboutClick(){
+        startActivity(new Intent(this, AboutView.class));
     }
 
     @Override
