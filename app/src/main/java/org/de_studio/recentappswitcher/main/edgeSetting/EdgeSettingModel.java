@@ -20,6 +20,7 @@ import rx.subjects.PublishSubject;
  */
 
 public class EdgeSettingModel extends BaseModel {
+    private static final String TAG = EdgeSettingModel.class.getSimpleName();
     Realm realm = Realm.getDefaultInstance();
     String edgeId;
     Edge edge;
@@ -99,6 +100,8 @@ public class EdgeSettingModel extends BaseModel {
                         if (edge.quickAction == null) {
                             edge.quickAction = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_QUICK_ACTION).findFirst();
                         }
+                        edge.grid = null;
+                        edge.circleFav = null;
                         break;
                     case Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION:
                         if (edge.circleFav == null) {
@@ -107,11 +110,16 @@ public class EdgeSettingModel extends BaseModel {
                         if (edge.quickAction == null) {
                             edge.quickAction = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_QUICK_ACTION).findFirst();
                         }
+                        edge.recent = null;
+                        edge.grid = null;
                         break;
                     case Edge.MODE_GRID:
                         if (edge.grid == null) {
                             edge.grid = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_GRID_FAVORITE).findFirst();
                         }
+                        edge.recent = null;
+                        edge.quickAction = null;
+                        edge.circleFav = null;
                         break;
                 }
             }
