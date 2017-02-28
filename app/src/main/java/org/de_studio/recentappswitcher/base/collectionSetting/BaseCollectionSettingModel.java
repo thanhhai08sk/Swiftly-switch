@@ -6,6 +6,7 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 
@@ -85,6 +86,60 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
             }
             collectionReadySubject.onNext(collection);
         }
+    }
+
+    public void setCurrentCollectionToAnotherOne() {
+        Collection anotherCollection = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType())
+                .notEqualTo(Cons.COLLECTION_ID, collectionId)
+                .findFirst();
+
+        if (anotherCollection != null) {
+            if (collection != null) {
+                RealmObject.removeChangeListeners(collection);
+            }
+            collection = anotherCollection;
+            RealmObject.addChangeListener(collection, this);
+            collectionChangedSubject.onNext(null);
+            this.collectionId = collection.collectionId;
+        } else {
+            Log.e(TAG, "setCurrentCollectionToAnotherOne: there are no another collection");
+        }
+    }
+
+    public String getPlaceUsingThis(String collectionId) {
+        Collection collectionThatUseThis = realm.where(Collection.class).equalTo("longPressCollection.collectionId", collectionId).findFirst();
+        if (collectionThatUseThis == null) {
+            collectionThatUseThis = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_QUICK_ACTION)
+                    .equalTo("slots.stage1Item.itemId", Utility.createShortcutSetItemId(collectionId))
+                    .or()
+                    .equalTo("slots.stage2Item.itemId", Utility.createShortcutSetItemId(collectionId))
+                    .findFirst();
+        }
+
+        if (collectionThatUseThis != null) {
+            return collectionThatUseThis.collectionId;
+        }
+
+        String collectionFieldNameInEdge = null;
+        switch (getCollectionType()) {
+            case Collection.TYPE_CIRCLE_FAVORITE:
+                collectionFieldNameInEdge = "circleFav";
+                break;
+            case Collection.TYPE_GRID_FAVORITE:
+                collectionFieldNameInEdge = "grid";
+                break;
+            case Collection.TYPE_QUICK_ACTION:
+                collectionFieldNameInEdge = "quickAction";
+                break;
+            case Collection.TYPE_RECENT:
+                collectionFieldNameInEdge = "recent";
+                break;
+        }
+        Edge edgeThatUseThis = realm.where(Edge.class).equalTo(collectionFieldNameInEdge + ".collectionId", collectionId).findFirst();
+        if (edgeThatUseThis != null) {
+            return edgeThatUseThis.edgeId;
+        }
+        return null;
     }
 
 

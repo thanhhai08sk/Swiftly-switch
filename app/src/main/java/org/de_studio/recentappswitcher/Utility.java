@@ -2996,6 +2996,10 @@ public  class Utility {
         return Item.TYPE_APP + packageName;
     }
 
+    public static String createShortcutSetItemId(String collectionId) {
+        return Item.TYPE_SHORTCUTS_SET + collectionId;
+    }
+
     public static String createActionItemId(int action) {
         return Item.TYPE_ACTION + action;
     }

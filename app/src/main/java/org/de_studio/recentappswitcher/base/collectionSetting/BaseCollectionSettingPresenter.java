@@ -24,6 +24,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
     PublishSubject<Integer> setCircleSizeSJ = PublishSubject.create();
 
     boolean onDragDrop = false;
+    PublishSubject<String> changeCurrentSetSJ = PublishSubject.create();
 
     public BaseCollectionSettingPresenter(M model) {
         super(model);
@@ -86,11 +87,26 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
                 view.onChooseCurrentSet().subscribe(new Action1<String>() {
                     @Override
                     public void call(String collectionId) {
-                        model.setCurrentCollection(collectionId);
+                        changeCurrentSetSJ.onNext(collectionId);
+                    }
+                })
+        );
+
+        addSubscription(
+                changeCurrentSetSJ.subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String collectionId) {
+                        if (collectionId != null) {
+                            model.setCurrentCollection(collectionId);
+                        } else {
+                            model.setCurrentCollectionToAnotherOne();
+                        }
                         view.updateRecyclerView(model.getSlots());
                     }
                 })
         );
+
+
 
         addSubscription(
                 setCircleSizeSJ.subscribe(new Action1<Integer>() {
@@ -101,6 +117,8 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
                     }
                 })
         );
+
+
 
 
         model.setup();
@@ -165,6 +183,18 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         view.setCircleSizeDialog(setCircleSizeSJ, model.getCurrentCollection().radius);
     }
 
+    public void onDeleteCollection() {
+        final String currentCollectionId = model.getCollectionId();
+        changeCurrentSetSJ.onNext(null);
+        if (model.getCollectionList().size() < 2 ||
+                model.isBeingUsed(currentCollectionId) ) {
+            view.notifyCannotDelete();
+        } else {
+            model.deleteCollection(currentCollectionId);
+        }
+
+    }
+
 
     public interface View extends PresenterView {
         PublishSubject<DragAndDropCallback.MoveData> onMoveItem();
@@ -212,6 +242,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
         void restartService();
 
+        void notifyCannotDelete();
 
     }
 

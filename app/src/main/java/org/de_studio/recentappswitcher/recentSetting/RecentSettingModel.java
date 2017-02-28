@@ -29,7 +29,7 @@ public class RecentSettingModel extends BaseCircleCollectionSettingModel {
 
     @Override
     public String createNewCollection() {
-         long newCollectionNumber = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).count() + 1;
+        long newCollectionNumber = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).count() + 1;
         if (newCollectionNumber != 1) {
             Random random = new Random();
             newCollectionNumber = random.nextInt(999) + 2;

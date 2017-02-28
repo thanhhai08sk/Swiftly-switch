@@ -249,6 +249,7 @@
 
 
     //Recent/Circle favorite
+
     <string name="choose_set">Set</string>
     <string name="size">Size</string>
     <string name="add_new">Add new</string>
@@ -258,6 +259,7 @@
     <string name="long_press_action">Long press action</string>
     <string name="long_press_action_description">Choose the action to perform when you long press on one of the items</string>
     <string name="no_action">No action</string>
+    <string name="delete">Delete this</string>
 
     //Grid favorite
     <string name="columns_count">Columns count</string>

@@ -22,6 +22,7 @@ import org.de_studio.recentappswitcher.dagger.RecentSettingModule;
 public class RecentSettingView extends BaseCircleCollectionSettingView<Void, RecentSettingPresenter> implements RecentSettingPresenter.View {
     private static final String TAG = RecentSettingView.class.getSimpleName();
 
+
     @Override
     protected void inject() {
         DaggerRecentSettingComponent.builder()
@@ -47,6 +48,8 @@ public class RecentSettingView extends BaseCircleCollectionSettingView<Void, Rec
 //                        }
 //                    }
 //                }).show();
+
+
 
 
         final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
