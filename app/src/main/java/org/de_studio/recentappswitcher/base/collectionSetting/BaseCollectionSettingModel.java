@@ -117,7 +117,7 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
         }
 
         if (collectionThatUseThis != null) {
-            return collectionThatUseThis.collectionId;
+            return collectionThatUseThis.label;
         }
 
         String collectionFieldNameInEdge = null;
@@ -146,6 +146,10 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                Item shortcutSetItem = realm.where(Item.class).equalTo(Cons.COLLECTION_ID, collectionId).findFirst();
+                if (shortcutSetItem != null) {
+                    shortcutSetItem.deleteFromRealm();
+                }
                 Collection collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, collectionId).findFirst();
                 if (collection != null) {
                     collection.slots.deleteAllFromRealm();

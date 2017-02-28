@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.base.collectionSetting;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.DragAndDropCallback;
@@ -188,17 +189,18 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
     public void onDeleteCollection() {
         final String currentCollectionId = model.getCollectionId();
-        changeCurrentSetSJ.onNext(null);
         if (model.getCollectionList().size() < 2) {
             view.notifyCannotDelete(CANNOT_DELETE_REASON_THIS_IS_ONLY_ONE,null);
         } else {
             String placeUseThis = model.getPlaceUsingThis(currentCollectionId);
             if (placeUseThis != null) {
+                Log.e(TAG, "onDeleteCollection: plase use this = " + placeUseThis);
                 view.notifyCannotDelete(CANNOT_DELETE_REASON_BEING_USED, placeUseThis);
             } else {
                 model.deleteCollection(currentCollectionId);
             }
         }
+        changeCurrentSetSJ.onNext(null);
     }
 
 

@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
@@ -253,14 +252,20 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
 
     @Override
     public void notifyCannotDelete(int reason, String id) {
+        String text = "";
         switch (reason) {
             case BaseCollectionSettingPresenter.CANNOT_DELETE_REASON_BEING_USED:
-                Toast.makeText(this, "Can not delete, being used in: " + id, Toast.LENGTH_LONG).show();
+                text = getString(R.string.can_not_delete_cause_being_used_in) + id;
                 break;
             case BaseCollectionSettingPresenter.CANNOT_DELETE_REASON_THIS_IS_ONLY_ONE:
-                Toast.makeText(this, "Can not delete, this is the only one", Toast.LENGTH_LONG).show();
+                text = getString(R.string.can_not_delete_cause_this_is_the_only_one);
                 break;
         }
+        new MaterialDialog.Builder(this)
+                .title(R.string.can_not_delete)
+                .content(text)
+                .positiveText(R.string.app_tab_fragment_ok_button)
+                .show();
     }
 
     @Override

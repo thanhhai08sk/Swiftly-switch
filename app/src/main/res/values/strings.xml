@@ -260,6 +260,9 @@
     <string name="long_press_action_description">Choose the action to perform when you long press on one of the items</string>
     <string name="no_action">No action</string>
     <string name="delete">Delete this</string>
+    <string name="can_not_delete">Can not delete</string>
+    <string name="can_not_delete_cause_being_used_in">Can not delete, being used in:  </string>
+    <string name="can_not_delete_cause_this_is_the_only_one">Can not delete, this is the only one</string>
 
     //Grid favorite
     <string name="columns_count">Columns count</string>
