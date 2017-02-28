@@ -28,6 +28,9 @@ public abstract class BaseCircleCollectionSettingModel extends BaseCollectionSet
                     }
                 }
                 collection.longClickMode = mode;
+                if (mode == Collection.LONG_CLICK_MODE_NONE) {
+                    collection.longPressCollection = null;
+                }
             }
         });
     }
