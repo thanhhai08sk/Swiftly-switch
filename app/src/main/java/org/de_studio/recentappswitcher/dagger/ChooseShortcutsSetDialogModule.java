@@ -21,15 +21,16 @@ import dagger.Provides;
 @Module
 public class ChooseShortcutsSetDialogModule {
     ChooseShortcutsSetDialogView view;
-
-    public ChooseShortcutsSetDialogModule(ChooseShortcutsSetDialogView view) {
+    String collectionType;
+    public ChooseShortcutsSetDialogModule(ChooseShortcutsSetDialogView view, String collectionType) {
         this.view = view;
+        this.collectionType = collectionType;
     }
 
     @Provides
     @Singleton
     BaseChooseItemPresenter presenter() {
-        return new ChooseShortcutsSetPresenter(null);
+        return new ChooseShortcutsSetPresenter(null, collectionType);
     }
 
 

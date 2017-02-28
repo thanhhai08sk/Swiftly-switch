@@ -2,6 +2,8 @@ package org.de_studio.recentappswitcher.setItems.chooseShortcutsSet;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
@@ -23,6 +25,25 @@ import rx.subjects.PublishSubject;
  */
 
 public class ChooseShortcutsSetDialogView extends BaseChooseItemDialogView {
+    String collectionType;
+
+
+    public static ChooseShortcutsSetDialogView newInstance(String collectionTYpe) {
+
+        Bundle args = new Bundle();
+        args.putString(Cons.TYPE, collectionTYpe);
+        ChooseShortcutsSetDialogView fragment = new ChooseShortcutsSetDialogView();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        collectionType = getArguments().getString(Cons.TYPE);
+    }
+
     @Override
     public void loadItems() {
         LoadShortcutsSetsTask loadShortcutsSetsTask = new LoadShortcutsSetsTask(new WeakReference<Context>(getActivity()), null);
@@ -33,7 +54,7 @@ public class ChooseShortcutsSetDialogView extends BaseChooseItemDialogView {
     protected void inject() {
         DaggerChooseShortcutsSetDialogComponent.builder()
                 .appModule(new AppModule(getActivity()))
-                .chooseShortcutsSetDialogModule(new ChooseShortcutsSetDialogModule(this))
+                .chooseShortcutsSetDialogModule(new ChooseShortcutsSetDialogModule(this, collectionType))
                 .build().inject(this);
     }
 

@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.setItems.chooseShortcutsSet;
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BaseChooseItemPresenter;
 import org.de_studio.recentappswitcher.base.BaseModel;
+import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Item;
 
 import io.realm.RealmResults;
@@ -12,13 +13,32 @@ import io.realm.RealmResults;
  */
 
 public class ChooseShortcutsSetPresenter extends BaseChooseItemPresenter {
+    String collectionType;
 
-    public ChooseShortcutsSetPresenter(BaseModel model) {
+    public ChooseShortcutsSetPresenter(BaseModel model, String collectionType) {
+
         super(model);
+        this.collectionType = collectionType;
     }
 
     @Override
     protected RealmResults<Item> getItemRealmResult() {
-        return realm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_SHORTCUTS_SET).findAllAsync();
+        switch (collectionType) {
+            case Collection.TYPE_RECENT:
+                return realm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_SHORTCUTS_SET)
+                        .contains(Cons.COLLECTION_ID, Collection.TYPE_GRID_FAVORITE)
+                        .or()
+                        .contains(Cons.COLLECTION_ID, Collection.TYPE_CIRCLE_FAVORITE)
+                        .findAllAsync();
+            case Collection.TYPE_CIRCLE_FAVORITE:
+                return realm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_SHORTCUTS_SET)
+                        .contains(Cons.COLLECTION_ID, Collection.TYPE_GRID_FAVORITE)
+                        .or()
+                        .contains(Cons.COLLECTION_ID, Collection.TYPE_RECENT)
+                        .findAllAsync();
+            default:
+                return realm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_SHORTCUTS_SET)
+                        .findAllAsync();
+        }
     }
 }

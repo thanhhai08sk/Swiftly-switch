@@ -20,10 +20,11 @@ import dagger.Provides;
 @Singleton
 @Module
 public class ChooseShortcutModule {
+    String collectionType;
     ChooseShortcutFragmentView view;
 
-    public ChooseShortcutModule(ChooseShortcutFragmentView view) {
-        this.view = view;
+    public ChooseShortcutModule(String collectionType ) {
+        this.collectionType = collectionType;
     }
 
     @Provides
@@ -40,7 +41,7 @@ public class ChooseShortcutModule {
 
     @Provides
     @Singleton
-    ItemsListAdapter fakeAdapter(@Nullable IconPackManager.IconPack iconPack){
+    ItemsListAdapter fakeAdapter(@Nullable IconPackManager.IconPack iconPack) {
         return new ItemsListAdapter(view.getActivity(), null, view.getActivity().getPackageManager(), iconPack, R.layout.item_items_list_radio_button);
     }
 }
