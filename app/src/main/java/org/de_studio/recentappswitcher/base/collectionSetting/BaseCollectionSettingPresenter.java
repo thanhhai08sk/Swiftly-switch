@@ -198,9 +198,9 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
                 view.notifyCannotDelete(CANNOT_DELETE_REASON_BEING_USED, placeUseThis);
             } else {
                 model.deleteCollection(currentCollectionId);
+                changeCurrentSetSJ.onNext(null);
             }
         }
-        changeCurrentSetSJ.onNext(null);
     }
 
 
