@@ -21,6 +21,9 @@ import rx.subjects.PublishSubject;
 
 public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSettingPresenter.View, M extends BaseCollectionSettingModel> extends BasePresenter<V, M> {
     private static final String TAG = BaseCollectionSettingPresenter.class.getSimpleName();
+    public static final int CANNOT_DELETE_REASON_BEING_USED = 1;
+    public static final int CANNOT_DELETE_REASON_THIS_IS_ONLY_ONE = 2;
+
     PublishSubject<Integer> setCircleSizeSJ = PublishSubject.create();
 
     boolean onDragDrop = false;
@@ -186,13 +189,16 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
     public void onDeleteCollection() {
         final String currentCollectionId = model.getCollectionId();
         changeCurrentSetSJ.onNext(null);
-        if (model.getCollectionList().size() < 2 ||
-                model.isBeingUsed(currentCollectionId) ) {
-            view.notifyCannotDelete();
+        if (model.getCollectionList().size() < 2) {
+            view.notifyCannotDelete(CANNOT_DELETE_REASON_THIS_IS_ONLY_ONE,null);
         } else {
-            model.deleteCollection(currentCollectionId);
+            String placeUseThis = model.getPlaceUsingThis(currentCollectionId);
+            if (placeUseThis != null) {
+                view.notifyCannotDelete(CANNOT_DELETE_REASON_BEING_USED, placeUseThis);
+            } else {
+                model.deleteCollection(currentCollectionId);
+            }
         }
-
     }
 
 
@@ -242,7 +248,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
         void restartService();
 
-        void notifyCannotDelete();
+        void notifyCannotDelete(int reason,String id);
 
     }
 

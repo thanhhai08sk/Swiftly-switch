@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
@@ -248,6 +249,18 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
         new MaterialDialog.Builder(this)
                 .adapter(adapter, null)
                 .show();
+    }
+
+    @Override
+    public void notifyCannotDelete(int reason, String id) {
+        switch (reason) {
+            case BaseCollectionSettingPresenter.CANNOT_DELETE_REASON_BEING_USED:
+                Toast.makeText(this, "Can not delete, being used in: " + id, Toast.LENGTH_LONG).show();
+                break;
+            case BaseCollectionSettingPresenter.CANNOT_DELETE_REASON_THIS_IS_ONLY_ONE:
+                Toast.makeText(this, "Can not delete, this is the only one", Toast.LENGTH_LONG).show();
+                break;
+        }
     }
 
     @Override

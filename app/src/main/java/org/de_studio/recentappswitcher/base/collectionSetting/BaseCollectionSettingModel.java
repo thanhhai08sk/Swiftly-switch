@@ -142,6 +142,19 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
         return null;
     }
 
+    public void deleteCollection(final String collectionId) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Collection collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, collectionId).findFirst();
+                if (collection != null) {
+                    collection.slots.deleteAllFromRealm();
+                    collection.deleteFromRealm();
+                }
+            }
+        });
+    }
+
 
     public void setCurrentCollectionSize(int size) {
         RealmList<Slot> slots = getCurrentCollection().slots;
