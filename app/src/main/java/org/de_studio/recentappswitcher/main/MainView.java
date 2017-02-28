@@ -235,8 +235,11 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
 
     @Override
     public void showWhatNewIfNeeded() {
-        if (shared.getInt(Cons.APP_VERSION_KEY, 0) < BuildConfig.VERSION_CODE) {
-            showWhatNew();
+        int savedAppVersion = shared.getInt(Cons.APP_VERSION_KEY, 0);
+        if (savedAppVersion < BuildConfig.VERSION_CODE) {
+            if (savedAppVersion > 0) {
+                showWhatNew();
+            }
             shared.edit().putInt(Cons.APP_VERSION_KEY, BuildConfig.VERSION_CODE).apply();
         }
     }

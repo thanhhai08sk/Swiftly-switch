@@ -26,7 +26,7 @@ public class Collection extends RealmObject {
 
     public String type;
     @PrimaryKey
-    public String collectionId;  // collection_type_number, numbers start from 1
+    public String collectionId;  // collectionType_number, numbers start from 1
     public String label;
     public RealmList<Slot> slots;
     public RealmList<Item> items; //For blacklist

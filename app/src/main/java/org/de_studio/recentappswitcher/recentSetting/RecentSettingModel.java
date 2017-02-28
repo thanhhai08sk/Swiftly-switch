@@ -29,7 +29,14 @@ public class RecentSettingModel extends BaseCircleCollectionSettingModel {
 
     @Override
     public String createNewCollection() {
-        final long newCollectionNumber = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).count() + 1;
+         long newCollectionNumber = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).count() + 1;
+        if (newCollectionNumber != 1) {
+            Random random = new Random();
+            newCollectionNumber = random.nextInt(999) + 2;
+            while (realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(getCollectionType(), newCollectionNumber)).findFirst() != null) {
+                newCollectionNumber = random.nextInt(999) + 2;
+            }
+        }
         final String newLabel = Utility.createCollectionLabel(defaultLabel, newCollectionNumber);
         final String newId = Utility.createCollectionId(getCollectionType(), newCollectionNumber);
         realm.executeTransaction(new Realm.Transaction() {

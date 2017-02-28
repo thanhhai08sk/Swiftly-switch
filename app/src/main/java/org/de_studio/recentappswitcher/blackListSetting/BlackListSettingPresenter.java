@@ -36,7 +36,7 @@ public class BlackListSettingPresenter extends BasePresenter<BlackListSettingPre
         getBlackListItems();
 //        view.setProgressBar(true);
 
-        appsList = realm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_APP).findAllAsync();
+        appsList = realm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_APP).findAllSortedAsync(Cons.LABEL);
         view.setAdapter(appsList, blackListItems);
         appsList.addChangeListener(new RealmChangeListener<RealmResults<Item>>() {
             @Override
