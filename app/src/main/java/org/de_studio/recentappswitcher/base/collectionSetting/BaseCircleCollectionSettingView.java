@@ -93,8 +93,8 @@ public abstract class BaseCircleCollectionSettingView<T, P extends BaseCircleCol
     }
 
     @Override
-    public void chooseLongPressCollection(PublishSubject<Item> chooseLongPressCollectionSJ) {
-        ChooseShortcutsSetDialogView dialogView = new ChooseShortcutsSetDialogView();
+    public void chooseLongPressCollection(PublishSubject<Item> chooseLongPressCollectionSJ,String collectionType) {
+        ChooseShortcutsSetDialogView dialogView = ChooseShortcutsSetDialogView.newInstance(collectionType);
         dialogView.setSubjects(null, chooseLongPressCollectionSJ);
         dialogView.show(getSupportFragmentManager(), "chooseLongPressCollection");
     }

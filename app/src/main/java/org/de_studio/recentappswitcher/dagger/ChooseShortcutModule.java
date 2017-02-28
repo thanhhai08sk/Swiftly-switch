@@ -23,8 +23,8 @@ public class ChooseShortcutModule {
     String collectionType;
     ChooseShortcutFragmentView view;
 
-    public ChooseShortcutModule(String collectionType ) {
-        this.collectionType = collectionType;
+    public ChooseShortcutModule(ChooseShortcutFragmentView view ) {
+        this.view = view;
     }
 
     @Provides

@@ -1,5 +1,7 @@
 package org.de_studio.recentappswitcher.setItems.chooseShortcutsSet;
 
+import android.util.Log;
+
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BaseChooseItemPresenter;
 import org.de_studio.recentappswitcher.base.BaseModel;
@@ -13,16 +15,20 @@ import io.realm.RealmResults;
  */
 
 public class ChooseShortcutsSetPresenter extends BaseChooseItemPresenter {
+    private static final String TAG = ChooseShortcutsSetPresenter.class.getSimpleName();
     String collectionType;
 
     public ChooseShortcutsSetPresenter(BaseModel model, String collectionType) {
-
         super(model);
         this.collectionType = collectionType;
     }
 
     @Override
     protected RealmResults<Item> getItemRealmResult() {
+        if (collectionType == null) {
+
+            Log.e(TAG, "getItemRealmResult: collection null");
+        }
         switch (collectionType) {
             case Collection.TYPE_RECENT:
                 return realm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_SHORTCUTS_SET)

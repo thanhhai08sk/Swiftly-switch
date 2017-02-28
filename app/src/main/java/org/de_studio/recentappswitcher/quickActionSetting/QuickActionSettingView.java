@@ -214,7 +214,7 @@ public class QuickActionSettingView extends BaseCollectionSettingView<Void, Quic
     @Override
     public void setShortcutsSetToSlot(String slotId) {
         FragmentManager fragmentManager1 = getSupportFragmentManager();
-        ChooseShortcutsSetDialogView dialogView = new ChooseShortcutsSetDialogView();
+        ChooseShortcutsSetDialogView dialogView = ChooseShortcutsSetDialogView.newInstance(Collection.TYPE_QUICK_ACTION);
         dialogView.setSubjects(null, setItemToSlotSubject);
         dialogView.show(fragmentManager1, "chooseShortcutsSetDialog");
     }

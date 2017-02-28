@@ -40,8 +40,8 @@ public class ChooseShortcutsSetDialogView extends BaseChooseItemDialogView {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         collectionType = getArguments().getString(Cons.TYPE);
+        super.onCreate(savedInstanceState);
     }
 
     @Override

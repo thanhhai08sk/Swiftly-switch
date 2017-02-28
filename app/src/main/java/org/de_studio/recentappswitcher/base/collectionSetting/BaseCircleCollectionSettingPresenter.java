@@ -23,7 +23,7 @@ public abstract class BaseCircleCollectionSettingPresenter<V extends BaseCircleC
                     public void call(Integer integer) {
                         switch (integer) {
                             case Collection.LONG_CLICK_MODE_OPEN_COLLECTION:
-                                view.chooseLongPressCollection(chooseLongPressCollectionSJ);
+                                view.chooseLongPressCollection(chooseLongPressCollectionSJ, model.getCollectionType());
                                 break;
                             case Collection.LONG_CLICK_MODE_NONE:
                                 model.setLongPress(Collection.LONG_CLICK_MODE_NONE, null);
@@ -32,6 +32,7 @@ public abstract class BaseCircleCollectionSettingPresenter<V extends BaseCircleC
                     }
                 })
         );
+
 
         addSubscription(
                 chooseLongPressCollectionSJ.subscribe(new Action1<Item>() {
@@ -59,7 +60,7 @@ public abstract class BaseCircleCollectionSettingPresenter<V extends BaseCircleC
 
         void chooseLongPressMode();
 
-        void chooseLongPressCollection(PublishSubject<Item> chooseLongPressCollectionSJ);
+        void chooseLongPressCollection(PublishSubject<Item> chooseLongPressCollectionSJ, String collectionType);
 
 
     }
