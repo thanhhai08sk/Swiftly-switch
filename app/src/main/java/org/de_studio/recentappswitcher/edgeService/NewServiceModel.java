@@ -10,6 +10,7 @@ import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
+import org.de_studio.recentappswitcher.ui.QuickActionsView;
 
 import java.util.ArrayList;
 
@@ -155,7 +156,7 @@ public class NewServiceModel extends BaseModel {
         return realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, id).findFirst();
     }
 
-    public int getCircleAndQuickActionTriggerId(IconsXY iconsXY, int radius, float x_init, float y_init, float x, float y, int position, int iconsCount, boolean hasQuickActions, int quickActionsCount) {
+    public int getCircleAndQuickActionTriggerId(IconsXY iconsXY, int radius, float x_init, float y_init, float x, float y, int position, int iconsCount, boolean hasQuickActions, int quickActionsCount, boolean quickActionsStayOnScreen) {
         float circleSizePxl = radius * mScale;
         double xInitDouble = (double) x_init;
         double yInitDouble = (double) y_init;
@@ -165,6 +166,7 @@ public class NewServiceModel extends BaseModel {
 
         if (hasQuickActions) {
             double startQuickActionZonePxl = (double) (35 * mScale + circleSizePxl);
+            double endQuickActionZonePxl = (double) (QuickActionsView.ARC_SIZE_DP * mScale + startQuickActionZonePxl);
 
             double ang30 = 0.1666 * Math.PI;
             double ang70 = 0.3889 * Math.PI;
@@ -180,6 +182,9 @@ public class NewServiceModel extends BaseModel {
                     }
                 }
             } else {
+                if (quickActionsStayOnScreen && distanceFromInitPxl > endQuickActionZonePxl) {
+                    return -1;
+                }
                 if (Utility.rightLeftOrBottom(position) == Cons.POSITION_BOTTOM) {
                     angle = Math.acos((x_init - x) / distanceFromInitPxl);
                 } else {
@@ -195,7 +200,7 @@ public class NewServiceModel extends BaseModel {
                         return 12;
                     } else return 13;
                 } else {
-                    return 10 + (int)(angle / (Math.PI / quickActionsCount));
+                    return 10 + (int) (angle / (Math.PI / quickActionsCount));
                 }
             }
             return -1;

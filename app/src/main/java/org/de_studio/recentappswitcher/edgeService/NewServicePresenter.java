@@ -330,11 +330,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     public void onActionMove(float x, float y) {
         switch (currentShowing.showWhat) {
             case Showing.SHOWING_CIRCLE_AND_ACTION:
-                int highlight = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), true,currentShowing.action.slots.size());
+                int highlight = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), true,currentShowing.action.slots.size(),false);
                 highlightIdSubject.onNext(highlight);
                 break;
             case Showing.SHOWING_CIRCLE_ONLY:
-                int highlight1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), false, -1);
+                int highlight1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), false, -1, false);
                 highlightIdSubject.onNext(highlight1);
                 break;
             case Showing.SHOWING_GRID:
@@ -473,7 +473,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 }
                 break;
             case Showing.SHOWING_CIRCLE_AND_ACTION:
-                int onPosition1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(), true, currentShowing.action.slots.size());
+                int onPosition1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(), true, currentShowing.action.slots.size(),true);
                 if (onPosition1 != -1) {
                     String collectionId = currentShowing.circle.collectionId;
                     if (onPosition1 < 10) {
@@ -491,7 +491,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 finishSectionSJ.onNext(null);
                 break;
             case Showing.SHOWING_CIRCLE_ONLY:
-                int onPosition2 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(), true, currentShowing.action.slots.size());
+                int onPosition2 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(), true, currentShowing.action.slots.size(),true);
                 if (onPosition2 != -1) {
                     String collectionId = currentShowing.circle.collectionId;
                     if (onPosition2 < 10) {
