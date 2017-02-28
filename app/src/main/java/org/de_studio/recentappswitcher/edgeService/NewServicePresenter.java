@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.edgeService;
 
 import android.graphics.Point;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.GestureDetector;
 
@@ -67,6 +68,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     PublishSubject<Void> returnToGridSubject = PublishSubject.create();
     PublishSubject<Void> finishSectionSJ = PublishSubject.create();
     private PublishSubject<Void> onGivingPermissionSJ = PublishSubject.create();
+    PublishSubject<Slot> startSlotSJ = PublishSubject.create();
 
 
 
@@ -273,17 +275,48 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 view.onEnterOrExitFullScreen().subscribe(new Action1<Boolean>() {
                     @Override
                     public void call(Boolean aBoolean) {
-//                        if (aBoolean) {
-//                            Log.e(TAG, "call: enter fullscreen");
-//                            view.removeEdgeViews();
-//                        } else {
-//                            Log.e(TAG, "call: exit fullscreen");
-//                            view.addEdgeViews();
-//                        }
                         view.disableEdgeViews(aBoolean);
                     }
                 })
         );
+
+        addSubscription(
+                startSlotSJ.subscribe(new Action1<Slot>() {
+                    @Override
+                    public void call(Slot slot) {
+                        switch (slot.type) {
+                            case Slot.TYPE_ITEM:
+                                view.startItem(slot.stage1Item, getLastApp());
+                                break;
+                            case Slot.TYPE_NULL:
+                                view.setNullSlot(currentShowing.showWhat, getCurrentCollectionId());
+                                break;
+                            case Slot.TYPE_FOLDER:
+                                showFolderSJ.onNext(slot);
+                                break;
+                        }
+                    }
+                })
+        );
+
+
+    }
+
+    @Nullable
+    private String getCurrentCollectionId() {
+        String currentCollectionId = null;
+        switch (currentShowing.showWhat) {
+            case Showing.SHOWING_CIRCLE_AND_ACTION:
+                currentCollectionId = currentShowing.circle.collectionId;
+                break;
+            case Showing.SHOWING_CIRCLE_ONLY:
+                currentCollectionId = currentShowing.circle.collectionId;
+                break;
+            case Showing.SHOWING_GRID:
+                currentCollectionId = currentShowing.grid.collectionId;
+                break;
+        }
+        return currentCollectionId;
     }
 
     private void showGrid(Collection collection, View view) {
@@ -407,7 +440,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
 
         if (slot != null) {
-            view.startSlot(slot, getLastApp(), currentShowing.showWhat, collectionId);
+//            view.startSlot(slot, getLastApp(), currentShowing.showWhat, collectionId);
+            startSlotSJ.onNext(slot);
             if (currentShowing.stayOnScreen && !slot.type.equals(Slot.TYPE_FOLDER)) {
                 finishSectionSJ.onNext(null);
             }
@@ -677,9 +711,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void unhighlightSlot(Showing currentShowing, int id);
 
-        void startSlot(Slot slot, String lastApp, int showing, String collectionId);
+        void startSlot(Slot slot, String lastApp, int showing, String currentCollectionId);
 
         void startItem(Item item, String lastApp);
+
+        void setNullSlot(int showing, String currentCollectionId);
 
         void hideCollection(String collectionId);
 

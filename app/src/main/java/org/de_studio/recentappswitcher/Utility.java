@@ -3004,27 +3004,27 @@ public  class Utility {
         return Item.TYPE_ACTION + action;
     }
 
-    public static void startSlot(Slot slot, String lastAppPackageName, Context context, int contactAction, int showing, String collectionId, NewServicePresenter presenter) {
+    public static void startSlot(Slot slot, String lastAppPackageName, Context context, int contactAction, int showing, String currentCollectionId, NewServicePresenter presenter) {
         switch (slot.type) {
             case Slot.TYPE_ITEM:
                 startItem(slot.stage1Item, lastAppPackageName, context, contactAction);
                 break;
             case Slot.TYPE_NULL:
-                if (collectionId != null) {
+                if (currentCollectionId != null) {
                     Intent intent;
                     switch (showing) {
                         case NewServicePresenter.Showing.SHOWING_GRID:
-                            intent = GridFavoriteSettingView.getIntent(context, collectionId);
+                            intent = GridFavoriteSettingView.getIntent(context, currentCollectionId);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);
                             break;
                         case NewServicePresenter.Showing.SHOWING_CIRCLE_AND_ACTION:
-                            intent = CircleFavoriteSettingView.getIntent(context, collectionId);
+                            intent = CircleFavoriteSettingView.getIntent(context, currentCollectionId);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);
                             break;
                         case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:
-                            intent = CircleFavoriteSettingView.getIntent(context, collectionId);
+                            intent = CircleFavoriteSettingView.getIntent(context, currentCollectionId);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);
                             break;

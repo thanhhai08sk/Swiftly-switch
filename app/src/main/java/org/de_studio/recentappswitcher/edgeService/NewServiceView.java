@@ -48,10 +48,12 @@ import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.ServiceSlotAdapter;
 import org.de_studio.recentappswitcher.base.adapter.ServiceItemsAdapter;
+import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
 import org.de_studio.recentappswitcher.dadaSetup.DataSetupService;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerNewServiceComponent;
 import org.de_studio.recentappswitcher.dagger.NewServiceModule;
+import org.de_studio.recentappswitcher.gridFavoriteSetting.GridFavoriteSettingView;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.DataInfo;
 import org.de_studio.recentappswitcher.model.Item;
@@ -1024,15 +1026,39 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
-    public void startSlot(Slot slot, String lastApp, int showing, String collectionId) {
+    public void startSlot(Slot slot, String lastApp, int showing, String currentCollectionId) {
         Log.e(TAG, "startSlot: " + slot.toString());
 
-        Utility.startSlot(slot, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.DEFAULT_CONTACT_ACTION), showing, collectionId, presenter);
+        Utility.startSlot(slot, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.DEFAULT_CONTACT_ACTION), showing, currentCollectionId, presenter);
     }
 
     @Override
     public void startItem(Item item, String lastApp) {
         Utility.startItem(item, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.DEFAULT_CONTACT_ACTION));
+    }
+
+    @Override
+    public void setNullSlot(int showing, String currentCollectionId) {
+        if (currentCollectionId != null) {
+            Intent intent;
+            switch (showing) {
+                case NewServicePresenter.Showing.SHOWING_GRID:
+                    intent = GridFavoriteSettingView.getIntent(this, currentCollectionId);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    this.startActivity(intent);
+                    break;
+                case NewServicePresenter.Showing.SHOWING_CIRCLE_AND_ACTION:
+                    intent = CircleFavoriteSettingView.getIntent(this, currentCollectionId);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    this.startActivity(intent);
+                    break;
+                case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:
+                    intent = CircleFavoriteSettingView.getIntent(this, currentCollectionId);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    this.startActivity(intent);
+                    break;
+            }
+        }
     }
 
     @Override
