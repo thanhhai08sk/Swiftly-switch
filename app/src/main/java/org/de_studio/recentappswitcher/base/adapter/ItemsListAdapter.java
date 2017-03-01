@@ -76,6 +76,14 @@ public class ItemsListAdapter extends RealmBaseAdapter<Item> {
                 if (checkBox != null) {
                     checkBox.setChecked(currentItem.equals(item));
                 }
+            } else {
+                if (radioButton != null) {
+                    radioButton.setChecked(false);
+                }
+
+                if (checkBox != null) {
+                    checkBox.setChecked(false);
+                }
             }
         }
         return view;

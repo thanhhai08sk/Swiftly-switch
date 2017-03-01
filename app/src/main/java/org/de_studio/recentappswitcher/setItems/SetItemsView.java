@@ -126,7 +126,8 @@ public class SetItemsView extends BaseActivity<SetItemsView.Subjects, SetItemsPr
         if (currentItem != null) {
             Utility.setItemIcon(currentItem, this, icon, getPackageManager(), iconPack,false);
         } else {
-            icon.setImageDrawable(null);
+//            icon.setImageDrawable(null);
+            icon.setImageResource(R.drawable.ic_recent_app_slot);
         }
         index.setText(String.valueOf(itemIndex + 1));
     }
