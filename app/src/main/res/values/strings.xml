@@ -147,8 +147,6 @@
     <string name="enable_long_press_to_toggle_swiftly_switch">By set Swiftly Switch to your Assist app (instead of Google Now On Tap), you can enable/disable trigger edges at any time by long press home button.</string>
     <string name="enable_assist_app">Enable assist app</string>
     <string name="assist_app_is_only_available_for_mashmallow_and_above">This feature is only available for Android 6.0 and above. For lower Android system, you can enable/disable the Edges from the persistent notification.</string>
-    <string name="on"> (ON)</string>
-    <string name="off"> (OFF)</string>
     <string name="pause">Pause</string>
     <string name="resume">Resume</string>
     <string name="pause_resume">Pause/Resume</string>
@@ -156,12 +154,9 @@
     <string name="recent_apps">Recent apps</string>
     <string name="title_activity_pin_shortcuts">Pin shortcuts</string>
     <string name="this_feature_does_not_supported_on_samsung_devices">This feature is not supported on Samsung or ZTE devices</string>
-    <string name="title_activity_main_view">MainView</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="title_activity_main_view1">MainView1</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
     <string name="recent_apps_description">Click to customize or add new Recent Set</string>
     <string name="quick_actions_description">Quick Actions are placed outside of the Recent App, click to customize or add new</string>
