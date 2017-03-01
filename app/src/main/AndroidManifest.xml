@@ -115,28 +115,10 @@
                 android:value=".favoriteShortcut.FavoriteSettingActivity" />
         </activity>
         <activity
-            android:name=".PinAppActivity"
-            android:label="@string/title_activity_pin_shortcuts"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.de_studio.recentappswitcher.MainActivity" />
-        </activity>
-        <activity
             android:name=".intro.IntroActivity"
             android:label="@string/intro_activity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".MoreSettingActivity"
-            android:label="@string/main_more_setting_title"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.de_studio.recentappswitcher.MainActivity" />
-        </activity>
         <activity
             android:name=".favoriteShortcut.SetFolderActivity"
             android:label="@string/setting_shortcut_folder" />
