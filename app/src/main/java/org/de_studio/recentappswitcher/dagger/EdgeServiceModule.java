@@ -31,10 +31,6 @@ import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.favoriteShortcut.CircleFavoriteAdapter;
 import org.de_studio.recentappswitcher.service.Circle;
-import org.de_studio.recentappswitcher.service.EdgeSetting;
-import org.de_studio.recentappswitcher.service.ExpandStatusBarView;
-import org.de_studio.recentappswitcher.service.FavoriteShortcutAdapter;
-import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
 
 import java.util.HashSet;

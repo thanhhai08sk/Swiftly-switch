@@ -22,7 +22,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
-import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.util.ArrayList;
 import java.util.Collections;

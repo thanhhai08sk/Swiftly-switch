@@ -31,7 +31,6 @@ import org.de_studio.recentappswitcher.model.DataInfo;
 import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
-import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;

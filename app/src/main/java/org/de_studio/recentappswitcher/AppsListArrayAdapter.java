@@ -12,8 +12,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.de_studio.recentappswitcher.service.EdgeSetting;
-
 import java.util.ArrayList;
 import java.util.Set;
 

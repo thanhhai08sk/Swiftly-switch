@@ -60,7 +60,6 @@ import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.service.Circle;
 import org.de_studio.recentappswitcher.service.CircleAngleAnimation;
-import org.de_studio.recentappswitcher.service.EdgeSetting;
 import org.de_studio.recentappswitcher.service.NotiDialog;
 import org.de_studio.recentappswitcher.ui.QuickActionsView;
 import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;

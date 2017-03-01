@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
-import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;

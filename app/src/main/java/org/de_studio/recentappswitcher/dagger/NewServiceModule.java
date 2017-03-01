@@ -24,7 +24,6 @@ import org.de_studio.recentappswitcher.edgeService.NewServiceView;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Item;
-import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import javax.inject.Named;
 import javax.inject.Singleton;

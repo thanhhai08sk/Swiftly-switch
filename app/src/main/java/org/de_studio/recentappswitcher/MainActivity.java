@@ -32,7 +32,6 @@ import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.favoriteShortcut.FavoriteSettingActivity;
 import org.de_studio.recentappswitcher.intro.IntroActivity;
-import org.de_studio.recentappswitcher.service.EdgeSetting;
 
 import java.util.ArrayList;
 

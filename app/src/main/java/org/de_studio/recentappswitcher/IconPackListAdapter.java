@@ -13,8 +13,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import org.de_studio.recentappswitcher.service.EdgeSetting;
-
 import java.util.HashMap;
 import java.util.Set;
 

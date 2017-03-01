@@ -15,8 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.de_studio.recentappswitcher.service.EdgeSetting;
-
 public class OuterRingSettingActivity extends AppCompatActivity {
     private static final String LOG_TAG = OuterRingSettingActivity.class.getSimpleName();
     private ListView mListView;

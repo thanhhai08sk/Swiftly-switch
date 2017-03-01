@@ -25,8 +25,6 @@ import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
-import org.de_studio.recentappswitcher.service.EdgeSetting;
-
 public class MoreSettingActivity extends AppCompatActivity {
     private static final String TAG = MoreSettingActivity.class.getSimpleName();
 

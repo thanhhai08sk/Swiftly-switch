@@ -2,7 +2,6 @@ package org.de_studio.recentappswitcher;
 
 import android.Manifest;
 import android.accessibilityservice.AccessibilityServiceInfo;
-import android.animation.Animator;
 import android.app.ActivityManager;
 import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothAdapter;
@@ -32,7 +31,6 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.CallLog;
@@ -43,22 +41,17 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -78,9 +71,6 @@ import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.service.ChooseActionDialogActivity;
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
-import org.de_studio.recentappswitcher.service.EdgeSetting;
-import org.de_studio.recentappswitcher.service.MyImageView;
 import org.de_studio.recentappswitcher.service.NotiDialog;
 import org.de_studio.recentappswitcher.service.ScreenBrightnessDialogActivity;
 import org.de_studio.recentappswitcher.service.VolumeDialogActivity;
@@ -98,8 +88,6 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -122,364 +110,14 @@ import static org.de_studio.recentappswitcher.Cons.RINGER_MODE_VIBRATE;
  */
 public  class Utility {
     private static final String TAG = Utility.class.getSimpleName();
-//    public static int dpiToPixels (int dp, WindowManager windowManager){
-//        DisplayMetrics metrics =new DisplayMetrics();
-//        windowManager.getDefaultDisplay().getMetrics(metrics);
-//        float logicalDensity = metrics.density;
-//        return (int) Math.ceil(dp*logicalDensity);
-//    }
 
     public static int dpToPixel(Context context, int dp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,(float) (dp), metrics);
     }
 
-    public static int findIconToSwitch (int[] x, int[] y,int x_cord, int y_cord, int numOfIcon, int radOfIcon, float mScale) {
-        int radOfIconPxl = (int) (radOfIcon * mScale);
-        if (numOfIcon >= 1) {
-            if (x_cord >= x[0] & x_cord <= (x[0] + radOfIconPxl * 2) & y_cord >= y[0] & y_cord <= (y[0] + radOfIconPxl * 2)) {
-                return 0;
-            }
-        }
-        if (numOfIcon >= 2) {
-            if (x_cord >= x[1] & x_cord <= (x[1] + radOfIconPxl * 2) & y_cord >= y[1] & y_cord <= (y[1] + radOfIconPxl * 2)) {
-                return 1;
-            }
-        }
-        if (numOfIcon >= 3) {
-            if (x_cord >= x[2] & x_cord <= (x[2] + radOfIconPxl * 2) & y_cord >= y[2] & y_cord <= (y[2] + radOfIconPxl * 2)) {
-                return 2;
-            }
-        }
-        if (numOfIcon >= 4) {
-            if (x_cord >= x[3] & x_cord <= (x[3] + radOfIconPxl * 2) & y_cord >= y[3] & y_cord <= (y[3] + radOfIconPxl * 2)) {
-                return 3;
-            }
-        }
-        if (numOfIcon >= 5) {
-            if (x_cord >= x[4] & x_cord <= (x[4] + radOfIconPxl * 2) & y_cord >= y[4] & y_cord <= (y[4] + radOfIconPxl * 2)) {
-                return 4;
-            }
-        }
-        if (numOfIcon >= 6) {
-            if (x_cord >= x[5] & x_cord <= (x[5] + radOfIconPxl * 2) & y_cord >= y[5] & y_cord <= (y[5] + radOfIconPxl * 2)) {
-                return 5;
-            }
-        }
-        return -1;
-    }
-
-    public static int findIconToSwitchNew(int[] x, int[] y, int x_cord, int y_cord, float radOfIconPxl, float mScale) {
-        double distance;
-        double distanceNeeded = 35*mScale;
-        if (x != null && y != null) {
-            for (int i = 0; i < x.length; i++) {
-                distance = Math.sqrt(Math.pow((double)x_cord - (double)(x[i] + radOfIconPxl),2) + Math.pow((double)y_cord - (double)(y[i]+radOfIconPxl), 2));
-                if (distance <= distanceNeeded) {
-                    return i;
-                }
-            }
-        }
-
-        return -1;
-    }
 
 
-    public static int findShortcutToSwitch(int x_cord, int y_cord, int x_grid, int y_grid, int sizeOfIcon, float mScale,int gird_row, int grid_column, int grid_gap, boolean folderMode) {
-        int item_x,item_y;
-        double distance;
-        double smallestDistance = 1000*mScale;
-        for (int i = 0; i < grid_column; i++) {
-            for (int j = 0; j < gird_row; j++) {
-                item_x = (int)(x_grid + (sizeOfIcon/2)*mScale +i*(sizeOfIcon + grid_gap)*mScale);
-                item_y = (int) (y_grid + (sizeOfIcon/2) * mScale + j * (sizeOfIcon + grid_gap) * mScale);
-                distance = Math.sqrt(Math.pow((double)x_cord - (double)item_x,2) + Math.pow((double)y_cord - (double) item_y, 2));
-                if (distance <= 35 * mScale) {
-                    return j * grid_column + i;
-                } else {
-                    if (smallestDistance > distance) {
-                        smallestDistance = distance;
-                    }
-                }
-            }
-        }
-        if (folderMode) {
-            if (smallestDistance > 105 * mScale) {
-                return -2;
-            }
-        }
-        return -1;
-    }
-
-    public static void setIconPositionNew(final MyImageView[] icon, float r, float icon_24_dp_pxl, int position, int x_i, int y_i, int n, boolean isAnimation, int animationTime) {
-        Log.e(TAG, "setIconPositionNew");
-        double alpha, beta;
-        if (animationTime <= 50) {
-            isAnimation = false;
-        }
-        double[] alphaN = new double[n];
-        switch (n) {
-            case 4:
-//                alpha = 0.1389*Math.PI; // 25 degree
-                alpha = 0.111 * Math.PI; // 20 degree
-                break;
-            case 5:
-                alpha = 0.111 * Math.PI; // 20 degree
-                break;
-            case 6:
-                alpha = 0.0556 * Math.PI; // 10 degree
-                break;
-            default:
-                alpha = 0.0556;
-        }
-        beta = Math.PI - 2 * alpha;
-        float x;
-        float y;
-        if (!isAnimation) {
-            for (int i = 0; i < n; i++) {
-                alphaN[i] = alpha + i * (beta / (n - 1));
-                switch (position / 10) {
-                    case 1:
-                        icon[i].setX(x_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
-                        icon[i].setY(y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
-                        break;
-                    case 2:
-                        icon[i].setX(x_i + r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
-                        icon[i].setY(y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
-                        break;
-                    case 3:
-                        icon[i].setX(x_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
-                        icon[i].setY(y_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
-                        break;
-                }
-            }
-        } else {
-            for (int i = 0; i < n; i++) {
-                alphaN[i] = alpha + i * (beta / (n - 1));
-                switch (position / 10) {
-                    case 1:
-                        icon[i].setX(x_i);
-                        icon[i].setY(y_i);
-                        x = x_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
-                        y = y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
-                        icon[i].setRotation(0f);
-                        if (i == 0) {
-                            icon[0].setOnAnimation(true);
-                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
-                                    icon[0].setOnAnimation(true);
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    icon[0].setOnAnimation(false);
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-                                    icon[0].setOnAnimation(false);
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animation) {
-
-                                }
-                            });
-                        } else {
-                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
-                        }
-
-//                    icon[i].setX(x);
-//                    icon[i].setY(y);
-                        break;
-                    case 2:
-                        x = x_i + r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
-                        y = y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
-                        icon[i].setX(x_i);
-                        icon[i].setY(y_i);
-                        icon[i].setRotation(0f);
-                        if (i == 0) {
-                            icon[0].setOnAnimation(true);
-                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
-                                    icon[0].setOnAnimation(true);
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    icon[0].setOnAnimation(false);
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-                                    icon[0].setOnAnimation(false);
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animation) {
-
-                                }
-                            });
-                        } else {
-                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
-                        }
-                        break;
-                    case 3:
-                        x = x_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
-                        y = y_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
-                        icon[i].setX(x_i);
-                        icon[i].setY(y_i);
-                        icon[i].setRotation(0f);
-                        if (i == 0) {
-                            icon[0].setOnAnimation(true);
-                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
-                                    icon[0].setOnAnimation(true);
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    icon[0].setOnAnimation(false);
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-                                    icon[0].setOnAnimation(false);
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animation) {
-
-                                }
-                            });
-                        } else {
-                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
-                        }
-                        break;
-                }
-            }
-        }
-
-        if (n < icon.length) {
-            for (int j = n; j < icon.length; j++) {
-                icon[j].setVisibility(View.GONE);
-            }
-        }
-
-    }
-
-    public static void setIconsPosition(AppCompatImageView[] icon, int x_init_cord, int y_init_cord, float icon_distance_pxl, float icon_24_dp_pxl, int edgePosition){
-        double sin10 = 0.1736, sin42 = 0.6691, sin74 = 0.9613, cos10 = 0.9848, cos42 = 0.7431, cos74 = 0.2756;
-        switch (edgePosition){
-            case 10:
-                icon[0].setX((float) (x_init_cord - sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[0].setY(y_init_cord - (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[1].setX((float) (x_init_cord - sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[1].setY(y_init_cord - (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[2].setX((float) (x_init_cord - sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[2].setY(y_init_cord - (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[3].setX((float) (x_init_cord - sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[3].setY(y_init_cord + (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[4].setX((float) (x_init_cord - sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[4].setY(y_init_cord + (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[5].setX((float) (x_init_cord - sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[5].setY(y_init_cord + (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                break;
-            case 11:
-                icon[0].setX((float) (x_init_cord - sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[0].setY(y_init_cord - (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[1].setX((float) (x_init_cord - sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[1].setY(y_init_cord - (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[2].setX((float) (x_init_cord - sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[2].setY(y_init_cord - (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[3].setX((float) (x_init_cord - sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[3].setY(y_init_cord + (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[4].setX((float) (x_init_cord - sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[4].setY(y_init_cord + (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[5].setX((float) (x_init_cord - sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[5].setY(y_init_cord + (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                int distance = x_init_cord - (int)icon[0].getX();
-                Log.e(TAG,"x_init - x0 = "+distance + "\nx_init = "+ x_init_cord );
-                break;
-            case 12:
-                icon[0].setX((float) (x_init_cord - sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[0].setY(y_init_cord - (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[1].setX((float) (x_init_cord - sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[1].setY(y_init_cord - (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[2].setX((float) (x_init_cord - sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[2].setY(y_init_cord - (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[3].setX((float) (x_init_cord - sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[3].setY(y_init_cord + (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[4].setX((float) (x_init_cord - sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[4].setY(y_init_cord + (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[5].setX((float) (x_init_cord - sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[5].setY(y_init_cord + (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                break;
-            case 20:
-                icon[0].setX((float) (x_init_cord + sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[0].setY(y_init_cord - (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[1].setX((float) (x_init_cord + sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[1].setY(y_init_cord - (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[2].setX((float) (x_init_cord + sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[2].setY(y_init_cord - (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[3].setX((float) (x_init_cord + sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[3].setY(y_init_cord + (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[4].setX((float) (x_init_cord + sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[4].setY(y_init_cord + (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[5].setX((float) (x_init_cord + sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[5].setY(y_init_cord + (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                break;
-            case 21:
-                icon[0].setX((float) (x_init_cord + sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[0].setY(y_init_cord - (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[1].setX((float) (x_init_cord + sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[1].setY(y_init_cord - (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[2].setX((float) (x_init_cord + sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[2].setY(y_init_cord - (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[3].setX((float) (x_init_cord + sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[3].setY(y_init_cord + (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[4].setX((float) (x_init_cord + sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[4].setY(y_init_cord + (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[5].setX((float) (x_init_cord + sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[5].setY(y_init_cord + (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                int distance2 = x_init_cord - (int)icon[0].getX();
-                Log.e(TAG, "x_init - x0 = " + distance2 + "\nx_init = "+ x_init_cord);
-                break;
-            case 22:
-                icon[0].setX((float) (x_init_cord + sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[0].setY(y_init_cord - (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[1].setX((float) (x_init_cord + sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[1].setY(y_init_cord - (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[2].setX((float) (x_init_cord + sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[2].setY(y_init_cord - (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[3].setX((float) (x_init_cord + sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[3].setY(y_init_cord + (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[4].setX((float) (x_init_cord + sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[4].setY(y_init_cord + (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[5].setX((float) (x_init_cord + sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[5].setY(y_init_cord + (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                break;
-
-            case 31:
-                icon[0].setX((float) (x_init_cord - cos10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[0].setY(y_init_cord - (float) sin10 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[1].setX((float) (x_init_cord - cos42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[1].setY(y_init_cord - (float) sin42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[2].setX((float) (x_init_cord - cos74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[2].setY(y_init_cord - (float) sin74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[3].setX((float) (x_init_cord + cos74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[3].setY(y_init_cord - (float) sin74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[4].setX((float) (x_init_cord + cos42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[4].setY(y_init_cord - (float) sin42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[5].setX((float) (x_init_cord + cos10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[5].setY(y_init_cord - (float) sin10 * icon_distance_pxl - icon_24_dp_pxl);
-                break;
-        }
-
-    }
 
     public static void setFavoriteGridViewPosition(View gridView,boolean isCenter ,  float gridTall, float gridWide, float xInit, float yInit, float mScale, int edgePosition, WindowManager windowManager, int distanceFromEdgeDp, int distanceVertical) {
         Log.e(TAG, "setFavoriteGridViewPosition: width " + gridWide + "\ntall " + gridTall + "\nxInit " + xInit + "\nyInit " + yInit +
@@ -539,87 +177,8 @@ public  class Utility {
 
     }
 
-    public static float[] getTriggerPoint(float x_init,float y_init,SharedPreferences sharedPreferences, int edgePosition, int iconToSwitch, float mScale) {
-        float[] returnValue = new float[2];
-        float circleSize = mScale * (float) sharedPreferences.getInt(EdgeSetting.CIRCLE_SIZE_KEY, 105);
-//        float iconScale = sharedPreferences.getFloat(EdgeSetting.ICON_SCALE_KEY, 1f);
-//        float iconSize24 = iconScale *mScale * 24;
-        double alpha, beta, alphaOfIconToSwitch;
-        alpha = 0.0556 * Math.PI; // 10 degree
-        beta = Math.PI - 2 * alpha;
-        alphaOfIconToSwitch = alpha + iconToSwitch * (beta / 5);
-        switch (edgePosition / 10) {
-            case 1:
-                returnValue[0] = x_init - circleSize * (float) Math.sin(alphaOfIconToSwitch);
-                returnValue[1] = y_init - circleSize * (float) Math.cos(alphaOfIconToSwitch);
-                break;
-            case 2:
-                returnValue[0] = x_init + circleSize * (float) Math.sin(alphaOfIconToSwitch);
-                returnValue[1] = y_init - circleSize * (float) Math.cos(alphaOfIconToSwitch);
-//                        icon[i].setX(x_i + r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
-//                        icon[i].setY(y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
-                break;
-            case 3:
-                returnValue[0] = x_init - circleSize * (float) Math.cos(alphaOfIconToSwitch);
-                returnValue[1] = y_init - circleSize * (float) Math.sin(alphaOfIconToSwitch);
-//                        icon[i].setX(x_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
-//                        icon[i].setY(y_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
-                break;
-        }
-        return returnValue;
-    }
 
 
-    public static int isHomeOrBackOrNoti(int x_init_int, int y_init_int, int x_int, int y_int, int radius_int, float mScale, int position){
-        double x_init = (double)x_init_int;
-        double y_init = (double)y_init_int;
-        double x = (double) x_int;
-        double y = (double) y_int;
-        double radius = (double) radius_int;
-        double distance = Math.sqrt(Math.pow((double)x - (double)x_init,2) + Math.pow((double)y - (double) y_init, 2));
-        double distanceNeeded_pxl = (double) ((35+ radius)* mScale);
-        double maxAng = 0.4166*Math.PI;  // 75 degree
-        double midAng = 0.3333* Math.PI; //60 degree
-        double minAng = 0.0833*Math.PI; //15 degree
-        double ang30 = 0.1666*Math.PI;
-        double ang70 = 0.3889*Math.PI;
-        double ang110 = 0.6111*Math.PI;
-        double alpha;
-        if (distance < distanceNeeded_pxl) {
-            return 0;
-        }
-
-        if (position >= 30) {
-            alpha = Math.acos((x_init - x) / distance);
-        }else {
-            alpha = Math.acos((y_init-y)/distance);
-        }
-        if (alpha < ang30) {
-            return 1;
-        }else if (alpha < ang70) {
-            return 2;
-        }else if (alpha < ang110) {
-            return 3;
-        }else return 4;
-
-    }
-//    public static int[] getExpandSpec(int x_init,int y_init,int rad, int distanceFromIcon,WindowManager win){
-//        int[] result = new int[4];
-//        int rad_pxl = dpiToPixels(rad,win);
-//        int distance_pxl = dpiToPixels(distanceFromIcon,win);
-//        double radian30 = 0.16667* Math.PI;
-//        double sin30 = Math.sin(radian30);
-//        double cos30 = Math.cos(radian30);
-//        int a = 2* (int)((rad_pxl+ distance_pxl)*sin30);
-//        int b = rad_pxl + distance_pxl - (int)((rad_pxl+distance_pxl)*cos30);
-//        result[0] = x_init -(int)( (rad_pxl + distance_pxl)*sin30);
-//        result[1] = y_init - (int)(rad_pxl*cos30) -(int)( distance_pxl*cos30) - b;
-//        result[2] = result[0] + a;
-//        result[3] = result[1] + b;
-//        Log.e("expand", "left = " + result[0]+ "\ntop =" + result[1] + "\nright = "+ result[2] + "\nbottom = "+ result[3] +"\na = "+ a + "\nb = "+ b +"\nsin30= "
-//        + sin30+ "\ncos30 = "+ cos30 + "\ndistance = " +distance_pxl + "\nradpx; = "+rad_pxl);
-//        return result;
-//    }
 
     public static int getPositionIntFromString(String position, Context context){
         String[] array = context.getResources().getStringArray(R.array.edge_positions_array);
@@ -666,17 +225,6 @@ public  class Utility {
                 Log.i("MyTag", "Unknown package name " + each.packageName);
             }
         }
-
-
-
-//        Intent i = new Intent(Intent.ACTION_MAIN, null);
-//        i.addCategory(Intent.CATEGORY_LAUNCHER);
-//
-//        List<ResolveInfo> availableActivities = packageManager.queryIntentActivities(i, 0);
-//        for(ResolveInfo ri:availableActivities){
-//
-//        }
-
         return filteredPackages;
     }
 
@@ -697,14 +245,6 @@ public  class Utility {
         return false;
     }
 
-    public static void goHome(final Context context) {
-        final Intent intent = new Intent(context, (Class)MainActivity.class);
-        final Bundle bundle = new Bundle();
-        bundle.putInt("goHome", 1);
-        intent.putExtras(bundle);
-        intent.setFlags(268435456);
-        context.startActivity(intent);
-    }
 
 
 
@@ -831,198 +371,11 @@ public  class Utility {
         }else return -1;
     }
 
-    public static int getSizeOfFavoriteGrid(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
-        return sharedPreferences.getInt(EdgeSetting.NUM_OF_GRID_ROW_KEY, 5) * sharedPreferences.getInt(EdgeSetting.NUM_OF_GRID_COLUMN_KEY, 4);
-    }
-
-    public static Bitmap getBitmapFromAction(Context context,SharedPreferences sharedPreferences, int actionButton) {
-        String action = MainActivity.ACTION_NONE;
-        switch (actionButton) {
-            case 1:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO);
-                break;
-            case 2:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_HOME);
-                break;
-            case 3:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_BACK);
-                break;
-            case 4:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
-                break;
-        }
-        switch (action) {
-            case MainActivity.ACTION_HOME:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_home);
-            case MainActivity.ACTION_BACK:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_back);
-            case MainActivity.ACTION_WIFI:
-                if (getWifiState(context)) {
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_wifi);
-                }else
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_wifi_no_bound_off);
-
-            case MainActivity.ACTION_NOTI:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_expand);
-            case MainActivity.ACTION_BLUETOOTH:
-                if (getBluetoothState(context)) {
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_bluetooth);
-                } else {
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_bluetooth_no_bound_off);
-                }
-            case MainActivity.ACTION_ROTATE:
-                if (getIsRotationAuto(context)) {
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_rotate_no_bound_auto);
-                } else {
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_rotate_no_bound_lock);
-                }
-            case MainActivity.ACTION_POWER_MENU:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_power_menu_no_bound);
-            case MainActivity.ACTION_LAST_APP:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_last_app);
-            case MainActivity.ACTION_CALL_LOGS:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_call_log);
-            case MainActivity.ACTION_CONTACT:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_contact);
-            case MainActivity.ACTION_DIAL:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_dial);
-            case MainActivity.ACTION_RECENT:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_icon_recent_5122);
-            case MainActivity.ACTION_VOLUME:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_volume);
-            case MainActivity.ACTION_BRIGHTNESS:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_brightness);
-            case MainActivity.ACTION_RINGER_MODE:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_sound_normal);
-            case MainActivity.ACTION_FLASH_LIGHT:
-                if (EdgeGestureService.FLASH_LIGHT_ON) {
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_flash_light_on);
-                } else {
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_flash_light_off);
-                }
-            case MainActivity.ACTION_SCREEN_LOCK:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_lock);
-            case MainActivity.ACTION_INSTANT_FAVO:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_instant_favorite_512);
-            case MainActivity.ACTION_NONE:
-                return null;
-
-        }
-        return null;
-    }
-
-    public static Bitmap getBitmapForOuterSetting(Context context,String action) {
-        switch (action) {
-            case MainActivity.ACTION_HOME:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_home);
-            case MainActivity.ACTION_BACK:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_back);
-            case MainActivity.ACTION_WIFI:
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_wifi);
-            case MainActivity.ACTION_NOTI:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_expand);
-            case MainActivity.ACTION_BLUETOOTH:
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_bluetooth);
-            case MainActivity.ACTION_ROTATE:
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_rotate_no_bound_auto);
-            case MainActivity.ACTION_POWER_MENU:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_power_menu_no_bound);
-            case MainActivity.ACTION_LAST_APP:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_last_app);
-            case MainActivity.ACTION_CALL_LOGS:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_call_log);
-            case MainActivity.ACTION_CONTACT:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_contact);
-            case MainActivity.ACTION_DIAL:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_dial);
-            case MainActivity.ACTION_RECENT:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_icon_recent_5122);
-            case MainActivity.ACTION_VOLUME:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_volume);
-            case MainActivity.ACTION_BRIGHTNESS:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_brightness);
-            case MainActivity.ACTION_RINGER_MODE:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_sound_normal);
-            case MainActivity.ACTION_FLASH_LIGHT:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_flash_light_on);
-            case MainActivity.ACTION_SCREEN_LOCK:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_lock);
-            case MainActivity.ACTION_NONE:
-                return null;
-            case MainActivity.ACTION_INSTANT_FAVO:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_instant_favorite_512);
-        }
-        return null;
-    }
-
-    public static String getLabelForOuterSetting(Context context, String action) {
-        switch (action) {
-            case MainActivity.ACTION_HOME:
-                return context.getString(R.string.setting_shortcut_home);
-            case MainActivity.ACTION_BACK:
-                return context.getString(R.string.setting_shortcut_back);
-            case MainActivity.ACTION_WIFI:
-                return context.getString(R.string.setting_shortcut_wifi);
-            case MainActivity.ACTION_NOTI:
-                return context.getString(R.string.setting_shortcut_noti);
-            case MainActivity.ACTION_BLUETOOTH:
-                return context.getString(R.string.setting_shortcut_bluetooth);
-            case MainActivity.ACTION_ROTATE:
-                return context.getString(R.string.setting_shortcut_rotation);
-            case MainActivity.ACTION_POWER_MENU:
-                return context.getString(R.string.setting_shortcut_power_menu);
-            case MainActivity.ACTION_LAST_APP:
-                return context.getString(R.string.setting_shortcut_last_app);
-            case MainActivity.ACTION_CALL_LOGS:
-                return context.getString(R.string.setting_shortcut_call_log);
-            case MainActivity.ACTION_CONTACT:
-                return context.getString(R.string.setting_shortcut_contact);
-            case MainActivity.ACTION_DIAL:
-                return context.getString(R.string.setting_shortcut_dial);
-            case MainActivity.ACTION_RECENT:
-                return context.getString(R.string.setting_shortcut_recent);
-            case MainActivity.ACTION_VOLUME:
-                return context.getString(R.string.setting_shortcut_volume);
-            case MainActivity.ACTION_BRIGHTNESS:
-                return context.getString(R.string.setting_shortcut_brightness);
-            case MainActivity.ACTION_RINGER_MODE:
-                return context.getString(R.string.setting_shortcut_ringer_mode);
-            case MainActivity.ACTION_FLASH_LIGHT:
-                return context.getString(R.string.setting_shortcut_flash_light);
-            case MainActivity.ACTION_SCREEN_LOCK:
-                return context.getString(R.string.setting_shortcut_screen_lock);
-            case MainActivity.ACTION_NONE:
-                return context.getString(R.string.setting_shortcut_none);
-            case MainActivity.ACTION_INSTANT_FAVO:
-                return context.getString(R.string.setting_shortcut_instant_favorite);
-        }
-        return "";
-    }
-
-    public static void homeAction(Context context, View v,String className, String packageName) {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
-
     public static void startHomeAction(Context context) {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
-    }
-
-
-
-
-
-    public static void backAction(Context context, View v, String className, String packageName) {
-        context.sendBroadcast(new Intent(Cons.ACTION_BACK));
-        if (!Utility.isAccessibilityEnable(context)) {
-            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
-        }
     }
 
     public static void startBackAction(Context context) {
@@ -1033,12 +386,6 @@ public  class Utility {
         }
     }
 
-    public static void recentAction(Context context, View v, String className, String packageName) {
-        context.sendBroadcast(new Intent(Cons.ACTION_RECENT));
-        if (!Utility.isAccessibilityEnable(context)) {
-            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
-        }
-    }
 
     public static void startRecentAction(Context context) {
         context.sendBroadcast(new Intent(Cons.ACTION_RECENT));
@@ -1060,17 +407,6 @@ public  class Utility {
     }
 
 
-    public static void flashLightAction(Context context, boolean actionOn) {
-        Intent i = new Intent(context, Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? FlashServiceM.class : FlashService.class);
-        if (actionOn) {
-            context.startService(i);
-            EdgeGestureService.FLASH_LIGHT_ON = true;
-        } else {
-            Log.e(TAG, "flashLightAction: actionOn = " + actionOn + "\nstop flash service");
-            context.stopService(i);
-            EdgeGestureService.FLASH_LIGHT_ON = false;
-        }
-    }
 
     public static void flashLightAction3(Context context) {
         Intent i = new Intent(context, Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? FlashServiceM.class : FlashService.class);
@@ -1117,12 +453,7 @@ public  class Utility {
 
     }
 
-    public static void powerAction(Context context, View v, String className, String packageName) {
-        context.sendBroadcast(new Intent(Cons.ACTION_POWER_MENU));
-        if (!Utility.isAccessibilityEnable(context)) {
-            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
-        }
-    }
+
 
     public static void startPowerAction(Context context) {
         context.sendBroadcast(new Intent(Cons.ACTION_POWER_MENU));
@@ -1131,29 +462,6 @@ public  class Utility {
         }
     }
 
-    public static void notiAction(Context context, View v, String className, String packageName) {
-        Object sbservice =context.getSystemService("statusbar");
-        try {
-            Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
-            Method showsb;
-            if (Build.VERSION.SDK_INT >= 17) {
-                showsb = statusbarManager.getMethod("expandNotificationsPanel");
-            } else {
-                showsb = statusbarManager.getMethod("expand");
-            }
-            showsb.invoke(sbservice);
-        } catch (ClassNotFoundException e) {
-            Log.e(TAG, "ClassNotFound " + e);
-        } catch (NoSuchMethodException e) {
-            notiActionByAccessibility(context);
-        } catch (IllegalAccessException e) {
-            notiActionByAccessibility(context);
-            Log.e(TAG, "IllegalAccessException " + e);
-        } catch (InvocationTargetException e) {
-            notiActionByAccessibility(context);
-            Log.e(TAG, "InvocationTargetException " + e);
-        }
-    }
     public static void startNotiAction(Context context) {
         Object sbservice =context.getSystemService("statusbar");
         try {
@@ -1239,140 +547,7 @@ public  class Utility {
         context.startActivity(intent);
     }
 
-    public static void executeAction(Context context, String action, View v, String className, String packageName, String lastAppPackageName) {
-        switch (action) {
-            case MainActivity.ACTION_HOME:
-//                homeAction(context,v,className,packageName);
-                homeAction(context, v, className, packageName);
-                break;
-            case MainActivity.ACTION_BACK:
-                backAction(context,v,className,packageName);
-                break;
-            case MainActivity.ACTION_NOTI:
-                notiAction(context,v,className,packageName);
-                break;
-            case MainActivity.ACTION_WIFI:
-                toggleWifi(context);
-                break;
-            case MainActivity.ACTION_BLUETOOTH:
-                toggleBluetooth(context);
-                break;
-            case MainActivity.ACTION_ROTATE:
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    Utility.setAutorotation(context);
-                } else {
-                    if (Settings.System.canWrite(context)) {
-                        Utility.setAutorotation(context);
-                    } else {
-                        startNotiDialog(context, NotiDialog.WRITE_SETTING_PERMISSION);
-//                        Intent notiIntent = new Intent();
-//                        notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-//                        PendingIntent notiPending = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-//                        builder.setContentTitle(context.getString(R.string.ask_for_write_setting_notification_title)).setContentText(context.getString(R.string.ask_for_write_setting_notification_text)).setSmallIcon(R.drawable.ic_settings_white_36px)
-//                                .setContentIntent(notiPending)
-//                                .setPriority(NotificationCompat.PRIORITY_HIGH)
-//                                .setDefaults(NotificationCompat.DEFAULT_SOUND);
-//                        Notification notification = builder.build();
-//                        NotificationManager notificationManager = (NotificationManager)context.getSystemService(context.NOTIFICATION_SERVICE);
-//                        notificationManager.notify(22, notification);
-                    }
-                }
-                break;
-            case MainActivity.ACTION_NONE:
-                //nothing
-                break;
-            case MainActivity.ACTION_POWER_MENU:
-                powerAction(context,v,className,packageName);
-                break;
-            case MainActivity.ACTION_LAST_APP:
-                lastAppAction(context, lastAppPackageName);
-                break;
-            case MainActivity.ACTION_CONTACT:
-                contactAction(context);
-                break;
-            case MainActivity.ACTION_CALL_LOGS:
-                callLogsAction(context);
-                break;
-            case MainActivity.ACTION_DIAL:
-                dialAction(context);
-                break;
-            case MainActivity.ACTION_RECENT:
-                recentAction(context,v,className,packageName);
-                break;
-            case MainActivity.ACTION_VOLUME:
-                volumeAction(context);
-                break;
-            case MainActivity.ACTION_BRIGHTNESS:
-                brightnessAction(context);
-                break;
-            case MainActivity.ACTION_RINGER_MODE:
-                setRinggerMode(context);
-            case MainActivity.ACTION_FLASH_LIGHT:
-                flashLightAction(context,EdgeGestureService.FLASH_LIGHT_ON);
-                break;
-            case MainActivity.ACTION_SCREEN_LOCK:
-                screenLockAction(context);
-                break;
-        }
-    }
 
-    public static View disPlayClock(Context context, WindowManager windowManager, boolean isAnimation, int animationTime, boolean disableClock) {
-        if (animationTime <= 50) {
-            isAnimation = false;
-        }
-        LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.clock, null);
-        LinearLayout clock = (LinearLayout) view.findViewById(R.id.clock_linear_layout);
-
-
-        if (!disableClock) {
-            Calendar c = Calendar.getInstance();
-            int mHour;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
-            clock.setVisibility(View.VISIBLE);
-            TextView hourTextView = (TextView) view.findViewById(R.id.clock_time_in_hour);
-            TextView dateTextView = (TextView) view.findViewById(R.id.clock_time_in_date);
-            TextView batteryLifeTextView = (TextView) view.findViewById(R.id.clock_battery_life);
-            String batteryString = context.getString(R.string.batterylife) + " " + getBatteryLevel(context) + "%";
-            if (batteryLifeTextView != null) {
-                batteryLifeTextView.setText(batteryString);
-            }
-            if (dateTextView != null) {
-                dateTextView.setText(dateFormat.format(c.getTime()));
-            }
-            if (!DateFormat.is24HourFormat(context)) {
-                SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm");
-                if (hourTextView != null) {
-                    hourTextView.setText(hourFormat.format(c.getTime()));
-                }
-            } else {
-                SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
-                if (hourTextView != null) {
-                    hourTextView.setText(hourFormat.format(c.getTime()));
-                }
-            }
-        } else {
-            clock.setVisibility(View.GONE);
-        }
-
-        WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                PixelFormat.TRANSLUCENT);
-
-        paramsEdge1.gravity = Gravity.TOP|Gravity.CENTER_HORIZONTAL;
-        windowManager.addView(view, paramsEdge1);
-        if (isAnimation) {
-            view.setAlpha(0f);
-            view.animate().alpha(1f).setDuration(animationTime).setInterpolator(new FastOutSlowInInterpolator());
-
-        }
-        return view;
-
-    }
     public static int getBatteryLevel(Context context) {
         Intent batteryIntent =context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         int level,scale;
@@ -1459,98 +634,6 @@ public  class Utility {
 
 
 
-    public static void setIndicatorForQuickAction(SharedPreferences sharedPreferences, Context context, int homeBackNoti, ImageView imageView, TextView label) {
-        String action = MainActivity.ACTION_NONE;
-        switch (homeBackNoti) {
-            case 1:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO);
-                break;
-            case 2:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_HOME);
-                break;
-            case 3:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_BACK);
-                break;
-            case 4:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
-                break;
-        }
-        if (action.equalsIgnoreCase(MainActivity.ACTION_NONE)) {
-            label.setText("");
-        } else {
-            label.setText(getLabelForOuterSetting(context,action));
-        }
-        switch (action) {
-            case MainActivity.ACTION_WIFI:
-                if (getWifiState(context)) {
-                    imageView.setImageResource(R.drawable.ic_wifi);
-                } else {
-                    imageView.setImageResource(R.drawable.ic_wifi_off);
-                }
-
-                break;
-            case MainActivity.ACTION_BLUETOOTH:
-                if (getBluetoothState(context)) {
-                    imageView.setImageResource(R.drawable.ic_bluetooth);
-                } else {
-                    imageView.setImageResource(R.drawable.ic_bluetooth_off);
-                }
-
-                break;
-            case MainActivity.ACTION_ROTATE:
-                if (getIsRotationAuto(context)) {
-                    imageView.setImageResource(R.drawable.ic_rotation);
-                } else {
-                    imageView.setImageResource(R.drawable.ic_rotation_lock);
-                }
-
-                break;
-            case MainActivity.ACTION_POWER_MENU:
-                imageView.setImageResource(R.drawable.ic_power_menu);
-                break;
-            case MainActivity.ACTION_HOME:
-                imageView.setImageResource(R.drawable.ic_home);
-                break;
-            case MainActivity.ACTION_BACK:
-                imageView.setImageResource(R.drawable.ic_back);
-                break;
-            case MainActivity.ACTION_NOTI:
-                imageView.setImageResource(R.drawable.ic_notification);
-                break;
-            case MainActivity.ACTION_LAST_APP:
-                imageView.setImageResource(R.drawable.ic_last_app);
-                break;
-            case MainActivity.ACTION_CALL_LOGS:
-                imageView.setImageResource(R.drawable.ic_call_log);
-                break;
-            case MainActivity.ACTION_DIAL:
-                imageView.setImageResource(R.drawable.ic_dial);
-                break;
-            case MainActivity.ACTION_CONTACT:
-                imageView.setImageResource(R.drawable.ic_contact);
-                break;
-            case MainActivity.ACTION_RECENT:
-                imageView.setImageResource(R.drawable.ic_recent);
-                break;
-            case MainActivity.ACTION_VOLUME:
-                imageView.setImageResource(R.drawable.ic_volume);
-                break;
-            case MainActivity.ACTION_BRIGHTNESS:
-                imageView.setImageResource(R.drawable.ic_screen_brightness);
-                break;
-            case MainActivity.ACTION_RINGER_MODE:
-                imageView.setImageResource(R.drawable.ic_sound_normal);
-                break;
-            case MainActivity.ACTION_FLASH_LIGHT:
-                imageView.setImageResource(R.drawable.ic_flash_light);
-                break;
-            case MainActivity.ACTION_SCREEN_LOCK:
-                imageView.setImageResource(R.drawable.ic_screen_lock);
-                break;
-            case MainActivity.ACTION_NONE:
-                imageView.setImageDrawable(null);
-        }
-    }
 
     public static Drawable getDrawableForAction(Context context, int action) {
         switch (action) {
@@ -1865,27 +948,6 @@ public  class Utility {
 
     }
 
-    public static int getQuickActionViewId(SharedPreferences defaultShared, int actionId) {
-        switch (actionId) {
-            case 0:
-                if (defaultShared.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
-                    return Cons.QUICK_ACTION_ID_INSTANT_GRID;
-                } else return Cons.QUICK_ACTION_ID_NORMAL;
-            case 1:
-                if (defaultShared.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_HOME).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
-                    return Cons.QUICK_ACTION_ID_INSTANT_GRID;
-                } else return Cons.QUICK_ACTION_ID_NORMAL;
-            case 2:
-                if (defaultShared.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_BACK).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
-                    return Cons.QUICK_ACTION_ID_INSTANT_GRID;
-                } else return Cons.QUICK_ACTION_ID_NORMAL;
-            case 3:
-                if (defaultShared.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI).equalsIgnoreCase(MainActivity.ACTION_INSTANT_FAVO)) {
-                    return Cons.QUICK_ACTION_ID_INSTANT_GRID;
-                } else return Cons.QUICK_ACTION_ID_NORMAL;
-        }
-        return -1;
-    }
 
     public static void startService(Context context) {
         Log.e(TAG, "startService: ");
@@ -2570,14 +1632,14 @@ public  class Utility {
 
     private static void startContact(Item item, Context context, int contactAction) {
         switch (contactAction) {
-            case EdgeSetting.ACTION_CHOOSE:
+            case Cons.ACTION_CHOOSE:
                 Intent intent = new Intent(context, ChooseActionDialogActivity.class);
                 intent.putExtra("number", item.getNumber());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 context.startActivity(intent);
                 break;
-            case EdgeSetting.ACTION_CALL:
+            case Cons.ACTION_CALL:
                 String url = "tel:"+ item.getNumber();
                 if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                     Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
@@ -2587,7 +1649,7 @@ public  class Utility {
                     Toast.makeText(context, context.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
                 }
                 break;
-            case EdgeSetting.ACTION_SMS:
+            case Cons.ACTION_SMS:
                 Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
                         + item.getNumber()));
                 smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
