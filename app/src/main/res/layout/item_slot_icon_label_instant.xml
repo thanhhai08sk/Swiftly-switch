@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center_vertical"
     android:paddingTop="4dp"
-    android:background="?selectableItemBackground"
+    style="@style/ItemSlot"
     android:paddingBottom="4dp"
     android:orientation="horizontal">
     <ImageView
