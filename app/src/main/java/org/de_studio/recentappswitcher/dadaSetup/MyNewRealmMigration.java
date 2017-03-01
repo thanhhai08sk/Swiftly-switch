@@ -47,14 +47,6 @@ public class MyNewRealmMigration implements RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == 4) {
-            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
-            schema.remove("Shortcut");
-            oldVersion++;
-        }
-
-
-
-        //// TODO: 2/20/17 don't forget to implement the old realmMigration
+   //// TODO: 2/20/17 don't forget to implement the old realmMigration
     }
 }
