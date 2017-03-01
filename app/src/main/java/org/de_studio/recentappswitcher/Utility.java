@@ -41,7 +41,6 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
@@ -58,7 +57,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -72,10 +70,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
-import org.de_studio.recentappswitcher.edgeService.EdgeServiceView;
 import org.de_studio.recentappswitcher.edgeService.NewServicePresenter;
 import org.de_studio.recentappswitcher.edgeService.NewServiceView;
-import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
 import org.de_studio.recentappswitcher.gridFavoriteSetting.GridFavoriteSettingView;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Edge;
@@ -84,7 +80,6 @@ import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.service.ChooseActionDialogActivity;
 import org.de_studio.recentappswitcher.service.EdgeGestureService;
 import org.de_studio.recentappswitcher.service.EdgeSetting;
-import org.de_studio.recentappswitcher.service.FolderAdapter;
 import org.de_studio.recentappswitcher.service.MyImageView;
 import org.de_studio.recentappswitcher.service.NotiDialog;
 import org.de_studio.recentappswitcher.service.ScreenBrightnessDialogActivity;
@@ -1076,16 +1071,6 @@ public  class Utility {
             EdgeGestureService.FLASH_LIGHT_ON = false;
         }
     }
-    public static void flashLightAction2(Context context, boolean actionOn) {
-        Intent i = new Intent(context, Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? FlashServiceM.class : FlashService.class);
-        if (actionOn) {
-            context.startService(i);
-            EdgeServiceView.FLASH_LIGHT_ON = true;
-        } else {
-            context.stopService(i);
-            EdgeServiceView.FLASH_LIGHT_ON = false;
-        }
-    }
 
     public static void flashLightAction3(Context context) {
         Intent i = new Intent(context, Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? FlashServiceM.class : FlashService.class);
@@ -1474,153 +1459,6 @@ public  class Utility {
 
 
 
-    public static void startShortcut(Context context, Shortcut shortcut, View v, String className, String packageName, String lastAppPackageName, int contactAction, boolean flashLightOn) {
-        if (shortcut.getType() == Shortcut.TYPE_APP) {
-            Intent extApp;
-            extApp =context.getPackageManager().getLaunchIntentForPackage(shortcut.getPackageName());
-            if (extApp != null) {
-                if (shortcut.getPackageName().equals("com.devhomc.search")) {
-                    extApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(extApp);
-                } else {
-                    ComponentName componentName = extApp.getComponent();
-//                                    Intent startApp = new Intent(Intent.ACTION_MAIN, null);
-//                                    startApp.addCategory(Intent.CATEGORY_LAUNCHER);
-//                                    startApp.setComponent(componentName);
-//                                    startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                                    extApp.addFlags(805306368);
-                    Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
-                    startAppIntent.setComponent(componentName);
-                    startAppIntent.addFlags(1064960);
-                    startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                    context.startActivity(startAppIntent);
-//                                    startActivity(extApp);
-                }
-
-            } else {
-                Log.e(TAG, "extApp of shortcut = null ");
-            }
-        } else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
-            switch (shortcut.getAction()) {
-                case Shortcut.ACTION_WIFI:
-                    Utility.toggleWifi(context);
-                    break;
-                case Shortcut.ACTION_BLUETOOTH:
-                    Utility.toggleBluetooth(context);
-                    break;
-                case Shortcut.ACTION_ROTATION:
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                        Utility.setAutorotation(context);
-                    } else {
-                        if (Settings.System.canWrite(context)) {
-                            Utility.setAutorotation(context);
-                        } else {
-                            startNotiDialog(context, NotiDialog.WRITE_SETTING_PERMISSION);
-//                            Intent notiIntent = new Intent();
-//                            notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-//                            PendingIntent notiPending = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//                            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-//                            builder.setContentTitle(context.getString(R.string.ask_for_write_setting_notification_title)).setContentText(context.getString(R.string.ask_for_write_setting_notification_text)).setSmallIcon(R.drawable.ic_settings_white_36px)
-//                                    .setContentIntent(notiPending)
-//                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-//                                    .setDefaults(NotificationCompat.DEFAULT_SOUND);
-//                            Notification notification = builder.build();
-//                            NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
-//                            notificationManager.notify(22, notification);
-                        }
-                    }
-
-                    break;
-                case Shortcut.ACTION_POWER_MENU:
-                    powerAction(context, v, className, packageName);
-                    break;
-                case Shortcut.ACTION_HOME:
-                    Utility.homeAction(context, v, className, packageName);
-                    break;
-                case Shortcut.ACTION_BACK:
-                    Utility.backAction(context, v, className, packageName);
-                    break;
-                case Shortcut.ACTION_NOTI:
-                    Utility.notiAction(context, v, className, packageName);
-                    break;
-                case Shortcut.ACTION_LAST_APP:
-                    Utility.lastAppAction(context, lastAppPackageName);
-                    break;
-                case Shortcut.ACTION_CALL_LOGS:
-                    Utility.callLogsAction(context);
-                    break;
-                case Shortcut.ACTION_DIAL:
-                    Log.e(TAG, "startShortcut: Start dial");
-                    Utility.dialAction(context);
-                    break;
-                case Shortcut.ACTION_CONTACT:
-                    Utility.contactAction(context);
-                    break;
-                case Shortcut.ACTION_RECENT:
-                    Utility.recentAction(context, v, className, packageName);
-                    break;
-                case Shortcut.ACTION_VOLUME:
-                    Utility.volumeAction(context);
-                    break;
-                case Shortcut.ACTION_BRIGHTNESS:
-                    Utility.brightnessAction(context);
-                    break;
-                case Shortcut.ACTION_RINGER_MODE:
-                    Utility.setRinggerMode(context);
-                    break;
-                case Shortcut.ACTION_FLASH_LIGHT:
-                    Utility.flashLightAction(context,!flashLightOn);
-                    break;
-                case Shortcut.ACTION_SCREEN_LOCK:
-                    Utility.screenLockAction(context);
-                    break;
-                case Shortcut.ACTION_NONE:
-                    break;
-
-            }
-        } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
-            switch (contactAction) {
-                case EdgeSetting.ACTION_CHOOSE:
-                    Intent intent = new Intent(context, ChooseActionDialogActivity.class);
-                    intent.putExtra("number", shortcut.getNumber());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                    context.startActivity(intent);
-                    break;
-                case EdgeSetting.ACTION_CALL:
-                    String url = "tel:"+ shortcut.getNumber();
-                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                        Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
-                        callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(callIntent);
-                    } else {
-                        Toast.makeText(context, context.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
-                    }
-                    break;
-                case EdgeSetting.ACTION_SMS:
-                    Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
-                            + shortcut.getNumber()));
-                    smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(smsIntent);
-            break;
-            }
-
-        } else if (shortcut.getType() == Shortcut.TYPE_SHORTCUT) {
-            try {
-                Intent intent = Intent.parseUri(shortcut.getIntent(), 0);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e(TAG, "startShortcut: exception when start Shortcut shortcut");
-            }
-
-        }
-    }
-
     public static void setIndicatorForQuickAction(SharedPreferences sharedPreferences, Context context, int homeBackNoti, ImageView imageView, TextView label) {
         String action = MainActivity.ACTION_NONE;
         switch (homeBackNoti) {
@@ -1754,183 +1592,6 @@ public  class Utility {
         return null;
     }
 
-    public static int[] showFolder(GridView gridView, Realm realm
-            , int mPosition, float mScale, float mIconScale, FolderAdapter adapter) {
-
-        ViewGroup viewGroup = (ViewGroup) gridView.getParent();
-        float gridX = gridView.getX();
-        float gridY = gridView.getY();
-        float x = gridView.getChildAt(mPosition).getX()+ gridX;
-        float y = gridView.getChildAt(mPosition).getY() + gridY;
-        int size = (int) realm.where(Shortcut.class).greaterThan("id",(mPosition+1)*1000 -1).lessThan("id",(mPosition+2)*1000).count();
-        if (size == 0) {
-            return new int[5];
-        }
-        int gridColumn = size;
-        if (gridColumn > 4) {
-            gridColumn = 4;
-        }
-        int gridRow;
-        if ( size % gridColumn == 0) {
-            gridRow = size/gridColumn;
-        }else gridRow = size/gridColumn +1;
-        int gridGap = 5;
-
-
-        gridView.setVisibility(View.GONE);
-        GridView folderGrid = (GridView) viewGroup.findViewById(R.id.folder_grid);
-        ViewGroup.LayoutParams gridParams = folderGrid.getLayoutParams();
-        folderGrid.setVerticalSpacing((int) (gridGap * mScale));
-        folderGrid.setNumColumns(gridColumn);
-        folderGrid.setGravity(Gravity.CENTER);
-        float gridWide = (int) (mScale * (float) (((EdgeGestureService.GRID_ICON_SIZE * mIconScale) + EdgeGestureService.GRID_2_PADDING) * gridColumn + gridGap * (gridColumn - 1)));
-        float gridTall = (int) (mScale * (float) (((EdgeGestureService.GRID_ICON_SIZE * mIconScale) + EdgeGestureService.GRID_2_PADDING) * gridRow + gridGap * (gridRow - 1)));
-        gridParams.height = (int) gridTall;
-        gridParams.width = (int) gridWide;
-        folderGrid.setLayoutParams(gridParams);
-        folderGrid.setAdapter(adapter);
-        if (x - gridWide / 2 + gridWide > gridX + gridView.getWidth()) {
-            folderGrid.setX(gridX + gridView.getWidth() - gridWide);
-        } else if (x - gridWide / 2 < 10 * mScale) {
-            folderGrid.setX(10*mScale);
-        } else {
-            folderGrid.setX(x - gridWide / 2);
-        }
-
-        folderGrid.setY(y - gridTall + gridTall/gridRow);
-        Log.e(TAG,"gridX = " + gridX + "\nGridY = " + gridY +  "\nfolder x = " + folderGrid.getX() + "\nfolder y= " + folderGrid.getY() );
-        folderGrid.setVisibility(View.VISIBLE);
-        return new int[]{(int) folderGrid.getX(), (int) folderGrid.getY(), gridRow, gridColumn, mPosition};
-
-
-
-    }
-
-    public static Bitmap getFolderThumbnail(Realm realm, int mPosition, Context context) {
-        Log.e(TAG, "getFolderThumbnail: ");
-        float mScale = context. getResources().getDisplayMetrics().density;
-        int width =(int)( 48*mScale);
-        int height = (int) (48 * mScale);
-        int smallWidth, smallHeight;
-        smallWidth = width/2;
-        smallHeight = height/2;
-        int startId = (mPosition +1)* 1000;
-        PackageManager packageManager = context.getPackageManager();
-        Bitmap.Config config = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = Bitmap.createBitmap(width, height, config);
-        Canvas canvas = new Canvas(bitmap);
-        Drawable drawable;
-        Shortcut shortcut;
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint.setColor(Color.WHITE);
-        int gap1dp = (int) (mScale);
-        boolean isFolderEmpty = true;
-
-        for (int i = 0; i < 4; i++) {
-            drawable = null;
-            shortcut = realm.where(Shortcut.class).equalTo("id",startId + i).findFirst();
-            if (shortcut != null && shortcut.getType() == Shortcut.TYPE_APP) {
-                isFolderEmpty = false;
-                try {
-//                    bitmap1 = drawableToBitmap(packageManager.getApplicationIcon(shortcut.getPackageName()));
-                    drawable = packageManager.getApplicationIcon(shortcut.getPackageName());
-//                    bitmap1 = ((BitmapDrawable)(drawable)).getBitmap();
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }
-                drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
-            } else if (shortcut != null && shortcut.getType() == Shortcut.TYPE_ACTION) {
-                isFolderEmpty = false;
-                drawable = getDrawableForAction(context, shortcut.getAction());
-                drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
-            }else if (shortcut != null && shortcut.getType() == Shortcut.TYPE_CONTACT) {
-                isFolderEmpty = false;
-                String uri = shortcut.getThumbnaiUri();
-                if (uri != null) {
-                    try {
-                        Bitmap bitmap1 = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(uri));
-                        drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap1);
-                        ((RoundedBitmapDrawable) drawable).setCircular(true);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        drawable = ContextCompat. getDrawable(context , R.drawable.ic_contact_default);
-//                        drawable = context.getDrawable(R.drawable.ic_contact_default);
-                    }
-                } else {
-                    drawable = ContextCompat. getDrawable(context , R.drawable.ic_contact_default);
-//                    drawable = context.getDrawable(R.drawable.ic_contact_default);
-                }
-                drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
-            } else if (shortcut != null && shortcut.getType() == Shortcut.TYPE_SHORTCUT) {
-                Log.e(TAG, "getFolderThumbnail: draw shortcut");
-                isFolderEmpty = false;
-                byte[] byteArray = shortcut.getBitmap();
-                try {
-                    Bitmap bmp;
-                    Resources resources = packageManager.getResourcesForApplication(shortcut.getPackageName());
-                    if (byteArray != null) {
-
-                        bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-                        drawable = new BitmapDrawable(resources, bmp);
-
-                    } else {
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-//                        drawable =  resources.getDrawable(shortcut.getResId(), null);
-                        Log.e(TAG, "getFolderThumbnail: resourcesCompat");
-                        drawable = ResourcesCompat.getDrawable(resources, shortcut.getResId(), null);
-//                        options.inMutable = true;
-//                        bmp =BitmapFactory.decodeResource(resources,shortcut.getResId(), options);
-//                        Log.e(TAG, "getFolderThumbnail: resource");
-                    }
-                    drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
-//                    if (bmp != null) {
-//
-//                        bmp = Bitmap.createScaledBitmap(bmp, smallWidth - gap1dp, smallHeight - gap1dp, false);
-//                        switch (i) {
-//                            case 0:
-//                                canvas.drawBitmap(bmp,0,0,paint);
-//                                break;
-//                            case 1:
-//                                canvas.drawBitmap(bmp,smallWidth + gap1dp, 0,paint);
-//                                break;
-//                            case 2:
-//                                canvas.drawBitmap(bmp, 0,smallHeight + gap1dp,paint);
-//                                break;
-//                            case 3:
-//                                canvas.drawBitmap(bmp,smallWidth + gap1dp, smallHeight +gap1dp,paint);
-//                                break;
-//                        }
-//                    }
-
-                } catch (Exception e) {
-                    Log.e(TAG, "getView: can not set imageview for shortcut shortcut");
-                }
-            }
-        }
-        if (isFolderEmpty) {
-//            drawable = context.getDrawable(R.drawable.ic_folder);
-            drawable = ContextCompat. getDrawable(context , R.drawable.ic_folder);
-            if (drawable != null) {
-                drawable.setBounds(0, 0, width, height);
-                drawable.draw(canvas);
-            }
-
-        }
-        File myDir = context.getFilesDir();
-        String fname = "folder-"+ mPosition +".png";
-        File file = new File (myDir, fname);
-        if (file.exists ()) file.delete ();
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
 
     public static   Bitmap createAndSaveFolderThumbnail(Slot folder, Realm realm, Context context) {
         float mScale = context. getResources().getDisplayMetrics().density;
@@ -2088,197 +1749,11 @@ public  class Utility {
         }
     }
 
-    public static void setImageForShortcut(Shortcut shortcut, PackageManager packageManager, ImageView imageView, Context context, IconPackManager.IconPack iconPack, Realm myRealm, boolean showOnOff) {
-
-        if (shortcut.getType() == Shortcut.TYPE_APP) {
-            try {
-                Drawable defaultDrawable = packageManager.getApplicationIcon(shortcut.getPackageName());
-                Drawable iconPackDrawable;
-                if (iconPack!=null) {
-                    iconPackDrawable = iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable);
-                    if (iconPackDrawable == null) {
-                        iconPackDrawable = defaultDrawable;
-                    }
-                    imageView.setImageDrawable(iconPackDrawable);
-                } else {
-                    imageView.setImageDrawable(defaultDrawable);
-                }
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e(TAG, "NameNotFound " + e);
-            }
-        }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
-            switch (shortcut.getAction()) {
-                case Shortcut.ACTION_WIFI:
-                    if (showOnOff) {
-                        if (Utility.getWifiState(context)) {
-                            imageView.setImageResource(R.drawable.ic_wifi);
-                        } else {
-                            imageView.setImageResource(R.drawable.ic_wifi_off);
-                        }
-                    } else {
-                        imageView.setImageResource(R.drawable.ic_wifi);
-                    }
-                    break;
-                case Shortcut.ACTION_BLUETOOTH:
-                    if (showOnOff) {
-                        if (Utility.getBluetoothState(context)) {
-                            imageView.setImageResource(R.drawable.ic_bluetooth);
-                        } else {
-                            imageView.setImageResource(R.drawable.ic_bluetooth_off);
-                        }
-                    } else {
-                        imageView.setImageResource(R.drawable.ic_bluetooth);
-                    }
-
-                    break;
-                case Shortcut.ACTION_ROTATION:
-                    if (showOnOff) {
-                        if (Utility.getIsRotationAuto(context)) {
-                            imageView.setImageResource(R.drawable.ic_rotation);
-                        } else {
-                            imageView.setImageResource(R.drawable.ic_rotation_lock);
-                        }
-                    } else {
-                        imageView.setImageResource(R.drawable.ic_rotation);
-                    }
-                    break;
-                case Shortcut.ACTION_POWER_MENU:
-                    imageView.setImageResource(R.drawable.ic_power_menu);
-                    break;
-                case Shortcut.ACTION_HOME:
-                    imageView.setImageResource(R.drawable.ic_home);
-                    break;
-                case Shortcut.ACTION_BACK:
-                    imageView.setImageResource(R.drawable.ic_back);
-                    break;
-                case Shortcut.ACTION_NOTI:
-                    imageView.setImageResource(R.drawable.ic_notification);
-                    break;
-                case Shortcut.ACTION_LAST_APP:
-                    imageView.setImageResource(R.drawable.ic_last_app);
-                    break;
-                case Shortcut.ACTION_CALL_LOGS:
-                    imageView.setImageResource(R.drawable.ic_call_log);
-                    break;
-                case Shortcut.ACTION_DIAL:
-                    imageView.setImageResource(R.drawable.ic_dial);
-                    break;
-                case Shortcut.ACTION_CONTACT:
-                    imageView.setImageResource(R.drawable.ic_contact);
-                    break;
-                case Shortcut.ACTION_RECENT:
-                    imageView.setImageResource(R.drawable.ic_recent);
-                    break;
-                case Shortcut.ACTION_VOLUME:
-                    imageView.setImageResource(R.drawable.ic_volume);
-                    break;
-                case Shortcut.ACTION_BRIGHTNESS:
-                    imageView.setImageResource(R.drawable.ic_screen_brightness);
-                    break;
-                case Shortcut.ACTION_RINGER_MODE:
-                    if (showOnOff) {
-                        switch (Utility.getRingerMode(context)) {
-                            case 0:
-                                imageView.setImageResource(R.drawable.ic_sound_normal);
-                                break;
-                            case 1:
-                                imageView.setImageResource(R.drawable.ic_sound_vibrate);
-                                break;
-                            case 2:
-                                imageView.setImageResource(R.drawable.ic_sound_silent);
-                                break;
-                        }
-                    } else {
-                        imageView.setImageResource(R.drawable.ic_sound_normal);
-                    }
-
-                    break;
-                case Shortcut.ACTION_FLASH_LIGHT:
-                    if (EdgeGestureService.FLASH_LIGHT_ON) {
-                        imageView.setImageResource(R.drawable.ic_flash_light);
-                    } else {
-                        imageView.setImageResource(R.drawable.ic_flash_light_off);
-                    }
-                    break;
-                case Shortcut.ACTION_SCREEN_LOCK:
-                    imageView.setImageResource(R.drawable.ic_screen_lock);
-                    break;
-                case Shortcut.ACTION_NONE:
-                    imageView.setImageDrawable(null);
-            }
-        } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
-            String thumbnaiUri = shortcut.getThumbnaiUri();
-            if (thumbnaiUri != null) {
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(thumbnaiUri));
-                    RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-                    drawable.setCircular(true);
-                    imageView.setImageDrawable(drawable);
-                    imageView.setColorFilter(null);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    imageView.setImageResource(R.drawable.ic_contact_default);
-//                        imageView.setColorFilter(ContextCompat.getColor(context, R.color.black));
-                } catch (SecurityException e) {
-                    Toast.makeText(context, context.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
-                }
-            } else {
-                imageView.setImageResource(R.drawable.ic_contact_default);
-//                    imageView.setColorFilter(ContextCompat.getColor(context, R.color.black));
-
-            }
-        } else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
-            File myDir = context.getFilesDir();
-            String fname = "folder-"+ shortcut.getId() +".png";
-            File file = new File (myDir, fname);
-            if (!file.exists()) {
-                imageView.setImageBitmap(Utility.getFolderThumbnail(myRealm, shortcut.getId(), context));
-            } else {
-                try {
-                    imageView.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
-                } catch (Exception e) {
-                    Log.e(TAG, "read thumbnail exeption" + e);
-                    e.printStackTrace();
-                }
-            }
-        } else if (shortcut.getType() == Shortcut.TYPE_SHORTCUT) {
-            byte[] byteArray = shortcut.getBitmap();
-            try {
-                if (byteArray != null) {
-                    imageView.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
-                } else {
-                    Resources resources = packageManager.getResourcesForApplication(shortcut.getPackageName());
-                    imageView.setImageBitmap(BitmapFactory.decodeResource(resources,shortcut.getResId()));
-                }
-
-            } catch (Exception e) {
-                Log.e(TAG, "getView: can not set imageview for shortcut shortcut");
-            }
-        }
-        imageView.setColorFilter(null);
-    }
-
 
     public static boolean checkDrawPermission(Context context) {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
     }
 
-    public static String getLabelForShortcut(Context context, Shortcut shortcut) {
-        if (shortcut != null) {
-            if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
-                return shortcut.getName();
-            } else if (shortcut.getType() == Shortcut.TYPE_APP) {
-                try {
-                    return(String) context.getPackageManager().getApplicationLabel(context.getPackageManager().getApplicationInfo(shortcut.getPackageName(), 0));
-                } catch (PackageManager.NameNotFoundException e) {
-                    return "";
-                }
-            } else if (shortcut.getAction() != Shortcut.ACTION_NONE) {
-                return shortcut.getLabel();
-            } else return "";
-
-        } else return "";
-    }
 
     public static boolean checkContactPermission(Context context) {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;

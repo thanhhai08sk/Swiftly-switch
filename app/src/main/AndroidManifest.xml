@@ -67,9 +67,6 @@
         <!-- android:name=".service.EdgeGestureService" -->
         <!-- android:exported="false" /> -->
         <service
-            android:name=".edgeService.EdgeServiceView"
-            android:exported="false" />
-        <service
             android:name=".edgeService.NewServiceView"
             android:exported="false" />
         <service
