@@ -142,8 +142,6 @@
     <string name="admin_permission_explain">Allow the Swiftly switch with admin permissions to enable screen lock.</string>
     <string name="admin_permission">Phone administrator permission</string>
     <string name="admin_desc">Required for lock screen action</string>
-    <string name="admin_permission_missing_toast">Miss Phone Admin permission. Enable this permission in Setting - Security - Phone administrators</string>
-    <string name="out_of_trial">Out of trial time</string>
     <string name="enable_accessibility_permission">Enable accessibility permission</string>
     <string name="main_enable_disable_by_long_press_home_button">Enable/disable Edges by long press home button</string>
     <string name="enable_long_press_to_toggle_swiftly_switch">By set Swiftly Switch to your Assist app (instead of Google Now On Tap), you can enable/disable trigger edges at any time by long press home button.</string>

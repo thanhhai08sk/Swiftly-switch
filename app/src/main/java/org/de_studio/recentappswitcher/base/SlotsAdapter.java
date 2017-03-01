@@ -55,7 +55,13 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
                     break;
                 case Cons.ITEM_TYPE_ICON_LABEL_INSTANT:
                     Utility.setSlotLabel(slot, context, holder.label);
-                    holder.instant.setColorFilter(slot.instant? context.getColor(R.color.colorAccent): Color.GRAY);
+                    holder.instant.setColorFilter(slot.instant ? context.getColor(R.color.colorAccent) : Color.GRAY);
+                    holder.instant.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            onInstantClickSJ.onNext(holder.getAdapterPosition());
+                        }
+                    });
                     break;
             }
             Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack, true, false);
@@ -65,12 +71,8 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
                     onClickSubject.onNext(holder.getAdapterPosition());
                 }
             });
-            holder.instant.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onInstantClickSJ.onNext(holder.getAdapterPosition());
-                }
-            });
+
+
             if (position == highlightItem) {
                 holder.view.setBackgroundColor(R.color.background_4);
             } else {
