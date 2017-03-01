@@ -34,14 +34,13 @@ import io.realm.Realm;
 import io.realm.RealmList;
 
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_DEFAULT;
-import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_KEY;
+import static org.de_studio.recentappswitcher.Cons.ANIMATION_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_KEY;
 import static org.de_studio.recentappswitcher.Cons.BACKGROUND_COLOR_NAME;
 import static org.de_studio.recentappswitcher.Cons.CLOCK_PARENTS_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.COLLECTION_WINDOW_PARAMS_NAME;
-import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
@@ -52,6 +51,7 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_NAME;
+import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_KEY;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
@@ -233,7 +233,7 @@ public class NewServiceModule {
     @Singleton
     @Named(GUIDE_COLOR_NAME)
     int guideColor(@Named(SHARED_PREFERENCE_NAME) SharedPreferences defaultShared){
-        return defaultShared.getInt(EdgeSetting.GUIDE_COLOR_KEY, GUIDE_COLOR_DEFAULT);
+        return defaultShared.getInt(Cons.GUIDE_COLOR_KEY, GUIDE_COLOR_DEFAULT);
     }
 
 

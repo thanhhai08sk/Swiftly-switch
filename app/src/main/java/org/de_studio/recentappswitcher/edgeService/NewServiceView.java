@@ -50,6 +50,7 @@ import org.de_studio.recentappswitcher.base.ServiceSlotAdapter;
 import org.de_studio.recentappswitcher.base.adapter.ServiceItemsAdapter;
 import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
 import org.de_studio.recentappswitcher.dadaSetup.DataSetupService;
+import org.de_studio.recentappswitcher.dadaSetup.EdgeSetting;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerNewServiceComponent;
 import org.de_studio.recentappswitcher.dagger.NewServiceModule;
@@ -336,7 +337,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
         PendingIntent notiPending = PendingIntent.getActivity(getApplicationContext(), 0, notiClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         notificationBuilder = new NotificationCompat.Builder(this);
-        notificationBuilder.setSmallIcon(R.drawable.ic_stat_ic_looks_white_48dp1)
+        notificationBuilder
                 .setContentIntent(notiPending)
                 .addAction(remoteAction)
                 .setPriority(Notification.PRIORITY_MIN)

@@ -67,7 +67,8 @@ public class IconPackListAdapter extends BaseAdapter {
         RadioButton radioButton = (RadioButton) view.findViewById(R.id.icon_pack_radio_button);
         if (getItemId(position) == 0) {
             label.setText(mContext.getString(R.string.icon_pack_system_icon_pack_label));
-            icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_launcher));
+            icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_settings_white_36px));
+            icon.setColorFilter(R.color.grey);
             if (sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none").equals("none")) {
                 radioButton.setChecked(true);
             } else {

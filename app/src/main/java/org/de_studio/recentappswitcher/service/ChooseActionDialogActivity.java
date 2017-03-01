@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.dadaSetup.EdgeSetting;
 
 public class ChooseActionDialogActivity extends AppCompatActivity {
 
