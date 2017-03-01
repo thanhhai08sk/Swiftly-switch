@@ -395,11 +395,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         Log.e(TAG, "onActionUp: currentHighlight = " + currentHighlight);
         onHolding = false;
         Slot slot = null;
-        String collectionId = null;
         switch (currentShowing.showWhat) {
             case Showing.SHOWING_CIRCLE_AND_ACTION:
                 if (currentHighlight >= 0) {
-                    collectionId = currentShowing.circle.collectionId;
                     if (currentHighlight < 10) {
                         Log.e(TAG, "onActionUp: size = " + currentShowing.circleSlots.size() + "\nhighlight " + currentHighlight);
                         if (currentShowing.circleSlots.size() > currentHighlight) {
@@ -415,13 +413,14 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     if (currentShowing.action.visibilityOption == Collection.VISIBILITY_OPTION_VISIBLE_AFTER_LIFTING) {
                         view.showQuickActions(currentEdge.position, currentHighlight, currentShowing, false, false);
                     } else {
-                        currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
+                        if (currentShowing.action.visibilityOption != Collection.VISIBILITY_OPTION_ALWAYS_VISIBLE) {
+                            currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
+                        }
                     }
                 }
                 break;
             case Showing.SHOWING_CIRCLE_ONLY:
                 if (currentHighlight >= 0) {
-                    collectionId = currentShowing.circle.collectionId;
                     if (currentHighlight < currentShowing.circleSlots.size()) {
                         slot = currentShowing.circleSlots.get(currentHighlight);
                     }
@@ -429,7 +428,6 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 break;
             case Showing.SHOWING_GRID:
                 if (currentHighlight >= 0) {
-                    collectionId = currentShowing.grid.collectionId;
                     slot = currentShowing.grid.slots.get(currentHighlight);
                 }
                 break;
@@ -505,6 +503,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 break;
             case Showing.SHOWING_CIRCLE_AND_ACTION:
                 int onPosition1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(), true, currentShowing.action.slots.size(),true);
+                Log.e(TAG, "onClickBackground: circle and action, position = " + onPosition1);
                 if (onPosition1 != -1) {
                     if (onPosition1 < 10) {
                         startSlotSJ.onNext(currentShowing.circleSlots.get(onPosition1));
@@ -516,6 +515,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 break;
             case Showing.SHOWING_CIRCLE_ONLY:
                 int onPosition2 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(), true, currentShowing.action.slots.size(),true);
+                Log.e(TAG, "onClickBackground: circle only, position = " + onPosition2);
                 if (onPosition2 != -1) {
                     if (onPosition2 < 10) {
                         startSlotSJ.onNext(currentShowing.circleSlots.get(onPosition2));
