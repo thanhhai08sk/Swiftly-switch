@@ -1,11 +1,9 @@
 package org.de_studio.recentappswitcher.main.about;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.webkit.WebView;
 import android.widget.TextView;
-
-import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.de_studio.recentappswitcher.BuildConfig;
 import org.de_studio.recentappswitcher.R;
@@ -56,12 +54,14 @@ public class AboutView extends BaseActivity {
     
     @OnClick(R.id.privacy)
     void onPrivacyClick(){
-        MaterialDialog dei =new  MaterialDialog.Builder(this).customView(R.layout.privacy_web_view, false)
-                .positiveText(R.string.app_tab_fragment_ok_button)
-                .show();
-        View view = dei.getCustomView();
-        WebView webView = (WebView) view.findViewById(R.id.webview);
-        webView.loadUrl("https://www.facebook.com/notes/de-studio/privacy-policy-for-swiftly-switch/733550620153464");
+        Uri uriUrl = Uri.parse("https://www.facebook.com/notes/de-studio/privacy-policy-for-swiftly-switch/733550620153464");
+        startActivity(new Intent(Intent.ACTION_VIEW, uriUrl));
+//        MaterialDialog dei =new  MaterialDialog.Builder(this).customView(R.layout.privacy_web_view, false)
+//                .positiveText(R.string.app_tab_fragment_ok_button)
+//                .show();
+//        View view = dei.getCustomView();
+//        WebView webView = (WebView) view.findViewById(R.id.webview);
+//        webView.loadUrl("https://www.facebook.com/notes/de-studio/privacy-policy-for-swiftly-switch/733550620153464");
 
     }
 
