@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import org.de_studio.recentappswitcher.MainActivity;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.main.MainView;
@@ -75,15 +74,15 @@ public class NotiDialog extends AppCompatActivity {
 
         } else {
             switch (type) {
-                case OUT_OF_TRIAL:
-                    titleRes = R.string.out_of_trial;
-                    textRes = R.string.edge_service_out_of_trial_text_when_homebacknoti;
-                    buttonTextRes = R.string.main_buy_pro_button_text;
-                    Uri uri = Uri.parse("mbarket://details?id=" + MainActivity.PRO_VERSION_PACKAGE_NAME);
-                    buttonIntent = new Intent(Intent.ACTION_VIEW, uri);
-                    buttonIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                            Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                    break;
+//                case OUT_OF_TRIAL:
+//                    titleRes = R.string.out_of_trial;
+//                    textRes = R.string.edge_service_out_of_trial_text_when_homebacknoti;
+//                    buttonTextRes = R.string.main_buy_pro_button_text;
+//                    Uri uri = Uri.parse("mbarket://details?id=" + MainActivity.PRO_VERSION_PACKAGE_NAME);
+//                    buttonIntent = new Intent(Intent.ACTION_VIEW, uri);
+//                    buttonIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+//                            Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+//                    break;
                 case WRITE_SETTING_PERMISSION:
                     titleRes = R.string.write_setting_permission;
                     textRes = R.string.write_setting_permission_explain;

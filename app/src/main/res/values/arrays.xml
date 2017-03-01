@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="edge_dialog_mode_setting_spinner_array">
-        <item>@string/edge_dialog_mode_array_default</item>
-        <item>@string/edge_dialog_mode_array_only_favorite</item>
-        <item>@string/edge_dialog_mode_array_circlt_favorite</item>
-    </string-array>
     <string-array name="edge_positions_array">
         <item>@string/edge_dialog_array_right_top</item>
         <item>@string/edge_dialog_array_right_centre</item>
@@ -51,25 +46,6 @@
         <item>@string/setting_shortcut_dial</item>
         <item>@string/setting_shortcut_contact</item>
         <item>@string/setting_shortcut_call_log</item>
-    </string-array>
-    <string-array name="grid_row">
-        <item>@string/grid_1_row</item>
-        <item>@string/grid_2_row</item>
-        <item>@string/grid_3_row</item>
-        <item>@string/grid_4_row</item>
-        <item>@string/grid_5_row</item>
-        <item>@string/grid_6_row</item>
-        <item>@string/grid_7_row</item>
-    </string-array>
-
-    <string-array name="grid_column">
-        <item>@string/grid_1_column</item>
-        <item>@string/grid_2_column</item>
-        <item>@string/grid_3_column</item>
-        <item>@string/grid_4_column</item>
-        <item>@string/grid_5_column</item>
-        <item>@string/grid_6_column</item>
-        <item>@string/grid_7_column</item>
     </string-array>
 
     <string-array name="outer_setting_list_action">
