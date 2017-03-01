@@ -92,6 +92,7 @@ import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.SHARED_PREFERENCE_NAME;
+import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
 
 /**
  * Created by HaiNguyen on 12/23/16.
@@ -166,6 +167,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Inject
     @Named(ANIMATION_TIME_NAME)
     int animationTime;
+    @Inject
+    @Named(USE_ANIMATION_NAME)
+    boolean useAnimation;
     @Inject
     @Named(Cons.BACKGROUND_COLOR_NAME)
     int backgroundColor;
@@ -610,21 +614,25 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             float halfIcon = 24 * mScale;
             float centerX = recyclerView.getWidth()/2;
             float centerY = recyclerView.getHeight()/2;
-            for (int i = 0; i < recyclerView.getChildCount(); i++) {
-                child = recyclerView.getChildAt(i);
-                childCenterX = child.getX() + halfIcon;
-                childCenterY = child.getY() + halfIcon;
-                child.setTranslationY((childCenterY - centerY)/2);
-                child.setTranslationX((childCenterX - centerX)/2);
-                child.setAlpha(0f);
-                child.animate().translationY(0)
-                        .translationX(0)
-                        .alpha(1f)
-                        .setInterpolator(new DecelerateInterpolator(3f))
-                        .setDuration(animationTime)
-                        .setStartDelay(animationTime)
-                        .start();
+
+            if (useAnimation) {
+                for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                    child = recyclerView.getChildAt(i);
+                    childCenterX = child.getX() + halfIcon;
+                    childCenterY = child.getY() + halfIcon;
+                    child.setTranslationY((childCenterY - centerY)/2);
+                    child.setTranslationX((childCenterX - centerX)/2);
+                    child.setAlpha(0f);
+                    child.animate().translationY(0)
+                            .translationX(0)
+                            .alpha(1f)
+                            .setInterpolator(new DecelerateInterpolator(3f))
+                            .setDuration(animationTime)
+                            .setStartDelay(animationTime)
+                            .start();
+                }
             }
+
             currentShowing.gridXY.x = (int) recyclerView.getX();
             currentShowing.gridXY.y = (int) recyclerView.getY();
         }
@@ -738,14 +746,17 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     previousX = iconsXY.xs[i];
                     previousY = iconsXY.ys[i];
 
-                    Path path = new Path();
-                    path.moveTo(icon.getX(),icon.getY());
-                    path.lineTo(iconsXY.xs[i], iconsXY.ys[i]);
-                    ObjectAnimator animator = ObjectAnimator.ofFloat(icon, "x", "y", path);
-                    animator.setStartDelay(animationTime / (frameLayout.getChildCount() - i)/2);
-                    animator.setDuration(animationTime);
-                    animator.setInterpolator(new DecelerateInterpolator());
-                    animator.start();
+                    if (useAnimation) {
+                        Path path = new Path();
+                        path.moveTo(icon.getX(),icon.getY());
+                        path.lineTo(iconsXY.xs[i], iconsXY.ys[i]);
+                        ObjectAnimator animator = ObjectAnimator.ofFloat(icon, "x", "y", path);
+                        animator.setStartDelay(animationTime / (frameLayout.getChildCount() - i)/2);
+                        animator.setDuration(animationTime);
+                        animator.setInterpolator(new DecelerateInterpolator());
+                        animator.start();
+                    }
+
                 }
                 ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(icon, "alpha", 0f, 1f);
                 alphaAnimator.setStartDelay(animationTime / (frameLayout.getChildCount() - i)/2);
