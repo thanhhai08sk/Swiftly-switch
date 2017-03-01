@@ -61,22 +61,11 @@
     <string name="main_usage_access_can_not_found">Can not found this setting on your device. Please try grant it manually.</string>
     <string name="batterylife">Battery life:</string>
     <string name="main_disable_clock_text">Disable clock</string>
-    <string name="share_with_friend">Share with friends</string>
     <string name="review_on_play_store">Review on Play Store</string>
     <string name="email_us">Email us</string>
-    <string name="share_with_friend_title">Share your friends</string>
-    <string name="share_with_friend_message">Hey! Try this awesome app? :)</string>
-    <string name="install">Install</string>
     <string name="share">Share</string>
     <string name="main_vibration_duration">Vibration duration</string>
     <string name="main_hold_time">Long-press delay</string>
-    <string name="place_in_the_center">Place it in the center</string>
-    <string name="main_pin_app">Pin apps to recent</string>
-    <string name="title_activity_pin_app">Pin App</string>
-    <string name="out_of_limit">Out of limit</string>
-    <string name="pin_app_info">You can pin your most use apps so it always in the recent list.</string>
-    <string name="pin_to_top">Pin to top</string>
-    <string name="pin_to_bottom">Pin to bottom</string>
     <string name="main_set_background_color">Set background color</string>
     <string name="main_animation_text">Animation</string>
     <string name="last_app">Last app</string>
@@ -85,7 +74,6 @@
     <string name="main_icon_size">Icon size</string>
     <string name="main_set_guide_color">Set guide color</string>
     <string name="main_ani_time">Animation duration</string>
-    <string name="intro_activity">App Intro</string>
     <string name="a_new_way_to_use_your_phone">A new way to use your phone</string>
     <string name="switch_between_recent_apps">Switch between recent apps</string>
     <string name="note_keep_your_finger_on_screen_unless_finish_action">Note: keep your finger on screen unless you want to finish action</string>
@@ -106,11 +94,6 @@
     <string name="one_or_more_permission_are_missing">One or more permission are missing</string>
     <string name="you_have_not_finished_all_permission_yet">You have not finished granting all permission yet. Please try again.</string>
     <string name="skip">Skip</string>
-    <string name="hold_icon">Hold icon</string>
-    <string name="grid_mode">Grid mode</string>
-    <string name="semi_circle_mode">Semi-circle mode</string>
-    <string name="edge_dialog_mode_array_circlt_favorite">Circle favorite</string>
-    <string name="set_circle_favorite_mode_for">Set Circle Favorite mode for:</string>
     <string name="setting_shortcut_recent">Recent button</string>
     <string name="setting_shortcut_instant_favorite">Instant favorite</string>
     <string name="what_new">What\'s new</string>
@@ -118,7 +101,6 @@
     <string name="actions">Actions</string>
     <string name="contacts">Contacts</string>
     <string name="setting_shortcut_folder">Folder</string>
-    <string name="enable_require_permissions_to_use_this_feature">Enable require permissions to use this feature</string>
     <string name="missing_contact_permission">Missing contact related permissions</string>
     <string name="missing_call_phone_permission">Missing call phone permission</string>
     <string name="choose_action">Choose action</string>
@@ -135,7 +117,6 @@
     <string name="contact_type_pager">pager</string>
     <string name="contact_type_other">other</string>
     <string name="contact_type_custom">custom</string>
-    <string name="limit_of_free_version">The free version has some feature that only available within 14 days trial period: Pin apps to recent, Expand status bar.</string>
     <string name="ringtone">Ringtone</string>
     <string name="notification">Notification</string>
     <string name="system">System</string>
@@ -151,11 +132,10 @@
     <string name="go_to_setting">Go to setting</string>
     <string name="shortcut">Shortcuts</string>
     <string name="vote_now">Review now</string>
-    <string name="pin_shortcuts_to_recent">Pin shortcuts to recent</string>
     <string name="sale_50">Pro -50%</string>
     <string name="avoid_keyboard">Avoid keyboard</string>
-    <string name="avoid_keyboard_step_aside">Step aside keyboard</string>
-    <string name="avoid_keyboard_place_under">Place under keyboard</string>
+    <string name="avoid_keyboard_step_aside" translatable="false">Step aside keyboard</string>
+    <string name="avoid_keyboard_place_under" translatable="false">Place under keyboard</string>
     <string name="setting_shortcut_flash_light">Flash light</string>
     <string name="setting_shortcut_screen_lock">Screen lock</string>
     <string name="swiftly_switch_screen_lock">Swiftly Switch Screen Lock</string>

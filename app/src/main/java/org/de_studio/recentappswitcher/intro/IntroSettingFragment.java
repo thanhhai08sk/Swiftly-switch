@@ -16,7 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
@@ -82,7 +83,10 @@ public class IntroSettingFragment extends Fragment {
                         startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
                     } catch (ActivityNotFoundException e) {
                         Log.e(LOG_TAG, "Can not found usage access setting");
-                        Toast.makeText(getContext(),R.string.main_usage_access_can_not_found,Toast.LENGTH_LONG).show();
+                        new MaterialDialog.Builder(getActivity())
+                                .content(R.string.main_usage_access_can_not_found)
+                                .positiveText(R.string.app_tab_fragment_ok_button)
+                                .show();
                     }
                 }
             });

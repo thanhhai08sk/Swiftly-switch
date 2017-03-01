@@ -99,7 +99,6 @@
 
         <activity
             android:name=".intro.IntroActivity"
-            android:label="@string/intro_activity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
