@@ -115,15 +115,6 @@
                 android:value=".favoriteShortcut.FavoriteSettingActivity" />
         </activity>
         <activity
-            android:name=".OuterRingSettingActivity"
-            android:label="@string/title_activity_outter_ring_setting"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.de_studio.recentappswitcher.MainActivity" />
-        </activity>
-        <activity
             android:name=".PinAppActivity"
             android:label="@string/title_activity_pin_shortcuts"
             android:parentActivityName=".MainActivity"
