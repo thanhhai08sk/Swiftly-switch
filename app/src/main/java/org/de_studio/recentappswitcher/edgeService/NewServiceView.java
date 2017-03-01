@@ -1360,7 +1360,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             if (intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED)) {
                 Log.e(TAG, "onReceive: action package removed");
                 if (!intent.getExtras().getBoolean(Intent.EXTRA_REPLACING)) {
-                    //nothing now
+                    String dataString = intent.getDataString();
+                    String packageN = dataString.substring(dataString.indexOf(":") +1);
+                    presenter.onUninstallPackage(packageN);
                 }
             } else if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
                 Log.e(TAG, "onReceive: action package added");

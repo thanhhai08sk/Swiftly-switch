@@ -385,6 +385,20 @@ public class NewServiceModel extends BaseModel {
 
     }
 
+    public void removeAppItemFromData(final String packageName) {
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+//                Item item = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(packageName)).findFirst();
+                Item item = realm.where(Item.class).equalTo(Cons.PACKAGENAME, packageName).findFirst();
+                if (item != null) {
+                    Log.e(TAG, "execute: delete app item from realm: " + packageName);
+                    item.deleteFromRealm();
+                }else Log.e(TAG, "execute: can not delete app, null item, package = " + packageName);
+            }
+        });
+    }
+
 
     @Override
     public void clear() {

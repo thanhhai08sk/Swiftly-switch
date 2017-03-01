@@ -655,6 +655,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         model.addPackageToData(packageName, label);
     }
 
+    public void onUninstallPackage(String packageName) {
+        model.removeAppItemFromData(packageName);
+    }
+
 
     public interface View extends PresenterView, android.view.View.OnTouchListener, GestureDetector.OnGestureListener
             , android.view.View.OnSystemUiVisibilityChangeListener {
