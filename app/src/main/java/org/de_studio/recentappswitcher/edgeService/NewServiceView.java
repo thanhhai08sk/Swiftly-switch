@@ -716,11 +716,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             if (i < slots.size()) {
                 View icon = frameLayout.getChildAt(i);
                 icon.setVisibility(View.VISIBLE);
-//                icon.setAlpha(0f);
+                icon.setAlpha(0f);
                 Utility.setSlotIcon(slots.get(i), this, (ImageView) icon, getPackageManager(), iconPack, false, true);
 
 
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || !useAnimation) {
                     icon.setX(iconsXY.xs[i]);
                     icon.setY(iconsXY.ys[i]);
 
@@ -746,16 +746,16 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     previousX = iconsXY.xs[i];
                     previousY = iconsXY.ys[i];
 
-                    if (useAnimation) {
-                        Path path = new Path();
-                        path.moveTo(icon.getX(),icon.getY());
-                        path.lineTo(iconsXY.xs[i], iconsXY.ys[i]);
-                        ObjectAnimator animator = ObjectAnimator.ofFloat(icon, "x", "y", path);
-                        animator.setStartDelay(animationTime / (frameLayout.getChildCount() - i)/2);
-                        animator.setDuration(animationTime);
-                        animator.setInterpolator(new DecelerateInterpolator());
-                        animator.start();
-                    }
+
+                    Path path = new Path();
+                    path.moveTo(icon.getX(), icon.getY());
+                    path.lineTo(iconsXY.xs[i], iconsXY.ys[i]);
+                    ObjectAnimator animator = ObjectAnimator.ofFloat(icon, "x", "y", path);
+                    animator.setStartDelay(animationTime / (frameLayout.getChildCount() - i) / 2);
+                    animator.setDuration(animationTime);
+                    animator.setInterpolator(new DecelerateInterpolator());
+                    animator.start();
+
 
                 }
                 ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(icon, "alpha", 0f, 1f);
