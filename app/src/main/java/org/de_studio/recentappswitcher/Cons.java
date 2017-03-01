@@ -261,7 +261,7 @@ public class Cons {
     public static final int HOLD_TIME_MIN = 150;
     public static final int HOLD_TIME_MAX = 2000;
     public static final int VIBRATION_TIME_MIN = 5;
-    public static final int VIBRATION_TIME_MAX = 50;
+    public static final int VIBRATION_TIME_MAX = 150;
     public static final int VIBRATION_TIME_DEFAULT = 15;
     public static final int CIRCLE_SIZE_MAX = 150;
     public static final int CIRCLE_SIZE_MIN = 70;
