@@ -46,6 +46,12 @@ public class MyNewRealmMigration implements RealmMigration {
                     .addField("iconBitmap3", byte[].class);
             oldVersion++;
         }
+        if (oldVersion == 4) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
+            schema.get("Slot")
+                    .addField("instant", boolean.class);
+            oldVersion++;
+        }
 
    //// TODO: 2/20/17 don't forget to implement the old realmMigration
     }

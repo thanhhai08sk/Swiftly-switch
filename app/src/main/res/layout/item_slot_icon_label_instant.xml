@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tool="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center_vertical"
+    android:paddingTop="4dp"
+    android:background="?selectableItemBackground"
+    android:paddingBottom="4dp"
+    android:orientation="horizontal">
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:id="@+id/item_icon"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        tools:src="@drawable/ic_settings_white_36px"
+        tools:tint="@color/background_1"
+
+        />
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/item_label"
+        android:textColor="@color/text_primary_dark"
+        tools:text="Swiftly Switch"
+        />
+    <ImageView
+        android:id="@+id/instant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:src="@drawable/ic_share_white_36dp"
+        android:tint="@color/blue"
+        />
+
+</LinearLayout>

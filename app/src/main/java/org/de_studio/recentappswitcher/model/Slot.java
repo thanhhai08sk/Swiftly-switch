@@ -22,6 +22,7 @@ public class Slot extends RealmObject {
     public int longClickMode;
     public RealmList<Item> items;
     public byte[] iconBitmap;
+    public boolean instant;
 
     public Slot() {
     }

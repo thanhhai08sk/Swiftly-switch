@@ -141,6 +141,12 @@ public class MyRealmMigration implements RealmMigration {
             oldVersion++;
         }
 
+        if (oldVersion == 6) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
+            schema.get("Slot")
+                    .addField("instant", boolean.class);
+            oldVersion++;
+        }
 
 
 

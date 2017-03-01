@@ -52,6 +52,9 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
                 case Cons.ITEM_TYPE_ICON_LABEL:
                     Utility.setSlotLabel(slot, context, holder.label);
                     break;
+                case Cons.ITEM_TYPE_ICON_LABEL_INSTANT:
+
+                    break;
             }
             Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack, true, false);
             holder.view.setOnClickListener(new View.OnClickListener() {
@@ -89,11 +92,14 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
         View view = null;
         switch (itemType) {
             case Cons.ITEM_TYPE_ICON_LABEL:
-                view = LayoutInflater.from(context).inflate(R.layout.item_circle_favorite, parent, false);
+                view = LayoutInflater.from(context).inflate(R.layout.item_slot_icon_label, parent, false);
                 break;
             case Cons.ITEM_TYPE_ICON_ONLY:
 //                view = LayoutInflater.from(context).inflate(R.layout.item_icon_only, parent, false);
-                view = inflater.inflate(R.layout.item_icon_only, parent, false);
+                view = inflater.inflate(R.layout.item_slot_icon_only, parent, false);
+                break;
+            case Cons.ITEM_TYPE_ICON_LABEL_INSTANT:
+                view = inflater.inflate(R.layout.item_slot_icon_label_instant, parent, false);
                 break;
         }
         return new ViewHolder(view);

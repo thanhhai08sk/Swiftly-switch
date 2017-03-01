@@ -20,8 +20,8 @@ public class Cons {
         }
     };
 
-    public static final int OLD_REALM_SCHEMA_VERSION = 6;
-    public static final int REALM_SCHEMA_VERSION = 4;  // TODO: 2/20/17 do not forget the old one
+    public static final int OLD_REALM_SCHEMA_VERSION = 7;
+    public static final int REALM_SCHEMA_VERSION = 5;  // TODO: 2/20/17 do not forget the old one
 
     public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.pro";
     public static final String FREE_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.trial";
@@ -298,6 +298,8 @@ public class Cons {
 
     public static final int ITEM_TYPE_ICON_LABEL = 0;
     public static final int ITEM_TYPE_ICON_ONLY = 1;
+    public static final int ITEM_TYPE_ICON_LABEL_INSTANT = 2;
+
 
     public static final String SHARED_PREFERENCE_FOLDER_NAME = "shared_prefs";
     public static final String BACKUP_FILE_NAME = "backup.swiftly_switch";

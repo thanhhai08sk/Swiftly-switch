@@ -83,10 +83,10 @@ public class ItemsAdapter extends RealmRecyclerViewAdapter<Item,ItemsAdapter
         View view = null;
         switch (itemType) {
             case Cons.ITEM_TYPE_ICON_LABEL:
-                view = LayoutInflater.from(context).inflate(R.layout.item_circle_favorite, parent, false);
+                view = LayoutInflater.from(context).inflate(R.layout.item_slot_icon_label, parent, false);
                 break;
             case Cons.ITEM_TYPE_ICON_ONLY:
-                view = LayoutInflater.from(context).inflate(R.layout.item_icon_only, parent, false);
+                view = LayoutInflater.from(context).inflate(R.layout.item_slot_icon_only, parent, false);
                 break;
         }
         return new ViewHolder(view);
