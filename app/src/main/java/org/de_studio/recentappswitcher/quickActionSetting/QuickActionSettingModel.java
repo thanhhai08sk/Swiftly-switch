@@ -75,6 +75,9 @@ public class QuickActionSettingModel extends BaseCollectionSettingModel {
                                         slot.type = Slot.TYPE_ITEM;
                                         slot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
                                         slot.stage1Item = items[i];
+                                        if (i == 0) {
+                                            slot.instant = true;
+                                        }
                                         Slot realmSlot = realm.copyToRealm(slot);
                                         slots.add(realmSlot);
                                     }
@@ -128,6 +131,18 @@ public class QuickActionSettingModel extends BaseCollectionSettingModel {
             }
         });
         return newId;
+    }
+
+    public void setSlotInstant(final int slotPosition) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Slot slot = getSlots().get(slotPosition);
+                if (slot != null) {
+                    slot.instant = !slot.instant;
+                }
+            }
+        });
     }
 
     @Override

@@ -120,8 +120,8 @@ public  class Utility {
 
 
     public static void setFavoriteGridViewPosition(View gridView,boolean isCenter ,  float gridTall, float gridWide, float xInit, float yInit, float mScale, int edgePosition, WindowManager windowManager, int distanceFromEdgeDp, int distanceVertical) {
-        Log.e(TAG, "setFavoriteGridViewPosition: width " + gridWide + "\ntall " + gridTall + "\nxInit " + xInit + "\nyInit " + yInit +
-                "\noffsetHorizontal " + distanceFromEdgeDp + "\noffsetVertical " + distanceVertical);
+//        Log.e(TAG, "setFavoriteGridViewPosition: width " + gridWide + "\ntall " + gridTall + "\nxInit " + xInit + "\nyInit " + yInit +
+//                "\noffsetHorizontal " + distanceFromEdgeDp + "\noffsetVertical " + distanceVertical);
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
         float distanceVerticalFromEdge = ((float)distanceVertical)* mScale;
         Point point = new Point();
@@ -137,7 +137,6 @@ public  class Utility {
                 case 11:
                     float x1 = (xInit) - distanceFromEdge - gridWide;
                     float y1 = (yInit) - gridTall / (float) 2;
-                    Log.e(TAG, "setFavoriteGridViewPosition: x " + x1 + "\ny " + y1);
                     gridView.setX(x1);
                     gridView.setY(y1);
                     break;

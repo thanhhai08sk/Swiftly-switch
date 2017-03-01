@@ -4,6 +4,7 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
 import org.de_studio.recentappswitcher.model.Item;
 
+import rx.Observable;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 
@@ -70,6 +71,15 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
                 })
         );
 
+        addSubscription(
+                view.onInstantClick().subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        model.setSlotInstant(integer);
+                    }
+                })
+        );
+
     }
 
     @Override
@@ -99,6 +109,8 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
         PublishSubject<SlotInfo> onSetSlot();
 
         PublishSubject<Item> onSetItemToSlot();
+
+        Observable<Integer> onInstantClick();
 
         void loadItems();
 

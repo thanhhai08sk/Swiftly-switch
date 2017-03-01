@@ -29,6 +29,7 @@ import java.lang.ref.WeakReference;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.Observable;
 import rx.subjects.PublishSubject;
 
 /**
@@ -118,6 +119,11 @@ public class QuickActionSettingView extends BaseCollectionSettingView<Void, Quic
     @Override
     public PublishSubject<Item> onSetItemToSlot() {
         return setItemToSlotSubject;
+    }
+
+    @Override
+    public Observable<Integer> onInstantClick() {
+        return adapter.getInstantClick();
     }
 
     @Override

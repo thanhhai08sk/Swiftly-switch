@@ -32,6 +32,7 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
     PackageManager packageManager;
     IconPackManager.IconPack iconPack;
     private final PublishSubject<Integer> onClickSubject = PublishSubject.create();
+    private final PublishSubject<Integer> onInstantClickSJ = PublishSubject.create();
     int itemType;
     int highlightItem = -1;
 
@@ -53,7 +54,8 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
                     Utility.setSlotLabel(slot, context, holder.label);
                     break;
                 case Cons.ITEM_TYPE_ICON_LABEL_INSTANT:
-
+                    Utility.setSlotLabel(slot, context, holder.label);
+                    holder.instant.setColorFilter(slot.instant? Color.YELLOW: Color.GRAY);
                     break;
             }
             Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack, true, false);
@@ -61,6 +63,12 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
                 @Override
                 public void onClick(View view) {
                     onClickSubject.onNext(holder.getAdapterPosition());
+                }
+            });
+            holder.instant.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onInstantClickSJ.onNext(holder.getAdapterPosition());
                 }
             });
             if (position == highlightItem) {
@@ -110,15 +118,21 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
         public View view;
         public TextView label;
         public ImageView icon;
+        public ImageView instant;
         public ViewHolder(View itemView) {
             super(itemView);
             this.view = itemView;
             label = (TextView) view.findViewById(R.id.item_label);
             icon = (ImageView) view.findViewById(R.id.item_icon);
+            instant = (ImageView) view.findViewById(R.id.instant);
         }
     }
     public Observable<Integer> getKeyClicked() {
         return onClickSubject.asObservable();
+    }
+
+    public Observable<Integer> getInstantClick() {
+        return onInstantClickSJ.asObservable();
     }
 
 

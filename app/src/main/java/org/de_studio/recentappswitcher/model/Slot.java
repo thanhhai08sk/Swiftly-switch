@@ -100,5 +100,11 @@ public class Slot extends RealmObject {
         this.items = items;
     }
 
+    public boolean isInstant() {
+        return instant;
+    }
 
+    public void setInstant(boolean instant) {
+        this.instant = instant;
+    }
 }

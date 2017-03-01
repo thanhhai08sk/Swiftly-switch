@@ -359,6 +359,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
         });
     }
 
+
     public void updateRecyclerView(OrderedRealmCollection<Slot> slots) {
         adapter.updateData(slots);
     }

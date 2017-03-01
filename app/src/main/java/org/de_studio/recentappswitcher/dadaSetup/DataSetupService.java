@@ -327,6 +327,9 @@ public class DataSetupService extends IntentService {
                         slot.type = Slot.TYPE_ITEM;
                         slot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
                         slot.stage1Item = items[i];
+                        if (i == 0) {
+                            slot.instant = true;
+                        }
                         Slot realmSlot = realm.copyToRealm(slot);
                         slots.add(realmSlot);
                     }

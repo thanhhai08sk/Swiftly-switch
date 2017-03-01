@@ -118,13 +118,14 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     @Override
                     public void call(Slot slot) {
                         if (slot != null) {
-                            if (currentShowing.showWhat == Showing.SHOWING_CIRCLE_AND_ACTION && currentHighlight >= 10) {
+                            if (slot.instant) {
                                 startSlotSJ.onNext(slot);
-                            } else {
-                                if (slot.type.equals(Slot.TYPE_ITEM) && slot.stage1Item.type.equals(Item.TYPE_SHORTCUTS_SET)) {
-                                    showCollectionInstantlySubject.onNext(slot.stage1Item.collectionId);
-                                }
                             }
+//                            else {
+//                                if (slot.type.equals(Slot.TYPE_ITEM) && slot.stage1Item.type.equals(Item.TYPE_SHORTCUTS_SET)) {
+//                                    showCollectionInstantlySubject.onNext(slot.stage1Item.collectionId);
+//                                }
+//                            }
 
                         }
                     }
