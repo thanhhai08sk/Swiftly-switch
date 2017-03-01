@@ -7,6 +7,7 @@ android {
     flavorDimensions "version"
     lintOptions {
         disable 'MissingTranslation'
+        disable 'ExtraTranslation'
     }
 
     productFlavors {
@@ -34,8 +35,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         multiDexEnabled true
-        versionCode 89
-        versionName "3.0.0.10"
+        versionCode 90
+        versionName "3.0.0.11"
 
     }
 

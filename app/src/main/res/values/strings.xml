@@ -1,6 +1,7 @@
 <resources>
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="MissingTranslation"
+    tools:ignore="ExtraTranslation"
     <string name="app_name">Swiftly Switch Pro</string>
     <string name="edge_gesture_notification_title">Recent App Switcher</string>
     <string name="main_edge1_section_text">Edge 1</string>
@@ -134,8 +135,8 @@
     <string name="vote_now">Review now</string>
     <string name="sale_50">Pro -50%</string>
     <string name="avoid_keyboard">Avoid keyboard</string>
-    <string name="avoid_keyboard_step_aside" translatable="false">Step aside keyboard</string>
-    <string name="avoid_keyboard_place_under" translatable="false">Place under keyboard</string>
+    <string name="avoid_keyboard_step_aside" >Step aside keyboard</string>
+    <string name="avoid_keyboard_place_under" >Place under keyboard</string>
     <string name="setting_shortcut_flash_light">Flash light</string>
     <string name="setting_shortcut_screen_lock">Screen lock</string>
     <string name="swiftly_switch_screen_lock">Swiftly Switch Screen Lock</string>
@@ -314,6 +315,15 @@
 
 
     //What new
+    <string name="what_new_3.0.0.11" translatable="false"> VERSION 3.0.0.11 (beta):\n
+        - New option for shortcuts in Quick Actions: Instant shortcut \n
+        - Change the default shortcuts for Quick Actions \n
+        - Auto delete shortcut after uninstall apps \n
+        - Fix can not open shortcuts set from Quick Actions \n
+        - About, privacy policy\n
+        - Fix bugs
+    </string>
+
     <string name="what_new_3.0.0.10" translatable="false"> VERSION 3.0.0.10 (beta):\n
         - Option to keep Recent apps and Circle Favorite stay on screen (enabled by default) \n
         - Delete shortcuts set \n

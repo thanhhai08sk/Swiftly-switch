@@ -147,7 +147,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
                             currentShowing.circle = collection;
                             currentShowing.circleSlots = collection.slots;
-                            currentShowing.stayOnScreen = false;
+                            currentShowing.stayOnScreen = isStayOnScreen(collection);
                             view.hideAllCollections();
                             showCollection(Showing.SHOWING_CIRCLE_ONLY);
                         } else if (collection.type.equals(Collection.TYPE_RECENT)) {
@@ -155,7 +155,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                                 tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
                             }
                             currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
-                            currentShowing.stayOnScreen = false;
+                            currentShowing.stayOnScreen = isStayOnScreen(collection);
                             currentShowing.circle = collection;
                             currentShowing.circleSlots = model.getRecent(tempRecentPackages, collection.slots, currentShowing);
                             view.hideAllCollections();
