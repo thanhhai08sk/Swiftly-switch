@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:src="@drawable/ic_share_white_36dp"
+        android:src="@drawable/ic_instant"
         android:tint="@color/blue"
         />
 

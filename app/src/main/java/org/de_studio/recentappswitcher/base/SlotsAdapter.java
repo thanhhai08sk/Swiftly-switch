@@ -55,7 +55,7 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
                     break;
                 case Cons.ITEM_TYPE_ICON_LABEL_INSTANT:
                     Utility.setSlotLabel(slot, context, holder.label);
-                    holder.instant.setColorFilter(slot.instant? Color.YELLOW: Color.GRAY);
+                    holder.instant.setColorFilter(slot.instant? context.getColor(R.color.colorAccent): Color.GRAY);
                     break;
             }
             Utility.setSlotIcon(slot, context, holder.icon, packageManager, iconPack, true, false);
