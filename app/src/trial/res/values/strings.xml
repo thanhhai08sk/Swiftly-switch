@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">Swiftly Switch</string>
     <string name="accessibility_service_description">Please turn on this setting for Swiftly switch free.This is for navigation(home,back,power menu) and on some Samsung device for expand status bar.
-    Enable accessibility can cause lag in some device especially when using Chrome. This happen to all
-    apps that use accessibility. If the lag is too extreme please disable this setting, all feature still available except the navigation (home, back, power menu).</string>
+    </string>
 
 </resources>

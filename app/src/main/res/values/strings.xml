@@ -315,6 +315,10 @@
 
 
     //What new
+    <string name="what_new_3.0.0.12" translatable="false">VERSION 3.0.0.8 (beta):\n
+        - Fix bugs
+        - Add Swedish translation
+    </string>
     <string name="what_new_3.0.0.11" translatable="false"> VERSION 3.0.0.11 (beta):\n
         - New option for shortcuts in Quick Actions: Instant shortcut \n
         - Change the default shortcuts for Quick Actions \n
@@ -341,10 +345,9 @@
 
     </string>
 
-    <string name="what_new_3.0.0.8" translatable="false">VERSION 3.0.0.8 (beta):\n
-        - Fix bugs
-
-    </string>
+<string name="what_new_3.0.0.8" translatable="false">VERSION 3.0.0.8 (beta):\n
+    - Fix bugs
+</string>
     <string name="what_new_3_0_0_7" translatable="false">VERSION 3.0.0.7 (beta):\n
         - Backup/import data to/from Google Drive \n
         - Customize Quick Actions size, visibility\n
