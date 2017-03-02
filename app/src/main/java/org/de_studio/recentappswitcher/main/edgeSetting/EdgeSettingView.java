@@ -180,6 +180,7 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
             adapter.add(new MaterialSimpleListItem.Builder(getActivity())
                     .content(collection.label)
                     .icon(icon)
+                    .iconPaddingDp(4)
                     .backgroundColor(Color.WHITE)
                     .build());
 

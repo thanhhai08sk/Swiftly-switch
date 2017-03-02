@@ -10,6 +10,7 @@ import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCircleCollectionSettingView;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerRecentSettingComponent;
@@ -60,7 +61,11 @@ public class RecentSettingView extends BaseCircleCollectionSettingView<Void, Rec
                         presenter.setThisSlotAsRecent(slotIndex);
                         break;
                     case 1:
-                        presenter.setItems(slotIndex);
+                        if (Utility.isFree(RecentSettingView.this)) {
+                            Utility.showProOnlyDialog(RecentSettingView.this);
+                        } else {
+                            presenter.setItems(slotIndex);
+                        }
                         break;
                 }
                 dialog.dismiss();
@@ -70,11 +75,18 @@ public class RecentSettingView extends BaseCircleCollectionSettingView<Void, Rec
         adapter.add(new MaterialSimpleListItem.Builder(this)
                 .content(R.string.recent_app)
                 .icon(R.drawable.ic_recent_app_slot)
+                .iconPaddingDp(4)
                 .backgroundColor(Color.WHITE)
                 .build());
+        String shortcutTitle = getString(R.string.shortcut);
+        if (Utility.isFree(this)) {
+            shortcutTitle = shortcutTitle + " (" + getString(R.string.pro_only) + ")";
+        }
+
         adapter.add(new MaterialSimpleListItem.Builder(this)
-                .content(R.string.shortcut)
+                .content(shortcutTitle)
                 .icon(R.drawable.ic_shortcuts)
+                .iconPaddingDp(4)
                 .backgroundColor(Color.WHITE)
                 .build());
 

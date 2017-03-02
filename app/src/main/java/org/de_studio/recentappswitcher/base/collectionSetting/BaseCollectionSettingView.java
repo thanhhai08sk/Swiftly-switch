@@ -234,6 +234,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
             adapter.add(new MaterialSimpleListItem.Builder(this)
                     .content(collection.label)
                     .icon(icon)
+                    .iconPaddingDp(4)
                     .backgroundColor(Color.WHITE)
                     .build());
         }
@@ -242,6 +243,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                 .content(R.string.add_new)
                 .icon(R.drawable.ic_add)
                 .backgroundColor(Color.WHITE)
+                .iconPaddingDp(4)
                 .build());
 
 
@@ -320,11 +322,13 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
 
         adapter.add(new MaterialSimpleListItem.Builder(this)
                 .content(R.string.shortcut)
+                .iconPaddingDp(4)
                 .icon(R.drawable.ic_shortcuts)
                 .backgroundColor(Color.WHITE)
                 .build());
         adapter.add(new MaterialSimpleListItem.Builder(this)
                 .content(R.string.setting_shortcut_folder)
+                .iconPaddingDp(4)
                 .icon(R.drawable.ic_folder)
                 .backgroundColor(Color.WHITE)
                 .build());
