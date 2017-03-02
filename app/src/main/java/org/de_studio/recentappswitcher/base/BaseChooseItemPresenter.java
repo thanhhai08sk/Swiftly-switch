@@ -100,6 +100,8 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
         void setProgressBar(boolean visible);
 
         void dismissIfDialog();
+
+        void noticeUserAboutScreenLock();
     }
 
 }

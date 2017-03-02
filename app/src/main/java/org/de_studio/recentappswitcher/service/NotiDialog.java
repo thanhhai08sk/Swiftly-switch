@@ -95,13 +95,13 @@ public class NotiDialog extends AppCompatActivity {
                     break;
                 case PHONE_ADMIN_PERMISSION:
                     titleRes = R.string.admin_permission;
-                    textRes = R.string.admin_permission_explain;
+                    textRes = R.string.admin_permission_notice;
                     buttonTextRes = R.string.go_to_setting;
                     ComponentName cm = new ComponentName(getApplicationContext(), LockAdmin.class);
                     buttonIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
                     buttonIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cm);
                     buttonIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                            getString(R.string.admin_desc));
+                            getString(R.string.admin_permission_notice));
                     break;
                 case ACCESSIBILITY_PERMISSION:
                     titleRes = R.string.enable_accessibility_permission;

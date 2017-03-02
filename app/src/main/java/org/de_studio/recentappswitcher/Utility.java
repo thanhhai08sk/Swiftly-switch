@@ -2041,4 +2041,24 @@ public  class Utility {
                 })
                 .show();
     }
+
+    public static void noticeUserAboutScreenLock(final Context context) {
+        new MaterialDialog.Builder(context)
+                .title(R.string.admin_permission)
+                .content(R.string.admin_permission_notice)
+                .positiveText(R.string.go_to_setting)
+                .negativeText(R.string.edge_dialog_cancel_button)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        ComponentName cm = new ComponentName(context, LockAdmin.class);
+                        Intent buttonIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                        buttonIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cm);
+                        buttonIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                                context.getString(R.string.admin_permission_notice));
+                        context.startActivity(buttonIntent);
+                    }
+                })
+                .show();
+    }
 }

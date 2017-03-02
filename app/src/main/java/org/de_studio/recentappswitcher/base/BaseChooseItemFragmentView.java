@@ -8,6 +8,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.adapter.ItemsListAdapter;
 import org.de_studio.recentappswitcher.model.Item;
 
@@ -120,5 +121,10 @@ public abstract class BaseChooseItemFragmentView<P extends BaseChooseItemPresent
     @Override
     public void dismissIfDialog() {
 
+    }
+
+    @Override
+    public void noticeUserAboutScreenLock() {
+        Utility.noticeUserAboutScreenLock(getActivity());
     }
 }

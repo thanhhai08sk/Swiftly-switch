@@ -141,6 +141,7 @@
     <string name="setting_shortcut_screen_lock">Screen lock</string>
     <string name="swiftly_switch_screen_lock">Swiftly Switch Screen Lock</string>
     <string name="admin_permission_explain">Allow the Swiftly switch with admin permissions to enable screen lock.</string>
+    <string name="admin_permission_notice">Using this shortcut need setting Swiftly Switch as Administrator. This make the app CAN NOT be uninstalled unless you have disable the permission first. </string>
     <string name="admin_permission">Phone administrator permission</string>
     <string name="admin_desc">Required for lock screen action</string>
     <string name="enable_accessibility_permission">Enable accessibility permission</string>
