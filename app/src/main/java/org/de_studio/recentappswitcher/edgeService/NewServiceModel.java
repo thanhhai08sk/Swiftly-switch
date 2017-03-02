@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 
 /**
  * Created by HaiNguyen on 12/23/16.
@@ -394,6 +395,15 @@ public class NewServiceModel extends BaseModel {
 //                Item item = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(packageName)).findFirst();
                 Item item = realm.where(Item.class).equalTo(Cons.PACKAGENAME, packageName).findFirst();
                 if (item != null) {
+                    RealmResults<Collection> recents = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_RECENT)
+                            .equalTo("slots.stage1Item.itemId", item.itemId).findAll();
+                    for (Collection recent : recents) {
+                        RealmResults<Slot> slots = recent.slots.where().equalTo(Cons.TYPE, Slot.TYPE_ITEM)
+                                .equalTo("stage1Item.itemId", item.itemId).findAll();
+                        for (Slot slot : slots) {
+                            slot.type = Slot.TYPE_RECENT;
+                        }
+                    }
                     Log.e(TAG, "execute: delete app item from realm: " + packageName);
                     item.deleteFromRealm();
                 }else Log.e(TAG, "execute: can not delete app, null item, package = " + packageName);
