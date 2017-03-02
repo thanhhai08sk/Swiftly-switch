@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +56,7 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
                     break;
                 case Cons.ITEM_TYPE_ICON_LABEL_INSTANT:
                     Utility.setSlotLabel(slot, context, holder.label);
-                    holder.instant.setColorFilter(slot.instant ? context.getColor(R.color.colorAccent) : Color.GRAY);
+                    holder.instant.setColorFilter(slot.instant ? ContextCompat.getColor(context,R.color.colorAccent) : Color.GRAY);
                     holder.instant.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
