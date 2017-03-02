@@ -148,7 +148,9 @@ public class NewServiceModel extends BaseModel {
     }
 
     public String getLastApp(ArrayList<String> packageNames) {
-        removeLauncherAndCurrentAppAndSetLastApp(packageNames);
+        if (packageNames != null) {
+            removeLauncherAndCurrentAppAndSetLastApp(packageNames);
+        }
         return lastAppPackageName;
     }
 
