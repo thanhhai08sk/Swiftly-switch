@@ -315,8 +315,17 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void setupNotification() {
-        Log.e(TAG, "setupNotification: noti text = " + getString(R.string.notification_short_description));
-        Intent notiClickIntent = NotiDialog.getIntent(this, NotiDialog.NOTIFICATION_INFO);
+        Intent notiClickIntent = new Intent();
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+//            notiClickIntent.setClassName("com.android.settings", "com.android.settings.Settings$AppNotificationSettingsActivity");
+//            notiClickIntent.putExtra("app_package", getPackageName());
+//            notiClickIntent.putExtra("app_uid", getApplicationInfo().uid);
+//        } else {
+//            notiClickIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//            notiClickIntent.addCategory(Intent.CATEGORY_DEFAULT);
+//            notiClickIntent.setData(Uri.parse("package:" + getPackageName()));
+//        }
+        notiClickIntent = NotiDialog.getIntent(this, NotiDialog.NOTIFICATION_INFO);
 
         Intent remoteIntent = new Intent();
         remoteIntent.setAction(Cons.ACTION_TOGGLE_EDGES);
@@ -332,7 +341,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
         PendingIntent notiPending = PendingIntent.getActivity(getApplicationContext(), 0, notiClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         notificationBuilder = new NotificationCompat.Builder(this);
-        notificationBuilder
+        notificationBuilder.setSmallIcon(R.drawable.ic_stat_ic_looks_white_48dp1)
                 .setContentIntent(notiPending)
                 .addAction(remoteAction)
                 .setPriority(Notification.PRIORITY_MIN)
