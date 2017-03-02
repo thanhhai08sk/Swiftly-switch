@@ -2,8 +2,8 @@ package org.de_studio.recentappswitcher.setItems.chooseContact;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import org.de_studio.recentappswitcher.base.BaseChooseItemFragmentView;
 import org.de_studio.recentappswitcher.base.ContactLoader;
@@ -23,12 +23,13 @@ public class ChooseContactFragmentView extends BaseChooseItemFragmentView<Choose
     @Override
     public void loadItems() {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "loadItems: permission ok");
             ContactLoader contactLoader = new ContactLoader(getActivity().getApplicationContext());
             getLoaderManager().initLoader(0, null, contactLoader);
         } else {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE},
-                    121);
+            Log.e(TAG, "loadItems: need contact permission");
+            needContactPermissionSJ.onNext(null);
+//            presenter.onNeedContactPermission();
         }
     }
 

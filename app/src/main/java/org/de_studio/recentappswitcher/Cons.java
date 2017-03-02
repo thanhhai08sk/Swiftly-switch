@@ -40,6 +40,8 @@ public class Cons {
     public static final int MODE_ONLY_FAVORITE = 2;
     public static final int MODE_CIRCLE_FAVORITE = 3;
 
+    public static final int REQUEST_CODE_CONTACT_PERMISSION = 121;
+
 
     public static final int RAD_ICON_DEFAULT_DP = 24;
     public static final String ACTION_TOGGLE_EDGES = "org.de_studio.recentappswitcher.action.toggle_edges";

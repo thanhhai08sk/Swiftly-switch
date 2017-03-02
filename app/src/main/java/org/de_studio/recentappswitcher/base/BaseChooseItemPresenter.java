@@ -6,6 +6,7 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import rx.functions.Action1;
+import rx.functions.Func2;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 
@@ -13,7 +14,8 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 11/25/16.
  */
 
-public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseItemPresenter.View,BaseModel> {
+public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseItemPresenter.View, BaseModel> {
+    private static final String TAG = BaseChooseItemPresenter.class.getSimpleName();
     protected RealmResults<Item> results;
     protected Realm realm = Realm.getDefaultInstance();
 
@@ -24,7 +26,6 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
     @Override
     public void onViewAttach(final View view) {
         super.onViewAttach(view);
-        view.loadItems();
 
         addSubscription(
                 view.onViewCreated().subscribe(new Action1<Void>() {
@@ -36,7 +37,7 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
                             results.addChangeListener(new RealmChangeListener<RealmResults<Item>>() {
                                 @Override
                                 public void onChange(RealmResults<Item> element) {
-                                    if (element.size()>0) {
+                                    if (element.size() > 0) {
                                         view.setProgressBar(false);
                                     }
                                 }
@@ -68,6 +69,38 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
                 })
         );
 
+
+
+        if (view.onContactPermissionGranted() != null) {
+
+            addSubscription(
+                    view.onContactPermissionGranted().subscribe(new Action1<Void>() {
+                        @Override
+                        public void call(Void aVoid) {
+                            view.showNeedContactButton(false);
+                            view.loadItems();
+                        }
+                    })
+            );
+
+            addSubscription(
+                    view.onViewCreated().withLatestFrom(view.onNeedContactPermission().first(), new Func2<Void, Void, Boolean>() {
+                        @Override
+                        public Boolean call(Void aVoid, Void aVoid2) {
+                            return true;
+                        }
+                    }).subscribe(new Action1<Boolean>() {
+                        @Override
+                        public void call(Boolean aBoolean) {
+                            view.showNeedContactButton(true);
+                        }
+                    })
+            );
+        }
+
+        view.loadItems();
+
+
     }
 
 
@@ -81,15 +114,23 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
         realm.close();
     }
 
+
     protected abstract RealmResults<Item> getItemRealmResult();
 
     public interface View extends PresenterView {
         PublishSubject<Void> onViewCreated();
+
         PublishSubject<Item> onItemClick();
 
         PublishSubject<Item> onSetItemToSlot();
 
         BehaviorSubject<Item> onCurrentItemChange();
+
+        PublishSubject<Void> onNeedContactPermission();
+
+        PublishSubject<Void> onContactPermissionGranted();
+
+        void showNeedContactButton(boolean visible);
 
         void loadItems();
 
@@ -102,6 +143,7 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
         void dismissIfDialog();
 
         void noticeUserAboutScreenLock();
+
     }
 
 }

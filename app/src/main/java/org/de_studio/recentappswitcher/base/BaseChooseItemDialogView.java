@@ -29,7 +29,6 @@ public abstract class BaseChooseItemDialogView extends BaseDialogFragment<BaseCh
     protected ListView listView;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
-
     @Inject
     protected ItemsListAdapter adapter;
 
@@ -53,6 +52,7 @@ public abstract class BaseChooseItemDialogView extends BaseDialogFragment<BaseCh
         listView.setAdapter(adapter);
         onViewCreatedSJ.onNext(null);
     }
+
 
     public void setSubjects(BehaviorSubject<Item> currentItemChangeSubject, PublishSubject<Item> setItemSubject) {
         this.currentItemChangeSubject = currentItemChangeSubject;
@@ -103,6 +103,20 @@ public abstract class BaseChooseItemDialogView extends BaseDialogFragment<BaseCh
     public abstract void loadItems();
 
     @Override
+    public PublishSubject<Void> onNeedContactPermission() {
+        return null;
+    }
+
+    @Override
+    public PublishSubject<Void> onContactPermissionGranted() {
+        return null;
+    }
+
+    @Override
+    public void showNeedContactButton(boolean visible) {
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Item item = ((Item) parent.getAdapter().getItem(position));
         if (item != null) {
@@ -125,4 +139,5 @@ public abstract class BaseChooseItemDialogView extends BaseDialogFragment<BaseCh
     public void noticeUserAboutScreenLock() {
         Utility.noticeUserAboutScreenLock(getActivity());
     }
+
 }
