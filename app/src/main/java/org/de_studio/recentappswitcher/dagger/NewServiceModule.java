@@ -326,8 +326,12 @@ public class NewServiceModule {
     WindowManager.LayoutParams edge1Para(@Named(M_SCALE_NAME) float mScale
             , @Named(EDGE_1_NAME) Edge edge1) {
 
+
         return Utility.getEdgeLayoutPara(edge1.keyboardOption
-                , mScale, edge1.position, edge1.sensitive, edge1.length, edge1.offset);
+                , mScale, edge1.position,
+                Utility.rightLeftOrBottom(edge1.position) == Cons.POSITION_BOTTOM ? edge1.length : edge1.sensitive,
+                Utility.rightLeftOrBottom(edge1.position) == Cons.POSITION_BOTTOM ? edge1.sensitive : edge1.length,
+                edge1.offset);
 
     }
 
@@ -337,7 +341,10 @@ public class NewServiceModule {
     WindowManager.LayoutParams edge2Para( @Named(M_SCALE_NAME) float mScale
             , @Named(EDGE_2_NAME) Edge edge2) {
         return Utility.getEdgeLayoutPara(edge2.keyboardOption
-                , mScale, edge2.position, edge2.sensitive, edge2.length, edge2.offset);
+                , mScale, edge2.position,
+                Utility.rightLeftOrBottom(edge2.position) == Cons.POSITION_BOTTOM ? edge2.length : edge2.sensitive,
+                Utility.rightLeftOrBottom(edge2.position) == Cons.POSITION_BOTTOM ? edge2.sensitive : edge2.length,
+                edge2.offset);
     }
 
     @Provides
