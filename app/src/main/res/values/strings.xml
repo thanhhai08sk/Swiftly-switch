@@ -317,7 +317,11 @@
 
 
     //What new
-    <string name="what_new_3.0.0.12" translatable="false">VERSION 3.0.0.8 (beta):\n
+    <string name="what_new_3.0.0.13" translatable="false">VERSION 3.0.0.13 (beta):\n
+        - Fix bugs
+        - New icon
+    </string>
+    <string name="what_new_3.0.0.12" translatable="false">VERSION 3.0.0.12 (beta):\n
         - Fix bugs
         - Add Swedish translation
     </string>
