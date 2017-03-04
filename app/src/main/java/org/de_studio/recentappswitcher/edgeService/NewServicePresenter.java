@@ -393,13 +393,13 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 highlightIdSubject.onNext(highlight1);
                 break;
             case Showing.SHOWING_GRID:
-                int onPosition = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, currentShowing.grid.rowsCount, currentShowing.grid.columnCount, currentShowing.grid.space, false);
+                int onPosition = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, currentShowing.grid.rowsCount, currentShowing.grid.columnCount, currentShowing.grid.space, false,view.isRTL());
                 highlightIdSubject.onNext(onPosition);
                 break;
             case Showing.SHOWING_FOLDER:
                 int columCount = Math.min(currentShowing.folderItems.size(), 4);
                 int rowCount = currentShowing.folderItems.size() / 4 + 1;
-                int folderItemHighlighted = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, rowCount, columCount, Cons.DEFAULT_FAVORITE_GRID_SPACE, true);
+                int folderItemHighlighted = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, rowCount, columCount, Cons.DEFAULT_FAVORITE_GRID_SPACE, true, view.isRTL());
                 highlightIdSubject.onNext(folderItemHighlighted);
                 if (folderItemHighlighted == -2) {
                     returnToGridSubject.onNext(null);
@@ -492,7 +492,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     public void onClickBackground(float x, float y) {
         switch (currentShowing.showWhat) {
             case Showing.SHOWING_GRID:
-                int onPosition = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, currentShowing.grid.rowsCount, currentShowing.grid.columnCount, currentShowing.grid.space, false);
+                int onPosition = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, currentShowing.grid.rowsCount, currentShowing.grid.columnCount, currentShowing.grid.space, false, view.isRTL());
                 if (onPosition != -1) {
                     Slot slot = currentShowing.grid.slots.get(onPosition);
                     if (slot != null) {
@@ -505,7 +505,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             case Showing.SHOWING_FOLDER:
                 int columCount = Math.min(currentShowing.folderItems.size(), 4);
                 int rowCount = currentShowing.folderItems.size() / 4 + 1;
-                int position1 = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, rowCount, columCount, currentShowing.grid.space, true);
+                int position1 = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, rowCount, columCount, currentShowing.grid.space, true,view.isRTL());
                 if (position1 >=0 && position1 <currentShowing.folderItems.size()) {
                     view.startItem(currentShowing.folderItems.get(position1), getLastApp());
                     view.hideAllExceptEdges();
@@ -746,6 +746,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         void disableEdgeViews(boolean disable);
 
         void showToast(int message);
+
+        boolean isRTL();
 
     }
 

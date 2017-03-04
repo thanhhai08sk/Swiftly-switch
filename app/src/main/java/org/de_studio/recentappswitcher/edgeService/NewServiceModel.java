@@ -235,7 +235,7 @@ public class NewServiceModel extends BaseModel {
         return -1;
     }
 
-    public int getGridActivatedId(float x, float y, float gridX, float gridY, int rowsCount, int columnCount, int space, boolean folderMode) {
+    public int getGridActivatedId(float x, float y, float gridX, float gridY, int rowsCount, int columnCount, int space, boolean folderMode, boolean isRTL) {
 
 //        Log.e(TAG, "getGridActivatedId: x " + x
 //                + "\ny " + y
@@ -253,13 +253,13 @@ public class NewServiceModel extends BaseModel {
 //                + "\nmScale = " + mScale + "\niconWidth = " + iconWidth);
         double distance;
         double smallestDistance = 1000 * mScale;
-        for (int i = 0; i < columnCount; i++) {
+        for (int i = 0; i < columnCount; i ++) {
             for (int j = 0; j < rowsCount; j++) {
                 centerIconX = (gridX + totalIconWidth / 2 + i * totalIconWidth);
-                centerIconY = (gridY + totalIconWidth / 2  + j * totalIconWidth);
+                centerIconY = (gridY + totalIconWidth / 2 + j * totalIconWidth);
                 distance = Math.sqrt(Math.pow(xDouble - centerIconX, 2) + Math.pow(yDouble - centerIconY, 2));
                 if (distance <= 35 * mScale) {
-                    return j * columnCount + i;
+                    return isRTL ? j*columnCount + (columnCount - 1 -i) : j * columnCount + i;
                 } else {
                     if (smallestDistance > distance) {
                         smallestDistance = distance;

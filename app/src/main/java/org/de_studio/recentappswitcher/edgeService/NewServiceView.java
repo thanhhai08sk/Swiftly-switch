@@ -192,11 +192,16 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     private GestureDetectorCompat mDetector;
     PublishSubject<Boolean> enterOrExitFullScreenSJ = PublishSubject.create();
     boolean isFree;
+    boolean isRTL;
 
     @Override
     public void onCreate() {
         super.onCreate();
         isFree = Utility.isFree(this);
+        Configuration config = getResources().getConfiguration();
+        isRTL = config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+
+
         DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
@@ -489,6 +494,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale), (int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale)));
         imageView.setId(R.id.item_icon);
         return imageView;
+    }
+
+    public boolean isRTL() {
+        return isRTL;
     }
 
     public void showQuickActions(int edgePosition, int highlighPosition, NewServicePresenter.Showing currentShowing, boolean delay, boolean animate) {
