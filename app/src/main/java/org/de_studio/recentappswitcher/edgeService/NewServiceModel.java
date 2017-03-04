@@ -424,6 +424,14 @@ public class NewServiceModel extends BaseModel {
         });
     }
 
+    public float getIconCenterX(float iconX) {
+        return iconX + haftIconWidth;
+    }
+
+    public float getIconCenterY(float iconY) {
+        return iconY + haftIconWidth;
+    }
+
 
     @Override
     public void clear() {

@@ -194,7 +194,6 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                                 Slot slot = currentShowing.grid.slots.get(currentHighlight);
                                 if (slot.type.equals(Slot.TYPE_FOLDER)) {
                                     showFolderSJ.onNext(slot);
-
                                 }
                                 break;
                             case Showing.SHOWING_CIRCLE_AND_ACTION:
@@ -209,8 +208,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
                         if (onCircle && currentShowing.circle.longClickMode == Collection.LONG_CLICK_MODE_OPEN_COLLECTION &&
                                 currentShowing.circle.longPressCollection != null) {
+                            setInitPointByTriggerIcon();
                             view.unhighlightSlot(currentShowing,currentHighlight);
                             showCollectionInstantlySubject.onNext(currentShowing.circle.longPressCollection.collectionId);
+
                         }
 
                     }
@@ -312,6 +313,17 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
     }
 
+    private void setInitPointByTriggerIcon() {
+        switch (Utility.rightLeftOrBottom(currentShowing.edgePosition)) {
+            case Cons.POSITION_BOTTOM:
+                currentShowing.xInit = model.getIconCenterX(currentShowing.circleIconsXY.xs[currentHighlight]);
+                break;
+            default:
+                currentShowing.yInit = model.getIconCenterY(currentShowing.circleIconsXY.ys[currentHighlight]);
+                break;
+        }
+    }
+
     @Nullable
     private String getCurrentCollectionId() {
         String currentCollectionId = null;
@@ -331,7 +343,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
     private void showGrid(Collection collection, View view) {
         currentHighlight = -1;
-        view.showGrid(xInit, yInit, collection, currentEdge.position, currentShowing);
+        view.showGrid(collection, currentEdge.position, currentShowing);
         currentShowing.showWhat = Showing.SHOWING_GRID;
         currentShowing.grid = collection;
         currentShowing.stayOnScreen = currentShowing.grid.stayOnScreen == null ? true : currentShowing.grid.stayOnScreen;
@@ -535,7 +547,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     private void showCollection(int showWhat) {
         switch (showWhat) {
             case Showing.SHOWING_GRID:
-                view.showGrid(xInit, yInit, currentShowing.grid, currentEdge.position, currentShowing);
+                view.showGrid(currentShowing.grid, currentEdge.position, currentShowing);
                 break;
             case Showing.SHOWING_CIRCLE_AND_ACTION:
                 updateCircleIconPosition();
@@ -681,7 +693,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void showBackground(boolean backgroundTouchable);
 
-        void showGrid(float xInit, float yInit, Collection grid, int position, Showing currentShowing);
+        void showGrid(Collection grid, int position, Showing currentShowing);
 
         void showCircle(NewServiceModel.IconsXY iconsXY, Collection circle, RealmList<Slot> slots, float xInit, float yInit);
 
@@ -750,6 +762,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         public String folderSlotId;
         public NewServiceModel.IconsXY circleIconsXY;
         public Point gridXY = new Point(0, 0);
+        public Point gridTriggerPoint = new Point(0, 0);
         public float xInit, yInit;
         public int edgePosition;
         boolean stayOnScreen;

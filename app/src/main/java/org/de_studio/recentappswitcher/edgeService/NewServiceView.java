@@ -543,7 +543,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
-    public void showGrid(final float xInit, final float yInit, final Collection grid, final int position, final NewServicePresenter.Showing currentShowing) {
+    public void showGrid(final Collection grid, final int position, final NewServicePresenter.Showing currentShowing) {
         if (grid != null) {
             Log.e(TAG, "showGrid: label " + grid.label);
         } else {
@@ -582,7 +582,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                             , grid.position == Collection.POSITION_CENTER
                             , recyclerView.getHeight()
                             , recyclerView.getWidth()
-                            , xInit, yInit
+                            , currentShowing.xInit, currentShowing.yInit
                             , mScale
                             , position
                             , windowManager
@@ -600,7 +600,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     , grid.position == Collection.POSITION_CENTER
                     , recyclerView.getHeight()
                     , recyclerView.getWidth()
-                    , xInit, yInit
+                    , currentShowing.xInit, currentShowing.yInit
                     , mScale
                     , position
                     , windowManager
