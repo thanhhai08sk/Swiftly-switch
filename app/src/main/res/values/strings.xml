@@ -317,45 +317,19 @@
 
 
     //What new
-    <string name="what_new_3.0.0.13" translatable="false">VERSION 3.0.0.13 (beta):\n
-        - Fix bugs
-        - New icon
-    </string>
-    <string name="what_new_3.0.0.12" translatable="false">VERSION 3.0.0.12 (beta):\n
-        - Fix bugs
-        - Add Swedish translation
-    </string>
-    <string name="what_new_3.0.0.11" translatable="false"> VERSION 3.0.0.11 (beta):\n
-        - New option for shortcuts in Quick Actions: Instant shortcut \n
-        - Change the default shortcuts for Quick Actions \n
-        - Auto delete shortcut after uninstall apps \n
-        - Fix can not open shortcuts set from Quick Actions \n
-        - About, privacy policy\n
-        - Fix bugs
-    </string>
-
-    <string name="what_new_3.0.0.10" translatable="false"> VERSION 3.0.0.10 (beta):\n
-        - Option to keep Recent apps and Circle Favorite stay on screen (enabled by default) \n
-        - Delete shortcuts set \n
-        - Improve rearranging in Grid setting\n
-        - Fix bugs
-    </string>
-
-    <string name="what_new_3.0.0.9" translatable="false">VERSION 3.0.0.9 (beta):\n
-        - Improve UI \n
-        - Option to disable Edges in full-screen apps\n
-        - Redesign notification\n
-        - Auto pause for 10 seconds when trigger Edge while giving permission(Android 6.0)\n
-        - FAQs, What new\n
-        - Fix does not show new installed app in recent and other bugs
+    <string name="what_new_3.0.1" translatable="false">VERSION 3.0.1, the biggest update:\n
+        - New beautiful Material design with new animation \n
+        - Different settings/contents for each Edge \n
+        - Item count can be up to 8 in Recent/Circle favorite/Quick Actions \n
+        - New operating mode for Edge: Circle favorite and Quick Actions\n
+        - Quick Actions: allow every kind of shortcuts, more visibility option, instant shortcut\n
+        - Option to keep content stay on screen after your finger up (enable by default)\n
+        - Backup/import data to/from Google Drive (internet connection permission added)\n
+        - Option to auto disable in full-screen app (Pro)\n
+        - Fix "Screen overlay detected": auto pause for 10 seconds while giving permission in Android 6.0\n
+        - Improve performance\n
+        - About, FAQs, What new, Privacy policy \n
 
     </string>
 
-<string name="what_new_3.0.0.8" translatable="false">VERSION 3.0.0.8 (beta):\n
-    - Fix bugs
-</string>
-    <string name="what_new_3_0_0_7" translatable="false">VERSION 3.0.0.7 (beta):\n
-        - Backup/import data to/from Google Drive \n
-        - Customize Quick Actions size, visibility\n
-        - Fix vibration duration in More setting</string>
 </resources>

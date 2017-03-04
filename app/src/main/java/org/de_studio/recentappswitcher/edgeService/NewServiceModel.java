@@ -404,6 +404,19 @@ public class NewServiceModel extends BaseModel {
                             slot.type = Slot.TYPE_RECENT;
                         }
                     }
+
+                    RealmResults<Collection> otherCollections = realm.where(Collection.class).notEqualTo(Cons.TYPE, Collection.TYPE_RECENT)
+                            .equalTo("slots.stage1Item.itemId", item.itemId).findAll();
+
+                    for (Collection collection : otherCollections) {
+                        RealmResults<Slot> slots = collection.slots.where().equalTo(Cons.TYPE, Slot.TYPE_ITEM)
+                                .equalTo("stage1Item.itemId", item.itemId).findAll();
+                        for (Slot slot : slots) {
+                            slot.type = Slot.TYPE_NULL;
+                        }
+                    }
+
+
                     Log.e(TAG, "execute: delete app item from realm: " + packageName);
                     item.deleteFromRealm();
                 }else Log.e(TAG, "execute: can not delete app, null item, package = " + packageName);
