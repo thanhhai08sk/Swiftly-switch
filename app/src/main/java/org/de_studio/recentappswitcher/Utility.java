@@ -1385,6 +1385,7 @@ public  class Utility {
 
 
     public static void setItemBitmapForShortcutsSet(Context context, Item item) {
+        Log.e(TAG, "setItemBitmapForShortcutsSet: " + item.toString());
         if (context != null) {
             String itemId = item.itemId;
             if (itemId.contains(Collection.TYPE_GRID_FAVORITE)) {
@@ -1414,7 +1415,7 @@ public  class Utility {
             Log.e(TAG, "getBitmapByteArrayFromResId: IOException");
             e.printStackTrace();
         }
-        bmp.recycle();
+//        bmp.recycle();
         return byteArray;
     }
 

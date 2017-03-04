@@ -90,7 +90,7 @@ public class ChooseShortcutsSetDialogView extends BaseChooseItemDialogView {
                             item.label = collection.label;
                             Utility.setItemBitmapForShortcutsSet(contextWeakReference.get(), item);
                             realm.copyToRealm(item);
-                        } else {
+                        } else if (item.iconBitmap == null) {
                             Utility.setItemBitmapForShortcutsSet(contextWeakReference.get(), item);
                         }
                     }
