@@ -57,6 +57,7 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
                     public void call(Integer integer) {
                         model.setShortcutsSpace(integer);
                         view.setShorcutsSpace(integer);
+                        view.restartService();
                     }
                 })
         );

@@ -67,8 +67,8 @@ import rx.subjects.PublishSubject;
 
 public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> implements MoreSettingPresenter.View {
     private static final String TAG = MoreSettingView.class.getSimpleName();
-    private int REQUEST_CODE_PICKER = 2;
-    private int REQUEST_CODE_SELECT = 3;
+    private static final int REQUEST_CODE_PICK_FOLDER = 23232;
+    private static final int REQUEST_CODE_SELECT_FILE = 32433;
     public static final int REQUEST_BACKUP = 11;
     public static final int REQUEST_RESTORE = 12;
     @BindView(R.id.disable_in_fullscreen_switch)
@@ -143,8 +143,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                     Log.e(TAG, "onActivityResult: connect result fail");
                 }
                 break;
-            // REQUEST_CODE_PICKER
-            case 2:
+            // REQUEST_CODE_PICK_FOLDER
+            case REQUEST_CODE_PICK_FOLDER:
                 intentPicker = null;
 
                 if (resultCode == RESULT_OK) {
@@ -155,8 +155,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                 }
                 break;
 
-            // REQUEST_CODE_SELECT
-            case 3:
+            // REQUEST_CODE_SELECT_FILE
+            case REQUEST_CODE_SELECT_FILE:
                 if (resultCode == RESULT_OK) {
                     // get the selected item's ID
                     DriveId driveId = data.getParcelableExtra(
@@ -555,7 +555,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                     intentPicker = buildIntent();
                 //Start the picker to choose a folder
                 startIntentSenderForResult(
-                        intentPicker, REQUEST_CODE_PICKER, null, 0, 0, 0);
+                        intentPicker, REQUEST_CODE_PICK_FOLDER, null, 0, 0, 0);
             } else {
                 Log.e(TAG, "openFolderPicker: error");
             }
@@ -676,7 +676,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                 .build(mGoogleApiClient);
         try {
             startIntentSenderForResult(
-                    intentSender, REQUEST_CODE_SELECT, null, 0, 0, 0);
+                    intentSender, REQUEST_CODE_SELECT_FILE, null, 0, 0, 0);
         } catch (IntentSender.SendIntentException e) {
             Log.e(TAG, "Unable to send intent", e);
             somethingWrongSJ.onNext(REQUEST_RESTORE);
