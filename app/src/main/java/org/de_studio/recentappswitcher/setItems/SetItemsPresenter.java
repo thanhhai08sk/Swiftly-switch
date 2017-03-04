@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.setItems;
 
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.base.BasePresenter;
@@ -79,7 +80,7 @@ public class SetItemsPresenter extends BasePresenter<SetItemsView, SetItemsModel
                 view.onOkButton().subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        view.finishAfterTransition();
+                        ActivityCompat.finishAfterTransition(view);
                     }
                 })
         );

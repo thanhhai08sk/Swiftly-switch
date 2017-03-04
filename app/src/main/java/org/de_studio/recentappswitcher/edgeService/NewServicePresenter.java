@@ -588,7 +588,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     }
 
     private void stopHideViewsHandler() {
-        handler.removeCallbacks(hideAllExceptEdgesRunnable);
+        if (handler != null) {
+            handler.removeCallbacks(hideAllExceptEdgesRunnable);
+        }
     }
 
     private void setCurrentEdgeAndCurrentShowing(int edgeId) {
