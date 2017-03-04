@@ -42,9 +42,11 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
             createNewCollection();
             collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, getCollectionId()).findFirst();
         }
-        RealmObject.addChangeListener(collection,this);
-        collectionReadySubject.onNext(collection);
-        collectionChangedSubject.onNext(null);
+        if (collection != null) {
+            RealmObject.addChangeListener(collection,this);
+            collectionReadySubject.onNext(collection);
+            collectionChangedSubject.onNext(null);
+        }
     }
 
     public PublishSubject<Void> onCollectionChanged() {

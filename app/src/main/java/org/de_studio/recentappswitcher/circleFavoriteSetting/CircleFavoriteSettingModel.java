@@ -42,6 +42,7 @@ public class CircleFavoriteSettingModel extends BaseCircleCollectionSettingModel
         }
         final String newLabel = Utility.createCollectionLabel(defaultLabel, newCollectionNumber);
         final String newId = Utility.createCollectionId(getCollectionType(), newCollectionNumber);
+        collectionId = newId;
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

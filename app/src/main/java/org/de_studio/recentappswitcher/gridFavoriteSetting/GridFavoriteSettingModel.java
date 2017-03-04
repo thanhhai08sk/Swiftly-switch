@@ -40,6 +40,7 @@ public class GridFavoriteSettingModel extends BaseCollectionSettingModel {
         }
         final String newLabel = Utility.createCollectionLabel(defaultLabel, newCollectionNumber);
         final String newId = Utility.createCollectionId(getCollectionType(), newCollectionNumber);
+        collectionId = newId;
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
