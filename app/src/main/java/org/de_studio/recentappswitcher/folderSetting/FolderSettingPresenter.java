@@ -76,8 +76,10 @@ public class FolderSettingPresenter extends BasePresenter<FolderSettingPresenter
                 view.onMoveItem().subscribe(new Action1<DragAndDropCallback.MoveData>() {
                     @Override
                     public void call(DragAndDropCallback.MoveData moveData) {
-                        model.moveItem(moveData.from, moveData.to);
-                        view.notifyItemMove(moveData.from,moveData.to);
+                        if (moveData != null) {
+                            model.moveItem(moveData.from, moveData.to);
+                            view.notifyItemMove(moveData.from,moveData.to);
+                        }
 
                     }
                 })
