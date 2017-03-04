@@ -694,8 +694,8 @@ public  class Utility {
         int gap1dp = (int) (mScale);
         boolean isFolderEmpty = true;
         Log.e(TAG, "createAndSaveFolderThumbnail: folderId " + folder.slotId + "\nsize " + folder.items.size());
-
-        for (int i = 0; i < 4; i++) {
+        int noOfSmallIcon = folder.items.size() >= 4 ? 4 : folder.items.size();
+        for (int i = 0; i < noOfSmallIcon; i++) {
             drawable = null;
             if (i < folder.items.size()) {
                 item = folder.items.get(i);
