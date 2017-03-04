@@ -1855,7 +1855,10 @@ public  class Utility {
                 for (String string : actionStrings) {
                     int action = Utility.getActionFromLabel(contextWeakReference.get(), string);
                     if (action != Item.ACTION_SCREEN_LOCK ||
-                            !(android.os.Build.MANUFACTURER.toLowerCase().contains("sam") || android.os.Build.MANUFACTURER.toLowerCase().contains("zte"))) {
+                            !(
+                                    (android.os.Build.MANUFACTURER.toLowerCase().contains("sam") || android.os.Build.MANUFACTURER.toLowerCase().contains("zte")) &&
+                                            Build.VERSION.SDK_INT == Build.VERSION_CODES.M
+                            )) {
 
                         String itemId = Item.TYPE_ACTION + action;
                         Item item = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
