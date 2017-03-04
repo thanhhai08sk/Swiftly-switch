@@ -26,6 +26,8 @@
         android:id="@+id/item_label"
         android:textColor="@color/text_primary_dark"
         tools:text="Swiftly Switch"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         />
     <ImageView
         android:id="@+id/instant"

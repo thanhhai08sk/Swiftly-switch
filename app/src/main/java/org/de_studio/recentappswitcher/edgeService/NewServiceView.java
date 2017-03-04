@@ -1007,23 +1007,25 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     private void highlightCircleIcon(View icon, float iconX, float iconY) {
         if (icon != null) {
-
-            icon.setScaleX(1.2f);
-            icon.setScaleY(1.2f);
+            icon.setScaleX(isRTL? 1.5f:1.2f);
+            icon.setScaleY(isRTL? 1.5f:1.2f);
 
             int height = (int) ((16 + 48 * iconScale) * mScale);
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(height, height);
+            layoutParams.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 icon.setBackground(getDrawable(R.drawable.icon_background));
             } else {
                 icon.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon_background));
             }
 
-            icon.setX(iconX - 8 * mScale);
-            icon.setY(iconY - 8 * mScale);
-
-            icon.setLayoutParams(layoutParams);
-            icon.setPadding((int) (8 * mScale), (int) (8 * mScale), (int) (8 * mScale), (int) (8 * mScale));
+            if (!isRTL) {
+                icon.setLayoutParams(layoutParams);
+                icon.setX(iconX - 8 * mScale);
+                icon.setY(iconY - 8 * mScale);
+            }
+            int padding = isRTL ? ((int) (5 * mScale)) : ((int) (8 * mScale));
+            icon.setPadding(padding, padding, padding, padding);
         }
     }
 
@@ -1036,14 +1038,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(icon.getLayoutParams());
             layoutParams1.width = (int) (48 * mScale * iconScale);
             layoutParams1.height = (int) (48 * mScale * iconScale);
-
             icon.setBackground(null);
 
-            icon.setX(iconX);
-            icon.setY(iconY);
 
             icon.setLayoutParams(layoutParams1);
             icon.setPadding(0, 0, 0, 0);
+            icon.setX(iconX);
+            icon.setY(iconY);
         }
     }
 
