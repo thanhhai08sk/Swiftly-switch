@@ -317,6 +317,15 @@
 
 
     //What new
+
+    <string name="what_new_3.0.2" translatable="false">VERSION 3.0.2:\n
+        - Fix setting space between shortcuts doesn\'t work \n
+        - Fix no icon for Shortcuts Set \n
+        - Fix Grid position when trigger from long press \n
+        - Fix crashes\n
+
+    </string>
+
     <string name="what_new_3.0.1" translatable="false">VERSION 3.0.1, the biggest update:\n
         - New beautiful Material design with new animation \n
         - Different settings/contents for each Edge \n

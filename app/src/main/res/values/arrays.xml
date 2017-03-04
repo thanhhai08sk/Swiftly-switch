@@ -140,6 +140,7 @@
     </string-array>
 
     <string-array name="what_new">
+        <item>@string/what_new_3.0.2</item>
         <item>@string/what_new_3.0.1</item>
     </string-array>
 
