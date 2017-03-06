@@ -42,13 +42,15 @@ public class QuickActionsView extends View {
     IconPackManager.IconPack iconPack;
     int edgePosition;
     boolean showAll;
+    int canvasSize;
 
-    public QuickActionsView(Context context, IconPackManager.IconPack iconPack, RealmList<Slot> actions, int edgePosition, boolean showAll) {
+    public QuickActionsView(Context context, IconPackManager.IconPack iconPack, RealmList<Slot> actions, int edgePosition, boolean showAll, int canvasSize) {
         super(context);
         this.iconPack = iconPack;
         this.actions = actions;
         this.edgePosition = edgePosition;
         this.showAll = showAll;
+        this.canvasSize = canvasSize;
         init();
 
     }
@@ -138,20 +140,18 @@ public class QuickActionsView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        int canvasWidth = canvas.getWidth();
-        int canvasHeight = canvas.getHeight();
-        int centerX = Math.round(canvasWidth * 0.5f);
-        int centerY = Math.round(canvasHeight * 0.5f);
-        Log.e(TAG, "onDraw: canvas width = " + canvasWidth +
-                "\nheight = " + canvasHeight +
+        int centerX = Math.round(canvasSize * 0.5f);
+        int centerY = Math.round(canvasSize * 0.5f);
+        Log.e(TAG, "onDraw: canvas width = " + canvasSize +
+                "\nheight = " + canvasSize +
                 "\ncenterX = " + centerX +
                 "\ncenterY = " + centerY);
 
 
         if (visibleItem != -1 && bitmaps[visibleItem] != null) {
             path.reset();
-//            path.addArc(0, 0, canvasWidth, canvasHeight, startAngle[visibleItem], sweepAngles[visibleItem]);
-            rectF.set(0, 0, canvasWidth, canvasHeight);
+//            path.addArc(0, 0, canvasSize, canvasSize, startAngle[visibleItem], sweepAngles[visibleItem]);
+            rectF.set(0, 0, canvasSize, canvasSize);
             path.addArc(rectF, startAngle[visibleItem], sweepAngles[visibleItem]);
             canvas.drawPath(path, backgroundPaint);
         }

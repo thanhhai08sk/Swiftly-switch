@@ -513,8 +513,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         Log.e(TAG, "showQuickActions: ");
         if (currentShowing.action != null) {
             if (collectionViewsMap.get(getQuickActionsKey(edgePosition, currentShowing.action)) == null) {
-                QuickActionsView actionsView = new QuickActionsView(this, iconPack, currentShowing.action.slots, edgePosition, currentShowing.action.visibilityOption != Collection.VISIBILITY_OPTION_ONLY_TRIGGERED_ONE_VISIBLE);
-                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams((int) (currentShowing.circle.radius * 2 * mScale + 60 * 2 * mScale), (int) (currentShowing.circle.radius * 2 * mScale + 60 * 2 * mScale));
+                int width = (int) (currentShowing.circle.radius * 2 * mScale + 60 * 2 * mScale);
+                QuickActionsView actionsView = new QuickActionsView(this, iconPack, currentShowing.action.slots, edgePosition, currentShowing.action.visibilityOption != Collection.VISIBILITY_OPTION_ONLY_TRIGGERED_ONE_VISIBLE, width);
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, width);
                 actionsView.setLayoutParams(layoutParams);
                 actionsView.setId(getQuickActionsResId(currentShowing.action, edgePosition));
                 collectionViewsMap.put(getQuickActionsKey(edgePosition, currentShowing.action), actionsView);
