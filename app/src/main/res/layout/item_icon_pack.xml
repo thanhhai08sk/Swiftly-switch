@@ -16,7 +16,7 @@
         android:layout_width="260dp"
         android:layout_centerVertical="true"
         android:layout_height="wrap_content"
-        android:singleLine="true"
+        android:lines="1"
         android:layout_toRightOf="@id/icon_pack_icon_image_view"
         android:id="@+id/icon_pack_label_text_view"
         android:text="Icon pack"

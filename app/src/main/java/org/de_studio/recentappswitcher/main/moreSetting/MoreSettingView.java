@@ -14,8 +14,10 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -35,7 +37,8 @@ import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.drive.OpenFileActivityBuilder;
 
 import org.de_studio.recentappswitcher.Cons;
-import org.de_studio.recentappswitcher.IconPackSettingDialogFragment;
+import org.de_studio.recentappswitcher.IconPackListAdapter;
+import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.backup.GoogleDriveBackup;
@@ -52,6 +55,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -258,7 +262,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         }
 
         String iconPackPackage = sharedPreferences.getString(Cons.ICON_PACK_PACKAGE_NAME_KEY, null);
-        if (iconPackPackage != null) {
+        if (!TextUtils.isEmpty(iconPackPackage)) {
+            Log.e(TAG, "updateViews: icon pack " + iconPackPackage);
             iconPackDescription.setText(Utility.getLabelFromPackageName(iconPackPackage, getPackageManager()));
         } else {
             iconPackDescription.setText(getString(R.string.system));
@@ -343,9 +348,27 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         if (Utility.isFree(this)) {
             Utility.showProOnlyDialog(this);
         } else {
-            android.app.FragmentManager fragmentManager = getFragmentManager();
-            IconPackSettingDialogFragment newFragment = new IconPackSettingDialogFragment();
-            newFragment.show(fragmentManager, "iconPackDialogFragment");
+//            android.app.FragmentManager fragmentManager = getFragmentManager();
+//            IconPackSettingDialogFragment newFragment = new IconPackSettingDialogFragment();
+//            newFragment.show(fragmentManager, "iconPackDialogFragment");
+
+            IconPackManager manager = new IconPackManager();
+            manager.setContext(this);
+            HashMap<String, IconPackManager.IconPack> hashMap = manager.getAvailableIconPacks(true);
+
+            MaterialDialog dialog = new MaterialDialog.Builder(this)
+                    .customView(R.layout.dialog_fragment_icon_pack, false)
+                    .positiveText(R.string.app_tab_fragment_ok_button)
+                    .dismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            resetService();
+                        }
+                    })
+                    .show();
+            ListView listView = (ListView) dialog.getView().findViewById(R.id.icon_pack_list_view);
+            IconPackListAdapter mAdapter = new IconPackListAdapter(this, hashMap);
+            listView.setAdapter(mAdapter);
         }
     }
 

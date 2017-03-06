@@ -63,7 +63,7 @@ public class AppModule {
     @Provides
     @Nullable
     @Singleton
-    IconPackManager.IconPack iconPack(@Named(Cons.OLD_DEFAULT_SHARED_NAME) SharedPreferences defaultShared) {
+    IconPackManager.IconPack iconPack(@Named(Cons.SHARED_PREFERENCE_NAME) SharedPreferences defaultShared) {
         IconPackManager.IconPack iconPack = null;
         String iconPackPacka = defaultShared.getString(Cons.ICON_PACK_PACKAGE_NAME_KEY, Cons.ICON_PACK_NONE);
         if (!iconPackPacka.equals(Cons.ICON_PACK_NONE)) {

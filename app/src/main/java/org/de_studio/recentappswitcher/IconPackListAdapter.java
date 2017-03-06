@@ -28,11 +28,11 @@ public class IconPackListAdapter extends BaseAdapter {
     private SharedPreferences sharedPreferences;
     private String[] packageName;
 
-    IconPackListAdapter(Context context, HashMap<String, IconPackManager.IconPack> hashMap) {
+    public IconPackListAdapter(Context context, HashMap<String, IconPackManager.IconPack> hashMap) {
         super();
         mContext = context;
         mHashMap = hashMap;
-        sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
+        sharedPreferences = mContext.getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
         Set<String> set = mHashMap.keySet();
         packageName = new String[set.size()];
         set.toArray(packageName);
@@ -96,10 +96,10 @@ public class IconPackListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (getItemId(position) == 0) {
-                    sharedPreferences.edit().putString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none").commit();
+                    sharedPreferences.edit().putString(Cons.ICON_PACK_PACKAGE_NAME_KEY, null).commit();
                     IconPackListAdapter.this.notifyDataSetChanged();
                 } else {
-                    sharedPreferences.edit().putString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, packageName[position - 1]).commit();
+                    sharedPreferences.edit().putString(Cons.ICON_PACK_PACKAGE_NAME_KEY, packageName[position - 1]).commit();
                     IconPackListAdapter.this.notifyDataSetChanged();
                 }
             }
