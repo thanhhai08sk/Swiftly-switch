@@ -54,6 +54,8 @@ public class QuickActionsView extends View {
     }
 
 
+
+
     private void init() {
         mScale = getResources().getDisplayMetrics().density;
         iconSize = (int) (ICON_SIZE_DP * mScale);
@@ -140,6 +142,10 @@ public class QuickActionsView extends View {
         int canvasHeight = canvas.getHeight();
         int centerX = Math.round(canvasWidth * 0.5f);
         int centerY = Math.round(canvasHeight * 0.5f);
+        Log.e(TAG, "onDraw: canvas width = " + canvasWidth +
+                "\nheight = " + canvasHeight +
+                "\ncenterX = " + centerX +
+                "\ncenterY = " + centerY);
 
 
         if (visibleItem != -1 && bitmaps[visibleItem] != null) {
