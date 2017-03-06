@@ -107,6 +107,15 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
         }
     }
 
+    public void setCollectionLabel(final String label) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                collection.label = label;
+            }
+        });
+    }
+
     public String getPlaceUsingThis(String collectionId) {
         Collection collectionThatUseThis = realm.where(Collection.class).equalTo("longPressCollection.collectionId", collectionId).findFirst();
         if (collectionThatUseThis == null) {

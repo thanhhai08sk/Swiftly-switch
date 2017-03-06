@@ -202,6 +202,13 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
             }
         }
     }
+    public void onSetCollectionLabel() {
+        view.showSetLabelDialog(model.getCurrentCollection().label);
+    }
+
+    public void setCollectionLabel(String label) {
+        model.setCollectionLabel(label);
+    }
 
 
     public interface View extends PresenterView {
@@ -234,6 +241,8 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         void openSetFolder(String folderId);
 
         void showChooseSizeDialog();
+
+        void showSetLabelDialog(String currentLabel);
 
         void showChooseBetweenSetFolderAndSetItems(final int slotIndex);
         void setRecyclerView(OrderedRealmCollection<Slot> slots, RecyclerView.LayoutManager layoutManager, GridSpacingItemDecoration decoration);

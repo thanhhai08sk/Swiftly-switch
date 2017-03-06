@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -100,6 +101,9 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
 
         if (id == R.id.action_delete) {
             presenter.onDeleteCollection();
+            return true;
+        } else if (id == R.id.action_set_label) {
+            presenter.onSetCollectionLabel();
             return true;
         }
 
@@ -387,6 +391,18 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                     }
                 });
         builder.create().show();
+    }
+
+    @Override
+    public void showSetLabelDialog(String currentLabel) {
+        new MaterialDialog.Builder(this)
+                .title(R.string.set_label)
+                .input(null, currentLabel, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        presenter.setCollectionLabel(input.toString());
+                    }
+                }).show();
     }
 
     @Override
