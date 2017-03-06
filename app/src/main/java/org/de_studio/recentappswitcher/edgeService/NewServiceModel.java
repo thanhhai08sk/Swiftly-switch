@@ -268,7 +268,7 @@ public class NewServiceModel extends BaseModel {
             }
         }
         if (folderMode) {
-            if (smallestDistance > 105 * mScale) {
+            if (smallestDistance > 90 * mScale) {
                 return -2;
             }
         }
