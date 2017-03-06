@@ -321,6 +321,14 @@
 
     //What new
 
+    <string name="what_new_3.0.4" translatable="false">VERSION 3.0.4:\n
+        - Set Shortcuts Set label \n
+        - Option to remove folder opening delay (More settings) \n
+        - Fix Quick Actions too big on Android 4.4 \n
+        - Fix positioning of Folder\n
+        - Fix can not delete Grid item\n
+        - Other improvements\n
+    </string>
     <string name="what_new_3.0.3" translatable="false">VERSION 3.0.3:\n
         - Add Persian translation \n
         - Fix layout problem in RTL language \n

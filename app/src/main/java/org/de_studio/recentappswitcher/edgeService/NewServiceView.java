@@ -672,6 +672,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
 
     public void showFolder(int triggerPosition, Slot folder, final String gridId, int space, final int edgePosition, final NewServicePresenter.Showing currentShowing) {
+        if (folder.items.size()==0) {
+            return;
+        }
         createFolderViewIfNeeded(folder, space);
 
         final RecyclerView folderView = (RecyclerView) collectionViewsMap.get(folder.slotId);
@@ -679,7 +682,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
         addFolderToBackgroundIfNeeded(folder, folderView);
 
-        displayFolderAndSetPosition(triggerPosition, space, edgePosition, currentShowing, folderView, triggerGridView,folder.items.size());
+        displayFolderAndSetPosition(triggerPosition, space, edgePosition, currentShowing, folderView, triggerGridView, folder.items.size());
     }
 
     private void displayFolderAndSetPosition(int triggerPosition, final int space, final int edgePosition, final NewServicePresenter.Showing currentShowing, final RecyclerView folderView, final RecyclerView triggerGridView, final int size) {
