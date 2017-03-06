@@ -34,8 +34,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     private Runnable hideAllExceptEdgesRunnable = new Runnable() {
         @Override
         public void run() {
-            if (view != null) {
-                view.hideAllExceptEdges();
+            if (view !=null && finishSectionSJ != null) {
+                finishSectionSJ.onNext(null);
             }
         }
     };
@@ -120,6 +120,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         if (slot != null) {
                             if (slot.instant) {
                                 startSlotSJ.onNext(slot);
+                            } else if (!view.isOpenFolderDelay() && slot.type.equals(Slot.TYPE_FOLDER)) {
+                                showFolderSJ.onNext(slot);
                             }
 //                            else {
 //                                if (slot.type.equals(Slot.TYPE_ITEM) && slot.stage1Item.type.equals(Item.TYPE_SHORTCUTS_SET)) {
@@ -161,6 +163,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             view.hideAllCollections();
                             showCollection(currentShowing.showWhat);
                         }
+                        highlightIdSubject.onNext(-1);
                     }
                 })
         );
@@ -748,6 +751,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         void showToast(int message);
 
         boolean isRTL();
+
+        boolean isOpenFolderDelay();
 
     }
 

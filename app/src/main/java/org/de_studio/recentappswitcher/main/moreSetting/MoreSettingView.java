@@ -77,6 +77,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     SwitchCompat disableClockSwitch;
 //    @BindView(R.id.avoid_keyboard_switch)
 //    SwitchCompat avoidKeyboardSwitch;
+    @BindView(R.id.open_folder_delay_switch)
+    SwitchCompat openFolderDelaySwitch;
     @BindView(R.id.disable_in_landscape_switch)
     SwitchCompat disableInLandscapeSwitch;
     @BindView(R.id.contact_action_description)
@@ -240,6 +242,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
             useHomeButtonSeparator.setVisibility(View.GONE);
         }
 
+        openFolderDelaySwitch.setChecked(sharedPreferences.getBoolean(Cons.OPEN_FOLDER_DELAY_KEY, true));
+
         int contactAction = sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.ACTION_CHOOSE);
         switch (contactAction) {
             case Cons.ACTION_CHOOSE:
@@ -329,7 +333,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         Utility.showDialogWithSeekBar(
                 Cons.HOLD_TIME_MIN,
                 Cons.HOLD_TIME_MAX,
-                sharedPreferences.getInt(Cons.HOLD_TIME_KEY, Cons.HOLD_TIME_DEFAULT),
+                sharedPreferences.getInt(Cons.LONG_PRESS_DELAY_KEY, Cons.LONG_PRESS_DELAY_DEFAULT),
                 "ms", getString(R.string.main_hold_time),
                 subject, this);
     }
@@ -410,6 +414,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                 subject, this
         );
     }
+
 
     @Override
     protected void inject() {
@@ -517,6 +522,11 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     @OnClick(R.id.vibration_duration)
     void onVibrationDurationClick(){
         presenter.onVibratioDuration();
+    }
+
+    @OnClick(R.id.open_folder_delay)
+    void onOpenFolderDelayClick(){
+        presenter.onOpenFolderDelay();
     }
 
     @OnClick(R.id.import_settings)

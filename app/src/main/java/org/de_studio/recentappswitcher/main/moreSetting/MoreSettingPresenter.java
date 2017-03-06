@@ -29,6 +29,7 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
     PublishSubject<Integer> iconSizeSJ = PublishSubject.create();
     PublishSubject<Integer> animationDurationSJ = PublishSubject.create();
     PublishSubject<Integer> vibrationDurationSJ = PublishSubject.create();
+    PublishSubject<Integer> openFolderDelaySJ = PublishSubject.create();
     Realm realm = Realm.getDefaultInstance();
 
 
@@ -66,6 +67,16 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
                     @Override
                     public void call(Integer integer) {
                         onSetAnimationDuration(integer);
+                    }
+                })
+        );
+
+        addSubscription(
+                openFolderDelaySJ.subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        sharedPreferences.edit().putInt(Cons.OPEN_FOLDER_DELAY_KEY, integer).commit();
+                        view.resetService();
                     }
                 })
         );
@@ -213,7 +224,7 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
     }
 
     public void onSetLongPressDelay(int time) {
-        sharedPreferences.edit().putInt(Cons.HOLD_TIME_KEY, time).commit();
+        sharedPreferences.edit().putInt(Cons.LONG_PRESS_DELAY_KEY, time).commit();
         view.resetService();
     }
 
@@ -273,6 +284,12 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
 
     public void onVibratioDuration() {
         view.vibrationDurationDialog(vibrationDurationSJ);
+    }
+
+    public void onOpenFolderDelay() {
+        boolean currentValue = sharedPreferences.getBoolean(Cons.OPEN_FOLDER_DELAY_KEY, true);
+        sharedPreferences.edit().putBoolean(Cons.OPEN_FOLDER_DELAY_KEY, !currentValue).commit();
+        view.resetService();
     }
 
     public void onSetVibrationDuration(int duration) {
@@ -358,6 +375,7 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
         void showErrorDialog();
 
         void showSuccessDialog();
+
 
         void hideDownloadingDialog();
 

@@ -90,7 +90,7 @@ public class Cons {
     public static final int GRID_GAP_DEFAULT = 5;
     public static final int GUIDE_COLOR_DEFAULT = Color.argb(255, 255, 64, 129);
     public static final int BACKGROUND_COLOR_DEFAULT = Color.argb(190, 0, 0, 0);
-    public static final int HOLD_TIME_DEFAULT = 800;
+    public static final int LONG_PRESS_DELAY_DEFAULT = 800;
     public static final int DEFAULT_VIBRATE_DURATION = 15;
     public static final int ANIMATION_TIME_DEFAULT = 250;
     public static final int ANIMATION_TIME_MIN = 50;
@@ -113,6 +113,7 @@ public class Cons {
     public static final int DEFAULT_EDGE_OFFSET = 0;
     public static final boolean DEFAULT_USE_ANIMATION = true;
 
+    public static final String OPEN_FOLDER_DELAY_NAME = "open_folder_delay";
     public static final String LAUNCHER_PACKAGENAME_NAME = "launcher_packagename";
     public static final String HAS_INTENT_PACKAGES_NAME = "noIntentPackages";
     public static final String IS_FREE_AND_OUT_OF_TRIAL_NAME = "is_free_and_out_of_trial";
@@ -198,6 +199,7 @@ public class Cons {
 
 
     public static final String BEGIN_DAY_KEY = "begin_trial_time";
+    public static final String OPEN_FOLDER_DELAY_KEY = "open_folder_delay";
     public static final String DISABLE_IN_FULLSCREEN_KEY = "disable_in_fullscreen";
     public static final String APP_VERSION_KEY = "app_version";
     public static final String AUTO_SHOW_WHAT_NEW_KEY = "auto_show_what_new";
@@ -243,7 +245,7 @@ public class Cons {
     public static final String ACTION_4_KEY = "action_4";
     public static final String IS_ACTIONS_STAY_PERMANENT = "is_permanent";
     public static final String VIBRATION_DURATION_KEY = "vibration_duration";
-    public static final String HOLD_TIME_KEY  = "hold_time";
+    public static final String LONG_PRESS_DELAY_KEY = "hold_time";
     public static final String ANIMATION_TIME_KEY = "animation_time";
     public static final String IS_PIN_TO_TOP_KEY = "is_pin_to_top";
     public static final String BACKGROUND_COLOR_KEY = "background_color";

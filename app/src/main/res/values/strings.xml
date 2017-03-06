@@ -251,6 +251,7 @@
     <string name="look">Look</string>
     <string name="feel">Feel</string>
     <string name="backup_and_restore">"Backup &amp; import settings"</string>
+    <string name="open_folder_delay">Open folder delay</string>
     <string name="long_press_delay_description">Time needed to trigger second stage or open folder</string>
     <string name="import_settings">Import</string>
     <string name="import_description">Import shortcuts, settings from backup file</string>

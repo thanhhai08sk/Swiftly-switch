@@ -646,7 +646,7 @@ public class DataSetupService extends IntentService {
         newShared.edit().putBoolean(Cons.DISABLE_CLOCK_KEY, oldShared.getBoolean(EdgeSetting.DISABLE_CLOCK_KEY, false))
                 .putBoolean(Cons.IS_DISABLE_IN_LANDSCAPE_KEY, oldShared.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE, false))
                 .putInt(Cons.CONTACT_ACTION_KEY, oldShared.getInt(EdgeSetting.CONTACT_ACTION, Cons.ACTION_CHOOSE))
-                .putInt(Cons.HOLD_TIME_KEY, oldShared.getInt(EdgeSetting.HOLD_TIME_KEY, Cons.HOLD_TIME_DEFAULT))
+                .putInt(Cons.LONG_PRESS_DELAY_KEY, oldShared.getInt(EdgeSetting.HOLD_TIME_KEY, Cons.LONG_PRESS_DELAY_DEFAULT))
                 .putString(Cons.ICON_PACK_PACKAGE_NAME_KEY, oldShared.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, null))
                 .putFloat(Cons.ICON_SCALE_KEY, oldShared.getFloat(EdgeSetting.ICON_SCALE, 1f))
                 .putInt(Cons.BACKGROUND_COLOR_KEY, oldShared.getInt(EdgeSetting.BACKGROUND_COLOR_KEY, Cons.BACKGROUND_COLOR_DEFAULT))

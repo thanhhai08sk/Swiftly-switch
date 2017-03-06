@@ -51,12 +51,13 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_NAME;
-import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_KEY;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
+import static org.de_studio.recentappswitcher.Cons.LONG_PRESS_DELAY_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
+import static org.de_studio.recentappswitcher.Cons.OPEN_FOLDER_DELAY_NAME;
 import static org.de_studio.recentappswitcher.Cons.SHARED_PREFERENCE_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_KEY;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
@@ -83,7 +84,7 @@ public class NewServiceModule {
     NewServicePresenter presenter(NewServiceModel model
             , @Named(SHARED_PREFERENCE_NAME) SharedPreferences shared ){
 
-        return new NewServicePresenter(model, shared.getInt(Cons.HOLD_TIME_KEY, Cons.HOLD_TIME_DEFAULT));
+        return new NewServicePresenter(model, shared.getInt(Cons.LONG_PRESS_DELAY_KEY, Cons.LONG_PRESS_DELAY_DEFAULT));
     }
 
     @Provides
@@ -149,7 +150,14 @@ public class NewServiceModule {
     @Singleton
     @Named(HOLD_TIME_NAME)
     int holdTime(@Named(SHARED_PREFERENCE_NAME) SharedPreferences shared){
-        return shared.getInt(Cons.HOLD_TIME_KEY, HOLD_TIME_DEFAULT);
+        return shared.getInt(Cons.LONG_PRESS_DELAY_KEY, LONG_PRESS_DELAY_DEFAULT);
+    }
+
+    @Provides
+    @Singleton
+    @Named(OPEN_FOLDER_DELAY_NAME)
+    boolean openFolderDelay(@Named(SHARED_PREFERENCE_NAME) SharedPreferences shared) {
+        return shared.getBoolean(Cons.OPEN_FOLDER_DELAY_KEY, true);
     }
 
 

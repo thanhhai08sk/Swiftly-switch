@@ -1746,21 +1746,6 @@ public  class Utility {
         } else {
             y = screenHeight - folderTall;
         }
-
-//        if (Utility.rightLeftOrBottom(edgePosition) == Cons.POSITION_RIGHT) {
-//            if (triggerX + folderWide / 2 < gridView.getX() + gridView.getWidth()) {
-//                x = triggerX - folderWide / 2;
-//            } else {
-//                x = gridView.getX() + gridView.getWidth() - folderWide;
-//            }
-//        } else {
-//            if (triggerX - folderWide / 2 > gridView.getX()) {
-//                x = triggerX - folderWide / 2;
-//            } else {
-//                x = gridView.getX();
-//            }
-//        }
-//        y = triggerY - folderTall / 2;
         Log.e(TAG, "setFolderPosition: x = " + x + "\ny = " + y + "\nposition = " + rightLeftOrBottom(edgePosition));
         folderView.setX(x);
         folderView.setY(y);

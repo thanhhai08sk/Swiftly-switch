@@ -91,6 +91,7 @@ import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.LAUNCHER_PACKAGENAME_NAME;
 import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
+import static org.de_studio.recentappswitcher.Cons.OPEN_FOLDER_DELAY_NAME;
 import static org.de_studio.recentappswitcher.Cons.SHARED_PREFERENCE_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
 
@@ -161,6 +162,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Inject
     @Named(HOLD_TIME_NAME)
     int holdTime;
+    @Inject
+    @Named(OPEN_FOLDER_DELAY_NAME)
+    boolean openFolderDelay;
     @Inject
     @Named(ICON_SCALE_NAME)
     float iconScale;
@@ -500,6 +504,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         return isRTL;
     }
 
+    @Override
+    public boolean isOpenFolderDelay() {
+        return openFolderDelay;
+    }
+
     public void showQuickActions(int edgePosition, int highlighPosition, NewServicePresenter.Showing currentShowing, boolean delay, boolean animate) {
         Log.e(TAG, "showQuickActions: ");
         if (currentShowing.action != null) {
@@ -667,12 +676,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         final RecyclerView folderView = (RecyclerView) collectionViewsMap.get(folder.slotId);
         final RecyclerView triggerGridView = (RecyclerView) collectionViewsMap.get(gridId);
 
-        boolean needDelay = addFolderToBackgroundIfNeeded(folder, folderView);
+        addFolderToBackgroundIfNeeded(folder, folderView);
 
-        displayFolderAndSetPosition(triggerPosition, space, edgePosition, currentShowing, folderView, triggerGridView, needDelay,folder.items.size());
+        displayFolderAndSetPosition(triggerPosition, space, edgePosition, currentShowing, folderView, triggerGridView,folder.items.size());
     }
 
-    private void displayFolderAndSetPosition(int triggerPosition, final int space, final int edgePosition, final NewServicePresenter.Showing currentShowing, final RecyclerView folderView, final RecyclerView triggerGridView, boolean needDelay, final int size) {
+    private void displayFolderAndSetPosition(int triggerPosition, final int space, final int edgePosition, final NewServicePresenter.Showing currentShowing, final RecyclerView folderView, final RecyclerView triggerGridView, final int size) {
         final float triggerX = triggerGridView.getChildAt(triggerPosition).getX() + triggerGridView.getX() + (iconScale * Cons.ICON_SIZE_DEFAULT + space)/2 * mScale;
         final float triggerY = triggerGridView.getChildAt(triggerPosition).getY() + triggerGridView.getY() + (iconScale * Cons.ICON_SIZE_DEFAULT + space) / 2 * mScale;
         setFolderPosition(triggerX, triggerY, folderView, edgePosition, currentShowing, size, space);
@@ -872,9 +881,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     indicateSlot(slot);
                     RecyclerView grid =(RecyclerView) collectionViewsMap.get(currentShowing.grid.collectionId);
                     if (slot.type.equals(Slot.TYPE_FOLDER)) {
-                        gridAlphaAnimator = ObjectAnimator.ofFloat(grid, "alpha", 1f, 0f);
-                        gridAlphaAnimator.setDuration(holdTime);
-                        gridAlphaAnimator.start();
+                        if (openFolderDelay) {
+                            gridAlphaAnimator = ObjectAnimator.ofFloat(grid, "alpha", 1f, 0f);
+                            gridAlphaAnimator.setDuration(holdTime);
+                            gridAlphaAnimator.start();
+                        }
                     } else {
                         if (gridAlphaAnimator != null) {
                             gridAlphaAnimator.cancel();
@@ -908,7 +919,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     public void indicateSlot(Slot slot) {
         if (slot != null) {
             Circle circle = (Circle) backgroundView.findViewById(R.id.circle);
-            if (slot.type.equals(Slot.TYPE_FOLDER)) {
+            if (slot.type.equals(Slot.TYPE_FOLDER) && openFolderDelay) {
                 circle.setVisibility(View.VISIBLE);
                 circle.setAlpha(1f);
                 circle.setAngle(0);
@@ -967,7 +978,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 case NewServicePresenter.Showing.SHOWING_FOLDER:
                     if (id < currentShowing.folderItems.size()) {
                         RecyclerView folder = (RecyclerView) collectionViewsMap.get(currentShowing.folderSlotId);
-                        folder.getChildAt(id).setBackgroundColor(Color.argb(255, 42, 96, 70));
+                        if (folder.getChildAt(id) != null) {
+                            folder.getChildAt(id).setBackgroundColor(Color.argb(255, 42, 96, 70));
+                        }
                     }
                     break;
 
