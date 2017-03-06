@@ -37,16 +37,15 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
     }
 
     public void setup() {
-        collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, getCollectionId()).findFirst();
+        collection = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).findFirst();
         if (collection == null) {
             createNewCollection();
-            collection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, getCollectionId()).findFirst();
+            collection = realm.where(Collection.class).equalTo(Cons.TYPE, getCollectionType()).findFirst();
         }
-        if (collection != null) {
             RealmObject.addChangeListener(collection,this);
             collectionReadySubject.onNext(collection);
             collectionChangedSubject.onNext(null);
-        }
+
     }
 
     public PublishSubject<Void> onCollectionChanged() {
@@ -59,10 +58,10 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
     }
 
     public String getCollectionId() {
-        if (collectionId == null) {
-            collectionId = getDefaultCollectionId();
+        if (collection != null) {
+            return collection.collectionId;
         }
-        return collectionId;
+        return null;
     }
 
 
