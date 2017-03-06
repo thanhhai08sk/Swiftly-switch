@@ -1296,13 +1296,15 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        if (sharedPreferences.getBoolean(Cons.IS_DISABLE_IN_LANDSCAPE_KEY, false) && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            removeEdgeViews();
-        } else {
-            addEdgeViews();
+        if (sharedPreferences != null &&
+                sharedPreferences.getBoolean(Cons.IS_DISABLE_IN_LANDSCAPE_KEY, false)) {
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                removeEdgeViews();
+            } else {
+                addEdgeViews();
+            }
         }
         hideAllExceptEdges();
-        Log.e(TAG, "onConfigurationChanged: ");
         super.onConfigurationChanged(newConfig);
     }
 
