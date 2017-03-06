@@ -142,12 +142,6 @@ public class QuickActionsView extends View {
 
         int centerX = Math.round(canvasSize * 0.5f);
         int centerY = Math.round(canvasSize * 0.5f);
-        Log.e(TAG, "onDraw: canvas width = " + canvasSize +
-                "\nheight = " + canvasSize +
-                "\ncenterX = " + centerX +
-                "\ncenterY = " + centerY);
-
-
         if (visibleItem != -1 && bitmaps[visibleItem] != null) {
             path.reset();
 //            path.addArc(0, 0, canvasSize, canvasSize, startAngle[visibleItem], sweepAngles[visibleItem]);

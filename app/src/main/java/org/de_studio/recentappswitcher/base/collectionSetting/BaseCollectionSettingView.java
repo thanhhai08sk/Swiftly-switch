@@ -154,6 +154,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
     @Override
     public void setDeleteButtonVisibility(boolean visible) {
         deleteButton.setVisibility(visible? View.VISIBLE: View.INVISIBLE);
+
     }
 
     @Override
@@ -163,7 +164,8 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
 
     @Override
     public boolean isHoverOnDeleteButton(float x, float y) {
-        return (x > deleteButton.getX() - deleteButton.getWidth()*2 && x < deleteButton.getX()) && y > deleteButton.getY() - deleteButton.getHeight()*2;
+//        return (x > deleteButton.getX() - deleteButton.getWidth()*2 && x < deleteButton.getX()) && y > deleteButton.getY() - deleteButton.getHeight()*2;
+        return  y > deleteButton.getY() - deleteButton.getHeight()*2;
     }
 
     @Override
