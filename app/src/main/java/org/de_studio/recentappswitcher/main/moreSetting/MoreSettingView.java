@@ -14,7 +14,6 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -261,9 +260,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                 break;
         }
 
-        String iconPackPackage = sharedPreferences.getString(Cons.ICON_PACK_PACKAGE_NAME_KEY, null);
-        if (!TextUtils.isEmpty(iconPackPackage)) {
-            Log.e(TAG, "updateViews: icon pack " + iconPackPackage);
+        String iconPackPackage = sharedPreferences.getString(Cons.ICON_PACK_PACKAGE_NAME_KEY, Cons.ICON_PACK_NONE);
+        if (!iconPackPackage.equals(Cons.ICON_PACK_NONE)) {
             iconPackDescription.setText(Utility.getLabelFromPackageName(iconPackPackage, getPackageManager()));
         } else {
             iconPackDescription.setText(getString(R.string.system));

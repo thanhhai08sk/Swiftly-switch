@@ -96,7 +96,7 @@ public class IconPackListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (getItemId(position) == 0) {
-                    sharedPreferences.edit().putString(Cons.ICON_PACK_PACKAGE_NAME_KEY, null).commit();
+                    sharedPreferences.edit().putString(Cons.ICON_PACK_PACKAGE_NAME_KEY, Cons.ICON_PACK_NONE).commit();
                     IconPackListAdapter.this.notifyDataSetChanged();
                 } else {
                     sharedPreferences.edit().putString(Cons.ICON_PACK_PACKAGE_NAME_KEY, packageName[position - 1]).commit();
