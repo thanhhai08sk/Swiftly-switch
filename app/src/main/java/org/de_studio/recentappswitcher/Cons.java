@@ -67,7 +67,7 @@ public class Cons {
     public static final int RINGER_MODE_SILENT = 2;
 
     public static final int QUICK_ACTION_GAP_DP = 35;
-    public static final int DEFAULT_ICON_WIDTH = 48;
+    public static final int ICON_SIZE_DEFAULT = 48;
     public static final int DEFAULT_ICON_GAP_IN_GRID = 10;
     public static final int DEFAULT_FAVORITE_GRID_PADDING_HORIZONTAL = 40; //no use
     public static final int DEFAULT_FAVORITE_GRID_PADDING_VERTICAL = 40;  //no use

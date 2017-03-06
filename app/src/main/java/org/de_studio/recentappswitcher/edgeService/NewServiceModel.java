@@ -44,7 +44,7 @@ public class NewServiceModel extends BaseModel {
     }
 
     void setup() {
-        iconWidth = Cons.DEFAULT_ICON_WIDTH * mScale * iconScale;
+        iconWidth = Cons.ICON_SIZE_DEFAULT * mScale * iconScale;
         haftIconWidth = iconWidth / 2;
     }
 

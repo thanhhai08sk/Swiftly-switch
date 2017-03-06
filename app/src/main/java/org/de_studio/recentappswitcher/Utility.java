@@ -1725,31 +1725,57 @@ public  class Utility {
         }
     }
 
-    public static void setFolderPosition(float triggerX, float triggerY, RecyclerView folderView, RecyclerView gridView, int edgePosition, float mScale) {
-        int folderWide = folderView.getWidth();
-        int folderTall = folderView.getHeight();
+    public static void setFolderPosition(float triggerX, float triggerY, RecyclerView folderView, int edgePosition, float mScale, float iconScale, int size, int iconSpace,
+                                         int screenWidth, int screenHeight) {
+        int columnCount = size <= 4 ? size : 4;
+        int rowCount = size % 4 > 0 ? size / 4 + 1 : size / 4;
+        int folderWide = calculateGridWide(columnCount, iconSpace, mScale, iconScale);
+        int folderTall = calculateGridHeight(rowCount, iconSpace, mScale, iconScale);
         float x;
         float y;
         Log.e(TAG, "setFolderPosition: folderWide = " + folderWide + "\nfolderTall = " + folderTall + "\ntriggerX = " + triggerX + "\ntriggerY = " + triggerY);
 
-        if (Utility.rightLeftOrBottom(edgePosition) == Cons.POSITION_RIGHT) {
-            if (triggerX + folderWide / 2 < gridView.getX() + gridView.getWidth()) {
-                x = triggerX - folderWide / 2;
-            } else {
-                x = gridView.getX() + gridView.getWidth() - folderWide;
-            }
+        if (triggerX + folderWide / 2 < screenWidth) {
+            x = triggerX - folderWide / 2;
         } else {
-            if (triggerX - folderWide / 2 > gridView.getX()) {
-                x = triggerX - folderWide / 2;
-            } else {
-                x = gridView.getX();
-            }
+            x = screenWidth - folderWide;
         }
-        y = triggerY - folderTall / 2;
-        Log.e(TAG, "setFolderPosition: x = " + x + "\ny = " + y + "\nposition = "+ rightLeftOrBottom(edgePosition));
+
+        if (triggerY + folderTall / 2 < screenHeight) {
+            y = triggerY - folderTall / 2;
+        } else {
+            y = screenHeight - folderTall;
+        }
+
+//        if (Utility.rightLeftOrBottom(edgePosition) == Cons.POSITION_RIGHT) {
+//            if (triggerX + folderWide / 2 < gridView.getX() + gridView.getWidth()) {
+//                x = triggerX - folderWide / 2;
+//            } else {
+//                x = gridView.getX() + gridView.getWidth() - folderWide;
+//            }
+//        } else {
+//            if (triggerX - folderWide / 2 > gridView.getX()) {
+//                x = triggerX - folderWide / 2;
+//            } else {
+//                x = gridView.getX();
+//            }
+//        }
+//        y = triggerY - folderTall / 2;
+        Log.e(TAG, "setFolderPosition: x = " + x + "\ny = " + y + "\nposition = " + rightLeftOrBottom(edgePosition));
         folderView.setX(x);
         folderView.setY(y);
     }
+
+    public static int calculateGridWide(int columnCount, int iconsSpace, float mScale, float iconScale) {
+        int for1Icon = (int) (iconsSpace * mScale + Cons.ICON_SIZE_DEFAULT * mScale * iconScale);
+        return for1Icon * columnCount + (int) (iconsSpace * mScale);
+    }
+    public static int calculateGridHeight(int rowCount, int iconsSpace, float mScale, float iconScale) {
+        int for1Icon = (int) (iconsSpace * mScale + Cons.ICON_SIZE_DEFAULT * mScale * iconScale);
+        return for1Icon * rowCount + (int) (iconsSpace * mScale);
+    }
+
+
 
     public static int getPositionOfIntArray(int[] array, int item) {
         for (int i = 0; i < array.length; i++) {

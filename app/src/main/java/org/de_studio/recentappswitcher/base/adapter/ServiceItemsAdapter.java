@@ -30,7 +30,7 @@ public class ServiceItemsAdapter extends ItemsAdapter {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ImageView imageView = new ImageView(context);
-        imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale), (int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale)));
+        imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Cons.ICON_SIZE_DEFAULT * mScale * iconScale), (int) (Cons.ICON_SIZE_DEFAULT * mScale * iconScale)));
         imageView.setId(R.id.item_icon);
 
         FrameLayout frameLayout = new FrameLayout(context);

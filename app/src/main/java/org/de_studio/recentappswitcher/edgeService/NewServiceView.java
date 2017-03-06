@@ -491,7 +491,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     public ImageView getIconImageView() {
         ImageView imageView = new ImageView(this);
-        imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale), (int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale)));
+        imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Cons.ICON_SIZE_DEFAULT * mScale * iconScale), (int) (Cons.ICON_SIZE_DEFAULT * mScale * iconScale)));
         imageView.setId(R.id.item_icon);
         return imageView;
     }
@@ -662,6 +662,41 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
 
     public void showFolder(int triggerPosition, Slot folder, final String gridId, int space, final int edgePosition, final NewServicePresenter.Showing currentShowing) {
+        createFolderViewIfNeeded(folder, space);
+
+        final RecyclerView folderView = (RecyclerView) collectionViewsMap.get(folder.slotId);
+        final RecyclerView triggerGridView = (RecyclerView) collectionViewsMap.get(gridId);
+
+        boolean needDelay = addFolderToBackgroundIfNeeded(folder, folderView);
+
+        displayFolderAndSetPosition(triggerPosition, space, edgePosition, currentShowing, folderView, triggerGridView, needDelay,folder.items.size());
+    }
+
+    private void displayFolderAndSetPosition(int triggerPosition, final int space, final int edgePosition, final NewServicePresenter.Showing currentShowing, final RecyclerView folderView, final RecyclerView triggerGridView, boolean needDelay, final int size) {
+        final float triggerX = triggerGridView.getChildAt(triggerPosition).getX() + triggerGridView.getX() + (iconScale * Cons.ICON_SIZE_DEFAULT + space)/2 * mScale;
+        final float triggerY = triggerGridView.getChildAt(triggerPosition).getY() + triggerGridView.getY() + (iconScale * Cons.ICON_SIZE_DEFAULT + space) / 2 * mScale;
+        setFolderPosition(triggerX, triggerY, folderView, edgePosition, currentShowing, size, space);
+        triggerGridView.setVisibility(View.GONE);
+    }
+
+    private void setFolderPosition(float triggerX, float triggerY, RecyclerView folderView, int edgePosition, NewServicePresenter.Showing currentShowing, int size, int iconSpace) {
+        Utility.setFolderPosition(triggerX, triggerY, folderView, edgePosition, mScale, iconScale, size, iconSpace,
+                getResources().getDisplayMetrics().widthPixels,
+                getResources().getDisplayMetrics().heightPixels
+                );
+        folderView.setVisibility(View.VISIBLE);
+        currentShowing.gridXY.x = (int) folderView.getX();
+        currentShowing.gridXY.y = (int) folderView.getY();
+    }
+
+    private boolean addFolderToBackgroundIfNeeded(Slot folder, RecyclerView folderView) {
+        if (backgroundView.findViewById(getFolderResId(folder)) == null) {
+            backgroundView.addView(folderView);
+            return true;
+        } else return false;
+    }
+
+    private void createFolderViewIfNeeded(Slot folder, int space) {
         if (collectionViewsMap.get(folder.slotId) == null) {
             RecyclerView folderView = new RecyclerView(this);
             folderView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -679,36 +714,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             folderView.setBackgroundResource(R.color.background_lightish);
             collectionViewsMap.put(folder.slotId, folderView);
         }
-        final RecyclerView folderView = (RecyclerView) collectionViewsMap.get(folder.slotId);
-        final RecyclerView triggerGridView = (RecyclerView) collectionViewsMap.get(gridId);
-        final float triggerX = triggerGridView.getChildAt(triggerPosition).getX() + triggerGridView.getX() + (iconScale * Cons.DEFAULT_ICON_WIDTH + space)/2 * mScale;
-        final float triggerY = triggerGridView.getChildAt(triggerPosition).getY() + triggerGridView.getY() + (iconScale * Cons.DEFAULT_ICON_WIDTH + space) / 2 * mScale;
-        boolean needDelay = false;
-        if (backgroundView.findViewById(getFolderResId(folder)) == null) {
-            backgroundView.addView(folderView);
-            needDelay = true;
-        }
-
-        if (needDelay) {
-            folderView.setVisibility(View.VISIBLE);
-            folderView.setAlpha(0f);
-            Handler handlerClose = new Handler();
-            handlerClose.postDelayed(new Runnable() {
-                public void run() {
-                    Utility.setFolderPosition(triggerX, triggerY, folderView, triggerGridView,edgePosition, mScale);
-                    folderView.setVisibility(View.VISIBLE);
-                    currentShowing.gridXY.x = (int) folderView.getX();
-                    currentShowing.gridXY.y = (int) folderView.getY();
-                    folderView.setAlpha(1f);
-                }
-            }, 20);
-        } else {
-            Utility.setFolderPosition(triggerX, triggerY, folderView, triggerGridView, edgePosition, mScale);
-            folderView.setVisibility(View.VISIBLE);
-            currentShowing.gridXY.x = (int) folderView.getX();
-            currentShowing.gridXY.y = (int) folderView.getY();
-        }
-        triggerGridView.setVisibility(View.GONE);
     }
 
     @Override
@@ -786,7 +791,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         circleView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         for (int i = 0; i < slots.size(); i++) {
             ImageView imageView = new ImageView(this);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale), (int) (Cons.DEFAULT_ICON_WIDTH * mScale * iconScale)));
+            imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Cons.ICON_SIZE_DEFAULT * mScale * iconScale), (int) (Cons.ICON_SIZE_DEFAULT * mScale * iconScale)));
             circleView.addView(imageView);
         }
     }
