@@ -1735,16 +1735,20 @@ public  class Utility {
         float y;
         Log.e(TAG, "setFolderPosition: folderWide = " + folderWide + "\nfolderTall = " + folderTall + "\ntriggerX = " + triggerX + "\ntriggerY = " + triggerY);
 
-        if (triggerX + folderWide / 2 < screenWidth) {
+        if (triggerX + folderWide / 2 < screenWidth && triggerX - folderWide / 2 > 0) {
             x = triggerX - folderWide / 2;
-        } else {
+        } else if (triggerX + folderWide / 2 >= screenWidth){
             x = screenWidth - folderWide;
+        } else {
+            x = 0;
         }
 
-        if (triggerY + folderTall / 2 < screenHeight) {
+        if (triggerY + folderTall / 2 < screenHeight && triggerY - folderTall/2 >0) {
             y = triggerY - folderTall / 2;
-        } else {
+        } else if (triggerY + folderTall / 2 >= screenHeight) {
             y = screenHeight - folderTall;
+        } else {
+            y = 0;
         }
         Log.e(TAG, "setFolderPosition: x = " + x + "\ny = " + y + "\nposition = " + rightLeftOrBottom(edgePosition));
         folderView.setX(x);
