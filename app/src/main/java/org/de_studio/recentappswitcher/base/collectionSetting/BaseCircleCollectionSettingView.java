@@ -41,7 +41,9 @@ public abstract class BaseCircleCollectionSettingView<T, P extends BaseCircleCol
 
     @Override
     public boolean isHoverOnDeleteButton(float x, float y) {
-        return  y > deleteButton.getY() - deleteButton.getHeight()*2;
+        int[] deleteCoord = new int[2];
+        deleteButton.getLocationOnScreen(deleteCoord);
+        return  y > deleteCoord[1] - deleteButton.getHeight()*2;
     }
     @Override
     protected int getLayoutId() {
