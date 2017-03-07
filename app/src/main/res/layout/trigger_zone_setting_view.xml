@@ -181,6 +181,7 @@
         android:layout_gravity="end|bottom"
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
+        android:paddingBottom="8dp"
         >
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/default_button"
@@ -192,9 +193,11 @@
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/ok_button"
-            android:layout_width="wrap_content"
+            android:layout_width="76dp"
             android:layout_height="wrap_content"
             android:text="@string/edge_dialog_ok_button"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
             />
 
