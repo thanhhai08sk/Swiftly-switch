@@ -65,7 +65,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
                     public void call(DragAndDropCallback.Coord coord) {
                         onDragDrop = true;
                         view.setDeleteButtonVisibility(true);
-                        if (view.isHoverOnDeleteButton(coord.x, coord.y)) {
+                        if (view.isHoverOnDeleteButton(coord.xy[0], coord.xy[1])) {
                             view.setDeleteButtonColor(true);
                         } else {
                             view.setDeleteButtonColor(false);

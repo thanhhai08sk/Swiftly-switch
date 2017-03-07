@@ -74,7 +74,9 @@ public class DragAndDropCallback extends ItemTouchHelper.Callback {
 
         }
         if (isCurrentlyActive) {
-            currentlyDragSubject.onNext(new Coord(viewHolder.itemView.getX(), viewHolder.itemView.getY()));
+            Coord coord = new Coord();
+            viewHolder.itemView.getLocationOnScreen(coord.xy);
+            currentlyDragSubject.onNext(coord);
             viewHolder.itemView.setScaleX(1.3f);
             viewHolder.itemView.setScaleY(1.3f);
         } else {
@@ -126,12 +128,9 @@ public class DragAndDropCallback extends ItemTouchHelper.Callback {
     }
 
     public class Coord{
-        public float x;
-        public float y;
+        public int[] xy = new int[2];
 
-        public Coord(float x, float y) {
-            this.x = x;
-            this.y = y;
+        public Coord() {
         }
     }
 

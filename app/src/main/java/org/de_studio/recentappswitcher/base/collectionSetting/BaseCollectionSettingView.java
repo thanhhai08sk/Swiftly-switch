@@ -164,8 +164,9 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
 
     @Override
     public boolean isHoverOnDeleteButton(float x, float y) {
-//        return (x > deleteButton.getX() - deleteButton.getWidth()*2 && x < deleteButton.getX()) && y > deleteButton.getY() - deleteButton.getHeight()*2;
-        return  y > deleteButton.getY() - deleteButton.getHeight()*2;
+        int[] deleteCoord = new int[2];
+        deleteButton.getLocationOnScreen(deleteCoord);
+        return (x > deleteCoord[0] - Cons.ICON_SIZE_DEFAULT * getResources().getDisplayMetrics().density && x < deleteCoord[0] +Cons.ICON_SIZE_DEFAULT * getResources().getDisplayMetrics().density  )  &&  y > deleteCoord[1] - deleteButton.getHeight()*1.5;
     }
 
     @Override

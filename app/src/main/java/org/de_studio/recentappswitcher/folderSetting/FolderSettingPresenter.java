@@ -105,7 +105,7 @@ public class FolderSettingPresenter extends BasePresenter<FolderSettingPresenter
                     @Override
                     public void call(DragAndDropCallback.Coord coord) {
                         view.setDeleteButtonVisibility(true);
-                        if (coord.y > view.getDeleteButtonY()) {
+                        if (coord.xy[1] > view.getDeleteButtonY()) {
                             view.setDeleteButtonColor(true);
                         } else {
                             view.setDeleteButtonColor(false);
