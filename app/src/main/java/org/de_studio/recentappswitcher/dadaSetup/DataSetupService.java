@@ -802,8 +802,6 @@ public class DataSetupService extends IntentService {
                     Log.e(TAG, "generateInitSetForGrid: item null, cannot add");
                 }
             }
-
-
         }
         DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
         dataInfo.initGridItemOk = true;
@@ -811,6 +809,4 @@ public class DataSetupService extends IntentService {
         realm.commitTransaction();
 
     }
-
-
 }

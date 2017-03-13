@@ -17,9 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import org.de_studio.recentappswitcher.MainActivity;
+import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
-import org.de_studio.recentappswitcher.dadaSetup.EdgeSetting;
 
 public class ChooseActionDialogActivity extends AppCompatActivity {
 
@@ -100,8 +99,8 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (checkBox.isChecked()) {
-                        SharedPreferences sharedPreferences = ChooseActionDialogActivity.this.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
-                        sharedPreferences.edit().putInt(EdgeSetting.CONTACT_ACTION, EdgeSetting.ACTION_CALL).apply();
+                        SharedPreferences sharedPreferences = ChooseActionDialogActivity.this.getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
+                        sharedPreferences.edit().putInt(Cons.CONTACT_ACTION_KEY, Cons.ACTION_CALL).apply();
                     }
                     if (ContextCompat.checkSelfPermission(ChooseActionDialogActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
 
@@ -116,8 +115,8 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (checkBox.isChecked()) {
-                        SharedPreferences sharedPreferences = ChooseActionDialogActivity.this.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
-                        sharedPreferences.edit().putInt(EdgeSetting.CONTACT_ACTION, EdgeSetting.ACTION_SMS).apply();
+                        SharedPreferences sharedPreferences = ChooseActionDialogActivity.this.getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
+                        sharedPreferences.edit().putInt(Cons.CONTACT_ACTION_KEY, Cons.ACTION_SMS).apply();
                     }
                         try {
                             startActivity(smsIntent);
