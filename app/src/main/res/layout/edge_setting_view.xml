@@ -401,7 +401,7 @@
                 <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/edge_dialog_show_guide_text"
+                android:text="@string/trigger_zone_visible"
 
                     style="@style/GeneralTextPrimary"
                 />
@@ -449,7 +449,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/main_set_guide_color"
+                android:text="@string/trigger_zone_color"
                 style="@style/GeneralTextPrimary"
                 android:layout_gravity="center_vertical"
                 />

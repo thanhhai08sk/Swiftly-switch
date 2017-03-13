@@ -195,7 +195,7 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
     public void chooseGuideColor(int currentColor, final PublishSubject<Integer> setGuideColorSj) {
         ColorPickerDialogBuilder
                 .with(getActivity())
-                .setTitle(getString(R.string.main_set_guide_color))
+                .setTitle(getString(R.string.trigger_zone_color))
                 .initialColor(currentColor)
                 .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                 .density(12)
