@@ -65,6 +65,10 @@ public class ContactLoader implements android.support.v4.app.LoaderManager.Loade
                         newItem.contactId = contactId;
                         newItem.iconUri = iconUri;
                         realm.copyToRealm(newItem);
+                    } else if (iconUri != null &&
+                            (item.iconUri == null || !item.iconUri.equals(iconUri))) {
+                        Log.e(TAG, "execute: update contact icon " + defaultName);
+                        item.iconUri = iconUri;
                     }
                 }
             }
