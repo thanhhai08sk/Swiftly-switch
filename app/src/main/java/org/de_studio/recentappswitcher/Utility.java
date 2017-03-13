@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -1060,10 +1061,15 @@ public  class Utility {
                 }
                 break;
             case Item.TYPE_CONTACT:
-                String thumbnaiUri = item.iconUri;
-                if (thumbnaiUri != null) {
+                Uri person = ContentUris.withAppendedId(
+                        ContactsContract.Contacts.CONTENT_URI, item.contactId);
+                Uri photo = Uri.withAppendedPath(person,
+                        ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+
+//                String thumbnaiUri = item.iconUri;
+                if (photo != null) {
                     try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(thumbnaiUri));
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photo);
                         RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
                         drawable.setCircular(true);
                         icon.setImageDrawable(drawable);
