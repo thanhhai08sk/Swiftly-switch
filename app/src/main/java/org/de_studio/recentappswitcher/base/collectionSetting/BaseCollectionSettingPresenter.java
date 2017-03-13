@@ -14,6 +14,7 @@ import java.util.List;
 
 import io.realm.OrderedRealmCollection;
 import rx.functions.Action1;
+import rx.functions.Func2;
 import rx.subjects.PublishSubject;
 
 /**
@@ -50,11 +51,29 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
                 })
         );
 
+//        addSubscription(
+//                view.onDropItem().subscribe(new Action1<DragAndDropCallback.DropData>() {
+//                    @Override
+//                    public void call(DragAndDropCallback.DropData dropData) {
+//                        onDropItem(dropData);
+//                    }
+//                })
+//        );
+//
         addSubscription(
-                view.onDropItem().subscribe(new Action1<DragAndDropCallback.DropData>() {
+                view.onDropItem().withLatestFrom(view.onDragItem(), new Func2<DragAndDropCallback.DropData, DragAndDropCallback.Coord, DragAndDropCallback.DropData>() {
+                    @Override
+                    public DragAndDropCallback.DropData call(DragAndDropCallback.DropData dropData, DragAndDropCallback.Coord coord) {
+                        dropData.dropX = coord.xy[0];
+                        dropData.dropY = coord.xy[1];
+                        return dropData;
+                    }
+                }).subscribe(new Action1<DragAndDropCallback.DropData>() {
                     @Override
                     public void call(DragAndDropCallback.DropData dropData) {
-                        onDropItem(dropData);
+                        if (dropData != null) {
+                            onDropItem(dropData);
+                        }
                     }
                 })
         );
