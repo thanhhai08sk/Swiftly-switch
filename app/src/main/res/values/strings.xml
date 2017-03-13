@@ -306,7 +306,7 @@
 
 
 
-    <string name="faq_problem_on_one_plus_device">Problem on Oppo devices</string>
+    <string name="faq_problem_on_one_plus_device">Problem on OnePlus devices</string>
     <string name="faq_problem_on_one_plus_device_answer">Please turn off the Deep Clear option in Setting. This will stop all the background process once you exit the app</string>
 
     <string name="faq_closed_app_in_recent_list">Why closed app still on recent list?</string>
@@ -321,6 +321,13 @@
 
     //What new
 
+    <string name="what_new_3.0.6" translatable="false">VERSION 3.0.6:\n
+        - Fix can not delete Grid item -_-\n
+    </string>
+    <string name="what_new_3.0.5" translatable="false">VERSION 3.0.5:\n
+        - Fix positioning of Folder\n
+        - Fix can not delete Grid item\n
+    </string>
     <string name="what_new_3.0.4" translatable="false">VERSION 3.0.4:\n
         - Set Shortcuts Set label \n
         - Option to remove folder opening delay (More settings) \n

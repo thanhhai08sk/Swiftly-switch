@@ -69,7 +69,9 @@ public class DragAndDropCallback extends ItemTouchHelper.Callback {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         if (isLastCallActive && !isCurrentlyActive ) {
             Log.e(TAG, "onChildDraw: drop item " + viewHolder.getAdapterPosition());
-            dropItemSubject.onNext(new DropData(viewHolder.getAdapterPosition(),viewHolder .itemView.getX(), viewHolder.itemView.getY()));
+            Coord coord = new Coord();
+            viewHolder.itemView.getLocationOnScreen(coord.xy);
+            dropItemSubject.onNext(new DropData(viewHolder.getAdapterPosition(),coord.xy[0], coord.xy[1]));
 //            clearView(recyclerView,viewHolder);
 
         }
