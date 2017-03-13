@@ -23,8 +23,6 @@
             android:orientation="vertical"
             >
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="@string/general"
                 style="@style/Text_Header"
                 />
@@ -155,8 +153,6 @@
             android:orientation="vertical"
             >
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="@string/look"
                 style="@style/Text_Header"
                 />
@@ -282,8 +278,6 @@
             android:orientation="vertical"
             >
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="@string/feel"
                 style="@style/Text_Header"
                 />
@@ -350,8 +344,6 @@
             android:orientation="vertical"
             >
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="@string/backup_and_restore"
                 style="@style/Text_Header"
                 />

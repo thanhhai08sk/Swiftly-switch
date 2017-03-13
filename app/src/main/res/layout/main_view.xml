@@ -44,7 +44,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     style="@style/Drawer_Item_text"
                     android:text="@string/main_more_setting_title"
                     />
@@ -66,7 +65,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     style="@style/Drawer_Item_text"
                     android:text="@string/faqs"
                     />
@@ -89,7 +87,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     style="@style/Drawer_Item_text"
                     android:text="@string/what_new"
                     />
@@ -112,7 +109,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     style="@style/Drawer_Item_text"
                     android:text="@string/review_on_play_store"
                     />
@@ -134,7 +130,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     style="@style/Drawer_Item_text"
                     android:text="@string/email_us"
                     />
@@ -155,7 +150,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     style="@style/Drawer_Item_text"
                     android:text="@string/about_pro_version"
                     />
@@ -178,7 +172,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     style="@style/Drawer_Item_text"
                     android:text="@string/about"
                     />
