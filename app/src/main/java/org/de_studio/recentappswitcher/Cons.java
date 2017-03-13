@@ -93,7 +93,7 @@ public class Cons {
     public static final int LONG_PRESS_DELAY_DEFAULT = 800;
     public static final int DEFAULT_VIBRATE_DURATION = 15;
     public static final int ANIMATION_TIME_DEFAULT = 250;
-    public static final int ANIMATION_TIME_MIN = 50;
+    public static final int ANIMATION_TIME_MIN = 0;
     public static final int ANIMATION_TIME_MAX = 1500;
     public static final long TIME_INTERVAL_SHORT = 1000000;
     public static final long TIME_INTERVAL_LONG = 604800000;

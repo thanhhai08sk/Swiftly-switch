@@ -491,15 +491,17 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             backgroundView.setVisibility(View.VISIBLE);
         }
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            backgroundView.setBackgroundColor(backgroundColor);
-            ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(backgroundView, "alpha", 0f, 1f);
-            objectAnimator.setDuration(animationTime).start();
+        if (animationTime >= 50) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                backgroundView.setBackgroundColor(backgroundColor);
+                ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(backgroundView, "alpha", 0f, 1f);
+                objectAnimator.setDuration(animationTime).start();
 
-        } else {
-            ObjectAnimator objectAnimator = ObjectAnimator.ofArgb(backgroundView, "backgroundColor", Color.argb(0, 0, 0, 0), backgroundColor);
-            objectAnimator.setDuration(animationTime);
-            objectAnimator.start();
+            } else {
+                ObjectAnimator objectAnimator = ObjectAnimator.ofArgb(backgroundView, "backgroundColor", Color.argb(0, 0, 0, 0), backgroundColor);
+                objectAnimator.setDuration(animationTime);
+                objectAnimator.start();
+            }
         }
     }
 
