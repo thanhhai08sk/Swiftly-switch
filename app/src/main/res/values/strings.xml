@@ -167,8 +167,6 @@
     <string name="show_this_after_an_update">Show this after an update</string>
     <string name="send_feedback">Send feedback</string>
     <string name="email_prompt">Please fill out appropriate information!\n\n
-        Device: \n\n
-    Android version:\n\n
         Bug report:\n\n
         Suggestion:\n\n
         Question:\n\n

@@ -1066,6 +1066,8 @@ public  class Utility {
                 Uri photo = Uri.withAppendedPath(person,
                         ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
 
+
+
 //                String thumbnaiUri = item.iconUri;
                 if (photo != null) {
                     try {

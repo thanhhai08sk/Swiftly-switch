@@ -281,13 +281,27 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
 
     protected void sendEmail() {
         String[] TO = {"thanhhai08sk@gmail.com"};
+        String content = new StringBuilder().append("Manufacture: ").append(Build.MANUFACTURER)
+                .append("\nDevice: ")
+                .append(Build.MODEL)
+                .append(" - ")
+                .append(Build.DEVICE)
+                .append("\nAndroid: ")
+                .append(Build.VERSION.RELEASE)
+                .append("\n\n")
+                .append(getString(R.string.email_prompt))
+                .toString();
+
+
+
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
         emailIntent.setData(Uri.parse("mailto:"));
         emailIntent.setType("text/plain");
         emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-        emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.email_prompt));
+        emailIntent.putExtra(Intent.EXTRA_TEXT, content);
+
 
         try {
             startActivity(Intent.createChooser(emailIntent, "Send mail..."));
