@@ -94,7 +94,7 @@ public class DataSetupService extends IntentService {
         generateItems(realm);
         generateCollections(realm,dataInfo);
         generateEdges(realm);
-        restoreFromOldRealmOrGenerateInitData(realm);
+        restoreFromOldRealmOrGenerateInitData(realm, dataInfo);
         realm.close();
         sendBroadcast(new Intent(BROADCAST_GENERATE_DATA_OK));
     }
@@ -104,7 +104,7 @@ public class DataSetupService extends IntentService {
         Log.e(TAG, "handleSetupGrid: ");
         Realm realm = Realm.getDefaultInstance();
         DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
-        if (dataInfo.everyThingsOk()) {
+        if (dataInfo.everyThingsOk() && !dataInfo.initGridItemOk) {
             generateInitSetForGrid(realm);
         }
         realm.close();
@@ -436,7 +436,7 @@ public class DataSetupService extends IntentService {
         }
     }
 
-    private void restoreFromOldRealmOrGenerateInitData(Realm newRealm) {
+    private void restoreFromOldRealmOrGenerateInitData(Realm newRealm, DataInfo dataInfo) {
         Realm gridRealm = Realm.getInstance(new RealmConfiguration.Builder()
                 .name("default.realm")
                 .schemaVersion(Cons.OLD_REALM_SCHEMA_VERSION)
@@ -468,7 +468,9 @@ public class DataSetupService extends IntentService {
             convertSettings(newRealm, oldDefaultShared, oldEdge1Shared, oldEdge2Shared, newShared);
         } else {
             Log.e(TAG, "restoreFromOldRealmOrGenerateInitData: generate init data");
-            generateInitSetForGrid(newRealm);
+            if (!dataInfo.initGridItemOk) {
+                generateInitSetForGrid(newRealm);
+            }
         }
 
 
@@ -732,7 +734,7 @@ public class DataSetupService extends IntentService {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             return;
         }
-        Collection grid = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_GRID_FAVORITE).findFirst();
+        Collection grid = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_GRID_FAVORITE, 1)).findFirst();
         if (grid == null) {
             return;
         }
@@ -790,8 +792,12 @@ public class DataSetupService extends IntentService {
             for (int i1 = 0; i1 < items.length; i1++) {
                 if (items[i1] != null) {
                     slot = grid.slots.get(i1);
-                    slot.type = Slot.TYPE_ITEM;
-                    slot.stage1Item = items[i1];
+                    if (slot.type.equals(Slot.TYPE_EMPTY) || slot.type.equals(Slot.TYPE_NULL)) {
+                        slot.type = Slot.TYPE_ITEM;
+                        slot.stage1Item = items[i1];
+                    } else {
+                        Log.e(TAG, "generateInitSetForGrid: slot already fill");
+                    }
                 } else {
                     Log.e(TAG, "generateInitSetForGrid: item null, cannot add");
                 }
@@ -799,8 +805,11 @@ public class DataSetupService extends IntentService {
 
 
         }
+        DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+        dataInfo.initGridItemOk = true;
 
         realm.commitTransaction();
+
     }
 
 

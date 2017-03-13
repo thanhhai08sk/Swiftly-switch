@@ -223,9 +223,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             startService(intent);
         } else {
             inject();
-            setupVariables();
             presenter.onViewAttach(this);
         }
+
+        realm.close();
 
 
     }
@@ -260,6 +261,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 .appModule(new AppModule(this))
                 .newServiceModule(new NewServiceModule(this, this, realm))
                 .build().inject(this);
+        setupVariables();
+
     }
 
     @Nullable

@@ -147,6 +147,12 @@ public class MyRealmMigration implements RealmMigration {
                     .addField("instant", boolean.class);
             oldVersion++;
         }
+        if (oldVersion == 7) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
+            schema.get("DataInfo")
+                    .addField("initGridItemOk", boolean.class);
+            oldVersion++;
+        }
 
 
 

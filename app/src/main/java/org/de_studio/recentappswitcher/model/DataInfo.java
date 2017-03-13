@@ -16,6 +16,7 @@ public class DataInfo extends RealmObject {
     public boolean quickActionOk;
     public boolean edge1Ok;
     public boolean edge2Ok;
+    public boolean initGridItemOk;
     @PrimaryKey
     private String id;
 
@@ -89,5 +90,13 @@ public class DataInfo extends RealmObject {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isInitGridItemOk() {
+        return initGridItemOk;
+    }
+
+    public void setInitGridItemOk(boolean initGridItemOk) {
+        this.initGridItemOk = initGridItemOk;
     }
 }
