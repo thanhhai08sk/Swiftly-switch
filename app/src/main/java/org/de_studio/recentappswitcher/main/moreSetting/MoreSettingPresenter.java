@@ -195,6 +195,12 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
         view.resetService();
     }
 
+    public void onDisableIndicator() {
+        boolean currentSetting = sharedPreferences.getBoolean(Cons.DISABLE_INDICATOR_KEY, false);
+        sharedPreferences.edit().putBoolean(Cons.DISABLE_INDICATOR_KEY, !currentSetting).commit();
+        view.resetService();
+    }
+
     public void onAvoidKeyboard() {
         boolean currentSetting = sharedPreferences.getBoolean(Cons.AVOID_KEYBOARD_KEY, true);
         sharedPreferences.edit().putBoolean(Cons.AVOID_KEYBOARD_KEY, !currentSetting).commit();

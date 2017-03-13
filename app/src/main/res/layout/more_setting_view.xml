@@ -61,20 +61,7 @@
             <include layout="@layout/separator" />
 
 
-            <LinearLayout
-                android:id="@+id/disable_clock"
-                style="@style/MoreSetting_Item_Parent_With_Switch"
-                >
-                <TextView
-                    style="@style/MoreSetting_Item_Text_Primary"
-                    android:text="@string/main_disable_clock_text"
-                    />
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/disable_clock_switch"
-                    style="@style/MoreSetting_Item_Switch"
-                    />
-            </LinearLayout>
-            <include layout="@layout/separator" />
+
 
             <!--<LinearLayout-->
                 <!--android:id="@+id/avoid_keyboard"-->
@@ -248,6 +235,37 @@
                     tools:text="300ms"
                     />
             </LinearLayout>
+            <include layout="@layout/separator" />
+
+            <LinearLayout
+                android:id="@+id/disable_clock"
+                style="@style/MoreSetting_Item_Parent_With_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary"
+                    android:text="@string/main_disable_clock_text"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/disable_clock_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
+
+            <LinearLayout
+                android:id="@+id/disable_indicator"
+                style="@style/MoreSetting_Item_Parent_With_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary"
+                    android:text="@string/disable_top_indicator"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/disable_indicator_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+
 
 
 

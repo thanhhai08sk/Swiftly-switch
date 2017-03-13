@@ -78,6 +78,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     SwitchCompat disableInFullScreenSwitch;
     @BindView(R.id.disable_clock_switch)
     SwitchCompat disableClockSwitch;
+    @BindView(R.id.disable_indicator_switch)
+    SwitchCompat disableIndicatorSwitch;
 //    @BindView(R.id.avoid_keyboard_switch)
 //    SwitchCompat avoidKeyboardSwitch;
     @BindView(R.id.open_folder_delay_switch)
@@ -233,6 +235,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     public void updateViews() {
         disableInFullScreenSwitch.setChecked(sharedPreferences.getBoolean(Cons.DISABLE_IN_FULLSCREEN_KEY,false));
         disableClockSwitch.setChecked(sharedPreferences.getBoolean(Cons.DISABLE_CLOCK_KEY, false));
+        disableIndicatorSwitch.setChecked(sharedPreferences.getBoolean(Cons.DISABLE_INDICATOR_KEY, false));
 //        avoidKeyboardSwitch.setChecked(sharedPreferences.getBoolean(Cons.AVOID_KEYBOARD_KEY, true));
         disableInLandscapeSwitch.setChecked(sharedPreferences.getBoolean(Cons.IS_DISABLE_IN_LANDSCAPE_KEY, false));
 
@@ -481,6 +484,10 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     @OnClick(R.id.disable_clock)
     void onDisableClockClick(){
         presenter.onDisableClock();
+    }
+    @OnClick(R.id.disable_indicator)
+    void onDisableIndicatorClick(){
+        presenter.onDisableIndicator();
     }
 
 //    }

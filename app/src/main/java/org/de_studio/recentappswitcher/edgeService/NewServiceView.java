@@ -197,6 +197,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     PublishSubject<Boolean> enterOrExitFullScreenSJ = PublishSubject.create();
     boolean isFree;
     boolean isRTL;
+    boolean useIndicator;
 
     @Override
     public void onCreate() {
@@ -222,11 +223,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             startService(intent);
         } else {
             inject();
+            setupVariables();
             presenter.onViewAttach(this);
         }
 
 
     }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -240,6 +243,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             presenter.onViewDetach();
         }
         super.onDestroy();
+    }
+
+    private void setupVariables() {
+        useIndicator = !sharedPreferences.getBoolean(Cons.DISABLE_INDICATOR_KEY, false);
     }
 
     @Override
@@ -555,7 +562,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     public void hideQuickActions(NewServicePresenter.Showing currentShowing) {
-        Log.e(TAG, "hideQuickActions: ");
         if (collectionViewsMap.get(getQuickActionsKey(currentShowing.edgePosition, currentShowing.action)) != null) {
             collectionViewsMap.get(getQuickActionsKey(currentShowing.edgePosition, currentShowing.action)).setVisibility(View.GONE);
         }
@@ -856,6 +862,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void indicateCurrentShowing(NewServicePresenter.Showing currentShowing, int id) {
+        if (!useIndicator) {
+            return;
+        }
         if (id >= 0) {
             switch (currentShowing.showWhat) {
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_AND_ACTION:
@@ -865,14 +874,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                             hideQuickActions(currentShowing);
                         }
 
-                    } else if (id >= 10 && id -10 < currentShowing.action.slots.size()) {
+                    } else if (id >= 10 && id - 10 < currentShowing.action.slots.size()) {
                         Slot slot = currentShowing.action.slots.get(id - 10);
                         if (slot.type.equals(Slot.TYPE_NULL) || slot.type.equals(Slot.TYPE_EMPTY)) {
                             indicateSlot(null);
                         } else {
                             indicateSlot(slot);
                         }
-                        showQuickActions(currentShowing.edgePosition, id - 10, currentShowing, false, false);
                     }
                     break;
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:
@@ -883,7 +891,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 case NewServicePresenter.Showing.SHOWING_GRID:
                     Slot slot = currentShowing.grid.slots.get(id);
                     indicateSlot(slot);
-                    RecyclerView grid =(RecyclerView) collectionViewsMap.get(currentShowing.grid.collectionId);
+                    RecyclerView grid = (RecyclerView) collectionViewsMap.get(currentShowing.grid.collectionId);
                     if (slot.type.equals(Slot.TYPE_FOLDER)) {
                         if (openFolderDelay) {
                             gridAlphaAnimator = ObjectAnimator.ofFloat(grid, "alpha", 1f, 0f);
@@ -910,7 +918,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             indicateSlot(null);
             if (currentShowing.showWhat == NewServicePresenter.Showing.SHOWING_GRID) {
                 if (gridAlphaAnimator != null) {
-                    RecyclerView grid =(RecyclerView) collectionViewsMap.get(currentShowing.grid.collectionId);
+                    RecyclerView grid = (RecyclerView) collectionViewsMap.get(currentShowing.grid.collectionId);
                     gridAlphaAnimator.cancel();
                     grid.setAlpha(1f);
                     gridAlphaAnimator = null;
@@ -973,6 +981,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     if (id < 10) {
                         FrameLayout recent = (FrameLayout) collectionViewsMap.get(currentShowing.circle.collectionId);
                         highlightCircleIcon(recent.getChildAt(id), currentShowing.circleIconsXY.xs[id], currentShowing.circleIconsXY.ys[id]);
+                    } else if (id - 10 < currentShowing.action.slots.size()){
+                        showQuickActions(currentShowing.edgePosition, id - 10, currentShowing, false, false);
                     }
                     break;
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:

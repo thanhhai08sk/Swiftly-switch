@@ -268,6 +268,7 @@
     <string name="uploading">Uploading</string>
     <string name="backup_guide">The backup file will be stored in your Google Drive. Please connect to your Google account and then choose the folder to upload.</string>
     <string name="import_guide">Choose the backup file from Google Drive.</string>
+    <string name="disable_top_indicator">Disable top indicator</string>
 
 
     <string name="notification_description">Persistent notification is for keeping Swiftly Switch stay in background. Hide it in App Info window.\n\n
