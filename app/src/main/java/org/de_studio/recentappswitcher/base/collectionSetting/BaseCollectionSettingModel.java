@@ -112,6 +112,10 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
             @Override
             public void execute(Realm realm) {
                 collection.label = label;
+                Item items = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createShortcutSetItemId(collection.collectionId)).findFirst();
+                if (items != null) {
+                    items.label = label;
+                }
             }
         });
     }
