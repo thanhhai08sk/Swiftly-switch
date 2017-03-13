@@ -119,7 +119,9 @@ public  class Utility {
 
 
 
-    public static void setFavoriteGridViewPosition(View gridView,boolean isCenter ,  float gridTall, float gridWide, float xInit, float yInit, float mScale, int edgePosition, WindowManager windowManager, int distanceFromEdgeDp, int distanceVertical) {
+    public static void setFavoriteGridViewPosition(View gridView,boolean isCenter ,  float gridTall, float gridWide, float xInit, float yInit, float mScale, int edgePosition, WindowManager windowManager,
+                                                   int distanceFromEdgeDp, int distanceVertical,
+                                                   Point windowSize) {
 //        Log.e(TAG, "setFavoriteGridViewPosition: width " + gridWide + "\ntall " + gridTall + "\nxInit " + xInit + "\nyInit " + yInit +
 //                "\noffsetHorizontal " + distanceFromEdgeDp + "\noffsetVertical " + distanceVertical);
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
@@ -165,7 +167,16 @@ public  class Utility {
                     }
                     break;
                 case 31:
-                    gridView.setX(( xInit) - gridWide /(float) 2);
+                    if (xInit - gridWide / (float) 2 > distanceFromEdge &&
+                            xInit + gridWide / (float) 2 < (windowSize.x - distanceFromEdge)) {
+                        gridView.setX((xInit) - gridWide / (float) 2);
+                    } else {
+                        if (xInit - gridWide / (float) 2 < distanceFromEdge) {
+                            gridView.setX(distanceFromEdge);
+                        } else {
+                            gridView.setX(windowSize.x - distanceFromEdge - gridWide);
+                        }
+                    }
                     gridView.setY(( yInit) - distanceVerticalFromEdge - gridTall);
                     break;
             }

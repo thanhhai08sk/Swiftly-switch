@@ -612,7 +612,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                             , position
                             , windowManager
                             , grid.marginHorizontal
-                            , grid.marginVertical);
+                            , grid.marginVertical
+                            , getWindowSize());
                     currentShowing.gridXY.x = (int) recyclerView.getX();
                     currentShowing.gridXY.y = (int) recyclerView.getY();
                     recyclerView.setAlpha(1f);
@@ -630,7 +631,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     , position
                     , windowManager
                     , grid.marginHorizontal
-                    , grid.marginVertical);
+                    , grid.marginVertical,
+                    getWindowSize());
             recyclerView.setVisibility(View.VISIBLE);
             ((ServiceSlotAdapter) recyclerView.getAdapter()).updateIconsState();
             View child;
