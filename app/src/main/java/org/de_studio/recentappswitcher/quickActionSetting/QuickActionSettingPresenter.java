@@ -76,6 +76,7 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
                     @Override
                     public void call(Integer integer) {
                         model.setSlotInstant(integer);
+                        view.showInstantChangedToast(model.getCurrentCollection().slots.get(integer).instant);
                     }
                 })
         );
@@ -127,6 +128,8 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
         void setDeviceShortcutToSlot(String slotId);
 
         void setShortcutsSetToSlot(String slotId);
+
+        void showInstantChangedToast(boolean enable);
     }
 
     public static class SlotInfo {

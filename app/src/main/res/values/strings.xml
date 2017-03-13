@@ -226,6 +226,9 @@
     <string name="visible_after_lifting_finger">Visible after lifting finger</string>
     <string name="trigger_one_make_all_visible">Trigger one make all visible</string>
     <string name="only_triggered_one_visible">Only triggered one visible</string>
+    <string name="instant_launch_enabled">Instant launch enabled</string>
+    <string name="instant_launch_disabled">Instant launch disabled</string>
+
 
     //Edge setting
     <string name="enable">Enable</string>

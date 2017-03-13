@@ -1,5 +1,7 @@
 package org.de_studio.recentappswitcher.quickActionSetting;
 
+import android.util.Log;
+
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.MyApplication;
 import org.de_studio.recentappswitcher.Utility;

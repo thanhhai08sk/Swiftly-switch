@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -37,7 +38,7 @@ import rx.subjects.PublishSubject;
  */
 
 public class QuickActionSettingView extends BaseCollectionSettingView<Void, QuickActionSettingPresenter> implements QuickActionSettingPresenter.View{
-
+    private static final String TAG = QuickActionSettingView.class.getSimpleName();
 
     @BindView(R.id.size_text)
     TextView sizeText;
@@ -106,6 +107,11 @@ public class QuickActionSettingView extends BaseCollectionSettingView<Void, Quic
         int[] deleteCoord = new int[2];
         deleteButton.getLocationOnScreen(deleteCoord);
         return  y > deleteCoord[1] - deleteButton.getHeight()*2;
+    }
+
+    @Override
+    public void showInstantChangedToast(boolean enable) {
+        Toast.makeText(getApplicationContext(), enable ? R.string.instant_launch_enabled : R.string.instant_launch_disabled, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -280,6 +280,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
         void notifyCannotDelete(int reason,String id);
 
+
     }
 
 
