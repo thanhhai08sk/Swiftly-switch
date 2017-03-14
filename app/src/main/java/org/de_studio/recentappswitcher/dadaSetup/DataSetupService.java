@@ -143,7 +143,7 @@ public class DataSetupService extends IntentService {
         generateContactItems(realm);
     }
 
-    private void generateEdges(Realm realm) {
+    public static void generateEdges(Realm realm) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

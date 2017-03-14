@@ -4,8 +4,8 @@ import android.content.SharedPreferences;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.BaseModel;
+import org.de_studio.recentappswitcher.dadaSetup.DataSetupService;
 import org.de_studio.recentappswitcher.model.Collection;
-import org.de_studio.recentappswitcher.model.DataInfo;
 import org.de_studio.recentappswitcher.model.Edge;
 
 import io.realm.Realm;
@@ -57,20 +57,11 @@ public class EdgeSettingModel extends BaseModel {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        DataInfo info = realm.where(DataInfo.class).findFirst();
-                        if (info != null) {
-                            switch (edgeId) {
-                                case Edge.EDGE_1_ID:
-                                    info.edge1Ok = false;
-                                    break;
-                                case Edge.EDGE_2_ID:
-                                    info.edge2Ok = false;
-                                    break;
-                            }
-                        }
+                        DataSetupService.generateEdges(realm);
                     }
                 });
             }
+            edge = realm.where(Edge.class).equalTo(Cons.EDGE_ID, edgeId).findFirst();
         }
         return edge;
     }
