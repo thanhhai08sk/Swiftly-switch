@@ -2,8 +2,10 @@ package org.de_studio.recentappswitcher.main;
 
 import android.app.AppOpsManager;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
@@ -15,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
@@ -27,6 +30,7 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseActivity;
+import org.de_studio.recentappswitcher.dadaSetup.DataSetupService;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerMainComponent;
 import org.de_studio.recentappswitcher.dagger.MainModule;
@@ -40,8 +44,10 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.subjects.PublishSubject;
 
 public class MainView extends BaseActivity<Void,MainPresenter> implements MainPresenter.View{
+    private static final String TAG = MainView.class.getSimpleName();
     @BindView(R.id.tabs)
     TabLayout tabLayout;
     @BindView(R.id.container)
@@ -61,6 +67,11 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     @Inject
     @Named(Cons.SHARED_PREFERENCE_NAME)
     SharedPreferences shared;
+
+
+    MaterialDialog initDataDialog;
+    PublishSubject<Void> dataSetupOk = PublishSubject.create();
+    GenerateDataOkReceiver generateDataOkReceiver;
 
 
 
@@ -102,6 +113,21 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     protected void onResume() {
         super.onResume();
         presenter.resume();
+    }
+
+    @Override
+    public PublishSubject<Void> onDataSetupOk() {
+        return dataSetupOk;
+    }
+
+
+    @Override
+    public void registerForDataSetupOk() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(DataSetupService.BROADCAST_GENERATE_DATA_OK);
+        generateDataOkReceiver = new GenerateDataOkReceiver();
+//            this.registerReceiver(receiver, filter);
+        this.registerReceiver(generateDataOkReceiver, filter);
     }
 
     @Override
@@ -160,6 +186,20 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
                 .mainModule(new MainModule(this))
                 .build().inject(this);
 
+    }
+
+    public void showInitializingDialog(boolean visible) {
+        if (visible) {
+            initDataDialog = new MaterialDialog.Builder(this)
+                    .title(R.string.initializing_data)
+                    .content(R.string.please_wait)
+                    .progress(true, 0)
+                    .show();
+        } else {
+            if (initDataDialog != null) {
+                initDataDialog.dismiss();
+            }
+        }
     }
 
     @Override
@@ -309,6 +349,19 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
         }
         catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(MainView.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public class GenerateDataOkReceiver extends BroadcastReceiver {
+        public GenerateDataOkReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(DataSetupService.BROADCAST_GENERATE_DATA_OK)) {
+                Log.e(TAG, "onReceive: generate data ok");
+                dataSetupOk.onNext(null);
+            }
         }
     }
 

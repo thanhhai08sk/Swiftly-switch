@@ -181,6 +181,7 @@
      - Auto disable Swiftly Switch in full-screen apps</string>
     <string name="about">About</string>
     <string name="privacy_policy">Privacy policy</string>
+    <string name="initializing_data">Initializing data</string>
 
 
 

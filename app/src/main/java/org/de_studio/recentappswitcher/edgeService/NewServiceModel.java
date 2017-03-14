@@ -104,6 +104,7 @@ public class NewServiceModel extends BaseModel {
             }
         }
 
+
         savedRecentShortcut = packageNames;
         int i = 0;
 

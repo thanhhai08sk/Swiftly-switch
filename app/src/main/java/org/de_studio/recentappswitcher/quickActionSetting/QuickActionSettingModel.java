@@ -1,7 +1,5 @@
 package org.de_studio.recentappswitcher.quickActionSetting;
 
-import android.util.Log;
-
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.MyApplication;
 import org.de_studio.recentappswitcher.Utility;
@@ -57,7 +55,10 @@ public class QuickActionSettingModel extends BaseCollectionSettingModel {
                                     Item[] items = new Item[4];
                                     items[0] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_SHORTCUTS_SET + Collection.TYPE_GRID_FAVORITE + 1).findFirst();
                                     if (items[0] ==null) {
-                                        Collection firstGridFavoriteCollection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Collection.TYPE_GRID_FAVORITE + 1).findFirst();
+                                        Collection firstGridFavoriteCollection = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_GRID_FAVORITE).findFirst();
+                                        if (firstGridFavoriteCollection == null) {
+                                            return;
+                                        }
                                         Item newItem = new Item();
                                         newItem.type = Item.TYPE_SHORTCUTS_SET;
                                         newItem.itemId = Item.TYPE_SHORTCUTS_SET + firstGridFavoriteCollection.collectionId;

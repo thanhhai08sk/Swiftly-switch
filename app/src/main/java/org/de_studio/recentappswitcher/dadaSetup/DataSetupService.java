@@ -202,7 +202,7 @@ public class DataSetupService extends IntentService {
                     collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
                     collection.radius = Cons.CIRCLE_RADIUS_DEFAULT;
                     Collection realmCollection = realm.copyToRealm(collection);
-                    for (int i = 0; i < 6; i++) {
+                    for (int i = 0; i < 7; i++) {
                         Slot recentSlot = new Slot();
                         recentSlot.type = Slot.TYPE_RECENT;
                         recentSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
@@ -234,7 +234,7 @@ public class DataSetupService extends IntentService {
                     collection.radius = Cons.CIRCLE_RADIUS_DEFAULT;
                     Collection realmCollection = realm.copyToRealm(collection);
 
-                    for (int i = 0; i < 6; i++) {
+                    for (int i = 0; i < 7; i++) {
                         Slot nullSlot = new Slot();
                         nullSlot.type = Slot.TYPE_NULL;
                         nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
@@ -307,7 +307,7 @@ public class DataSetupService extends IntentService {
                     Item[] items = new Item[4];
                     items[0] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_SHORTCUTS_SET + Collection.TYPE_GRID_FAVORITE + 1).findFirst();
                     if (items[0] ==null) {
-                        Collection firstGridFavoriteCollection = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Collection.TYPE_GRID_FAVORITE + 1).findFirst();
+                        Collection firstGridFavoriteCollection = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_GRID_FAVORITE).findFirst();
                         Item newItem = new Item();
                         newItem.type = Item.TYPE_SHORTCUTS_SET;
                         newItem.itemId = Item.TYPE_SHORTCUTS_SET + firstGridFavoriteCollection.collectionId;
