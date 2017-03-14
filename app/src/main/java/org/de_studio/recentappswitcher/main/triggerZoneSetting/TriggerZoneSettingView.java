@@ -194,6 +194,7 @@ public class TriggerZoneSettingView extends BaseDialogFragment<TriggerZoneSettin
     @Override
     public void setCurrentSensitive(int sensitive, int position) {
         sensitiveValue.setText(String.valueOf(sensitive));
+        sensitiveSeekBar.setProgress(sensitive - Cons.EDGE_SENSITIVE_MIN);
         FrameLayout.LayoutParams lp2 = (FrameLayout.LayoutParams) edge.getLayoutParams();
 
         switch (Utility.rightLeftOrBottom(position)) {
@@ -209,14 +210,24 @@ public class TriggerZoneSettingView extends BaseDialogFragment<TriggerZoneSettin
 
     @Override
     public void setCurrentLength(int length, int position) {
-        lengthValue.setText(String.valueOf(length));
+        boolean fullEdge = length == Cons.EDGE_LENGTH_MAX;
+        lengthValue.setText(fullEdge? getString(R.string.full_edge) : String.valueOf(length));
+        lengthSeekBar.setProgress(length - Cons.EDGE_LENGTH_MIN);
         FrameLayout.LayoutParams lp2 = (FrameLayout.LayoutParams) edge.getLayoutParams();
         switch (Utility.rightLeftOrBottom(position)) {
             case Cons.POSITION_BOTTOM:
-                lp2.width = (int) (length * mScale);
+                if (fullEdge) {
+                    lp2.width = FrameLayout.LayoutParams.MATCH_PARENT;
+                } else {
+                    lp2.width = (int) (length * mScale);
+                }
                 break;
             default:
-                lp2.height = (int) (length * mScale);
+                if (fullEdge) {
+                    lp2.height = FrameLayout.LayoutParams.MATCH_PARENT;
+                } else {
+                    lp2.height = (int) (length * mScale);
+                }
                 break;
         }
         edge.setLayoutParams(lp2);
@@ -225,6 +236,7 @@ public class TriggerZoneSettingView extends BaseDialogFragment<TriggerZoneSettin
     @Override
     public void setCurrentOffset(int offset, int position) {
         offsetValue.setText(String.valueOf(offset));
+        offsetSeekBar.setProgress(offset - Cons.EDGE_OFFSET_MIN);
         switch (Utility.rightLeftOrBottom(position)) {
             case Cons.POSITION_BOTTOM:
                 edge.setTranslationX(-offset * mScale);

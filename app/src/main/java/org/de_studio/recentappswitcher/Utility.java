@@ -958,16 +958,14 @@ public  class Utility {
                 break;
         }
 
-        if (!fullEdge) {
-            if (edgePosition == 12 | edgePosition == 22) {
-                edgePara.y = (int) (edgeOffset * mScale);
-            } else if (edgePosition == 31) {
-                edgePara.x = -(int) (edgeOffset * mScale);
-            } else {
-                edgePara.y = -(int) (edgeOffset * mScale);
-            }
-        }
 
+        if (edgePosition == 12 | edgePosition == 22) {
+            edgePara.y = (int) (edgeOffset * mScale);
+        } else if (edgePosition == 31) {
+            edgePara.x = -(int) (edgeOffset * mScale);
+        } else {
+            edgePara.y = -(int) (edgeOffset * mScale);
+        }
 
         switch (rightLeftOrBottom(edgePosition)) {
             case Cons.POSITION_BOTTOM:

@@ -246,6 +246,7 @@
     <string name="pro_only_content">This feature is only available for Pro version</string>
     <string name="trigger_zone_visible">Trigger zone visible</string>
     <string name="trigger_zone_color">Trigger zone color</string>
+    <string name="full_edge">Full edge</string>
 
     //More setting
     <string name="disable_in_fullscreen">Disable in fullscreen apps</string>

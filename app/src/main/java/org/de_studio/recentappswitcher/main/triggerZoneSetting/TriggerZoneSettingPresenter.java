@@ -157,6 +157,7 @@ public class TriggerZoneSettingPresenter extends BasePresenter<TriggerZoneSettin
 
 
     private void updateEdge() {
+        Log.e(TAG, "updateEdge: ");
         if (view != null) {
             view.setCurrentSensitive(edge.sensitive, edge.position);
             view.setCurrentLength(edge.length, edge.position);
