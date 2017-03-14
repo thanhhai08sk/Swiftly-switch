@@ -455,7 +455,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                                         "\nfourth && = " + !tempPackageName.contains(packa));
 
                             }
-                            if (tempPackageName.size() >= 10) {
+                            if (tempPackageName.size() >= (timeInterval == Cons.TIME_INTERVAL_LONG? 15: 10) ) {
                                 Log.e(TAG, "tempackage >= " + 10);
                                 break;
                             }

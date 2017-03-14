@@ -61,6 +61,9 @@ public class NewServiceModel extends BaseModel {
 
 
     public void setSavedRecentShortcuts(ArrayList<String> recents) {
+        if (recents != null) {
+            recents.remove(launcherPackageName);
+        }
         this.savedRecentShortcut = recents;
     }
 
@@ -70,8 +73,9 @@ public class NewServiceModel extends BaseModel {
 
 
     public RealmList<Slot> getRecent(ArrayList<String> packageNames, RealmList<Slot> slots, NewServicePresenter.Showing currentShowing) {
-
+        Log.e(TAG, "getRecent: saved shortcut size = " + savedRecentShortcut.size());
         long time = System.currentTimeMillis();
+        Item item = null;
         RealmList<Slot> returnSlots = new RealmList<>();
 
         long recentSlotsCount = slots.where().equalTo(Cons.TYPE, Slot.TYPE_RECENT).count();
@@ -91,13 +95,37 @@ public class NewServiceModel extends BaseModel {
             }
         }
 
+//        for (String packageName : packageNames) {
+//            item = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(packageName)).findFirst();
+//            if (item == null) {
+//                packageNames.remove(packageName);
+//            }
+//        }
+
+        for (int i = packageNames.size() - 1; i >= 0; i--) {
+            item = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(packageNames.get(i))).findFirst();
+            if (item == null) {
+                Log.e(TAG, "getRecent: item null " + packageNames.get(i));
+                packageNames.remove(packageNames.get(i));
+            }
+        }
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int i = 0;
             if (savedRecentShortcut != null) {
+                Log.e(TAG, "getRecent: begin to add, packageNames size = " + packageNames.size() +
+                        "\nrecentSlotsCount = " + recentSlotsCount +
+                        "\nsavedShortcuts size = " + savedRecentShortcut.size());
                 while (packageNames.size() < recentSlotsCount && i < savedRecentShortcut.size()) {
                     if (!savedRecentShortcut.get(i).equals(removedPackage)
-                            && !packageNames.contains(savedRecentShortcut.get(i))) {
+                            && !packageNames.contains(savedRecentShortcut.get(i)) &&
+                            realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(savedRecentShortcut.get(i))).findFirst() != null
+                            ) {
                         packageNames.add(savedRecentShortcut.get(i));
+                        Log.e(TAG, "getRecent: add " + savedRecentShortcut.get(i));
+                    } else {
+                        Log.e(TAG, "getRecent: do not add " + savedRecentShortcut.get(i));
                     }
                     i++;
                 }
@@ -106,24 +134,25 @@ public class NewServiceModel extends BaseModel {
 
 
         savedRecentShortcut = packageNames;
+        for (String packageName : packageNames) {
+            Log.e(TAG, "getRecent: packageName = " + packageName);
+        }
         int i = 0;
-
         for (Slot slot : slots) {
             switch (slot.type) {
                 case Slot.TYPE_RECENT:
                     if (packageNames.size() > i) {
-                        Item item = null;
-                        while (item == null && i < packageNames.size()) {
-                            item = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(packageNames.get(i))).findFirst();
-                            if (item != null) {
+                        Item item1 = null;
+                        while (item1 == null && i < packageNames.size()) {
+                            item1 = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(packageNames.get(i))).findFirst();
+                            if (item1 != null) {
                                 Slot slot1 = new Slot();
                                 slot1.type = Slot.TYPE_ITEM;
-                                slot1.stage1Item = item;
+                                slot1.stage1Item = item1;
                                 returnSlots.add(slot1);
                             }
                             i++;
                         }
-
                     }
                     break;
                 default:
