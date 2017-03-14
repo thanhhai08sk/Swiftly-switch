@@ -890,6 +890,19 @@ public  class Utility {
 
     public static WindowManager.LayoutParams getEdgeLayoutPara(int avoidKeyboardOption, float mScale, int edgePosition, int edgeWidth, int edgeHeight, int edgeOffset) {
         WindowManager.LayoutParams edgePara;
+        boolean fullEdge = false;
+        switch (rightLeftOrBottom(edgePosition)) {
+            case Cons.POSITION_BOTTOM:
+                if (edgeWidth == Cons.EDGE_LENGTH_MAX) {
+                    fullEdge = true;
+                }
+                break;
+            default:
+                if (edgeHeight == Cons.EDGE_LENGTH_MAX) {
+                    fullEdge = true;
+                }
+                break;
+        }
         switch (avoidKeyboardOption) {
             case Edge.KEYBOARD_OPTION_PLACE_UNDER:
                 edgePara = new WindowManager.LayoutParams(
@@ -945,16 +958,32 @@ public  class Utility {
                 break;
         }
 
-
-        if (edgePosition == 12 | edgePosition == 22) {
-            edgePara.y = (int) (edgeOffset * mScale);
-        } else if (edgePosition == 31) {
-            edgePara.x = -(int) (edgeOffset * mScale);
-        } else {
-            edgePara.y = -(int) (edgeOffset * mScale);
+        if (!fullEdge) {
+            if (edgePosition == 12 | edgePosition == 22) {
+                edgePara.y = (int) (edgeOffset * mScale);
+            } else if (edgePosition == 31) {
+                edgePara.x = -(int) (edgeOffset * mScale);
+            } else {
+                edgePara.y = -(int) (edgeOffset * mScale);
+            }
         }
-        edgePara.width = (int) (edgeWidth * mScale);
-        edgePara.height = (int) (edgeHeight *mScale);
+
+
+        switch (rightLeftOrBottom(edgePosition)) {
+            case Cons.POSITION_BOTTOM:
+                if (edgeWidth != Cons.EDGE_LENGTH_MAX) {
+                    edgePara.width = (int) (edgeWidth * mScale);
+                }
+                edgePara.height = (int) (edgeHeight *mScale);
+                break;
+            default:
+                if (edgeHeight != Cons.EDGE_LENGTH_MAX) {
+                    edgePara.height = (int) (edgeHeight *mScale);
+                }
+                edgePara.width = (int) (edgeWidth * mScale);
+                break;
+        }
+
         return edgePara;
 
     }
