@@ -96,6 +96,8 @@ public class GeneralView extends Fragment {
     }
 
     public void clear() {
-        unbinder.unbind();
+        if (unbinder != null) {
+            unbinder.unbind();
+        }
     }
 }

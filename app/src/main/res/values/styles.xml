@@ -124,11 +124,13 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:gravity">center_vertical|start</item>
+
     </style>
     <style name="MoreSetting_Item_Parent_No_Switch">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
+
     </style>
 
     <style name="MoreSetting_Item_Text_Primary">
@@ -141,6 +143,7 @@
         <item name="android:paddingEnd">16dp</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">16dp</item>
+
     </style>
     <style name="MoreSetting_Item_Text_Primary.NoSwitch">
         <item name="android:layout_width">wrap_content</item>

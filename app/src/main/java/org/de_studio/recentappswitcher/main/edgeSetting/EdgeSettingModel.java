@@ -171,6 +171,7 @@ public class EdgeSettingModel extends BaseModel {
         });
     }
 
+
     public void setGridFavoriteSet(final String id) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override

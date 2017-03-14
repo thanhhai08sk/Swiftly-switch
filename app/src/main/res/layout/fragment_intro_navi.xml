@@ -14,7 +14,7 @@
         android:text="@string/easily_navigation"
         android:layout_centerHorizontal="true"
         android:fontFamily="sans-serif-bolt"
-        android:textSize="24dp"
+        android:textSize="20sp"
         android:paddingBottom="32dp"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
@@ -33,7 +33,7 @@
         android:text="@string/note_keep_your_finger_on_screen_unless_finish_action"
         android:layout_below="@id/intro_image"
         android:gravity="center"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:fontFamily="sans-serif-light"
         android:paddingTop="16dp"
         />

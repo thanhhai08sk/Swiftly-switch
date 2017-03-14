@@ -41,6 +41,9 @@ public class ContactLoader implements android.support.v4.app.LoaderManager.Loade
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader,final Cursor data) {
+        if (data == null) {
+            return;
+        }
         Log.e(TAG, "onLoadFinished: load contact, size = " + data.getCount());
         Realm realm = Realm.getDefaultInstance();
         data.moveToFirst();

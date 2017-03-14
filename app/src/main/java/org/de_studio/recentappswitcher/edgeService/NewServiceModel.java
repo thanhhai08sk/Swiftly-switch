@@ -95,17 +95,10 @@ public class NewServiceModel extends BaseModel {
             }
         }
 
-//        for (String packageName : packageNames) {
-//            item = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(packageName)).findFirst();
-//            if (item == null) {
-//                packageNames.remove(packageName);
-//            }
-//        }
 
         for (int i = packageNames.size() - 1; i >= 0; i--) {
             item = realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(packageNames.get(i))).findFirst();
             if (item == null) {
-                Log.e(TAG, "getRecent: item null " + packageNames.get(i));
                 packageNames.remove(packageNames.get(i));
             }
         }
@@ -114,18 +107,12 @@ public class NewServiceModel extends BaseModel {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int i = 0;
             if (savedRecentShortcut != null) {
-                Log.e(TAG, "getRecent: begin to add, packageNames size = " + packageNames.size() +
-                        "\nrecentSlotsCount = " + recentSlotsCount +
-                        "\nsavedShortcuts size = " + savedRecentShortcut.size());
                 while (packageNames.size() < recentSlotsCount && i < savedRecentShortcut.size()) {
                     if (!savedRecentShortcut.get(i).equals(removedPackage)
                             && !packageNames.contains(savedRecentShortcut.get(i)) &&
                             realm.where(Item.class).equalTo(Cons.ITEM_ID, Utility.createAppItemId(savedRecentShortcut.get(i))).findFirst() != null
                             ) {
                         packageNames.add(savedRecentShortcut.get(i));
-                        Log.e(TAG, "getRecent: add " + savedRecentShortcut.get(i));
-                    } else {
-                        Log.e(TAG, "getRecent: do not add " + savedRecentShortcut.get(i));
                     }
                     i++;
                 }
@@ -134,9 +121,6 @@ public class NewServiceModel extends BaseModel {
 
 
         savedRecentShortcut = packageNames;
-        for (String packageName : packageNames) {
-            Log.e(TAG, "getRecent: packageName = " + packageName);
-        }
         int i = 0;
         for (Slot slot : slots) {
             switch (slot.type) {

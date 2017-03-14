@@ -176,7 +176,12 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     }
 
     public void clear() {
-
+        if (generateDataOkReceiver != null) {
+            this.unregisterReceiver(generateDataOkReceiver);
+        }
+        if (initDataDialog != null) {
+            initDataDialog = null;
+        }
     }
 
     @Override
