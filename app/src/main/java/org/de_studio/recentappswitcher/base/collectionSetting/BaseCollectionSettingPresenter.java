@@ -263,7 +263,6 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
         void showSetLabelDialog(String currentLabel);
 
-        void showChooseBetweenSetFolderAndSetItems(final int slotIndex);
         void setRecyclerView(OrderedRealmCollection<Slot> slots, RecyclerView.LayoutManager layoutManager, GridSpacingItemDecoration decoration);
 
         RecyclerView.LayoutManager getLayoutManager(int layoutType, int column);

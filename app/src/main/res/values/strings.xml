@@ -215,6 +215,7 @@
     <string name="stay_on_screen">Stay on screen</string>
     <string name="stay_on_screen_enable_description">Keep it on the screen until you finish</string>
     <string name="stay_on_screen_disable_description">Disappear after lifting your finger</string>
+    <string name="edit">Edit</string>
 
     //Quick action
     <string name="device_shortcuts">"Device's shortcuts"</string>

@@ -115,6 +115,7 @@
         <item>@string/always_visible</item>
     </string-array>
 
+
     <string-array name="faq_titles" >
         <item>@string/faq_how_to_hide_the_notification</item>
         <item>@string/faq_screen_overlay_detected</item>

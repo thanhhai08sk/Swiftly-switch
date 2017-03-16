@@ -295,33 +295,20 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
         setOnItemClick();
     }
 
-    public void showChooseBetweenSetFolderAndSetItems(final int slotIndex) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder
-//                .setItems(new CharSequence[]{getString(R.string.app_shortcut_contact), getString(R.string.setting_shortcut_folder)}, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        switch (which) {
-//                            case 0:
-//                                presenter.setItems(slotIndex);
-//                                break;
-//                            case 1:
-//                                presenter.setFolder(slotIndex);
-//                                break;
-//                        }
-//                    }
-//                });
-//        builder.create().show();
+    public void showChooseBetweenSetFolderAndSetItems(final int slotIndex, boolean folderAvailable) {
 
         final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
             @Override
             public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem item) {
-                switch (index) {
+                switch ((int) item.getId()) {
                     case 0:
                         presenter.setItems(slotIndex);
                         break;
                     case 1:
                         presenter.setFolder(slotIndex);
+                        break;
+                    case 2:
+                        presenter.editItem(slotIndex);
                         break;
                 }
                 dialog.dismiss();
@@ -333,13 +320,26 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                 .iconPaddingDp(4)
                 .icon(R.drawable.ic_shortcuts)
                 .backgroundColor(Color.WHITE)
+                .id(0)
                 .build());
+        if (folderAvailable) {
+            adapter.add(new MaterialSimpleListItem.Builder(this)
+                    .content(R.string.setting_shortcut_folder)
+                    .iconPaddingDp(4)
+                    .icon(R.drawable.ic_folder)
+                    .backgroundColor(Color.WHITE)
+                    .id(1)
+                    .build());
+        }
+
         adapter.add(new MaterialSimpleListItem.Builder(this)
-                .content(R.string.setting_shortcut_folder)
-                .iconPaddingDp(4)
-                .icon(R.drawable.ic_folder)
+                .content(R.string.edit)
+                .iconPadding(4)
+                .icon(R.drawable.ic_edit_white_24dp)
                 .backgroundColor(Color.WHITE)
-                .build());
+                .id(2)
+                .build()
+        );
 
 
         new MaterialDialog.Builder(this)
