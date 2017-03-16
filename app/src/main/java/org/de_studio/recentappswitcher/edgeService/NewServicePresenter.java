@@ -164,6 +164,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             showCollection(currentShowing.showWhat);
                         }
                         highlightIdSubject.onNext(-1);
+                        hideAllExceptEdgesAfter10Seconds();
                     }
                 })
         );
@@ -246,6 +247,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         currentShowing.stayOnScreen = currentShowing.grid.stayOnScreen == null ? true : currentShowing.grid.stayOnScreen;
                         currentShowing.gridXY = view.getGridXy(currentShowing.grid.collectionId);
                         view.showCollection(currentShowing.grid.collectionId);
+                        hideAllExceptEdgesAfter10Seconds();
                     }
                 })
         );
@@ -366,7 +368,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
     public void onActionDown(float x, float y, int edgeId) {
         stopHideViewsHandler();
-        hideAllExceptEdgesAfter10Seconds();
+//        hideAllExceptEdgesAfter10Seconds();
         long time = System.currentTimeMillis();
         tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
         if (tempRecentPackages.size() > 0 && tempRecentPackages.get(0).equals("com.google.android.packageinstaller") && Utility.isMashmallow()) {
@@ -565,6 +567,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 view.showCircle(currentShowing.circleIconsXY, currentShowing.circle, currentShowing.circleSlots, xInit, yInit);
                 break;
         }
+        hideAllExceptEdgesAfter10Seconds();
     }
 
     private void updateCircleIconPosition() {
@@ -588,7 +591,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     }
 
     private void hideAllExceptEdgesAfter10Seconds() {
-        handler.postDelayed(hideAllExceptEdgesRunnable, 10 * 1000);
+        handler.removeCallbacks(hideAllExceptEdgesRunnable);
+        handler.postDelayed(hideAllExceptEdgesRunnable, 15 * 1000);
     }
 
     private void stopHideViewsHandler() {
