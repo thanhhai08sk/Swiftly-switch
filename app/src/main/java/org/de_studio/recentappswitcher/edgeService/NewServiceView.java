@@ -225,10 +225,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             inject();
             presenter.onViewAttach(this);
         }
-
-        realm.close();
-
-
     }
 
 
