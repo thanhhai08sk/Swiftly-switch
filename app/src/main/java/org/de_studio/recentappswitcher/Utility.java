@@ -541,11 +541,12 @@ public  class Utility {
         }
     }
 
-    public static void setRinggerMode(Context context) {
+    public static void setRinggerMode(Context context, int ringerModeAction) {
         AudioManager manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         switch (getRingerMode(context)) {
             case 0:
-                manager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                manager.setRingerMode(ringerModeAction == Cons.RINGER_MODE_ACTION_SOUND_AND_VIBRATE?
+                        AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT);
                 break;
             case 1:
                 manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
@@ -1589,10 +1590,11 @@ public  class Utility {
         return Item.TYPE_ACTION + action;
     }
 
-    public static void startSlot(Slot slot, String lastAppPackageName, Context context, int contactAction, int showing, String currentCollectionId, NewServicePresenter presenter) {
+    public static void startSlot(Slot slot, String lastAppPackageName, Context context, int contactAction, int ringerModeAction, int showing, String currentCollectionId, NewServicePresenter presenter) {
+
         switch (slot.type) {
             case Slot.TYPE_ITEM:
-                startItem(slot.stage1Item, lastAppPackageName, context, contactAction);
+                startItem(slot.stage1Item, lastAppPackageName, context, contactAction, ringerModeAction);
                 break;
             case Slot.TYPE_NULL:
                 if (currentCollectionId != null) {
@@ -1622,13 +1624,13 @@ public  class Utility {
         }
     }
 
-    public static void startItem(Item item, String lastAppPackageName, Context context,int contactAction) {
+    public static void startItem(Item item, String lastAppPackageName, Context context,int contactAction, int ringerModeAction) {
         switch (item.type) {
             case Item.TYPE_APP:
                 startApp(item.getPackageName(), context);
                 break;
             case Item.TYPE_ACTION:
-                startAction(item.action, context, lastAppPackageName);
+                startAction(item.action, context, lastAppPackageName, ringerModeAction);
                 break;
             case Item.TYPE_CONTACT:
                 startContact(item, context, contactAction);
@@ -1705,7 +1707,7 @@ public  class Utility {
         }
     }
 
-    public static void startAction(int action, Context context, String lastAppPackageName) {
+    public static void startAction(int action, Context context, String lastAppPackageName, int ringerModeAction) {
         switch (action) {
             case Item.ACTION_WIFI:
                 Utility.toggleWifi(context);
@@ -1760,7 +1762,7 @@ public  class Utility {
                 Utility.brightnessAction(context);
                 break;
             case Item.ACTION_RINGER_MODE:
-                Utility.setRinggerMode(context);
+                Utility.setRinggerMode(context, ringerModeAction);
                 break;
             case Item.ACTION_FLASH_LIGHT:
                 Utility.flashLightAction3(context);

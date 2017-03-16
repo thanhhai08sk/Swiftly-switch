@@ -1088,7 +1088,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void startItem(Item item, String lastApp) {
-        Utility.startItem(item, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.DEFAULT_CONTACT_ACTION));
+        Utility.startItem(item, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.DEFAULT_CONTACT_ACTION),
+                sharedPreferences.getInt(Cons.RINGER_MODE_ACTION_KEY, Cons.RINGER_MODE_ACTION_DEFAULT));
     }
 
     @Override
