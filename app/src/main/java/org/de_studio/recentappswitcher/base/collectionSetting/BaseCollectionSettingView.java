@@ -139,6 +139,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
     public void notifyItemRemove(int position) {
         adapter.notifyItemRemoved(position);
         adapter.notifyDataSetChanged();
+        adapter.setHighlightItem(-1);
     }
     @CallSuper
     @Override

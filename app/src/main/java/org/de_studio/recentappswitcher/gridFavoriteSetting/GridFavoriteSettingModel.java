@@ -72,6 +72,28 @@ public class GridFavoriteSettingModel extends BaseCollectionSettingModel {
         return newId;
     }
 
+    @Override
+    public void removeItem(int position) {
+        realm.beginTransaction();
+        Slot removeSlot = collection.slots.get(position);
+        if (!removeSlot.type.equals(Slot.TYPE_RECENT)) {
+            collection.slots.remove(position);
+            switch (removeSlot.type) {
+                case Slot.TYPE_NULL:
+                    collection.slots.add(position, Utility.createSlotAndAddToRealm(realm,Slot.TYPE_EMPTY));
+                    break;
+                case Slot.TYPE_EMPTY:
+                    collection.slots.add(position, Utility.createSlotAndAddToRealm(realm, Slot.TYPE_NULL));
+                    break;
+                default:
+                    collection.slots.add(position, Utility.createSlotAndAddToRealm(realm, Slot.TYPE_NULL));
+                    break;
+            }
+            removeSlot.deleteFromRealm();
+        }
+        realm.commitTransaction();
+    }
+
     public void setHorizontalMargin(final int value) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override

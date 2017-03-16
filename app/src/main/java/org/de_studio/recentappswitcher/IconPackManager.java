@@ -70,7 +70,7 @@ public class IconPackManager
         private List<Bitmap> mBackImages = new ArrayList<Bitmap>();
         private Bitmap mMaskImage = null;
         private Bitmap mFrontImage = null;
-        private float mFactor = 0.8f;
+        private float mFactor = 1.0f;
         private int totalIcons;
 
         Resources iconPackres = null;
@@ -151,9 +151,9 @@ public class IconPackManager
                                 if (xpp.getAttributeCount() > 0 && xpp.getAttributeName(0).equals("factor"))
                                 {
                                     mFactor = Float.valueOf(xpp.getAttributeValue(0));
-                                    if (mFactor < 0.7f) {
-                                        mFactor = 0.7f;
-                                    }
+//                                    if (mFactor < 0.7f) {
+//                                        mFactor = 0.7f;
+//                                    }
                                 }
                             }
                             else if (xpp.getName().equals("item"))

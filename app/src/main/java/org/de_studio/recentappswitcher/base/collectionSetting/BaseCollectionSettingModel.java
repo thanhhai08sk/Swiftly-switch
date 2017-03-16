@@ -255,6 +255,7 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
     }
 
     public void moveItem(int from, int to) {
+        Log.e(TAG, "moveItem: ");
         realm.beginTransaction();
         collection.slots.move(from, to);
         realm.commitTransaction();

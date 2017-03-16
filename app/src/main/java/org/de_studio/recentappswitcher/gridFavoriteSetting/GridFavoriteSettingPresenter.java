@@ -71,7 +71,17 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
                         }
                         return null;
                     }
-                }).subscribe(new Action1<DragAndDropCallback.MoveData>() {
+                })
+                        .withLatestFrom(view.onDragItem(), new Func2<DragAndDropCallback.MoveData, DragAndDropCallback.Coord, DragAndDropCallback.MoveData>() {
+                            @Override
+                            public DragAndDropCallback.MoveData call(DragAndDropCallback.MoveData moveData, DragAndDropCallback.Coord coord) {
+                                if (moveData != null && !view.isHoverOnDeleteButton(coord.xy[0], coord.xy[1])) {
+                                    return moveData;
+                                }
+                                return null;
+                            }
+                        })
+                        .subscribe(new Action1<DragAndDropCallback.MoveData>() {
                     @Override
                     public void call(DragAndDropCallback.MoveData moveData) {
                         if (moveData != null) {
