@@ -227,10 +227,14 @@ public  class Utility {
                 Intent intentOfStartActivity = packageManager.getLaunchIntentForPackage(each.packageName);
                 if(intentOfStartActivity == null)
                     continue;
-
-                Drawable applicationIcon = packageManager.getActivityIcon(intentOfStartActivity);
-                if(applicationIcon != null && !defaultActivityIcon.equals(applicationIcon)) {
-                    filteredPackages.add(each);
+                try {
+                    Drawable applicationIcon = packageManager.getActivityIcon(intentOfStartActivity);
+                    if (applicationIcon != null && !defaultActivityIcon.equals(applicationIcon)) {
+                        filteredPackages.add(each);
+                    }
+                } catch (OutOfMemoryError error) {
+                    error.printStackTrace();
+                    Log.e(TAG, "getInstalledApps: " + error);
                 }
             } catch (PackageManager.NameNotFoundException e) {
                 Log.i("MyTag", "Unknown package name " + each.packageName);
@@ -687,7 +691,7 @@ public  class Utility {
     }
 
 
-    public static   Bitmap createAndSaveFolderThumbnail(Slot folder, Realm realm, Context context) {
+    public static   Bitmap createAndSaveFolderThumbnail(final Slot folder, Realm realm, Context context) {
         float mScale = context. getResources().getDisplayMetrics().density;
         int width =(int)( 48*mScale);
         int height = (int) (48 * mScale);
@@ -696,7 +700,7 @@ public  class Utility {
         smallHeight = height/2;
         PackageManager packageManager = context.getPackageManager();
         Bitmap.Config config = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = Bitmap.createBitmap(width, height, config);
+        final Bitmap bitmap = Bitmap.createBitmap(width, height, config);
         Canvas canvas = new Canvas(bitmap);
         Drawable drawable;
         Item item = null;
@@ -778,23 +782,15 @@ public  class Utility {
 
         }
 
-//        File myDir = context.getFilesDir();
-//        String fname = "folder-"+ folder.slotId +".png";
-//        File file = new File (myDir, fname);
-//        if (file.exists ()) file.delete ();
-//        try {
-//            FileOutputStream out = new FileOutputStream(file);
-//            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-//            out.flush();
-//            out.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        realm.beginTransaction();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        folder.iconBitmap = stream.toByteArray();
-        realm.commitTransaction();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Log.e(TAG, "execute: in transaction");
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                folder.iconBitmap = stream.toByteArray();
+            }
+        });
         if (folder.iconBitmap != null) {
             Log.e(TAG, "createAndSaveFolderThumbnail: ok ");
         } else {
@@ -1052,13 +1048,16 @@ public  class Utility {
                 try {
 //                    Log.e(TAG, "setItemIcon: app: " + item.getPackageName() );
                     Drawable defaultDrawable = packageManager.getApplicationIcon(item.getPackageName());
+                    Bitmap defaultBm = ((BitmapDrawable) defaultDrawable).getBitmap();
                     Drawable iconPackDrawable;
                     if (iconPack!=null) {
-                        iconPackDrawable = iconPack.getDrawableIconForPackage(item.getPackageName(), defaultDrawable);
-                        if (iconPackDrawable == null) {
-                            iconPackDrawable = defaultDrawable;
-                        }
-                        icon.setImageDrawable(iconPackDrawable);
+                        Bitmap iconBitmap = iconPack.getIconForPackage(item.packageName, defaultBm);
+                        icon.setImageBitmap(iconBitmap);
+//                        iconPackDrawable = iconPack.getDrawableIconForPackage(item.getPackageName(), defaultDrawable);
+//                        if (iconPackDrawable == null) {
+//                            iconPackDrawable = defaultDrawable;
+//                        }
+//                        icon.setImageDrawable(iconPackDrawable);
                     } else {
                         icon.setImageDrawable(defaultDrawable);
                     }
@@ -1321,10 +1320,13 @@ public  class Utility {
 
     }
 
-    public static Item getActionItemFromResult(ResolveInfo mResolveInfo,final PackageManager packageManager, Realm realm, Intent data) {
+    public static Item getActionItemFromResult(ResolveInfo mResolveInfo, final PackageManager packageManager, Realm realm, Intent data) {
+        if (mResolveInfo == null) {
+            return null;
+        }
         String label = (String) data.getExtras().get(Intent.EXTRA_SHORTCUT_NAME);
         String stringIntent = ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0);
-        String packageName =  mResolveInfo.activityInfo.packageName;
+        String packageName = mResolveInfo.activityInfo.packageName;
         final String itemId = Item.TYPE_DEVICE_SHORTCUT + stringIntent;
         Item realmItem = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
         if (realmItem == null) {
