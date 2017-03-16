@@ -114,6 +114,26 @@
                     />
 
             </FrameLayout>
+            <FrameLayout
+                android:id="@+id/translate"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                style="@style/Drawer_Item"
+
+                >
+                <ImageView
+                    style="@style/Drawer_Icon"
+                    app:srcCompat="@drawable/ic_action_translate"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Drawer_Item_text"
+                    android:text="@string/translate_the_app"
+                    />
+
+            </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/send_feedback"

@@ -279,6 +279,22 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
         showWhatNew();
     }
 
+    @OnClick(R.id.translate)
+    void translateClick(){
+        new MaterialDialog.Builder(this)
+                .title(R.string.translate_the_app)
+                .content(R.string.translate_the_app_detail)
+                .positiveText(R.string.go_to_page)
+                .negativeText(R.string.edge_dialog_cancel_button)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Uri uriUrl = Uri.parse("https://www.localize.im/v/xy");
+                        startActivity(new Intent(Intent.ACTION_VIEW, uriUrl));
+                    }
+                }).show();
+    }
+
     @OnClick(R.id.about)
     void onAboutClick(){
         startActivity(new Intent(this, AboutView.class));

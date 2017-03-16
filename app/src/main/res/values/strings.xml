@@ -25,7 +25,6 @@
     <string name="notification_title">Swiftly switch is running ...</string>
     <string name="main_edge_switch_2_trial_buy_pro_button">Get Pro version</string>
     <string name="main_buy_pro_button_text">Upgrade to Pro</string>
-    <string name="edge_service_out_of_trial_text_when_homebacknoti">You are out of trial time of this application. Upgrade to Pro version to use this feature</string>
     <string name="action_settings">Setting</string>
     <string name="accessibility_service_description">Please turn on this setting.This is for navigation(home,back,power menu) and on some Samsung device for expand status bar.</string>
     <string name="ask_user_to_turn_on_accessibility_toast">Please turn on the Accessibility setting for Swiftly Switch</string>
@@ -63,6 +62,9 @@
     <string name="batterylife">Battery life:</string>
     <string name="main_disable_clock_text">Disable clock</string>
     <string name="review_on_play_store">Review on Play Store</string>
+    <string name="translate_the_app">Translate the app</string>
+    <string name="translate_the_app_detail">If you want to help us to localize the app in your language, please go to https://www.localize.im/v/xy \nThanks!</string>
+    <string name="go_to_page">Go to page</string>
     <string name="email_us">Email us</string>
     <string name="share">Share</string>
     <string name="main_vibration_duration">Vibration duration</string>
@@ -85,8 +87,6 @@
     <string name="permission_used_for_getting_recent_apps">Permission used for getting recent apps</string>
     <string name="enable_accessibility">3. Enable Accessibility</string>
     <string name="permission_used_for_back_button_notification_power_menu">Permission used for Back button, notification, power menu</string>
-    <string name="main_edge1_setting_description">Click the switch to enable/disable the Edge 1. Click setting button to set Edge 1 position, mode, semi-circle size</string>
-    <string name="main_edge2_setting_description">Click the switch to enable/disable the Edge 2. Click setting button to set Edge 2 position, mode, semi-circle size</string>
     <string name="main_favorite_shortcut_setting_description">Hold on one of the recent icons for awhile to show Favorite Shortcut section. Click the setting icon to set your favorite items, its position </string>
     <string name="main_quick_actions_setting_description">Quick actions are placed outside of recent apps semi-circle, click the setting icon to customize it</string>
     <string name="main_more_setting_description">More customize for look and feel of the app</string>
