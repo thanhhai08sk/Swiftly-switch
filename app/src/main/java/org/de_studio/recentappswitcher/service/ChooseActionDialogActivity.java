@@ -100,7 +100,7 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (checkBox.isChecked()) {
                         SharedPreferences sharedPreferences = ChooseActionDialogActivity.this.getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
-                        sharedPreferences.edit().putInt(Cons.CONTACT_ACTION_KEY, Cons.ACTION_CALL).apply();
+                        sharedPreferences.edit().putInt(Cons.CONTACT_ACTION_KEY, Cons.CONTACT_ACTION_CALL).apply();
                     }
                     if (ContextCompat.checkSelfPermission(ChooseActionDialogActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
 
@@ -116,7 +116,7 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (checkBox.isChecked()) {
                         SharedPreferences sharedPreferences = ChooseActionDialogActivity.this.getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
-                        sharedPreferences.edit().putInt(Cons.CONTACT_ACTION_KEY, Cons.ACTION_SMS).apply();
+                        sharedPreferences.edit().putInt(Cons.CONTACT_ACTION_KEY, Cons.CONTACT_ACTION_SMS).apply();
                     }
                         try {
                             startActivity(smsIntent);

@@ -88,6 +88,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     SwitchCompat disableInLandscapeSwitch;
     @BindView(R.id.contact_action_description)
     TextView contactActionDescription;
+    @BindView(R.id.ringer_mode_action_description)
+    TextView ringerModeActionDescription;
     @BindView(R.id.icon_pack_description)
     TextView iconPackDescription;
     @BindView(R.id.icon_size_description)
@@ -250,16 +252,26 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
         openFolderDelaySwitch.setChecked(sharedPreferences.getBoolean(Cons.OPEN_FOLDER_DELAY_KEY, true));
 
-        int contactAction = sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.ACTION_CHOOSE);
+        int contactAction = sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.CONTACT_ACTION_CHOOSE);
         switch (contactAction) {
-            case Cons.ACTION_CHOOSE:
+            case Cons.CONTACT_ACTION_CHOOSE:
                 contactActionDescription.setText(R.string.choose);
                 break;
-            case Cons.ACTION_CALL:
+            case Cons.CONTACT_ACTION_CALL:
                 contactActionDescription.setText(R.string.call);
                 break;
-            case Cons.ACTION_SMS:
+            case Cons.CONTACT_ACTION_SMS:
                 contactActionDescription.setText(R.string.sms);
+                break;
+        }
+
+        int ringerModeAction = sharedPreferences.getInt(Cons.RINGER_MODE_ACTION_KEY, Cons.RINGER_MODE_ACTION_DEFAULT);
+        switch (ringerModeAction) {
+            case Cons.RINGER_MODE_ACTION_SOUND_AND_VIBRATE:
+                ringerModeActionDescription.setText(R.string.ringer_mode_action_sound_and_vibrate);
+                break;
+            case Cons.RINGER_MODE_ACTION_SOUND_AND_SILENT:
+                ringerModeActionDescription.setText(R.string.ringer_mode_action_sound_and_silent);
                 break;
         }
 
@@ -321,17 +333,28 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @Override
     public void contactActionDialog() {
-        int current = sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.ACTION_CHOOSE);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.default_action_for_contact).
-                setSingleChoiceItems(R.array.contact_action, current, new DialogInterface.OnClickListener() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.default_action_for_contact)
+                .items(R.array.contact_action)
+                .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        presenter.setDefaultContactAction(which);
+                    public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                        presenter.setDefaultContactAction(position);
                     }
-                }).
-                setPositiveButton(R.string.app_tab_fragment_ok_button, null);
-        builder.create().show();
+                }).show();
+    }
+
+    @Override
+    public void ringerModeActionDialog() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.ringer_mode_action)
+                .items(R.array.ringer_mode_actions)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                        presenter.setRingerModeAction(position);
+                    }
+                }).show();
     }
 
     @Override
@@ -505,6 +528,11 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     @OnClick(R.id.contact_action)
     void onContactActionClick(){
         presenter.onDefaultActionForContacts();
+    }
+
+    @OnClick(R.id.ringer_mode_action)
+    void ringerModeClick(){
+        presenter.onRingerModeAction();
     }
 
     @OnClick(R.id.long_press_delay)

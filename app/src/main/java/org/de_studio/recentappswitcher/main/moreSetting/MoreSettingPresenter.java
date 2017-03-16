@@ -221,8 +221,16 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
         view.contactActionDialog();
     }
 
+    public void onRingerModeAction() {
+        view.ringerModeActionDialog();
+    }
+
     public void setDefaultContactAction(int action) {
         sharedPreferences.edit().putInt(Cons.CONTACT_ACTION_KEY, action).commit();
+    }
+
+    public void setRingerModeAction(int action) {
+        sharedPreferences.edit().putInt(Cons.RINGER_MODE_ACTION_KEY, action).commit();
     }
 
     public void onLongPressDelay() {
@@ -332,6 +340,8 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
         void assistAppDialog();
 
         void contactActionDialog();
+
+        void ringerModeActionDialog();
 
         void longPressDelayDialog(PublishSubject<Integer> subject);
 

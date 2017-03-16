@@ -253,14 +253,19 @@ public class Cons {
     public static final String USE_GUIDE_KEY = "edge_guide";
     public static final String HAS_TELL_ABOUT_TRIAL_LIMIT = "has_tell_about_trial_limit";
     public static final String CONTACT_ACTION_KEY = "contact_action";
+    public static final String RINGER_MODE_ACTION_KEY = "ringer_mode_action";
     public static final String CIRCLE_FAVORITE_MODE = "circle_fovorite_mode";
     public static final String SERVICE_ID = "service_id";
     public static final String ICON_SCALE_KEY = "icon_scale";
     public static final String FIRST_START_KEY = "firstStart";
-    public static final int ACTION_CHOOSE = 0;
-    public static final int ACTION_CALL = 1;
-    public static final int ACTION_SMS = 2;
-    public static final int DEFAULT_CONTACT_ACTION = ACTION_CHOOSE;
+    public static final int CONTACT_ACTION_CHOOSE = 0;
+    public static final int CONTACT_ACTION_CALL = 1;
+    public static final int CONTACT_ACTION_SMS = 2;
+    public static final int DEFAULT_CONTACT_ACTION = CONTACT_ACTION_CHOOSE;
+    public static final int RINGER_MODE_ACTION_SOUND_AND_VIBRATE = 0;
+    public static final int RINGER_MODE_ACTION_SOUND_AND_SILENT = 1;
+    public static final int RINGER_MODE_ACTION_DEFAULT = RINGER_MODE_ACTION_SOUND_AND_VIBRATE;
+
 
     public static final int HOLD_TIME_MIN = 150;
     public static final int HOLD_TIME_MAX = 2000;

@@ -104,7 +104,7 @@
     <string name="missing_call_phone_permission">Missing call phone permission</string>
     <string name="choose_action">Choose action</string>
     <string name="use_as_default">Use as default</string>
-    <string name="default_action_for_contact">Default action for contacts</string>
+    <string name="default_action_for_contact">Contact action</string>
     <string name="choose">Choose</string>
     <string name="call">Call</string>
     <string name="sms">Sms</string>
@@ -252,6 +252,7 @@
     //More setting
     <string name="disable_in_fullscreen">Disable in fullscreen apps</string>
     <string name="general">General</string>
+    <string name="shortcuts_settings">Shortcuts settings</string>
     <string name="look">Look</string>
     <string name="feel">Feel</string>
     <string name="backup_and_restore">"Backup &amp; import settings"</string>
@@ -271,6 +272,9 @@
     <string name="backup_guide">The backup file will be stored in your Google Drive. Please connect to your Google account and then choose the folder to upload.</string>
     <string name="import_guide">Choose the backup file from Google Drive.</string>
     <string name="disable_top_indicator">Disable top indicator</string>
+    <string name="ringer_mode_action">Ringer mode action</string>
+    <string name="ringer_mode_action_sound_and_vibrate">Sound and vibrate</string>
+    <string name="ringer_mode_action_sound_and_silent">Sound and silent</string>
 
 
     <string name="notification_description">Persistent notification is for keeping Swiftly Switch stay in background. Hide it in App Info window.\n\n

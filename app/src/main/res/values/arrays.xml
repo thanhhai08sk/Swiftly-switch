@@ -83,6 +83,10 @@
         <item>@string/call</item>
         <item>@string/sms</item>
     </string-array>
+    <string-array name="ringer_mode_actions">
+        <item>@string/ringer_mode_action_sound_and_vibrate</item>
+        <item>@string/ringer_mode_action_sound_and_silent</item>
+    </string-array>
     <string-array name="avoid_keyboard_option">
         <item>@string/avoid_keyboard_place_under</item>
         <item>@string/avoid_keyboard_step_aside</item>

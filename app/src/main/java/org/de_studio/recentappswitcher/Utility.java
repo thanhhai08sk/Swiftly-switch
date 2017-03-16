@@ -1623,7 +1623,6 @@ public  class Utility {
     }
 
     public static void startItem(Item item, String lastAppPackageName, Context context,int contactAction) {
-        Log.e(TAG, "startItem: start action " + item.toString());
         switch (item.type) {
             case Item.TYPE_APP:
                 startApp(item.getPackageName(), context);
@@ -1680,14 +1679,14 @@ public  class Utility {
 
     private static void startContact(Item item, Context context, int contactAction) {
         switch (contactAction) {
-            case Cons.ACTION_CHOOSE:
+            case Cons.CONTACT_ACTION_CHOOSE:
                 Intent intent = new Intent(context, ChooseActionDialogActivity.class);
                 intent.putExtra("number", item.getNumber());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 context.startActivity(intent);
                 break;
-            case Cons.ACTION_CALL:
+            case Cons.CONTACT_ACTION_CALL:
                 String url = "tel:"+ item.getNumber();
                 if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                     Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
@@ -1697,7 +1696,7 @@ public  class Utility {
                     Toast.makeText(context, context.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
                 }
                 break;
-            case Cons.ACTION_SMS:
+            case Cons.CONTACT_ACTION_SMS:
                 Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
                         + item.getNumber()));
                 smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
