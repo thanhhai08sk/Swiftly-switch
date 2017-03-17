@@ -44,7 +44,7 @@ public class RecentSettingView extends BaseCircleCollectionSettingView<Void, Rec
 //                                presenter.setThisSlotAsRecent(slotIndex);
 //                                break;
 //                            case 1:
-//                                presenter.setItems(slotIndex);
+//                                presenter.setSlots(slotIndex);
 //                                break;
 //                        }
 //                    }
@@ -64,7 +64,7 @@ public class RecentSettingView extends BaseCircleCollectionSettingView<Void, Rec
                         if (Utility.isFree(RecentSettingView.this)) {
                             Utility.showProOnlyDialog(RecentSettingView.this);
                         } else {
-                            presenter.setItems(slotIndex);
+                            presenter.setSlots(slotIndex);
                         }
                         break;
                 }

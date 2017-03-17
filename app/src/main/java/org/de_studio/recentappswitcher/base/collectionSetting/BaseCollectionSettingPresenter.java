@@ -7,6 +7,7 @@ import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.DragAndDropCallback;
 import org.de_studio.recentappswitcher.base.PresenterView;
 import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
@@ -177,14 +178,28 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
     }
 
     public void onSlotClick(int slotIndex) {
-        view.openSetItems(slotIndex, model.getCollectionId());
+        Slot slot = model.getCurrentCollection().slots.get(slotIndex);
+        view.chooseActionOnSlot(slotIndex, slot.type.equals(Slot.TYPE_FOLDER),
+                model.getCurrentCollection().type.equals(Collection.TYPE_GRID_FAVORITE));
+
     }
 
-    public void setFolder(int slotIndex) {
+    public void editItem(int slotIndex) {
+        Item item = model.getCurrentCollection().slots.get(slotIndex).stage1Item;
+        view.editItemLabelAndIcon(item.itemId);
+    }
+
+    public void editFolderContent(int slotIndex) {
+        view.openSetFolder(model.getCurrentCollection().slots.get(slotIndex).slotId);
+    }
+
+
+
+    public void setSlotAsFolder(int slotIndex) {
         model.setSlotAsFolder(slotIndex);
     }
 
-    public void setItems(int slotIndex) {
+    public void setSlots(int slotIndex) {
         view.openSetItems(slotIndex, model.getCollectionId());
     }
 
@@ -273,11 +288,15 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
         void chooseCurrentCollection(List<Collection> collections, Collection currentCollection);
 
+        void chooseActionOnSlot(final int slotIndex,boolean isFolder, boolean folderAvailable);
+
         void setCircleSizeDialog(PublishSubject<Integer> subject, int currentValue);
 
         void restartService();
 
         void notifyCannotDelete(int reason,String id);
+
+        void editItemLabelAndIcon(String itemId);
 
 
     }

@@ -6,7 +6,6 @@ import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.base.DragAndDropCallback;
 import org.de_studio.recentappswitcher.base.collectionSetting.BaseCollectionSettingPresenter;
 import org.de_studio.recentappswitcher.model.Collection;
-import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
 import rx.functions.Action1;
@@ -100,15 +99,6 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
         view.setChoosingMargins(model.getCurrentCollection().position == Collection.POSITION_TRIGGER);
     }
 
-    @Override
-    public void onSlotClick(int slotIndex) {
-        Slot slot = model.getSlots().get(slotIndex);
-        if (slot.type.equals(Slot.TYPE_FOLDER)) {
-            view.openSetFolder(slot.slotId);
-        } else {
-            view.showChooseBetweenSetFolderAndSetItems(slotIndex);
-        }
-    }
 
     public void onSetColumnsCount(int columnsCount) {
         model.setColumnsCount(columnsCount);

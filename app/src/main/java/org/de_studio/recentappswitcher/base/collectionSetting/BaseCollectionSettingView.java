@@ -292,36 +292,50 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
         }
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
-        setOnItemClick();
+        onSlotClick();
     }
 
-    public void showChooseBetweenSetFolderAndSetItems(final int slotIndex, boolean folderAvailable) {
+    public void chooseActionOnSlot(final int slotIndex,boolean isFolder, boolean folderAvailable) {
 
         final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
             @Override
             public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem item) {
                 switch ((int) item.getId()) {
                     case 0:
-                        presenter.setItems(slotIndex);
+                        presenter.setSlots(slotIndex);
                         break;
                     case 1:
-                        presenter.setFolder(slotIndex);
+                        presenter.setSlotAsFolder(slotIndex);
                         break;
                     case 2:
                         presenter.editItem(slotIndex);
+                        break;
+                    case 3:
+                        presenter.editFolderContent(slotIndex);
                         break;
                 }
                 dialog.dismiss();
             }
         });
 
-        adapter.add(new MaterialSimpleListItem.Builder(this)
-                .content(R.string.shortcut)
-                .iconPaddingDp(4)
-                .icon(R.drawable.ic_shortcuts)
-                .backgroundColor(Color.WHITE)
-                .id(0)
-                .build());
+        if (isFolder) {
+            adapter.add(new MaterialSimpleListItem.Builder(this)
+                    .content(R.string.folder_content)
+                    .iconPadding(4)
+                    .icon(R.drawable.ic_shortcuts)
+                    .backgroundColor(Color.WHITE)
+                    .id(3)
+                    .build()
+            );
+        } else {
+            adapter.add(new MaterialSimpleListItem.Builder(this)
+                    .content(R.string.shortcut)
+                    .iconPaddingDp(4)
+                    .icon(R.drawable.ic_shortcuts)
+                    .backgroundColor(Color.WHITE)
+                    .id(0)
+                    .build());
+        }
         if (folderAvailable) {
             adapter.add(new MaterialSimpleListItem.Builder(this)
                     .content(R.string.setting_shortcut_folder)
@@ -358,7 +372,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
         return null;
     }
 
-    public void setOnItemClick() {
+    public void onSlotClick() {
         if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
@@ -371,6 +385,10 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
         });
     }
 
+    @Override
+    public void editItemLabelAndIcon(String itemId) {
+
+    }
 
     public void updateRecyclerView(OrderedRealmCollection<Slot> slots) {
         adapter.updateData(slots);
