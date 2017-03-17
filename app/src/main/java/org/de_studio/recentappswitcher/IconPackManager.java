@@ -201,7 +201,7 @@ public class IconPackManager
             int id = iconPackres.getIdentifier(drawableName, "drawable", packageName);
             if (id > 0)
             {
-                Drawable bitmap = iconPackres.getDrawable(id);
+                Drawable bitmap = iconPackres.getDrawable(id,null);
                 if (bitmap instanceof BitmapDrawable)
                     return ((BitmapDrawable)bitmap).getBitmap();
             }
