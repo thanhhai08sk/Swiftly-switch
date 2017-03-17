@@ -186,12 +186,27 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
     public void editItem(int slotIndex) {
         Item item = model.getCurrentCollection().slots.get(slotIndex).stage1Item;
-        view.editItemLabelAndIcon(item.itemId);
+        view.editItemLabelAndIcon(item);
+    }
+
+    public void setItemLabel(Item item, String label) {
+        model.setItemLabel(item, label);
+    }
+
+    public void setItemIcon(Item item) {
+        view.showChooseIconSourceDialog(item);
+    }
+
+    public void setItemIconWithSource(String source) {
+
     }
 
     public void editFolderContent(int slotIndex) {
         view.openSetFolder(model.getCurrentCollection().slots.get(slotIndex).slotId);
     }
+
+
+
 
 
 
@@ -278,6 +293,8 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
         void showSetLabelDialog(String currentLabel);
 
+        void showChooseIconSourceDialog(Item item);
+
         void setRecyclerView(OrderedRealmCollection<Slot> slots, RecyclerView.LayoutManager layoutManager, GridSpacingItemDecoration decoration);
 
         RecyclerView.LayoutManager getLayoutManager(int layoutType, int column);
@@ -296,7 +313,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
         void notifyCannotDelete(int reason,String id);
 
-        void editItemLabelAndIcon(String itemId);
+        void editItemLabelAndIcon(Item item);
 
 
     }

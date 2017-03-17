@@ -372,10 +372,6 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         if (Utility.isFree(this)) {
             Utility.showProOnlyDialog(this);
         } else {
-//            android.app.FragmentManager fragmentManager = getFragmentManager();
-//            IconPackSettingDialogFragment newFragment = new IconPackSettingDialogFragment();
-//            newFragment.show(fragmentManager, "iconPackDialogFragment");
-
             IconPackManager manager = new IconPackManager();
             manager.setContext(this);
             HashMap<String, IconPackManager.IconPack> hashMap = manager.getAvailableIconPacks(true);

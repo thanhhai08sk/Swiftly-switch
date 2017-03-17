@@ -1,10 +1,13 @@
 package org.de_studio.recentappswitcher.base.collectionSetting;
 
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,14 +18,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseActivity;
@@ -30,11 +37,14 @@ import org.de_studio.recentappswitcher.base.DragAndDropCallback;
 import org.de_studio.recentappswitcher.base.SlotsAdapter;
 import org.de_studio.recentappswitcher.folderSetting.FolderSettingView;
 import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.setItems.SetItemsView;
 import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -62,6 +72,9 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
 
     @Inject
     protected SlotsAdapter adapter;
+    @Nullable
+    @Inject
+    IconPackManager.IconPack iconPack;
 
     protected GridSpacingItemDecoration decoration;
 
@@ -386,7 +399,80 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
     }
 
     @Override
-    public void editItemLabelAndIcon(String itemId) {
+    public void editItemLabelAndIcon(final Item item) {
+        MaterialDialog materialDialog = new MaterialDialog.Builder(this)
+                .title(R.string.edit)
+                .customView(R.layout.dialog_edit_item, false)
+                .positiveText(R.string.app_tab_fragment_ok_button)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        presenter.setItemLabel(item, ((EditText) dialog.getCustomView().findViewById(R.id.label)).getText().toString());
+                    }
+                })
+                .show();
+        View view = materialDialog.getCustomView();
+        EditText editText = (EditText) view.findViewById(R.id.label);
+        editText.setText(item.label);
+        ImageView icon = (ImageView) view.findViewById(R.id.icon);
+        Utility.setItemIcon(item, this, icon, getPackageManager(), iconPack, false);
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.setItemIcon(item);
+            }
+        });
+    }
+
+    @Override
+    public void showChooseIconSourceDialog(Item item) {
+        final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
+            @Override
+            public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem item) {
+                presenter.setItemIconWithSource(((String) item.getTag()));
+                dialog.dismiss();
+            }
+        });
+
+        IconPackManager manager = new IconPackManager();
+        manager.setContext(this);
+        HashMap<String, IconPackManager.IconPack> hashMap = manager.getAvailableIconPacks(true);
+
+        adapter.add(new MaterialSimpleListItem.Builder(this)
+                .content(R.string.system)
+                .iconPadding(4)
+                .icon(R.drawable.ic_settings_white_36px)
+                .backgroundColor(Color.WHITE)
+                .tag("system")
+                .build()
+        );
+        Set<String> keys = hashMap.keySet();
+        IconPackManager.IconPack iconPack;
+        Drawable icon = null;
+        for (String key : keys) {
+            iconPack = hashMap.get(key);
+            try {
+                icon = getPackageManager().getApplicationIcon(iconPack.packageName);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            adapter.add(new MaterialSimpleListItem.Builder(this)
+                    .content(iconPack.name)
+                    .iconPadding(4)
+                    .icon(icon)
+                    .backgroundColor(Color.WHITE)
+                    .tag(iconPack.packageName)
+                    .build()
+            );
+        }
+
+        new MaterialDialog.Builder(this)
+                .adapter(adapter, null)
+                .title(R.string.choose_icon_source)
+                .show();
+
+
+
 
     }
 

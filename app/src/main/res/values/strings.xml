@@ -217,6 +217,8 @@
     <string name="stay_on_screen_disable_description">Disappear after lifting your finger</string>
     <string name="edit">Edit</string>
     <string name="folder_content">Folder content</string>
+    <string name="choose_icon_source">Choose icon source</string>
+
 
     //Quick action
     <string name="device_shortcuts">"Device's shortcuts"</string>

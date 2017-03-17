@@ -290,6 +290,14 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
         realm.commitTransaction();
     }
 
+    public void setItemLabel(final Item item, final String label) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                item.label = label;
+            }
+        });
+    }
     public void setItemToSlotStage1(final Item item, final String slotId) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
