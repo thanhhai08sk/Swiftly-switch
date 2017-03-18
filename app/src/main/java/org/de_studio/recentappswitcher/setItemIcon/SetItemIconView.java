@@ -176,6 +176,9 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        if (progress.isShown()) {
+            return false;
+        }
         Log.e(TAG, "onQueryTextChange: " + newText);
         if (TextUtils.isEmpty(newText)) {
             adapter.clearData();

@@ -550,7 +550,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
         adapter.add(new MaterialSimpleListItem.Builder(this)
                 .content(R.string.system)
                 .iconPadding(4)
-                .icon(R.drawable.ic_settings_white_36px)
+                .icon(R.drawable.ic_default)
                 .backgroundColor(Color.WHITE)
                 .build()
         );

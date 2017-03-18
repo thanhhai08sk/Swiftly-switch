@@ -334,6 +334,16 @@
     //What new
 
 
+    <string name="what_new_3.0.8" translatable="false">VERSION 3.0.8:\n
+        - Help me translate the app to your language (Left panel -> Translate the app) \n
+        - Customize shortcut label and icon (pro)\n
+        - Support mask from icon pack\n
+        - Option for Ringer Mode shortcut: switch between Sound and Silent (More Settings)\n
+        - Update Persian translation\n
+        - Fix background color when animation time is too small\n
+        - Other bug fixes and improvements\n
+    </string>
+
     <string name="what_new_3.0.7" translatable="false">VERSION 3.0.7:\n
         - Option to disable top indicator \n
         - Auto update contact photos\n
