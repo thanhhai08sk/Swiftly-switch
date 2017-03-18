@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -412,26 +413,100 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                     }
                 })
                 .show();
+
         View view = materialDialog.getCustomView();
         EditText editText = (EditText) view.findViewById(R.id.label);
         editText.setText(item.label);
+        setIcons(item, view);
+    }
+
+    private void setIcons(final Item item, View view) {
         ImageView icon = (ImageView) view.findViewById(R.id.icon);
-        Utility.setItemIcon(item, this, icon, getPackageManager(), iconPack, false);
-        icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.setItemIcon(item);
+        LinearLayout icons = (LinearLayout) view.findViewById(R.id.icons);
+        ImageView icon1 = (ImageView) view.findViewById(R.id.icon1);
+        ImageView icon2 = (ImageView) view.findViewById(R.id.icon2);
+        ImageView icon3 = (ImageView) view.findViewById(R.id.icon3);
+
+        int stateCount = 1;
+        if (item.type.equals(Item.TYPE_ACTION)) {
+            if (item.action == Item.ACTION_WIFI ||
+                    item.action == Item.ACTION_BLUETOOTH ||
+                    item.action == Item.ACTION_ROTATION ||
+                    item.action == Item.ACTION_FLASH_LIGHT) {
+                stateCount = 2;
+            } else if (item.action == Item.ACTION_RINGER_MODE) {
+                stateCount = 3;
             }
-        });
+        }
+
+
+        switch (stateCount) {
+            case 1:
+                icon.setVisibility(View.VISIBLE);
+                icons.setVisibility(View.GONE);
+                Utility.setItemIcon(item, this, icon, getPackageManager(), iconPack, false);
+                icon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        presenter.setItemIcon(item, 1);
+                    }
+                });
+                break;
+            case 2:
+                icon.setVisibility(View.GONE);
+                icons.setVisibility(View.VISIBLE);
+                Utility.setActionIconWithState(item, icon1, this, 1);
+                Utility.setActionIconWithState(item, icon2, this, 2);
+                icon3.setVisibility(View.GONE);
+                icon1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        presenter.setItemIcon(item, 1);
+                    }
+                });
+                icon2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        presenter.setItemIcon(item, 2);
+                    }
+                });
+
+                break;
+            case 3:
+                icon.setVisibility(View.GONE);
+                icons.setVisibility(View.VISIBLE);
+                Utility.setActionIconWithState(item, icon1, this, 1);
+                Utility.setActionIconWithState(item, icon2, this, 2);
+                Utility.setActionIconWithState(item, icon3, this, 3);
+                icon1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        presenter.setItemIcon(item, 1);
+                    }
+                });
+                icon2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        presenter.setItemIcon(item, 2);
+                    }
+                });
+                icon3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        presenter.setItemIcon(item, 3);
+                    }
+                });
+                break;
+        }
     }
 
     @Override
-    public void showChooseIconSourceDialog(final Item item) {
+    public void showChooseIconSourceDialog(final Item item, final int itemState) {
         final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
             @Override
             public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem dialogItem) {
                 IconPackManager.IconPack iconPack =(IconPackManager.IconPack) dialogItem.getTag();
-                presenter.setItemIconWithSource(new BaseCollectionSettingPresenter.SetItemIconInfo(iconPack, item.itemId));
+                presenter.setItemIconWithSource(new BaseCollectionSettingPresenter.SetItemIconInfo(iconPack, item.itemId, itemState));
                 dialog.dismiss();
             }
         });
@@ -476,7 +551,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
     @Override
     public void openItemIconSetting(BaseCollectionSettingPresenter.SetItemIconInfo info) {
         startActivity(SetItemIconView.getIntent(info.itemId, this, info.iconPack != null ? info.iconPack.name : null,
-                info.iconPack != null ? info.iconPack.packageName : null));
+                info.iconPack != null ? info.iconPack.packageName : null, info.itemState));
     }
 
     public void updateRecyclerView(OrderedRealmCollection<Slot> slots) {

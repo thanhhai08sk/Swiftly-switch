@@ -1044,81 +1044,79 @@ public  class Utility {
         if (item == null) {
             return;
         }
-        switch (item.type) {
-            case Item.TYPE_APP:
-                try {
-//                    Log.e(TAG, "setItemIcon: app: " + item.getPackageName() );
-                    Drawable defaultDrawable = packageManager.getApplicationIcon(item.getPackageName());
-                    Bitmap defaultBm = ((BitmapDrawable) defaultDrawable).getBitmap();
-                    Drawable iconPackDrawable;
-                    if (iconPack!=null) {
-                        Bitmap iconBitmap = iconPack.getIconForPackage(item.packageName, defaultBm);
-                        icon.setImageBitmap(iconBitmap);
-//                        iconPackDrawable = iconPack.getDrawableIconForPackage(item.getPackageName(), defaultDrawable);
-//                        if (iconPackDrawable == null) {
-//                            iconPackDrawable = defaultDrawable;
-//                        }
-//                        icon.setImageDrawable(iconPackDrawable);
-                    } else {
-                        icon.setImageDrawable(defaultDrawable);
-                    }
-                } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(TAG, "NameNotFound " + e);
-                }
-                break;
-            case Item.TYPE_ACTION:
-                if (item.iconBitmap == null) {
+        if (!setItemIconFromBitmap(item, icon)) {
+            switch (item.type) {
+                case Item.TYPE_APP:
+                        try {
+                            Drawable defaultDrawable = packageManager.getApplicationIcon(item.getPackageName());
+                            Bitmap defaultBm = ((BitmapDrawable) defaultDrawable).getBitmap();
+                            if (iconPack!=null) {
+                                Bitmap iconBitmap = iconPack.getIconForPackage(item.packageName, defaultBm);
+                                icon.setImageBitmap(iconBitmap);
+                            } else {
+                                icon.setImageDrawable(defaultDrawable);
+                            }
+                        } catch (PackageManager.NameNotFoundException e) {
+                            Log.e(TAG, "NameNotFound " + e);
+                        }
                     break;
-                }
-                if (showIconState) {
-                    setActionIconWithState(item, icon, context);
-                } else {
-                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
-                }
-                break;
-            case Item.TYPE_DEVICE_SHORTCUT:
-                byte[] byteArray = item.iconBitmap;
-                try {
-                    if (byteArray != null) {
-                        icon.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
+                case Item.TYPE_ACTION:
+                    if (item.iconBitmap == null) {
+                        break;
                     }
-
-                } catch (Exception e) {
-                    Log.e(TAG, "getView: can not set imageview for shortcut shortcut");
-                }
-                break;
-            case Item.TYPE_CONTACT:
-                Uri person = ContentUris.withAppendedId(
-                        ContactsContract.Contacts.CONTENT_URI, item.contactId);
-                Uri photo = Uri.withAppendedPath(person,
-                        ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-
-
-
-//                String thumbnaiUri = item.iconUri;
-                if (photo != null) {
-                    try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photo);
-                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-                        drawable.setCircular(true);
-                        icon.setImageDrawable(drawable);
-                        icon.setColorFilter(null);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (showIconState) {
+                        setActionIconWithState(item, icon, context);
+                    } else {
+                        icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
+                    }
+                    break;
+                case Item.TYPE_DEVICE_SHORTCUT:
+                    setItemIconFromBitmap(item, icon);
+                    break;
+                case Item.TYPE_CONTACT:
+                    Uri person = ContentUris.withAppendedId(
+                            ContactsContract.Contacts.CONTENT_URI, item.contactId);
+                    Uri photo = Uri.withAppendedPath(person,
+                            ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+                    if (photo != null) {
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photo);
+                            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+                            drawable.setCircular(true);
+                            icon.setImageDrawable(drawable);
+                            icon.setColorFilter(null);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            icon.setImageResource(R.drawable.ic_contact_default);
+                        } catch (SecurityException e) {
+                            Toast.makeText(context, context.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
+                        }
+                    } else {
                         icon.setImageResource(R.drawable.ic_contact_default);
-                    } catch (SecurityException e) {
-                        Toast.makeText(context, context.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
                     }
-                } else {
-                    icon.setImageResource(R.drawable.ic_contact_default);
-                }
-                break;
-            case Item.TYPE_SHORTCUTS_SET:
-                if (item.iconBitmap != null) {
-                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
-                }
-                break;
+                    break;
+                case Item.TYPE_SHORTCUTS_SET:
+                    if (item.iconBitmap != null) {
+                        icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
+                    }
+                    break;
+            }
+
         }
+    }
+
+    private static boolean setItemIconFromBitmap(Item item, ImageView icon) {
+        byte[] byteArray = item.iconBitmap;
+        try {
+            if (byteArray != null) {
+                icon.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
+                return true;
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "getView: can not set imageview for shortcut shortcut");
+        }
+        return false;
     }
 
     public static Bitmap getItemBitmap(Item item, Context context, IconPackManager.IconPack iconPack) {
@@ -1204,33 +1202,42 @@ public  class Utility {
 
 
     public static void setActionIconWithState(Item item, ImageView icon, Context context) {
+        setActionIconWithState(item, icon, context, -1);
+    }
+
+    public static void setActionIconWithState(Item item, ImageView icon, Context context, int state) {
         if (item.iconBitmap == null) {
             return;
         }
+        boolean enable;
         switch (item.action) {
             case Item.ACTION_WIFI:
-                if (getWifiState(context)) {
+                enable = state != -1 ? state == 1 : getWifiState(context);
+                if (enable) {
                     icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                 } else {
                     icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap2, 0, item.iconBitmap2.length));
                 }
                 break;
             case Item.ACTION_BLUETOOTH:
-                if (getBluetoothState(context)) {
+                enable = state != -1 ? state == 1 : getBluetoothState(context);
+                if (enable) {
                     icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                 } else {
                     icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap2, 0, item.iconBitmap2.length));
                 }
                 break;
             case Item.ACTION_ROTATION:
-                if (getIsRotationAuto(context)) {
+                enable = state != -1 ? state == 1 : getIsRotationAuto(context);
+                if (enable) {
                     icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                 } else {
                     icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap2, 0, item.iconBitmap2.length));
                 }
                 break;
             case Item.ACTION_RINGER_MODE:
-                switch (getRingerMode(context)) {
+                int currentState = state != -1 ? state : getRingerMode(context);
+                switch (currentState) {
                     case RINGER_MODE_NORMAL:
                         icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                         break;
@@ -1243,7 +1250,9 @@ public  class Utility {
                 }
                 break;
             case Item.ACTION_FLASH_LIGHT:
-                if (NewServiceView.FLASH_LIGHT_ON) {
+                enable = state != -1 ? state == 1 : NewServiceView.FLASH_LIGHT_ON;
+
+                if (enable) {
                     icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                 } else {
                     icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap2, 0, item.iconBitmap2.length));
@@ -1254,7 +1263,6 @@ public  class Utility {
                 break;
         }
     }
-
 
 
     public static void setIconBitmapsForActionItem(Context context, Item item) {

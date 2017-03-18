@@ -194,8 +194,8 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         model.setItemLabel(item, label);
     }
 
-    public void setItemIcon(Item item) {
-        view.showChooseIconSourceDialog(item);
+    public void setItemIcon(Item item, int itemState) {
+        view.showChooseIconSourceDialog(item,itemState);
     }
 
     public void setItemIconWithSource(SetItemIconInfo info) {
@@ -294,7 +294,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
         void showSetLabelDialog(String currentLabel);
 
-        void showChooseIconSourceDialog(Item item);
+        void showChooseIconSourceDialog(Item item, int itemState);
 
         void setRecyclerView(OrderedRealmCollection<Slot> slots, RecyclerView.LayoutManager layoutManager, GridSpacingItemDecoration decoration);
 
@@ -324,8 +324,10 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
     public static class SetItemIconInfo {
         IconPackManager.IconPack iconPack;
         String itemId;
+        int itemState;
 
-        public SetItemIconInfo(IconPackManager.IconPack iconPack, String itemId) {
+        public SetItemIconInfo(IconPackManager.IconPack iconPack, String itemId, int itemState) {
+            this.itemState = itemState;
             this.iconPack = iconPack;
             this.itemId = itemId;
         }

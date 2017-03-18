@@ -4,6 +4,46 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/icons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginStart="16dp"
+        >
+
+        <ImageView
+            android:id="@+id/icon1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            tools:src="@drawable/ic_action_contact"
+            tools:tint="@color/grey"
+            android:layout_margin="4dp"
+            style="@style/Button"
+            />
+
+        <ImageView
+            android:id="@+id/icon2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            tools:src="@drawable/ic_action_contact"
+            tools:tint="@color/grey"
+            android:layout_margin="4dp"
+            style="@style/Button"
+            />
+        <ImageView
+            android:id="@+id/icon3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            tools:src="@drawable/ic_action_contact"
+            tools:tint="@color/grey"
+            android:layout_margin="4dp"
+            style="@style/Button"
+            />
+
+
+    </LinearLayout>
     <ImageView
         android:id="@+id/icon"
         android:layout_width="68dp"

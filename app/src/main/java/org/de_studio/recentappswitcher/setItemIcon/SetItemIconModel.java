@@ -18,10 +18,12 @@ import io.realm.Realm;
 public class SetItemIconModel extends BaseModel {
     Realm realm = Realm.getDefaultInstance();
     String itemId;
+    int itemState;
 
 
-    public SetItemIconModel(String itemId) {
+    public SetItemIconModel(String itemId, int itemState) {
         this.itemId = itemId;
+        this.itemState = itemState;
 
     }
 
@@ -35,7 +37,16 @@ public class SetItemIconModel extends BaseModel {
                 if (item != null) {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    item.iconBitmap = stream.toByteArray();
+                    switch (itemState) {
+                        case 2:
+                            item.iconBitmap2 = stream.toByteArray();
+                            break;
+                        case 3:
+                            item.iconBitmap3 = stream.toByteArray();
+                            break;
+                        default:
+                            item.iconBitmap = stream.toByteArray();
+                    }
                     try {
                         stream.close();
                     } catch (IOException e) {
