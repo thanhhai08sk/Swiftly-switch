@@ -223,7 +223,7 @@
             />
 
         <activity android:name=".setItemIcon.SetItemIconView"
-            android:label="@string/about"
+            android:label="@string/set_icon"
             android:theme="@style/AppTheme.SetItemIcon"
             />
 

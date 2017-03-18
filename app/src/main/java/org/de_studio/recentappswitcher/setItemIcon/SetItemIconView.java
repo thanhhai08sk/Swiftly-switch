@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -18,6 +17,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
@@ -51,7 +52,7 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.progress_bar)
-    ContentLoadingProgressBar progress;
+    ProgressBar progress;
 
 
     @Inject
@@ -62,6 +63,8 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
     final ArrayList<BitmapInfo> mAllItems = new ArrayList<BitmapInfo>();
     String iconPackPackage;
     String itemId;
+
+    PublishSubject<Void> loadAllItemOkSJ = PublishSubject.create();
 
 
 
@@ -122,23 +125,45 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
 
 
     @Override
-    public void showAllItems() {
-        if (iconPackPackage != null) {
-            try {
-                Resources res = packageManager.getResourcesForApplication(iconPackPackage);
-                if (res != null) {
-                    loadThemeIcons(res, iconPackPackage);
-                    setTitle(getIntent().getStringExtra(Cons.LABEL));
+    public void loadAllItem() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e(TAG, "run: on thread " + Thread.currentThread().getName() );
+                if (iconPackPackage != null) {
+                    try {
+                        Resources res = packageManager.getResourcesForApplication(iconPackPackage);
+                        if (res != null) {
+                            loadThemeIcons(res, iconPackPackage);
+                        }
+                    } catch (PackageManager.NameNotFoundException e) {
+                        Log.e(TAG, "loadAllItem: name not found");
+                        e.printStackTrace();
+                    }
+                } else {
+                    loadAppIcons();
                 }
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e(TAG, "showAllItems: name not found");
-                e.printStackTrace();
+                loadAllItemOkSJ.onNext(null);
             }
-        } else{
-            loadAppIcons();
-            setTitle(R.string.system);
-        }
+        });
+        thread.start();
+
+
+    }
+
+    @Override
+    public PublishSubject<Void> onLoadAllItemsOk() {
+        return loadAllItemOkSJ;
+    }
+
+    @Override
+    public void updateAdapterData() {
         adapter.updateData(mAllItems);
+    }
+
+    @Override
+    public void setProgressBar(boolean visible) {
+        progress.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     @Override

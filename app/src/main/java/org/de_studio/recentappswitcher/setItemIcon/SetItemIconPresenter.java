@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.PresenterView;
 
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 
@@ -35,18 +36,32 @@ public class SetItemIconPresenter extends BasePresenter<SetItemIconPresenter.Vie
                 })
         );
 
-        view.showAllItems();
+        addSubscription(
+                view.onLoadAllItemsOk()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        view.updateAdapterData();
+                        view.setProgressBar(false);
+                    }
+                })
+        );
+        view.setProgressBar(true);
+        view.loadAllItem();
 
     }
 
     public interface View extends PresenterView, SearchView.OnQueryTextListener,MenuItem.OnActionExpandListener {
 
-
+        PublishSubject<Void> onLoadAllItemsOk();
         PublishSubject<SetItemIconView.BitmapInfo> onItemClick();
 
+        void updateAdapterData();
         Bitmap getBitmap(SetItemIconView.BitmapInfo item);
 
-        void showAllItems();
+        void setProgressBar(boolean visible);
+        void loadAllItem();
 
         void finish();
 
