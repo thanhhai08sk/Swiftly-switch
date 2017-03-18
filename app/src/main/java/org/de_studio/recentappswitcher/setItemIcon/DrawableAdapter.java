@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import org.de_studio.recentappswitcher.R;
 
 import java.util.ArrayList;
-import java.util.SortedMap;
 
 import rx.subjects.PublishSubject;
 
@@ -20,14 +19,19 @@ import rx.subjects.PublishSubject;
  */
 
 public class DrawableAdapter  extends RecyclerView.Adapter<DrawableAdapter.ViewHolder>{
-    SortedMap<String, String> sortedMap;
     Context context;
     ArrayList<SetItemIconView.BitmapInfo> allItems;
     PublishSubject<SetItemIconView.BitmapInfo> itemClickSJ = PublishSubject.create();
 
 
+    public DrawableAdapter(Context context, ArrayList<SetItemIconView.BitmapInfo> allItems) {
+        this.context = context;
+        this.allItems = allItems;
+    }
+
     public void updateData(ArrayList<SetItemIconView.BitmapInfo> items) {
         allItems = items;
+        allItems = (ArrayList<SetItemIconView.BitmapInfo>) items.clone();
         notifyDataSetChanged();
     }
 
@@ -59,8 +63,8 @@ public class DrawableAdapter  extends RecyclerView.Adapter<DrawableAdapter.ViewH
 
     @Override
     public int getItemCount() {
-        if (sortedMap != null) {
-            return sortedMap.size();
+        if (allItems != null) {
+            return allItems.size();
         }
         return 0;
     }

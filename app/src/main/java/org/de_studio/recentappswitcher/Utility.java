@@ -2129,4 +2129,11 @@ public  class Utility {
                 })
                 .show();
     }
+
+    public static int calculateNoOfColumns(Context context, int iconSize) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        return (int) (dpWidth / iconSize);
+    }
 }
+

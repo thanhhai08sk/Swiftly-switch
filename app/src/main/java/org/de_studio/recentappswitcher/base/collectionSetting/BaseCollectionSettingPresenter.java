@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.base.collectionSetting;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.DragAndDropCallback;
 import org.de_studio.recentappswitcher.base.PresenterView;
@@ -197,8 +198,8 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         view.showChooseIconSourceDialog(item);
     }
 
-    public void setItemIconWithSource(String source) {
-
+    public void setItemIconWithSource(SetItemIconInfo info) {
+        view.openItemIconSetting(info);
     }
 
     public void editFolderContent(int slotIndex) {
@@ -315,7 +316,19 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
         void editItemLabelAndIcon(Item item);
 
+        void openItemIconSetting(SetItemIconInfo info);
 
+
+    }
+
+    public static class SetItemIconInfo {
+        IconPackManager.IconPack iconPack;
+        String itemId;
+
+        public SetItemIconInfo(IconPackManager.IconPack iconPack, String itemId) {
+            this.iconPack = iconPack;
+            this.itemId = itemId;
+        }
     }
 
 

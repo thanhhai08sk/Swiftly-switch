@@ -8,6 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.SetItemIcon">
+        <item name="android:editTextColor">@android:color/white</item>
+    </style>
+
     <style name="DialogTheme" parent="Base.V11.Theme.AppCompat.Light.Dialog">
         <item name="windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -47,6 +51,8 @@
     <style name="tablayout_text_appearacnce" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"></style>
 
     <style name="step_button"></style>
+    <style name="Button">
+    </style>
 
     <style name="TextAppearance_Subhead_Primary_Dark" parent="@style/TextAppearance.AppCompat.Subhead">
         <item name="android:textColor">@color/text_primary_dark</item>

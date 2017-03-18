@@ -39,6 +39,7 @@ import org.de_studio.recentappswitcher.folderSetting.FolderSettingView;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
+import org.de_studio.recentappswitcher.setItemIcon.SetItemIconView;
 import org.de_studio.recentappswitcher.setItems.SetItemsView;
 import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
@@ -425,11 +426,12 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
     }
 
     @Override
-    public void showChooseIconSourceDialog(Item item) {
+    public void showChooseIconSourceDialog(final Item item) {
         final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
             @Override
-            public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem item) {
-                presenter.setItemIconWithSource(((String) item.getTag()));
+            public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem dialogItem) {
+                IconPackManager.IconPack iconPack =(IconPackManager.IconPack) dialogItem.getTag();
+                presenter.setItemIconWithSource(new BaseCollectionSettingPresenter.SetItemIconInfo(iconPack, item.itemId));
                 dialog.dismiss();
             }
         });
@@ -443,7 +445,6 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                 .iconPadding(4)
                 .icon(R.drawable.ic_settings_white_36px)
                 .backgroundColor(Color.WHITE)
-                .tag("system")
                 .build()
         );
         Set<String> keys = hashMap.keySet();
@@ -461,7 +462,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                     .iconPadding(4)
                     .icon(icon)
                     .backgroundColor(Color.WHITE)
-                    .tag(iconPack.packageName)
+                    .tag(iconPack)
                     .build()
             );
         }
@@ -470,10 +471,12 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                 .adapter(adapter, null)
                 .title(R.string.choose_icon_source)
                 .show();
+    }
 
-
-
-
+    @Override
+    public void openItemIconSetting(BaseCollectionSettingPresenter.SetItemIconInfo info) {
+        startActivity(SetItemIconView.getIntent(info.itemId, this, info.iconPack != null ? info.iconPack.name : null,
+                info.iconPack != null ? info.iconPack.packageName : null));
     }
 
     public void updateRecyclerView(OrderedRealmCollection<Slot> slots) {

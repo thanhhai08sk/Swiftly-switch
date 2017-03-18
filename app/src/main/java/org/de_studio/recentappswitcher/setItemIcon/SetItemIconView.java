@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -20,7 +21,11 @@ import android.view.MenuItem;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseActivity;
+import org.de_studio.recentappswitcher.dagger.DaggerSetItemIconComponent;
+import org.de_studio.recentappswitcher.dagger.SetItemIconModule;
+import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
@@ -45,6 +50,8 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.progress_bar)
+    ContentLoadingProgressBar progress;
 
 
     @Inject
@@ -64,7 +71,9 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
         itemId = getIntent().getStringExtra(Cons.ITEM_ID);
         super.onCreate(savedInstanceState);
 
-        recyclerView.setLayoutManager(new GridLayoutManager(this, GridLayoutManager.DEFAULT_SPAN_COUNT));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, Utility.calculateNoOfColumns(this, 56)));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration((int) (4 * getResources().getDisplayMetrics().density)));
+
         recyclerView.setAdapter(adapter);
     }
 
@@ -77,8 +86,7 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
         menu.add(android.R.string.search_go)
                 .setIcon(android.R.drawable.ic_menu_search)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW + MenuItem.SHOW_AS_ACTION_ALWAYS)
-                .setActionView(searchView)
-                .setOnActionExpandListener(this);
+                .setActionView(searchView);
         return true;
     }
 
@@ -86,7 +94,9 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
 
     @Override
     protected void inject() {
-
+        DaggerSetItemIconComponent.builder()
+                .setItemIconModule(new SetItemIconModule(itemId,this))
+                .build().inject(this);
     }
 
     @Override
@@ -133,25 +143,29 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        if (TextUtils.isEmpty(query)) {
-            adapter.clearData();
-            adapter.updateData(mAllItems);
-            return true;
-        }
 
-        query = query.toLowerCase(Locale.ENGLISH);
-        adapter.clearData();
-        for (BitmapInfo info : mAllItems) {
-            if (info.label != null && info.label.contains(query)) {
-                adapter.addItem(info);
-            }
-        }
         return true;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        return false;
+        Log.e(TAG, "onQueryTextChange: " + newText);
+        if (TextUtils.isEmpty(newText)) {
+            adapter.clearData();
+            adapter.updateData(mAllItems);
+            return true;
+        }
+
+        newText = newText.toLowerCase(Locale.ENGLISH);
+        adapter.clearData();
+        for (BitmapInfo info : mAllItems) {
+            if (info.label != null && info.label.contains(newText)) {
+                adapter.addItem(info);
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+        return true;
     }
 
     @Override
@@ -227,6 +241,14 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
     public Bitmap getBitmap(BitmapInfo item) {
         Drawable drawable = item.res.getDrawable(item.resId, null);
         return ((BitmapDrawable) drawable).getBitmap();
+    }
+
+    public static Intent getIntent(String itemId, Context context, String label, String iconPackPackageName) {
+        Intent intent = new Intent(context, SetItemIconView.class);
+        intent.putExtra(Cons.LABEL, label);
+        intent.putExtra(Cons.ITEM_ID, itemId);
+        intent.putExtra(Cons.PACKAGENAME, iconPackPackageName);
+        return intent;
     }
 
     @Override

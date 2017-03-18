@@ -8,6 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.SetItemIcon">
+        <item name="android:editTextColor">@android:color/white</item>
+    </style>
+
     <style name="step_button.">
         <item name="android:elevation">0dp</item>
     </style>
@@ -20,6 +24,10 @@
         <!--<item name="android:background">@color/background_light</item>-->
     </style>
     <style name="ItemSlot">
+        <item name="android:foreground">?android:selectableItemBackground</item>
+    </style>
+
+    <style name="Button">
         <item name="android:foreground">?android:selectableItemBackground</item>
     </style>
     <style name="MoreSetting_Item_Parent_With_Switch">

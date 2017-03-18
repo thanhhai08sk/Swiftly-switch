@@ -221,6 +221,12 @@
             android:theme="@style/AppTheme"
             android:parentActivityName=".main.MainView"
             />
+
+        <activity android:name=".setItemIcon.SetItemIconView"
+            android:label="@string/about"
+            android:theme="@style/AppTheme.SetItemIcon"
+            />
+
     </application>
 
 </manifest>
