@@ -498,6 +498,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 objectAnimator.setDuration(animationTime);
                 objectAnimator.start();
             }
+        } else {
+            backgroundView.setBackgroundColor(backgroundColor);
         }
     }
 
