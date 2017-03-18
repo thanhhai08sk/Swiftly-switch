@@ -475,6 +475,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
             case 3:
                 icon.setVisibility(View.GONE);
                 icons.setVisibility(View.VISIBLE);
+                icon3.setVisibility(View.VISIBLE);
                 Utility.setActionIconWithState(item, icon1, this, 1);
                 Utility.setActionIconWithState(item, icon2, this, 2);
                 Utility.setActionIconWithState(item, icon3, this, 3);

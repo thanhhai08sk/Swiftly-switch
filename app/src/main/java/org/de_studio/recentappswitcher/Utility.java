@@ -1044,7 +1044,7 @@ public  class Utility {
         if (item == null) {
             return;
         }
-        if (!setItemIconFromBitmap(item, icon)) {
+        if (!setItemIconFromBitmap(item, icon, showIconState,context)) {
             switch (item.type) {
                 case Item.TYPE_APP:
                         try {
@@ -1071,7 +1071,7 @@ public  class Utility {
                     }
                     break;
                 case Item.TYPE_DEVICE_SHORTCUT:
-                    setItemIconFromBitmap(item, icon);
+                    setItemIconFromBitmap(item, icon, showIconState, context);
                     break;
                 case Item.TYPE_CONTACT:
                     Uri person = ContentUris.withAppendedId(
@@ -1105,16 +1105,18 @@ public  class Utility {
         }
     }
 
-    private static boolean setItemIconFromBitmap(Item item, ImageView icon) {
-        byte[] byteArray = item.iconBitmap;
-        try {
+    private static boolean setItemIconFromBitmap(Item item, ImageView icon, boolean showState, Context context) {
+
+
+        if (showState && item.type.equals(Item.TYPE_ACTION)) {
+            setActionIconWithState(item, icon, context);
+            return true;
+        } else {
+            byte[] byteArray = item.iconBitmap;
             if (byteArray != null) {
                 icon.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
                 return true;
             }
-
-        } catch (Exception e) {
-            Log.e(TAG, "getView: can not set imageview for shortcut shortcut");
         }
         return false;
     }
@@ -1236,7 +1238,7 @@ public  class Utility {
                 }
                 break;
             case Item.ACTION_RINGER_MODE:
-                int currentState = state != -1 ? state : getRingerMode(context);
+                int currentState = state != -1 ? state - 1 : getRingerMode(context);
                 switch (currentState) {
                     case RINGER_MODE_NORMAL:
                         icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
@@ -1251,7 +1253,6 @@ public  class Utility {
                 break;
             case Item.ACTION_FLASH_LIGHT:
                 enable = state != -1 ? state == 1 : NewServiceView.FLASH_LIGHT_ON;
-
                 if (enable) {
                     icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
                 } else {
