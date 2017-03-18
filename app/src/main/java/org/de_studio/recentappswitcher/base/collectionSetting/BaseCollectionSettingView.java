@@ -417,10 +417,10 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
         View view = materialDialog.getCustomView();
         EditText editText = (EditText) view.findViewById(R.id.label);
         editText.setText(item.label);
-        setIcons(item, view);
+        setIcons(item, view, materialDialog);
     }
 
-    private void setIcons(final Item item, View view) {
+    private void setIcons(final Item item, View view, final MaterialDialog dialog) {
         ImageView icon = (ImageView) view.findViewById(R.id.icon);
         LinearLayout icons = (LinearLayout) view.findViewById(R.id.icons);
         ImageView icon1 = (ImageView) view.findViewById(R.id.icon1);
@@ -449,6 +449,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                     @Override
                     public void onClick(View v) {
                         presenter.setItemIcon(item, 1);
+                        dialog.dismiss();
                     }
                 });
                 break;
@@ -462,12 +463,14 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                     @Override
                     public void onClick(View v) {
                         presenter.setItemIcon(item, 1);
+                        dialog.dismiss();
                     }
                 });
                 icon2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         presenter.setItemIcon(item, 2);
+                        dialog.dismiss();
                     }
                 });
 
@@ -483,18 +486,21 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                     @Override
                     public void onClick(View v) {
                         presenter.setItemIcon(item, 1);
+                        dialog.dismiss();
                     }
                 });
                 icon2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         presenter.setItemIcon(item, 2);
+                        dialog.dismiss();
                     }
                 });
                 icon3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         presenter.setItemIcon(item, 3);
+                        dialog.dismiss();
                     }
                 });
                 break;
