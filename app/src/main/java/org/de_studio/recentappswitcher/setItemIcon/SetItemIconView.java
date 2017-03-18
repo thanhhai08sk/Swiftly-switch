@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -269,7 +270,8 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
 
     @Override
     public Bitmap getBitmap(BitmapInfo item) {
-        Drawable drawable = item.res.getDrawable(item.resId, null);
+        Drawable drawable = ResourcesCompat.getDrawable(item.res, item.resId, null);
+
         return ((BitmapDrawable) drawable).getBitmap();
     }
 

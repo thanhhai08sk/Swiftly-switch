@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.setItemIcon;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,7 @@ public class DrawableAdapter  extends RecyclerView.Adapter<DrawableAdapter.ViewH
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final SetItemIconView.BitmapInfo info = allItems.get(position);
-        Drawable drawable = info.res.getDrawable(info.resId, null);
+        Drawable drawable = ResourcesCompat.getDrawable(info.res,info.resId,null);
         holder.imageView.setImageDrawable(drawable);
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override

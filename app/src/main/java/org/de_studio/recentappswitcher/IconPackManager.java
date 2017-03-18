@@ -13,6 +13,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -201,7 +202,8 @@ public class IconPackManager
             int id = iconPackres.getIdentifier(drawableName, "drawable", packageName);
             if (id > 0)
             {
-                Drawable bitmap = iconPackres.getDrawable(id,null);
+//                Drawable bitmap = iconPackres.getDrawable(id,null);
+                Drawable bitmap = ResourcesCompat.getDrawable(iconPackres, id, null);
                 if (bitmap instanceof BitmapDrawable)
                     return ((BitmapDrawable)bitmap).getBitmap();
             }
