@@ -33,7 +33,7 @@ public class RecentSettingView extends BaseCircleCollectionSettingView<Void, Rec
     }
 
     @Override
-    public void chooseToSetRecentOrShortcutToSlot(final int slotIndex) {
+    public void chooseToSetRecentOrShortcutToSlot(final int slotIndex, boolean isItem) {
 //        new MaterialDialog.Builder(this)
 //                .items(R.array.recent_slot_options)
 //                .itemsCallback(new MaterialDialog.ListCallback() {
@@ -67,6 +67,9 @@ public class RecentSettingView extends BaseCircleCollectionSettingView<Void, Rec
                             presenter.setSlots(slotIndex);
                         }
                         break;
+                    case 2:
+                        presenter.editItem(slotIndex);
+                        break;
                 }
                 dialog.dismiss();
             }
@@ -85,10 +88,19 @@ public class RecentSettingView extends BaseCircleCollectionSettingView<Void, Rec
 
         adapter.add(new MaterialSimpleListItem.Builder(this)
                 .content(shortcutTitle)
-                .icon(R.drawable.ic_shortcuts)
+                .icon(R.drawable.ic_shortcuts_dark)
                 .iconPaddingDp(4)
                 .backgroundColor(Color.WHITE)
                 .build());
+        if (isItem) {
+            adapter.add(new MaterialSimpleListItem.Builder(this)
+                    .content(R.string.edit)
+                    .icon(R.drawable.ic_action_edit_dark)
+                    .iconPaddingDp(4)
+                    .backgroundColor(Color.WHITE)
+                    .build());
+        }
+
 
 
         new MaterialDialog.Builder(this)

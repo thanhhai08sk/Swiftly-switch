@@ -192,6 +192,8 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         Item item = model.getCurrentCollection().slots.get(slotIndex).stage1Item;
         if (item != null) {
             view.editItemLabelAndIcon(item);
+        } else {
+            Log.e(TAG, "editItem: item null");
         }
     }
 
