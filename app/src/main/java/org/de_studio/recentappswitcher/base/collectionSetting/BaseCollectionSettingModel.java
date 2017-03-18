@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.base.collectionSetting;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -295,6 +296,20 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
             @Override
             public void execute(Realm realm) {
                 item.label = label;
+            }
+        });
+    }
+
+    public void resetItemIcon(final Context context, final Item item) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if (item.type.equals(Item.TYPE_ACTION)) {
+                    Utility.setIconBitmapsForActionItem(context,item);
+                } else if (item.type.equals(Item.TYPE_APP) ||
+                        item.type.equals(Item.TYPE_CONTACT)) {
+                    item.iconBitmap = null;
+                }
             }
         });
     }

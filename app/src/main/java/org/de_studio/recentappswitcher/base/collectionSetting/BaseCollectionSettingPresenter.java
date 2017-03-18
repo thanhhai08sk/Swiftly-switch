@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.base.collectionSetting;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
@@ -180,14 +181,18 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
     public void onSlotClick(int slotIndex) {
         Slot slot = model.getCurrentCollection().slots.get(slotIndex);
-        view.chooseActionOnSlot(slotIndex, slot.type.equals(Slot.TYPE_FOLDER),
+        view.chooseActionOnSlot(slotIndex,
+                slot.type.equals(Slot.TYPE_ITEM),
+                slot.type.equals(Slot.TYPE_FOLDER),
                 model.getCurrentCollection().type.equals(Collection.TYPE_GRID_FAVORITE));
 
     }
 
     public void editItem(int slotIndex) {
         Item item = model.getCurrentCollection().slots.get(slotIndex).stage1Item;
-        view.editItemLabelAndIcon(item);
+        if (item != null) {
+            view.editItemLabelAndIcon(item);
+        }
     }
 
     public void setItemLabel(Item item, String label) {
@@ -195,7 +200,15 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
     }
 
     public void setItemIcon(Item item, int itemState) {
-        view.showChooseIconSourceDialog(item,itemState);
+        if (!view.isFree()) {
+            view.showChooseIconSourceDialog(item, itemState);
+        } else {
+            view.proOnlyDialog();
+        }
+    }
+
+    public void resetItemIcon(Item item) {
+        model.resetItemIcon(view.getActivity(), item);
     }
 
     public void setItemIconWithSource(SetItemIconInfo info) {
@@ -306,7 +319,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
         void chooseCurrentCollection(List<Collection> collections, Collection currentCollection);
 
-        void chooseActionOnSlot(final int slotIndex,boolean isFolder, boolean folderAvailable);
+        void chooseActionOnSlot(final int slotIndex,boolean isItem, boolean isFolder, boolean folderAvailable);
 
         void setCircleSizeDialog(PublishSubject<Integer> subject, int currentValue);
 
@@ -317,6 +330,12 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         void editItemLabelAndIcon(Item item);
 
         void openItemIconSetting(SetItemIconInfo info);
+
+        Context getActivity();
+
+        boolean isFree();
+
+        void proOnlyDialog();
 
 
     }

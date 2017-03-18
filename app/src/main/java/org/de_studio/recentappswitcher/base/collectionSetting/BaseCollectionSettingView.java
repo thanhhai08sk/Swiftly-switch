@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.base.collectionSetting;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -294,6 +295,11 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
     }
 
     @Override
+    public Context getActivity() {
+        return this;
+    }
+
+    @Override
     public PublishSubject<String> onChooseCurrentSet() {
         return chooseCurrentSetSJ;
     }
@@ -310,7 +316,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
         onSlotClick();
     }
 
-    public void chooseActionOnSlot(final int slotIndex,boolean isFolder, boolean folderAvailable) {
+    public void chooseActionOnSlot(final int slotIndex,boolean isItem, boolean isFolder, boolean folderAvailable) {
 
         final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
             @Override
@@ -337,7 +343,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
             adapter.add(new MaterialSimpleListItem.Builder(this)
                     .content(R.string.folder_content)
                     .iconPadding(4)
-                    .icon(R.drawable.ic_shortcuts)
+                    .icon(R.drawable.ic_shortcuts_dark)
                     .backgroundColor(Color.WHITE)
                     .id(3)
                     .build()
@@ -346,29 +352,31 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
             adapter.add(new MaterialSimpleListItem.Builder(this)
                     .content(R.string.shortcut)
                     .iconPaddingDp(4)
-                    .icon(R.drawable.ic_shortcuts)
+                    .icon(R.drawable.ic_shortcuts_dark)
                     .backgroundColor(Color.WHITE)
                     .id(0)
                     .build());
         }
-        if (folderAvailable) {
+        if (folderAvailable && !isFolder) {
             adapter.add(new MaterialSimpleListItem.Builder(this)
                     .content(R.string.setting_shortcut_folder)
                     .iconPaddingDp(4)
-                    .icon(R.drawable.ic_folder)
+                    .icon(R.drawable.ic_folder_dark)
                     .backgroundColor(Color.WHITE)
                     .id(1)
                     .build());
         }
 
-        adapter.add(new MaterialSimpleListItem.Builder(this)
-                .content(R.string.edit)
-                .iconPadding(4)
-                .icon(R.drawable.ic_edit_white_24dp)
-                .backgroundColor(Color.WHITE)
-                .id(2)
-                .build()
-        );
+        if (isItem || isFolder) {
+            adapter.add(new MaterialSimpleListItem.Builder(this)
+                    .content(R.string.edit)
+                    .iconPadding(4)
+                    .icon(R.drawable.ic_action_edit_dark)
+                    .backgroundColor(Color.WHITE)
+                    .id(2)
+                    .build()
+            );
+        }
 
 
         new MaterialDialog.Builder(this)
@@ -412,6 +420,13 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                         presenter.setItemLabel(item, ((EditText) dialog.getCustomView().findViewById(R.id.label)).getText().toString());
                     }
                 })
+//                .neutralText(R.string.reset)
+//                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+//                    @Override
+//                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+//                        presenter.resetItemIcon(item);
+//                    }
+//                })
                 .show();
 
         View view = materialDialog.getCustomView();
@@ -505,6 +520,16 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                 });
                 break;
         }
+    }
+
+    @Override
+    public boolean isFree() {
+        return Utility.isFree(this);
+    }
+
+    @Override
+    public void proOnlyDialog() {
+        Utility.showProOnlyDialog(this);
     }
 
     @Override
