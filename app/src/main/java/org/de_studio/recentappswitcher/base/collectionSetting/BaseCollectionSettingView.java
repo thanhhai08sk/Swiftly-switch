@@ -367,7 +367,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                     .build());
         }
 
-        if (isItem || isFolder) {
+        if (isItem) {
             adapter.add(new MaterialSimpleListItem.Builder(this)
                     .content(R.string.edit)
                     .iconPadding(4)
