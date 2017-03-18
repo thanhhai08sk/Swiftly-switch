@@ -1,16 +1,19 @@
 package org.de_studio.recentappswitcher.setItemIcon;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 
+import java.util.ArrayList;
 import java.util.SortedMap;
+
+import rx.subjects.PublishSubject;
 
 /**
  * Created by HaiNguyen on 3/17/17.
@@ -18,19 +21,40 @@ import java.util.SortedMap;
 
 public class DrawableAdapter  extends RecyclerView.Adapter<DrawableAdapter.ViewHolder>{
     SortedMap<String, String> sortedMap;
-    IconPackManager.IconPack iconPack;
     Context context;
-    PackageManager packageManager;
+    ArrayList<SetItemIconView.BitmapInfo> allItems;
+    PublishSubject<SetItemIconView.BitmapInfo> itemClickSJ = PublishSubject.create();
 
+
+    public void updateData(ArrayList<SetItemIconView.BitmapInfo> items) {
+        allItems = items;
+        notifyDataSetChanged();
+    }
+
+    public void clearData() {
+        allItems.clear();
+    }
+
+    public void addItem(SetItemIconView.BitmapInfo item) {
+        allItems.add(item);
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_drawable_icon_only, parent, false));
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
+        final SetItemIconView.BitmapInfo info = allItems.get(position);
+        Drawable drawable = info.res.getDrawable(info.resId, null);
+        holder.imageView.setImageDrawable(drawable);
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemClickSJ.onNext(info);
+            }
+        });
     }
 
     @Override
@@ -47,5 +71,9 @@ public class DrawableAdapter  extends RecyclerView.Adapter<DrawableAdapter.ViewH
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.image_view);
         }
+    }
+
+    public PublishSubject<SetItemIconView.BitmapInfo> onItemClick() {
+        return itemClickSJ;
     }
 }

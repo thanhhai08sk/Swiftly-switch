@@ -7,7 +7,11 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,8 +30,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.SortedMap;
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import rx.subjects.PublishSubject;
 
 /**
@@ -37,18 +43,29 @@ import rx.subjects.PublishSubject;
 public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> implements SetItemIconPresenter.View {
     private static final String TAG = SetItemIconView.class.getSimpleName();
 
-    PublishSubject<String> searchSJ = PublishSubject.create();
-    PublishSubject<String> drawableClickSJ = PublishSubject.create();
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+
+
+    @Inject
+    DrawableAdapter adapter;
+    @Inject
+    PackageManager packageManager;
 
     final ArrayList<BitmapInfo> mAllItems = new ArrayList<BitmapInfo>();
     String iconPackPackage;
+    String itemId;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        iconPackPackage = getIntent().getStringExtra(Cons.PACKAGENAME);
+        itemId = getIntent().getStringExtra(Cons.ITEM_ID);
         super.onCreate(savedInstanceState);
-        iconPackPackage = getIntent().getStringExtra(Cons.PACKAGE_NAME_KEY);
 
+        recyclerView.setLayoutManager(new GridLayoutManager(this, GridLayoutManager.DEFAULT_SPAN_COUNT));
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -66,16 +83,6 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
     }
 
 
-
-    @Override
-    public PublishSubject<String> onSearch() {
-        return searchSJ;
-    }
-
-    @Override
-    public PublishSubject<String> onDrawableClick() {
-        return drawableClickSJ;
-    }
 
     @Override
     protected void inject() {
@@ -103,19 +110,43 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
 
     }
 
-    @Override
-    public Bitmap getBitmap(String drawable) {
-        return null;
-    }
 
     @Override
-    public void updateAdapter(SortedMap<String, String> sortedDrawableMap) {
-
+    public void showAllItems() {
+        if (iconPackPackage != null) {
+            try {
+                Resources res = packageManager.getResourcesForApplication(iconPackPackage);
+                if (res != null) {
+                    loadThemeIcons(res, iconPackPackage);
+                    setTitle(getIntent().getStringExtra(Cons.LABEL));
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                Log.e(TAG, "showAllItems: name not found");
+                e.printStackTrace();
+            }
+        } else{
+            loadAppIcons();
+            setTitle(R.string.system);
+        }
+        adapter.updateData(mAllItems);
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        return false;
+        if (TextUtils.isEmpty(query)) {
+            adapter.clearData();
+            adapter.updateData(mAllItems);
+            return true;
+        }
+
+        query = query.toLowerCase(Locale.ENGLISH);
+        adapter.clearData();
+        for (BitmapInfo info : mAllItems) {
+            if (info.label != null && info.label.contains(query)) {
+                adapter.addItem(info);
+            }
+        }
+        return true;
     }
 
     @Override
@@ -192,8 +223,18 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
         }
     }
 
+    @Override
+    public Bitmap getBitmap(BitmapInfo item) {
+        Drawable drawable = item.res.getDrawable(item.resId, null);
+        return ((BitmapDrawable) drawable).getBitmap();
+    }
 
-    private static class BitmapInfo {
+    @Override
+    public PublishSubject<BitmapInfo> onItemClick() {
+        return adapter.onItemClick();
+    }
+
+    public static class BitmapInfo {
         final int resId;
         final Resources res;
         final String label;

@@ -7,8 +7,6 @@ import android.view.MenuItem;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.PresenterView;
 
-import java.util.SortedMap;
-
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 
@@ -26,37 +24,31 @@ public class SetItemIconPresenter extends BasePresenter<SetItemIconPresenter.Vie
     @Override
     public void onViewAttach(final View view) {
         super.onViewAttach(view);
+
         addSubscription(
-                view.onSearch().subscribe(new Action1<String>() {
+                view.onItemClick().subscribe(new Action1<SetItemIconView.BitmapInfo>() {
                     @Override
-                    public void call(String s) {
-                        view.updateAdapter(model.getDrawables(s));
+                    public void call(SetItemIconView.BitmapInfo bitmapInfo) {
+                        model.setItemBitmap(view.getBitmap(bitmapInfo));
+                        view.finish();
                     }
                 })
         );
 
-        addSubscription(
-                view.onDrawableClick().subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        model.setItemBitmap(view.getBitmap(s));
-                    }
-                })
-        );
-
-        view.updateAdapter(model.getDrawables(null));
+        view.showAllItems();
 
     }
 
     public interface View extends PresenterView, SearchView.OnQueryTextListener,MenuItem.OnActionExpandListener {
 
-        PublishSubject<String> onSearch();
 
-        PublishSubject<String> onDrawableClick();
+        PublishSubject<SetItemIconView.BitmapInfo> onItemClick();
 
-        Bitmap getBitmap(String drawable);
+        Bitmap getBitmap(SetItemIconView.BitmapInfo item);
 
-        void updateAdapter(SortedMap<String, String> sortedDrawableMap);
+        void showAllItems();
+
+        void finish();
 
     }
 }
