@@ -409,7 +409,8 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
     }
 
     public void editFolderLabelAndIcon(final Slot folder) {
-        MaterialDialog.Builder builder = buildBaseSetIconDialog(true);
+        boolean showResetButton = !Utility.isFree(this);
+        MaterialDialog.Builder builder = buildBaseSetIconDialog(showResetButton);
         builder.onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -444,7 +445,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
 
     @Override
     public void editItemLabelAndIcon(final Item item) {
-        boolean showResetButton = !Utility.isFree(this) && !item.type.equals(Item.TYPE_DEVICE_SHORTCUT);
+        boolean showResetButton = !Utility.isFree(this);
         MaterialDialog.Builder builder = buildBaseSetIconDialog(showResetButton);
         builder.onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override

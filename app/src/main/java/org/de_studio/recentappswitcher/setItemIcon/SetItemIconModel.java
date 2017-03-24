@@ -50,6 +50,9 @@ public class SetItemIconModel extends BaseModel {
                                 item.iconBitmap3 = stream.toByteArray();
                                 break;
                             default:
+                                if (item.type.equals(Item.TYPE_DEVICE_SHORTCUT) && item.originalIconBitmap == null) {
+                                    item.originalIconBitmap = item.iconBitmap;
+                                }
                                 item.iconBitmap = stream.toByteArray();
                         }
                         try {

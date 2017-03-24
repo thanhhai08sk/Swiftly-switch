@@ -322,6 +322,10 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
                 } else if (item.type.equals(Item.TYPE_APP) ||
                         item.type.equals(Item.TYPE_CONTACT)) {
                     item.iconBitmap = null;
+                } else if (item.type.equals(Item.TYPE_DEVICE_SHORTCUT)) {
+                    if (item.originalIconBitmap != null) {
+                        item.iconBitmap = item.originalIconBitmap;
+                    }
                 }
             }
         });

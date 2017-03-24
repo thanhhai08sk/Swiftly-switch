@@ -45,6 +45,7 @@ public class Item extends RealmObject {
     public int iconResourceId;
     public int iconResourceId2;
     public int iconResourceId3;
+    public byte[] originalIconBitmap;
     public byte[] iconBitmap;
     public byte[] iconBitmap2;
     public byte[] iconBitmap3;
@@ -188,6 +189,14 @@ public class Item extends RealmObject {
 
     public void setIconBitmap3(byte[] iconBitmap3) {
         this.iconBitmap3 = iconBitmap3;
+    }
+
+    public byte[] getOriginalIconBitmap() {
+        return originalIconBitmap;
+    }
+
+    public void setOriginalIconBitmap(byte[] originalIconBitmap) {
+        this.originalIconBitmap = originalIconBitmap;
     }
 
     @Override

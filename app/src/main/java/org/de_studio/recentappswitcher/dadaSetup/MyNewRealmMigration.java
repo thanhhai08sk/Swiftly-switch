@@ -72,6 +72,12 @@ public class MyNewRealmMigration implements RealmMigration {
                     .addField("useIconSetByUser", boolean.class);
             oldVersion++;
         }
+        if (oldVersion == 8) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
+            schema.get("Item")
+                    .addField("originalIconBitmap", byte[].class);
+            oldVersion++;
+        }
 
    //// TODO: 2/20/17 don't forget to implement the old realmMigration
     }
