@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.dadaSetup.DataSetupService;
 import org.de_studio.recentappswitcher.edgeService.NewServiceModel;
 import org.de_studio.recentappswitcher.edgeService.NewServicePresenter;
 import org.de_studio.recentappswitcher.edgeService.NewServiceView;
@@ -98,14 +100,27 @@ public class NewServiceModule {
     @Singleton
     @Named(EDGE_1_NAME)
     Edge edge1(Realm realm) {
-        return realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_1_ID).findFirst();
+        Edge edge = realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_1_ID).findFirst();
+        if (edge == null) {
+            Log.e(TAG, "edge1: edge null, generate again");
+            DataSetupService.generateEdges(realm);
+            edge = realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_1_ID).findFirst();
+
+        }
+        return edge;
     }
 
     @Provides
     @Singleton
     @Named(EDGE_2_NAME)
     Edge edge2(Realm realm) {
-        return realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_2_ID).findFirst();
+        Edge edge = realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_2_ID).findFirst();
+        if (edge == null) {
+            Log.e(TAG, "edge2: edge null, generate again");
+            DataSetupService.generateEdges(realm);
+            edge = realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_2_ID).findFirst();
+        }
+        return edge;
     }
 
     @Provides

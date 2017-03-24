@@ -14,6 +14,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -354,17 +355,23 @@ public class IconPackManager
             }
             else // draw the scaled bitmap with the back image as mask
             {
-                Bitmap mutableMask = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-                Canvas maskCanvas = new Canvas(mutableMask);
-                maskCanvas.drawBitmap(backImage,0, 0, new Paint());
+                try {
+                    Bitmap mutableMask = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                    Canvas maskCanvas = new Canvas(mutableMask);
+                    maskCanvas.drawBitmap(backImage, 0, 0, new Paint());
 
-                // paint the bitmap with mask into the result
+                    // paint the bitmap with mask into the result
 
-                Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-                mCanvas.drawBitmap(mutableMask, 0, 0, paint);
-                mCanvas.drawBitmap(scaledBitmap, (w - scaledBitmap.getWidth())/2, (h - scaledBitmap.getHeight())/2, null);
-                paint.setXfermode(null);
+                    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                    paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+                    mCanvas.drawBitmap(mutableMask, 0, 0, paint);
+                    mCanvas.drawBitmap(scaledBitmap, (w - scaledBitmap.getWidth()) / 2, (h - scaledBitmap.getHeight()) / 2, null);
+                    paint.setXfermode(null);
+                } catch (OutOfMemoryError error) {
+                    error.printStackTrace();
+                    Log.e(TAG, "generateBitmap: " + error);
+                    return defaultBitmap;
+                }
 
             }
 

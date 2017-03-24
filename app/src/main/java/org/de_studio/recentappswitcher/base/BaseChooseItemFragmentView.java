@@ -113,10 +113,12 @@ public abstract class BaseChooseItemFragmentView<P extends BaseChooseItemPresent
     }
 
     public void setProgressBar(boolean show) {
-        if (show) {
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            progressBar.setVisibility(View.GONE);
+        if (progressBar != null) {
+            if (show) {
+                progressBar.setVisibility(View.VISIBLE);
+            } else {
+                progressBar.setVisibility(View.GONE);
+            }
         }
     }
 
