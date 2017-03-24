@@ -203,10 +203,30 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
     public void setItemIcon(Item item, int itemState) {
         if (!view.isFree()) {
-            view.showChooseIconSourceDialog(item, itemState);
+            view.showChooseIconSourceDialog(item,null, itemState);
         } else {
             view.proOnlyDialog();
         }
+    }
+
+    public void setFolderLabel(Slot folder, String label) {
+        model.setSlotLabel(folder, label);
+    }
+
+    public void setFolderIcon(Slot folder) {
+        if (!view.isFree()) {
+            view.showChooseIconSourceDialog(null, folder, -1);
+        } else {
+            view.proOnlyDialog();
+        }
+    }
+
+    public void setFolderIconWithSource(IconPackManager.IconPack iconPack, Slot folder) {
+
+    }
+
+    public void resetFolderIcon(Slot folder) {
+        model.resetFolderIcon(view.getActivity(), folder);
     }
 
     public void resetItemIcon(Item item) {
@@ -309,7 +329,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
         void showSetLabelDialog(String currentLabel);
 
-        void showChooseIconSourceDialog(Item item, int itemState);
+        void showChooseIconSourceDialog(Item item, Slot folder, int itemState);
 
         void setRecyclerView(OrderedRealmCollection<Slot> slots, RecyclerView.LayoutManager layoutManager, GridSpacingItemDecoration decoration);
 

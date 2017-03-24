@@ -300,6 +300,19 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
         });
     }
 
+    public void setSlotLabel(final Slot slot, final String label) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                slot.label = label;
+            }
+        });
+    }
+
+    public void resetFolderIcon(Context context, Slot folder) {
+
+    }
+
     public void resetItemIcon(final Context context, final Item item) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override

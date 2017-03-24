@@ -23,6 +23,7 @@ public class Slot extends RealmObject {
     public RealmList<Item> items;
     public byte[] iconBitmap;
     public boolean instant;
+    public String label;
 
     public Slot() {
     }
@@ -106,5 +107,13 @@ public class Slot extends RealmObject {
 
     public void setInstant(boolean instant) {
         this.instant = instant;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

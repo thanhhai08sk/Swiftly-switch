@@ -154,10 +154,12 @@ public class MyRealmMigration implements RealmMigration {
             oldVersion++;
         }
 
-
-
-
-
+        if (oldVersion == 8) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
+            schema.get("Slot")
+                    .addField("label", String.class);
+            oldVersion++;
+        }
 
     }
 

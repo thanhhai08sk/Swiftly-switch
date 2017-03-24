@@ -408,26 +408,57 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
         });
     }
 
+    public void editFolderLabelAndIcon(final Slot folder) {
+        MaterialDialog.Builder builder = buildBaseSetIconDialog(true);
+        builder.onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                presenter.setFolderLabel(folder, ((EditText) dialog.getCustomView().findViewById(R.id.label)).getText().toString());
+            }
+        });
+
+        builder.onNeutral(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                presenter.resetFolderIcon(folder);
+            }
+        });
+
+        final MaterialDialog materialDialog = builder.build();
+        materialDialog.show();
+
+        View view = materialDialog.getCustomView();
+        EditText editText = (EditText) view.findViewById(R.id.label);
+        ImageView icon = (ImageView) view.findViewById(R.id.icon);
+        editText.setText(folder.label);
+        Utility.setSlotIcon(folder, this, icon, getPackageManager(), iconPack, true, false);
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.setFolderIcon(folder);
+                materialDialog.dismiss();
+            }
+        });
+
+    }
+
     @Override
     public void editItemLabelAndIcon(final Item item) {
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
-                .title(R.string.edit)
-                .customView(R.layout.dialog_edit_item, false)
-                .positiveText(R.string.app_tab_fragment_ok_button)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        presenter.setItemLabel(item, ((EditText) dialog.getCustomView().findViewById(R.id.label)).getText().toString());
-                    }
-                });
-        if (!Utility.isFree(this) && !item.type.equals(Item.TYPE_DEVICE_SHORTCUT)) {
-            builder.neutralText(R.string.reset_icon)
-                    .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            presenter.resetItemIcon(item);
-                        }
-                    });
+        boolean showResetButton = !Utility.isFree(this) && !item.type.equals(Item.TYPE_DEVICE_SHORTCUT);
+        MaterialDialog.Builder builder = buildBaseSetIconDialog(showResetButton);
+        builder.onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                presenter.setItemLabel(item, ((EditText) dialog.getCustomView().findViewById(R.id.label)).getText().toString());
+            }
+        });
+        if (showResetButton) {
+            builder.onNeutral(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    presenter.resetItemIcon(item);
+                }
+            });
         }
 
 
@@ -438,6 +469,18 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
         EditText editText = (EditText) view.findViewById(R.id.label);
         editText.setText(item.label);
         setIcons(item, view, materialDialog);
+    }
+
+    private MaterialDialog.Builder buildBaseSetIconDialog(boolean showResetButotn) {
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                .title(R.string.edit)
+                .customView(R.layout.dialog_edit_item, false)
+                .positiveText(R.string.app_tab_fragment_ok_button)
+                ;
+        if (showResetButotn) {
+            builder.neutralText(R.string.reset_icon);
+        }
+        return builder;
     }
 
     private void setIcons(final Item item, View view, final MaterialDialog dialog) {
@@ -538,12 +581,16 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
     }
 
     @Override
-    public void showChooseIconSourceDialog(final Item item, final int itemState) {
+    public void showChooseIconSourceDialog(final Item item, final Slot folder, final int itemState) {
         final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
             @Override
             public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem dialogItem) {
                 IconPackManager.IconPack iconPack =(IconPackManager.IconPack) dialogItem.getTag();
-                presenter.setItemIconWithSource(new BaseCollectionSettingPresenter.SetItemIconInfo(iconPack, item.itemId, itemState));
+                if (item != null) {
+                    presenter.setItemIconWithSource(new BaseCollectionSettingPresenter.SetItemIconInfo(iconPack, item.itemId, itemState));
+                } else if (folder != null) {
+                    presenter.setFolderIconWithSource(iconPack, folder);
+                }
                 dialog.dismiss();
             }
         });

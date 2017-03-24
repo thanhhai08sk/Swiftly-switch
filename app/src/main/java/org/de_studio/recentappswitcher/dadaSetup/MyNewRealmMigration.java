@@ -60,6 +60,13 @@ public class MyNewRealmMigration implements RealmMigration {
             oldVersion++;
         }
 
+        if (oldVersion == 6) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
+            schema.get("Slot")
+                    .addField("label", String.class);
+            oldVersion++;
+        }
+
    //// TODO: 2/20/17 don't forget to implement the old realmMigration
     }
 }
