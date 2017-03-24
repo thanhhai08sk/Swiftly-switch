@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,13 @@ public class ItemsListAdapter extends RealmBaseAdapter<Item> {
             icon = ((ImageView) view.findViewById(R.id.icon));
             label = ((TextView) view.findViewById(R.id.label));
 
-            Utility.setItemIcon(item, context, icon, packageManager, iconPack,false);
+            try {
+                Utility.setItemIcon(item, context, icon, packageManager, iconPack, false);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG, "getView: crash");
+            }
             label.setText(item.label);
             if (currentItem != null) {
                 if (radioButton != null) {

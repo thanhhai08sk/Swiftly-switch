@@ -1066,13 +1066,20 @@ public  class Utility {
                 case Item.TYPE_APP:
                         try {
                             Drawable defaultDrawable = packageManager.getApplicationIcon(item.getPackageName());
-                            Bitmap defaultBm = ((BitmapDrawable) defaultDrawable).getBitmap();
-                            if (iconPack!=null) {
-                                Bitmap iconBitmap = iconPack.getIconForPackage(item.packageName, defaultBm);
-                                icon.setImageBitmap(iconBitmap);
-                            } else {
+                            try {
+                                Bitmap defaultBm = ((BitmapDrawable) defaultDrawable).getBitmap();
+                                if (iconPack!=null) {
+                                    Bitmap iconBitmap = iconPack.getIconForPackage(item.packageName, defaultBm);
+                                    icon.setImageBitmap(iconBitmap);
+                                } else {
+                                    icon.setImageDrawable(defaultDrawable);
+                                }
+                            } catch (ClassCastException e) {
+                                e.printStackTrace();
+                                Log.e(TAG, "setItemIcon: not a BitmapDrawable");
                                 icon.setImageDrawable(defaultDrawable);
                             }
+
                         } catch (PackageManager.NameNotFoundException e) {
                             Log.e(TAG, "NameNotFound " + e);
                         }
