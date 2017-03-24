@@ -54,12 +54,7 @@ public class EdgeSettingModel extends BaseModel {
         if (edge == null) {
             edge = realm.where(Edge.class).equalTo(Cons.EDGE_ID, edgeId).findFirst();
             if (edge == null) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        DataSetupService.generateEdges(realm);
-                    }
-                });
+                DataSetupService.generateEdges(realm);
             }
             edge = realm.where(Edge.class).equalTo(Cons.EDGE_ID, edgeId).findFirst();
         }

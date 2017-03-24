@@ -164,7 +164,10 @@ public class DataSetupService extends IntentService {
 
                     realm.copyToRealm(edge1);
                     DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+                    Log.e(TAG, "execute: setup edge1 ok");
                     dataInfo.edge1Ok = true;
+                } else {
+                    Log.e(TAG, "execute: edge1 already exist");
                 }
 
                 if (realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_2_ID).findFirst() == null) {
@@ -182,7 +185,10 @@ public class DataSetupService extends IntentService {
 
                     realm.copyToRealm(edge2);
                     DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+                    Log.e(TAG, "execute: setup edge2 ok");
                     dataInfo.edge2Ok = true;
+                } else {
+                    Log.e(TAG, "execute: edge2 already exist");
                 }
             }
         });
