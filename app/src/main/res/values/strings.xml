@@ -329,6 +329,7 @@
 
     <string name="faq_can_not_uninstall">Why I can\'t uninstall the app on my device?</string>
     <string name="faq_can_not_uninstall_answer">You can uninstall the app as other applications. If you have set the app to \" Device administrator\" (for Screen lock shortcut) you\'ll need to disable it first: Setting > Security > Phone administrator > disable the option for Swiftly Switch).</string>
+    <string name="reset_icon">Reset icon</string>
 
 
     //What new

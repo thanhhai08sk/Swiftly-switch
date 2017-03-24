@@ -410,7 +410,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
 
     @Override
     public void editItemLabelAndIcon(final Item item) {
-        MaterialDialog materialDialog = new MaterialDialog.Builder(this)
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
                 .title(R.string.edit)
                 .customView(R.layout.dialog_edit_item, false)
                 .positiveText(R.string.app_tab_fragment_ok_button)
@@ -419,15 +419,20 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         presenter.setItemLabel(item, ((EditText) dialog.getCustomView().findViewById(R.id.label)).getText().toString());
                     }
-                })
-//                .neutralText(R.string.reset)
-//                .onNeutral(new MaterialDialog.SingleButtonCallback() {
-//                    @Override
-//                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-//                        presenter.resetItemIcon(item);
-//                    }
-//                })
-                .show();
+                });
+        if (!Utility.isFree(this) && !item.type.equals(Item.TYPE_DEVICE_SHORTCUT)) {
+            builder.neutralText(R.string.reset_icon)
+                    .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            presenter.resetItemIcon(item);
+                        }
+                    });
+        }
+
+
+        MaterialDialog materialDialog = builder.build();
+        materialDialog.show();
 
         View view = materialDialog.getCustomView();
         EditText editText = (EditText) view.findViewById(R.id.label);
