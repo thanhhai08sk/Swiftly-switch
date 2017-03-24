@@ -14,7 +14,6 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
-import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -301,7 +300,7 @@ public class IconPackManager
 
         private Bitmap generateBitmap(String appPackageName, Bitmap defaultBitmap)
         {
-            long time = System.currentTimeMillis();
+//            long time = System.currentTimeMillis();
             // the key for the cache is the icon pack package name and the app package name
 //            String key = packageName + ":" + appPackageName;
 
@@ -349,8 +348,8 @@ public class IconPackManager
                 // paint the bitmap with mask into the result
                 Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
                 paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
-                mCanvas.drawBitmap(scaledBitmap, (w - scaledBitmap.getWidth())/2, (h - scaledBitmap.getHeight())/2, null);
                 mCanvas.drawBitmap(mutableMask, 0, 0, paint);
+                mCanvas.drawBitmap(scaledBitmap, (w - scaledBitmap.getWidth())/2, (h - scaledBitmap.getHeight())/2, null);
                 paint.setXfermode(null);
             }
             else // draw the scaled bitmap with the back image as mask
@@ -360,10 +359,11 @@ public class IconPackManager
                 maskCanvas.drawBitmap(backImage,0, 0, new Paint());
 
                 // paint the bitmap with mask into the result
+
                 Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
                 paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-                mCanvas.drawBitmap(scaledBitmap, (w - scaledBitmap.getWidth())/2, (h - scaledBitmap.getHeight())/2, null);
                 mCanvas.drawBitmap(mutableMask, 0, 0, paint);
+                mCanvas.drawBitmap(scaledBitmap, (w - scaledBitmap.getWidth())/2, (h - scaledBitmap.getHeight())/2, null);
                 paint.setXfermode(null);
 
             }
@@ -378,7 +378,7 @@ public class IconPackManager
 //            BitmapCache.getInstance(mContext).putBitmap(key, result);
 
             // return it
-            Log.e(TAG, "generateBitmap: time = " + (System.currentTimeMillis() - time));
+//            Log.e(TAG, "generateBitmap: time = " + (System.currentTimeMillis() - time));
             return result;
         }
     }
