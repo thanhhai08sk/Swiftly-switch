@@ -470,8 +470,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public void showBackground(boolean backgroundTouchable) {
         if (!backgroundView.isAttachedToWindow()) {
-            Log.e(TAG, "showBackground: add background");
-            windowManager.addView(backgroundView, backgroundTouchable ? WINDOW_PARAMS_TOUCHABLE : WINDOW_PARAMS_NO_TOUCH);
+            try {
+                windowManager.addView(backgroundView, backgroundTouchable ? WINDOW_PARAMS_TOUCHABLE : WINDOW_PARAMS_NO_TOUCH);
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+                Log.e(TAG, "showBackground: already add to window");
+            }
             mDetector = new GestureDetectorCompat(this,this);
             backgroundView.setAlpha(1f);
             backgroundView.setVisibility(View.VISIBLE);
@@ -806,7 +810,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             }
         }
         if (!frameLayout.isAttachedToWindow()) {
-            windowManager.addView(frameLayout, WINDOW_PARAMS_NO_TOUCH);
+            try {
+                windowManager.addView(frameLayout, WINDOW_PARAMS_NO_TOUCH);
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+                Log.e(TAG, "showCircle: already add to window");
+            }
         }
         frameLayout.setVisibility(View.VISIBLE);
     }
