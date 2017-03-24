@@ -692,7 +692,7 @@ public  class Utility {
     }
 
 
-    public static   Bitmap createAndSaveFolderThumbnail(final Slot folder, Realm realm, Context context) {
+    public static   Bitmap createAndSaveFolderThumbnail(final Slot folder, Realm realm, Context context, IconPackManager.IconPack iconPack) {
         float mScale = context. getResources().getDisplayMetrics().density;
         int width =(int)( 48*mScale);
         int height = (int) (48 * mScale);
@@ -723,11 +723,26 @@ public  class Utility {
                 switch (item.type) {
                     case Item.TYPE_APP:
                         try {
-                            drawable = packageManager.getApplicationIcon(item.getPackageName());
+                            Drawable defaultDrawable = packageManager.getApplicationIcon(item.getPackageName());
+                            Bitmap defaultBm = ((BitmapDrawable) defaultDrawable).getBitmap();
+                            if (iconPack!=null) {
+                                drawable = new BitmapDrawable(context.getResources(), iconPack.getIconForPackage(item.packageName, defaultBm));
+
+                            } else {
+                                drawable = defaultDrawable;
+                            }
                         } catch (PackageManager.NameNotFoundException e) {
-                            e.printStackTrace();
+                            Log.e(TAG, "NameNotFound " + e);
                         }
                         drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
+
+
+//                        try {
+//                            drawable = packageManager.getApplicationIcon(item.getPackageName());
+//                        } catch (PackageManager.NameNotFoundException e) {
+//                            e.printStackTrace();
+//                        }
+//                        drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
 
                         break;
                     case Item.TYPE_ACTION:

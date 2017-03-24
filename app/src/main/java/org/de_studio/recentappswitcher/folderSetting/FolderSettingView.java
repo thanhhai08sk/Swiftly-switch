@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.folderSetting;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseActivity;
@@ -51,6 +53,9 @@ public class FolderSettingView extends BaseActivity<Void, FolderSettingPresenter
 
     @Inject
     ItemsAdapter adapter;
+    @Nullable
+    @Inject
+    IconPackManager.IconPack iconPack;
 
     PublishSubject<DragAndDropCallback.MoveData> moveItemSubject = PublishSubject.create();
     PublishSubject<DragAndDropCallback.DropData> dropItemSubject = PublishSubject.create();
@@ -243,6 +248,6 @@ public class FolderSettingView extends BaseActivity<Void, FolderSettingPresenter
 
     @Override
     public void updateFolderThumbnail(Realm realm, Slot folder) {
-        Utility.createAndSaveFolderThumbnail(folder,realm,this);
+        Utility.createAndSaveFolderThumbnail(folder, realm, this, iconPack);
     }
 }
