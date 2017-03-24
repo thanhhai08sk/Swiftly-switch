@@ -108,4 +108,12 @@ public class IconPackListAdapter extends BaseAdapter {
 
         return view;
     }
+
+    public IconPackManager.IconPack getIconPackAt(int position) {
+        if (getItemId(position) == 0) {
+            return null;
+        } else {
+            return mHashMap.get(packageName[position - 1]);
+        }
+    }
 }

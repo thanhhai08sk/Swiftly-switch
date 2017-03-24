@@ -180,7 +180,7 @@ public abstract class BaseChooseItemFragmentView<P extends BaseChooseItemPresent
 
     @OnClick(R.id.contact_permission)
     void onContackPermissionClick(){
-//        ActivityCompat.requestPermissions(getActivity(),
+//        ActivityCompat.requestPermissions(getActivityForContext(),
 //                new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE},
 //                Cons.REQUEST_CODE_CONTACT_PERMISSION);
         requestPermissions(new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE},Cons.REQUEST_CODE_CONTACT_PERMISSION);

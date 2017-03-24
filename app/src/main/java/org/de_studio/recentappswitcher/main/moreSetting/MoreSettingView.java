@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.main.moreSetting;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -383,6 +384,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                         @Override
                         public void onDismiss(DialogInterface dialog) {
                             resetService();
+                            presenter.resetFolderThumbnail();
                         }
                     })
                     .show();
@@ -390,6 +392,11 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
             IconPackListAdapter mAdapter = new IconPackListAdapter(this, hashMap);
             listView.setAdapter(mAdapter);
         }
+    }
+
+    @Override
+    public Activity getActivityForContext() {
+        return this;
     }
 
     @Override

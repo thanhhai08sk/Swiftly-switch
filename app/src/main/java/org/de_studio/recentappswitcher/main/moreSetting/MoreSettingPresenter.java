@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.main.moreSetting;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -8,11 +9,15 @@ import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveId;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.IconPackManager;
+import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.base.BasePresenter;
 import org.de_studio.recentappswitcher.base.PresenterView;
+import org.de_studio.recentappswitcher.model.Slot;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func2;
@@ -246,6 +251,23 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
         view.chooseIconPackDialog();
     }
 
+    public void resetFolderThumbnail() {
+        String iconPackPacka = sharedPreferences.getString(Cons.ICON_PACK_PACKAGE_NAME_KEY, Cons.ICON_PACK_NONE);
+        IconPackManager.IconPack iconPack = null;
+        if (!iconPackPacka.equals(Cons.ICON_PACK_NONE)) {
+            IconPackManager iconPackManager = new IconPackManager();
+            iconPackManager.setContext(view.getActivityForContext());
+            iconPack = iconPackManager.getInstance(iconPackPacka);
+            if (iconPack != null) {
+                iconPack.load();
+            }
+        }
+        RealmResults<Slot> folders = realm.where(Slot.class).equalTo(Cons.TYPE, Slot.TYPE_FOLDER).findAll();
+        for (Slot folder : folders) {
+            Utility.createAndSaveFolderThumbnail(folder, realm, view.getActivityForContext(), iconPack);
+        }
+    }
+
     public void onSetIconPack(String iconPackPackage) {
         sharedPreferences.edit().putString(Cons.ICON_PACK_PACKAGE_NAME_KEY, iconPackPackage).commit();
         view.resetService();
@@ -402,6 +424,8 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
         void uploadToDrive(final Realm realm, DriveId mFolderDriveId);
 
         void downloadFromDrive(final Realm realm, DriveFile file);
+
+        Activity getActivityForContext();
 
     }
 }
