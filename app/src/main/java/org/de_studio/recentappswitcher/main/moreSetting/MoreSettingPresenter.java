@@ -264,7 +264,9 @@ public class MoreSettingPresenter extends BasePresenter<MoreSettingPresenter.Vie
         }
         RealmResults<Slot> folders = realm.where(Slot.class).equalTo(Cons.TYPE, Slot.TYPE_FOLDER).findAll();
         for (Slot folder : folders) {
-            Utility.createAndSaveFolderThumbnail(folder, realm, view.getActivityForContext(), iconPack);
+            if (!folder.useIconSetByUser) {
+                Utility.createAndSaveFolderThumbnail(folder, realm, view.getActivityForContext(), iconPack);
+            }
         }
     }
 

@@ -248,6 +248,8 @@ public class FolderSettingView extends BaseActivity<Void, FolderSettingPresenter
 
     @Override
     public void updateFolderThumbnail(Realm realm, Slot folder) {
-        Utility.createAndSaveFolderThumbnail(folder, realm, this, iconPack);
+        if (!folder.useIconSetByUser) {
+            Utility.createAndSaveFolderThumbnail(folder, realm, this, iconPack);
+        }
     }
 }

@@ -161,6 +161,12 @@ public class MyRealmMigration implements RealmMigration {
             oldVersion++;
         }
 
+        if (oldVersion == 9) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
+            schema.get("Slot")
+                    .addField("useIconSetByUser", boolean.class);
+            oldVersion++;
+        }
     }
 
     @Override

@@ -64,6 +64,7 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
     final ArrayList<BitmapInfo> mAllItems = new ArrayList<BitmapInfo>();
     String iconPackPackage;
     String itemId;
+    String folderId;
     int itemState;
 
     PublishSubject<Void> loadAllItemOkSJ = PublishSubject.create();
@@ -74,6 +75,7 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
     protected void onCreate(Bundle savedInstanceState) {
         iconPackPackage = getIntent().getStringExtra(Cons.PACKAGENAME);
         itemId = getIntent().getStringExtra(Cons.ITEM_ID);
+        folderId = getIntent().getStringExtra(Cons.SLOT_ID);
         itemState = getIntent().getIntExtra("state", 1);
         super.onCreate(savedInstanceState);
 
@@ -101,7 +103,7 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
     @Override
     protected void inject() {
         DaggerSetItemIconComponent.builder()
-                .setItemIconModule(new SetItemIconModule(itemId, this, itemState))
+                .setItemIconModule(new SetItemIconModule(itemId,folderId, this, itemState))
                 .build().inject(this);
     }
 
@@ -275,10 +277,11 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
         return ((BitmapDrawable) drawable).getBitmap();
     }
 
-    public static Intent getIntent(String itemId, Context context, String label, String iconPackPackageName, int itemState) {
+    public static Intent getIntent(String itemId, String folderId, Context context, String label, String iconPackPackageName, int itemState) {
         Intent intent = new Intent(context, SetItemIconView.class);
         intent.putExtra(Cons.LABEL, label);
         intent.putExtra(Cons.ITEM_ID, itemId);
+        intent.putExtra(Cons.SLOT_ID, folderId);
         intent.putExtra(Cons.PACKAGENAME, iconPackPackageName);
         if (itemState>0) {
             intent.putExtra("state", itemState);

@@ -19,11 +19,13 @@ import dagger.Provides;
 @Module
 public class SetItemIconModule {
     String itemId;
+    String folderId;
     int itemState;
     SetItemIconView view;
 
-    public SetItemIconModule(String itemId, SetItemIconView view, int itemState) {
+    public SetItemIconModule(String itemId, String folderId, SetItemIconView view, int itemState) {
         this.itemId = itemId;
+        this.folderId = folderId;
         this.view = view;
         this.itemState = itemState;
     }
@@ -37,7 +39,7 @@ public class SetItemIconModule {
     @Provides
     @Singleton
     SetItemIconModel model() {
-        return new SetItemIconModel(itemId, itemState);
+        return new SetItemIconModel(itemId,folderId, itemState);
     }
 
     @Provides

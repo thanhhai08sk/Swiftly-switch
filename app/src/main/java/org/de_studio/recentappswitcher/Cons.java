@@ -20,8 +20,8 @@ public class Cons {
         }
     };
 
-    public static final int OLD_REALM_SCHEMA_VERSION = 9;
-    public static final int REALM_SCHEMA_VERSION = 7;  // TODO: 2/20/17 do not forget the old one
+    public static final int OLD_REALM_SCHEMA_VERSION = 10;
+    public static final int REALM_SCHEMA_VERSION = 8;  // TODO: 2/20/17 do not forget the old one
 
     public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.pro";
     public static final String FREE_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.trial";

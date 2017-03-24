@@ -16,6 +16,7 @@ import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 import java.util.List;
 
 import io.realm.OrderedRealmCollection;
+import io.realm.Realm;
 import rx.functions.Action1;
 import rx.functions.Func2;
 import rx.subjects.PublishSubject;
@@ -189,11 +190,17 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
     }
 
     public void editItem(int slotIndex) {
-        Item item = model.getCurrentCollection().slots.get(slotIndex).stage1Item;
-        if (item != null) {
-            view.editItemLabelAndIcon(item);
-        } else {
-            Log.e(TAG, "editItem: item null");
+        Slot slot = model.getCurrentCollection().slots.get(slotIndex);
+        if (slot.type.equals(Slot.TYPE_FOLDER)) {
+            view.editFolderLabelAndIcon(slot);
+        } else if (slot.type.equals(Slot.TYPE_ITEM)) {
+            Item item = model.getCurrentCollection().slots.get(slotIndex).stage1Item;
+            if (item != null) {
+                view.editItemLabelAndIcon(item);
+            } else {
+                Log.e(TAG, "editItem: item null");
+            }
+
         }
     }
 
@@ -222,11 +229,11 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
     }
 
     public void setFolderIconWithSource(IconPackManager.IconPack iconPack, Slot folder) {
-
+        view.openFolderIconSetting(iconPack, folder);
     }
 
     public void resetFolderIcon(Slot folder) {
-        model.resetFolderIcon(view.getActivity(), folder);
+        view.resetFolderIcon(folder, model.getRealm());
     }
 
     public void resetItemIcon(Item item) {
@@ -351,12 +358,17 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
         void editItemLabelAndIcon(Item item);
 
+        void editFolderLabelAndIcon(Slot folder);
+
         void openItemIconSetting(SetItemIconInfo info);
+
+        void openFolderIconSetting(IconPackManager.IconPack iconPack, Slot folder);
+
+        void resetFolderIcon(Slot folder, Realm realm);
 
         Context getActivity();
 
         boolean isFree();
-
         void proOnlyDialog();
 
 

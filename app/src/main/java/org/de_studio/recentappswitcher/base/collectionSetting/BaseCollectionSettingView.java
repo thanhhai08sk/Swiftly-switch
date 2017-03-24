@@ -55,6 +55,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
 import io.realm.OrderedRealmCollection;
+import io.realm.Realm;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
@@ -367,16 +368,15 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
                     .build());
         }
 
-        if (isItem) {
-            adapter.add(new MaterialSimpleListItem.Builder(this)
-                    .content(R.string.edit)
-                    .iconPadding(4)
-                    .icon(R.drawable.ic_action_edit_dark)
-                    .backgroundColor(Color.WHITE)
-                    .id(2)
-                    .build()
-            );
-        }
+        adapter.add(new MaterialSimpleListItem.Builder(this)
+                .content(R.string.edit)
+                .iconPadding(4)
+                .icon(R.drawable.ic_action_edit_dark)
+                .backgroundColor(Color.WHITE)
+                .id(2)
+                .build()
+        );
+
 
 
         new MaterialDialog.Builder(this)
@@ -430,7 +430,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
         View view = materialDialog.getCustomView();
         EditText editText = (EditText) view.findViewById(R.id.label);
         ImageView icon = (ImageView) view.findViewById(R.id.icon);
-        editText.setText(folder.label);
+        editText.setText(folder.label!=null? folder.label : getString(R.string.setting_shortcut_folder));
         Utility.setSlotIcon(folder, this, icon, getPackageManager(), iconPack, true, false);
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -634,8 +634,20 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
 
     @Override
     public void openItemIconSetting(BaseCollectionSettingPresenter.SetItemIconInfo info) {
-        startActivity(SetItemIconView.getIntent(info.itemId, this, info.iconPack != null ? info.iconPack.name : null,
+        startActivity(SetItemIconView.getIntent(info.itemId,null, this, info.iconPack != null ? info.iconPack.name : null,
                 info.iconPack != null ? info.iconPack.packageName : null, info.itemState));
+    }
+
+    @Override
+    public void openFolderIconSetting(IconPackManager.IconPack iconPack, Slot folder) {
+        startActivity(SetItemIconView.getIntent(null, folder.slotId, this, null,
+                iconPack == null ? null : iconPack.packageName,
+                -1));
+    }
+
+    @Override
+    public void resetFolderIcon(Slot folder, Realm realm) {
+        Utility.createAndSaveFolderThumbnail(folder, realm, this, iconPack);
     }
 
     public void updateRecyclerView(OrderedRealmCollection<Slot> slots) {

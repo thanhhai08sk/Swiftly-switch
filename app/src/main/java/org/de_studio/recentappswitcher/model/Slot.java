@@ -22,6 +22,7 @@ public class Slot extends RealmObject {
     public int longClickMode;
     public RealmList<Item> items;
     public byte[] iconBitmap;
+    public boolean useIconSetByUser;
     public boolean instant;
     public String label;
 
@@ -115,5 +116,13 @@ public class Slot extends RealmObject {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public boolean isUseIconSetByUser() {
+        return useIconSetByUser;
+    }
+
+    public void setUseIconSetByUser(boolean useIconSetByUser) {
+        this.useIconSetByUser = useIconSetByUser;
     }
 }

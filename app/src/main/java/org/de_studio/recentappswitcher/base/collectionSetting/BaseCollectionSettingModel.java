@@ -309,8 +309,8 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
         });
     }
 
-    public void resetFolderIcon(Context context, Slot folder) {
-
+    public Realm getRealm() {
+        return realm;
     }
 
     public void resetItemIcon(final Context context, final Item item) {

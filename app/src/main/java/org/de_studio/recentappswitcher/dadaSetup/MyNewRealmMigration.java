@@ -66,6 +66,12 @@ public class MyNewRealmMigration implements RealmMigration {
                     .addField("label", String.class);
             oldVersion++;
         }
+        if (oldVersion == 7) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
+            schema.get("Slot")
+                    .addField("useIconSetByUser", boolean.class);
+            oldVersion++;
+        }
 
    //// TODO: 2/20/17 don't forget to implement the old realmMigration
     }

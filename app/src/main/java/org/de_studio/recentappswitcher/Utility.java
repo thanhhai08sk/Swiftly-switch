@@ -692,7 +692,8 @@ public  class Utility {
     }
 
 
-    public static   Bitmap createAndSaveFolderThumbnail(final Slot folder, Realm realm, Context context, IconPackManager.IconPack iconPack) {
+
+    public static Bitmap createAndSaveFolderThumbnail(final Slot folder, Realm realm, Context context, IconPackManager.IconPack iconPack) {
         float mScale = context. getResources().getDisplayMetrics().density;
         int width =(int)( 48*mScale);
         int height = (int) (48 * mScale);
@@ -805,6 +806,7 @@ public  class Utility {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 folder.iconBitmap = stream.toByteArray();
+                folder.useIconSetByUser = false;
             }
         });
         if (folder.iconBitmap != null) {
