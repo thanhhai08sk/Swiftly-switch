@@ -523,7 +523,7 @@ public  class Utility {
     }
 
     public static void lastAppAction(Context context, String packageName) {
-        startApp(packageName,context);
+        startApp(packageName,context,false);
     }
 
     public static void callLogsAction(Context context) {
@@ -1640,7 +1640,7 @@ public  class Utility {
 
         switch (slot.type) {
             case Slot.TYPE_ITEM:
-                startItem(slot.stage1Item, lastAppPackageName, context, contactAction, ringerModeAction);
+                startItem(slot.stage1Item, lastAppPackageName, context, contactAction, ringerModeAction,false);
                 break;
             case Slot.TYPE_NULL:
                 if (currentCollectionId != null) {
@@ -1670,10 +1670,10 @@ public  class Utility {
         }
     }
 
-    public static void startItem(Item item, String lastAppPackageName, Context context,int contactAction, int ringerModeAction) {
+    public static void startItem(Item item, String lastAppPackageName, Context context,int contactAction, int ringerModeAction, boolean onHomeScreen) {
         switch (item.type) {
             case Item.TYPE_APP:
-                startApp(item.getPackageName(), context);
+                startApp(item.getPackageName(), context, onHomeScreen);
                 break;
             case Item.TYPE_ACTION:
                 startAction(item.action, context, lastAppPackageName, ringerModeAction);
@@ -1698,17 +1698,13 @@ public  class Utility {
         }
     }
 
-    private static void startApp(String packageName, Context context) {
+    private static void startApp(String packageName, Context context, boolean onHomeScreen) {
         Intent extApp = context.getPackageManager().getLaunchIntentForPackage(packageName);
         if (packageName != null && extApp != null) {
             if (packageName.equals("com.devhomc.search")) {
                 extApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(extApp);
             } else {
-//                Log.e(TAG, "startApp: " + item.getPackageName() + "\nContext = " + context.toString());
-//                extApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                ContextCompat.startActivities(context, new Intent[]{extApp});
-//
                 ComponentName componentName = extApp.getComponent();
                 Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
                 startAppIntent.setComponent(componentName);
@@ -1717,9 +1713,11 @@ public  class Utility {
                 startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-                startIntentUsingPendingIntent(startAppIntent,context);
-
+                if (onHomeScreen) {
+                    startIntentUsingPendingIntent(startAppIntent, context);
+                } else {
+                    ContextCompat.startActivity(context, startAppIntent, null);
+                }
             }
         } else {
             Log.e(TAG, "extApp of shortcut = null ");

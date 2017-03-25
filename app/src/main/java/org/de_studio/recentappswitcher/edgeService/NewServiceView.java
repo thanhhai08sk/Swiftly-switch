@@ -198,6 +198,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     boolean isFree;
     boolean isRTL;
     boolean useIndicator;
+    boolean onHomeScreen;
 
     @Override
     public void onCreate() {
@@ -411,7 +412,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             }
             return tempPackageNameKK;
         } else {
-            long timeStart = System.currentTimeMillis();
+//            long timeStart = System.currentTimeMillis();
             long currentTimeMillis = System.currentTimeMillis() + 2000;
 
             List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, currentTimeMillis - timeInterval, currentTimeMillis);
@@ -459,8 +460,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     }
                 }
             }
-            Log.e(TAG, "getRecentApp: time to get recent  = " + (System.currentTimeMillis() - timeStart));
-            Log.e(TAG, "getRecentApp: tem size = " + tempPackageName.size());
+            onHomeScreen = tempPackageName.get(0).equals(launcherPackageName);
+//            Log.e(TAG, "getRecentApp: time to get recent  = " + (System.currentTimeMillis() - timeStart));
+//            Log.e(TAG, "getRecentApp: tem size = " + tempPackageName.size());
             return tempPackageName;
 
         }
@@ -1100,7 +1102,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public void startItem(Item item, String lastApp) {
         Utility.startItem(item, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.DEFAULT_CONTACT_ACTION),
-                sharedPreferences.getInt(Cons.RINGER_MODE_ACTION_KEY, Cons.RINGER_MODE_ACTION_DEFAULT));
+                sharedPreferences.getInt(Cons.RINGER_MODE_ACTION_KEY, Cons.RINGER_MODE_ACTION_DEFAULT),
+                onHomeScreen);
     }
 
     @Override
