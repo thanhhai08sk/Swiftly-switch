@@ -141,6 +141,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         Log.e(TAG, "call: showCollectionInstantly");
                         Collection collection = model.getCollection(s);
                         if (collection.type.equals(Collection.TYPE_GRID_FAVORITE)) {
+                            Log.e(TAG, "call: hideAll collection and show grid");
+                            view.hideAllCollections();
                             showGrid(collection, view);
                         } else if (collection.type.equals(Collection.TYPE_CIRCLE_FAVORITE)) {
                             if (tempRecentPackages == null) {
@@ -264,6 +266,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         currentShowing.lastApp = null;
                         tempRecentPackages = null;
                         model.clearSectionData();
+                        view.setFirstSectionFalse();
                     }
                 })
         );
@@ -759,6 +762,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         boolean isRTL();
 
         boolean isOpenFolderDelay();
+
+        void setFirstSectionFalse();
 
     }
 

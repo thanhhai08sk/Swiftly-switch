@@ -1835,7 +1835,7 @@ public  class Utility {
         }
     }
 
-    public static void setFolderPosition(float triggerX, float triggerY, RecyclerView folderView, int edgePosition, float mScale, float iconScale, int size, int iconSpace,
+    public static void setFolderPosition(float triggerX, float triggerY, final RecyclerView folderView, int edgePosition, float mScale, float iconScale, int size, int iconSpace,
                                          int screenWidth, int screenHeight) {
         int columnCount = size <= 4 ? size : 4;
         int rowCount = size % 4 > 0 ? size / 4 + 1 : size / 4;
@@ -1843,7 +1843,7 @@ public  class Utility {
         int folderTall = calculateGridHeight(rowCount, iconSpace, mScale, iconScale);
         float x;
         float y;
-        Log.e(TAG, "setFolderPosition: folderWide = " + folderWide + "\nfolderTall = " + folderTall + "\ntriggerX = " + triggerX + "\ntriggerY = " + triggerY);
+//        Log.e(TAG, "setFolderPosition: folderWide = " + folderWide + "\nfolderTall = " + folderTall + "\ntriggerX = " + triggerX + "\ntriggerY = " + triggerY);
 
         if (triggerX + folderWide / 2 < screenWidth && triggerX - folderWide / 2 > 0) {
             x = triggerX - folderWide / 2;
@@ -1860,7 +1860,7 @@ public  class Utility {
         } else {
             y = 0;
         }
-        Log.e(TAG, "setFolderPosition: x = " + x + "\ny = " + y + "\nposition = " + rightLeftOrBottom(edgePosition));
+//        Log.e(TAG, "setFolderPosition: x = " + x + "\ny = " + y + "\nposition = " + rightLeftOrBottom(edgePosition));
         folderView.setX(x);
         folderView.setY(y);
     }

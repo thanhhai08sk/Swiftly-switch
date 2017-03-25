@@ -199,6 +199,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     boolean isRTL;
     boolean useIndicator;
     boolean onHomeScreen;
+    boolean firstSection = true;
 
     @Override
     public void onCreate() {
@@ -525,7 +526,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         return openFolderDelay;
     }
 
-    public void showQuickActions(int edgePosition, int highlighPosition, NewServicePresenter.Showing currentShowing, boolean delay, boolean animate) {
+    public void showQuickActions(int edgePosition, final int highlighPosition, final NewServicePresenter.Showing currentShowing, boolean delay, boolean animate) {
         Log.e(TAG, "showQuickActions: ");
         if (currentShowing.action != null) {
             if (collectionViewsMap.get(getQuickActionsKey(edgePosition, currentShowing.action)) == null) {
@@ -536,33 +537,31 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 actionsView.setId(getQuickActionsResId(currentShowing.action, edgePosition));
                 collectionViewsMap.put(getQuickActionsKey(edgePosition, currentShowing.action), actionsView);
             }
-            QuickActionsView quickActionsView = (QuickActionsView) collectionViewsMap.get(getQuickActionsKey(edgePosition, currentShowing.action));
+            final QuickActionsView quickActionsView = (QuickActionsView) collectionViewsMap.get(getQuickActionsKey(edgePosition, currentShowing.action));
             if (backgroundView.findViewById(getQuickActionsResId(currentShowing.action, edgePosition)) == null) {
                 backgroundView.addView(quickActionsView);
             }
 
-
-            quickActionsView.setVisibility(View.VISIBLE);
-            quickActionsView.show(highlighPosition);
-            quickActionsView.setX(currentShowing.xInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
-            quickActionsView.setY(currentShowing.yInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
-//            if (animate) {
-//                quickActionsView.setAlpha(0f);
-//                ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(quickActionsView, "alpha", 0f, 1f);
-//                objectAnimator.setDuration(animationTime);
-//                objectAnimator.setInterpolator(new DecelerateInterpolator());
-//                if (delay) {
-//                    objectAnimator.setStartDelay(animationTime);
-//                    objectAnimator.start();
-//                } else {
-//                    objectAnimator.start();
-//                }
-//
-//            } else {
-//                quickActionsView.setAlpha(1f);
-//            }
-
+            if (firstSection) {
+                quickActionsView.setVisibility(View.INVISIBLE);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setQuickActionsPositionAndCurrentTrigger(quickActionsView, highlighPosition, currentShowing);
+                    }
+                }, 20);
+            } else {
+                setQuickActionsPositionAndCurrentTrigger(quickActionsView, highlighPosition, currentShowing);
+            }
         }
+    }
+
+    private void setQuickActionsPositionAndCurrentTrigger(QuickActionsView quickActionsView, int highlighPosition, NewServicePresenter.Showing currentShowing) {
+        quickActionsView.setVisibility(View.VISIBLE);
+        quickActionsView.show(highlighPosition);
+        quickActionsView.setX(currentShowing.xInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
+        quickActionsView.setY(currentShowing.yInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
     }
 
     @NonNull
@@ -603,7 +602,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             backgroundView.addView(recyclerView);
             needDelay = true;
         }
-        hideAllCollections();
+//        hideAllCollections();
 
         if (needDelay) {
             Log.e(TAG, "showGrid: with delay");
@@ -687,6 +686,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         return Math.abs(quickActions.collectionId.hashCode()) + position;
     }
 
+    @Override
+    public void setFirstSectionFalse() {
+        firstSection = false;
+    }
 
     public void showFolder(int triggerPosition, Slot folder, final String gridId, int space, final int edgePosition, final NewServicePresenter.Showing currentShowing) {
         if (folder.items.size()==0) {
@@ -697,23 +700,40 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         final RecyclerView folderView = (RecyclerView) collectionViewsMap.get(folder.slotId);
         final RecyclerView triggerGridView = (RecyclerView) collectionViewsMap.get(gridId);
 
-        addFolderToBackgroundIfNeeded(folder, folderView);
+        boolean firstTime = addFolderToBackgroundIfNeeded(folder, folderView);
 
-        displayFolderAndSetPosition(triggerPosition, space, edgePosition, currentShowing, folderView, triggerGridView, folder.items.size());
+        displayFolderAndSetPosition(triggerPosition, space, edgePosition, currentShowing, folderView, triggerGridView, folder.items.size(), firstTime);
     }
 
-    private void displayFolderAndSetPosition(int triggerPosition, final int space, final int edgePosition, final NewServicePresenter.Showing currentShowing, final RecyclerView folderView, final RecyclerView triggerGridView, final int size) {
-        final float triggerX = triggerGridView.getChildAt(triggerPosition).getX() + triggerGridView.getX() + (iconScale * Cons.ICON_SIZE_DEFAULT + space)/2 * mScale;
+    private void displayFolderAndSetPosition(int triggerPosition, final int space, final int edgePosition,
+                                             final NewServicePresenter.Showing currentShowing,
+                                             final RecyclerView folderView,
+                                             final RecyclerView triggerGridView,
+                                             final int size,
+                                             boolean firstTime) {
+
+        final float triggerX = triggerGridView.getChildAt(triggerPosition).getX() + triggerGridView.getX() + (iconScale * Cons.ICON_SIZE_DEFAULT + space) / 2 * mScale;
         final float triggerY = triggerGridView.getChildAt(triggerPosition).getY() + triggerGridView.getY() + (iconScale * Cons.ICON_SIZE_DEFAULT + space) / 2 * mScale;
-        setFolderPosition(triggerX, triggerY, folderView, edgePosition, currentShowing, size, space);
+        if (firstTime) {
+            folderView.setVisibility(View.INVISIBLE);
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setFolderPosition(triggerX, triggerY, folderView, edgePosition, currentShowing, size, space);
+                }
+            }, 20);
+        } else {
+            setFolderPosition(triggerX, triggerY, folderView, edgePosition, currentShowing, size, space);
+        }
         triggerGridView.setVisibility(View.GONE);
     }
 
-    private void setFolderPosition(float triggerX, float triggerY, RecyclerView folderView, int edgePosition, NewServicePresenter.Showing currentShowing, int size, int iconSpace) {
+    private void setFolderPosition(final float triggerX, final float triggerY, final RecyclerView folderView, final int edgePosition, final NewServicePresenter.Showing currentShowing, final int size, final int iconSpace) {
         Utility.setFolderPosition(triggerX, triggerY, folderView, edgePosition, mScale, iconScale, size, iconSpace,
                 getResources().getDisplayMetrics().widthPixels,
                 getResources().getDisplayMetrics().heightPixels
-                );
+        );
         folderView.setVisibility(View.VISIBLE);
         currentShowing.gridXY.x = (int) folderView.getX();
         currentShowing.gridXY.y = (int) folderView.getY();
@@ -1156,9 +1176,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void hideAllCollections() {
-        Log.e(TAG, "hideAllCollections: ");
         Set<String> collectionIds = collectionViewsMap.keySet();
         for (String collectionId : collectionIds) {
+            Log.e(TAG, "hideAllCollections: hide " + collectionId);
             collectionViewsMap.get(collectionId).setVisibility(View.GONE);
         }
     }

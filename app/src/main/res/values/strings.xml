@@ -103,7 +103,7 @@
     <string name="faq_app_take_few_seconds_to_launch">Lag when launching apps from the home screen</string>
     <string name="faq_app_take_few_seconds_to_launch_answer">Swiftly Switch can\'t start apps within 5 seconds from the moment you return to the Home screen. This is the how Android limit services. It\'s not a problem if you return home using the in-app Home shortcut.</string>
     <string name="faq_can_not_uninstall">Why I can\'t uninstall the app on my device?</string>
-    <string name="faq_can_not_uninstall_answer">You can uninstall the app as other applications. If you have set the app to \"Device administrator\" (for the screen lock shortcut), you\'ll need to disable it first: Settings > Security > Phone administrator > disable the option for Swiftly Switch.</string>
+    <string name="faq_can_not_uninstall_answer">You can uninstall the app as other applications. If you have set the app to \"Device administrator\" (for the screen lock shortcut), you\'ll need to disable it first: Settings > Security > Device administrators > disable the option for Swiftly Switch.</string>
     <string name="faq_closed_app_in_recent_list">Closed apps do not disappear from recent apps list</string>
     <string name="faq_closed_app_in_recent_list_answer">Due to a limitation from Android 5.0, 3rd-party apps can only access the list of your recently used apps but not the list of currently running apps on your device.</string>
     <string name="faq_how_to_auto_disable_when_play_game">How to automatically disable the app when playing games?</string>
