@@ -6,12 +6,14 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    >
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:id="@+id/icon"
-        android:layout_marginStart="16dp"
         tools:src="@drawable/ic_action_dial"
         />
     <TextView
