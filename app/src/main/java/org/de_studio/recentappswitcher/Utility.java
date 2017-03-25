@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher;
 import android.Manifest;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.ActivityManager;
+import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -458,10 +459,22 @@ public  class Utility {
 
     public static void brightnessAction(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.System.canWrite(context)) {
+//            Intent intent = new Intent(context, ScreenBrightnessDialogActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+//            context.startActivity(intent);
+
             Intent intent = new Intent(context, ScreenBrightnessDialogActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-            context.startActivity(intent);
+            PendingIntent pendingIntent =
+                    PendingIntent.getActivity(context, 0, intent, 0);
+            try {
+                pendingIntent.send();
+            } catch (PendingIntent.CanceledException e) {
+                e.printStackTrace();
+            }
+
         } else {
             startNotiDialog(context, NotiDialog.WRITE_SETTING_PERMISSION);
         }
@@ -1704,11 +1717,27 @@ public  class Utility {
                 startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-//                context.startActivity(startAppIntent);
-                ContextCompat.startActivities(context, new Intent[]{startAppIntent});
+
+                startIntentUsingPendingIntent(startAppIntent,context);
+
             }
         } else {
             Log.e(TAG, "extApp of shortcut = null ");
+        }
+    }
+
+
+    private static void startIntentUsingPendingIntent(Intent intent, Context context) {
+        PendingIntent pendingIntent =
+                PendingIntent.getActivity(context, 0, intent, 0);
+        try {
+            pendingIntent.send();
+        } catch (PendingIntent.CanceledException e) {
+            e.printStackTrace();
+            context.startActivity(intent);
+//            ContextCompat.startActivities(context, new Intent[]{intent});
+            ContextCompat.startActivity(context, intent, null);
+
         }
     }
 

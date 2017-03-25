@@ -115,7 +115,9 @@
             android:name=".service.ScreenBrightnessDialogActivity"
             android:excludeFromRecents="true"
             android:label=""
-            android:theme="@style/DialogTheme" />
+            android:theme="@style/DialogTheme" >
+
+        </activity>
 
         <service android:name=".shortcut.FlashService" />
         <service android:name=".shortcut.FlashServiceM" />

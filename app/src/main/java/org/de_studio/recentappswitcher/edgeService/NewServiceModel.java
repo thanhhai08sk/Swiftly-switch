@@ -73,8 +73,6 @@ public class NewServiceModel extends BaseModel {
 
 
     public RealmList<Slot> getRecent(ArrayList<String> packageNames, RealmList<Slot> slots, NewServicePresenter.Showing currentShowing) {
-        Log.e(TAG, "getRecent: saved shortcut size = " + savedRecentShortcut.size());
-        long time = System.currentTimeMillis();
         Item item = null;
         RealmList<Slot> returnSlots = new RealmList<>();
 
@@ -144,8 +142,6 @@ public class NewServiceModel extends BaseModel {
                     break;
             }
         }
-        Log.e(TAG, "getRecent: time to get last app " + (System.currentTimeMillis() - time));
-
         return returnSlots;
     }
 
