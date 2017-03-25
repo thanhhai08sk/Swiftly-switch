@@ -1716,7 +1716,8 @@ public  class Utility {
                 if (onHomeScreen) {
                     startIntentUsingPendingIntent(startAppIntent, context);
                 } else {
-                    ContextCompat.startActivity(context, startAppIntent, null);
+//                    ContextCompat.startActivity(context, startAppIntent, null);
+                    ContextCompat.startActivities(context, new Intent[]{startAppIntent});
                 }
             }
         } else {
@@ -1733,8 +1734,8 @@ public  class Utility {
         } catch (PendingIntent.CanceledException e) {
             e.printStackTrace();
             context.startActivity(intent);
-//            ContextCompat.startActivities(context, new Intent[]{intent});
-            ContextCompat.startActivity(context, intent, null);
+            ContextCompat.startActivities(context, new Intent[]{intent});
+//            ContextCompat.startActivity(context, intent, null);
 
         }
     }
