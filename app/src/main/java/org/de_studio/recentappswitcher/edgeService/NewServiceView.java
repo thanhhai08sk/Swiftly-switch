@@ -605,12 +605,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 //        hideAllCollections();
 
         if (needDelay) {
-            Log.e(TAG, "showGrid: with delay");
-            recyclerView.setVisibility(View.VISIBLE);
-            recyclerView.setAlpha(0f);
+            recyclerView.setVisibility(View.INVISIBLE);
             Handler handlerClose = new Handler();
             handlerClose.postDelayed(new Runnable() {
                 public void run() {
+                    hideAllCollections();
+                    recyclerView.setVisibility(View.VISIBLE);
                     Utility.setFavoriteGridViewPosition(recyclerView
                             , grid.position == Collection.POSITION_CENTER
                             , recyclerView.getHeight()
@@ -629,7 +629,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 }
             }, 20);
         } else {
-            Log.e(TAG, "showGrid: without delay");
             Utility.setFavoriteGridViewPosition(recyclerView
                     , grid.position == Collection.POSITION_CENTER
                     , recyclerView.getHeight()
