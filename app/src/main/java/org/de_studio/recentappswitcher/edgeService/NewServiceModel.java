@@ -67,6 +67,10 @@ public class NewServiceModel extends BaseModel {
         this.savedRecentShortcut = recents;
     }
 
+
+    public void clearSectionData() {
+        lastAppPackageName = null;
+    }
     public float convertDpToPixel(int dp) {
         return dp * mScale;
     }
@@ -146,16 +150,19 @@ public class NewServiceModel extends BaseModel {
     }
 
     private String removeLauncherAndCurrentAppAndSetLastApp(ArrayList<String> packageNames) {
-        String removedPackage = null;
-        if (packageNames.size() > 0) {
-            removedPackage = packageNames.get(0);
-            packageNames.remove(0);
-            packageNames.remove(launcherPackageName);
-            if (packageNames.size()>0) {
-                lastAppPackageName = packageNames.get(0);
+        if (lastAppPackageName == null) {
+            String removedPackage = null;
+            if (packageNames.size() > 0) {
+                removedPackage = packageNames.get(0);
+                packageNames.remove(0);
+                packageNames.remove(launcherPackageName);
+                if (packageNames.size() > 0) {
+                    lastAppPackageName = packageNames.get(0);
+                }
             }
-        }
-        return removedPackage;
+            return removedPackage;
+
+        } else return null;
     }
 
     public String getLastApp(ArrayList<String> packageNames) {

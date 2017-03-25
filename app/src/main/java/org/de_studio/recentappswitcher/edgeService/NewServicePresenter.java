@@ -263,6 +263,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         currentShowing.showWhat = Showing.SHOWING_NONE;
                         currentShowing.lastApp = null;
                         tempRecentPackages = null;
+                        model.clearSectionData();
                     }
                 })
         );
