@@ -287,12 +287,18 @@
 
 
 
+    <string name="what_new_3.0.11" translatable="false">VERSION 3.0.11:\n
+        - Fix delay when start apps from home screen\n
+        - Fix bug that sometimes makes recent icons disappear\n
+        - Fix visual problem in RTL languages\n
+        - Update translation for: Japanese, Spanish, Norwegian. Thanks for all that help me translate the app! You can always contribute at https://www.localize.im/v/xy\n
+    </string>
     <string name="what_new_3.0.10" translatable="false">VERSION 3.0.10:\n
-        - Update translation for Chinese, Czech, Dutch, French, German, Hebrew, Indonesian, Italian, Japanese, Korean, Norwegian, Persian, Polish, Portuguese, Russian, Spanish, Swedish, Thai, Turkish, Vietnamese. Thanks for all that help me translate the app!   \n
         - Fix icon pack\'s bugs\n
         - Option to reset icon to default\n
         - Customize folder\'s icon (Pro)\n
         - Fix crashes\n
+        - Update translation for Chinese, Czech, Dutch, French, German, Hebrew, Indonesian, Italian, Japanese, Korean, Norwegian, Persian, Polish, Portuguese, Russian, Spanish, Swedish, Thai, Turkish, Vietnamese. Thanks for all that help me translate the app!   \n
     </string>
 
     <string name="what_new_3.0.9" translatable="false">VERSION 3.0.9:\n
