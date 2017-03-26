@@ -291,7 +291,7 @@
         - Fix delay when start apps from home screen\n
         - Fix bug that sometimes makes recent icons disappear\n
         - Fix visual problem in RTL languages\n
-        - Update translation for: Japanese, Spanish, Norwegian. Thanks for all that help me translate the app! You can always contribute at https://www.localize.im/v/xy\n
+        - Update translation for: Japanese, Spanish, Norwegian, Dutch. Thanks for all that help me translate the app! You can always contribute at https://www.localize.im/v/xy\n
     </string>
     <string name="what_new_3.0.10" translatable="false">VERSION 3.0.10:\n
         - Fix icon pack\'s bugs\n

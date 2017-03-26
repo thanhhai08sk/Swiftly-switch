@@ -453,7 +453,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                                         "\nfourth && = " + !tempPackageName.contains(packa));
 
                             }
-                            if (tempPackageName.size() >= (timeInterval == Cons.TIME_INTERVAL_LONG? 15: 10) ) {
+                            if (tempPackageName.size() >= (timeInterval == Cons.TIME_INTERVAL_LONG ? 15 : 10)) {
                                 Log.e(TAG, "tempackage >= " + 10);
                                 break;
                             }
@@ -461,7 +461,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     }
                 }
             }
-            onHomeScreen = tempPackageName.get(0).equals(launcherPackageName);
+            onHomeScreen = tempPackageName.size() > 0 && tempPackageName.get(0).equals(launcherPackageName) || tempPackageName.size() == 0;
 //            Log.e(TAG, "getRecentApp: time to get recent  = " + (System.currentTimeMillis() - timeStart));
 //            Log.e(TAG, "getRecentApp: tem size = " + tempPackageName.size());
             return tempPackageName;

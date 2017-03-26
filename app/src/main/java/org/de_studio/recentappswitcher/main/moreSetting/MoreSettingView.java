@@ -185,8 +185,10 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        mGoogleApiClient = backup.getClient();
-        googleClientConnectedSJ.onNext(null);
+        if (backup != null) {
+            mGoogleApiClient = backup.getClient();
+            googleClientConnectedSJ.onNext(null);
+        }
     }
 
     @Override
