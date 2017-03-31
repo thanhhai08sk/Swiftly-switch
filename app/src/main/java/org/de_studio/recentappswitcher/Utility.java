@@ -72,6 +72,7 @@ import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
+import org.de_studio.recentappswitcher.screenshot.ScreenshotView;
 import org.de_studio.recentappswitcher.service.ChooseActionDialogActivity;
 import org.de_studio.recentappswitcher.service.NotiDialog;
 import org.de_studio.recentappswitcher.service.ScreenBrightnessDialogActivity;
@@ -484,10 +485,14 @@ public  class Utility {
 
 
     public static void startPowerAction(Context context) {
-        context.sendBroadcast(new Intent(Cons.ACTION_POWER_MENU));
-        if (!Utility.isAccessibilityEnable(context)) {
-            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
-        }
+        Intent intent = new Intent(context, ScreenshotView.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        context.startActivity(intent);
+//        context.sendBroadcast(new Intent(Cons.ACTION_POWER_MENU));
+//        if (!Utility.isAccessibilityEnable(context)) {
+//            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
+//        }
     }
 
     public static void startNotiAction(Context context) {

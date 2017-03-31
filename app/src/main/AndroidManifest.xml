@@ -229,6 +229,12 @@
             android:label="@string/set_icon"
             android:theme="@style/AppTheme.SetItemIcon"
             />
+        <activity android:name=".screenshot.ScreenshotView"
+            android:excludeFromRecents="true"
+            android:label=""
+            android:theme="@style/DialogTheme"
+            />
+
 
     </application>
 

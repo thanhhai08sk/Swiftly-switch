@@ -95,7 +95,10 @@ public class ScreenshotView extends Activity {
                     image.close();
                 }
             }
+            Log.e(TAG, "onImageAvailable: finish screenshot");
             stopProjection();
+//            finishAffinity();
+            finishAndRemoveTask();
         }
     }
 
@@ -186,23 +189,43 @@ public class ScreenshotView extends Activity {
                 }
 
                 // display metrics
-                DisplayMetrics metrics = getResources().getDisplayMetrics();
-                mDensity = metrics.densityDpi;
-                mDisplay = getWindowManager().getDefaultDisplay();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        DisplayMetrics metrics = getResources().getDisplayMetrics();
+                        mDensity = metrics.densityDpi;
+                        mDisplay = getWindowManager().getDefaultDisplay();
 
-                // create virtual display depending on device width / height
-                createVirtualDisplay();
+                        // create virtual display depending on device width / height
+                        createVirtualDisplay();
 
-                // register orientation change callback
-                mOrientationChangeCallback = new OrientationChangeCallback(this);
-                if (mOrientationChangeCallback.canDetectOrientation()) {
-                    mOrientationChangeCallback.enable();
-                }
+                        // register orientation change callback
+                        mOrientationChangeCallback = new OrientationChangeCallback(ScreenshotView.this);
+                        if (mOrientationChangeCallback.canDetectOrientation()) {
+                            mOrientationChangeCallback.enable();
+                        }
 
-                // register media projection stop callback
-                sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
+                        // register media projection stop callback
+                        sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
+                    }
+                }, 200);
+
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        sMediaProjection = null;
+
+        mProjectionManager = null;
+        mImageReader = null;
+        mHandler = null;
+        mDisplay = null;
+        mVirtualDisplay = null;
+        mOrientationChangeCallback = null;
+        super.onDestroy();
     }
 
     /****************************************** UI Widget Callbacks *******************************/
@@ -233,5 +256,8 @@ public class ScreenshotView extends Activity {
         mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
         mVirtualDisplay = sMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight, mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null, mHandler);
         mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
+
+
+
     }
 }
