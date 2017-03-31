@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.edgeService;
 
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -316,6 +317,16 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                                     break;
                             }
                         }
+                    }
+                })
+        );
+
+        addSubscription(
+                view.onFinishTakingScreenshot().subscribe(new Action1<Uri>() {
+                    @Override
+                    public void call(Uri uri) {
+//                        view.openFile(uri);
+                        view.showScreenshotReadyButton(uri);
                     }
                 })
         );
@@ -695,6 +706,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             , android.view.View.OnSystemUiVisibilityChangeListener {
 
         PublishSubject<Boolean> onEnterOrExitFullScreen();
+
+        PublishSubject<Uri> onFinishTakingScreenshot();
+
         void addEdgesToWindowAndSetListener();
 
         void setupNotification();
@@ -764,6 +778,12 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         boolean isOpenFolderDelay();
 
         void setFirstSectionFalse();
+
+        void showScreenshotReadyButton(Uri uri);
+
+        void removeScreenshotReadyButton();
+
+        void openFile(Uri uri);
 
     }
 

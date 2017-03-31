@@ -18,6 +18,7 @@ import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -32,6 +33,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,6 +126,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             WindowManager.LayoutParams.TYPE_PHONE,
             WINDOW_FLAG_TOUCHABLE,
             PixelFormat.TRANSLUCENT);
+    WindowManager.LayoutParams WINDOW_SCREENSHOT_LAYOUT_PARAMS = new WindowManager.LayoutParams(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.TYPE_PHONE,
+            WINDOW_FLAG_TOUCHABLE,
+            PixelFormat.TRANSLUCENT);
 
 
 
@@ -193,13 +202,15 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     ObjectAnimator gridAlphaAnimator;
 
-    private GestureDetectorCompat mDetector;
+    private GestureDetectorCompat backgroundGestureDetector;
     PublishSubject<Boolean> enterOrExitFullScreenSJ = PublishSubject.create();
+    PublishSubject<Uri> finishTakingScreenshotSJ = PublishSubject.create();
     boolean isFree;
     boolean isRTL;
     boolean useIndicator;
     boolean onHomeScreen;
     boolean firstSection = true;
+    private ImageView screenshot;
 
     @Override
     public void onCreate() {
@@ -251,6 +262,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public PublishSubject<Boolean> onEnterOrExitFullScreen() {
         return enterOrExitFullScreenSJ;
+    }
+
+    @Override
+    public PublishSubject<Uri> onFinishTakingScreenshot() {
+        return finishTakingScreenshotSJ;
     }
 
     private void inject() {
@@ -479,13 +495,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 e.printStackTrace();
                 Log.e(TAG, "showBackground: already add to window");
             }
-            mDetector = new GestureDetectorCompat(this,this);
+            backgroundGestureDetector = new GestureDetectorCompat(this,this);
             backgroundView.setAlpha(1f);
             backgroundView.setVisibility(View.VISIBLE);
             backgroundView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    mDetector.onTouchEvent(event);
+                    backgroundGestureDetector.onTouchEvent(event);
                     return true;
                 }
             });
@@ -677,6 +693,17 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         return Math.abs(grid.collectionId.hashCode());
     }
 
+    @Override
+    public void openFile(Uri uri) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "image/*");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+
+
     private int getFolderResId(Slot folder) {
         return Math.abs(folder.slotId.hashCode());
     }
@@ -744,6 +771,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             return true;
         } else return false;
     }
+
+
 
     private void createFolderViewIfNeeded(Slot folder, int space) {
         if (collectionViewsMap.get(folder.slotId) == null) {
@@ -841,12 +870,87 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         frameLayout.setVisibility(View.VISIBLE);
     }
 
+
     private void addIconsToCircleView(RealmList<Slot> slots, FrameLayout circleView) {
         circleView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         for (int i = 0; i < slots.size(); i++) {
             ImageView imageView = new ImageView(this);
             imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Cons.ICON_SIZE_DEFAULT * mScale * iconScale), (int) (Cons.ICON_SIZE_DEFAULT * mScale * iconScale)));
             circleView.addView(imageView);
+        }
+    }
+
+    public void showScreenshotReadyButton(final Uri uri) {
+        screenshot = new ImageView(this);
+        int size = (int) (160 * mScale);
+        screenshot.setId(R.id.image_preview);
+        screenshot.setPadding(0, ((int) (32 * mScale)), 0, 0);
+//        backgroundView.addView(imageView);
+        WINDOW_SCREENSHOT_LAYOUT_PARAMS.width = size;
+        WINDOW_SCREENSHOT_LAYOUT_PARAMS.height = size;
+        WINDOW_SCREENSHOT_LAYOUT_PARAMS.gravity = Gravity.TOP | Gravity.END;
+
+
+        windowManager.addView(screenshot, WINDOW_SCREENSHOT_LAYOUT_PARAMS);
+        screenshot.setImageBitmap(Utility.decodeSampledBitmapFromUri(uri, size, size));
+
+        final GestureDetectorCompat gestureDetectorCompat = new GestureDetectorCompat(this, new GestureDetector.OnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent e) {
+                Log.e(TAG, "onDown: ");
+                return true;
+            }
+
+            @Override
+            public void onShowPress(MotionEvent e) {
+
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                removeScreenshotReadyButton();
+                openFile(uri);
+                return true;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                if (screenshot.getTranslationX() > 72 * mScale || screenshot.getTranslationY() > 70 * mScale) {
+                    removeScreenshotReadyButton();
+                } else {
+                    screenshot.setTranslationX(screenshot.getTranslationX() - distanceX);
+                    screenshot.setTranslationY(screenshot.getTranslationY() - distanceY);
+                }
+
+                return false;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                Log.e(TAG, "onFling: ");
+                removeScreenshotReadyButton();
+                return true;
+            }
+        });
+
+        screenshot.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                gestureDetectorCompat.onTouchEvent(event);
+                return true;
+            }
+        });
+    }
+
+    public synchronized void removeScreenshotReadyButton() {
+        if (screenshot != null && screenshot.isAttachedToWindow()) {
+            screenshot.setOnTouchListener(null);
+            windowManager.removeView(screenshot);
         }
     }
 
@@ -1430,6 +1534,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 hideAllExceptEdges();
             } else if (intent.getAction().equals(Cons.ACTION_SCREENSHOT_OK)) {
                 Log.e(TAG, "onReceive: screenshot ok, uri = " + intent.getParcelableExtra("uri").toString());
+                finishTakingScreenshotSJ.onNext(((Uri) intent.getParcelableExtra("uri")));
             }
         }
     }

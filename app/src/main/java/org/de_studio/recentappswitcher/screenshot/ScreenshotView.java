@@ -157,15 +157,18 @@ public class ScreenshotView extends Activity {
         @Override
         public void onStop() {
             Log.e("ScreenCapture", "stopping projection.");
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (mVirtualDisplay != null) mVirtualDisplay.release();
-                    if (mImageReader != null) mImageReader.setOnImageAvailableListener(null, null);
-                    if (mOrientationChangeCallback != null) mOrientationChangeCallback.disable();
-                    sMediaProjection.unregisterCallback(MediaProjectionStopCallback.this);
-                }
-            });
+            if (mHandler != null) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mVirtualDisplay != null) mVirtualDisplay.release();
+                        if (mImageReader != null) mImageReader.setOnImageAvailableListener(null, null);
+                        if (mOrientationChangeCallback != null) mOrientationChangeCallback.disable();
+                        sMediaProjection.unregisterCallback(MediaProjectionStopCallback.this);
+                    }
+                });
+
+            }
         }
     }
 
