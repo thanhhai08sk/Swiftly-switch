@@ -1293,7 +1293,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     public void hideAllCollections() {
         Set<String> collectionIds = collectionViewsMap.keySet();
         for (String collectionId : collectionIds) {
-            Log.e(TAG, "hideAllCollections: hide " + collectionId);
+//            Log.e(TAG, "hideAllCollections: hide " + collectionId);
             collectionViewsMap.get(collectionId).setVisibility(View.GONE);
         }
     }
@@ -1303,7 +1303,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     public void hideAllExceptEdges() {
         hideAllCollections();
         if (backgroundView != null) {
-            Log.e(TAG, "hideAllExceptEdges: ");
+//            Log.e(TAG, "hideAllExceptEdges: ");
             backgroundView.setVisibility(View.GONE);
         }
     }

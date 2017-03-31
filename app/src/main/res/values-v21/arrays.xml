@@ -39,6 +39,7 @@
         <item>@string/setting_shortcut_dial</item>
         <item>@string/setting_shortcut_contact</item>
         <item>@string/setting_shortcut_call_log</item>
+        <item>@string/screen_shot</item>
     </string-array>
     <string-array name="outer_ring_list_available_action">
         <item>@string/setting_shortcut_none</item>

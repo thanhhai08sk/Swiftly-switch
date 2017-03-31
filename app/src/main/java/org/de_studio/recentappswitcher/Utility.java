@@ -385,7 +385,11 @@ public  class Utility {
             return Item.ACTION_FLASH_LIGHT;
         }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_screen_lock))) {
             return Item.ACTION_SCREEN_LOCK;
-        }else return -1;
+        } else if (label.equalsIgnoreCase(context.getResources().getString(R.string.screen_shot))) {
+            return Item.ACTION_SCREENSHOT;
+        } else {
+            return -1;
+        }
     }
 
     public static void startHomeAction(Context context) {
@@ -485,14 +489,18 @@ public  class Utility {
 
 
     public static void startPowerAction(Context context) {
+
+        context.sendBroadcast(new Intent(Cons.ACTION_POWER_MENU));
+        if (!Utility.isAccessibilityEnable(context)) {
+            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
+        }
+    }
+
+    public static void screenshotAction(Context context) {
         Intent intent = new Intent(context, ScreenshotView.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         context.startActivity(intent);
-//        context.sendBroadcast(new Intent(Cons.ACTION_POWER_MENU));
-//        if (!Utility.isAccessibilityEnable(context)) {
-//            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
-//        }
     }
 
     public static void startNotiAction(Context context) {
@@ -705,6 +713,8 @@ public  class Utility {
                 return ContextCompat.getDrawable(context, R.drawable.ic_flash_light);
             case Item.ACTION_SCREEN_LOCK:
                 return ContextCompat.getDrawable(context, R.drawable.ic_screen_lock);
+            case Item.ACTION_SCREENSHOT:
+                return ContextCompat.getDrawable(context, R.drawable.ic_screenshot2);
         }
         return null;
     }
@@ -1367,7 +1377,9 @@ public  class Utility {
             case Item.ACTION_SCREEN_LOCK:
                 setBitMapForActionItemFromResId(item, 1, R.drawable.ic_screen_lock, context);
                 break;
-
+            case Item.ACTION_SCREENSHOT:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_screenshot2, context);
+                break;
         }
 
     }
@@ -1836,7 +1848,9 @@ public  class Utility {
             case Item.ACTION_SCREEN_LOCK:
                 Utility.screenLockAction(context);
                 break;
-
+            case Item.ACTION_SCREENSHOT:
+                Utility.screenshotAction(context);
+                break;
         }
     }
 
