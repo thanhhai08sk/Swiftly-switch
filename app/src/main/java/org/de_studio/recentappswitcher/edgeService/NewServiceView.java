@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
@@ -883,16 +884,27 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     public void showScreenshotReadyButton(final Uri uri) {
         screenshot = new ImageView(this);
         int size = (int) (160 * mScale);
+        int padding = (int) (4 * mScale);
         screenshot.setId(R.id.image_preview);
-        screenshot.setPadding(0, ((int) (32 * mScale)), 0, 0);
+        screenshot.setPadding(padding, padding, padding, padding);
 //        backgroundView.addView(imageView);
-        WINDOW_SCREENSHOT_LAYOUT_PARAMS.width = size;
-        WINDOW_SCREENSHOT_LAYOUT_PARAMS.height = size;
+        Bitmap bitmap = Utility.decodeSampledBitmapFromUri(uri, size, size);
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        WINDOW_SCREENSHOT_LAYOUT_PARAMS.width = width;
+        WINDOW_SCREENSHOT_LAYOUT_PARAMS.height = height;
         WINDOW_SCREENSHOT_LAYOUT_PARAMS.gravity = Gravity.TOP | Gravity.END;
 
 
         windowManager.addView(screenshot, WINDOW_SCREENSHOT_LAYOUT_PARAMS);
-        screenshot.setImageBitmap(Utility.decodeSampledBitmapFromUri(uri, size, size));
+        screenshot.setImageBitmap(bitmap);
+        screenshot.setBackgroundColor(Color.WHITE);
+        screenshot.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                removeScreenshotReadyButton();
+            }
+        }, 5 * 1000);
 
         final GestureDetectorCompat gestureDetectorCompat = new GestureDetectorCompat(this, new GestureDetector.OnGestureListener() {
             @Override
@@ -921,8 +933,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     screenshot.setTranslationX(screenshot.getTranslationX() - distanceX);
                     screenshot.setTranslationY(screenshot.getTranslationY() - distanceY);
                 }
-
-                return false;
+                return true;
             }
 
             @Override
@@ -951,6 +962,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         if (screenshot != null && screenshot.isAttachedToWindow()) {
             screenshot.setOnTouchListener(null);
             windowManager.removeView(screenshot);
+            screenshot = null;
         }
     }
 
@@ -1313,6 +1325,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         if (backgroundView != null && backgroundView.isAttachedToWindow()) {
             windowManager.removeView(backgroundView);
         }
+        removeScreenshotReadyButton();
     }
 
     @Override

@@ -2220,6 +2220,9 @@ public  class Utility {
                 inSampleSize *= 2;
             }
         }
+        if (height / inSampleSize > reqHeight) {
+            inSampleSize *= 2;
+        }
 
         return inSampleSize;
     }
