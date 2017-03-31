@@ -16,6 +16,7 @@ import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -196,9 +197,10 @@ public class ScreenshotView extends Activity {
             sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
 
             if (sMediaProjection != null) {
-                File externalFilesDir = getExternalFilesDir(null);
+                File externalFilesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
                 if (externalFilesDir != null) {
                     STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/screenshots/";
+
                     File storeDirectory = new File(STORE_DIRECTORY);
                     if (!storeDirectory.exists()) {
                         boolean success = storeDirectory.mkdirs();
