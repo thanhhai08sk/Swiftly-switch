@@ -384,7 +384,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         filter1.addDataScheme("package");
         receiver1 = new NewServiceView.PackageChangedReceiver();
         this.registerReceiver(receiver1, filter1);
-
     }
 
     @Override

@@ -287,6 +287,9 @@
 
 
 
+    <string name="what_new_3.0.12" translatable="false">VERSION 3.0.12:\n
+        - Quick fix\n
+    </string>
     <string name="what_new_3.0.11" translatable="false">VERSION 3.0.11:\n
         - Fix delay when start apps from home screen\n
         - Fix bug that sometimes makes recent icons disappear\n
