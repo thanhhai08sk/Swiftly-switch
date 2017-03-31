@@ -15,6 +15,7 @@ import android.media.Image;
 import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -69,6 +70,7 @@ public class ScreenshotView extends Activity {
             Image image = null;
             FileOutputStream fos = null;
             Bitmap bitmap = null;
+            File file = new File(STORE_DIRECTORY + "/myscreen_" + System.currentTimeMillis() + ".png");
 
             try {
                 image = mImageReader.acquireLatestImage();
@@ -84,11 +86,12 @@ public class ScreenshotView extends Activity {
                     bitmap.copyPixelsFromBuffer(buffer);
 
                     // write bitmap to a file
-                    fos = new FileOutputStream(STORE_DIRECTORY + "/myscreen_" + IMAGES_PRODUCED + ".png");
+
+                    fos = new FileOutputStream(file);
                     bitmap.compress(CompressFormat.JPEG, 100, fos);
 
                     IMAGES_PRODUCED++;
-                    Log.e(TAG, "captured image: " + IMAGES_PRODUCED);
+                    Log.e(TAG, "captured image: " + file.getName());
                 }
 
             } catch (Exception e) {
@@ -111,6 +114,9 @@ public class ScreenshotView extends Activity {
                 }
             }
             captured = true;
+            Intent screenshotOkBroadcast = new Intent(Cons.ACTION_SCREENSHOT_OK);
+            screenshotOkBroadcast.putExtra("uri", Uri.fromFile(file));
+            sendBroadcast(screenshotOkBroadcast);
             finishScreenshot();
         }
     }

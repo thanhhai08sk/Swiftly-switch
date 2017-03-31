@@ -374,6 +374,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         filter.addAction(Intent.ACTION_USER_PRESENT);
         filter.addAction(Cons.ACTION_REFRESH_FAVORITE);
         filter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        filter.addAction(Cons.ACTION_SCREENSHOT_OK);
         receiver = new NewServiceView.EdgesToggleReceiver();
         this.registerReceiver(receiver, filter);
 
@@ -1427,8 +1428,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             } else if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
                 Log.e(TAG, "onReceive: userPresent");
                 hideAllExceptEdges();
-            } else if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
-
+            } else if (intent.getAction().equals(Cons.ACTION_SCREENSHOT_OK)) {
+                Log.e(TAG, "onReceive: screenshot ok, uri = " + intent.getParcelableExtra("uri").toString());
             }
         }
     }

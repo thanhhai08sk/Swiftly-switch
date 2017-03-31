@@ -46,6 +46,7 @@ public class Cons {
 
     public static final int RAD_ICON_DEFAULT_DP = 24;
     public static final String ACTION_TOGGLE_EDGES = "org.de_studio.recentappswitcher.action.toggle_edges";
+    public static final String ACTION_SCREENSHOT_OK = "org.de_studio.recentappswitcher.action.screenshot_ok";
     public static final String ACTION_REFRESH_FAVORITE = "org.de_studio.recentappswitcher.action.refresh_favorite";
     public static final String ACTION_BACK = "org.de_studio.recentappswitcher.action.back";
     public static final String ACTION_RECENT = "org.de_studio.recentappswitcher.action.recent";
