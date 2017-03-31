@@ -1,8 +1,10 @@
 package org.de_studio.recentappswitcher.screenshot;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.PixelFormat;
@@ -16,21 +18,27 @@ import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.OrientationEventListener;
+
+import org.de_studio.recentappswitcher.Cons;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import static org.de_studio.recentappswitcher.MyApplication.getContext;
+
 
 public class ScreenshotView extends Activity {
 
     private static final String TAG = ScreenshotView.class.getName();
-    private static final int REQUEST_CODE = 100;
+    private static final int REQUEST_CODE_CAPTURE = 100;
     private static String STORE_DIRECTORY;
     private static int IMAGES_PRODUCED;
     private static final String SCREENCAP_NAME = "screencap";
@@ -46,11 +54,17 @@ public class ScreenshotView extends Activity {
     private int mWidth;
     private int mHeight;
     private int mRotation;
+    private boolean captured;
+
     private OrientationChangeCallback mOrientationChangeCallback;
 
     private class ImageAvailableListener implements ImageReader.OnImageAvailableListener {
         @Override
         public void onImageAvailable(ImageReader reader) {
+            if (captured) {
+                finishScreenshot();
+                return;
+            }
             Image image = null;
             FileOutputStream fos = null;
             Bitmap bitmap = null;
@@ -95,11 +109,16 @@ public class ScreenshotView extends Activity {
                     image.close();
                 }
             }
-            Log.e(TAG, "onImageAvailable: finish screenshot");
-            stopProjection();
-//            finishAffinity();
-            finishAndRemoveTask();
+            captured = true;
+            finishScreenshot();
         }
+    }
+
+    private void finishScreenshot() {
+        Log.e(TAG, "onImageAvailable: finish screenshot");
+        stopProjection();
+//            finishAffinity();
+        finishAndRemoveTask();
     }
 
     private class OrientationChangeCallback extends OrientationEventListener {
@@ -147,12 +166,17 @@ public class ScreenshotView extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
 
-        // call for the projection manager
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            startTakingScreenshot();
+        } else {
+            requestPermissions(new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE}, Cons.REQUEST_CODE_STORAGE_PERMISSION);
+        }
+
+    }
+
+    private void startTakingScreenshot() {
         mProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-
-        // start projection
         startProjection();
 
         // start capture handling thread
@@ -168,7 +192,7 @@ public class ScreenshotView extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == REQUEST_CODE_CAPTURE) {
             sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
 
             if (sMediaProjection != null) {
@@ -216,6 +240,19 @@ public class ScreenshotView extends Activity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+         if (requestCode == Cons.REQUEST_CODE_STORAGE_PERMISSION) {
+            for (int grantResult : grantResults) {
+                if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                    startTakingScreenshot();
+                } else {
+                    finishScreenshot();
+                }
+            }
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         sMediaProjection = null;
 
@@ -230,7 +267,7 @@ public class ScreenshotView extends Activity {
 
     /****************************************** UI Widget Callbacks *******************************/
     private void startProjection() {
-        startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
+        startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE_CAPTURE);
     }
 
     private void stopProjection() {

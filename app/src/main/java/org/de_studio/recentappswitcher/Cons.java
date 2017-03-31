@@ -41,6 +41,7 @@ public class Cons {
     public static final int MODE_CIRCLE_FAVORITE = 3;
 
     public static final int REQUEST_CODE_CONTACT_PERMISSION = 121;
+    public static final int REQUEST_CODE_STORAGE_PERMISSION = 122;
 
 
     public static final int RAD_ICON_DEFAULT_DP = 24;
