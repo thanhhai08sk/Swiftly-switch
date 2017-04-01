@@ -288,6 +288,10 @@
 
 
 
+    <string name="what_new_3.0.12.4" translatable="false">VERSION 3.0.12.4 (beta):\n
+        - Fix black margin of screenshots\n
+        - Support upgrading to Pro version by in-app purchase\n
+    </string>
     <string name="what_new_3.0.12.2" translatable="false">VERSION 3.0.12.2 (beta):\n
         - Fixed accessibility service\n
     </string>
