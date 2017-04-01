@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
 import android.media.Image;
@@ -67,6 +68,8 @@ public class ScreenshotView extends Activity {
                 finishScreenshot();
                 return;
             }
+
+
             Image image = null;
             FileOutputStream fos = null;
             Bitmap bitmap = null;
@@ -85,13 +88,18 @@ public class ScreenshotView extends Activity {
                     bitmap = Bitmap.createBitmap(mWidth + rowPadding / pixelStride, mHeight, Bitmap.Config.ARGB_8888);
                     bitmap.copyPixelsFromBuffer(buffer);
 
-                    // write bitmap to a file
+                    Rect rect = image.getCropRect();
+                    bitmap = Bitmap.createBitmap(bitmap, rect.left, rect.top, rect.width(), rect.height());
 
                     fos = new FileOutputStream(file);
                     bitmap.compress(CompressFormat.JPEG, 100, fos);
+                    bitmap.recycle();
+
+
+
 
                     IMAGES_PRODUCED++;
-                    Log.e(TAG, "captured image: " + file.getName());
+
                 }
 
             } catch (Exception e) {
@@ -299,6 +307,7 @@ public class ScreenshotView extends Activity {
         mDisplay.getSize(size);
         mWidth = size.x;
         mHeight = size.y;
+
 
         // start capture reader
         mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
