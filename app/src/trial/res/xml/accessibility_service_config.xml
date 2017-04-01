@@ -2,7 +2,9 @@
     android:description="@string/accessibility_service_description"
     android:packageNames="org.de_studio.recentappswitcher.trial"
     android:accessibilityEventTypes=""
-    android:accessibilityFeedbackType=""
+    android:accessibilityFeedbackType="feedbackGeneric"
     android:canRetrieveWindowContent="false"
     android:notificationTimeout="10000"
-    />
+    android:id= "@+id/swiftly_switch_accessibility_id"
+
+/>

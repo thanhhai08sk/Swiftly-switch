@@ -19,6 +19,7 @@ public class MyAccessibilityService extends AccessibilityService {
 
     @Override
     public void onCreate() {
+        Log.e(TAG, "onCreate: ");
         super.onCreate();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Cons.ACTION_BACK);
@@ -30,8 +31,10 @@ public class MyAccessibilityService extends AccessibilityService {
         this.registerReceiver(receiver, filter);
     }
 
+
     @Override
     public void onDestroy() {
+        Log.e(TAG, "onDestroy: ");
         super.onDestroy();
         this.unregisterReceiver(receiver);
     }
