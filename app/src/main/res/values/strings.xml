@@ -288,6 +288,9 @@
 
 
 
+    <string name="what_new_3.0.12.2" translatable="false">VERSION 3.0.12.2 (beta):\n
+        - Fixed accessibility service\n
+    </string>
     <string name="what_new_3.0.12.1" translatable="false">VERSION 3.0.12.1 (beta):\n
         - Added screenshot action (require android 5.0 as minimum)\n
     </string>
