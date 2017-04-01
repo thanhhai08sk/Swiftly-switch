@@ -200,6 +200,8 @@ public class Cons {
     public static final int SHOWING_FOLDER = 4;
 
 
+
+    public static final String PRO_PURCHASED_KEY = "realmsm";
     public static final String BEGIN_DAY_KEY = "begin_trial_time";
     public static final String OPEN_FOLDER_DELAY_KEY = "open_folder_delay";
     public static final String DISABLE_IN_FULLSCREEN_KEY = "disable_in_fullscreen";

@@ -2155,7 +2155,8 @@ public  class Utility {
     }
 
     public static boolean isFree(Context context) {
-        return context.getPackageName().equals(Cons.FREE_VERSION_PACKAGE_NAME);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
+        return context.getPackageName().equals(Cons.FREE_VERSION_PACKAGE_NAME) && !sharedPreferences.getBoolean(Cons.PRO_PURCHASED_KEY, false);
     }
 
     public static boolean isFreeAndOutOfTrial(Context context, SharedPreferences sharedPreferences) {
@@ -2173,6 +2174,8 @@ public  class Utility {
             context.startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("http://play.google.com/store/apps/details?id=" + Cons.PRO_VERSION_PACKAGE_NAME)));
         }
+
+
     }
 
     public static void showProOnlyDialog(final Context context) {
