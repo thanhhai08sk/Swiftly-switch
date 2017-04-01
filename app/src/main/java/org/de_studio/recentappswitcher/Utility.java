@@ -1173,6 +1173,16 @@ public  class Utility {
         return false;
     }
 
+    public static Bitmap convertDrawableToBitmap(Drawable drawable) {
+        int width = drawable.getIntrinsicWidth();
+        int height = drawable.getIntrinsicHeight();
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
     public static Bitmap getItemBitmap(Item item, Context context, IconPackManager.IconPack iconPack) {
         switch (item.type) {
             case Item.TYPE_APP:
@@ -1186,7 +1196,11 @@ public  class Utility {
                         }
                         return ((BitmapDrawable) iconPackDrawable).getBitmap();
                     } else {
-                        return ((BitmapDrawable) defaultDrawable).getBitmap();
+                        try {
+                            return ((BitmapDrawable) defaultDrawable).getBitmap();
+                        } catch (ClassCastException e) {
+                            return convertDrawableToBitmap(defaultDrawable);
+                        }
                     }
                 } catch (PackageManager.NameNotFoundException e) {
                     Log.e(TAG, "NameNotFound " + e);
