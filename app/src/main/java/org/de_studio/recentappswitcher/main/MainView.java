@@ -57,10 +57,11 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import rx.subjects.PublishSubject;
 
+import static org.de_studio.recentappswitcher.Cons.SKU_PRO;
+
 public class MainView extends BaseActivity<Void,MainPresenter> implements MainPresenter.View, IabBroadcastReceiver.IabBroadcastListener {
     private static final String TAG = MainView.class.getSimpleName();
     static final int RC_REQUEST = 10001;
-    static final String SKU_PRO = "sku_pro";
 
     @BindView(R.id.tabs)
     TabLayout tabLayout;
@@ -84,7 +85,6 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     @Inject
     @Named(Cons.SHARED_PREFERENCE_NAME)
     SharedPreferences shared;
-    String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgHZzxPr4voivbRVH3i1ikAKE75u89En2Dy7sokKutIxsbhp5r/MCZ/d5vyNOwglmEdO+7B555jIN8HgAOC2q5Eu6xFjFXRbiC/cu6S++0A2P10i/mmswLE0cwVQPpNNU/n61CotWp1yeXAXThhfSzxNEYyHBs97EOtDe2BVXHn5DXOsEvyf5dK0NSmFqyPOBLFOG+dZ9irRwB5bKqkYr0T2N4JX4Vk1exG/rXajmxjBdkJaPKYNwWPGf7mFJXYbFpTmLj5JWQDXs/b2JQs1fcyiUd13Q48KjUq9l4/Byz+oIJC1J4UNHiiXAM1qLPnEwHT/bwhJgYBb61tLOH6u8zwIDAQAB";
     IabHelper mHelper;
     IInAppBillingService mService;
     ServiceConnection mServiceConn = new ServiceConnection() {
@@ -111,11 +111,14 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bindInAppBillingService();
+        if (Utility.isFree(this)) {
+            aboutProButton.setVisibility(View.INVISIBLE);
+        }
 
 
         if (getPackageName().equals(Cons.FREE_VERSION_PACKAGE_NAME)) {
-            mHelper = new IabHelper(this, base64EncodedPublicKey);
+            bindInAppBillingService();
+            mHelper = new IabHelper(this, Cons.BASE_64_ENCODED_PUBLIC_KEY);
             mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
                 public void onIabSetupFinished(IabResult result) {
                     Log.d(TAG, "Setup finished.");
@@ -387,7 +390,7 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
             Log.d(TAG, "Purchase successful.");
 
             if (purchase.getSku().equals(SKU_PRO)) {
-                alert("Thank you for upgrading to pro!");
+                alert(getString(R.string.thanks_for_upgrading_to_pro));
                 shared.edit().putBoolean(Cons.PRO_PURCHASED_KEY, true).commit();
                 restartServiceIfPossible();
             }

@@ -3,11 +3,11 @@ package org.de_studio.recentappswitcher;
 import android.Manifest;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.ActivityManager;
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
@@ -68,6 +68,7 @@ import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.edgeService.NewServicePresenter;
 import org.de_studio.recentappswitcher.edgeService.NewServiceView;
 import org.de_studio.recentappswitcher.gridFavoriteSetting.GridFavoriteSettingView;
+import org.de_studio.recentappswitcher.main.MainView;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Edge;
 import org.de_studio.recentappswitcher.model.Item;
@@ -2178,16 +2179,26 @@ public  class Utility {
     }
 
     public static void getProVersion(Context context) {
-        Uri uri = Uri.parse("mbarket://details?id=" + Cons.PRO_VERSION_PACKAGE_NAME);
-        Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
-        gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        try {
-            context.startActivity(gotoMarket);
-        } catch (ActivityNotFoundException e) {
-            context.startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://play.google.com/store/apps/details?id=" + Cons.PRO_VERSION_PACKAGE_NAME)));
-        }
+//        Uri uri = Uri.parse("mbarket://details?id=" + Cons.PRO_VERSION_PACKAGE_NAME);
+//        Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+//        gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+//                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+//        try {
+//            context.startActivity(gotoMarket);
+//        } catch (ActivityNotFoundException e) {
+//            context.startActivity(new Intent(Intent.ACTION_VIEW,
+//                    Uri.parse("http://play.google.com/store/apps/details?id=" + Cons.PRO_VERSION_PACKAGE_NAME)));
+//        }
+
+//        String payload = "";
+//        IabHelper mHelper = new IabHelper(context, Cons.BASE_64_ENCODED_PUBLIC_KEY);
+//
+//        try {
+//            mHelper.launchPurchaseFlow(context, SKU_PRO, RC_REQUEST,
+//                    mPurchaseFinishedListener, payload);
+//        } catch (IabHelper.IabAsyncInProgressException e) {
+//            Log.e(TAG, "buyPro: error");
+//        }
 
 
     }
@@ -2272,6 +2283,15 @@ public  class Utility {
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(uri.getPath(),options);
+    }
+
+    public static void rebootApp(Context context) {
+        Intent mStartActivity = new Intent(context.getApplicationContext(), MainView.class);
+        int mPendingIntentId = 123456;
+        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+        System.exit(0);
     }
 }
 

@@ -58,8 +58,9 @@ public class ScreenshotView extends Activity {
     private int mHeight;
     private int mRotation;
     private boolean captured;
+    private MediaProjectionStopCallback mediaProjectionStopCallback = new MediaProjectionStopCallback();
 
-    private OrientationChangeCallback mOrientationChangeCallback;
+//    private OrientationChangeCallback mOrientationChangeCallback;
 
     private class ImageAvailableListener implements ImageReader.OnImageAvailableListener {
         @Override
@@ -171,7 +172,7 @@ public class ScreenshotView extends Activity {
                     public void run() {
                         if (mVirtualDisplay != null) mVirtualDisplay.release();
                         if (mImageReader != null) mImageReader.setOnImageAvailableListener(null, null);
-                        if (mOrientationChangeCallback != null) mOrientationChangeCallback.disable();
+//                        if (mOrientationChangeCallback != null) mOrientationChangeCallback.disable();
                         sMediaProjection.unregisterCallback(MediaProjectionStopCallback.this);
                     }
                 });
@@ -244,13 +245,13 @@ public class ScreenshotView extends Activity {
                         createVirtualDisplay();
 
                         // register orientation change callback
-                        mOrientationChangeCallback = new OrientationChangeCallback(ScreenshotView.this);
-                        if (mOrientationChangeCallback.canDetectOrientation()) {
-                            mOrientationChangeCallback.enable();
-                        }
+//                        mOrientationChangeCallback = new OrientationChangeCallback(ScreenshotView.this);
+//                        if (mOrientationChangeCallback.canDetectOrientation()) {
+//                            mOrientationChangeCallback.enable();
+//                        }
 
                         // register media projection stop callback
-                        sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
+                        sMediaProjection.registerCallback(mediaProjectionStopCallback, mHandler);
                     }
                 }, 200);
 
@@ -273,14 +274,20 @@ public class ScreenshotView extends Activity {
 
     @Override
     protected void onDestroy() {
+        sMediaProjection.unregisterCallback(mediaProjectionStopCallback);
         sMediaProjection = null;
 
         mProjectionManager = null;
+        if (mImageReader != null) mImageReader.setOnImageAvailableListener(null, null);
         mImageReader = null;
         mHandler = null;
         mDisplay = null;
+        if (mVirtualDisplay != null) mVirtualDisplay.release();
         mVirtualDisplay = null;
-        mOrientationChangeCallback = null;
+
+
+//                        if (mOrientationChangeCallback != null) mOrientationChangeCallback.disable();
+//        mOrientationChangeCallback = null;
         super.onDestroy();
     }
 

@@ -288,15 +288,13 @@
 
 
 
-    <string name="what_new_3.0.12.4" translatable="false">VERSION 3.0.12.4 (beta):\n
-        - Fix black margin of screenshots\n
-        - Support upgrading to Pro version by in-app purchase\n
-    </string>
-    <string name="what_new_3.0.12.2" translatable="false">VERSION 3.0.12.2 (beta):\n
-        - Fixed accessibility service\n
-    </string>
-    <string name="what_new_3.0.12.1" translatable="false">VERSION 3.0.12.1 (beta):\n
+
+    <string name="what_new_3.1.0" translatable="false">VERSION 3.1.0:\n
         - Added screenshot action (require android 5.0 as minimum)\n
+        - Upgrade from free to pro by in-app purchase (for free version only)\n
+        - \n
+        - \n
+
     </string>
     <string name="what_new_3.0.12" translatable="false">VERSION 3.0.12:\n
         - Quick fix\n
@@ -340,6 +338,10 @@
     <string name="write_setting_permission_explain">Swiftly Switch needs the \"Write settings\" permission to perform this action. Please find Swiftly Switch in the device\'s app settings and enable the permission.</string>
     <string name="yes">Yes</string>
     <string name="you_have_not_finished_all_permission_yet">You have not granted all the necessary permissions yet. Please try again.</string>
+
+
+
+    <string name="thanks_for_upgrading_to_pro">Thank you for upgrading to pro!</string>
 
 
 </resources>

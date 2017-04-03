@@ -1,9 +1,6 @@
 package org.de_studio.recentappswitcher.main.moreSetting;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -46,7 +43,6 @@ import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerMoreSettingComponent;
 import org.de_studio.recentappswitcher.dagger.MoreSettingModule;
-import org.de_studio.recentappswitcher.main.MainView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -897,12 +893,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
 
                         // Reboot app
-                        Intent mStartActivity = new Intent(getApplicationContext(), MainView.class);
-                        int mPendingIntentId = 123456;
-                        PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-                        AlarmManager mgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-                        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-                        System.exit(0);
+                        Utility.rebootApp(getApplicationContext());
                     }
                 });
     }
