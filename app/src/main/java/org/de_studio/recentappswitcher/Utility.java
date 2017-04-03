@@ -2,12 +2,14 @@ package org.de_studio.recentappswitcher;
 
 import android.Manifest;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
@@ -63,6 +65,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.edgeService.NewServicePresenter;
@@ -2179,31 +2182,22 @@ public  class Utility {
     }
 
     public static void getProVersion(Context context) {
-//        Uri uri = Uri.parse("mbarket://details?id=" + Cons.PRO_VERSION_PACKAGE_NAME);
-//        Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
-//        gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-//                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-//        try {
-//            context.startActivity(gotoMarket);
-//        } catch (ActivityNotFoundException e) {
-//            context.startActivity(new Intent(Intent.ACTION_VIEW,
-//                    Uri.parse("http://play.google.com/store/apps/details?id=" + Cons.PRO_VERSION_PACKAGE_NAME)));
-//        }
+        Uri uri = Uri.parse("mbarket://details?id=" + Cons.PRO_VERSION_PACKAGE_NAME);
+        Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+        gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            context.startActivity(gotoMarket);
+        } catch (ActivityNotFoundException e) {
+            context.startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + Cons.PRO_VERSION_PACKAGE_NAME)));
+        }
 
-//        String payload = "";
-//        IabHelper mHelper = new IabHelper(context, Cons.BASE_64_ENCODED_PUBLIC_KEY);
-//
-//        try {
-//            mHelper.launchPurchaseFlow(context, SKU_PRO, RC_REQUEST,
-//                    mPurchaseFinishedListener, payload);
-//        } catch (IabHelper.IabAsyncInProgressException e) {
-//            Log.e(TAG, "buyPro: error");
-//        }
 
 
     }
 
-    public static void showProOnlyDialog(final Context context) {
+    public static void showProOnlyDialog(final Activity context) {
         new MaterialDialog.Builder(context)
                 .title(R.string.pro_only)
                 .content(R.string.pro_only_content)
@@ -2212,7 +2206,12 @@ public  class Utility {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Utility.getProVersion(context);
+//                        Utility.getProVersion(context);
+                        if (context instanceof BaseActivity) {
+                            ((BaseActivity) context).buyPro();
+                        } else {
+                            Utility.getProVersion(context);
+                        }
                     }
                 })
                 .show();

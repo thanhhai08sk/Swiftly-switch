@@ -30,8 +30,6 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 
-import static org.de_studio.recentappswitcher.Cons.SKU_PRO;
-
 /**
  * Created by HaiNguyen on 11/11/16.
  */
@@ -185,7 +183,7 @@ public abstract class BaseActivity<T, P extends BasePresenter> extends AppCompat
         }
 
         try {
-            mHelper.launchPurchaseFlow(this, SKU_PRO, RC_REQUEST,
+            mHelper.launchPurchaseFlow(this, Cons.SKU_PRO, RC_REQUEST,
                     mPurchaseFinishedListener, payload);
         } catch (IabHelper.IabAsyncInProgressException e) {
             Log.e(TAG, "buyPro: error");
@@ -211,7 +209,7 @@ public abstract class BaseActivity<T, P extends BasePresenter> extends AppCompat
             }
             Log.d(TAG, "Purchase successful.");
 
-            if (purchase.getSku().equals(SKU_PRO)) {
+            if (purchase.getSku().equals(Cons.SKU_PRO)) {
                 alert(getString(R.string.thanks_for_upgrading_to_pro));
                 SharedPreferences shared = getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
                 shared.edit().putBoolean(Cons.PRO_PURCHASED_KEY, true).commit();
@@ -228,7 +226,7 @@ public abstract class BaseActivity<T, P extends BasePresenter> extends AppCompat
                 return;
             }
             Log.e(TAG, "Query inventory was successful.");
-            Purchase premiumPurchase = inventory.getPurchase(SKU_PRO);
+            Purchase premiumPurchase = inventory.getPurchase(Cons.SKU_PRO);
             boolean mIsPremium = (premiumPurchase != null);
             Log.e(TAG, "User is " + (mIsPremium ? "PREMIUM" : "NOT PREMIUM"));
             getShared().edit().putBoolean(Cons.PRO_PURCHASED_KEY, mIsPremium).commit();
