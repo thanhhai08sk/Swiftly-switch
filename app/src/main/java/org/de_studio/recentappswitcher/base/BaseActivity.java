@@ -173,16 +173,36 @@ public abstract class BaseActivity<T, P extends BasePresenter> extends AppCompat
                 }
             }
         });
-
     }
 
+
     public void buyPro() {
-        String payload = "";
+        final String payload = "";
         if (mHelper == null) {
-            setUpCheckingPurchase();
+            mHelper = new IabHelper(this, Cons.BASE_64_ENCODED_PUBLIC_KEY);
+            mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                public void onIabSetupFinished(IabResult result) {
+                    Log.d(TAG, "Setup finished.");
+
+                    if (!result.isSuccess()) {
+                        // Oh noes, there was a problem.
+                        complain("Problem setting up in-app billing: " + result);
+                        return;
+                    }
+
+                    if (mHelper == null) return;
+                    makePurchase(payload);
+                }
+            });
+        } else {
+            makePurchase(payload);
 
         }
 
+
+    }
+
+    private void makePurchase(String payload) {
         try {
             mHelper.launchPurchaseFlow(this, Cons.SKU_PRO, RC_REQUEST,
                     mPurchaseFinishedListener, payload);
