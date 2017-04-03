@@ -97,6 +97,15 @@ public abstract class BaseActivity<T, P extends BasePresenter> extends AppCompat
         destroyedBySystem = false;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (mHelper == null || !mHelper.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        } else {
+            Log.d(TAG, "onActivityResult handled by IABUtil.");
+        }
+    }
+
     @CallSuper
     @Override
     protected void onDestroy() {
@@ -105,6 +114,13 @@ public abstract class BaseActivity<T, P extends BasePresenter> extends AppCompat
         }
         if (destroyedBySystem) onDestroyBySystem();
         else onDestroyByUser();
+
+        if (mService != null) {
+            unbindService(mServiceConn);
+        }
+        if (mBroadcastReceiver != null) {
+            unregisterReceiver(mBroadcastReceiver);
+        }
         Log.d(TAG, "Destroying helper.");
         if (mHelper != null) {
             mHelper.disposeWhenFinished();
@@ -164,7 +180,9 @@ public abstract class BaseActivity<T, P extends BasePresenter> extends AppCompat
 
     public void buyPro() {
         String payload = "";
-        mHelper = new IabHelper(this, Cons.BASE_64_ENCODED_PUBLIC_KEY);
+        if (mHelper == null) {
+            mHelper = new IabHelper(this, Cons.BASE_64_ENCODED_PUBLIC_KEY);
+        }
 
         try {
             mHelper.launchPurchaseFlow(this, SKU_PRO, RC_REQUEST,
