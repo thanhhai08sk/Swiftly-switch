@@ -179,7 +179,8 @@ public abstract class BaseActivity<T, P extends BasePresenter> extends AppCompat
     public void buyPro() {
         String payload = "";
         if (mHelper == null) {
-            mHelper = new IabHelper(this, Cons.BASE_64_ENCODED_PUBLIC_KEY);
+            setUpCheckingPurchase();
+
         }
 
         try {
@@ -230,6 +231,9 @@ public abstract class BaseActivity<T, P extends BasePresenter> extends AppCompat
             boolean mIsPremium = (premiumPurchase != null);
             Log.e(TAG, "User is " + (mIsPremium ? "PREMIUM" : "NOT PREMIUM"));
             getShared().edit().putBoolean(Cons.PRO_PURCHASED_KEY, mIsPremium).commit();
+            if (!mIsPremium) {
+                getShared().edit().putBoolean(Cons.EDGE_2_ON_KEY, false).commit();
+            }
         }
     };
 

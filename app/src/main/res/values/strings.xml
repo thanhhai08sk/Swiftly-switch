@@ -292,8 +292,7 @@
     <string name="what_new_3.1.0" translatable="false">VERSION 3.1.0:\n
         - Added screenshot action (require android 5.0 as minimum)\n
         - Upgrade from free to pro by in-app purchase (for free version only)\n
-        - \n
-        - \n
+        - Updated translation for: Persian, Portuguese, Chinese, Japanese,Spanish. Thanks for your contribution!\n
 
     </string>
     <string name="what_new_3.0.12" translatable="false">VERSION 3.0.12:\n
