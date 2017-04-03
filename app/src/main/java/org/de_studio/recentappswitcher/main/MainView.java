@@ -70,6 +70,8 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     DrawerLayout drawer;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.about_pro_version)
+    View aboutProButton;
 
 
 
@@ -111,33 +113,35 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
         super.onCreate(savedInstanceState);
         bindInAppBillingService();
 
-        mHelper = new IabHelper(this, base64EncodedPublicKey);
-        mHelper.enableDebugLogging(true);
-        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-            public void onIabSetupFinished(IabResult result) {
-                Log.d(TAG, "Setup finished.");
 
-                if (!result.isSuccess()) {
-                    // Oh noes, there was a problem.
-                    complain("Problem setting up in-app billing: " + result);
-                    return;
+        if (getPackageName().equals(Cons.FREE_VERSION_PACKAGE_NAME)) {
+            mHelper = new IabHelper(this, base64EncodedPublicKey);
+            mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                public void onIabSetupFinished(IabResult result) {
+                    Log.d(TAG, "Setup finished.");
+
+                    if (!result.isSuccess()) {
+                        // Oh noes, there was a problem.
+                        complain("Problem setting up in-app billing: " + result);
+                        return;
+                    }
+
+                    if (mHelper == null) return;
+
+                    mBroadcastReceiver = new IabBroadcastReceiver(MainView.this);
+                    IntentFilter broadcastFilter = new IntentFilter(IabBroadcastReceiver.ACTION);
+                    registerReceiver(mBroadcastReceiver, broadcastFilter);
+
+                    // IAB is fully set up. Now, let's get an inventory of stuff we own.
+                    Log.d(TAG, "Setup successful. Querying inventory.");
+                    try {
+                        mHelper.queryInventoryAsync(mGotInventoryListener);
+                    } catch (IabHelper.IabAsyncInProgressException e) {
+                        complain("Error querying inventory. Another async operation in progress.");
+                    }
                 }
-
-                if (mHelper == null) return;
-
-                mBroadcastReceiver = new IabBroadcastReceiver(MainView.this);
-                IntentFilter broadcastFilter = new IntentFilter(IabBroadcastReceiver.ACTION);
-                registerReceiver(mBroadcastReceiver, broadcastFilter);
-
-                // IAB is fully set up. Now, let's get an inventory of stuff we own.
-                Log.d(TAG, "Setup successful. Querying inventory.");
-                try {
-                    mHelper.queryInventoryAsync(mGotInventoryListener);
-                } catch (IabHelper.IabAsyncInProgressException e) {
-                    complain("Error querying inventory. Another async operation in progress.");
-                }
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -530,23 +534,26 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
 
     IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
         public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-            Log.d(TAG, "Query inventory finished.");
+            Log.e(TAG, "Query inventory finished.");
             if (mHelper == null) return;
             if (result.isFailure()) {
                 complain("Failed to query inventory: " + result);
                 return;
             }
-            Log.d(TAG, "Query inventory was successful.");
+            Log.e(TAG, "Query inventory was successful.");
             Purchase premiumPurchase = inventory.getPurchase(SKU_PRO);
             boolean mIsPremium = (premiumPurchase != null && verifyDeveloperPayload(premiumPurchase));
-            Log.d(TAG, "User is " + (mIsPremium ? "PREMIUM" : "NOT PREMIUM"));
+            Log.e(TAG, "User is " + (mIsPremium ? "PREMIUM" : "NOT PREMIUM"));
             shared.edit().putBoolean(Cons.PRO_PURCHASED_KEY, mIsPremium).commit();
             updateFreeOrProUi(mIsPremium);
         }
     };
 
     public void updateFreeOrProUi(boolean isPro) {
-
+        aboutProButton.setVisibility(isPro ? View.GONE : View.VISIBLE);
+        if (!isPro) {
+            shared.edit().putBoolean(Cons.EDGE_2_ON_KEY, false).commit();
+        }
     }
 
     public class GenerateDataOkReceiver extends BroadcastReceiver {
