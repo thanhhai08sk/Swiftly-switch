@@ -251,7 +251,7 @@
 	<string name="trigger_one_make_all_visible">Hiển thị tất cả khi kích hoạt</string>
 	<string name="trigger_zone_color">Trigger zone color</string>
 	<string name="trigger_zone_setting">Cài đặt khu vực kích hoạt</string>
-	<string name="trigger_zone_setting_description">\"Nhấn vào đây để cài đặt vị trí, kích thước của Cạnh\"</string>
+	<string name="trigger_zone_setting_description">Nhấn vào đây để cài đặt vị trí, kích thước của Cạnh</string>
 	<string name="trigger_zone_visible">Trigger zone visible</string>
 	<string name="uploading">Uploading</string>
 	<string name="use_as_default">Use as default</string>

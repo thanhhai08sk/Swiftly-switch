@@ -28,6 +28,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -69,6 +70,7 @@ import org.de_studio.recentappswitcher.service.NotiDialog;
 import org.de_studio.recentappswitcher.ui.QuickActionsView;
 import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -696,11 +698,15 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void openFile(Uri uri) {
+        File file = new File(uri.getPath());
+        Uri uri1 = FileProvider.getUriForFile(this, Cons.AUTHORITY, file);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(uri, "image/*");
+        intent.setDataAndType(uri1, "image/*");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(intent);
+
     }
 
 

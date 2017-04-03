@@ -316,6 +316,7 @@ public class Cons {
 
     public static final String SHARED_PREFERENCE_FOLDER_NAME = "shared_prefs";
     public static final String BACKUP_FILE_NAME = "backup.swiftly_switch";
+    public static final String AUTHORITY = "org.de_studio.recentappswitcher.provider";
 
 
 
