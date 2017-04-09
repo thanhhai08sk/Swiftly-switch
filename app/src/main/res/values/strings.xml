@@ -30,7 +30,7 @@
     <string name="avoid_keyboard_place_under">Place under keyboard</string>
     <string name="avoid_keyboard_step_aside">Step aside keyboard</string>
     <string name="backup">Backup</string>
-    <string name="backup_and_restore">\"Backup &#38;amp; Import settings\"</string>
+    <string name="backup_and_restore">\"Backup, Import settings\"</string>
     <string name="backup_fail">Backup fail</string>
     <string name="backup_guide">The backup file will be stored in your Google Drive. Please connect to your Google account and then choose the folder to upload.</string>
     <string name="backup_successful">Backed up successfully</string>
@@ -290,9 +290,9 @@
 
 
     <string name="what_new_3.1.0" translatable="false">VERSION 3.1.0:\n
-        - Added screenshot action (require android 5.0 as minimum)\n
+        - Added screenshot action (require android 5.0 and write storage permission)\n
         - Upgrade from free to pro by in-app purchase (for free version only)\n
-        - Updated translation for: Persian, Portuguese, Chinese, Japanese,Spanish. Thanks for your contribution!\n
+        - Updated translation for: Persian, Portuguese, Chinese, Japanese, Spanish. Thanks for your contribution!\n
 
     </string>
     <string name="what_new_3.0.12" translatable="false">VERSION 3.0.12:\n

@@ -14,6 +14,7 @@ import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
 import android.media.Image;
 import android.media.ImageReader;
+import android.media.MediaScannerConnection;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
@@ -126,6 +127,7 @@ public class ScreenshotView extends Activity {
             Intent screenshotOkBroadcast = new Intent(Cons.ACTION_SCREENSHOT_OK);
             screenshotOkBroadcast.putExtra("uri", Uri.fromFile(file));
             sendBroadcast(screenshotOkBroadcast);
+            MediaScannerConnection.scanFile(getApplicationContext(), new String[]{file.getPath()}, new String[]{"image/jpeg"}, null);
             finishScreenshot();
         }
     }
