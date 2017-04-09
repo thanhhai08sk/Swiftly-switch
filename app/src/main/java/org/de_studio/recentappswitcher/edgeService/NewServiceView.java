@@ -415,7 +415,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public ArrayList<String> getRecentApp(long timeInterval) {
-        Log.e(TAG, "getRecentApp: launcher = " + launcherPackageName);
+//        Log.e(TAG, "getRecentApp: launcher = " + launcherPackageName);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
             int numOfTask = 13;
@@ -465,11 +465,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                                 tempPackageName.add(packa);
                                 i++;
                             } else {
-                                Log.e(TAG, "getRecentApp: removed package = " + packa + "\ni = " + i +
-                                        "\nfirst && = " + (usageStats.getTotalTimeInForeground() > 500) + "value = " + usageStats.getTotalTimeInForeground() +
-                                        "\nsecond && = " + (!packa.contains("systemui")) +
-                                        "\nthird && = " + ((i == 0 || (excludeSet == null || excludeSet.where().equalTo(Cons.PACKAGENAME, packa).findFirst() == null))) +
-                                        "\nfourth && = " + !tempPackageName.contains(packa));
+//                                Log.e(TAG, "getRecentApp: removed package = " + packa + "\ni = " + i +
+//                                        "\nfirst && = " + (usageStats.getTotalTimeInForeground() > 500) + "value = " + usageStats.getTotalTimeInForeground() +
+//                                        "\nsecond && = " + (!packa.contains("systemui")) +
+//                                        "\nthird && = " + ((i == 0 || (excludeSet == null || excludeSet.where().equalTo(Cons.PACKAGENAME, packa).findFirst() == null))) +
+//                                        "\nfourth && = " + !tempPackageName.contains(packa));
 
                             }
                             if (tempPackageName.size() >= (timeInterval == Cons.TIME_INTERVAL_LONG ? 15 : 10)) {

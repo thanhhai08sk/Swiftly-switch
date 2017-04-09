@@ -146,6 +146,7 @@
 
     <string-array name="what_new">
 
+        <item>@string/what_new_3.1.1</item>
         <item>@string/what_new_3.1.0</item>
         <item>@string/what_new_3.0.12</item>
         <item>@string/what_new_3.0.11</item>
