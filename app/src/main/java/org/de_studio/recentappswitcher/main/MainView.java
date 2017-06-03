@@ -110,7 +110,6 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
 //                    intent.setAction(DataSetupService.ACTION_GENERATE_DATA);
 //                    startService(intent);
                     startActivity(i);
-
                 }
             }
         });

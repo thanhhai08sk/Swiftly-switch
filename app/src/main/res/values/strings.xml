@@ -30,6 +30,8 @@
     <string name="avoid_keyboard_place_under">Place under keyboard</string>
     <string name="avoid_keyboard_step_aside">Step aside keyboard</string>
     <string name="backup">Backup</string>
+    <string name="backup_to_local_storage">Backup to local storage</string>
+    <string name="backup_to_google_drive">Backup to Google Drive</string>
     <string name="backup_and_restore">\"Backup, Import settings\"</string>
     <string name="backup_fail">Backup fail</string>
     <string name="backup_guide">The backup file will be stored in your Google Drive. Please connect to your Google account and then choose the folder to upload.</string>
@@ -288,7 +290,7 @@
 
 
     <string name="what_new_3.1.1" translatable="false">VERSION 3.1.1:\n
-        - Fixed screenshot does not appear in the gallery after taken\n
+        - Fixed: screenshot does not appear in the gallery after taken\n
         - Updated translations for: German, Czech, Chinese, Japanese, Spanish, Italian. Contribute your translation at: localize.im/v/xy\n
 
     </string>
