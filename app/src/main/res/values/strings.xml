@@ -30,8 +30,6 @@
     <string name="avoid_keyboard_place_under">Place under keyboard</string>
     <string name="avoid_keyboard_step_aside">Step aside keyboard</string>
     <string name="backup">Backup</string>
-    <string name="backup_to_local_storage">Backup to local storage</string>
-    <string name="backup_to_google_drive">Backup to Google Drive</string>
     <string name="backup_and_restore">\"Backup, Import settings\"</string>
     <string name="backup_fail">Backup fail</string>
     <string name="backup_guide">The backup file will be stored in your Google Drive. Please connect to your Google account and then choose the folder to upload.</string>
@@ -310,7 +308,7 @@
         - Fix visual problem in RTL languages\n
         - Update translation for: Japanese, Spanish, Norwegian, Dutch. Thanks for all that help me translate the app! You can always contribute at https://www.localize.im/v/xy\n
     </string>
-    <string name="what_new_3.0.10" translatable="false">VERSION 3.0.10:\n
+    <string name="what_new_3.0.10">VERSION 3.0.10:\n
         - Fix icon pack\'s bugs\n
         - Option to reset icon to default\n
         - Customize folder\'s icon (Pro)\n
@@ -347,6 +345,8 @@
 
 
     <string name="thanks_for_upgrading_to_pro">Thank you for upgrading to pro!</string>
+    <string name="backup_to_local_storage">Backup to local storage</string>
+    <string name="backup_to_google_drive">Backup to Google Drive</string>
 
 
 </resources>

@@ -42,16 +42,16 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
 
         val exportTrans: Observable.Transformer<ExportAction, MoreSettingResult> = Observable.Transformer { observable: Observable<ExportAction>? ->
-            observable?.flatMap({i -> view.choosePlaceToBackup().toObservable()})
+            observable?.flatMap({ view.choosePlaceToBackup().toObservable()})
                     ?.publish({shared -> Observable.merge(
                             shared.filter { t -> t.type == MoreSettingResult.Type.CHOOSE_PLACE_GOOGLE_DRIVE }
                                     .flatMap { view.connectClientRX().toObservable()
-                                            .onErrorReturn { t -> MoreSettingResult(MoreSettingResult.Type.EXPORT_FAIL) }
+                                            .onErrorReturn { MoreSettingResult(MoreSettingResult.Type.EXPORT_FAIL) }
                                             .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))
-                                            .flatMap { t -> view.openFolderPickerRx()}
+                                            .flatMap { view.openFolderPickerRx()}
                                             .flatMap { folderDriveId -> view.uploadToDriveRx(realm,folderDriveId).toObservable() } },
-                            shared.filter { t -> t.type == MoreSettingResult.Type.CHOOSE_PLACE_STORAGE }
-                                    .flatMap({t ->
+                            shared.filter { (type) -> type == MoreSettingResult.Type.CHOOSE_PLACE_STORAGE }
+                                    .flatMap({_ ->
                                         view.exportToStorage().toObservable()
                                                 .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))})
 
@@ -104,7 +104,7 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
         )
 
         addSubscription(
-                iconSizeSJ.subscribe { integer -> onSetIconSize(integer as Float / 100f) }
+                iconSizeSJ.subscribe { integer -> onSetIconSize(integer.toFloat() / 100f) }
         )
 
         addSubscription(

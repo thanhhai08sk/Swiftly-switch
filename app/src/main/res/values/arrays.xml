@@ -48,12 +48,7 @@
         <item>@string/setting_shortcut_call_log</item>
     </string-array>
 
-    <string-array name="outer_setting_list_action">
-        <item>@string/action_1</item>
-        <item>@string/action_2</item>
-        <item>@string/action_3</item>
-        <item>@string/action_4</item>
-    </string-array>
+
     <string-array name="outer_ring_list_available_action">
         <item>@string/setting_shortcut_none</item>
         <item>@string/setting_shortcut_instant_favorite</item>

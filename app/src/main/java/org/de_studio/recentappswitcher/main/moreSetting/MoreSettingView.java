@@ -818,7 +818,13 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @NotNull
     @Override
-    public Single<MoreSettingPresenter.MoreSettingResult> uploadToDriveRx(@NotNull Realm realm, @NotNull final DriveId folderId) {
+    public Single<MoreSettingPresenter.MoreSettingResult> exportToStorage() {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public Single<MoreSettingPresenter.MoreSettingResult> uploadToDriveRx(@NotNull final Realm realm, @NotNull final DriveId folderId) {
         return Single.create(new Single.OnSubscribe<MoreSettingPresenter.MoreSettingResult>() {
             @Override
             public void call(final SingleSubscriber<? super MoreSettingPresenter.MoreSettingResult> singleSubscriber) {
@@ -829,8 +835,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                                 @Override
                                 public void onResult(DriveApi.DriveContentsResult result) {
                                     if (!result.getStatus().isSuccess()) {
-                                        Log.e(TAG, "Error while trying to create new file contents");
-                                        singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.WRITE_TO_DRIVE_FAIL));
+                                        singleSubscriber.onError(new Throwable("Error while trying to create new file contents"));
                                         return;
                                     }
                                     final DriveContents driveContents = result.getDriveContents();
@@ -855,8 +860,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
                                     } catch (IOException e) {
                                         e.printStackTrace();
-                                        Log.e(TAG, "onResult: IOException when zip");
-                                        somethingWrongSJ.onNext(REQUEST_BACKUP);
+                                        singleSubscriber.onError(new Throwable("IOException when zip"));
                                         return;
                                     }
 
@@ -871,8 +875,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                                             try {
                                                 inputStream = new FileInputStream(zipFile);
                                             } catch (FileNotFoundException e) {
-                                                somethingWrongSJ.onNext(REQUEST_BACKUP);
-                                                Log.e(TAG, "run: file not found");
+                                                singleSubscriber.onError(new Throwable("file not found"));
                                                 e.printStackTrace();
                                             }
 
@@ -885,7 +888,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                                                     }
                                                 }
                                             } catch (IOException e) {
-                                                somethingWrongSJ.onNext(REQUEST_BACKUP);
+                                                singleSubscriber.onError(new Throwable("IoException"));
                                                 e.printStackTrace();
                                             }
 
@@ -901,11 +904,11 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                                                         @Override
                                                         public void onResult(DriveFolder.DriveFileResult result) {
                                                             if (!result.getStatus().isSuccess()) {
-                                                                Log.e(TAG, "Error while trying to create the file");
-                                                                somethingWrongSJ.onNext(REQUEST_BACKUP);
+                                                                singleSubscriber.onError(new Throwable("Error while trying to create the file"));
+
                                                                 return;
                                                             }
-                                                            backupSuccessful.onNext(null);
+                                                            singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.EXPORT_SUCCESS));
                                                         }
                                                     });
                                         }
