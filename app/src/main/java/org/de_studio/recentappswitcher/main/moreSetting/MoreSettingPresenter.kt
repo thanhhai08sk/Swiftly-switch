@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.main.moreSetting
 import android.app.Activity
 import android.content.SharedPreferences
 import android.util.Log
+import android.util.Pair
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.drive.DriveFile
 import com.google.android.gms.drive.DriveId
@@ -42,14 +43,19 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
 
         val exportTrans: Observable.Transformer<ExportAction, MoreSettingResult> = Observable.Transformer { observable: Observable<ExportAction>? ->
-            observable?.flatMap({ view.choosePlaceToBackup().toObservable()})
+            observable?.observeOn(AndroidSchedulers.mainThread())
+                    ?.flatMap({ view.choosePlaceToBackup().toObservable()})
+                    ?.observeOn(Schedulers.io())
                     ?.publish({shared -> Observable.merge(
-                            shared.filter { t -> t.type == MoreSettingResult.Type.CHOOSE_PLACE_GOOGLE_DRIVE }
+                            shared.filter { (type) -> type == MoreSettingResult.Type.CHOOSE_PLACE_GOOGLE_DRIVE }
+                                    .observeOn(AndroidSchedulers.mainThread())
                                     .flatMap { view.connectClientRX().toObservable()
+                                            .flatMap { result -> view.openFolderPickerRx(result.googleApiClient)}
+                                            .doOnNext { Log.e(TAG, "pick folder ok: "  ) }
+                                            .flatMap { pair -> view.uploadToDriveRx(realm,pair.second,pair.first).toObservable() }
                                             .onErrorReturn { MoreSettingResult(MoreSettingResult.Type.EXPORT_FAIL) }
                                             .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))
-                                            .flatMap { view.openFolderPickerRx()}
-                                            .flatMap { folderDriveId -> view.uploadToDriveRx(realm,folderDriveId).toObservable() } },
+                                    },
                             shared.filter { (type) -> type == MoreSettingResult.Type.CHOOSE_PLACE_STORAGE }
                                     .flatMap({_ ->
                                         view.exportToStorage().toObservable()
@@ -153,17 +159,11 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
 
 
-        addSubscription(
-                view.onPickFolderSuccess().subscribe { driveId ->
-                    //                        view.showUploadingDialog();
-                    view.uploadToDrive(realm, driveId)
-                }
-        )
 
         addSubscription(
                 view.onPickFileToRestoreSuccess().subscribe { driveFile ->
                     view.showDownloadingDialog()
-                    view.downloadFromDrive(realm, driveFile)
+//                    view.downloadFromDrive(realm, driveFile)
                 }
         )
 
@@ -372,8 +372,7 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
         fun vibrationDurationDialog(subject: PublishSubject<Int>)
 
-        fun openFolderPicker()
-        fun openFolderPickerRx(): PublishSubject<DriveId>
+        fun openFolderPickerRx(client: GoogleApiClient?): PublishSubject<Pair<GoogleApiClient, DriveId>>
 
         fun openFilePicker()
 
@@ -389,7 +388,6 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
         fun onBackupOrRestoreSJ(): PublishSubject<Int>
 
-        fun onPickFolderSuccess(): PublishSubject<DriveId>
 
         fun onPickFileToRestoreSuccess(): PublishSubject<DriveFile>
 
@@ -419,10 +417,10 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
         fun hideUploadingDialog()
 
-        fun uploadToDrive(realm: Realm, mFolderDriveId: DriveId)
-        fun uploadToDriveRx(realm: Realm, folderId: DriveId): Single<MoreSettingResult>
+//        fun uploadToDrive(realm: Realm, mFolderDriveId: DriveId)
+        fun uploadToDriveRx(realm: Realm, folderId: DriveId, client: GoogleApiClient?): Single<MoreSettingResult>
 
-        fun downloadFromDrive(realm: Realm, file: DriveFile)
+//        fun downloadFromDrive(realm: Realm, file: DriveFile)
 
         val activityForContext: Activity
 
@@ -463,7 +461,7 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
     }
 
 
-    data class MoreSettingResult(val type: Type) {
+    data class MoreSettingResult(val type: Type, var googleApiClient: GoogleApiClient? = null) {
         enum class Type {
             CHOOSE_PLACE_STORAGE,
             CHOOSE_PLACE_GOOGLE_DRIVE,

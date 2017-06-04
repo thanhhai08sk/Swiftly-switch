@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -117,7 +118,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     PublishSubject<Void> googleClientConnectedSJ = PublishSubject.create();
     PublishSubject<Integer> backupOrRestoreRequestSJ = PublishSubject.create();
     PublishSubject<Integer> somethingWrongSJ = PublishSubject.create();
-    PublishSubject<DriveId> pickupFolderSuccessSJ = PublishSubject.create();
+    PublishSubject<Pair<GoogleApiClient, DriveId>> pickupFolderSuccessSJ;
     PublishSubject<DriveFile> pickupFileSuccessSJ = PublishSubject.create();
     PublishSubject<Void> backupSuccessful = PublishSubject.create();
     PublishSubject<Void> finishReadingGuideSJ = PublishSubject.create();
@@ -160,7 +161,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                     //Get the folder drive id
                     DriveId mFolderDriveId = data.getParcelableExtra(
                             OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
-                    pickupFolderSuccessSJ.onNext(mFolderDriveId);
+                    Log.e(TAG, "onActivityResult: pick folder ok");
+                    pickupFolderSuccessSJ.onNext(new Pair<>(mGoogleApiClient,mFolderDriveId));
                 }
                 break;
 
@@ -185,7 +187,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (backup != null) {
-            mGoogleApiClient = backup.getClient();
+//            mGoogleApiClient = backup.getClient();
             googleClientConnectedSJ.onNext(null);
         }
     }
@@ -210,10 +212,6 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         return backupOrRestoreRequestSJ;
     }
 
-    @Override
-    public PublishSubject<DriveId> onPickFolderSuccess() {
-        return pickupFolderSuccessSJ;
-    }
 
     @Override
     public PublishSubject<DriveFile> onPickFileToRestoreSuccess() {
@@ -616,7 +614,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                 backup.init(MoreSettingView.this, new GoogleApiClient.ConnectionCallbacks() {
                     @Override
                     public void onConnected(@Nullable Bundle bundle) {
-                        singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.CONNECT_CLIENT_SUCCESS));
+                        Log.e(TAG, "onConnected: client connected, thread = " + Thread.currentThread().getName());
+                        singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.CONNECT_CLIENT_SUCCESS,backup.getClient()));
                     }
 
                     @Override
@@ -645,34 +644,36 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @NotNull
     @Override
-    public PublishSubject<DriveId> openFolderPickerRx() {
-        openFolderPicker();
+    public PublishSubject<Pair<GoogleApiClient, DriveId>> openFolderPickerRx(@org.jetbrains.annotations.Nullable GoogleApiClient client) {
+        openFolderPicker(client);
+        mGoogleApiClient = client;
+        pickupFolderSuccessSJ = PublishSubject.create();
         return pickupFolderSuccessSJ;
     }
 
 
-    public void openFolderPicker() {
-        Log.e(TAG, "openFolderPicker: ");
+    public void openFolderPicker(GoogleApiClient mGoogleApiClient) {
         try {
             if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
                 if (intentPicker == null)
-                    intentPicker = buildIntent();
+                    intentPicker = buildIntent(mGoogleApiClient);
                 //Start the picker to choose a folder
+                Log.e(TAG, "openFolderPicker: open");
                 startIntentSenderForResult(
                         intentPicker, REQUEST_CODE_PICK_FOLDER, null, 0, 0, 0);
             } else {
-                Log.e(TAG, "openFolderPicker: error");
+                Log.e(TAG, "openFolderPicker: error, api client not ready, thread = " + Thread.currentThread().getName());
             }
         } catch (IntentSender.SendIntentException e) {
             Log.e(TAG, "Unable to send intent", e);
             showErrorDialog();
         }
     }
-    private IntentSender buildIntent() {
+    private IntentSender buildIntent(GoogleApiClient client) {
         return Drive.DriveApi
                 .newOpenFileActivityBuilder()
                 .setMimeType(new String[]{DriveFolder.MIME_TYPE})
-                .build(mGoogleApiClient);
+                .build(client);
     }
     public void showErrorDialog() {
         new MaterialDialog.Builder(this)
@@ -780,7 +781,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                 .newOpenFileActivityBuilder()
 //                these mimetypes enable these folders/files types to be selected
                 .setMimeType(new String[]{DriveFolder.MIME_TYPE, "text/plain"})
-                .build(mGoogleApiClient);
+                .build(null);
         try {
             startIntentSenderForResult(
                     intentSender, REQUEST_CODE_SELECT_FILE, null, 0, 0, 0);
@@ -803,10 +804,10 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                             public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
                                 switch (position) {
                                     case 0:
-                                        singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.CHOOSE_PLACE_STORAGE));
+                                        singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.CHOOSE_PLACE_STORAGE, null));
                                         break;
                                     case 1:
-                                        singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.CHOOSE_PLACE_GOOGLE_DRIVE));
+                                        singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.CHOOSE_PLACE_GOOGLE_DRIVE, null));
                                         break;
                                 }
                             }
@@ -824,199 +825,201 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @NotNull
     @Override
-    public Single<MoreSettingPresenter.MoreSettingResult> uploadToDriveRx(@NotNull final Realm realm, @NotNull final DriveId folderId) {
+    public Single<MoreSettingPresenter.MoreSettingResult> uploadToDriveRx(@NotNull final Realm realm, @NotNull final DriveId folderId, @org.jetbrains.annotations.Nullable final GoogleApiClient client) {
         return Single.create(new Single.OnSubscribe<MoreSettingPresenter.MoreSettingResult>() {
             @Override
             public void call(final SingleSubscriber<? super MoreSettingPresenter.MoreSettingResult> singleSubscriber) {
-                    //Create the file on GDrive
-                    final DriveFolder folder = folderId.asDriveFolder();
-                    Drive.DriveApi.newDriveContents(mGoogleApiClient)
-                            .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
-                                @Override
-                                public void onResult(DriveApi.DriveContentsResult result) {
-                                    if (!result.getStatus().isSuccess()) {
-                                        singleSubscriber.onError(new Throwable("Error while trying to create new file contents"));
-                                        return;
-                                    }
-                                    final DriveContents driveContents = result.getDriveContents();
-
-                                    String sharedFile = Environment.getDataDirectory().getAbsolutePath() + "/data/" + getPackageName() + "/" + Cons.SHARED_PREFERENCE_FOLDER_NAME + "/" + Cons.SHARED_PREFERENCE_NAME+".xml";
-
-                                    File file = new File(sharedFile);
-                                    if (!file.exists()) {
-                                        Log.e(TAG, "onResult: file not exist " + sharedFile +
-                                                "\nrealm file = " + realm.getPath());
-                                        File file1 = new File("/data/data/org.de_studio.recentappswitcher.fastbuild/shared_prefs/");
-                                        for (File file2 : file1.listFiles()) {
-                                            Log.e(TAG, "onResult: file = " + file2.getAbsolutePath());
-
-                                        }
-                                        return;
-                                    }
-                                    String realmFile = realm.getPath();
-                                    final File zipFile = new File(getApplicationInfo().dataDir + "/" + Cons.BACKUP_FILE_NAME);
-                                    try {
-                                        Utility.zip(new String[]{sharedFile, realmFile}, zipFile);
-
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                        singleSubscriber.onError(new Throwable("IOException when zip"));
-                                        return;
-                                    }
-
-                                    // Perform I/O off the UI thread.
-                                    new Thread() {
-                                        @Override
-                                        public void run() {
-                                            // write content to DriveContents
-                                            OutputStream outputStream = driveContents.getOutputStream();
-
-                                            FileInputStream inputStream = null;
-                                            try {
-                                                inputStream = new FileInputStream(zipFile);
-                                            } catch (FileNotFoundException e) {
-                                                singleSubscriber.onError(new Throwable("file not found"));
-                                                e.printStackTrace();
-                                            }
-
-                                            byte[] buf = new byte[1024];
-                                            int bytesRead;
-                                            try {
-                                                if (inputStream != null) {
-                                                    while ((bytesRead = inputStream.read(buf)) > 0) {
-                                                        outputStream.write(buf, 0, bytesRead);
-                                                    }
-                                                }
-                                            } catch (IOException e) {
-                                                singleSubscriber.onError(new Throwable("IoException"));
-                                                e.printStackTrace();
-                                            }
-
-
-                                            MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                                                    .setTitle(Cons.BACKUP_FILE_NAME)
-                                                    .setMimeType("text/plain")
-                                                    .build();
-
-                                            // create a file in selected folder
-                                            folder.createFile(mGoogleApiClient, changeSet, driveContents)
-                                                    .setResultCallback(new ResultCallback<DriveFolder.DriveFileResult>() {
-                                                        @Override
-                                                        public void onResult(DriveFolder.DriveFileResult result) {
-                                                            if (!result.getStatus().isSuccess()) {
-                                                                singleSubscriber.onError(new Throwable("Error while trying to create the file"));
-
-                                                                return;
-                                                            }
-                                                            singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.EXPORT_SUCCESS));
-                                                        }
-                                                    });
-                                        }
-                                    }.start();
+                //Create the file on GDrive
+                final DriveFolder folder = folderId.asDriveFolder();
+                Drive.DriveApi.newDriveContents(mGoogleApiClient)
+                        .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
+                            @Override
+                            public void onResult(DriveApi.DriveContentsResult result) {
+                                if (!result.getStatus().isSuccess()) {
+                                    singleSubscriber.onError(new Throwable("Error while trying to create new file contents"));
+                                    return;
                                 }
-                            });
+                                final DriveContents driveContents = result.getDriveContents();
+
+                                String sharedFile = Environment.getDataDirectory().getAbsolutePath() + "/data/" + getPackageName() + "/" + Cons.SHARED_PREFERENCE_FOLDER_NAME + "/" + Cons.SHARED_PREFERENCE_NAME+".xml";
+
+                                File file = new File(sharedFile);
+                                if (!file.exists()) {
+                                    Log.e(TAG, "onResult: file not exist " + sharedFile +
+                                            "\nrealm file = " + realm.getPath());
+                                    File file1 = new File("/data/data/org.de_studio.recentappswitcher.fastbuild/shared_prefs/");
+                                    for (File file2 : file1.listFiles()) {
+                                        Log.e(TAG, "onResult: file = " + file2.getAbsolutePath());
+
+                                    }
+                                    return;
+                                }
+                                String realmFile = realm.getPath();
+                                final File zipFile = new File(getApplicationInfo().dataDir + "/" + Cons.BACKUP_FILE_NAME);
+                                try {
+                                    Utility.zip(new String[]{sharedFile, realmFile}, zipFile);
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    singleSubscriber.onError(new Throwable("IOException when zip"));
+                                    return;
+                                }
+
+                                // Perform I/O off the UI thread.
+                                new Thread() {
+                                    @Override
+                                    public void run() {
+                                        // write content to DriveContents
+                                        OutputStream outputStream = driveContents.getOutputStream();
+
+                                        FileInputStream inputStream = null;
+                                        try {
+                                            inputStream = new FileInputStream(zipFile);
+                                        } catch (FileNotFoundException e) {
+                                            singleSubscriber.onError(new Throwable("file not found"));
+                                            e.printStackTrace();
+                                        }
+
+                                        byte[] buf = new byte[1024];
+                                        int bytesRead;
+                                        try {
+                                            if (inputStream != null) {
+                                                while ((bytesRead = inputStream.read(buf)) > 0) {
+                                                    outputStream.write(buf, 0, bytesRead);
+                                                }
+                                            }
+                                        } catch (IOException e) {
+                                            singleSubscriber.onError(new Throwable("IoException"));
+                                            e.printStackTrace();
+                                        }
+
+
+                                        MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                                                .setTitle(Cons.BACKUP_FILE_NAME)
+                                                .setMimeType("text/plain")
+                                                .build();
+
+                                        // create a file in selected folder
+                                        folder.createFile(mGoogleApiClient, changeSet, driveContents)
+                                                .setResultCallback(new ResultCallback<DriveFolder.DriveFileResult>() {
+                                                    @Override
+                                                    public void onResult(DriveFolder.DriveFileResult result) {
+                                                        if (!result.getStatus().isSuccess()) {
+                                                            singleSubscriber.onError(new Throwable("Error while trying to create the file"));
+
+                                                            return;
+                                                        }
+                                                        singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.EXPORT_SUCCESS, null));
+                                                    }
+                                                });
+                                    }
+                                }.start();
+                            }
+                        });
 
 
             }
         });
+
     }
 
-    public void uploadToDrive(final Realm realm, DriveId mFolderDriveId) {
-        if (mFolderDriveId != null) {
-            //Create the file on GDrive
-            final DriveFolder folder = mFolderDriveId.asDriveFolder();
-            Drive.DriveApi.newDriveContents(mGoogleApiClient)
-                    .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
-                        @Override
-                        public void onResult(DriveApi.DriveContentsResult result) {
-                            if (!result.getStatus().isSuccess()) {
-                                Log.e(TAG, "Error while trying to create new file contents");
-                                somethingWrongSJ.onNext(REQUEST_BACKUP);
-                                return;
-                            }
-                            final DriveContents driveContents = result.getDriveContents();
 
-                            String sharedFile = Environment.getDataDirectory().getAbsolutePath() + "/data/" + getPackageName() + "/" + Cons.SHARED_PREFERENCE_FOLDER_NAME + "/" + Cons.SHARED_PREFERENCE_NAME+".xml";
+//    public void uploadToDrive(final Realm realm, DriveId mFolderDriveId) {
+//        if (mFolderDriveId != null) {
+//            //Create the file on GDrive
+//            final DriveFolder folder = mFolderDriveId.asDriveFolder();
+//            Drive.DriveApi.newDriveContents(mGoogleApiClient)
+//                    .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
+//                        @Override
+//                        public void onResult(DriveApi.DriveContentsResult result) {
+//                            if (!result.getStatus().isSuccess()) {
+//                                Log.e(TAG, "Error while trying to create new file contents");
+//                                somethingWrongSJ.onNext(REQUEST_BACKUP);
+//                                return;
+//                            }
+//                            final DriveContents driveContents = result.getDriveContents();
+//
+//                            String sharedFile = Environment.getDataDirectory().getAbsolutePath() + "/data/" + getPackageName() + "/" + Cons.SHARED_PREFERENCE_FOLDER_NAME + "/" + Cons.SHARED_PREFERENCE_NAME+".xml";
+//
+//                            File file = new File(sharedFile);
+//                            if (!file.exists()) {
+//                                Log.e(TAG, "onResult: file not exist " + sharedFile +
+//                                "\nrealm file = " + realm.getPath());
+//                                File file1 = new File("/data/data/org.de_studio.recentappswitcher.fastbuild/shared_prefs/");
+//                                for (File file2 : file1.listFiles()) {
+//                                    Log.e(TAG, "onResult: file = " + file2.getAbsolutePath());
+//
+//                                }
+//                                return;
+//                            }
+//                            String realmFile = realm.getPath();
+//                            final File zipFile = new File(getApplicationInfo().dataDir + "/" + Cons.BACKUP_FILE_NAME);
+//                            try {
+//                                Utility.zip(new String[]{sharedFile, realmFile}, zipFile);
+//
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                                Log.e(TAG, "onResult: IOException when zip");
+//                                somethingWrongSJ.onNext(REQUEST_BACKUP);
+//                                return;
+//                            }
+//
+//                            // Perform I/O off the UI thread.
+//                            new Thread() {
+//                                @Override
+//                                public void run() {
+//                                    // write content to DriveContents
+//                                    OutputStream outputStream = driveContents.getOutputStream();
+//
+//                                    FileInputStream inputStream = null;
+//                                    try {
+//                                        inputStream = new FileInputStream(zipFile);
+//                                    } catch (FileNotFoundException e) {
+//                                        somethingWrongSJ.onNext(REQUEST_BACKUP);
+//                                        Log.e(TAG, "run: file not found");
+//                                        e.printStackTrace();
+//                                    }
+//
+//                                    byte[] buf = new byte[1024];
+//                                    int bytesRead;
+//                                    try {
+//                                        if (inputStream != null) {
+//                                            while ((bytesRead = inputStream.read(buf)) > 0) {
+//                                                outputStream.write(buf, 0, bytesRead);
+//                                            }
+//                                        }
+//                                    } catch (IOException e) {
+//                                        somethingWrongSJ.onNext(REQUEST_BACKUP);
+//                                        e.printStackTrace();
+//                                    }
+//
+//
+//                                    MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+//                                            .setTitle(Cons.BACKUP_FILE_NAME)
+//                                            .setMimeType("text/plain")
+//                                            .build();
+//
+//                                    // create a file in selected folder
+//                                    folder.createFile(mGoogleApiClient, changeSet, driveContents)
+//                                            .setResultCallback(new ResultCallback<DriveFolder.DriveFileResult>() {
+//                                                @Override
+//                                                public void onResult(DriveFolder.DriveFileResult result) {
+//                                                    if (!result.getStatus().isSuccess()) {
+//                                                        Log.e(TAG, "Error while trying to create the file");
+//                                                        somethingWrongSJ.onNext(REQUEST_BACKUP);
+//                                                        return;
+//                                                    }
+//                                                    backupSuccessful.onNext(null);
+//                                                }
+//                                            });
+//                                }
+//                            }.start();
+//                        }
+//                    });
+//        }
+//    }
 
-                            File file = new File(sharedFile);
-                            if (!file.exists()) {
-                                Log.e(TAG, "onResult: file not exist " + sharedFile +
-                                "\nrealm file = " + realm.getPath());
-                                File file1 = new File("/data/data/org.de_studio.recentappswitcher.fastbuild/shared_prefs/");
-                                for (File file2 : file1.listFiles()) {
-                                    Log.e(TAG, "onResult: file = " + file2.getAbsolutePath());
-
-                                }
-                                return;
-                            }
-                            String realmFile = realm.getPath();
-                            final File zipFile = new File(getApplicationInfo().dataDir + "/" + Cons.BACKUP_FILE_NAME);
-                            try {
-                                Utility.zip(new String[]{sharedFile, realmFile}, zipFile);
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                Log.e(TAG, "onResult: IOException when zip");
-                                somethingWrongSJ.onNext(REQUEST_BACKUP);
-                                return;
-                            }
-
-                            // Perform I/O off the UI thread.
-                            new Thread() {
-                                @Override
-                                public void run() {
-                                    // write content to DriveContents
-                                    OutputStream outputStream = driveContents.getOutputStream();
-
-                                    FileInputStream inputStream = null;
-                                    try {
-                                        inputStream = new FileInputStream(zipFile);
-                                    } catch (FileNotFoundException e) {
-                                        somethingWrongSJ.onNext(REQUEST_BACKUP);
-                                        Log.e(TAG, "run: file not found");
-                                        e.printStackTrace();
-                                    }
-
-                                    byte[] buf = new byte[1024];
-                                    int bytesRead;
-                                    try {
-                                        if (inputStream != null) {
-                                            while ((bytesRead = inputStream.read(buf)) > 0) {
-                                                outputStream.write(buf, 0, bytesRead);
-                                            }
-                                        }
-                                    } catch (IOException e) {
-                                        somethingWrongSJ.onNext(REQUEST_BACKUP);
-                                        e.printStackTrace();
-                                    }
-
-
-                                    MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                                            .setTitle(Cons.BACKUP_FILE_NAME)
-                                            .setMimeType("text/plain")
-                                            .build();
-
-                                    // create a file in selected folder
-                                    folder.createFile(mGoogleApiClient, changeSet, driveContents)
-                                            .setResultCallback(new ResultCallback<DriveFolder.DriveFileResult>() {
-                                                @Override
-                                                public void onResult(DriveFolder.DriveFileResult result) {
-                                                    if (!result.getStatus().isSuccess()) {
-                                                        Log.e(TAG, "Error while trying to create the file");
-                                                        somethingWrongSJ.onNext(REQUEST_BACKUP);
-                                                        return;
-                                                    }
-                                                    backupSuccessful.onNext(null);
-                                                }
-                                            });
-                                }
-                            }.start();
-                        }
-                    });
-        }
-    }
-
-    public void downloadFromDrive(final Realm realm, DriveFile file) {
+    public void downloadFromDrive(final Realm realm, DriveFile file, GoogleApiClient mGoogleApiClient) {
         file.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
                 .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
                     @Override
