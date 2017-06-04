@@ -682,7 +682,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                 .show();
     }
 
-    public void showSuccessDialog() {
+    public void showBackupGoogleDriveOk() {
         new MaterialDialog.Builder(this)
                 .content(R.string.backup_successful)
                 .positiveText(R.string.app_tab_fragment_ok_button)

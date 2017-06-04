@@ -89,7 +89,10 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
                         .subscribe { model: MoreSettingUIModel? ->
                             if (model != null) {
                                 if (model.exporting) view.showUploadingDialog()
-                                if (model.exportDone) view.hideUploadingDialog()
+                                if (model.exportDone) {
+                                    view.hideUploadingDialog()
+                                    view.showBackupGoogleDriveOk()
+                                }
                             }
                         })
 
@@ -177,7 +180,7 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
         )
 
         addSubscription(
-                view.onBackupSuccessful().subscribe { view.showSuccessDialog() }
+                view.onBackupSuccessful().subscribe { view.showBackupGoogleDriveOk() }
         )
 
 
@@ -408,7 +411,7 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
         fun showErrorDialog()
 
-        fun showSuccessDialog()
+        fun showBackupGoogleDriveOk()
 
 
         fun hideDownloadingDialog()
