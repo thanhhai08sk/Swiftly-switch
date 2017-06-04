@@ -347,6 +347,8 @@
     <string name="thanks_for_upgrading_to_pro">Thank you for upgrading to pro!</string>
     <string name="backup_to_local_storage">Backup to local storage</string>
     <string name="backup_to_google_drive">Backup to Google Drive</string>
+    <string name="exporting">Exporting</string>
+    <string name="exported_storage_success">Exported to Storage/Download</string>
 
 
 </resources>

@@ -35,6 +35,7 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.CallLog;
@@ -92,6 +93,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -1049,11 +1052,11 @@ public  class Utility {
         startService(context);
     }
 
-    public static void showTextDialog(Context context, int stringId) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage(stringId);
-        builder.setPositiveButton(R.string.app_tab_fragment_ok_button, null);
-        builder.create().show();
+    public static void showSimpleDialog(Context context, int contentId) {
+        new MaterialDialog.Builder(context)
+                .content(contentId)
+                .positiveText(R.string.app_tab_fragment_ok_button)
+                .show();
     }
 
     public static void setSlotIcon(Slot slot, Context context, ImageView icon, PackageManager packageManager, IconPackManager.IconPack iconPack, boolean isDark, boolean showIconState) {
@@ -2291,6 +2294,42 @@ public  class Utility {
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
         System.exit(0);
+    }
+
+    public static String getSharedPreferenceFile(Context context) throws IOException {
+        String sharedFile = Environment.getDataDirectory().getAbsolutePath() + "/data/" + context.getPackageName() + "/" + Cons.SHARED_PREFERENCE_FOLDER_NAME + "/" + Cons.SHARED_PREFERENCE_NAME+".xml";
+
+        File file = new File(sharedFile);
+        if (!file.exists()) {
+            Log.e(TAG, "onResult: file not exist " + sharedFile);
+            File file1 = new File("/data/data/org.de_studio.recentappswitcher.fastbuild/shared_prefs/");
+            for (File file2 : file1.listFiles()) {
+                Log.e(TAG, "onResult: file = " + file2.getAbsolutePath());
+
+            }
+            throw new IOException("Can not find shared file");
+        }
+        return sharedFile;
+    }
+
+    public static File createTempBackupZipFile(Context context) {
+        return new File(context.getApplicationInfo().dataDir + "/" + Cons.BACKUP_FILE_NAME);
+    }
+
+    public static File createDownloadBackupZipFile() {
+        return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + Cons.BACKUP_FILE_NAME);
+    }
+
+    public static void writeToStream(InputStream inputStream, OutputStream outputStream) throws IOException {
+        byte[] buf = new byte[1024];
+        int bytesRead;
+        if (inputStream != null) {
+            while ((bytesRead = inputStream.read(buf)) > 0) {
+                outputStream.write(buf, 0, bytesRead);
+            }
+            inputStream.close();
+            outputStream.close();
+        }
     }
 }
 

@@ -59,7 +59,8 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
                             shared.filter { (type) -> type == MoreSettingResult.Type.CHOOSE_PLACE_STORAGE }
                                     .flatMap({_ ->
                                         view.exportToStorage().toObservable()
-                                                .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))})
+                                                .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))
+                                                .onErrorReturn {  MoreSettingResult(MoreSettingResult.Type.EXPORT_FAIL) }})
 
                     ) })
         }
@@ -82,16 +83,21 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
                             uiModel.reset()
                             when (result.type) {
                                 MoreSettingResult.Type.EXPORT_START -> return@Func2 uiModel.startExport()
-                                MoreSettingResult.Type.EXPORT_SUCCESS -> return@Func2 uiModel.finishExport()
+                                MoreSettingResult.Type.EXPORT_TO_DRIVE_SUCCESS -> return@Func2 uiModel.exportToDriveSuccess()
+                                MoreSettingResult.Type.EXPORT_TO_STORAGE_SUCCESS -> return@Func2 uiModel.exportToStorageSuccess()
                                 else -> return@Func2 uiModel
                             }
                         })
                         .subscribe { model: MoreSettingUIModel? ->
                             if (model != null) {
-                                if (model.exporting) view.showUploadingDialog()
-                                if (model.exportDone) {
-                                    view.hideUploadingDialog()
+                                if (model.exporting) view.showExportingDialog()
+                                if (model.exportDriveSuccess) {
+                                    view.hideExportingDialog()
                                     view.showBackupGoogleDriveOk()
+                                }
+                                if (model.exportStorageSuccess) {
+                                    view.hideExportingDialog()
+                                    view.showBackupStorageOk()
                                 }
                             }
                         })
@@ -413,12 +419,13 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
         fun showBackupGoogleDriveOk()
 
+        fun showBackupStorageOk()
 
         fun hideDownloadingDialog()
 
-        fun showUploadingDialog()
+        fun showExportingDialog()
 
-        fun hideUploadingDialog()
+        fun hideExportingDialog()
 
 //        fun uploadToDrive(realm: Realm, mFolderDriveId: DriveId)
         fun uploadToDriveRx(realm: Realm, folderId: DriveId, client: GoogleApiClient?): Single<MoreSettingResult>
@@ -426,7 +433,6 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 //        fun downloadFromDrive(realm: Realm, file: DriveFile)
 
         val activityForContext: Activity
-
         fun choosePlaceToBackup(): Single<MoreSettingResult>
         fun  exportToStorage(): Single<MoreSettingPresenter.MoreSettingResult>
 
@@ -438,12 +444,14 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
     data class MoreSettingUIModel(var exporting: Boolean = false,
                                   var importing: Boolean = false,
-                                  var exportDone: Boolean = false
+                                  var exportDriveSuccess: Boolean = false,
+                                  var exportStorageSuccess: Boolean = false
     ){
         fun reset() {
             exporting = false
             importing = false
-            exportDone = false
+            exportDriveSuccess = false
+            exportStorageSuccess = false
         }
 
         fun startExport() : MoreSettingUIModel {
@@ -451,8 +459,13 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
             return this
         }
 
-        fun finishExport() : MoreSettingUIModel {
-            exportDone = true
+        fun exportToDriveSuccess() : MoreSettingUIModel {
+            exportDriveSuccess = true
+            return this
+        }
+
+        fun exportToStorageSuccess(): MoreSettingUIModel {
+            exportStorageSuccess = true
             return this
         }
 
@@ -471,7 +484,8 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
             CONNECT_CLIENT_SUCCESS,
             CONNECT_CLIENT_FAIL,
             EXPORT_START,
-            EXPORT_SUCCESS,
+            EXPORT_TO_DRIVE_SUCCESS,
+            EXPORT_TO_STORAGE_SUCCESS,
             EXPORT_FAIL,
             IMPORT_START,
             IMPORT_SUCCESS,

@@ -676,20 +676,17 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                 .build(client);
     }
     public void showErrorDialog() {
-        new MaterialDialog.Builder(this)
-                .content(R.string.something_wrong_happen)
-                .positiveText(R.string.app_tab_fragment_ok_button)
-                .show();
+        Utility.showSimpleDialog(this, R.string.something_wrong_happen);
     }
 
     public void showBackupGoogleDriveOk() {
-        new MaterialDialog.Builder(this)
-                .content(R.string.backup_successful)
-                .positiveText(R.string.app_tab_fragment_ok_button)
-                .show();
+        Utility.showSimpleDialog(this, R.string.backup_successful);
     }
 
-
+    @Override
+    public void showBackupStorageOk() {
+        Utility.showSimpleDialog(this,R.string.exported_storage_success);
+    }
 
     public void showLoadingDialog(int titleRes) {
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -761,16 +758,16 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     }
 
     @Override
-    public void showUploadingDialog() {
+    public void showExportingDialog() {
         uploadingDialog = new MaterialDialog.Builder(this)
-                .title(R.string.uploading)
+                .title(R.string.exporting)
                 .content(R.string.please_wait)
                 .progress(true, 0)
                 .show();
     }
 
     @Override
-    public void hideUploadingDialog() {
+    public void hideExportingDialog() {
         uploadingDialog.dismiss();
     }
 
@@ -820,7 +817,37 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     @NotNull
     @Override
     public Single<MoreSettingPresenter.MoreSettingResult> exportToStorage() {
-        return null;
+        return Single.create(new Single.OnSubscribe<MoreSettingPresenter.MoreSettingResult>() {
+            @Override
+            public void call(SingleSubscriber<? super MoreSettingPresenter.MoreSettingResult> singleSubscriber) {
+                Realm realm = Realm.getDefaultInstance();
+                File zipFile = Utility.createDownloadBackupZipFile();
+                if (zipFile.exists()) {
+                    zipFile.delete();
+                }
+
+                String sharedFile;
+                try {
+                    sharedFile = Utility.getSharedPreferenceFile(MoreSettingView.this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    singleSubscriber.onError(new Throwable("error when getting shared file"));
+                    realm.close();
+                    return;
+                }
+                String realmFile = realm.getPath();
+                try {
+                    Utility.zip(new String[]{sharedFile, realmFile}, zipFile);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    singleSubscriber.onError(new Throwable("IOException when zip"));
+                    realm.close();
+                    return;
+                }
+                singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.EXPORT_TO_STORAGE_SUCCESS,null));
+            }
+        });
     }
 
     @NotNull
@@ -841,21 +868,16 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                                 }
                                 final DriveContents driveContents = result.getDriveContents();
 
-                                String sharedFile = Environment.getDataDirectory().getAbsolutePath() + "/data/" + getPackageName() + "/" + Cons.SHARED_PREFERENCE_FOLDER_NAME + "/" + Cons.SHARED_PREFERENCE_NAME+".xml";
-
-                                File file = new File(sharedFile);
-                                if (!file.exists()) {
-                                    Log.e(TAG, "onResult: file not exist " + sharedFile +
-                                            "\nrealm file = " + realm.getPath());
-                                    File file1 = new File("/data/data/org.de_studio.recentappswitcher.fastbuild/shared_prefs/");
-                                    for (File file2 : file1.listFiles()) {
-                                        Log.e(TAG, "onResult: file = " + file2.getAbsolutePath());
-
-                                    }
+                                String sharedFile;
+                                try {
+                                    sharedFile = Utility.getSharedPreferenceFile(MoreSettingView.this);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    singleSubscriber.onError(new Throwable("error when getting shared file"));
                                     return;
                                 }
                                 String realmFile = realm.getPath();
-                                final File zipFile = new File(getApplicationInfo().dataDir + "/" + Cons.BACKUP_FILE_NAME);
+                                final File zipFile = Utility.createTempBackupZipFile(MoreSettingView.this);
                                 try {
                                     Utility.zip(new String[]{sharedFile, realmFile}, zipFile);
 
@@ -871,7 +893,6 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                                     public void run() {
                                         // write content to DriveContents
                                         OutputStream outputStream = driveContents.getOutputStream();
-
                                         FileInputStream inputStream = null;
                                         try {
                                             inputStream = new FileInputStream(zipFile);
@@ -880,16 +901,10 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                                             e.printStackTrace();
                                         }
 
-                                        byte[] buf = new byte[1024];
-                                        int bytesRead;
                                         try {
-                                            if (inputStream != null) {
-                                                while ((bytesRead = inputStream.read(buf)) > 0) {
-                                                    outputStream.write(buf, 0, bytesRead);
-                                                }
-                                            }
+                                            Utility.writeToStream(inputStream, outputStream);
                                         } catch (IOException e) {
-                                            singleSubscriber.onError(new Throwable("IoException"));
+                                            singleSubscriber.onError(new Throwable("IoException when write file"));
                                             e.printStackTrace();
                                         }
 
@@ -909,7 +924,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
                                                             return;
                                                         }
-                                                        singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.EXPORT_SUCCESS, null));
+                                                        singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.EXPORT_TO_DRIVE_SUCCESS, null));
                                                     }
                                                 });
                                     }
