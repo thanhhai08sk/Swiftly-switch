@@ -65,13 +65,22 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
                     ) })
         }
 
+        val driveImportTrans: Observable.Transformer<ImportFromDriveAction, MoreSettingResult> = Observable.Transformer { observable ->
+            observable.flatMap({view.connectClientRX().toObservable()})
+                    .flatMap({result: MoreSettingResult? -> view.pickDriveFile(result.googleApiClient) })
+                    .flatMap({pair: Pair<GoogleApiClient, DriveFile>? ->  })
 
-        val actionTrans: Observable.Transformer<MoreSettingAction, MoreSettingResult> = Observable.Transformer { observable: Observable<MoreSettingAction>? ->
+        }
+
+
+
+        val actionTrans: Observable.Transformer<MoreSettingAction, MoreSettingResult> = Observable.Transformer {observable ->
             observable?.publish({shared -> Observable.merge(
                     shared.ofType(ExportAction::class.java).compose(exportTrans),
                     shared.ofType(ImportAction::class.java).compose { null }
             ) })
         }
+
 
 
 
@@ -384,6 +393,7 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
         fun openFolderPickerRx(client: GoogleApiClient?): PublishSubject<Pair<GoogleApiClient, DriveId>>
 
         fun openFilePicker()
+        fun pickDriveFile(client: GoogleApiClient): PublishSubject<Pair<GoogleApiClient,DriveFile>>
 
         fun connectClient()
 
@@ -434,7 +444,8 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
         val activityForContext: Activity
         fun choosePlaceToBackup(): Single<MoreSettingResult>
-        fun  exportToStorage(): Single<MoreSettingPresenter.MoreSettingResult>
+        fun choosePlaceToImport(): Single<MoreSettingResult>
+        fun exportToStorage(): Single<MoreSettingPresenter.MoreSettingResult>
 
     }
 
@@ -498,8 +509,9 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
     open inner class MoreSettingAction
 
     inner class ExportAction : MoreSettingAction()
-    inner class ImportAction: MoreSettingAction()
-
+    open inner class ImportAction: MoreSettingAction()
+    inner class ImportFromStorageAction: ImportAction()
+    inner class ImportFromDriveAction : ImportAction()
 
 
 

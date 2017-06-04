@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
@@ -119,7 +120,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     PublishSubject<Integer> backupOrRestoreRequestSJ = PublishSubject.create();
     PublishSubject<Integer> somethingWrongSJ = PublishSubject.create();
     PublishSubject<Pair<GoogleApiClient, DriveId>> pickupFolderSuccessSJ;
-    PublishSubject<DriveFile> pickupFileSuccessSJ = PublishSubject.create();
+    PublishSubject<Pair<GoogleApiClient, DriveFile>> pickupFileSuccessSJ;
     PublishSubject<Void> backupSuccessful = PublishSubject.create();
     PublishSubject<Void> finishReadingGuideSJ = PublishSubject.create();
 
@@ -174,7 +175,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                             OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
 
                     DriveFile file = driveId.asDriveFile();
-                    pickupFileSuccessSJ.onNext(file);
+                    pickupFileSuccessSJ.onNext(new Pair<>(mGoogleApiClient, file));
 
                 }
                 break;
@@ -786,6 +787,29 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
             Log.e(TAG, "Unable to send intent", e);
             somethingWrongSJ.onNext(REQUEST_RESTORE);
         }
+    }
+
+    @NotNull
+    @Override
+    public PublishSubject<Pair<GoogleApiClient, DriveFile>> pickDriveFile(@NonNull GoogleApiClient client) {
+        IntentSender intentSender = Drive.DriveApi
+                .newOpenFileActivityBuilder()
+//                these mimetypes enable these folders/files types to be selected
+                .setMimeType(new String[]{DriveFolder.MIME_TYPE, "text/plain"})
+                .build(client);
+        pickupFileSuccessSJ = PublishSubject.create();
+        try {
+            return pickupFileSuccessSJ;
+        }finally {
+            try {
+                startIntentSenderForResult(
+                        intentSender, REQUEST_CODE_SELECT_FILE, null, 0, 0, 0);
+            } catch (IntentSender.SendIntentException e) {
+                Log.e(TAG, "Unable to send intent", e);
+                pickupFileSuccessSJ.onError(new Throwable("unable to send intent"));
+            }
+        }
+
     }
 
     @NotNull
