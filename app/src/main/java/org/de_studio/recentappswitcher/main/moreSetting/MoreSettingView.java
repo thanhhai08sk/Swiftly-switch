@@ -1111,13 +1111,19 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     @NotNull
     @Override
     public PublishSubject<String> pickBackupFileFromStorage() {
+        MoreSettingViewPermissionsDispatcher.pickBackupFileFromStorage_checkPermissionWithCheck(this);
         pickupStorageFileSuccessSJ = PublishSubject.create();
+        return pickupStorageFileSuccessSJ;
+    }
+
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    public void pickBackupFileFromStorage_checkPermission() {
         Intent filePickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         filePickerIntent.setType("application/*");
         filePickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
         startActivityForResult(filePickerIntent, REQUEST_CODE_PICK_STORAGE_FILE);
-        return pickupStorageFileSuccessSJ;
     }
+
 
     @NotNull
     @Override
