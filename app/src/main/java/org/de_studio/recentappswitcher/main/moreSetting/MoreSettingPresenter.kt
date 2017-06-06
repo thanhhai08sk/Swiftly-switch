@@ -80,7 +80,7 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
         }
 
         val storageImportTrans: Observable.Transformer<ImportFromStorageAction, MoreSettingResult> = Observable.Transformer { observable ->
-            observable.flatMap({view.pickBackupFileFromStorage().toObservable()})
+            observable.flatMap({view.pickBackupFileFromStorage()})
                     .flatMap({uri ->
                         view.importFromStorageFile(uri).toObservable()
                                 .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))})
@@ -476,7 +476,7 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
         fun choosePlaceToImport(): Single<MoreSettingResult>
         fun exportToStorage(): Single<MoreSettingPresenter.MoreSettingResult>
         fun  importFromDriveFile(client: GoogleApiClient, driveFile: DriveFile): Single<MoreSettingResult>
-        fun  pickBackupFileFromStorage(): Single<String>
+        fun  pickBackupFileFromStorage(): PublishSubject<String>
         fun importFromStorageFile(uir: String): Single<MoreSettingResult>
         fun rebootApp()
         fun  onImport(): PublishSubject<Void>

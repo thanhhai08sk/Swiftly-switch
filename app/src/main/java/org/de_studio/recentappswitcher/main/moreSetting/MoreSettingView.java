@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -73,7 +74,9 @@ import rx.subjects.PublishSubject;
 public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> implements MoreSettingPresenter.View {
     private static final String TAG = MoreSettingView.class.getSimpleName();
     private static final int REQUEST_CODE_PICK_FOLDER = 23232;
-    private static final int REQUEST_CODE_SELECT_FILE = 32433;
+    private static final int REQUEST_CODE_PICK_DRIVE_FILE = 32433;
+    private static final int REQUEST_CODE_PICK_STORAGE_FILE = 32434;
+
     public static final int REQUEST_BACKUP = 11;
     public static final int REQUEST_RESTORE = 12;
     @BindView(R.id.disable_in_fullscreen_switch)
@@ -119,7 +122,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     PublishSubject<Void> googleClientConnectedSJ = PublishSubject.create();
     PublishSubject<Integer> somethingWrongSJ = PublishSubject.create();
     PublishSubject<Pair<GoogleApiClient, DriveId>> pickupFolderSuccessSJ;
-    PublishSubject<Pair<GoogleApiClient, DriveFile>> pickupFileSuccessSJ;
+    PublishSubject<Pair<GoogleApiClient, DriveFile>> pickupDriveFileSuccessSJ;
+    PublishSubject<String> pickupStorageFileSuccessSJ;
     PublishSubject<Void> backupSuccessful = PublishSubject.create();
     PublishSubject<Void> finishReadingGuideSJ = PublishSubject.create();
     PublishSubject<Void> importSJ = PublishSubject.create();
@@ -168,19 +172,24 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                 }
                 break;
 
-            // REQUEST_CODE_SELECT_FILE
-            case REQUEST_CODE_SELECT_FILE:
+            // REQUEST_CODE_PICK_DRIVE_FILE
+            case REQUEST_CODE_PICK_DRIVE_FILE:
                 if (resultCode == RESULT_OK) {
                     // get the selected item's ID
                     DriveId driveId = data.getParcelableExtra(
                             OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
 
                     DriveFile file = driveId.asDriveFile();
-                    pickupFileSuccessSJ.onNext(new Pair<>(mGoogleApiClient, file));
+                    pickupDriveFileSuccessSJ.onNext(new Pair<>(mGoogleApiClient, file));
 
                 }
                 break;
-
+            case REQUEST_CODE_PICK_STORAGE_FILE:
+                if (resultCode == Activity.RESULT_OK) {
+                    Log.e(TAG, "onActivityResult: pick journey file ok");
+                    pickupStorageFileSuccessSJ.onNext(data.getData().toString());
+                }
+                break;
         }
     }
 
@@ -776,7 +785,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                 .build(null);
         try {
             startIntentSenderForResult(
-                    intentSender, REQUEST_CODE_SELECT_FILE, null, 0, 0, 0);
+                    intentSender, REQUEST_CODE_PICK_DRIVE_FILE, null, 0, 0, 0);
         } catch (IntentSender.SendIntentException e) {
             Log.e(TAG, "Unable to send intent", e);
             somethingWrongSJ.onNext(REQUEST_RESTORE);
@@ -792,16 +801,16 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                 .setMimeType(new String[]{DriveFolder.MIME_TYPE, "text/plain"})
                 .build(client);
         mGoogleApiClient = client;
-        pickupFileSuccessSJ = PublishSubject.create();
+        pickupDriveFileSuccessSJ = PublishSubject.create();
         try {
-            return pickupFileSuccessSJ;
+            return pickupDriveFileSuccessSJ;
         }finally {
             try {
                 startIntentSenderForResult(
-                        intentSender, REQUEST_CODE_SELECT_FILE, null, 0, 0, 0);
+                        intentSender, REQUEST_CODE_PICK_DRIVE_FILE, null, 0, 0, 0);
             } catch (IntentSender.SendIntentException e) {
                 Log.e(TAG, "Unable to send intent", e);
-                pickupFileSuccessSJ.onError(new Throwable("unable to send intent"));
+                pickupDriveFileSuccessSJ.onError(new Throwable("unable to send intent"));
             }
         }
 
@@ -1087,14 +1096,41 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @NotNull
     @Override
-    public Single<String> pickBackupFileFromStorage() {
-        return null;
+    public PublishSubject<String> pickBackupFileFromStorage() {
+        pickupStorageFileSuccessSJ = PublishSubject.create();
+        Intent filePickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        filePickerIntent.setType("application/*");
+        filePickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+        startActivityForResult(filePickerIntent, REQUEST_CODE_PICK_STORAGE_FILE);
+        return pickupStorageFileSuccessSJ;
     }
 
     @NotNull
     @Override
-    public Single<MoreSettingPresenter.MoreSettingResult> importFromStorageFile(@NotNull String uir) {
-        return null;
+    public Single<MoreSettingPresenter.MoreSettingResult> importFromStorageFile(@NotNull final String uir) {
+        return Single.create(new Single.OnSubscribe<MoreSettingPresenter.MoreSettingResult>() {
+            @Override
+            public void call(SingleSubscriber<? super MoreSettingPresenter.MoreSettingResult> singleSubscriber) {
+                try {
+                    InputStream input = getContentResolver().openInputStream(Uri.parse(uir));
+                    File zipFile = new File(getApplicationInfo().dataDir + "/" + Cons.BACKUP_FILE_NAME);
+                    OutputStream output = new FileOutputStream(zipFile);
+                    try {
+                        Utility.writeToStream(input,output);
+                        Utility.unzip(zipFile.getAbsolutePath(),getFilesDir().getAbsolutePath(),
+                                Environment.getDataDirectory().getAbsolutePath() + "/data/" + getPackageName() + "/" + Cons.SHARED_PREFERENCE_FOLDER_NAME + "/");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        singleSubscriber.onError(new Throwable("error when write data"));
+                    }
+                    zipFile.delete();
+                } catch (FileNotFoundException e) {
+                    Log.e(TAG, "handleActionImport: file not found " + e);
+                    singleSubscriber.onError(new Throwable("file not found"));
+                }
+                singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.IMPORT_SUCCESS, null));
+            }
+        });
     }
 
     @NotNull

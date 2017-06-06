@@ -2115,7 +2115,7 @@ public  class Utility {
                     } else if (ze.getName().equals(Cons.SHARED_PREFERENCE_NAME +".xml")) {
                         path = sharedPreferenceLocation + ze.getName();
                     } else {
-                        Log.e(TAG, "unzip: ZipEntry name = " + ze.getName());
+                        throw new IllegalArgumentException("imcompatable file");
                     }
                     File unzipFile = new File(path);
 
