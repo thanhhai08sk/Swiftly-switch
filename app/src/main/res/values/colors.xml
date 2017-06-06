@@ -24,6 +24,7 @@
     <color name="text_guide_background">#c3184279</color>
     <color name="guide_color">#9b0731</color>
     <color name="quick_actions_background">#bdededed</color>
+    <color name="background_card">#34335e93</color>
 
     <color name="icon_main_view">#beff4081</color>
     <color name="button_54_black">#8c000000</color>

@@ -732,7 +732,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
         final RecyclerView folderView = (RecyclerView) collectionViewsMap.get(folder.slotId);
         final RecyclerView triggerGridView = (RecyclerView) collectionViewsMap.get(gridId);
-
         boolean firstTime = addFolderToBackgroundIfNeeded(folder, folderView);
 
         displayFolderAndSetPosition(triggerPosition, space, edgePosition, currentShowing, folderView, triggerGridView, folder.items.size(), firstTime);

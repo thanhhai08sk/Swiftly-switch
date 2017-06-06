@@ -286,6 +286,12 @@
 
     //What new
 
+    <string name="what_new_3.1.2" translatable="false">VERSION 3.1.2:\n
+        - Fixed: last app shortcut does not work in some situations\n
+        - Updated translations for: Italian, Japanese, Spanish, Portuguese,, Slovak, Russian\n
+        - Check out our new app: Journal it! - a powerful journal/diary app that makes journaling on mobile easy and delightful. Tap the \"Check Out\" button below to visit the app\'s page\n
+
+    </string>
 
     <string name="what_new_3.1.1" translatable="false">VERSION 3.1.1:\n
         - Fixed: screenshot does not appear in the gallery after taken\n
@@ -350,6 +356,10 @@
     <string name="exporting">Exporting</string>
     <string name="exported_storage_success">Exported to Storage/Download</string>
     <string name="importing">Importing</string>
+    <string name="checkout_new_app">Checkout our new app</string>
+    <string name="checkout_journal_it_text">After 10 months of development, we proud to announce Journal it!, a journal/diary app that makes journaling on mobile easy and delightful. If you love Swiftly Switch, you probably love Journal it! too!</string>
+    <string name="checkout_journal_it_button">Checkout Journal it!</string>
+    <string name="dismiss">Dismiss</string>
 
 
 </resources>
