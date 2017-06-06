@@ -1059,6 +1059,14 @@ public  class Utility {
                 .show();
     }
 
+    public static MaterialDialog showProgressDialog(Context context, int titleRes, int contentRes) {
+        return new MaterialDialog.Builder(context)
+                .title(titleRes)
+                .content(contentRes)
+                .progress(true, 0)
+                .show();
+    }
+
     public static void setSlotIcon(Slot slot, Context context, ImageView icon, PackageManager packageManager, IconPackManager.IconPack iconPack, boolean isDark, boolean showIconState) {
         switch (slot.type) {
             case Slot.TYPE_ITEM:

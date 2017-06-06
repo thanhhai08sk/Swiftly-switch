@@ -66,16 +66,25 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
         }
 
         val driveImportTrans: Observable.Transformer<ImportFromDriveAction, MoreSettingResult> = Observable.Transformer { observable ->
-            observable.flatMap({view.connectClientRX().toObservable()})
-                    .flatMap({result: MoreSettingResult -> view.pickDriveFile(result.googleApiClient) })
-                    .flatMap({pair: Pair<GoogleApiClient, DriveFile> -> view.importFromDriveFile(pair.first, pair.second).toObservable() })
-                    .startWith(MoreSettingResult(MoreSettingResult.Type.IMPORT_START))
+            observable.flatMap({
+                view.connectClientRX().toObservable()
+                        .flatMap({ result: MoreSettingResult ->
+                            view.pickDriveFile(result.googleApiClient)
+                                    .flatMap({ pair: Pair<GoogleApiClient, DriveFile> ->
+                                        view.importFromDriveFile(pair.first, pair.second).toObservable()
+                                                .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))
+                                    }).startWith(MoreSettingResult(MoreSettingResult.Type.CONNECT_CLIENT_SUCCESS))
+                        })
+                        .startWith(MoreSettingResult(MoreSettingResult.Type.CONNECT_CLIENT_START))
+            })
         }
 
         val storageImportTrans: Observable.Transformer<ImportFromStorageAction, MoreSettingResult> = Observable.Transformer { observable ->
             observable.flatMap({view.pickBackupFileFromStorage().toObservable()})
-                    .flatMap({uri -> view.importFromStorageFile(uri).toObservable() })
-                    .startWith(MoreSettingResult(MoreSettingResult.Type.IMPORT_START))
+                    .flatMap({uri ->
+                        view.importFromStorageFile(uri).toObservable()
+                                .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))})
+
         }
 
 
@@ -94,6 +103,7 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
         addSubscription(
                 actionSJ.observeOn(Schedulers.io())
+                        .doOnNext { action -> Log.e(TAG, "actionSJ : " + action); }
                         .compose(actionTrans)
                         .observeOn(AndroidSchedulers.mainThread())
                         .scan (MoreSettingUIModel(), fun2@ Func2 { uiModel, result ->
@@ -104,6 +114,8 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
                                 MoreSettingResult.Type.EXPORT_TO_STORAGE_SUCCESS -> return@Func2 uiModel.exportToStorageSuccess()
                                 MoreSettingResult.Type.IMPORT_START -> return@Func2 uiModel.startImport()
                                 MoreSettingResult.Type.IMPORT_SUCCESS -> return@Func2 uiModel.reboot()
+                                MoreSettingResult.Type.CONNECT_CLIENT_START -> return@Func2 uiModel.connectClient()
+                                MoreSettingResult.Type.CONNECT_CLIENT_SUCCESS -> return@Func2 uiModel.connectClientDone()
                                 else -> return@Func2 uiModel
                             }
                         })
@@ -122,11 +134,14 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
                                 if (model.importing) view.showImportingDialog()
                                 if (model.rebootApp) view.rebootApp()
+                                if (model.connectingClient) {
+                                    view.showConnectingDialog()
+                                }else view.hideConnectingDialog()
                             }
                         })
 
         addSubscription(
-                view.onBackup().subscribe { actionSJ.onNext(ExportAction()) }
+                view.onExport().subscribe { actionSJ.onNext(ExportAction()) }
         )
 
         addSubscription(
@@ -199,12 +214,12 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
 
 
-        addSubscription(
-                view.onPickFileToRestoreSuccess().subscribe { driveFile ->
-                    view.showDownloadingDialog()
-//                    view.downloadFromDrive(realm, driveFile)
-                }
-        )
+//        addSubscription(
+//                view.onPickFileToRestoreSuccess().subscribe { driveFile ->
+//                    view.showDownloadingDialog()
+////                    view.downloadFromDrive(realm, driveFile)
+//                }
+//        )
 
 
         addSubscription(
@@ -427,9 +442,6 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
         fun onGoogleApiClientConnected(): PublishSubject<Void>
 
 
-
-        fun onPickFileToRestoreSuccess(): PublishSubject<DriveFile>
-
         fun onSomethingWrong(): PublishSubject<Int>
 
         fun onBackupSuccessful(): PublishSubject<Void>
@@ -443,15 +455,11 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
         fun hideConnectingDialog()
 
-        fun showDownloadingDialog()
-
         fun showErrorDialog()
 
         fun showBackupGoogleDriveOk()
 
         fun showBackupStorageOk()
-
-        fun hideDownloadingDialog()
 
         fun showExportingDialog()
 
@@ -472,7 +480,7 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
         fun importFromStorageFile(uir: String): Single<MoreSettingResult>
         fun rebootApp()
         fun  onImport(): PublishSubject<Void>
-        fun  onBackup(): PublishSubject<Void>
+        fun onExport(): PublishSubject<Void>
 
 
     }
@@ -485,7 +493,8 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
                                   var importing: Boolean = false,
                                   var exportDriveSuccess: Boolean = false,
                                   var exportStorageSuccess: Boolean = false,
-                                  var rebootApp: Boolean = false
+                                  var rebootApp: Boolean = false,
+                                  var connectingClient: Boolean = false
     ){
         fun reset() {
             exporting = false
@@ -520,6 +529,16 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
             return this
         }
 
+        fun connectClient(): MoreSettingUIModel{
+            connectingClient = true
+            return this
+        }
+
+        fun connectClientDone(): MoreSettingUIModel {
+            connectingClient = false
+            return this
+        }
+
     }
 
 
@@ -529,6 +548,7 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
             CHOOSE_PLACE_GOOGLE_DRIVE,
             CONNECT_CLIENT_SUCCESS,
             CONNECT_CLIENT_FAIL,
+            CONNECT_CLIENT_START,
             EXPORT_START,
             EXPORT_TO_DRIVE_SUCCESS,
             EXPORT_TO_STORAGE_SUCCESS,

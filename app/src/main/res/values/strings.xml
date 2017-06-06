@@ -349,6 +349,7 @@
     <string name="backup_to_google_drive">Backup to Google Drive</string>
     <string name="exporting">Exporting</string>
     <string name="exported_storage_success">Exported to Storage/Download</string>
+    <string name="importing">Importing</string>
 
 
 </resources>

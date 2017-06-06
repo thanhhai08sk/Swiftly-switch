@@ -161,5 +161,12 @@
         <item>@string/backup_to_google_drive</item>
     </string-array>
 
+    <string-array name="import_options">
+        <item>@string/import_from_local_storage</item>
+        <item>@string/import_from_google_drive</item>
+    </string-array>
 
+
+    <string name="import_from_local_storage">Import from local storage</string>
+    <string name="import_from_google_drive">Import from Google Drive</string>
 </resources>

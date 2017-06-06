@@ -117,16 +117,17 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     private IntentSender intentPicker;
 
     PublishSubject<Void> googleClientConnectedSJ = PublishSubject.create();
-    PublishSubject<Integer> backupOrRestoreRequestSJ = PublishSubject.create();
     PublishSubject<Integer> somethingWrongSJ = PublishSubject.create();
     PublishSubject<Pair<GoogleApiClient, DriveId>> pickupFolderSuccessSJ;
     PublishSubject<Pair<GoogleApiClient, DriveFile>> pickupFileSuccessSJ;
     PublishSubject<Void> backupSuccessful = PublishSubject.create();
     PublishSubject<Void> finishReadingGuideSJ = PublishSubject.create();
+    PublishSubject<Void> importSJ = PublishSubject.create();
+    PublishSubject<Void> exportSJ = PublishSubject.create();
 
     MaterialDialog connectingDialog;
-    MaterialDialog downloadingDialog;
-    MaterialDialog uploadingDialog;
+    MaterialDialog importingDialog;
+    MaterialDialog exportingDialog;
 
 
 
@@ -208,16 +209,18 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         return finishReadingGuideSJ;
     }
 
+    @NotNull
     @Override
-    public PublishSubject<Integer> onBackupOrRestoreSJ() {
-        return backupOrRestoreRequestSJ;
+    public PublishSubject<Void> onImport() {
+        return importSJ;
     }
 
-
+    @NotNull
     @Override
-    public PublishSubject<DriveFile> onPickFileToRestoreSuccess() {
-        return pickupFileSuccessSJ;
+    public PublishSubject<Void> onExport() {
+        return exportSJ;
     }
+
 
     @Override
     public PublishSubject<Integer> onSomethingWrong() {
@@ -496,8 +499,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         disconnectClient();
         sharedPreferences = null;
         connectingDialog = null;
-        downloadingDialog = null;
-        uploadingDialog = null;
+        importingDialog = null;
+        exportingDialog = null;
     }
 
 
@@ -592,12 +595,12 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @OnClick(R.id.import_settings)
     void onImportSettingClick(){
-        backupOrRestoreRequestSJ.onNext(REQUEST_RESTORE);
+        importSJ.onNext(null);
     }
 
     @OnClick(R.id.backup)
     void onBackupClick(){
-        backupOrRestoreRequestSJ.onNext(REQUEST_BACKUP);
+        exportSJ.onNext(null);
     }
 
     @OnClick(R.id.reset_to_default)
@@ -732,44 +735,35 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @Override
     public void showConnectingDialog() {
-        connectingDialog = new  MaterialDialog.Builder(this)
-                .title(R.string.connecting)
-                .content(R.string.please_wait)
-                .progress(true, 0)
-                .show();
+        if (connectingDialog != null && !connectingDialog.isShowing()) {
+            connectingDialog.show();
+        } else {
+            connectingDialog = Utility.showProgressDialog(this, R.string.connecting, R.string.please_wait);
+        }
     }
 
     @Override
     public void hideConnectingDialog() {
-        connectingDialog.dismiss();
-    }
-
-    @Override
-    public void showDownloadingDialog() {
-        downloadingDialog =  new  MaterialDialog.Builder(this)
-                .title(R.string.downloading)
-                .content(R.string.please_wait)
-                .progress(true, 0)
-                .show();
-    }
-
-    @Override
-    public void hideDownloadingDialog() {
-        downloadingDialog.dismiss();
+        if (connectingDialog != null) {
+            connectingDialog.dismiss();
+        }
     }
 
     @Override
     public void showExportingDialog() {
-        uploadingDialog = new MaterialDialog.Builder(this)
-                .title(R.string.exporting)
-                .content(R.string.please_wait)
-                .progress(true, 0)
-                .show();
+        exportingDialog = Utility.showProgressDialog(this, R.string.exporting, R.string.please_wait);
     }
 
     @Override
+    public void showImportingDialog() {
+        Log.e(TAG, "showImportingDialog: ");
+        importingDialog = Utility.showProgressDialog(this, R.string.importing, R.string.please_wait);
+    }
+
+
+    @Override
     public void hideExportingDialog() {
-        uploadingDialog.dismiss();
+        exportingDialog.dismiss();
     }
 
 
@@ -837,6 +831,32 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
             }
         });
     }
+
+    @NotNull
+    @Override
+    public Single<MoreSettingPresenter.MoreSettingResult> choosePlaceToImport() {
+        return Single.create(new Single.OnSubscribe<MoreSettingPresenter.MoreSettingResult>() {
+            @Override
+            public void call(final SingleSubscriber<? super MoreSettingPresenter.MoreSettingResult> singleSubscriber) {
+                new MaterialDialog.Builder(MoreSettingView.this)
+                        .items(R.array.import_options)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                                switch (position) {
+                                    case 0:
+                                        singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.CHOOSE_PLACE_STORAGE, null));
+                                        break;
+                                    case 1:
+                                        singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.CHOOSE_PLACE_GOOGLE_DRIVE, null));
+                                        break;
+                                }
+                            }
+                        }).show();
+            }
+        });
+    }
+
 
 
     @NotNull
@@ -1058,6 +1078,63 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 //                    });
 //        }
 //    }
+
+
+    @Override
+    public void rebootApp() {
+        Utility.rebootApp(getApplicationContext());
+    }
+
+    @NotNull
+    @Override
+    public Single<String> pickBackupFileFromStorage() {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public Single<MoreSettingPresenter.MoreSettingResult> importFromStorageFile(@NotNull String uir) {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public Single<MoreSettingPresenter.MoreSettingResult> importFromDriveFile(@NotNull final GoogleApiClient client, @NotNull final DriveFile driveFile) {
+        return Single.create(new Single.OnSubscribe<MoreSettingPresenter.MoreSettingResult>() {
+            @Override
+            public void call(final SingleSubscriber<? super MoreSettingPresenter.MoreSettingResult> singleSubscriber) {
+                driveFile.open(client, DriveFile.MODE_READ_ONLY, null)
+                        .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
+                            @Override
+                            public void onResult(DriveApi.DriveContentsResult result) {
+                                if (!result.getStatus().isSuccess()) {
+                                    singleSubscriber.onError(new Throwable("Error when opening drive file"));
+                                    return;
+                                }
+                                DriveContents contents = result.getDriveContents();
+                                InputStream input = contents.getInputStream();
+
+                                try {
+                                    File zipFile = new File(getApplicationInfo().dataDir + "/" + Cons.BACKUP_FILE_NAME);
+                                    OutputStream output = new FileOutputStream(zipFile);
+                                    try {
+                                        Utility.writeToStream(input,output);
+                                        Utility.unzip(zipFile.getAbsolutePath(),getFilesDir().getAbsolutePath(),
+                                                Environment.getDataDirectory().getAbsolutePath() + "/data/" + getPackageName() + "/" + Cons.SHARED_PREFERENCE_FOLDER_NAME + "/");
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        singleSubscriber.onError(new Throwable("error when write data"));
+                                    }
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                    singleSubscriber.onError(new Throwable("file not found"));
+                                }
+                                singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.IMPORT_SUCCESS, null));
+                            }
+                        });
+            }
+        });
+    }
 
     public void downloadFromDrive(final Realm realm, DriveFile file, GoogleApiClient mGoogleApiClient) {
         file.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
