@@ -797,6 +797,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 //                these mimetypes enable these folders/files types to be selected
                 .setMimeType(new String[]{DriveFolder.MIME_TYPE, "text/plain"})
                 .build(client);
+        mGoogleApiClient = client;
         pickupFileSuccessSJ = PublishSubject.create();
         try {
             return pickupFileSuccessSJ;
