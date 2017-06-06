@@ -169,6 +169,9 @@ public class NewServiceModel extends BaseModel {
         if (packageNames != null) {
             removeLauncherAndCurrentAppAndSetLastApp(packageNames);
         }
+//        for (String packageName : packageNames) {
+//            Log.e(TAG, "getLastApp: " + packageName);
+//        }
         return lastAppPackageName;
     }
 

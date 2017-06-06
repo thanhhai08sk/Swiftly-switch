@@ -1767,7 +1767,7 @@ public  class Utility {
                 }
             }
         } else {
-            Log.e(TAG, "extApp of shortcut = null ");
+            Log.e(TAG, "extApp of shortcut = null " + packageName);
         }
     }
 

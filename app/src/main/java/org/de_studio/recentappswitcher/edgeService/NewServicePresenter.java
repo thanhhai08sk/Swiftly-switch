@@ -304,7 +304,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                                     if (slot.stage1Item.type.equals(Item.TYPE_SHORTCUTS_SET)) {
                                         showCollectionInstantlySubject.onNext(slot.stage1Item.collectionId);
                                     } else {
-                                        view.startItem(slot.stage1Item, getLastApp());
+                                        String lastApp = getLastApp();
+                                        Log.e(TAG, "call: lastapp = " + lastApp);
+                                        view.startItem(slot.stage1Item, lastApp);
                                         finishSectionSJ.onNext(null);
                                     }
                                     break;
@@ -491,7 +493,6 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             finishSectionSJ.onNext(null);
         }
         currentHighlight = -1;
-        tempRecentPackages = null;
     }
 
     public void onActionOutSide() {
