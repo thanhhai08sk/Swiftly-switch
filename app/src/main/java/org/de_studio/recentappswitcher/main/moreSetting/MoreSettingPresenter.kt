@@ -51,14 +51,12 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .flatMap { view.connectClientRX().toObservable()
                                             .flatMap { result -> view.openFolderPickerRx(result.googleApiClient)}
-                                            .doOnNext { Log.e(TAG, "pick folder ok: "  ) }
                                             .flatMap { pair -> view.uploadToDriveRx(realm,pair.second,pair.first).toObservable() }
                                             .onErrorReturn { MoreSettingResult(MoreSettingResult.Type.EXPORT_FAIL) }
                                             .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))
                                     },
                             shared.filter { (type) -> type == MoreSettingResult.Type.CHOOSE_PLACE_STORAGE }
-                                    .flatMap({_ ->
-                                        view.exportToStorage().toObservable()
+                                    .flatMap({view.exportToStorage().toObservable()
                                                 .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))
                                                 .onErrorReturn {  MoreSettingResult(MoreSettingResult.Type.EXPORT_FAIL) }})
 
@@ -103,7 +101,6 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
         addSubscription(
                 actionSJ.observeOn(Schedulers.io())
-                        .doOnNext { action -> Log.e(TAG, "actionSJ : " + action); }
                         .compose(actionTrans)
                         .observeOn(AndroidSchedulers.mainThread())
                         .scan (MoreSettingUIModel(), fun2@ Func2 { uiModel, result ->

@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.main.moreSetting;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -63,6 +64,8 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.realm.Realm;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
 import rx.Single;
 import rx.SingleSubscriber;
 import rx.subjects.PublishSubject;
@@ -70,7 +73,7 @@ import rx.subjects.PublishSubject;
 /**
  * Created by HaiNguyen on 1/14/17.
  */
-
+@RuntimePermissions
 public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> implements MoreSettingPresenter.View {
     private static final String TAG = MoreSettingView.class.getSimpleName();
     private static final int REQUEST_CODE_PICK_FOLDER = 23232;
@@ -194,6 +197,12 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     }
 
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        MoreSettingViewPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -202,6 +211,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
             googleClientConnectedSJ.onNext(null);
         }
     }
+
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -874,35 +884,39 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         return Single.create(new Single.OnSubscribe<MoreSettingPresenter.MoreSettingResult>() {
             @Override
             public void call(SingleSubscriber<? super MoreSettingPresenter.MoreSettingResult> singleSubscriber) {
-                Realm realm = Realm.getDefaultInstance();
-                File zipFile = Utility.createDownloadBackupZipFile();
-                if (zipFile.exists()) {
-                    zipFile.delete();
-                }
-
-                String sharedFile;
-                try {
-                    sharedFile = Utility.getSharedPreferenceFile(MoreSettingView.this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    singleSubscriber.onError(new Throwable("error when getting shared file"));
-                    realm.close();
-                    return;
-                }
-                String realmFile = realm.getPath();
-                try {
-                    Utility.zip(new String[]{sharedFile, realmFile}, zipFile);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    singleSubscriber.onError(new Throwable("IOException when zip"));
-                    realm.close();
-                    return;
-                }
-                singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.EXPORT_TO_STORAGE_SUCCESS,null));
+                MoreSettingViewPermissionsDispatcher.exportToStorage_checkPermissionWithCheck(MoreSettingView.this, singleSubscriber);
             }
         });
     }
+
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    public void exportToStorage_checkPermission(SingleSubscriber singleSubscriber) {
+        Realm realm = Realm.getDefaultInstance();
+        File zipFile = Utility.createDownloadBackupZipFile();
+        if (zipFile.exists()) {
+            zipFile.delete();
+        }
+
+        String sharedFile;
+        try {
+            sharedFile = Utility.getSharedPreferenceFile(MoreSettingView.this);
+        } catch (IOException e) {
+            e.printStackTrace();
+            singleSubscriber.onError(new Throwable("error when getting shared file"));
+            realm.close();
+            return;
+        }
+        String realmFile = realm.getPath();
+        try {
+            Utility.zip(new String[]{sharedFile, realmFile}, zipFile);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            singleSubscriber.onError(new Throwable("IOException when zip"));
+            realm.close();
+            return;
+        }
+        singleSubscriber.onSuccess(new MoreSettingPresenter.MoreSettingResult(MoreSettingPresenter.MoreSettingResult.Type.EXPORT_TO_STORAGE_SUCCESS,null));    }
 
     @NotNull
     @Override
