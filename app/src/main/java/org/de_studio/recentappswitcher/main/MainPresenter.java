@@ -66,5 +66,6 @@ public class MainPresenter extends BasePresenter<MainPresenter.View,MainModel> {
 
         void registerForDataSetupOk();
 
+
     }
 }

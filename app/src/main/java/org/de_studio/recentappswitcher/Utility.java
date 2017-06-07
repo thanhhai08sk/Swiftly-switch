@@ -2193,7 +2193,11 @@ public  class Utility {
     }
 
     public static void getProVersion(Context context) {
-        Uri uri = Uri.parse("mbarket://details?id=" + Cons.PRO_VERSION_PACKAGE_NAME);
+        openPlayStorePage(context, Cons.PRO_VERSION_PACKAGE_NAME);
+    }
+
+    private static void openPlayStorePage(Context context, String packageName) {
+        Uri uri = Uri.parse("mbarket://details?id=" + packageName);
         Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
         gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
                 Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
@@ -2201,11 +2205,12 @@ public  class Utility {
             context.startActivity(gotoMarket);
         } catch (ActivityNotFoundException e) {
             context.startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://play.google.com/store/apps/details?id=" + Cons.PRO_VERSION_PACKAGE_NAME)));
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + packageName)));
         }
+    }
 
-
-
+    public static void openJournalItPlayStorePage(Context context) {
+        openPlayStorePage(context, Cons.JOURNAL_IT_PACKAGE_NAME);
     }
 
     public static void showProOnlyDialog(final Activity context) {

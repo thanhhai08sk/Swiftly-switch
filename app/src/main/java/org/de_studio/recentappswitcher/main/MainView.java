@@ -21,6 +21,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
@@ -67,6 +68,7 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
 
 
 
+
     @BindView(R.id.permission_missing)
     View permissionMissing;
     @Inject
@@ -104,6 +106,7 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
                 if (isFirstStart) {
                     SharedPreferences.Editor e = shared.edit();
                     e.putBoolean(Cons.FIRST_START_KEY, false);
+                    e.putLong(Cons.DATE_START_KEY, System.currentTimeMillis());
                     e.commit();
                     Intent i = new Intent(MainView.this, IntroActivity.class);
 //                    Intent intent = new Intent(MainView.this, DataSetupService.class);

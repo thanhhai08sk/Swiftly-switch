@@ -24,6 +24,7 @@ public class Cons {
     public static final int REALM_SCHEMA_VERSION = 9;  // TODO: 2/20/17 do not forget the old one
 
     public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.pro";
+    public static final String JOURNAL_IT_PACKAGE_NAME = "org.de_studio.diary";
     public static final String FREE_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.trial";
     public static final int NOTIFICATION_ID = 2323;
 
@@ -100,6 +101,7 @@ public class Cons {
     public static final long TIME_INTERVAL_SHORT = 1000000;
     public static final long TIME_INTERVAL_LONG = 604800000;
     public static final long TRIAL_TIME = 1000 * 60 * 60 * 24 * 14;
+    public static final long WAIT_FOR_SHOWING_JOURNAL_IT_TIME = 1000 * 60 * 60 * 24 * 7;
 
 
     public static final int EDGE_1_ID_INT = 11;
@@ -262,6 +264,10 @@ public class Cons {
     public static final String SERVICE_ID = "service_id";
     public static final String ICON_SCALE_KEY = "icon_scale";
     public static final String FIRST_START_KEY = "firstStart";
+    public static final String DATE_START_KEY = "dateStart";
+    public static final String SAW_JOURNAL_IT_KEY = "sawJournalIt";
+
+
     public static final int CONTACT_ACTION_CHOOSE = 0;
     public static final int CONTACT_ACTION_CALL = 1;
     public static final int CONTACT_ACTION_SMS = 2;
