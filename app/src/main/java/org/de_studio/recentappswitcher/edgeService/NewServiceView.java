@@ -1437,6 +1437,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 windowManager.addView(edge1View, edge1Para);
             } catch (IllegalStateException e) {
                 Log.e(TAG, "addEdgeViews: fail when add edge1Image");
+            } catch (SecurityException e) {
+                if (!Utility.checkDrawPermission(this)) {
+                    Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
+                } else throw new IllegalArgumentException("crash when addEdgeViews");
             }
 
         }
