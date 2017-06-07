@@ -932,11 +932,14 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                if (screenshot.getTranslationX() > 72 * mScale || screenshot.getTranslationY() > 70 * mScale) {
-                    removeScreenshotReadyButton();
-                } else {
-                    screenshot.setTranslationX(screenshot.getTranslationX() - distanceX);
-                    screenshot.setTranslationY(screenshot.getTranslationY() - distanceY);
+                if (screenshot != null) {
+                    if (screenshot.getTranslationX() > 72 * mScale || screenshot.getTranslationY() > 70 * mScale) {
+                        removeScreenshotReadyButton();
+                    } else {
+                        screenshot.setTranslationX(screenshot.getTranslationX() - distanceX);
+                        screenshot.setTranslationY(screenshot.getTranslationY() - distanceY);
+                    }
+
                 }
                 return true;
             }
