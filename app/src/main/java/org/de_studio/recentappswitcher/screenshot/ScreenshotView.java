@@ -276,8 +276,10 @@ public class ScreenshotView extends Activity {
 
     @Override
     protected void onDestroy() {
-        sMediaProjection.unregisterCallback(mediaProjectionStopCallback);
-        sMediaProjection = null;
+        if (sMediaProjection != null) {
+            sMediaProjection.unregisterCallback(mediaProjectionStopCallback);
+            sMediaProjection = null;
+        }
 
         mProjectionManager = null;
         if (mImageReader != null) mImageReader.setOnImageAvailableListener(null, null);
