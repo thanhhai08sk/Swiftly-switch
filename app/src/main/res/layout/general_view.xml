@@ -6,61 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
+        android:id="@+id/parent"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:id="@+id/check_out_journal_it"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:background="@color/background_card"
-            >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/checkout_new_app"
-                style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/checkout_journal_it_text"
-                android:paddingTop="8dp"
-                style="@style/TextAppearance.AppCompat.Body1"
-                />
-            <android.support.v7.widget.ButtonBarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                >
-                <Button
-                    android:id="@+id/dismiss"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dismiss"
-                    style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-                    />
-                <Button
-                    android:id="@+id/checkout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/checkout_journal_it_button"
-                    style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-
-                    />
-            </android.support.v7.widget.ButtonBarLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/mid_grey"
-                />
-        </LinearLayout>
+        android:layout_height="match_parent"
+        >
 
 
         <LinearLayout
