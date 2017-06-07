@@ -361,6 +361,12 @@
     <string name="checkout_journal_it_button">Checkout Journal it!</string>
     <string name="dismiss">Dismiss</string>
     <string name="other_apps_from_de_studio">Other apps from de-studio</string>
-
+    <string name="how_do_you_like_the_app">How do you like the app?</string>
+    <string name="thank_you">Thank you!</string>
+    <string name="play_store_review_request">Would you like to post your review to Play Store? This will motivate us a lot!</string>
+    <string name="sure">Sure</string>
+    <string name="no_thanks">No thanks</string>
+    <string name="quick_feedback_review_request_text">Could you tell us what problem you faced. This will help us improve.</string>
+    <string name="send_email">Send email</string>
 
 </resources>

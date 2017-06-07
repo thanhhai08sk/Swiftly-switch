@@ -102,6 +102,8 @@ public class Cons {
     public static final long TIME_INTERVAL_LONG = 604800000;
     public static final long TRIAL_TIME = 1000 * 60 * 60 * 24 * 14;
     public static final long WAIT_FOR_SHOWING_JOURNAL_IT_TIME = 1000 * 60 * 60 * 24 * 7;
+    public static final long WAIT_FOR_REVIEW_REQUEST_TIME = 1000 * 60 * 60 * 24 * 7;
+    public static final long REVIEW_REQUEST_INTEVAL_TIME = 1000 * 60 * 60 * 24 * 24;
 
 
     public static final int EDGE_1_ID_INT = 11;
@@ -266,6 +268,12 @@ public class Cons {
     public static final String FIRST_START_KEY = "firstStart";
     public static final String DATE_START_KEY = "dateStart";
     public static final String SAW_JOURNAL_IT_KEY = "sawJournalIt";
+    public static final String SAW_JOURNAL_IT_DATE_KEY = "sawJournalItDate";
+    public static final String DONE_WITH_REVIEW_REQUEST = "doneWithReviewRequest";
+    public static final String LAST_REVIEW_REQUEST = "lastReviewRequest";
+
+
+
 
 
     public static final int CONTACT_ACTION_CHOOSE = 0;

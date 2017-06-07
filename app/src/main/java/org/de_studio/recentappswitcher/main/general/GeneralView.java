@@ -1,15 +1,23 @@
 package org.de_studio.recentappswitcher.main.general;
 
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.transition.TransitionManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
@@ -29,6 +37,10 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.Observable;
+import rx.Single;
+import rx.SingleSubscriber;
+import rx.Subscriber;
 import rx.subjects.PublishSubject;
 
 /**
@@ -83,6 +95,158 @@ public class GeneralView extends BaseFragment<GeneralPresenter> implements Gener
     }
 
     @Override
+    public void askForPlayStoreReview() {
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.thank_you)
+                .content(R.string.play_store_review_request)
+                .positiveText(R.string.review_on_play_store)
+                .neutralText(R.string.no)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Utility.openPlayStorePage(getActivity(),getActivity().getPackageName());
+                        closeReviewRequest(true);
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        closeReviewRequest(false);
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    public void askForFeedback() {
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.send_feedback)
+                .content(R.string.quick_feedback_review_request_text)
+                .positiveText(R.string.send_email)
+                .negativeText(R.string.no_thanks)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        closeReviewRequest(true);
+                        Utility.sendFeedback(getActivity(), true);
+                    }
+                }).onNegative(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                closeReviewRequest(false);
+                dialog.dismiss();
+            }
+        }).show();
+    }
+
+    @Override
+    public void closeReviewRequest(boolean neverAskAgain) {
+        View request = parentView.findViewById(R.id.review_request);
+        if (request != null) {
+            TransitionManager.beginDelayedTransition(parentView);
+            request.setVisibility(View.GONE);
+        }
+        SharedPreferences.Editor editor = shared.edit().putLong(Cons.LAST_REVIEW_REQUEST, System.currentTimeMillis());
+        if (neverAskAgain) {
+            editor.putBoolean(Cons.DONE_WITH_REVIEW_REQUEST, true);
+        }
+        editor.apply();
+
+    }
+
+    @Override
+    public Single<Boolean> shouldShowReviewRequest() {
+        return Single.create(new Single.OnSubscribe<Boolean>() {
+            @Override
+            public void call(SingleSubscriber<? super Boolean> singleSubscriber) {
+                boolean sawJournalIt = shared.getBoolean(Cons.SAW_JOURNAL_IT_KEY, false);
+                long sawJournalItDate = shared.getLong(Cons.SAW_JOURNAL_IT_DATE_KEY, System.currentTimeMillis());
+                boolean doneWithReviewRequest = shared.getBoolean(Cons.DONE_WITH_REVIEW_REQUEST, false);
+                long lastReviewRequest = shared.getLong(Cons.LAST_REVIEW_REQUEST, 0);
+                singleSubscriber.onSuccess(!doneWithReviewRequest
+                        && sawJournalIt && (System.currentTimeMillis() - sawJournalItDate > 2 * Cons.WAIT_FOR_REVIEW_REQUEST_TIME)
+                        && (System.currentTimeMillis() - lastReviewRequest > Cons.REVIEW_REQUEST_INTEVAL_TIME));
+            }
+        });
+    }
+
+    @Override
+    public Observable<GeneralPresenter.Result> showReviewRequestCard() {
+        return Observable.create(new Observable.OnSubscribe<GeneralPresenter.Result>() {
+            @Override
+            public void call(final Subscriber<? super GeneralPresenter.Result> subscriber) {
+                Log.e(TAG, "showReviewRequestCard: ");
+                LinearLayout cardView = (LinearLayout) LayoutInflater.from(getActivity()).inflate(R.layout.header_review_request, parentView, false);
+                parentView.addView(cardView, 0);
+                final ImageView star1 = ((ImageView) cardView.findViewById(R.id.star_1));
+                ImageView star2 = ((ImageView) cardView.findViewById(R.id.star_2));
+                ImageView star3 = ((ImageView) cardView.findViewById(R.id.star_3));
+                ImageView star4 = ((ImageView) cardView.findViewById(R.id.star_4));
+                ImageView star5 = ((ImageView) cardView.findViewById(R.id.star_5));
+                ImageButton close = (ImageButton) cardView.findViewById(R.id.close);
+                final Drawable fullStar = ContextCompat.getDrawable(getActivity(), R.drawable.star_full);
+                final ViewGroup stars = (ViewGroup) cardView.findViewById(R.id.stars);
+                star1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        star1.setImageDrawable(fullStar);
+                        subscriber.onNext(GeneralPresenter.Result.REVIEW_REQUEST_LESS_THAN_5_STARS);
+                    }
+                });
+                star2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for (int i = 0; i < 2; i++) {
+                            ((ImageView) stars.getChildAt(i)).setImageDrawable(fullStar);
+                        }
+                        subscriber.onNext(GeneralPresenter.Result.REVIEW_REQUEST_LESS_THAN_5_STARS);
+
+                    }
+                });
+                star3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for (int i = 0; i < 3; i++) {
+                            ((ImageView) stars.getChildAt(i)).setImageDrawable(fullStar);
+                        }
+                        subscriber.onNext(GeneralPresenter.Result.REVIEW_REQUEST_LESS_THAN_5_STARS);
+
+                    }
+                });
+                star4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for (int i = 0; i < 4; i++) {
+                            ((ImageView) stars.getChildAt(i)).setImageDrawable(fullStar);
+                        }
+                        subscriber.onNext(GeneralPresenter.Result.REVIEW_REQUEST_LESS_THAN_5_STARS);
+
+                    }
+                });
+                star5.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for (int i = 0; i < 5; i++) {
+                            ((ImageView) stars.getChildAt(i)).setImageDrawable(fullStar);
+                        }
+                        subscriber.onNext(GeneralPresenter.Result.REVIEW_REQUEST_5_STARS);
+
+                    }
+                });
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        subscriber.onNext(GeneralPresenter.Result.REVIEW_REQUEST_CLOSE);
+                    }
+                });
+
+            }
+        });
+    }
+
+
+
+    @Override
     public void addJournalItHeader() {
         Log.e(TAG, "addJournalItHeader: show journal it header");
         final LinearLayout header = (LinearLayout) LayoutInflater.from(getActivity()).inflate(R.layout.header_checkout_journal_it, parentView, false);
@@ -93,7 +257,7 @@ public class GeneralView extends BaseFragment<GeneralPresenter> implements Gener
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shared.edit().putBoolean(Cons.SAW_JOURNAL_IT_KEY, true).apply();
+                updateSharedSawJournalIt();
                 TransitionManager.beginDelayedTransition(parentView);
                 header.setVisibility(View.GONE);
             }
@@ -102,13 +266,19 @@ public class GeneralView extends BaseFragment<GeneralPresenter> implements Gener
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shared.edit().putBoolean(Cons.SAW_JOURNAL_IT_KEY, true).apply();
+                updateSharedSawJournalIt();
                 Utility.openJournalItPlayStorePage(getActivity());
                 TransitionManager.beginDelayedTransition(parentView);
                 header.setVisibility(View.GONE);
             }
         });
 
+    }
+
+    private void updateSharedSawJournalIt() {
+        shared.edit().putBoolean(Cons.SAW_JOURNAL_IT_KEY, true)
+                .putLong(Cons.SAW_JOURNAL_IT_DATE_KEY, System.currentTimeMillis())
+                .apply();
     }
 
     public void setRecent() {

@@ -2192,11 +2192,45 @@ public  class Utility {
         return isFree(context) && System.currentTimeMillis() - sharedPreferences.getLong(Cons.BEGIN_DAY_KEY, System.currentTimeMillis()) > Cons.TRIAL_TIME;
     }
 
+    public static void sendFeedback(Context context, boolean fromReviewRequest) {
+        String[] TO = {"thanhhai08sk@gmail.com"};
+        String content = new StringBuilder().append("Manufacture: ").append(Build.MANUFACTURER)
+                .append("\nDevice: ")
+                .append(Build.MODEL)
+                .append(" - ")
+                .append(Build.DEVICE)
+                .append("\nAndroid: ")
+                .append(Build.VERSION.RELEASE)
+                .append("\n\n")
+                .append(context.getString(R.string.email_prompt))
+                .toString();
+
+
+
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        String subject = context.getString(R.string.app_name) + (fromReviewRequest ? " feedback" : "");
+
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT,subject);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, content);
+
+
+        try {
+            context.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+        }
+        catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(context, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public static void getProVersion(Context context) {
         openPlayStorePage(context, Cons.PRO_VERSION_PACKAGE_NAME);
     }
 
-    private static void openPlayStorePage(Context context, String packageName) {
+
+    public static void openPlayStorePage(Context context, String packageName) {
         Uri uri = Uri.parse("mbarket://details?id=" + packageName);
         Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
         gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
