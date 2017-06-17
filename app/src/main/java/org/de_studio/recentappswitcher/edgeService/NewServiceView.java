@@ -1299,10 +1299,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void hideAllCollections() {
-        Set<String> collectionIds = collectionViewsMap.keySet();
-        for (String collectionId : collectionIds) {
+        if (collectionViewsMap != null) {
+            Set<String> collectionIds = collectionViewsMap.keySet();
+            for (String collectionId : collectionIds) {
 //            Log.e(TAG, "hideAllCollections: hide " + collectionId);
-            collectionViewsMap.get(collectionId).setVisibility(View.GONE);
+                collectionViewsMap.get(collectionId).setVisibility(View.GONE);
+            }
         }
     }
 

@@ -99,7 +99,6 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -615,51 +614,6 @@ public  class Utility {
         return((int) (((float)level / (float)scale) * 100.0f));
     }
 
-    public static String getForegroundApp(Context context) {
-        ActivityManager.RunningAppProcessInfo resultInfo=null, info=null;
-        ActivityManager mActivityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
-        List <ActivityManager.RunningAppProcessInfo> l = mActivityManager.getRunningAppProcesses();
-        Iterator<ActivityManager.RunningAppProcessInfo> i = l.iterator();
-        Log.e(TAG, "list size = " + l.size());
-        while(i.hasNext()){
-            info = i.next();
-            if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
-                    ) {
-                if (!isRunningService(context, info.processName, mActivityManager)) {
-                    resultInfo = info;
-                    break;
-                } else {
-                    Log.e(TAG, "info = " + info.processName);
-                }
-            }
-        }
-        if (resultInfo != null && resultInfo.importanceReasonComponent!= null) {
-            String packageReturn = resultInfo.importanceReasonComponent.getPackageName();
-            if (!packageReturn.isEmpty()) {
-                return packageReturn;
-            }else return null;
-        }else return null;
-
-    }
-
-    public static boolean isRunningService(Context mContext, String processname, ActivityManager mActivityManager){
-        if(processname==null || processname.isEmpty())
-            return false;
-
-        ActivityManager.RunningServiceInfo service;
-
-        if(mActivityManager==null)
-            mActivityManager = (ActivityManager)mContext.getSystemService(Context.ACTIVITY_SERVICE);
-        List <ActivityManager.RunningServiceInfo> l = mActivityManager.getRunningServices(9999);
-        Iterator <ActivityManager.RunningServiceInfo> i = l.iterator();
-        while(i.hasNext()){
-            service = i.next();
-            if(service.process.equals(processname))
-                return true;
-        }
-
-        return false;
-    }
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
@@ -2377,6 +2331,18 @@ public  class Utility {
             inputStream.close();
             outputStream.close();
         }
+    }
+
+    public static boolean isMyServiceRunning(Class<?> serviceClass,Context context) {
+        ActivityManager manager = (ActivityManager)context. getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i("Service already","running");
+                return true;
+            }
+        }
+        Log.i("Service not","running");
+        return false;
     }
 }
 
