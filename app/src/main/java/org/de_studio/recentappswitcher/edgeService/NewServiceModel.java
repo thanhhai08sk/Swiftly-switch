@@ -265,6 +265,9 @@ public class NewServiceModel extends BaseModel {
 //                + "\niconWidth " + iconWidth
 //                +"\nmScale " + mScale
 //        );
+        if (gridX == 0 && gridY == 0) {
+            return -1;
+        }
         double centerIconX, centerIconY;
         double xDouble = (double) x;
         double yDouble = (double) y;

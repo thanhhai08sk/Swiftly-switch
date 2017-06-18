@@ -724,7 +724,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     public void showFolder(int triggerPosition, Slot folder, final String gridId, int space, final int edgePosition, final NewServicePresenter.Showing currentShowing) {
-        if (folder.items.size()==0) {
+        Log.e(TAG, "showFolder: ");
+        if (folder.items.size() == 0) {
             return;
         }
         createFolderViewIfNeeded(folder, space);
@@ -766,8 +767,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 getResources().getDisplayMetrics().heightPixels
         );
         folderView.setVisibility(View.VISIBLE);
-        currentShowing.gridXY.x = (int) folderView.getX();
-        currentShowing.gridXY.y = (int) folderView.getY();
+        currentShowing.folderXY.x = (int) folderView.getX();
+        currentShowing.folderXY.y = (int) folderView.getY();
     }
 
     private boolean addFolderToBackgroundIfNeeded(Slot folder, RecyclerView folderView) {

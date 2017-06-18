@@ -80,7 +80,6 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
     @Override
     public void onViewAttach(final View view) {
-        Log.e(TAG, "onViewAttach: ");
         super.onViewAttach(view);
         model.setup();
         view.addEdgesToWindowAndSetListener();
@@ -141,30 +140,33 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     public void call(String s) {
                         Log.e(TAG, "call: showCollectionInstantly");
                         Collection collection = model.getCollection(s);
-                        if (collection.type.equals(Collection.TYPE_GRID_FAVORITE)) {
-                            Log.e(TAG, "call: hideAll collection and show grid");
-                            view.hideAllCollections();
-                            showGrid(collection, view);
-                        } else if (collection.type.equals(Collection.TYPE_CIRCLE_FAVORITE)) {
-                            if (tempRecentPackages == null) {
-                                tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
-                            }
-                            currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
-                            currentShowing.circle = collection;
-                            currentShowing.circleSlots = collection.slots;
-                            currentShowing.stayOnScreen = isStayOnScreen(collection);
-                            view.hideAllCollections();
-                            showCollection(Showing.SHOWING_CIRCLE_ONLY);
-                        } else if (collection.type.equals(Collection.TYPE_RECENT)) {
-                            if (tempRecentPackages == null) {
-                                tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
-                            }
-                            currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
-                            currentShowing.stayOnScreen = isStayOnScreen(collection);
-                            currentShowing.circle = collection;
-                            currentShowing.circleSlots = model.getRecent(tempRecentPackages, collection.slots, currentShowing);
-                            view.hideAllCollections();
-                            showCollection(currentShowing.showWhat);
+                        switch (collection.type) {
+                            case Collection.TYPE_GRID_FAVORITE:
+                                view.hideAllCollections();
+                                showGrid(collection, view);
+                                break;
+                            case Collection.TYPE_CIRCLE_FAVORITE:
+                                if (tempRecentPackages == null) {
+                                    tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
+                                }
+                                currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
+                                currentShowing.circle = collection;
+                                currentShowing.circleSlots = collection.slots;
+                                currentShowing.stayOnScreen = isStayOnScreen(collection);
+                                view.hideAllCollections();
+                                showCollection(Showing.SHOWING_CIRCLE_ONLY);
+                                break;
+                            case Collection.TYPE_RECENT:
+                                if (tempRecentPackages == null) {
+                                    tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
+                                }
+                                currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
+                                currentShowing.stayOnScreen = isStayOnScreen(collection);
+                                currentShowing.circle = collection;
+                                currentShowing.circleSlots = model.getRecent(tempRecentPackages, collection.slots, currentShowing);
+                                view.hideAllCollections();
+                                showCollection(currentShowing.showWhat);
+                                break;
                         }
                         highlightIdSubject.onNext(-1);
                         hideAllExceptEdgesAfter10Seconds();
@@ -422,7 +424,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             case Showing.SHOWING_FOLDER:
                 int columCount = Math.min(currentShowing.folderItems.size(), 4);
                 int rowCount = currentShowing.folderItems.size() / 4 + 1;
-                int folderItemHighlighted = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, rowCount, columCount, Cons.DEFAULT_FAVORITE_GRID_SPACE, true, view.isRTL());
+                int folderItemHighlighted = model.getGridActivatedId(x, y, currentShowing.folderXY.x, currentShowing.folderXY.y, rowCount, columCount, Cons.DEFAULT_FAVORITE_GRID_SPACE, true, view.isRTL());
                 highlightIdSubject.onNext(folderItemHighlighted);
                 if (folderItemHighlighted == -2) {
                     returnToGridSubject.onNext(null);
@@ -803,6 +805,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         public String folderSlotId;
         public NewServiceModel.IconsXY circleIconsXY;
         public Point gridXY = new Point(0, 0);
+        public Point folderXY = new Point(0, 0);
         public Point gridTriggerPoint = new Point(0, 0);
         public float xInit, yInit;
         public int edgePosition;
