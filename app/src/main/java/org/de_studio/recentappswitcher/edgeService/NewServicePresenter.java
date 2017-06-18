@@ -387,8 +387,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
     public void onActionDown(float x, float y, int edgeId) {
         stopHideViewsHandler();
-//        hideAllExceptEdgesAfter10Seconds();
-        long time = System.currentTimeMillis();
+//        long time = System.currentTimeMillis();
         tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
         if (tempRecentPackages.size() > 0 && tempRecentPackages.get(0).equals("com.google.android.packageinstaller") && Utility.isMashmallow()) {
             onGivingPermissionSJ.onNext(null);
@@ -399,10 +398,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             view.showBackground(model.shouldBackgroundTouchable());
             view.actionDownVibrate();
             view.showClock();
-//        showCollection(tempRecentPackages);
             showCollection(currentShowing.showWhat);
             holdingHelper = 0;
-            Log.e(TAG, "onActionDown: time to finish = " + (System.currentTimeMillis() - time));
+//            Log.e(TAG, "onActionDown: time to finish = " + (System.currentTimeMillis() - time));
 
         }
     }

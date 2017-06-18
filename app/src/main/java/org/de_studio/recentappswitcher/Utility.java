@@ -133,47 +133,68 @@ public  class Utility {
                                                    Point windowSize) {
 //        Log.e(TAG, "setFavoriteGridViewPosition: width " + gridWide + "\ntall " + gridTall + "\nxInit " + xInit + "\nyInit " + yInit +
 //                "\noffsetHorizontal " + distanceFromEdgeDp + "\noffsetVertical " + distanceVertical);
+        long time = System.currentTimeMillis();
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
         float distanceVerticalFromEdge = ((float)distanceVertical)* mScale;
         Point point = new Point();
         windowManager.getDefaultDisplay().getSize(point);
-        float x = point.x;
-        float y = point.y;
+        float screenWidth = point.x;
+        float screenHeight = point.y;
         if (!isCenter) {
             switch (edgePosition) {
                 case 10:
-                    gridView.setX(( xInit) - distanceFromEdge - gridWide);
-                    gridView.setY(yInit - gridTall/2);
+                    gridView.setX( xInit - distanceFromEdge - gridWide);
+                    if (yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(distanceVerticalFromEdge);
+                    } else {
+                        gridView.setY(yInit - gridTall/2);
+                    }
                     break;
                 case 11:
-                    float x1 = (xInit) - distanceFromEdge - gridWide;
-                    float y1 = (yInit) - gridTall / (float) 2;
-                    gridView.setX(x1);
-                    gridView.setY(y1);
+                    gridView.setX( xInit - distanceFromEdge - gridWide);
+                    if (yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(distanceVerticalFromEdge);
+                    } else if (screenHeight - yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(screenHeight - gridTall - distanceVerticalFromEdge);
+                    }else gridView.setY(yInit - gridTall/2);
                     break;
                 case 12:
                     gridView.setX(( xInit) - distanceFromEdge - gridWide);
-                    if (y - yInit - gridTall / 2 < distanceVerticalFromEdge) {
-                        gridView.setY(y - gridTall - distanceVerticalFromEdge);
+                    if (screenHeight - yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(screenHeight - gridTall - distanceVerticalFromEdge);
                     } else {
                         gridView.setY(yInit - gridTall/2);
                     }
                     break;
                 case 20:
                     gridView.setX(( xInit) + distanceFromEdge);
-                    gridView.setY(yInit - gridTall/2);
+                    if (yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(distanceVerticalFromEdge);
+                    } else if (screenHeight - yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(screenHeight - gridTall - distanceVerticalFromEdge);
+                    }else gridView.setY(yInit - gridTall/2);
                     break;
                 case 21:
                     gridView.setX(( xInit) + distanceFromEdge);
-                    gridView.setY(( yInit) - gridTall /(float) 2);
+//                    gridView.setY(( yInit) - gridTall /(float) 2);
+                    if (yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(distanceVerticalFromEdge);
+                    } else if (screenHeight - yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(screenHeight - gridTall - distanceVerticalFromEdge);
+                    }else gridView.setY(yInit - gridTall/2);
                     break;
                 case 22:
                     gridView.setX(( xInit) + distanceFromEdge);
-                    if (y - yInit - gridTall / 2 < distanceVerticalFromEdge) {
-                        gridView.setY(y - gridTall - distanceVerticalFromEdge);
-                    } else {
-                        gridView.setY(yInit - gridTall/2);
-                    }
+//                    if (screenHeight - yInit - gridTall / 2 < distanceVerticalFromEdge) {
+//                        gridView.setY(screenHeight - gridTall - distanceVerticalFromEdge);
+//                    } else {
+//                        gridView.setY(yInit - gridTall/2);
+//                    }
+                    if (yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(distanceVerticalFromEdge);
+                    } else if (screenHeight - yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(screenHeight - gridTall - distanceVerticalFromEdge);
+                    }else gridView.setY(yInit - gridTall/2);
                     break;
                 case 31:
                     if (xInit - gridWide / (float) 2 > distanceFromEdge &&
@@ -190,10 +211,11 @@ public  class Utility {
                     break;
             }
         } else {
-            gridView.setX((x-gridWide)/2);
-            gridView.setY((y-gridTall)/2);
+            gridView.setX((screenWidth-gridWide)/2);
+            gridView.setY((screenHeight-gridTall)/2);
         }
 
+        Log.e(TAG, "setFavoriteGridViewPosition: time spent = " + (System.currentTimeMillis() - time));
     }
 
 
