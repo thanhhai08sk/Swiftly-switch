@@ -30,7 +30,7 @@ class ServiceToggleWidgetProvider: AppWidgetProvider() {
 //            broadcastIntent.setClassName(context, NewServiceView::class.java.name)
             broadcastIntent.action =Cons.ACTION_TOGGLE_EDGES
 //            broadcastIntent.setClass(context,NewServiceView::class.java)
-            val toggleIntent = PendingIntent.getBroadcast(context.applicationContext, 0, broadcastIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+            val toggleIntent = PendingIntent.getBroadcast(context.applicationContext, 1, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT)
             remoteView.setOnClickPendingIntent(R.id.widget_icon,toggleIntent)
             Log.e(TAG, "onUpdate: running = $serviceRunning")
             appWidgetManager!!.updateAppWidget(it,remoteView)
