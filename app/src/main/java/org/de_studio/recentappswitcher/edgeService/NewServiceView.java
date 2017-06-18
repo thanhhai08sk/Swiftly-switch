@@ -315,7 +315,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void addEdgesToWindowAndSetListener() {
-        Log.e(TAG, "addEdgesToWindowAndSetListener: ");
         if (!(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && sharedPreferences.getBoolean(EdgeSetting.IS_DISABLE_IN_LANSCAPE, false))) {
             if (sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY, true)) {
                 try {
@@ -338,7 +337,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         }
 
         if (sharedPreferences.getBoolean(Cons.DISABLE_IN_FULLSCREEN_KEY, false)) {
-            Log.e(TAG, "addEdgesToWindowAndSetListener: true");
             if (sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY, true)) {
                 Log.e(TAG, "addEdgesToWindowAndSetListener: edge1 attached");
                 edge1View.setOnSystemUiVisibilityChangeListener(this);

@@ -25,7 +25,7 @@ class ServiceToggleWidgetProvider: AppWidgetProvider() {
 
         appWidgetIds!!.forEach {
             val remoteView = RemoteViews(context.packageName, R.layout.widget_service_toggle)
-            remoteView.setImageViewResource(R.id.widget_icon, if (serviceRunning && edgeIsOn) R.drawable.ic_pause_dark else R.drawable.ic_play_dark)
+            remoteView.setImageViewResource(R.id.widget_icon, if (serviceRunning && edgeIsOn) R.drawable.ic_edge_toggle_pause else R.drawable.ic_edge_toggle_resume)
             val broadcastIntent = Intent()
 //            broadcastIntent.setClassName(context, NewServiceView::class.java.name)
             broadcastIntent.action =Cons.ACTION_TOGGLE_EDGES
@@ -46,7 +46,5 @@ class ServiceToggleWidgetProvider: AppWidgetProvider() {
             onUpdate(context, manager, ids)
         }
         super.onReceive(context, intent)
-
-
     }
 }

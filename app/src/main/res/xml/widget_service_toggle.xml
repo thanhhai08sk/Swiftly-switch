@@ -3,7 +3,7 @@
     android:minHeight="40dp"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/widget_service_toggle"
-    android:previewImage="@drawable/ic_play_dark"
+    android:previewImage="@drawable/ic_edge_toggle_pause"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen">
 </appwidget-provider>
