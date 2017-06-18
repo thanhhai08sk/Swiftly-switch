@@ -387,7 +387,8 @@ public class NewServiceModel extends BaseModel {
         } else return 0;
     }
     private float getInitPointOffsetNeeded(int radius) {
-        return haftIconWidth + radius*mScale;
+//        return haftIconWidth + radius*mScale;
+        return iconWidth + radius*mScale;
     }
 
     public void addPackageToData(final String packageName, final String label) {

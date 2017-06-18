@@ -345,7 +345,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 edge2View.setOnSystemUiVisibilityChangeListener(this);
             }
         }
-        notifyEdgeServiceStarted();
+        notifyEdgeServiceStarted(false);
     }
 
     @Override
@@ -1457,13 +1457,15 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             }
 
         }
-        notifyEdgeServiceStarted();
+        notifyEdgeServiceStarted(true);
     }
 
-    private void notifyEdgeServiceStarted() {
+    private void notifyEdgeServiceStarted(boolean showToast) {
         ((MyApplication) getApplicationContext()).setEdgeIsOn(true);
         sendBroadcast(new Intent(Cons.ACTION_UPDATE_TOGGLE_WIDGET));
-        showToast(R.string.edge_running_toast);
+        if (showToast) {
+            showToast(R.string.edge_running_toast);
+        }
     }
 
     public final synchronized void removeEdgeViews() {
