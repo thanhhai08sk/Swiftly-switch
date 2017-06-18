@@ -369,5 +369,7 @@
     <string name="no_thanks">No thanks</string>
     <string name="quick_feedback_review_request_text">Could you tell us what problem you faced. This will help us improve.</string>
     <string name="send_email">Send email</string>
+    <string name="edge_running_toast">Swiftly Switch is running</string>
+    <string name="edge_service_paused_toast">Swiftly Switch is paused</string>
 
 </resources>

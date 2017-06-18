@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.base;
 
+import android.content.Context;
 import android.content.Intent;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -10,8 +11,10 @@ import org.de_studio.recentappswitcher.edgeService.NewServiceView;
  */
 
 public class JavaCodeHere {
-    private void methodss() {
+
+    private void methodss(Context context) {
         Intent broadcastIntent = new Intent(Cons.ACTION_TOGGLE_EDGES);
         broadcastIntent.setClassName("package",NewServiceView.class.getName());
+
     }
 }

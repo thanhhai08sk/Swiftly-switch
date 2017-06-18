@@ -49,6 +49,7 @@ import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
+import org.de_studio.recentappswitcher.MyApplication;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.ServiceSlotAdapter;
@@ -198,7 +199,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     UsageStatsManager usageStatsManager;
     NewServiceView.EdgesToggleReceiver receiver;
     NewServiceView.PackageChangedReceiver receiver1;
-    boolean working = true;
     private NotificationCompat.Builder notificationBuilder;
     Realm realm = Realm.getDefaultInstance();
     GenerateDataOkReceiver generateDataOkReceiver;
@@ -347,6 +347,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 edge2View.setOnSystemUiVisibilityChangeListener(this);
             }
         }
+        notifyEdgeServiceStarted();
     }
 
     @Override
@@ -1389,7 +1390,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void showToast(int message) {
-        Toast.makeText(NewServiceView.this.getApplicationContext(),message,Toast.LENGTH_LONG).show();
+        Toast.makeText(NewServiceView.this.getApplicationContext(),message,Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -1457,6 +1458,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             }
 
         }
+        notifyEdgeServiceStarted();
+    }
+
+    private void notifyEdgeServiceStarted() {
+        ((MyApplication) getApplicationContext()).setEdgeIsOn(true);
+        sendBroadcast(new Intent(Cons.ACTION_UPDATE_TOGGLE_WIDGET));
+        showToast(R.string.edge_running_toast);
     }
 
     public final synchronized void removeEdgeViews() {
@@ -1473,6 +1481,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             e.printStackTrace();
             Log.e(TAG, " Null when remove edge2Image");
         }
+        notifyEdgeServicePaused();
+    }
+
+    private void notifyEdgeServicePaused() {
+        ((MyApplication) getApplicationContext()).setEdgeIsOn(false);
+        sendBroadcast(new Intent(Cons.ACTION_UPDATE_TOGGLE_WIDGET));
+        showToast(R.string.edge_service_paused_toast);
     }
 
     @Override
@@ -1530,11 +1545,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 NotificationCompat.Action remoteAction;
 
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(NewServiceView.this, 0, remoteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                if (working) {
+                if (((MyApplication) context.getApplicationContext()).isEdgeIsOn()) {
                     removeEdgeViews();
-                    working = !working;
-
-
                     remoteAction =
                             new NotificationCompat.Action.Builder(
                                     android.R.drawable.ic_media_play,
@@ -1542,9 +1554,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                                     pendingIntent).build();
                 } else {
                     addEdgeViews();
-                    working = !working;
-
-
                     remoteAction =
                             new NotificationCompat.Action.Builder(
                                     android.R.drawable.ic_media_pause,

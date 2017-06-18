@@ -15,6 +15,7 @@ import io.realm.RealmConfiguration;
 public class MyApplication extends MultiDexApplication {
     private static final String TAG = MyApplication.class.getSimpleName();
     private static Context mContext;
+    private boolean edgeIsOn;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -27,6 +28,13 @@ public class MyApplication extends MultiDexApplication {
         this.mContext = this;
     }
 
+    public boolean isEdgeIsOn() {
+        return edgeIsOn;
+    }
+
+    public void setEdgeIsOn(boolean edgeIsOn) {
+        this.edgeIsOn = edgeIsOn;
+    }
 
     private boolean checkIfDataOk() {
         Realm realm = Realm.getDefaultInstance();
@@ -35,6 +43,7 @@ public class MyApplication extends MultiDexApplication {
         realm.close();
         return isOk;
     }
+
 
     public static Context getContext() {
         return mContext;
