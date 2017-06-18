@@ -170,8 +170,6 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
     }
 
     public interface View extends BaseCollectionSettingPresenter.View {
-        void showChooseColumnsCountDialog();
-
 
         void setChoosingMargins(boolean enable);
 
@@ -190,9 +188,6 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
         void showChooseMarginHorizontal(int min, int max, int current, PublishSubject<Integer> subject);
 
         void showChoosePositionDialog();
-
-        void showChooseRowsCountDialog();
-
 
 
 

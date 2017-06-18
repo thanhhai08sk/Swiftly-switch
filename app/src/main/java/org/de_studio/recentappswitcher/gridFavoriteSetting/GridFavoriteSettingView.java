@@ -79,31 +79,6 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
         return ((GridFavoriteSettingPresenter) presenter);
     }
 
-    public void showChooseColumnsCountDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.columns_count)
-                .setItems(new CharSequence[]{"1","2","3","4","5", "6", "7"}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        getGridPresenter().onSetColumnsCount(which + 1);
-                    }
-                });
-        builder.create().show();
-    }
-
-    public void showChooseRowsCountDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.rows_count)
-                .setItems(new CharSequence[]{"1","2","3","4","5", "6", "7"}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        getGridPresenter().onSetRowsCount(which + 1);
-                    }
-                });
-        builder.create().show();
-    }
-
-
     public void showChoosePositionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.edge_dialog_set_position_text)
@@ -141,7 +116,7 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
     public void showChooseRowsCount() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.rows_count)
-                .setItems(new CharSequence[]{"1","2","3","4", "5", "6", "7", "8"}, new DialogInterface.OnClickListener() {
+                .setItems(new CharSequence[]{"1","2","3","4", "5", "6", "7", "8", "9", "10"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         getGridPresenter().onSetRowsCount(which + 1);
