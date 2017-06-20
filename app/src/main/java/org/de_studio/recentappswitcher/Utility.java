@@ -2159,6 +2159,10 @@ public  class Utility {
         return Build.VERSION.SDK_INT == Build.VERSION_CODES.M;
     }
 
+    public static boolean isKitkat() {
+        return Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT;
+    }
+
     public static boolean isFree(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
         return context.getPackageName().equals(Cons.FREE_VERSION_PACKAGE_NAME) && !sharedPreferences.getBoolean(Cons.PRO_PURCHASED_KEY, false);

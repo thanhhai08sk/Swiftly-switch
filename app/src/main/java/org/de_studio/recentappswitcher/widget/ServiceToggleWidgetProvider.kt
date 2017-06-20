@@ -41,9 +41,19 @@ class ServiceToggleWidgetProvider: AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent!!.action == Cons.ACTION_UPDATE_TOGGLE_WIDGET) {
             Log.e(TAG, "onReceive: update toggle widget")
-            val manager: AppWidgetManager = context!!.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
-            val ids = manager.getAppWidgetIds(ComponentName(context, ServiceToggleWidgetProvider::class.java))
-            onUpdate(context, manager, ids)
+            val manager: Any
+            if (Utility.isKitkat()) {
+                manager = AppWidgetManager.getInstance(context)
+            }else manager = context!!.getSystemService(Context.APPWIDGET_SERVICE)
+
+            if (manager != null) {
+                manager as AppWidgetManager
+                val ids = manager.getAppWidgetIds(ComponentName(context, ServiceToggleWidgetProvider::class.java))
+                onUpdate(context, manager, ids)
+            }else {
+                Log.e(TAG, "AppWidgetManager null")
+                context!!.sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE"))
+            }
         }
         super.onReceive(context, intent)
     }

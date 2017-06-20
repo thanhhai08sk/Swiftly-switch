@@ -40,6 +40,9 @@
 	<string name="can_not_delete">Không thể xóa</string>
 	<string name="can_not_delete_cause_being_used_in">Không thể xóa, đang được sử dụng tại:</string>
 	<string name="can_not_delete_cause_this_is_the_only_one">Không thể xóa, đây là duy nhất</string>
+	<string name="checkout_journal_it_button">Checkout Journal it!</string>
+	<string name="checkout_journal_it_text">After 10 months of development, we proud to announce Journal it!, a journal/diary app that makes journaling on mobile easy and delightful. If you love Swiftly Switch, you probably gonna love Journal it! too!</string>
+	<string name="checkout_new_app">Checkout our new app</string>
 	<string name="choose">Choose</string>
 	<string name="choose_action">Choose action</string>
 	<string name="choose_icon_source">Choose icon source</string>
@@ -68,6 +71,7 @@
 	<string name="device_shortcuts">\"Lối tắt của thiết bị\"</string>
 	<string name="disable_in_fullscreen">Disable in full screen apps</string>
 	<string name="disable_top_indicator">Disable top indicator</string>
+	<string name="dismiss">Dismiss</string>
 	<string name="downloading">Downloading</string>
 	<string name="easily_navigation">Dễ dàng điều hướng</string>
 	<string name="edge_dialog_array_bottom_centre">Dưới - giữa</string>
@@ -136,6 +140,7 @@
 	<string name="grid_position_trigger_position">Vị trí kích hoạt</string>
 	<string name="hide_notification">Hide notification</string>
 	<string name="horizontal_margin">Lề ngang</string>
+	<string name="how_do_you_like_the_app">How do you like the app?</string>
 	<string name="icon_pack_system_icon_pack_label">Hệ thống</string>
 	<string name="import_description">Import shortcuts and settings from backup file</string>
 	<string name="import_guide">Choose the backup file from Google Drive.</string>
@@ -179,6 +184,7 @@
 	<string name="navigation_drawer_open">Open navigation drawer</string>
 	<string name="no">Không</string>
 	<string name="no_action">Không hành động</string>
+	<string name="no_thanks">No thanks</string>
 	<string name="note_keep_your_finger_on_screen_unless_finish_action">Lưu ý: giữ ngón tay trên màn hình cho đến khi bạn muốn kết thúc hành động</string>
 	<string name="notification">Notification</string>
 	<string name="notification_description">This persistent notification is required for Swiftly Switch to stay active in the background. You may hide it by tapping and holding the notification and selecting \"Block all notifications\".\n\nIf you see the \"Screen overlay detected\" warning when giving a permission to another app, please pause Swiftly Switch temporarily using the \"Pause\" button on the notification.\n\nOr just swipe in from the edge, Swiftly Switch will be paused for 10s automatically when you\'re in giving permission window.</string>
@@ -188,18 +194,21 @@
 	<string name="only_triggered_one_visible">Hiển thị từng cái</string>
 	<string name="open_folder_delay">Open folder delay</string>
 	<string name="open_swiftly_switch">Open Swiftly Switch</string>
+	<string name="other_apps_from_de_studio">Other apps from de-studio</string>
 	<string name="pause">Pause</string>
 	<string name="pause_for_10_second_toast">Swiftly Switch: Auto-pause for 10s while granting permissions. Change this in Swiftly Switch settings.</string>
 	<string name="pause_resume">Pause/Resume</string>
 	<string name="permission_used_for_back_button_notification_power_menu">Quyền này dùng để thực thi nút Trở lại, Notification, menu nút</string>
 	<string name="permission_used_for_getting_recent_apps">Quyền này dùng để lấy thông tin về ứng dụng gần đây</string>
 	<string name="permission_used_for_showing_icons_over_other_apps">Quyền này dùng để hiển thị trên ứng dụng khác</string>
+	<string name="play_store_review_request">Would you like to post your review to Play Store? This will motivate us a lot!</string>
 	<string name="please_wait">Please wait</string>
 	<string name="privacy_policy">Privacy policy</string>
 	<string name="pro_only">Pro-only</string>
 	<string name="pro_only_content">This feature is only available in the Pro version</string>
 	<string name="quick_actions_description">Quick Actions are placed outside of the Recent App, tap to customize or add new</string>
 	<string name="quick_actions_set">Quick Actions set</string>
+	<string name="quick_feedback_review_request_text">Could you tell us what problem you faced. This will help us improve.</string>
 	<string name="recent_app">Recent app</string>
 	<string name="recent_apps">Recent apps</string>
 	<string name="recent_apps_description">Tap to customize or add new Recent Set</string>
@@ -216,6 +225,7 @@
 	<string name="rows_count">Số hàng</string>
 	<string name="sale_50">Pro -50%</string>
 	<string name="screen_shot">Take screenshot</string>
+	<string name="send_email">Send email</string>
 	<string name="send_feedback">Send feedback</string>
 	<string name="set_favorite_shortcut_grid_distance_title_text_view">Khoảng cách từ cạnh(ngang)</string>
 	<string name="set_favorite_shortcut_grid_distance_vertical_title_text_view">Khoảng cách từ cạnh(dọc)</string>
@@ -257,9 +267,11 @@
 	<string name="stay_on_screen">Giữ trên màn hình</string>
 	<string name="stay_on_screen_disable_description">Immediately hide overlay after lifting your finger</string>
 	<string name="stay_on_screen_enable_description">Giữ nó trên màn hình đến khi kết thúc</string>
+	<string name="sure">Sure</string>
 	<string name="swiftly_switch_screen_lock">Swiftly Switch Screen lock</string>
 	<string name="switch_between_recent_apps">Nhanh chóng chuyển qua lại giữa các ứng dụng đang chạy</string>
 	<string name="system">System</string>
+	<string name="thank_you">Thank you!</string>
 	<string name="thanks_for_upgrading_to_pro">Thank you for upgrading to pro!</string>
 	<string name="this_feature_does_not_supported_on_samsung_devices">This feature is not supported on Samsung or ZTE devices</string>
 	<string name="title_activity_pin_shortcuts">Pin shortcuts</string>

@@ -286,6 +286,13 @@
 
     //What new
 
+    <string name="what_new_3.1.3" translatable="false">VERSION 3.1.3:\n
+        - Create a widget to pause/resume the app from the home screen\n
+        - Prevent shortcuts from being cut off\n
+        - Updated translations. Contribute your translation at https://www.localize.im/v/xy\n
+        - Fix bugs and some small improvements\n
+    </string>
+
     <string name="what_new_3.1.2" translatable="false">VERSION 3.1.2:\n
         - Fixed: last app shortcut does not work in some situations\n
         - Updated translations for: Italian, Japanese, Spanish, Portuguese,, Slovak, Russian\n
