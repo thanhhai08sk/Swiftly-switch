@@ -527,7 +527,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             case Showing.SHOWING_FOLDER:
                 int columCount = Math.min(currentShowing.folderItems.size(), 4);
                 int rowCount = currentShowing.folderItems.size() / 4 + 1;
-                int position1 = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, rowCount, columCount, currentShowing.grid.space, true,view.isRTL());
+                int position1 = model.getGridActivatedId(x, y, currentShowing.folderXY.x, currentShowing.folderXY.y, rowCount, columCount, currentShowing.grid.space, true,view.isRTL());
                 if (position1 >=0 && position1 <currentShowing.folderItems.size()) {
                     view.startItem(currentShowing.folderItems.get(position1), getLastApp());
                     view.hideAllExceptEdges();

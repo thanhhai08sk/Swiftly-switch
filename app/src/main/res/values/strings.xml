@@ -286,8 +286,8 @@
 
     //What new
 
-    <string name="what_new_3.1.4" translatable="false">VERSION 3.1.4:\n
-        - Fix: widget doesn't work on Kitkat\n
+    <string name="what_new_3.1.4" translatable="false">VERSION 3.1.4 &amp; 3.1.5:\n
+         - Quick fix\n
     </string>
 
     <string name="what_new_3.1.3" translatable="false">VERSION 3.1.3:\n
