@@ -336,6 +336,15 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         );
 
         addSubscription(
+                view.onStartSearchItem().subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        view.showSearchView(model.getLastSearch());
+                    }
+                })
+        );
+
+        addSubscription(
                 view.onSearch()
                         .debounce(200,TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
@@ -394,7 +403,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
     private void showGrid(Collection collection, View view) {
         currentHighlight = -1;
-        view.showGrid(collection, currentEdge.position, currentShowing);
+//        view.showGrid(collection, currentEdge.position, currentShowing);
+        view.showSearchView(model.getLastSearch());
         currentShowing.showWhat = Showing.SHOWING_GRID;
         currentShowing.grid = collection;
         currentShowing.stayOnScreen = currentShowing.grid.stayOnScreen == null ? true : currentShowing.grid.stayOnScreen;
@@ -595,8 +605,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     private void showCollection(int showWhat) {
         switch (showWhat) {
             case Showing.SHOWING_GRID:
-                view.showGrid(currentShowing.grid, currentEdge.position, currentShowing);
-
+//                view.showGrid(currentShowing.grid, currentEdge.position, currentShowing);
+                view.showSearchView(model.getLastSearch());
                 break;
             case Showing.SHOWING_CIRCLE_AND_ACTION:
                 updateCircleIconPosition();
@@ -753,7 +763,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void showBackground(boolean backgroundTouchable);
 
-        void showSearchView();
+        void showSearchView(List<Item> lastSearch);
 
         void showGrid(Collection grid, int position, Showing currentShowing);
 
@@ -822,6 +832,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         void updateSearchResult(List<Item> items);
 
         void hideKeyboard();
+
+        PublishSubject<Void> onStartSearchItem();
     }
 
     public class Showing {

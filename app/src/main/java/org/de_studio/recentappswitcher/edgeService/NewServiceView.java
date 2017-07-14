@@ -219,6 +219,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     PublishSubject<Uri> finishTakingScreenshotSJ = PublishSubject.create();
     PublishSubject<String> searchFiledSJ = PublishSubject.create();
     PublishSubject<Item> startItemFromSearchSJ = PublishSubject.create();
+    PublishSubject<Void> startSearchItemSJ = PublishSubject.create();
     boolean isFree;
     boolean isRTL;
     boolean useIndicator;
@@ -289,6 +290,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public PublishSubject<Item> onStartItemFromSearch() {
         return startItemFromSearchSJ;
+    }
+
+    @Override
+    public PublishSubject<Void> onStartSearchItem() {
+        return startSearchItemSJ;
     }
 
     @Override
@@ -1325,9 +1331,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void startItem(Item item, String lastApp) {
-        Utility.startItem(item, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.DEFAULT_CONTACT_ACTION),
-                sharedPreferences.getInt(Cons.RINGER_MODE_ACTION_KEY, Cons.RINGER_MODE_ACTION_DEFAULT),
-                onHomeScreen);
+        if (item.type.equals(Item.TYPE_ACTION) && item.action == Item.ACTION_DIAL) {
+            startSearchItemSJ.onNext(null);
+        } else {
+            Utility.startItem(item, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.DEFAULT_CONTACT_ACTION),
+                    sharedPreferences.getInt(Cons.RINGER_MODE_ACTION_KEY, Cons.RINGER_MODE_ACTION_DEFAULT),
+                    onHomeScreen);
+        }
     }
 
     @Override

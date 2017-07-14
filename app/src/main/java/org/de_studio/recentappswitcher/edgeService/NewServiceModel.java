@@ -482,13 +482,21 @@ public class NewServiceModel extends BaseModel {
         return realm.where(Item.class).contains(Cons.LABEL,title, Case.INSENSITIVE).findAll();
     }
 
-    public void addToLastSearch(Item item) {
-        Collection lastSearch = getLastSearchCollection();
-        if (lastSearch != null) {
-            if (lastSearch.items.contains(item)) {
-                lastSearch.items.move(lastSearch.items.indexOf(item), 0);
-            } else lastSearch.items.add(0, item);
-        }
+    public void addToLastSearch(final Item item) {
+        final String itemId = item.itemId;
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Collection lastSearch = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Collection.TYPE_LAST_SEARCH).findFirst();
+                Item item1 = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
+                if (lastSearch != null && item1 != null) {
+                    if (lastSearch.items.contains(item1 )) {
+                        lastSearch.items.move(lastSearch.items.indexOf(item1), 0);
+                    } else lastSearch.items.add(0, item1);
+                }
+            }
+        });
+
     }
 
     private Collection getLastSearchCollection() {
