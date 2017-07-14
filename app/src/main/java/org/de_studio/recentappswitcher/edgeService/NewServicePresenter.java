@@ -336,7 +336,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         );
 
         addSubscription(
-                view.onSearch().subscribe(new Action1<String>() {
+                view.onSearch()
+                        .debounce(200,TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
                         view.updateSearchResult(model.searchForItemsWithTitle(s));
