@@ -26,6 +26,7 @@ import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.transition.AutoTransition;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -224,6 +225,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     boolean firstSection = true;
     private ImageView screenshot;
     private ViewGroup searchView;
+    private EditText searchField;
     private ItemsAdapter searchResultAdapter;
 
     @Override
@@ -616,7 +618,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     public void updateSearchResult(List<Item> items) {
-        TransitionManager.beginDelayedTransition((searchView));
+        TransitionManager.beginDelayedTransition((searchView),new AutoTransition().setDuration(150));
         searchResultAdapter.updateData(items);
 
 
@@ -630,7 +632,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             searchResultAdapter = new ItemsAdapter(this,null,getPackageManager(),iconPack, startItemFromSearchSJ);
             resultView.setLayoutManager(new LinearLayoutManager(this));
             resultView.setAdapter(searchResultAdapter);
-            EditText searchField = ((EditText) searchView.findViewById(R.id.search_field));
+            searchField = ((EditText) searchView.findViewById(R.id.search_field));
             searchField.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -652,7 +654,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             backgroundView.addView(searchView);
         }
         searchView.setVisibility(View.VISIBLE);
-        EditText searchField = ((EditText) searchView.findViewById(R.id.search_field));
+        searchField = ((EditText) searchView.findViewById(R.id.search_field));
         searchField.requestFocus();
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(searchField, InputMethodManager.SHOW_FORCED);
@@ -661,11 +663,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        EditText searchField = ((EditText) searchView.findViewById(R.id.search_field));
-        IBinder iBinder = searchField.getWindowToken();
-        if (iBinder != null) {
-            imm.hideSoftInputFromWindow(iBinder, 0);
+        if (searchField != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            IBinder iBinder = searchField.getWindowToken();
+            if (iBinder != null) {
+                imm.hideSoftInputFromWindow(iBinder, 0);
+            }
         }
     }
 
@@ -1382,6 +1385,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             for (String collectionId : collectionIds) {
 //            Log.e(TAG, "hideAllCollections: hide " + collectionId);
                 collectionViewsMap.get(collectionId).setVisibility(View.GONE);
+            }
+            if (searchView != null) {
+                searchView.setVisibility(View.GONE);
+                if (searchField != null) {
+                    searchField.setText("");
+                }
+                hideKeyboard();
             }
         }
     }
