@@ -482,6 +482,38 @@ public class NewServiceModel extends BaseModel {
         return realm.where(Item.class).contains(Cons.LABEL,title, Case.INSENSITIVE).findAll();
     }
 
+    public void addToLastSearch(Item item) {
+        Collection lastSearch = getLastSearchCollection();
+        if (lastSearch != null) {
+            if (lastSearch.items.contains(item)) {
+                lastSearch.items.move(lastSearch.items.indexOf(item), 0);
+            } else lastSearch.items.add(0, item);
+        }
+    }
+
+    private Collection getLastSearchCollection() {
+        return realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Collection.TYPE_LAST_SEARCH).findFirst();
+    }
+
+    public List<Item> getLastSearch() {
+        Collection lastSearch = getLastSearchCollection();
+        if (lastSearch != null) {
+            return lastSearch.items;
+        } else {
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Collection collection = new Collection();
+                    collection.type = Collection.TYPE_LAST_SEARCH;
+                    collection.collectionId = Collection.TYPE_LAST_SEARCH;
+                    collection.label = "LastSearch";
+                    realm.insertOrUpdate(collection);
+                }
+            });
+            return new ArrayList<>();
+        }
+    }
+
     public class IconsXY {
         float[] xs;
         float[] ys;

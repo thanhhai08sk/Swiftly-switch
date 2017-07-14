@@ -356,6 +356,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         slot.stage1Item = item;
                         startSlotSJ.onNext(slot);
                         view.hideKeyboard();
+                        model.addToLastSearch(item);
                     }
                 })
         );

@@ -14,6 +14,7 @@ public class Collection extends RealmObject {
     public static final String TYPE_QUICK_ACTION = "quickAction_";
     public static final String TYPE_GRID_FAVORITE = "gridFavorite_";
     public static final String TYPE_BLACK_LIST = "blackList_";
+    public static final String TYPE_LAST_SEARCH = "lastSearch";
     public static final int POSITION_TRIGGER = 0;
     public static final int POSITION_CENTER = 1;
     public static final int LONG_CLICK_MODE_NONE = 1;
@@ -29,7 +30,7 @@ public class Collection extends RealmObject {
     public String collectionId;  // collectionType_number, numbers start from 1
     public String label;
     public RealmList<Slot> slots;
-    public RealmList<Item> items; //For blacklist
+    public RealmList<Item> items; //For blacklist or lastSearch
     public int longClickMode;
     public Collection longPressCollection;
     public int rowsCount;

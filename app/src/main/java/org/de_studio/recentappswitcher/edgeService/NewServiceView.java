@@ -60,6 +60,7 @@ import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MyApplication;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.base.ServiceSlotAdapter;
 import org.de_studio.recentappswitcher.base.adapter.ItemsAdapter;
 import org.de_studio.recentappswitcher.base.adapter.ServiceItemsAdapter;
 import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
@@ -624,12 +625,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     }
 
-    public void showSearchView() {
+    public void showSearchView(List<Item> lastSearchItems) {
         if (searchView == null) {
             searchView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.search_shortcut_view, backgroundView, false);
             searchView.setId(545454);
             RecyclerView resultView = (RecyclerView) searchView.findViewById(R.id.search_result);
-            searchResultAdapter = new ItemsAdapter(this,null,getPackageManager(),iconPack, startItemFromSearchSJ);
+            searchResultAdapter = new ItemsAdapter(this,lastSearchItems,getPackageManager(),iconPack, startItemFromSearchSJ);
             resultView.setLayoutManager(new LinearLayoutManager(this));
             resultView.setAdapter(searchResultAdapter);
             searchField = ((EditText) searchView.findViewById(R.id.search_field));
@@ -674,101 +675,100 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void showGrid(final Collection grid, final int position, final NewServicePresenter.Showing currentShowing) {
-        showSearchView();
-//        if (grid != null) {
-////            Log.e(TAG, "showGrid: label " + grid.label);
-//        } else {
-//            Log.e(TAG, "showGrid: grid null");
-//            return;
-//        }
-//        if (collectionViewsMap.get(grid.collectionId) == null) {
-//            RecyclerView gridView = new RecyclerView(this);
-//            gridView.setItemAnimator(null);
-//            gridView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//            ServiceSlotAdapter adapter = new ServiceSlotAdapter(this, grid.slots, true, iconPack, mScale, iconScale);
-//            gridView.setLayoutManager(new GridLayoutManager(this, grid.columnCount));
-//            gridView.setAdapter(adapter);
-//            gridView.setId(getCollectionResId(grid));
-//            gridView.addItemDecoration(new GridSpacingItemDecoration((int) (grid.space * mScale)));
-//            collectionViewsMap.put(grid.collectionId, gridView);
-//        }
-//        final RecyclerView recyclerView = (RecyclerView) collectionViewsMap.get(grid.collectionId);
-//        boolean needDelay = false;
-//        if (backgroundView.findViewById(getCollectionResId(grid)) == null) {
-////            recyclerView.setClickable(true);
-////            recyclerView.setFocusable(true);
-//            Log.e(TAG, "showGrid: add grid to background");
-//            backgroundView.addView(recyclerView);
-//            needDelay = true;
-//        }
-////        hideAllCollections();
-//
-//        if (needDelay) {
-//            recyclerView.setVisibility(View.INVISIBLE);
-//            Handler handlerClose = new Handler();
-//            handlerClose.postDelayed(new Runnable() {
-//                public void run() {
-//                    hideAllCollections();
-//                    recyclerView.setVisibility(View.VISIBLE);
-//                    Utility.setFavoriteGridViewPosition(recyclerView
-//                            , grid.position == Collection.POSITION_CENTER
-//                            , recyclerView.getHeight()
-//                            , recyclerView.getWidth()
-//                            , currentShowing.xInit, currentShowing.yInit
-//                            , mScale
-//                            , position
-//                            , windowManager
-//                            , grid.marginHorizontal
-//                            , grid.marginVertical
-//                            , getWindowSize());
-//                    currentShowing.gridXY.x = (int) recyclerView.getX();
-//                    currentShowing.gridXY.y = (int) recyclerView.getY();
-//                    recyclerView.setAlpha(1f);
-//                    ((ServiceSlotAdapter) recyclerView.getAdapter()).updateIconsState();
-//                }
-//            }, 20);
-//        } else {
-//            Utility.setFavoriteGridViewPosition(recyclerView
-//                    , grid.position == Collection.POSITION_CENTER
-//                    , recyclerView.getHeight()
-//                    , recyclerView.getWidth()
-//                    , currentShowing.xInit, currentShowing.yInit
-//                    , mScale
-//                    , position
-//                    , windowManager
-//                    , grid.marginHorizontal
-//                    , grid.marginVertical,
-//                    getWindowSize());
-//            recyclerView.setVisibility(View.VISIBLE);
-//            ((ServiceSlotAdapter) recyclerView.getAdapter()).updateIconsState();
-//            View child;
-//            float childCenterX;
-//            float childCenterY;
-//            float halfIcon = 24 * mScale;
-//            float centerX = recyclerView.getWidth()/2;
-//            float centerY = recyclerView.getHeight()/2;
-//
-//            if (useAnimation) {
-//                for (int i = 0; i < recyclerView.getChildCount(); i++) {
-//                    child = recyclerView.getChildAt(i);
-//                    childCenterX = child.getX() + halfIcon;
-//                    childCenterY = child.getY() + halfIcon;
-//                    child.setTranslationY((childCenterY - centerY)/2);
-//                    child.setTranslationX((childCenterX - centerX)/2);
-//                    child.setAlpha(0f);
-//                    child.animate().translationY(0)
-//                            .translationX(0)
-//                            .alpha(1f)
-//                            .setInterpolator(new DecelerateInterpolator(3f))
-//                            .setDuration(animationTime)
-//                            .setStartDelay(animationTime)
-//                            .start();
-//                }
-//            }
-//
-//            currentShowing.gridXY.x = (int) recyclerView.getX();
-//            currentShowing.gridXY.y = (int) recyclerView.getY();
-//        }
+        if (grid != null) {
+//            Log.e(TAG, "showGrid: label " + grid.label);
+        } else {
+            Log.e(TAG, "showGrid: grid null");
+            return;
+        }
+        if (collectionViewsMap.get(grid.collectionId) == null) {
+            RecyclerView gridView = new RecyclerView(this);
+            gridView.setItemAnimator(null);
+            gridView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ServiceSlotAdapter adapter = new ServiceSlotAdapter(this, grid.slots, true, iconPack, mScale, iconScale);
+            gridView.setLayoutManager(new GridLayoutManager(this, grid.columnCount));
+            gridView.setAdapter(adapter);
+            gridView.setId(getCollectionResId(grid));
+            gridView.addItemDecoration(new GridSpacingItemDecoration((int) (grid.space * mScale)));
+            collectionViewsMap.put(grid.collectionId, gridView);
+        }
+        final RecyclerView recyclerView = (RecyclerView) collectionViewsMap.get(grid.collectionId);
+        boolean needDelay = false;
+        if (backgroundView.findViewById(getCollectionResId(grid)) == null) {
+//            recyclerView.setClickable(true);
+//            recyclerView.setFocusable(true);
+            Log.e(TAG, "showGrid: add grid to background");
+            backgroundView.addView(recyclerView);
+            needDelay = true;
+        }
+//        hideAllCollections();
+
+        if (needDelay) {
+            recyclerView.setVisibility(View.INVISIBLE);
+            Handler handlerClose = new Handler();
+            handlerClose.postDelayed(new Runnable() {
+                public void run() {
+                    hideAllCollections();
+                    recyclerView.setVisibility(View.VISIBLE);
+                    Utility.setFavoriteGridViewPosition(recyclerView
+                            , grid.position == Collection.POSITION_CENTER
+                            , recyclerView.getHeight()
+                            , recyclerView.getWidth()
+                            , currentShowing.xInit, currentShowing.yInit
+                            , mScale
+                            , position
+                            , windowManager
+                            , grid.marginHorizontal
+                            , grid.marginVertical
+                            , getWindowSize());
+                    currentShowing.gridXY.x = (int) recyclerView.getX();
+                    currentShowing.gridXY.y = (int) recyclerView.getY();
+                    recyclerView.setAlpha(1f);
+                    ((ServiceSlotAdapter) recyclerView.getAdapter()).updateIconsState();
+                }
+            }, 20);
+        } else {
+            Utility.setFavoriteGridViewPosition(recyclerView
+                    , grid.position == Collection.POSITION_CENTER
+                    , recyclerView.getHeight()
+                    , recyclerView.getWidth()
+                    , currentShowing.xInit, currentShowing.yInit
+                    , mScale
+                    , position
+                    , windowManager
+                    , grid.marginHorizontal
+                    , grid.marginVertical,
+                    getWindowSize());
+            recyclerView.setVisibility(View.VISIBLE);
+            ((ServiceSlotAdapter) recyclerView.getAdapter()).updateIconsState();
+            View child;
+            float childCenterX;
+            float childCenterY;
+            float halfIcon = 24 * mScale;
+            float centerX = recyclerView.getWidth()/2;
+            float centerY = recyclerView.getHeight()/2;
+
+            if (useAnimation) {
+                for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                    child = recyclerView.getChildAt(i);
+                    childCenterX = child.getX() + halfIcon;
+                    childCenterY = child.getY() + halfIcon;
+                    child.setTranslationY((childCenterY - centerY)/2);
+                    child.setTranslationX((childCenterX - centerX)/2);
+                    child.setAlpha(0f);
+                    child.animate().translationY(0)
+                            .translationX(0)
+                            .alpha(1f)
+                            .setInterpolator(new DecelerateInterpolator(3f))
+                            .setDuration(animationTime)
+                            .setStartDelay(animationTime)
+                            .start();
+                }
+            }
+
+            currentShowing.gridXY.x = (int) recyclerView.getX();
+            currentShowing.gridXY.y = (int) recyclerView.getY();
+        }
 
     }
 
