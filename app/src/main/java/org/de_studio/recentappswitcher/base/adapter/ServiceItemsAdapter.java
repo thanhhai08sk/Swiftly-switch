@@ -19,7 +19,7 @@ import io.realm.OrderedRealmCollection;
  * Created by HaiNguyen on 1/7/17.
  */
 
-public class ServiceItemsAdapter extends ItemsAdapter {
+public class ServiceItemsAdapter extends ItemsRealmAdapter {
     float mScale, iconScale;
     public ServiceItemsAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<Item> data, boolean autoUpdate, PackageManager packageManager, IconPackManager.IconPack iconPack, float mScale, float iconScale) {
         super(context, data, autoUpdate, packageManager, iconPack, Cons.ITEM_TYPE_ICON_ONLY);

@@ -26,6 +26,7 @@ import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -279,6 +280,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public PublishSubject<Uri> onFinishTakingScreenshot() {
         return finishTakingScreenshotSJ;
+    }
+
+    @Override
+    public PublishSubject<String> onSearch() {
+        return searchFiledSJ;
     }
 
     private void inject() {
@@ -604,9 +610,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     public void updateSearchResult(List<Item> items) {
+        TransitionManager.beginDelayedTransition(((ViewGroup) collectionViewsMap.get("search_view")));
         searchResultAdapter.updateData(items);
-
-
 
 
     }
@@ -617,7 +622,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             collectionViewsMap.put("search_view", searchView);
             searchView.setId(545454);
             RecyclerView resultView = (RecyclerView) searchView.findViewById(R.id.search_result);
-            searchResultAdapter = new ItemsAdapter(this, null, false, getPackageManager(), iconPack, Cons.ITEM_TYPE_ICON_LABEL);
+            searchResultAdapter = new ItemsAdapter(this,null,getPackageManager(),iconPack);
             resultView.setLayoutManager(new LinearLayoutManager(this));
             resultView.setAdapter(searchResultAdapter);
             EditText searchField = ((EditText) searchView.findViewById(R.id.search_field));

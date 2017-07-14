@@ -15,6 +15,7 @@ import org.de_studio.recentappswitcher.ui.QuickActionsView;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
@@ -478,7 +479,7 @@ public class NewServiceModel extends BaseModel {
     }
 
     public List<Item> searchForItemsWithTitle(String title) {
-        return realm.where(Item.class).contains(Cons.LABEL,title).findAll();
+        return realm.where(Item.class).contains(Cons.LABEL,title, Case.INSENSITIVE).findAll();
     }
 
     public class IconsXY {

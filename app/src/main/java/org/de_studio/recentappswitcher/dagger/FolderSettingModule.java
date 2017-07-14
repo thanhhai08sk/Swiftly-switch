@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackManager;
-import org.de_studio.recentappswitcher.base.adapter.ItemsAdapter;
+import org.de_studio.recentappswitcher.base.adapter.ItemsRealmAdapter;
 import org.de_studio.recentappswitcher.folderSetting.FolderSettingModel;
 import org.de_studio.recentappswitcher.folderSetting.FolderSettingPresenter;
 import org.de_studio.recentappswitcher.folderSetting.FolderSettingView;
@@ -41,8 +41,8 @@ public class FolderSettingModule {
 
     @Provides
     @Singleton
-    ItemsAdapter adapter(@Nullable IconPackManager.IconPack iconPack) {
-        return new ItemsAdapter(view, null, true, view.getPackageManager(), iconPack, Cons.ITEM_TYPE_ICON_LABEL);
+    ItemsRealmAdapter adapter(@Nullable IconPackManager.IconPack iconPack) {
+        return new ItemsRealmAdapter(view, null, true, view.getPackageManager(), iconPack, Cons.ITEM_TYPE_ICON_LABEL);
     }
 
 

@@ -19,7 +19,7 @@ import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.DragAndDropCallback;
 import org.de_studio.recentappswitcher.base.OnDialogClosed;
-import org.de_studio.recentappswitcher.base.adapter.ItemsAdapter;
+import org.de_studio.recentappswitcher.base.adapter.ItemsRealmAdapter;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerFolderSettingComponent;
 import org.de_studio.recentappswitcher.dagger.FolderSettingModule;
@@ -52,7 +52,7 @@ public class FolderSettingView extends BaseActivity<Void, FolderSettingPresenter
     ImageButton deleteButton;
 
     @Inject
-    ItemsAdapter adapter;
+    ItemsRealmAdapter adapter;
     @Nullable
     @Inject
     IconPackManager.IconPack iconPack;

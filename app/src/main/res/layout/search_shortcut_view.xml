@@ -4,14 +4,20 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     android:layout_marginTop="48dp"
-    android:background="@drawable/background_search_view"
     android:padding="16dp"
+    android:background="@drawable/background_search_view"
+
+
+
     >
     <EditText
         android:id="@+id/search_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="search shortcut"
+        android:textColorHint="@color/text_secondary_dark"
+        android:textColor="@color/text_primary_dark"
+
         />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/search_result"
