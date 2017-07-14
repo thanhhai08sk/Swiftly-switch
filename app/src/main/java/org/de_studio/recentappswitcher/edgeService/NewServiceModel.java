@@ -13,6 +13,7 @@ import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.ui.QuickActionsView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -474,6 +475,10 @@ public class NewServiceModel extends BaseModel {
             }
         }
         return backgroundTouchable;
+    }
+
+    public List<Item> searchForItemsWithTitle(String title) {
+        return realm.where(Item.class).contains(Cons.LABEL,title).findAll();
     }
 
     public class IconsXY {

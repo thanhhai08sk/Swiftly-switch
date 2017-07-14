@@ -133,7 +133,7 @@ public  class Utility {
                                                    Point windowSize) {
 //        Log.e(TAG, "setFavoriteGridViewPosition: width " + gridWide + "\ntall " + gridTall + "\nxInit " + xInit + "\nyInit " + yInit +
 //                "\noffsetHorizontal " + distanceFromEdgeDp + "\noffsetVertical " + distanceVertical);
-        long time = System.currentTimeMillis();
+//        long time = System.currentTimeMillis();
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
         float distanceVerticalFromEdge = ((float)distanceVertical)* mScale;
         Point point = new Point();
@@ -215,7 +215,7 @@ public  class Utility {
             gridView.setY((screenHeight-gridTall)/2);
         }
 
-        Log.e(TAG, "setFavoriteGridViewPosition: time spent = " + (System.currentTimeMillis() - time));
+//        Log.e(TAG, "setFavoriteGridViewPosition: time spent = " + (System.currentTimeMillis() - time));
     }
 
 

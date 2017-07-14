@@ -20,6 +20,6 @@ public class MyFrameLayout extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return true;
+        return super.onInterceptTouchEvent(ev);
     }
 }

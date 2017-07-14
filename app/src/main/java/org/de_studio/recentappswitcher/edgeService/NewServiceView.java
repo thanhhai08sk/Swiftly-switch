@@ -32,16 +32,22 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -52,7 +58,7 @@ import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MyApplication;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
-import org.de_studio.recentappswitcher.base.ServiceSlotAdapter;
+import org.de_studio.recentappswitcher.base.adapter.ItemsAdapter;
 import org.de_studio.recentappswitcher.base.adapter.ServiceItemsAdapter;
 import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
 import org.de_studio.recentappswitcher.dadaSetup.DataSetupService;
@@ -115,7 +121,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
     static final int WINDOW_FLAG_TOUCHABLE =
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+//                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
 
     WindowManager.LayoutParams WINDOW_PARAMS_NO_TOUCH =new WindowManager.LayoutParams(
@@ -208,12 +214,15 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     private GestureDetectorCompat backgroundGestureDetector;
     PublishSubject<Boolean> enterOrExitFullScreenSJ = PublishSubject.create();
     PublishSubject<Uri> finishTakingScreenshotSJ = PublishSubject.create();
+    PublishSubject<String> searchFiledSJ = PublishSubject.create();
     boolean isFree;
     boolean isRTL;
     boolean useIndicator;
     boolean onHomeScreen;
     boolean firstSection = true;
     private ImageView screenshot;
+    private ViewGroup searchView;
+    private ItemsAdapter searchResultAdapter;
 
     @Override
     public void onCreate() {
@@ -500,6 +509,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             backgroundGestureDetector = new GestureDetectorCompat(this,this);
             backgroundView.setAlpha(1f);
             backgroundView.setVisibility(View.VISIBLE);
+
             backgroundView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -593,101 +603,150 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         }
     }
 
+    public void updateSearchResult(List<Item> items) {
+        searchResultAdapter.updateData(items);
+
+
+
+
+    }
+
+    public void showSearchView() {
+        if (collectionViewsMap.get("search_view") == null) {
+            ViewGroup searchView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.search_shortcut_view, backgroundView, false);
+            collectionViewsMap.put("search_view", searchView);
+            searchView.setId(545454);
+            RecyclerView resultView = (RecyclerView) searchView.findViewById(R.id.search_result);
+            searchResultAdapter = new ItemsAdapter(this, null, false, getPackageManager(), iconPack, Cons.ITEM_TYPE_ICON_LABEL);
+            resultView.setLayoutManager(new LinearLayoutManager(this));
+            resultView.setAdapter(searchResultAdapter);
+            EditText searchField = ((EditText) searchView.findViewById(R.id.search_field));
+            searchField.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    searchFiledSJ.onNext(s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+        }
+        ViewGroup searchView = (ViewGroup) collectionViewsMap.get("search_view");
+        if (backgroundView.findViewById(545454) == null) {
+            backgroundView.addView(searchView);
+        }
+        searchView.setVisibility(View.VISIBLE);
+        EditText searchField = ((EditText) searchView.findViewById(R.id.search_field));
+        searchField.requestFocus();
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(searchField, InputMethodManager.SHOW_FORCED);
+
+    }
+
     @Override
     public void showGrid(final Collection grid, final int position, final NewServicePresenter.Showing currentShowing) {
-        if (grid != null) {
-            Log.e(TAG, "showGrid: label " + grid.label);
-        } else {
-            Log.e(TAG, "showGrid: grid null");
-            return;
-        }
-        if (collectionViewsMap.get(grid.collectionId) == null) {
-            RecyclerView gridView = new RecyclerView(this);
-            gridView.setItemAnimator(null);
-            gridView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ServiceSlotAdapter adapter = new ServiceSlotAdapter(this, grid.slots, true, iconPack, mScale, iconScale);
-            gridView.setLayoutManager(new GridLayoutManager(this, grid.columnCount));
-            gridView.setAdapter(adapter);
-            gridView.setId(getCollectionResId(grid));
-            gridView.addItemDecoration(new GridSpacingItemDecoration((int) (grid.space * mScale)));
-            collectionViewsMap.put(grid.collectionId, gridView);
-        }
-        final RecyclerView recyclerView = (RecyclerView) collectionViewsMap.get(grid.collectionId);
-        boolean needDelay = false;
-        if (backgroundView.findViewById(getCollectionResId(grid)) == null) {
-            recyclerView.setClickable(false);
-            recyclerView.setFocusable(false);
-            backgroundView.addView(recyclerView);
-            needDelay = true;
-        }
-//        hideAllCollections();
-
-        if (needDelay) {
-            recyclerView.setVisibility(View.INVISIBLE);
-            Handler handlerClose = new Handler();
-            handlerClose.postDelayed(new Runnable() {
-                public void run() {
-                    hideAllCollections();
-                    recyclerView.setVisibility(View.VISIBLE);
-                    Utility.setFavoriteGridViewPosition(recyclerView
-                            , grid.position == Collection.POSITION_CENTER
-                            , recyclerView.getHeight()
-                            , recyclerView.getWidth()
-                            , currentShowing.xInit, currentShowing.yInit
-                            , mScale
-                            , position
-                            , windowManager
-                            , grid.marginHorizontal
-                            , grid.marginVertical
-                            , getWindowSize());
-                    currentShowing.gridXY.x = (int) recyclerView.getX();
-                    currentShowing.gridXY.y = (int) recyclerView.getY();
-                    recyclerView.setAlpha(1f);
-                    ((ServiceSlotAdapter) recyclerView.getAdapter()).updateIconsState();
-                }
-            }, 20);
-        } else {
-            Utility.setFavoriteGridViewPosition(recyclerView
-                    , grid.position == Collection.POSITION_CENTER
-                    , recyclerView.getHeight()
-                    , recyclerView.getWidth()
-                    , currentShowing.xInit, currentShowing.yInit
-                    , mScale
-                    , position
-                    , windowManager
-                    , grid.marginHorizontal
-                    , grid.marginVertical,
-                    getWindowSize());
-            recyclerView.setVisibility(View.VISIBLE);
-            ((ServiceSlotAdapter) recyclerView.getAdapter()).updateIconsState();
-            View child;
-            float childCenterX;
-            float childCenterY;
-            float halfIcon = 24 * mScale;
-            float centerX = recyclerView.getWidth()/2;
-            float centerY = recyclerView.getHeight()/2;
-
-            if (useAnimation) {
-                for (int i = 0; i < recyclerView.getChildCount(); i++) {
-                    child = recyclerView.getChildAt(i);
-                    childCenterX = child.getX() + halfIcon;
-                    childCenterY = child.getY() + halfIcon;
-                    child.setTranslationY((childCenterY - centerY)/2);
-                    child.setTranslationX((childCenterX - centerX)/2);
-                    child.setAlpha(0f);
-                    child.animate().translationY(0)
-                            .translationX(0)
-                            .alpha(1f)
-                            .setInterpolator(new DecelerateInterpolator(3f))
-                            .setDuration(animationTime)
-                            .setStartDelay(animationTime)
-                            .start();
-                }
-            }
-
-            currentShowing.gridXY.x = (int) recyclerView.getX();
-            currentShowing.gridXY.y = (int) recyclerView.getY();
-        }
+        showSearchView();
+//        if (grid != null) {
+////            Log.e(TAG, "showGrid: label " + grid.label);
+//        } else {
+//            Log.e(TAG, "showGrid: grid null");
+//            return;
+//        }
+//        if (collectionViewsMap.get(grid.collectionId) == null) {
+//            RecyclerView gridView = new RecyclerView(this);
+//            gridView.setItemAnimator(null);
+//            gridView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//            ServiceSlotAdapter adapter = new ServiceSlotAdapter(this, grid.slots, true, iconPack, mScale, iconScale);
+//            gridView.setLayoutManager(new GridLayoutManager(this, grid.columnCount));
+//            gridView.setAdapter(adapter);
+//            gridView.setId(getCollectionResId(grid));
+//            gridView.addItemDecoration(new GridSpacingItemDecoration((int) (grid.space * mScale)));
+//            collectionViewsMap.put(grid.collectionId, gridView);
+//        }
+//        final RecyclerView recyclerView = (RecyclerView) collectionViewsMap.get(grid.collectionId);
+//        boolean needDelay = false;
+//        if (backgroundView.findViewById(getCollectionResId(grid)) == null) {
+////            recyclerView.setClickable(true);
+////            recyclerView.setFocusable(true);
+//            Log.e(TAG, "showGrid: add grid to background");
+//            backgroundView.addView(recyclerView);
+//            needDelay = true;
+//        }
+////        hideAllCollections();
+//
+//        if (needDelay) {
+//            recyclerView.setVisibility(View.INVISIBLE);
+//            Handler handlerClose = new Handler();
+//            handlerClose.postDelayed(new Runnable() {
+//                public void run() {
+//                    hideAllCollections();
+//                    recyclerView.setVisibility(View.VISIBLE);
+//                    Utility.setFavoriteGridViewPosition(recyclerView
+//                            , grid.position == Collection.POSITION_CENTER
+//                            , recyclerView.getHeight()
+//                            , recyclerView.getWidth()
+//                            , currentShowing.xInit, currentShowing.yInit
+//                            , mScale
+//                            , position
+//                            , windowManager
+//                            , grid.marginHorizontal
+//                            , grid.marginVertical
+//                            , getWindowSize());
+//                    currentShowing.gridXY.x = (int) recyclerView.getX();
+//                    currentShowing.gridXY.y = (int) recyclerView.getY();
+//                    recyclerView.setAlpha(1f);
+//                    ((ServiceSlotAdapter) recyclerView.getAdapter()).updateIconsState();
+//                }
+//            }, 20);
+//        } else {
+//            Utility.setFavoriteGridViewPosition(recyclerView
+//                    , grid.position == Collection.POSITION_CENTER
+//                    , recyclerView.getHeight()
+//                    , recyclerView.getWidth()
+//                    , currentShowing.xInit, currentShowing.yInit
+//                    , mScale
+//                    , position
+//                    , windowManager
+//                    , grid.marginHorizontal
+//                    , grid.marginVertical,
+//                    getWindowSize());
+//            recyclerView.setVisibility(View.VISIBLE);
+//            ((ServiceSlotAdapter) recyclerView.getAdapter()).updateIconsState();
+//            View child;
+//            float childCenterX;
+//            float childCenterY;
+//            float halfIcon = 24 * mScale;
+//            float centerX = recyclerView.getWidth()/2;
+//            float centerY = recyclerView.getHeight()/2;
+//
+//            if (useAnimation) {
+//                for (int i = 0; i < recyclerView.getChildCount(); i++) {
+//                    child = recyclerView.getChildAt(i);
+//                    childCenterX = child.getX() + halfIcon;
+//                    childCenterY = child.getY() + halfIcon;
+//                    child.setTranslationY((childCenterY - centerY)/2);
+//                    child.setTranslationX((childCenterX - centerX)/2);
+//                    child.setAlpha(0f);
+//                    child.animate().translationY(0)
+//                            .translationX(0)
+//                            .alpha(1f)
+//                            .setInterpolator(new DecelerateInterpolator(3f))
+//                            .setDuration(animationTime)
+//                            .setStartDelay(animationTime)
+//                            .start();
+//                }
+//            }
+//
+//            currentShowing.gridXY.x = (int) recyclerView.getX();
+//            currentShowing.gridXY.y = (int) recyclerView.getY();
+//        }
 
     }
 
@@ -1406,8 +1465,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        Log.e(TAG, "onSingleTapUp: ");
-        presenter.onClickBackground(getXCord(e), getYCord(e));
+//        presenter.onClickBackground(getXCord(e), getYCord(e));
         return false;
     }
 

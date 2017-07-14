@@ -18,6 +18,7 @@ import org.de_studio.recentappswitcher.model.Item;
 import org.de_studio.recentappswitcher.model.Slot;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.realm.RealmList;
@@ -138,7 +139,6 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 showCollectionInstantlySubject.subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        Log.e(TAG, "call: showCollectionInstantly");
                         Collection collection = model.getCollection(s);
                         switch (collection.type) {
                             case Collection.TYPE_GRID_FAVORITE:
@@ -278,7 +278,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 onGivingPermissionSJ.subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        Log.e(TAG, "call: pause for 10 second");
+//                        Log.e(TAG, "call: pause for 10 second");
                         view.removeEdgeViews();
                         finishSectionSJ.onNext(null);
                         handler.postDelayed(pause10SecondRunnable, 10000);
@@ -307,7 +307,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                                         showCollectionInstantlySubject.onNext(slot.stage1Item.collectionId);
                                     } else {
                                         String lastApp = getLastApp();
-                                        Log.e(TAG, "call: lastapp = " + lastApp);
+//                                        Log.e(TAG, "call: lastapp = " + lastApp);
                                         view.startItem(slot.stage1Item, lastApp);
                                         finishSectionSJ.onNext(null);
                                     }
@@ -331,6 +331,15 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     public void call(Uri uri) {
 //                        view.openFile(uri);
                         view.showScreenshotReadyButton(uri);
+                    }
+                })
+        );
+
+        addSubscription(
+                view.onSearch().subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        view.updateSearchResult(model.searchForItemsWithTitle(s));
                     }
                 })
         );
@@ -432,14 +441,14 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     }
 
     public void onActionUp(float x, float y) {
-        Log.e(TAG, "onActionUp: currentHighlight = " + currentHighlight);
+//        Log.e(TAG, "onActionUp: currentHighlight = " + currentHighlight);
         onHolding = false;
         Slot slot = null;
         switch (currentShowing.showWhat) {
             case Showing.SHOWING_CIRCLE_AND_ACTION:
                 if (currentHighlight >= 0) {
                     if (currentHighlight < 10) {
-                        Log.e(TAG, "onActionUp: size = " + currentShowing.circleSlots.size() + "\nhighlight " + currentHighlight);
+//                        Log.e(TAG, "onActionUp: size = " + currentShowing.circleSlots.size() + "\nhighlight " + currentHighlight);
                         if (currentShowing.circleSlots.size() > currentHighlight) {
                             slot = currentShowing.circleSlots.get(currentHighlight);
                         }
@@ -542,7 +551,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 break;
             case Showing.SHOWING_CIRCLE_AND_ACTION:
                 int onPosition1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(), true, currentShowing.action.slots.size(),true);
-                Log.e(TAG, "onClickBackground: circle and action, position = " + onPosition1);
+//                Log.e(TAG, "onClickBackground: circle and action, position = " + onPosition1);
                 if (onPosition1 != -1) {
                     if (onPosition1 < 10) {
                         startSlotSJ.onNext(currentShowing.circleSlots.get(onPosition1));
@@ -554,7 +563,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 break;
             case Showing.SHOWING_CIRCLE_ONLY:
                 int onPosition2 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(), true, currentShowing.action.slots.size(),true);
-                Log.e(TAG, "onClickBackground: circle only, position = " + onPosition2);
+//                Log.e(TAG, "onClickBackground: circle only, position = " + onPosition2);
                 if (onPosition2 != -1) {
                     if (onPosition2 < 10) {
                         startSlotSJ.onNext(currentShowing.circleSlots.get(onPosition2));
@@ -570,6 +579,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         switch (showWhat) {
             case Showing.SHOWING_GRID:
                 view.showGrid(currentShowing.grid, currentEdge.position, currentShowing);
+
                 break;
             case Showing.SHOWING_CIRCLE_AND_ACTION:
                 updateCircleIconPosition();
@@ -710,6 +720,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         PublishSubject<Uri> onFinishTakingScreenshot();
 
+        PublishSubject<String> onSearch();
+
         void addEdgesToWindowAndSetListener();
 
         void setupNotification();
@@ -721,6 +733,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         ArrayList<String> getRecentApp(long timeInterval);
 
         void showBackground(boolean backgroundTouchable);
+
+        void showSearchView();
 
         void showGrid(Collection grid, int position, Showing currentShowing);
 
@@ -786,6 +800,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void openFile(Uri uri);
 
+        void updateSearchResult(List<Item> items);
     }
 
     public class Showing {
