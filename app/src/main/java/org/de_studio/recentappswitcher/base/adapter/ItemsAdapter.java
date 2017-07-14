@@ -14,7 +14,6 @@ import org.de_studio.recentappswitcher.model.Item;
 
 import java.util.List;
 
-import rx.Observable;
 import rx.subjects.PublishSubject;
 
 /**
@@ -26,13 +25,15 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsRealmAdapter.ViewHol
     List<Item> data;
     PackageManager packageManager;
     IconPackManager.IconPack iconPack;
-    PublishSubject<Item> itemClickSJ = PublishSubject.create();
+    PublishSubject<Item> itemClickSJ;
 
-    public ItemsAdapter(Context context, List<Item> data, PackageManager packageManager, IconPackManager.IconPack iconPack) {
+    public ItemsAdapter(Context context, List<Item> data, PackageManager packageManager, IconPackManager.IconPack iconPack, PublishSubject<Item> itemClickSJ) {
+        this.itemClickSJ = itemClickSJ;
         this.context = context;
         this.data = data;
         this.packageManager = packageManager;
         this.iconPack = iconPack;
+
     }
 
     @Override
@@ -67,9 +68,5 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsRealmAdapter.ViewHol
             return 0;
         }
         return data.size();
-    }
-
-    public Observable<Item> onItemClick() {
-        return itemClickSJ.asObservable();
     }
 }

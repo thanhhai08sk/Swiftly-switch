@@ -216,6 +216,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     PublishSubject<Boolean> enterOrExitFullScreenSJ = PublishSubject.create();
     PublishSubject<Uri> finishTakingScreenshotSJ = PublishSubject.create();
     PublishSubject<String> searchFiledSJ = PublishSubject.create();
+    PublishSubject<Item> startItemFromSearchSJ = PublishSubject.create();
     boolean isFree;
     boolean isRTL;
     boolean useIndicator;
@@ -280,6 +281,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public PublishSubject<Uri> onFinishTakingScreenshot() {
         return finishTakingScreenshotSJ;
+    }
+
+    @Override
+    public PublishSubject<Item> onStartItemFromSearch() {
+        return startItemFromSearchSJ;
     }
 
     @Override
@@ -610,19 +616,18 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     public void updateSearchResult(List<Item> items) {
-        TransitionManager.beginDelayedTransition(((ViewGroup) collectionViewsMap.get("search_view")));
+        TransitionManager.beginDelayedTransition((searchView));
         searchResultAdapter.updateData(items);
 
 
     }
 
     public void showSearchView() {
-        if (collectionViewsMap.get("search_view") == null) {
-            ViewGroup searchView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.search_shortcut_view, backgroundView, false);
-            collectionViewsMap.put("search_view", searchView);
+        if (searchView == null) {
+            searchView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.search_shortcut_view, backgroundView, false);
             searchView.setId(545454);
             RecyclerView resultView = (RecyclerView) searchView.findViewById(R.id.search_result);
-            searchResultAdapter = new ItemsAdapter(this,null,getPackageManager(),iconPack);
+            searchResultAdapter = new ItemsAdapter(this,null,getPackageManager(),iconPack, startItemFromSearchSJ);
             resultView.setLayoutManager(new LinearLayoutManager(this));
             resultView.setAdapter(searchResultAdapter);
             EditText searchField = ((EditText) searchView.findViewById(R.id.search_field));
@@ -643,7 +648,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 }
             });
         }
-        ViewGroup searchView = (ViewGroup) collectionViewsMap.get("search_view");
         if (backgroundView.findViewById(545454) == null) {
             backgroundView.addView(searchView);
         }
@@ -653,6 +657,16 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(searchField, InputMethodManager.SHOW_FORCED);
 
+    }
+
+    @Override
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        EditText searchField = ((EditText) searchView.findViewById(R.id.search_field));
+        IBinder iBinder = searchField.getWindowToken();
+        if (iBinder != null) {
+            imm.hideSoftInputFromWindow(iBinder, 0);
+        }
     }
 
     @Override
@@ -1470,7 +1484,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-//        presenter.onClickBackground(getXCord(e), getYCord(e));
+        presenter.onClickBackground(getXCord(e), getYCord(e));
         return false;
     }
 

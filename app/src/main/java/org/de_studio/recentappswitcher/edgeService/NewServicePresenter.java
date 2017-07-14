@@ -344,6 +344,19 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 })
         );
 
+        addSubscription(
+                view.onStartItemFromSearch().subscribe(new Action1<Item>() {
+                    @Override
+                    public void call(Item item) {
+                        Slot slot = new Slot();
+                        slot.type = Slot.TYPE_ITEM;
+                        slot.stage1Item = item;
+                        startSlotSJ.onNext(slot);
+                        view.hideKeyboard();
+                    }
+                })
+        );
+
 
     }
 
@@ -722,6 +735,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         PublishSubject<String> onSearch();
 
+        PublishSubject<Item> onStartItemFromSearch();
+
         void addEdgesToWindowAndSetListener();
 
         void setupNotification();
@@ -801,6 +816,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         void openFile(Uri uri);
 
         void updateSearchResult(List<Item> items);
+
+        void hideKeyboard();
     }
 
     public class Showing {
