@@ -233,6 +233,7 @@
     <string name="setting_shortcut_screen_lock">Screen lock</string>
     <string name="setting_shortcut_volume">Volume</string>
     <string name="setting_shortcut_wifi">WiFi on/off</string>
+    <string name="setting_shortcut_search_shortcuts">Search shortcuts</string>
     <string name="share">Share</string>
     <string name="shortcut">Shortcuts</string>
     <string name="shortcuts_sets">Shortcuts sets</string>

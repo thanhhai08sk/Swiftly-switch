@@ -598,7 +598,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     }else finishSectionSJ.onNext(null);
                 }else finishSectionSJ.onNext(null);
                 break;
-            default: finishSectionSJ.onNext(null);
+            default:
+                finishSectionSJ.onNext(null);
+                view.hideKeyboard();
+                Log.e(TAG, "onClickBackground: finish on search");
+                break;
 
         }
     }

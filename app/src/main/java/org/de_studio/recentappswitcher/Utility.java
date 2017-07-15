@@ -407,16 +407,18 @@ public  class Utility {
             return Item.ACTION_BRIGHTNESS;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_ringer_mode))) {
             return Item.ACTION_RINGER_MODE;
-        }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_dial))) {
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_dial))) {
             return Item.ACTION_DIAL;
-        }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_flash_light))) {
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_flash_light))) {
             return Item.ACTION_FLASH_LIGHT;
-        }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_screen_lock))) {
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_screen_lock))) {
             return Item.ACTION_SCREEN_LOCK;
-        } else if (label.equalsIgnoreCase(context.getResources().getString(R.string.screen_shot))) {
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.screen_shot))) {
             return Item.ACTION_SCREENSHOT;
-        } else {
-            return -1;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_search_shortcuts))) {
+            return Item.ACTION_SEARCH_SHORTCUTS;
+        }else {
+            throw new IllegalArgumentException("do not support this shortcut " + label);
         }
     }
 
@@ -698,8 +700,11 @@ public  class Utility {
                 return ContextCompat.getDrawable(context, R.drawable.ic_screen_lock);
             case Item.ACTION_SCREENSHOT:
                 return ContextCompat.getDrawable(context, R.drawable.ic_screenshot2);
+            case Item.ACTION_SEARCH_SHORTCUTS:
+                return ContextCompat.getDrawable(context, R.drawable.ic_search_shortcuts);
+            default:
+                throw new IllegalArgumentException("do not support this action: " + action);
         }
-        return null;
     }
 
 
@@ -1385,6 +1390,11 @@ public  class Utility {
             case Item.ACTION_SCREENSHOT:
                 setBitMapForActionItemFromResId(item, 1, R.drawable.ic_screenshot2, context);
                 break;
+            case Item.ACTION_SEARCH_SHORTCUTS:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_search_shortcuts, context);
+                break;
+            default:
+                throw new IllegalArgumentException("do not support this " + item.action);
         }
 
     }
@@ -1982,8 +1992,9 @@ public  class Utility {
                 return Item.ACTION_FLASH_LIGHT;
             case MainActivity.ACTION_SCREEN_LOCK:
                 return Item.ACTION_SCREEN_LOCK;
+            default:
+                throw new IllegalArgumentException("do not convert this action " + action);
         }
-        return -1;
     }
 
     public static void setCollectionSlotsSize(Realm inTransitionRealm, Collection collection, int size) {

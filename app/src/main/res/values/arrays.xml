@@ -30,6 +30,7 @@
         <item>@string/setting_shortcut_call_log</item>
     </string-array>
     <string-array name="setting_shortcut_array_no_folder">
+        <item>@string/setting_shortcut_search_shortcuts</item>
         <item>@string/setting_shortcut_wifi</item>
         <item>@string/setting_shortcut_bluetooth</item>
         <item>@string/setting_shortcut_rotation</item>
