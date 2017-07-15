@@ -38,8 +38,6 @@
             android:padding="8dp"
             android:layout_gravity="top"
             android:layout_marginStart="64dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
 
 
             >

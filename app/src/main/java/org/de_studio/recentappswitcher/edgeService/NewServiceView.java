@@ -129,6 +129,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
 //                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+    static final int WINDOW_FLAG_TOUCHABLE_FOCUSABLE =
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+
 
     WindowManager.LayoutParams WINDOW_PARAMS_NO_TOUCH =new WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT,
@@ -147,6 +151,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.TYPE_PHONE,
             WINDOW_FLAG_TOUCHABLE,
+            PixelFormat.TRANSLUCENT);
+    WindowManager.LayoutParams WINDOW_SEARCH_LAYOUT_PARAMS = new WindowManager.LayoutParams(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.TYPE_PHONE,
+            WINDOW_FLAG_TOUCHABLE_FOCUSABLE,
             PixelFormat.TRANSLUCENT);
 
 
@@ -493,7 +503,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     mySortedMap.put(lastTimeUsed, usageStats);
                 }
                 Set<Long> setKey = mySortedMap.keySet();
-                Log.e(TAG, "mySortedMap size   = " + mySortedMap.size());
+//                Log.e(TAG, "mySortedMap size   = " + mySortedMap.size());
                 UsageStats usageStats;
                 String packa;
                 int i = 0;
@@ -519,7 +529,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
                             }
                             if (tempPackageName.size() >= (timeInterval == Cons.TIME_INTERVAL_LONG ? 15 : 10)) {
-                                Log.e(TAG, "tempackage >= " + 10);
+//                                Log.e(TAG, "tempackage >= " + 10);
                                 break;
                             }
                         }
@@ -656,7 +666,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     public void showSearchView(List<Item> lastSearchItems) {
         Log.e(TAG, "showSearchView: ");
         if (searchView == null) {
-            Log.e(TAG, "showSearchView: create view");
             searchView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.search_shortcut_view, backgroundView, false);
             searchView.setId(545454);
             searchResults = (RecyclerView) searchView.findViewById(R.id.search_result);
@@ -688,9 +697,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             });
         }
         if (backgroundView.findViewById(545454) == null) {
-            Log.e(TAG, "showSearchView: add view");
             backgroundView.addView(searchView);
         }
+//        if (!searchView.isAttachedToWindow()) {
+//            WINDOW_SEARCH_LAYOUT_PARAMS.width = ((int) getResources().getDimension(R.dimen.search_width));
+//            WINDOW_SEARCH_LAYOUT_PARAMS.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+//            windowManager.addView(searchView, WINDOW_SEARCH_LAYOUT_PARAMS);
+//        }
         searchView.setVisibility(View.VISIBLE);
         searchField.requestFocus();
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -706,6 +719,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             if (iBinder != null) {
                 imm.hideSoftInputFromWindow(iBinder, 0);
             }
+            searchField.clearFocus();
         }
     }
 
@@ -1437,6 +1451,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 searchView.setVisibility(View.GONE);
                 if (searchField != null) {
                     searchField.setText("");
+                    hideKeyboard();
                 }
             }
         }
