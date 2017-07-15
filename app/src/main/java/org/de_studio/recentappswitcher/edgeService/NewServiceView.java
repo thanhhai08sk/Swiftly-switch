@@ -26,7 +26,7 @@ import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.transition.AutoTransition;
+import android.support.transition.ChangeBounds;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -625,7 +625,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     public void updateSearchResult(List<Item> items) {
-        TransitionManager.beginDelayedTransition((searchView),new AutoTransition().setDuration(150));
+        if (searchResultAdapter.getItemCount() != items.size()) {
+            Log.e(TAG, "updateSearchResult: transition");
+            TransitionManager.beginDelayedTransition((searchView),new ChangeBounds().setDuration(150));
+        }
         searchResultAdapter.updateData(items);
 
 

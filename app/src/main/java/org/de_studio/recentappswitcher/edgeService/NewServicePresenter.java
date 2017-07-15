@@ -346,15 +346,13 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         addSubscription(
                 view.onSearch()
-                        .debounce(200,TimeUnit.MILLISECONDS)
+                        .debounce(150,TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
                         List<Item> result = model.searchForItemsWithTitle(s);
-                        if (result.size()>0) {
-                            view.updateSearchResult(result);
-                        }else Log.e(TAG, "call: result empty");
+                        view.updateSearchResult(result);
                     }
                 })
         );

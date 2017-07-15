@@ -14,7 +14,7 @@
         android:id="@+id/search_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="search shortcut"
+        android:hint="@string/search_shortcuts"
         android:textColorHint="@color/text_secondary_dark"
         android:textColor="@color/text_primary_dark"
 

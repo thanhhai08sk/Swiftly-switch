@@ -382,5 +382,6 @@
     <string name="send_email">Send email</string>
     <string name="edge_running_toast">Swiftly Switch is running</string>
     <string name="edge_service_paused_toast">Swiftly Switch is paused</string>
+    <string name="search_shortcuts">Search shortcuts…</string>
 
 </resources>
