@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.edgeService;
 
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -479,7 +480,13 @@ public class NewServiceModel extends BaseModel {
     }
 
     public List<Item> searchForItemsWithTitle(String title) {
-        return realm.where(Item.class).contains(Cons.LABEL,title, Case.INSENSITIVE).findAll();
+        if (TextUtils.isEmpty(title)) {
+            return getLastSearch();
+        }
+        return realm.where(Item.class)
+                .contains(Cons.LABEL,title, Case.INSENSITIVE)
+                .notEqualTo(Cons.TYPE, Item.TYPE_SHORTCUTS_SET)
+                .findAll();
     }
 
     public void addToLastSearch(final Item item) {
@@ -496,7 +503,6 @@ public class NewServiceModel extends BaseModel {
                 }
             }
         });
-
     }
 
     private Collection getLastSearchCollection() {

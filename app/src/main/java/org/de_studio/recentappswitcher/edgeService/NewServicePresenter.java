@@ -351,7 +351,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        view.updateSearchResult(model.searchForItemsWithTitle(s));
+                        List<Item> result = model.searchForItemsWithTitle(s);
+                        if (result.size()>0) {
+                            view.updateSearchResult(result);
+                        }else Log.e(TAG, "call: result empty");
                     }
                 })
         );
@@ -597,6 +600,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     }else finishSectionSJ.onNext(null);
                 }else finishSectionSJ.onNext(null);
                 break;
+            default: finishSectionSJ.onNext(null);
+
         }
     }
 
@@ -842,6 +847,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         public static final int SHOWING_NONE = 2;
         public static final int SHOWING_FOLDER = 3;
         public static final int SHOWING_CIRCLE_ONLY = 4;
+        public static final int SHOWING_SEARCH_VIEW = 5;
+
         public int showWhat;
         public Collection grid;
         public Collection circle;
