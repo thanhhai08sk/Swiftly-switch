@@ -9,6 +9,7 @@
 
 
 
+
     >
     <org.de_studio.recentappswitcher.ui.MyEditText
         android:id="@+id/search_field"

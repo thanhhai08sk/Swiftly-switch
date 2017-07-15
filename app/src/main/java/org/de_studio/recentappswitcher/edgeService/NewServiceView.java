@@ -27,7 +27,10 @@ import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.transition.ChangeBounds;
+import android.support.transition.Fade;
+import android.support.transition.Transition;
 import android.support.transition.TransitionManager;
+import android.support.transition.TransitionSet;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -230,7 +233,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     private ImageView screenshot;
     private ViewGroup searchView;
     private MyEditText searchField;
+    private RecyclerView searchResults;
     private ItemsAdapter searchResultAdapter;
+    private Transition searchTransition;
 
     @Override
     public void onCreate() {
@@ -638,8 +643,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     public void updateSearchResult(List<Item> items) {
         if (searchResultAdapter.getItemCount() != items.size()) {
-            Log.e(TAG, "updateSearchResult: transition");
-            TransitionManager.beginDelayedTransition((searchView),new ChangeBounds().setDuration(150));
+            if (searchTransition == null) {
+                searchTransition = new TransitionSet().addTransition(new Fade().addTarget(searchResults).setDuration(200)).addTransition(new ChangeBounds().addTarget(searchView).setDuration(200));
+            }
+            TransitionManager.beginDelayedTransition(searchView, searchTransition);
         }
         searchResultAdapter.updateData(items);
 
@@ -652,10 +659,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             Log.e(TAG, "showSearchView: create view");
             searchView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.search_shortcut_view, backgroundView, false);
             searchView.setId(545454);
-            RecyclerView resultView = (RecyclerView) searchView.findViewById(R.id.search_result);
+            searchResults = (RecyclerView) searchView.findViewById(R.id.search_result);
             searchResultAdapter = new ItemsAdapter(this,lastSearchItems,getPackageManager(),iconPack, startItemFromSearchSJ);
-            resultView.setLayoutManager(new LinearLayoutManager(this));
-            resultView.setAdapter(searchResultAdapter);
+            searchResults.setLayoutManager(new LinearLayoutManager(this));
+            searchResults.setAdapter(searchResultAdapter);
             searchField = ((MyEditText) searchView.findViewById(R.id.search_field));
             searchField.setBackButtonListener(new MyEditText.BackOnEditTextListener() {
                 @Override
