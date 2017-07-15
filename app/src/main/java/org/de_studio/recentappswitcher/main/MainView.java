@@ -358,7 +358,7 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     public void showWhatNew() {
         new MaterialDialog.Builder(this)
                 .positiveText(R.string.app_tab_fragment_ok_button)
-                .negativeText(R.string.checkout_journal_it_button)
+                .negativeText(R.string.review_on_play_store)
                 .title(R.string.what_new)
                 .items(R.array.what_new)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -370,7 +370,7 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Utility.openJournalItPlayStorePage(MainView.this);
+                        Utility.openPlayStorePage(MainView.this,getPackageName());
                     }
                 })
                 .checkBoxPromptRes(R.string.show_this_after_an_update, shared.getBoolean(Cons.AUTO_SHOW_WHAT_NEW_KEY,true), new CompoundButton.OnCheckedChangeListener() {
