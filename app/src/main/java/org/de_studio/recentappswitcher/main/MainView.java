@@ -62,6 +62,8 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     Toolbar toolbar;
     @BindView(R.id.about_pro_version)
     View aboutProButton;
+    @BindView(R.id.upgrade)
+    View upgradeButton;
 
 
 
@@ -87,9 +89,11 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
         super.onCreate(savedInstanceState);
         if (Utility.isFree(this)) {
             aboutProButton.setVisibility(View.VISIBLE);
+            upgradeButton.setVisibility(View.VISIBLE);
             super.setUpCheckingPurchase();
         } else {
             aboutProButton.setVisibility(View.GONE);
+            upgradeButton.setVisibility(View.GONE);
         }
     }
 
@@ -270,6 +274,10 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
 
     @OnClick(R.id.about_pro_version)
     void aboutProClick() {
+        showProVersionInfo();
+    }
+
+    private void showProVersionInfo() {
         new MaterialDialog.Builder(this)
                 .title(R.string.about_pro_version)
                 .content(R.string.about_pro_text)
@@ -281,6 +289,11 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
                         buyPro();
                     }
                 }).show();
+    }
+
+    @OnClick(R.id.upgrade)
+    void onUpgradeClick(){
+        showProVersionInfo();
     }
 
 
