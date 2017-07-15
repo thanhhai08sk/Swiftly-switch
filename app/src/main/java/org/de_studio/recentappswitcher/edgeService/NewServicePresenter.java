@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.edgeService;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -346,7 +347,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         currentShowing.stayOnScreen = true;
                         currentShowing.showWhat = Showing.SHOWING_SEARCH_VIEW;
                         view.hideAllCollections();
+                        view.hideClock();
                         view.showSearchView(model.getLastSearch());
+                        stopHideViewsHandler();
 
                     }
                 })
@@ -369,9 +372,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 view.onStartItemFromSearch().subscribe(new Action1<Item>() {
                     @Override
                     public void call(Item item) {
-                        Slot slot = new Slot();
-                        slot.type = Slot.TYPE_ITEM;
-                        slot.stage1Item = item;
+                        Slot slot = createSlotFromItem(item);
                         startSlotSJ.onNext(slot);
                         view.hideKeyboard();
                         model.addToLastSearch(item);
@@ -379,7 +380,33 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 })
         );
 
+        addSubscription(
+                view.onStartSlot().subscribe(new Action1<Slot>() {
+                    @Override
+                    public void call(Slot slot) {
+                        startSlotSJ.onNext(slot);
+                    }
+                })
+        );
 
+        addSubscription(
+                view.onStartItem().subscribe(new Action1<Item>() {
+                    @Override
+                    public void call(Item item) {
+                        startSlotSJ.onNext(createSlotFromItem(item));
+                    }
+                })
+        );
+
+
+    }
+
+    @NonNull
+    private Slot createSlotFromItem(Item item) {
+        Slot slot = new Slot();
+        slot.type = Slot.TYPE_ITEM;
+        slot.stage1Item = item;
+        return slot;
     }
 
     private void setInitPointByTriggerIcon() {
@@ -846,6 +873,12 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         void hideKeyboard();
 
         PublishSubject<Void> onStartSearchItem();
+
+        PublishSubject<Slot> onStartSlot();
+
+        PublishSubject<Item> onStartItem();
+
+        void hideClock();
     }
 
     public class Showing {

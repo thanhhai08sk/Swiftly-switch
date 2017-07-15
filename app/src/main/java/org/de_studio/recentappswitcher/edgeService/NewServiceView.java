@@ -300,6 +300,16 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
+    public PublishSubject<Slot> onStartSlot() {
+        return startSlotSJ;
+    }
+
+    @Override
+    public PublishSubject<Item> onStartItem() {
+        return startItemSJ;
+    }
+
+    @Override
     public PublishSubject<String> onSearch() {
         return searchQuerySJ;
     }
@@ -1120,6 +1130,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 }
             }
         }
+    }
+
+    public void hideClock() {
+        backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.GONE);
+        backgroundView.findViewById(R.id.clock_linear_layout).setVisibility(View.GONE);
     }
 
     @Override
