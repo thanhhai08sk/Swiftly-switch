@@ -648,7 +648,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             searchField.setBackButtonListener(new MyEditText.BackOnEditTextListener() {
                 @Override
                 public void onBackButton() {
-                    Log.e(TAG, "onBackButton: ");
+                    presenter.onClickBackground(0,0);
                 }
             });
             searchField.addTextChangedListener(new TextWatcher() {
