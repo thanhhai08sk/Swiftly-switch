@@ -49,7 +49,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -77,6 +76,7 @@ import org.de_studio.recentappswitcher.model.Slot;
 import org.de_studio.recentappswitcher.service.Circle;
 import org.de_studio.recentappswitcher.service.CircleAngleAnimation;
 import org.de_studio.recentappswitcher.service.NotiDialog;
+import org.de_studio.recentappswitcher.ui.MyEditText;
 import org.de_studio.recentappswitcher.ui.QuickActionsView;
 import org.de_studio.recentappswitcher.utils.GridSpacingItemDecoration;
 
@@ -217,7 +217,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     private GestureDetectorCompat backgroundGestureDetector;
     PublishSubject<Boolean> enterOrExitFullScreenSJ = PublishSubject.create();
     PublishSubject<Uri> finishTakingScreenshotSJ = PublishSubject.create();
-    PublishSubject<String> searchFiledSJ = PublishSubject.create();
+    PublishSubject<String> searchQuerySJ = PublishSubject.create();
     PublishSubject<Item> startItemFromSearchSJ = PublishSubject.create();
     PublishSubject<Void> startSearchItemSJ = PublishSubject.create();
     boolean isFree;
@@ -227,7 +227,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     boolean firstSection = true;
     private ImageView screenshot;
     private ViewGroup searchView;
-    private EditText searchField;
+    private MyEditText searchField;
     private ItemsAdapter searchResultAdapter;
 
     @Override
@@ -299,7 +299,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public PublishSubject<String> onSearch() {
-        return searchFiledSJ;
+        return searchQuerySJ;
     }
 
     private void inject() {
@@ -635,14 +635,22 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     public void showSearchView(List<Item> lastSearchItems) {
+        Log.e(TAG, "showSearchView: ");
         if (searchView == null) {
+            Log.e(TAG, "showSearchView: create view");
             searchView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.search_shortcut_view, backgroundView, false);
             searchView.setId(545454);
             RecyclerView resultView = (RecyclerView) searchView.findViewById(R.id.search_result);
             searchResultAdapter = new ItemsAdapter(this,lastSearchItems,getPackageManager(),iconPack, startItemFromSearchSJ);
             resultView.setLayoutManager(new LinearLayoutManager(this));
             resultView.setAdapter(searchResultAdapter);
-            searchField = ((EditText) searchView.findViewById(R.id.search_field));
+            searchField = ((MyEditText) searchView.findViewById(R.id.search_field));
+            searchField.setBackButtonListener(new MyEditText.BackOnEditTextListener() {
+                @Override
+                public void onBackButton() {
+                    Log.e(TAG, "onBackButton: ");
+                }
+            });
             searchField.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -651,7 +659,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    searchFiledSJ.onNext(s.toString());
+                    searchQuerySJ.onNext(s.toString());
                 }
 
                 @Override
@@ -661,10 +669,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             });
         }
         if (backgroundView.findViewById(545454) == null) {
+            Log.e(TAG, "showSearchView: add view");
             backgroundView.addView(searchView);
         }
         searchView.setVisibility(View.VISIBLE);
-        searchField = ((EditText) searchView.findViewById(R.id.search_field));
         searchField.requestFocus();
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(searchField, InputMethodManager.SHOW_FORCED);
@@ -1334,6 +1342,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void startItem(Item item, String lastApp) {
+        if (item.type.equals(Item.TYPE_ACTION) && item.action == Item.ACTION_SEARCH_SHORTCUTS) {
+            startSearchItemSJ.onNext(null);
+        }
         Utility.startItem(item, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.DEFAULT_CONTACT_ACTION),
                 sharedPreferences.getInt(Cons.RINGER_MODE_ACTION_KEY, Cons.RINGER_MODE_ACTION_DEFAULT),
                 onHomeScreen);

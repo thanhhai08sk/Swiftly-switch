@@ -309,7 +309,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                                         String lastApp = getLastApp();
 //                                        Log.e(TAG, "call: lastapp = " + lastApp);
                                         view.startItem(slot.stage1Item, lastApp);
-                                        finishSectionSJ.onNext(null);
+                                        if (!slot.stage1Item.type.equals(Item.TYPE_ACTION) || slot.stage1Item.action != Item.ACTION_SEARCH_SHORTCUTS) {
+                                            finishSectionSJ.onNext(null);
+                                        }
                                     }
                                     break;
                                 case Slot.TYPE_NULL:
@@ -339,7 +341,12 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 view.onStartSearchItem().subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        currentShowing.showWhat = Showing.SHOWING_SEARCH_VIEW;
+                        currentShowing.stayOnScreen = true;
+                        currentHighlight = -1;
+                        view.hideAllCollections();
                         view.showSearchView(model.getLastSearch());
+
                     }
                 })
         );
@@ -404,8 +411,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
     private void showGrid(Collection collection, View view) {
         currentHighlight = -1;
-//        view.showGrid(collection, currentEdge.position, currentShowing);
-        view.showSearchView(model.getLastSearch());
+        view.showGrid(collection, currentEdge.position, currentShowing);
         currentShowing.showWhat = Showing.SHOWING_GRID;
         currentShowing.grid = collection;
         currentShowing.stayOnScreen = currentShowing.grid.stayOnScreen == null ? true : currentShowing.grid.stayOnScreen;
@@ -601,7 +607,6 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             default:
                 finishSectionSJ.onNext(null);
                 view.hideKeyboard();
-                Log.e(TAG, "onClickBackground: finish on search");
                 break;
 
         }
@@ -612,8 +617,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     private void showCollection(int showWhat) {
         switch (showWhat) {
             case Showing.SHOWING_GRID:
-//                view.showGrid(currentShowing.grid, currentEdge.position, currentShowing);
-                view.showSearchView(model.getLastSearch());
+                view.showGrid(currentShowing.grid, currentEdge.position, currentShowing);
                 break;
             case Showing.SHOWING_CIRCLE_AND_ACTION:
                 updateCircleIconPosition();
