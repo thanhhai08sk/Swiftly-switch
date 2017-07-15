@@ -219,6 +219,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     PublishSubject<Uri> finishTakingScreenshotSJ = PublishSubject.create();
     PublishSubject<String> searchQuerySJ = PublishSubject.create();
     PublishSubject<Item> startItemFromSearchSJ = PublishSubject.create();
+    PublishSubject<Slot> startSlotSJ = PublishSubject.create();
+    PublishSubject<Item> startItemSJ = PublishSubject.create();
     PublishSubject<Void> startSearchItemSJ = PublishSubject.create();
     boolean isFree;
     boolean isRTL;
@@ -702,8 +704,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             RecyclerView gridView = new RecyclerView(this);
             gridView.setItemAnimator(null);
             gridView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ServiceSlotAdapter adapter = new ServiceSlotAdapter(this, grid.slots, true, iconPack, mScale, iconScale);
+            ServiceSlotAdapter adapter = new ServiceSlotAdapter(this, grid.slots, true, iconPack, mScale, iconScale, startSlotSJ);
             gridView.setLayoutManager(new GridLayoutManager(this, grid.columnCount));
+            gridView.setClickable(false);
+            gridView.setFocusable(false);
             gridView.setAdapter(adapter);
             gridView.setId(getCollectionResId(grid));
             gridView.addItemDecoration(new GridSpacingItemDecoration((int) (grid.space * mScale)));
@@ -883,6 +887,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             RecyclerView folderView = new RecyclerView(this);
             folderView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             ServiceItemsAdapter adapter = new ServiceItemsAdapter(this, folder.items, true, getPackageManager(), iconPack, mScale, iconScale);
+            adapter.setItemClickSJ(startItemSJ);
             int columnCount = 0;
             if (folder.items.size() > 4) {
                 columnCount = 4;

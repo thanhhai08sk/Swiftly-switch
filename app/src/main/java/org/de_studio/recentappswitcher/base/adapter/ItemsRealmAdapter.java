@@ -20,7 +20,6 @@ import org.de_studio.recentappswitcher.model.Item;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmChangeListener;
 import io.realm.RealmRecyclerViewAdapter;
-import rx.Observable;
 import rx.subjects.PublishSubject;
 
 /**
@@ -32,7 +31,7 @@ public class ItemsRealmAdapter extends RealmRecyclerViewAdapter<Item,ItemsRealmA
     private static final String TAG = ItemsRealmAdapter.class.getSimpleName();
     PackageManager packageManager;
     IconPackManager.IconPack iconPack;
-    private final PublishSubject<Item> onClickSubject = PublishSubject.create();
+    private PublishSubject<Item> itemClickSJ;
     int itemType;
     private RealmChangeListener listener;
 
@@ -44,6 +43,10 @@ public class ItemsRealmAdapter extends RealmRecyclerViewAdapter<Item,ItemsRealmA
         this.iconPack = iconPack;
         this.itemType = itemType;
 
+    }
+
+    public void setItemClickSJ(PublishSubject<Item> itemClickSJ) {
+        this.itemClickSJ = itemClickSJ;
     }
 
     @Override
@@ -59,7 +62,9 @@ public class ItemsRealmAdapter extends RealmRecyclerViewAdapter<Item,ItemsRealmA
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onClickSubject.onNext(item);
+                    if (itemClickSJ != null) {
+                        itemClickSJ.onNext(item);
+                    }
                 }
             });
 
@@ -104,9 +109,5 @@ public class ItemsRealmAdapter extends RealmRecyclerViewAdapter<Item,ItemsRealmA
             icon = (ImageView) view.findViewById(R.id.item_icon);
         }
     }
-    public Observable<Item> getKeyClicked() {
-        return onClickSubject.asObservable();
-    }
-
 
 }

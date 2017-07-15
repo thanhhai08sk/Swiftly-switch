@@ -20,6 +20,7 @@ import org.de_studio.recentappswitcher.model.Slot;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by HaiNguyen on 12/31/16.
@@ -29,14 +30,17 @@ public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSl
     IconPackManager.IconPack iconPack;
     private static final String TAG = ServiceSlotAdapter.class.getSimpleName();
     float mScale, iconScale;
+    PublishSubject<Slot> itemClickSJ;
 
 
-    public ServiceSlotAdapter(@NonNull Context context, @Nullable OrderedRealmCollection data, boolean autoUpdate, IconPackManager.IconPack iconPack, float mScale, float iconScale) {
+    public ServiceSlotAdapter(@NonNull Context context, @Nullable OrderedRealmCollection data,
+                              boolean autoUpdate, IconPackManager.IconPack iconPack, float mScale, float iconScale, PublishSubject<Slot> itemClickSJ) {
         super(context, data, autoUpdate);
         this.iconPack = iconPack;
         packageManager = context.getPackageManager();
         this.mScale = mScale;
         this.iconScale = iconScale;
+        this.itemClickSJ = itemClickSJ;
     }
 
     public void updateIconsState() {
@@ -72,7 +76,7 @@ public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSl
             holder.icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e(TAG, "onClick: " + holder.getAdapterPosition());
+                    itemClickSJ.onNext(slot);
                 }
             });
         }
@@ -86,7 +90,11 @@ public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSl
 
         FrameLayout frameLayout = new FrameLayout(context);
         frameLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        imageView.setClickable(false);
+        imageView.setFocusable(false);
         frameLayout.addView(imageView);
+        frameLayout.setClickable(false);
+        frameLayout.setFocusable(false);
 //        frameLayout.setBackgroundColor(Color.BLUE);
         return new ViewHolder(frameLayout);
     }
