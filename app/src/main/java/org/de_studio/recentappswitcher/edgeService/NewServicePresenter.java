@@ -341,9 +341,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 view.onStartSearchItem().subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        currentShowing.showWhat = Showing.SHOWING_SEARCH_VIEW;
-                        currentShowing.stayOnScreen = true;
+                        view.unhighlightSlot(currentShowing,currentHighlight);
                         currentHighlight = -1;
+                        currentShowing.stayOnScreen = true;
+                        currentShowing.showWhat = Showing.SHOWING_SEARCH_VIEW;
                         view.hideAllCollections();
                         view.showSearchView(model.getLastSearch());
 
