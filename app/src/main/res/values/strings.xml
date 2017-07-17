@@ -286,6 +286,13 @@
 
 
     //What new
+
+    <string name="what_new_3.1.5" translatable="false">VERSION 3.1.5:\n
+        - New action: Search Shortcuts - Quickly search and start apps, shortcuts, contacts from any screen\n
+        - Support Greek and update translation for Japanese. Thanks for your support!\n
+        - Updated translations. Contribute your translation at https://www.localize.im/v/xy\n
+        - Fix bugs and some small improvements\n
+    </string>
     <string name="what_new_3.1.5.2" translatable="false">VERSION 3.1.5.2(BETA):\n
          - Fix back shortcut\n
     </string>
