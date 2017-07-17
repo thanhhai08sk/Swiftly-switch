@@ -116,6 +116,7 @@ import static org.de_studio.recentappswitcher.Cons.M_SCALE_NAME;
 import static org.de_studio.recentappswitcher.Cons.OPEN_FOLDER_DELAY_NAME;
 import static org.de_studio.recentappswitcher.Cons.SHARED_PREFERENCE_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
+import static org.de_studio.recentappswitcher.Cons.USE_TRANSITION_NAME;
 
 /**
  * Created by HaiNguyen on 12/23/16.
@@ -137,13 +138,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
 
 
-    WindowManager.LayoutParams WINDOW_PARAMS_NO_TOUCH =new WindowManager.LayoutParams(
+    WindowManager.LayoutParams WINDOW_PARAMS_NO_TOUCH = new WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.TYPE_PHONE,
             WINDOW_FLAG_NO_TOUCH,
             PixelFormat.TRANSLUCENT);
-    WindowManager.LayoutParams WINDOW_PARAMS_TOUCHABLE =new WindowManager.LayoutParams(
+    WindowManager.LayoutParams WINDOW_PARAMS_TOUCHABLE = new WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.TYPE_PHONE,
@@ -161,7 +162,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             WindowManager.LayoutParams.TYPE_PHONE,
             WINDOW_FLAG_TOUCHABLE_FOCUSABLE,
             PixelFormat.TRANSLUCENT);
-
 
 
     @Nullable
@@ -212,6 +212,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Inject
     @Named(USE_ANIMATION_NAME)
     boolean useAnimation;
+    @Inject
+    @Named(USE_TRANSITION_NAME)
+    boolean useTransition;
     @Inject
     @Named(Cons.BACKGROUND_COLOR_NAME)
     int backgroundColor;
@@ -559,7 +562,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 e.printStackTrace();
                 Log.e(TAG, "showBackground: already add to window");
             }
-            backgroundGestureDetector = new GestureDetectorCompat(this,this);
+            backgroundGestureDetector = new GestureDetectorCompat(this, this);
             backgroundView.setAlpha(1f);
             backgroundView.setVisibility(View.VISIBLE);
 
@@ -680,7 +683,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             });
             searchResults = (RecyclerView) searchParent.findViewById(R.id.search_result);
             searchView = (LinearLayout) searchParent.findViewById(R.id.search_linear);
-            searchResultAdapter = new ItemsAdapter(this,lastSearchItems,getPackageManager(),iconPack, startItemFromSearchSJ);
+            searchResultAdapter = new ItemsAdapter(this, lastSearchItems, getPackageManager(), iconPack, startItemFromSearchSJ);
             searchResults.setLayoutManager(new LinearLayoutManager(this));
             searchResults.setAdapter(searchResultAdapter);
             searchResults.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -700,7 +703,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                         hideKeyboard();
                         searchKeyboardShow = false;
                     } else {
-                        presenter.onClickBackground(0,0);
+                        presenter.onClickBackground(0, 0);
                     }
                 }
             });
@@ -729,8 +732,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             windowManager.addView(searchParent, WINDOW_SEARCH_LAYOUT_PARAMS);
 
         }
-        if (!Utility.isKitkat()&& searchParent.isAttachedToWindow()) {
-            int centerX = searchView.getWidth()/2;
+        if (!Utility.isKitkat() && searchParent.isAttachedToWindow()) {
+            int centerX = searchView.getWidth() / 2;
             int centerY = 0;
             float radius = ((float) Math.hypot(centerX, searchView.getHeight()));
             Animator circularReveal = ViewAnimationUtils.createCircularReveal(searchView, centerX, centerY, 0f, radius);
@@ -838,16 +841,16 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             float childCenterX;
             float childCenterY;
             float halfIcon = 24 * mScale;
-            float centerX = recyclerView.getWidth()/2;
-            float centerY = recyclerView.getHeight()/2;
+            float centerX = recyclerView.getWidth() / 2;
+            float centerY = recyclerView.getHeight() / 2;
 
             if (useAnimation) {
                 for (int i = 0; i < recyclerView.getChildCount(); i++) {
                     child = recyclerView.getChildAt(i);
                     childCenterX = child.getX() + halfIcon;
                     childCenterY = child.getY() + halfIcon;
-                    child.setTranslationY((childCenterY - centerY)/2);
-                    child.setTranslationX((childCenterX - centerX)/2);
+                    child.setTranslationY((childCenterY - centerY) / 2);
+                    child.setTranslationX((childCenterX - centerX) / 2);
                     child.setAlpha(0f);
                     child.animate().translationY(0)
                             .translationX(0)
@@ -881,7 +884,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         startActivity(intent);
 
     }
-
 
 
     private int getFolderResId(Slot folder) {
@@ -953,7 +955,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
 
-
     private void createFolderViewIfNeeded(Slot folder, int space) {
         if (collectionViewsMap.get(folder.slotId) == null) {
             RecyclerView folderView = new RecyclerView(this);
@@ -969,7 +970,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             folderView.setLayoutManager(new GridLayoutManager(this, columnCount));
             folderView.setAdapter(adapter);
             folderView.setId(getFolderResId(folder));
-            folderView.addItemDecoration(new GridSpacingItemDecoration((int)(space * mScale)));
+            folderView.addItemDecoration(new GridSpacingItemDecoration((int) (space * mScale)));
             folderView.setBackgroundResource(R.color.background_lightish);
             collectionViewsMap.put(folder.slotId, folderView);
         }
@@ -1032,7 +1033,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
                 }
                 ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(icon, "alpha", 0f, 1f);
-                alphaAnimator.setStartDelay(animationTime / (frameLayout.getChildCount() - i)/2);
+                alphaAnimator.setStartDelay(animationTime / (frameLayout.getChildCount() - i) / 2);
                 alphaAnimator.setDuration(animationTime);
                 alphaAnimator.start();
 
@@ -1277,7 +1278,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 CircleAngleAnimation angleAnimation = new CircleAngleAnimation(circle, 270);
                 angleAnimation.setDuration(holdTime);
                 circle.startAnimation(angleAnimation);
-            } else if (circle.isShown()){
+            } else if (circle.isShown()) {
                 circle.setAlpha(0f);
             }
 
@@ -1287,7 +1288,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
             ImageView icon = (ImageView) backgroundView.findViewById(R.id.indicator_icon);
             TextView label = (TextView) backgroundView.findViewById(R.id.indicator_label);
-            Utility.setSlotIcon(slot, this, icon, getPackageManager(), iconPack,false,true);
+            Utility.setSlotIcon(slot, this, icon, getPackageManager(), iconPack, false, true);
             Utility.setSlotLabel(slot, this, label);
         } else {
             backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.GONE);
@@ -1302,7 +1303,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         backgroundView.findViewById(R.id.indicator_frame_layout).setVisibility(View.VISIBLE);
         ImageView icon = (ImageView) backgroundView.findViewById(R.id.indicator_icon);
         TextView label = (TextView) backgroundView.findViewById(R.id.indicator_label);
-        Utility.setItemIcon(item, this, icon, getPackageManager(), iconPack,true);
+        Utility.setItemIcon(item, this, icon, getPackageManager(), iconPack, true);
         label.setText(item.label);
     }
 
@@ -1320,7 +1321,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     if (id < 10) {
                         FrameLayout recent = (FrameLayout) collectionViewsMap.get(currentShowing.circle.collectionId);
                         highlightCircleIcon(recent.getChildAt(id), currentShowing.circleIconsXY.xs[id], currentShowing.circleIconsXY.ys[id]);
-                    } else if (id - 10 < currentShowing.action.slots.size()){
+                    } else if (id - 10 < currentShowing.action.slots.size()) {
                         showQuickActions(currentShowing.edgePosition, id - 10, currentShowing, false, false);
                     }
                     break;
@@ -1380,8 +1381,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     private void highlightCircleIcon(View icon, float iconX, float iconY) {
         if (icon != null) {
-            icon.setScaleX(isRTL? 1.5f:1.2f);
-            icon.setScaleY(isRTL? 1.5f:1.2f);
+            icon.setScaleX(isRTL ? 1.5f : 1.2f);
+            icon.setScaleY(isRTL ? 1.5f : 1.2f);
 
             int height = (int) ((16 + 48 * iconScale) * mScale);
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(height, height);
@@ -1429,7 +1430,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         }
         Utility.startItem(item, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.DEFAULT_CONTACT_ACTION),
                 sharedPreferences.getInt(Cons.RINGER_MODE_ACTION_KEY, Cons.RINGER_MODE_ACTION_DEFAULT),
-                onHomeScreen);
+                onHomeScreen, useTransition);
     }
 
     @Override
@@ -1467,7 +1468,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void showCollection(String collectionId) {
-        if (collectionId != null && collectionViewsMap.get(collectionId)!=null) {
+        if (collectionId != null && collectionViewsMap.get(collectionId) != null) {
             collectionViewsMap.get(collectionId).setVisibility(View.VISIBLE);
             collectionViewsMap.get(collectionId).setAlpha(1f);
 
@@ -1477,7 +1478,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public Point getGridXy(String collectionId) {
         RecyclerView grid = (RecyclerView) collectionViewsMap.get(collectionId);
-        return new Point((int) grid.getX(),(int)grid.getY());
+        return new Point((int) grid.getX(), (int) grid.getY());
     }
 
     @Override
@@ -1507,7 +1508,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             backgroundView.setVisibility(View.GONE);
         }
     }
-
 
 
     @Override
@@ -1579,7 +1579,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void showToast(int message) {
-        Toast.makeText(NewServiceView.this.getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+        Toast.makeText(NewServiceView.this.getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -1788,7 +1788,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 Log.e(TAG, "onReceive: action package removed");
                 if (!intent.getExtras().getBoolean(Intent.EXTRA_REPLACING)) {
                     String dataString = intent.getDataString();
-                    String packageN = dataString.substring(dataString.indexOf(":") +1);
+                    String packageN = dataString.substring(dataString.indexOf(":") + 1);
                     presenter.onUninstallPackage(packageN);
                 }
             } else if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {

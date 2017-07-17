@@ -63,6 +63,8 @@ import static org.de_studio.recentappswitcher.Cons.OPEN_FOLDER_DELAY_NAME;
 import static org.de_studio.recentappswitcher.Cons.SHARED_PREFERENCE_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_KEY;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
+import static org.de_studio.recentappswitcher.Cons.USE_TRANSITION_KEY;
+import static org.de_studio.recentappswitcher.Cons.USE_TRANSITION_NAME;
 
 /**
  * Created by HaiNguyen on 12/24/16.
@@ -210,6 +212,13 @@ public class NewServiceModule {
     @Named(USE_ANIMATION_NAME)
     boolean useAnimation(@Named(SHARED_PREFERENCE_NAME) SharedPreferences shared) {
         return shared.getBoolean(USE_ANIMATION_KEY, true);
+    }
+
+    @Provides
+    @Singleton
+    @Named(USE_TRANSITION_NAME)
+    boolean useTransition(@Named(SHARED_PREFERENCE_NAME) SharedPreferences shared) {
+        return shared.getBoolean(USE_TRANSITION_KEY, false);
     }
 
     @Provides

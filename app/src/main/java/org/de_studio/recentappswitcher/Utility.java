@@ -565,8 +565,8 @@ public  class Utility {
         }
     }
 
-    public static void lastAppAction(Context context, String packageName) {
-        startApp(packageName,context,false);
+    public static void lastAppAction(Context context, String packageName, boolean useTransition) {
+        startApp(packageName, context, false, useTransition);
     }
 
     public static void callLogsAction(Context context) {
@@ -1668,11 +1668,11 @@ public  class Utility {
         return Item.TYPE_ACTION + action;
     }
 
-    public static void startSlot(Slot slot, String lastAppPackageName, Context context, int contactAction, int ringerModeAction, int showing, String currentCollectionId, NewServicePresenter presenter) {
+    public static void startSlot(Slot slot, String lastAppPackageName, Context context, int contactAction, int ringerModeAction, int showing, String currentCollectionId, NewServicePresenter presenter, boolean useTransition) {
 
         switch (slot.type) {
             case Slot.TYPE_ITEM:
-                startItem(slot.stage1Item, lastAppPackageName, context, contactAction, ringerModeAction,false);
+                startItem(slot.stage1Item, lastAppPackageName, context, contactAction, ringerModeAction, false, useTransition);
                 break;
             case Slot.TYPE_NULL:
                 if (currentCollectionId != null) {
@@ -1702,13 +1702,13 @@ public  class Utility {
         }
     }
 
-    public static void startItem(Item item, String lastAppPackageName, Context context,int contactAction, int ringerModeAction, boolean onHomeScreen) {
+    public static void startItem(Item item, String lastAppPackageName, Context context,int contactAction, int ringerModeAction, boolean onHomeScreen, boolean useTransition) {
         switch (item.type) {
             case Item.TYPE_APP:
-                startApp(item.getPackageName(), context, onHomeScreen);
+                startApp(item.getPackageName(), context, onHomeScreen, useTransition);
                 break;
             case Item.TYPE_ACTION:
-                startAction(item.action, context, lastAppPackageName, ringerModeAction);
+                startAction(item.action, context, lastAppPackageName, ringerModeAction, useTransition);
                 break;
             case Item.TYPE_CONTACT:
                 startContact(item, context, contactAction);
@@ -1730,7 +1730,7 @@ public  class Utility {
         }
     }
 
-    private static void startApp(String packageName, Context context, boolean onHomeScreen) {
+    private static void startApp(String packageName, Context context, boolean onHomeScreen, boolean useTransition) {
         Intent extApp = context.getPackageManager().getLaunchIntentForPackage(packageName);
         if (packageName != null && extApp != null) {
             if (packageName.equals("com.devhomc.search")) {
@@ -1743,8 +1743,11 @@ public  class Utility {
                 startAppIntent.addFlags(1064960);
                 startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startAppIntent.setFlags(270532608);
+                if (useTransition) {
+                    startAppIntent.setFlags(270532608);
+                } else {
+                startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                }
                 startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
                 if (onHomeScreen) {
                     startIntentUsingPendingIntent(startAppIntent, context);
@@ -1801,7 +1804,7 @@ public  class Utility {
         }
     }
 
-    public static void startAction(int action, Context context, String lastAppPackageName, int ringerModeAction) {
+    public static void startAction(int action, Context context, String lastAppPackageName, int ringerModeAction, boolean useTransition) {
         switch (action) {
             case Item.ACTION_WIFI:
                 Utility.toggleWifi(context);
@@ -1834,7 +1837,7 @@ public  class Utility {
                 Utility.startNotiAction(context);
                 break;
             case Item.ACTION_LAST_APP:
-                Utility.lastAppAction(context, lastAppPackageName);
+                Utility.lastAppAction(context, lastAppPackageName, useTransition);
                 break;
             case Item.ACTION_CALL_LOGS:
                 Utility.callLogsAction(context);

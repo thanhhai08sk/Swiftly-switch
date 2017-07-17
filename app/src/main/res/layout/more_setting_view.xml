@@ -265,6 +265,34 @@
             </LinearLayout>
             <include layout="@layout/separator" />
 
+        <LinearLayout
+            android:id="@+id/transition"
+            style="@style/MoreSetting_Item_Parent_No_Switch"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/transition_animation"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/transition_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/transition_description"
+                style="@style/MoreSetting_Item_Text_Secondary"
+                android:text="@string/transition_animation_description"
+
+                />
+        </LinearLayout>
+        <include layout="@layout/separator" />
+
             <LinearLayout
                 android:id="@+id/disable_clock"
                 style="@style/MoreSetting_Item_Parent_With_Switch"

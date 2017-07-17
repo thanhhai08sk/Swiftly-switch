@@ -391,5 +391,7 @@
     <string name="edge_service_paused_toast">Swiftly Switch is paused</string>
     <string name="search_shortcuts">Search shortcuts…</string>
     <string name="upgrade_to_pro">Upgrade to Pro</string>
+    <string name="transition_animation">Transition animation</string>
+    <string name="transition_animation_description">Enable system animation when switching between apps</string>
 
 </resources>
