@@ -85,7 +85,7 @@ public class DataSetupService extends IntentService {
                 @Override
                 public void execute(Realm realm) {
                     DataInfo dataInfo1 = new DataInfo();
-                    realm.copyToRealm(dataInfo1);
+                    realm.insertOrUpdate(dataInfo1);
                 }
             });
         }

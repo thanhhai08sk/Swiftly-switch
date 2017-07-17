@@ -301,14 +301,16 @@ public class ScreenshotView extends Activity {
     }
 
     private void stopProjection() {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (sMediaProjection != null) {
-                    sMediaProjection.stop();
+        if (mHandler != null) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (sMediaProjection != null) {
+                        sMediaProjection.stop();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     /****************************************** Factoring Virtual Display creation ****************/

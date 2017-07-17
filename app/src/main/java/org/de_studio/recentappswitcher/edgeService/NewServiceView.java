@@ -153,8 +153,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             WINDOW_FLAG_TOUCHABLE,
             PixelFormat.TRANSLUCENT);
     WindowManager.LayoutParams WINDOW_SEARCH_LAYOUT_PARAMS = new WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.TYPE_PHONE,
             WINDOW_FLAG_TOUCHABLE_FOCUSABLE,
             PixelFormat.TRANSLUCENT);
@@ -654,7 +654,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     public void updateSearchResult(List<Item> items) {
         if (searchResultAdapter.getItemCount() != items.size()) {
             if (searchTransition == null) {
-                searchTransition = new TransitionSet().addTransition(new Fade().addTarget(searchResults).setDuration(200)).addTransition(new ChangeBounds().addTarget(searchView).setDuration(200));
+                searchTransition = new TransitionSet().addTransition(new Fade().addTarget(searchResults).setDuration(200)).addTransition(new ChangeBounds().addTarget(searchView.findViewById(R.id.search_linear)).setDuration(200));
             }
             TransitionManager.beginDelayedTransition(searchView, searchTransition);
         }
@@ -664,10 +664,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     public void showSearchView(List<Item> lastSearchItems) {
-        Log.e(TAG, "showSearchView: ");
         if (searchView == null) {
             searchView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.search_shortcut_view, backgroundView, false);
-            searchView.setId(545454);
             searchResults = (RecyclerView) searchView.findViewById(R.id.search_result);
             searchResultAdapter = new ItemsAdapter(this,lastSearchItems,getPackageManager(),iconPack, startItemFromSearchSJ);
             searchResults.setLayoutManager(new LinearLayoutManager(this));
@@ -696,13 +694,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 }
             });
         }
-        if (backgroundView.findViewById(545454) == null) {
+        if (backgroundView.findViewById(R.id.search_view) == null) {
             backgroundView.addView(searchView);
         }
+
 //        if (!searchView.isAttachedToWindow()) {
-//            WINDOW_SEARCH_LAYOUT_PARAMS.width = ((int) getResources().getDimension(R.dimen.search_width));
-//            WINDOW_SEARCH_LAYOUT_PARAMS.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
 //            windowManager.addView(searchView, WINDOW_SEARCH_LAYOUT_PARAMS);
+//
 //        }
         searchView.setVisibility(View.VISIBLE);
         searchField.requestFocus();

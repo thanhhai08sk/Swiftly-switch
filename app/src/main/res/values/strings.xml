@@ -286,6 +286,9 @@
 
 
     //What new
+    <string name="what_new_3.1.5.1" translatable="false">VERSION 3.1.5.1(BETA):\n
+         - New action: Search Shortcuts - search for all shortcut on your device\n
+    </string>
 
     <string name="what_new_3.1.4" translatable="false">VERSION 3.1.4 &amp; 3.1.5:\n
          - Quick fix\n

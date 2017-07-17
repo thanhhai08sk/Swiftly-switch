@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="300dp"
-    android:layout_height="wrap_content"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
-    android:layout_marginTop="64dp"
-    android:padding="16dp"
-    android:background="@drawable/background_search_view"
-
-
-
-
-
+    android:id="@+id/search_view"
     >
-    <org.de_studio.recentappswitcher.ui.MyEditText
-        android:id="@+id/search_field"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/search_linear"
+        android:orientation="vertical" android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="@string/search_shortcuts"
-        android:textColorHint="@color/text_secondary_dark"
-        android:textColor="@color/text_primary_dark"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="64dp"
+        android:padding="16dp"
+        android:background="@drawable/background_search_view"
+        >
 
-        />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/search_result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <org.de_studio.recentappswitcher.ui.MyEditText
+            android:id="@+id/search_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/search_shortcuts"
+            android:textColorHint="@color/text_secondary_dark"
+            android:textColor="@color/text_primary_dark"
 
-    </android.support.v7.widget.RecyclerView>
+            />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
 
 
-</LinearLayout>
+    </LinearLayout>
+
+
+</FrameLayout>

@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,8 +80,7 @@ public class IntroSettingFragment extends Fragment {
                     try {
 
                         startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                    } catch (ActivityNotFoundException e) {
-                        Log.e(LOG_TAG, "Can not found usage access setting");
+                    } catch (Exception e) {
                         new MaterialDialog.Builder(getActivity())
                                 .content(R.string.main_usage_access_can_not_found)
                                 .positiveText(R.string.app_tab_fragment_ok_button)
