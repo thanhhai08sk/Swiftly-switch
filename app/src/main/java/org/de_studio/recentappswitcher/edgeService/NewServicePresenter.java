@@ -757,7 +757,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         return currentShowing.action.slots.get(currentHighlight -10);
                     }
                 case Showing.SHOWING_GRID:
-                    return currentShowing.grid.slots.get(currentHighlight);
+                    if (currentHighlight < currentShowing.grid.slots.size()) {
+                        return currentShowing.grid.slots.get(currentHighlight);
+                    } else return null;
             }
         }
         return null;
