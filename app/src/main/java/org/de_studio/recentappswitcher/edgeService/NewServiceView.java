@@ -688,6 +688,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     if (newState == RecyclerView.SCROLL_STATE_DRAGGING && searchKeyboardShow) {
                         hideKeyboard();
+                        searchKeyboardShow = false;
                     }
                 }
             });
@@ -731,7 +732,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         if (!Utility.isKitkat()&& searchParent.isAttachedToWindow()) {
             int centerX = searchView.getWidth()/2;
             int centerY = 0;
-            Animator circularReveal = ViewAnimationUtils.createCircularReveal(searchView, centerX, centerY, 0f, searchView.getWidth());
+            float radius = ((float) Math.hypot(centerX, searchView.getHeight()));
+            Animator circularReveal = ViewAnimationUtils.createCircularReveal(searchView, centerX, centerY, 0f, radius);
             circularReveal.start();
         }
         searchParent.setVisibility(View.VISIBLE);

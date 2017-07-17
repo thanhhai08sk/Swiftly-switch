@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="64dp"
+        android:layout_marginBottom="64dp"
         android:padding="16dp"
         android:background="@drawable/background_search_view"
         >
