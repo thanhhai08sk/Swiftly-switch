@@ -118,6 +118,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     View useHomeButtonLayout;
     @BindView(R.id.use_home_button_separator)
     View useHomeButtonSeparator;
+    @BindView(R.id.transition_switch)
+    SwitchCompat transitionSwitch;
     GoogleDriveBackup backup;
     GoogleApiClient mGoogleApiClient;
     private IntentSender intentPicker;
@@ -306,6 +308,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         }
         iconSizeDescription.setText(String.valueOf(100 * sharedPreferences.getFloat(Cons.ICON_SCALE_KEY, 1f)) + "%");
         animationSwitch.setChecked(sharedPreferences.getBoolean(Cons.USE_ANIMATION_KEY, true));
+        transitionSwitch.setChecked(sharedPreferences.getBoolean(Cons.USE_TRANSITION_KEY, false));
         animationTimeDescription.setText(String.valueOf(sharedPreferences.getInt(Cons.ANIMATION_TIME_KEY, Cons.ANIMATION_TIME_DEFAULT)) + "ms" );
         hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferences.getBoolean(Cons.DISABLE_HAPTIC_FEEDBACK_KEY, true));
         hapticFeedbackOnIconSwitch.setChecked(sharedPreferences.getBoolean(Cons.HAPTIC_ON_ICON_KEY, false));
@@ -585,6 +588,10 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     @OnClick(R.id.use_animation)
     void onUseAnimationClick(){
         presenter.onAnimation();
+    }
+    @OnClick(R.id.transition)
+    void onTransitionClick(){
+        presenter.onTransition();
     }
 
     @OnClick(R.id.animation_time)
