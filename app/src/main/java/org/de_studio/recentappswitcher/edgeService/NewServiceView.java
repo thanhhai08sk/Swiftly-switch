@@ -690,7 +690,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                         hideKeyboard();
                     }
                 }
-
             });
             searchField = ((MyEditText) searchParent.findViewById(R.id.search_field));
             searchField.setBackButtonListener(new MyEditText.BackOnEditTextListener() {
