@@ -1,5 +1,6 @@
 package org.de_studio.recentappswitcher.edgeService;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -48,12 +49,14 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -127,7 +130,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
     static final int WINDOW_FLAG_TOUCHABLE =
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
-//                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
     static final int WINDOW_FLAG_TOUCHABLE_FOCUSABLE =
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
@@ -241,11 +244,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     boolean onHomeScreen;
     boolean firstSection = true;
     private ImageView screenshot;
-    private ViewGroup searchView;
+    private ViewGroup searchParent;
     private MyEditText searchField;
     private RecyclerView searchResults;
+    private LinearLayout searchView;
     private ItemsAdapter searchResultAdapter;
     private Transition searchTransition;
+    private boolean searchKeyboardShow;
 
     @Override
     public void onCreate() {
@@ -654,9 +659,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     public void updateSearchResult(List<Item> items) {
         if (searchResultAdapter.getItemCount() != items.size()) {
             if (searchTransition == null) {
-                searchTransition = new TransitionSet().addTransition(new Fade().addTarget(searchResults).setDuration(200)).addTransition(new ChangeBounds().addTarget(searchView.findViewById(R.id.search_linear)).setDuration(200));
+                searchTransition = new TransitionSet().addTransition(new Fade().addTarget(searchResults).setDuration(200)).addTransition(new ChangeBounds().addTarget(searchParent.findViewById(R.id.search_linear)).setDuration(200));
             }
-            TransitionManager.beginDelayedTransition(searchView, searchTransition);
+            TransitionManager.beginDelayedTransition(searchParent, searchTransition);
         }
         searchResultAdapter.updateData(items);
 
@@ -664,17 +669,39 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     public void showSearchView(List<Item> lastSearchItems) {
-        if (searchView == null) {
-            searchView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.search_shortcut_view, backgroundView, false);
-            searchResults = (RecyclerView) searchView.findViewById(R.id.search_result);
+        if (searchParent == null) {
+            searchParent = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.search_shortcut_view, backgroundView, false);
+            searchParent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startItemFromSearchSJ.onNext(null);
+
+                }
+            });
+            searchResults = (RecyclerView) searchParent.findViewById(R.id.search_result);
+            searchView = (LinearLayout) searchParent.findViewById(R.id.search_linear);
             searchResultAdapter = new ItemsAdapter(this,lastSearchItems,getPackageManager(),iconPack, startItemFromSearchSJ);
             searchResults.setLayoutManager(new LinearLayoutManager(this));
             searchResults.setAdapter(searchResultAdapter);
-            searchField = ((MyEditText) searchView.findViewById(R.id.search_field));
+            searchResults.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    if (newState == RecyclerView.SCROLL_STATE_DRAGGING && searchKeyboardShow) {
+                        hideKeyboard();
+                    }
+                }
+
+            });
+            searchField = ((MyEditText) searchParent.findViewById(R.id.search_field));
             searchField.setBackButtonListener(new MyEditText.BackOnEditTextListener() {
                 @Override
                 public void onBackButton() {
-                    presenter.onClickBackground(0,0);
+                    if (searchKeyboardShow) {
+                        hideKeyboard();
+                        searchKeyboardShow = false;
+                    } else {
+                        presenter.onClickBackground(0,0);
+                    }
                 }
             });
             searchField.addTextChangedListener(new TextWatcher() {
@@ -694,18 +721,33 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 }
             });
         }
-        if (backgroundView.findViewById(R.id.search_view) == null) {
-            backgroundView.addView(searchView);
-        }
-
-//        if (!searchView.isAttachedToWindow()) {
-//            windowManager.addView(searchView, WINDOW_SEARCH_LAYOUT_PARAMS);
-//
+//        if (backgroundView.findViewById(R.id.search_view) == null) {
+//            backgroundView.addView(searchParent);
 //        }
-        searchView.setVisibility(View.VISIBLE);
+
+        if (!searchParent.isAttachedToWindow()) {
+            windowManager.addView(searchParent, WINDOW_SEARCH_LAYOUT_PARAMS);
+
+        }
+        if (!Utility.isKitkat()&& searchParent.isAttachedToWindow()) {
+            int centerX = searchView.getWidth()/2;
+            int centerY = 0;
+            Animator circularReveal = ViewAnimationUtils.createCircularReveal(searchView, centerX, centerY, 0f, searchView.getWidth());
+            circularReveal.start();
+        }
+        searchParent.setVisibility(View.VISIBLE);
+        searchKeyboardShow = true;
+
         searchField.requestFocus();
-        InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(searchField, InputMethodManager.SHOW_FORCED);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager imm = (InputMethodManager) NewServiceView.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(searchField, InputMethodManager.SHOW_FORCED);
+            }
+        }, 100);
+
 
     }
 
@@ -1445,8 +1487,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 //            Log.e(TAG, "hideAllCollections: hide " + collectionId);
                 collectionViewsMap.get(collectionId).setVisibility(View.GONE);
             }
-            if (searchView != null) {
-                searchView.setVisibility(View.GONE);
+            if (searchParent != null) {
+                searchParent.setVisibility(View.GONE);
                 if (searchField != null) {
                     searchField.setText("");
                     hideKeyboard();

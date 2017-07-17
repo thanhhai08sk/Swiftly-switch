@@ -372,10 +372,12 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 view.onStartItemFromSearch().subscribe(new Action1<Item>() {
                     @Override
                     public void call(Item item) {
-                        Slot slot = createSlotFromItem(item);
-                        startSlotSJ.onNext(slot);
-                        view.hideKeyboard();
-                        model.addToLastSearch(item);
+                        if (item != null) {
+                            Slot slot = createSlotFromItem(item);
+                            startSlotSJ.onNext(slot);
+                            view.hideKeyboard();
+                            model.addToLastSearch(item);
+                        }else finishSectionSJ.onNext(null);
                     }
                 })
         );
