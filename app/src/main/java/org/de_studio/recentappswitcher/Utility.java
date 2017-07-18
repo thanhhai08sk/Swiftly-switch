@@ -741,7 +741,18 @@ public  class Utility {
                     case Item.TYPE_APP:
                         try {
                             Drawable defaultDrawable = packageManager.getApplicationIcon(item.getPackageName());
-                            Bitmap defaultBm = ((BitmapDrawable) defaultDrawable).getBitmap();
+
+//                            Bitmap defaultBm = ((BitmapDrawable) defaultDrawable).getBitmap();
+                            Bitmap defaultBm = null;
+                            if (defaultDrawable instanceof BitmapDrawable) {
+                                defaultBm = ((BitmapDrawable) defaultDrawable).getBitmap();
+                            } else {
+                                defaultBm = Bitmap.createBitmap(defaultDrawable.getIntrinsicWidth(), defaultDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                                Canvas canvasForDefaultBitmap = new Canvas(defaultBm);
+                                defaultDrawable.setBounds(0, 0, canvasForDefaultBitmap.getWidth(), canvasForDefaultBitmap.getHeight());
+                                defaultDrawable.draw(canvasForDefaultBitmap);
+                            }
+
                             if (iconPack!=null) {
                                 drawable = new BitmapDrawable(context.getResources(), iconPack.getIconForPackage(item.packageName, defaultBm));
 
