@@ -1525,6 +1525,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         if (backgroundView != null && backgroundView.isAttachedToWindow()) {
             windowManager.removeView(backgroundView);
         }
+        if (searchParent != null && searchParent.isAttachedToWindow()) {
+            windowManager.removeView(searchParent);
+        }
         removeScreenshotReadyButton();
     }
 

@@ -227,6 +227,7 @@
 	<string name="rows_count">Số hàng</string>
 	<string name="sale_50">Pro -50%</string>
 	<string name="screen_shot">Take screenshot</string>
+	<string name="search_shortcuts">Search shortcuts…</string>
 	<string name="send_email">Send email</string>
 	<string name="send_feedback">Send feedback</string>
 	<string name="set_favorite_shortcut_grid_distance_title_text_view">Khoảng cách từ cạnh(ngang)</string>
@@ -254,6 +255,7 @@
 	<string name="setting_shortcut_ringer_mode">Ringer mode</string>
 	<string name="setting_shortcut_rotation">Tự động/khóa xoay</string>
 	<string name="setting_shortcut_screen_lock">Screen lock</string>
+	<string name="setting_shortcut_search_shortcuts">Search shortcuts</string>
 	<string name="setting_shortcut_volume">Volume</string>
 	<string name="setting_shortcut_wifi">Bật/tắt wifi</string>
 	<string name="share">Chia sẻ</string>
@@ -277,6 +279,8 @@
 	<string name="thanks_for_upgrading_to_pro">Thank you for upgrading to pro!</string>
 	<string name="this_feature_does_not_supported_on_samsung_devices">This feature is not supported on Samsung or ZTE devices</string>
 	<string name="title_activity_pin_shortcuts">Pin shortcuts</string>
+	<string name="transition_animation">Transition animation</string>
+	<string name="transition_animation_description">Enable system animation when switching between apps</string>
 	<string name="translate_the_app">Translate the app</string>
 	<string name="translate_the_app_detail">If you want to help us to localize the app in your language, please go to https://www.localize.im/v/xy \nThanks!</string>
 	<string name="trigger_one_make_all_visible">Hiển thị tất cả khi kích hoạt</string>
@@ -284,6 +288,7 @@
 	<string name="trigger_zone_setting">Cài đặt khu vực kích hoạt</string>
 	<string name="trigger_zone_setting_description">Nhấn vào đây để cài đặt vị trí, kích thước của Cạnh</string>
 	<string name="trigger_zone_visible">Trigger zone visible</string>
+	<string name="upgrade_to_pro">Upgrade to Pro</string>
 	<string name="uploading">Uploading</string>
 	<string name="use_as_default">Use as default</string>
 	<string name="vertical_margin">Lề dọc</string>

@@ -59,13 +59,21 @@ public class QuickActionSettingModel extends BaseCollectionSettingModel {
                                         if (firstGridFavoriteCollection == null) {
                                             return;
                                         }
+
+
                                         Item newItem = new Item();
                                         newItem.type = Item.TYPE_SHORTCUTS_SET;
                                         newItem.itemId = Item.TYPE_SHORTCUTS_SET + firstGridFavoriteCollection.collectionId;
                                         newItem.label = firstGridFavoriteCollection.label;
                                         newItem.collectionId = firstGridFavoriteCollection.collectionId;
                                         Utility.setItemBitmapForShortcutsSet(MyApplication.getContext(), newItem);
-                                        Item realmItem = realm.copyToRealm(newItem);
+                                        Item item0 = realm.where(Item.class).equalTo(Cons.ITEM_ID, newItem.itemId).findFirst();
+                                        Item realmItem;
+                                        if (item0 != null) {
+                                            realmItem = item0;
+                                        } else {
+                                            realmItem = realm.copyToRealm(newItem);
+                                        }
                                         items[0] = realmItem;
                                     }
 

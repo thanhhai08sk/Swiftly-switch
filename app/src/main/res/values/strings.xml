@@ -289,7 +289,7 @@
 
     <string name="what_new_3.1.6" translatable="false">VERSION 3.1.6:\n
         - New action: Search Shortcuts - Quickly search and start apps, shortcuts, contacts from any screen\n
-        - Support Greek and update translation for Japanese. Thanks for your support!\n
+        - Support Greek and update translation for Japanese, Persian. Thanks for your support!\n
         - Option to enable system animation when switching between apps\n
         - Fix bugs and some small improvements\n
     </string>

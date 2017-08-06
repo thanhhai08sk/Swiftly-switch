@@ -302,12 +302,17 @@ public class NewServiceModel extends BaseModel {
     }
 
     public IconsXY calculateCircleIconPositions(int radius, int edgePosition, float xInit, float yInit, int iconCount) {
+//        iconCount = 3;
+//        // TODO: 8/6/17 undo
         float circleSizePxl = radius * mScale;
         float[] xs = new float[iconCount];
         float[] ys = new float[iconCount];
         double alpha, beta;
         double[] alphaN = new double[iconCount];
         switch (iconCount) {
+            case 3:
+                alpha = Cons.CIRCLE_INIT_ANGLE_LESS_THAN_6_ITEMS;
+                break;
             case 4:
                 alpha = Cons.CIRCLE_INIT_ANGLE_LESS_THAN_6_ITEMS; // 20 degree
                 break;
