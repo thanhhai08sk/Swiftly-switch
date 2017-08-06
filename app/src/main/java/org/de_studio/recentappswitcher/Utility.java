@@ -1679,39 +1679,6 @@ public  class Utility {
         return Item.TYPE_ACTION + action;
     }
 
-    public static void startSlot(Slot slot, String lastAppPackageName, Context context, int contactAction, int ringerModeAction, int showing, String currentCollectionId, NewServicePresenter presenter, boolean useTransition) {
-
-        switch (slot.type) {
-            case Slot.TYPE_ITEM:
-                startItem(slot.stage1Item, lastAppPackageName, context, contactAction, ringerModeAction, false, useTransition);
-                break;
-            case Slot.TYPE_NULL:
-                if (currentCollectionId != null) {
-                    Intent intent;
-                    switch (showing) {
-                        case NewServicePresenter.Showing.SHOWING_GRID:
-                            intent = GridFavoriteSettingView.getIntent(context, currentCollectionId);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(intent);
-                            break;
-                        case NewServicePresenter.Showing.SHOWING_CIRCLE_AND_ACTION:
-                            intent = CircleFavoriteSettingView.getIntent(context, currentCollectionId);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(intent);
-                            break;
-                        case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:
-                            intent = CircleFavoriteSettingView.getIntent(context, currentCollectionId);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(intent);
-                            break;
-                    }
-                }
-                break;
-            case Slot.TYPE_FOLDER:
-                presenter.requestShowingFolder(slot);
-                break;
-        }
-    }
 
     public static void startItem(Item item, String lastAppPackageName, Context context,int contactAction, int ringerModeAction, boolean onHomeScreen, boolean useTransition) {
         switch (item.type) {

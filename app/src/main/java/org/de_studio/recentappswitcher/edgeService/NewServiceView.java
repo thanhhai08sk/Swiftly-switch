@@ -1228,6 +1228,16 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                         indicateSlot(currentShowing.circleSlots.get(id));
                     }
                     break;
+                case NewServicePresenter.Showing.SHOWING_ACTION_ONLY:
+                    if (id >= 10 && id - 10 < currentShowing.action.slots.size()) {
+                        Slot slot = currentShowing.action.slots.get(id - 10);
+                        if (slot.type.equals(Slot.TYPE_NULL) || slot.type.equals(Slot.TYPE_EMPTY)) {
+                            indicateSlot(null);
+                        } else {
+                            indicateSlot(slot);
+                        }
+                    }
+                    break;
                 case NewServicePresenter.Showing.SHOWING_GRID:
                     Slot slot = currentShowing.grid.slots.get(id);
                     indicateSlot(slot);
@@ -1329,6 +1339,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     ViewGroup circleView = (ViewGroup) collectionViewsMap.get(currentShowing.circle.collectionId);
                     highlightCircleIcon(circleView.getChildAt(id), currentShowing.circleIconsXY.xs[id], currentShowing.circleIconsXY.ys[id]);
                     break;
+                case NewServicePresenter.Showing.SHOWING_ACTION_ONLY:
+                    if (id >= 10 && id - 10 < currentShowing.action.slots.size()) {
+                        showQuickActions(currentShowing.edgePosition, id - 10, currentShowing, false, false);
+                    }
+                    break;
                 case NewServicePresenter.Showing.SHOWING_FOLDER:
                     if (id < currentShowing.folderItems.size()) {
                         RecyclerView folder = (RecyclerView) collectionViewsMap.get(currentShowing.folderSlotId);
@@ -1366,6 +1381,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     if (id < currentShowing.circleSlots.size()) {
                         ViewGroup circleView = (ViewGroup) collectionViewsMap.get(currentShowing.circle.collectionId);
                         unhighlightCircleIcon(circleView.getChildAt(id), currentShowing.circleIconsXY.xs[id], currentShowing.circleIconsXY.ys[id]);
+                    }
+                    break;
+                case NewServicePresenter.Showing.SHOWING_ACTION_ONLY:
+                    if (id >= 10){
+                        ((QuickActionsView) collectionViewsMap.get(getQuickActionsKey(currentShowing.edgePosition, currentShowing.action))).show(-1);
                     }
                     break;
                 case NewServicePresenter.Showing.SHOWING_FOLDER:

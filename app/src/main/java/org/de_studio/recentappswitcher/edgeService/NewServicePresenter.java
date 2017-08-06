@@ -435,6 +435,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             case Showing.SHOWING_GRID:
                 currentCollectionId = currentShowing.grid.collectionId;
                 break;
+            case Showing.SHOWING_ACTION_ONLY:
+                currentCollectionId = currentShowing.action.collectionId;
+                break;
         }
         return currentCollectionId;
     }
@@ -488,6 +491,12 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 int highlight1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), false, -1, false, true);
                 highlightIdSubject.onNext(highlight1);
                 break;
+            case Showing.SHOWING_ACTION_ONLY:
+                int highlight2 = model.getCircleAndQuickActionTriggerId(null, 60, xInit, yInit, x, y, currentEdge.position, 6, true, currentShowing.action.slots.size(), false, true);
+                if (highlight2 >= 10) {
+                    highlightIdSubject.onNext(highlight2);
+                }
+                break;
             case Showing.SHOWING_GRID:
                 int onPosition = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, currentShowing.grid.rowsCount, currentShowing.grid.columnCount, currentShowing.grid.space, false,view.isRTL());
                 highlightIdSubject.onNext(onPosition);
@@ -536,6 +545,14 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 if (currentHighlight >= 0) {
                     if (currentHighlight < currentShowing.circleSlots.size()) {
                         slot = currentShowing.circleSlots.get(currentHighlight);
+                    }
+                }
+                break;
+            case Showing.SHOWING_ACTION_ONLY:
+                if (currentHighlight >= 10) {
+                    slot = currentShowing.action.slots.get(currentHighlight - 10);
+                    if (slot.type.equals(Slot.TYPE_EMPTY) || slot.type.equals(Slot.TYPE_NULL)) {
+                        slot = null;
                     }
                 }
                 break;
@@ -669,6 +686,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 updateCircleIconPosition();
                 view.showCircle(currentShowing.circleIconsXY, currentShowing.circle, currentShowing.circleSlots, xInit, yInit);
                 break;
+            case Showing.SHOWING_ACTION_ONLY:
+                view.showQuickActions(currentEdge.position, -1, currentShowing, true,true);
+                break;
+
         }
         hideAllExceptEdgesAfter10Seconds();
     }
@@ -781,6 +802,12 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     if (currentHighlight < currentShowing.grid.slots.size()) {
                         return currentShowing.grid.slots.get(currentHighlight);
                     } else return null;
+                case Showing.SHOWING_ACTION_ONLY:
+                    if (currentHighlight >= 10) {
+                        if (currentShowing.action.slots.size() > currentHighlight - 10) {
+                            return currentShowing.action.slots.get(currentHighlight -10);
+                        } else return null;
+                    }
             }
         }
         return null;
