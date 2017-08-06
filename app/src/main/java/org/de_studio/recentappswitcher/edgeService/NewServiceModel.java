@@ -201,7 +201,7 @@ public class NewServiceModel extends BaseModel {
             if (distanceFromInitPxl < startQuickActionZonePxl) {
                 double distance;
                 double distanceNeeded = 35 * mScale;
-                for (int i = 0; i < iconsCount; i++) {
+                for (int i = 0; i < Math.min(iconsCount, iconsXY.xs.length); i++) {
                     distance = Math.sqrt(Math.pow(xDouble - (double) (iconsXY.xs[i] + haftIconWidth), 2) + Math.pow(yDouble - (double) (iconsXY.ys[i] + haftIconWidth), 2));
                     if (distance <= distanceNeeded) {
                         return i;
@@ -303,8 +303,6 @@ public class NewServiceModel extends BaseModel {
 
 
     public IconsXY calculateCircleIconPositions(int radius, int edgePosition, float xInit, float yInit, int iconCount) {
-//        iconCount = 3;
-//        // TODO: 8/6/17 undo
         float circleSizePxl = radius * mScale;
         float[] xs = new float[iconCount];
         float[] ys = new float[iconCount];
@@ -312,7 +310,7 @@ public class NewServiceModel extends BaseModel {
         double[] alphaN = new double[iconCount];
         switch (iconCount) {
             case 3:
-                alpha = Cons.CIRCLE_INIT_ANGLE_LESS_THAN_6_ITEMS;
+                alpha = Cons.CIRCLE_INIT_ANGLE_FOR_3;
                 break;
             case 4:
                 alpha = Cons.CIRCLE_INIT_ANGLE_LESS_THAN_6_ITEMS; // 20 degree

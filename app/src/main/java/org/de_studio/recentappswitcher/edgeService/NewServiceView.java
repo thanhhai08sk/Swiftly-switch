@@ -986,7 +986,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         FrameLayout frameLayout = (FrameLayout) collectionViewsMap.get(circle.collectionId);
         float previousX = 0;
         float previousY = 0;
-        for (int i = 0; i < frameLayout.getChildCount(); i++) {
+        for (int i = 0; i < Math.min(frameLayout.getChildCount(),iconsXY.xs.length); i++) {
             if (i < slots.size()) {
                 View icon = frameLayout.getChildAt(i);
                 icon.setVisibility(View.VISIBLE);

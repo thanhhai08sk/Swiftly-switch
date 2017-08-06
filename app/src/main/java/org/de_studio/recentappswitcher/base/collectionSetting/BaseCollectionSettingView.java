@@ -667,10 +667,10 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
     public void showChooseSizeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.set_size)
-                .setItems(new CharSequence[]{"5", "6", "7", "8"}, new DialogInterface.OnClickListener() {
+                .setItems(new CharSequence[]{"3","4","5", "6", "7", "8"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        presenter.onChooseCollectionSize(which + 5);
+                        presenter.onChooseCollectionSize(which + 3);
                     }
                 });
         builder.create().show();
