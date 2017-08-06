@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.transition.AutoTransition;
 import android.support.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
@@ -237,7 +238,7 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
 
     public void setCurrentMode(int mode) {
         String currentMode = null;
-        TransitionManager.beginDelayedTransition(parent);
+        TransitionManager.beginDelayedTransition(parent,new AutoTransition().setDuration(450));
         switch (mode) {
             case Edge.MODE_RECENT_AND_QUICK_ACTION:
                 currentMode = getString(R.string.edge_mode__recent_and_quick_actions);
