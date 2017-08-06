@@ -492,7 +492,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 highlightIdSubject.onNext(highlight1);
                 break;
             case Showing.SHOWING_ACTION_ONLY:
-                int highlight2 = model.getCircleAndQuickActionTriggerId(null, 60, xInit, yInit, x, y, currentEdge.position, 6, true, currentShowing.action.slots.size(), false, true);
+                int highlight2 = model.getCircleAndQuickActionTriggerId(null, currentShowing.action.radius, xInit, yInit, x, y, currentEdge.position, 6, true, currentShowing.action.slots.size(), false, true);
                 if (highlight2 >= 10) {
                     highlightIdSubject.onNext(highlight2);
                 }
@@ -655,7 +655,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 }else finishSectionSJ.onNext(null);
                 break;
             case Showing.SHOWING_ACTION_ONLY:
-                int position3 = model.getCircleAndQuickActionTriggerId(null, 60, xInit, yInit, x, y, currentShowing.edgePosition, 6, true, currentShowing.action.slots.size(), true, false);
+                int position3 = model.getCircleAndQuickActionTriggerId(null, currentShowing.action.radius, xInit, yInit, x, y, currentShowing.edgePosition, 6, true, currentShowing.action.slots.size(), true, false);
                 if (position3 >= 10) {
                     startSlotSJ.onNext(currentShowing.action.slots.get(position3 - 10));
                 } finishSectionSJ.onNext(null);
@@ -775,6 +775,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 currentShowing.showWhat = Showing.SHOWING_ACTION_ONLY;
                 currentShowing.action = currentEdge.quickAction;
                 currentShowing.stayOnScreen = false;
+                if (currentShowing.action.radius == 0) {
+                    model.setDefaultRadiusForQuickActions(currentShowing.action);
+                }
                 break;
         }
         currentShowing.edgePosition = currentEdge.position;

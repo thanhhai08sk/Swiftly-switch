@@ -88,6 +88,8 @@ public class Cons {
     public static final int FAVORITE_GRID_MAX_SHORTCUTS_SPACE = 40;
     public static final int INIT_OFFSET = 10;
     public static final int CIRCLE_RADIUS_DEFAULT = 105;
+    public static final int QUICK_ACTION_RADIUS_DEFAULT = 70;
+
     public static final int CIRCLE_AND_QUICK_ACTION_GAP = 35;
     public static final int OVAL_RADIUS_PLUS = 17;
     public static final int OVAL_OFFSET = 70;

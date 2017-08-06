@@ -424,6 +424,14 @@ public class NewServiceModel extends BaseModel {
 
     }
 
+    public void setDefaultRadiusForQuickActions(Collection quickActions) {
+        if (quickActions != null) {
+            realm.beginTransaction();
+            quickActions.radius = Cons.QUICK_ACTION_RADIUS_DEFAULT;
+            realm.commitTransaction();
+        }
+    }
+
     public void findAndSetRecentToEdge(Edge edge) {
         if (edge != null) {
             final String edgeId = edge.edgeId;

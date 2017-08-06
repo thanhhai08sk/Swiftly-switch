@@ -4,8 +4,10 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -71,6 +73,8 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
     TextView gridFavoriteSetDescription;
     @BindView(R.id.circle_favorite_set_description)
     TextView circleFavoriteSetDescription;
+    @BindView(R.id.parent)
+    ViewGroup parent;
 
 
     PublishSubject<Void> setDataCompleteSJ = PublishSubject.create();
@@ -233,6 +237,7 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
 
     public void setCurrentMode(int mode) {
         String currentMode = null;
+        TransitionManager.beginDelayedTransition(parent);
         switch (mode) {
             case Edge.MODE_RECENT_AND_QUICK_ACTION:
                 currentMode = getString(R.string.edge_mode__recent_and_quick_actions);
