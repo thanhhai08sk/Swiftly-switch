@@ -644,8 +644,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     private void setQuickActionsPositionAndCurrentTrigger(QuickActionsView quickActionsView, int highlighPosition, NewServicePresenter.Showing currentShowing) {
         quickActionsView.setVisibility(View.VISIBLE);
         quickActionsView.show(highlighPosition);
-        quickActionsView.setX(currentShowing.xInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
-        quickActionsView.setY(currentShowing.yInit - (currentShowing.circle.radius * 2 * mScale + 56 * 2 * mScale) / 2);
+        int radius;
+        if (currentShowing.showWhat == NewServicePresenter.Showing.SHOWING_ACTION_ONLY || currentShowing.circle == null) {
+            radius = currentShowing.action.radius;
+        } else radius = currentShowing.circle.radius;
+        quickActionsView.setX(currentShowing.xInit - ( radius  * 2 * mScale + 56 * 2 * mScale) / 2);
+        quickActionsView.setY(currentShowing.yInit - (radius * 2 * mScale + 56 * 2 * mScale) / 2);
     }
 
     @NonNull
