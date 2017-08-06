@@ -267,6 +267,39 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
                 gridFavorite.setVisibility(View.VISIBLE);
                 gridFavoriteSeparator.setVisibility(View.VISIBLE);
                 break;
+            case Edge.MODE_RECENT_ONLY:
+                currentMode = getString(R.string.edge_mode__recent_apps_only);
+                recent.setVisibility(View.VISIBLE);
+                recentSeparator.setVisibility(View.VISIBLE);
+                quickAction.setVisibility(View.GONE);
+                quickActionSeparator.setVisibility(View.GONE);
+                circleFavorite.setVisibility(View.GONE);
+                circleFavoriteSeparator.setVisibility(View.GONE);
+                gridFavorite.setVisibility(View.GONE);
+                gridFavoriteSeparator.setVisibility(View.GONE);
+                break;
+            case Edge.MODE_CIRCLE_FAVORITE_ONLY:
+                currentMode = getString(R.string.edge_mode__circle_favorites_only);
+                recent.setVisibility(View.GONE);
+                recentSeparator.setVisibility(View.GONE);
+                quickAction.setVisibility(View.GONE);
+                quickActionSeparator.setVisibility(View.GONE);
+                circleFavorite.setVisibility(View.VISIBLE);
+                circleFavoriteSeparator.setVisibility(View.VISIBLE);
+                gridFavorite.setVisibility(View.GONE);
+                gridFavoriteSeparator.setVisibility(View.GONE);
+                break;
+            case Edge.MODE_QUICK_ACTION_ONLY:
+                currentMode = getString(R.string.edge_mode__quick_action_only);
+                recent.setVisibility(View.GONE);
+                recentSeparator.setVisibility(View.GONE);
+                quickAction.setVisibility(View.VISIBLE);
+                quickActionSeparator.setVisibility(View.VISIBLE);
+                circleFavorite.setVisibility(View.GONE);
+                circleFavoriteSeparator.setVisibility(View.GONE);
+                gridFavorite.setVisibility(View.GONE);
+                gridFavoriteSeparator.setVisibility(View.GONE);
+                break;
         }
         currentModeText.setText(currentMode);
     }

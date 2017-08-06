@@ -125,6 +125,30 @@ public class EdgeSettingModel extends BaseModel {
                         edge.quickAction = null;
                         edge.circleFav = null;
                         break;
+                    case Edge.MODE_RECENT_ONLY:
+                        if (edge.recent == null) {
+                            edge.recent = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_RECENT).findFirst();
+                        }
+                        edge.circleFav = null;
+                        edge.quickAction = null;
+                        edge.grid = null;
+                        break;
+                    case Edge.MODE_CIRCLE_FAVORITE_ONLY:
+                        if (edge.circleFav == null) {
+                            edge.circleFav = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_CIRCLE_FAVORITE).findFirst();
+                        }
+                        edge.recent = null;
+                        edge.quickAction = null;
+                        edge.grid = null;
+                        break;
+                    case Edge.MODE_QUICK_ACTION_ONLY:
+                        if (edge.quickAction == null) {
+                            edge.quickAction = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_QUICK_ACTION).findFirst();
+                        }
+                        edge.recent = null;
+                        edge.circleFav = null;
+                        edge.grid = null;
+                        break;
                 }
             }
         });

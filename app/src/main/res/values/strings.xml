@@ -395,4 +395,10 @@
     <string name="transition_animation">Transition animation</string>
     <string name="transition_animation_description">Enable system animation when switching between apps</string>
 
+
+    <string name="edge_mode__recent_apps_only">Recent Apps only</string>
+    <string name="edge_mode__circle_favorites_only">Circle Favorite only</string>
+    <string name="edge_mode__quick_action_only">Quick Actions only</string>
+
+
 </resources>
