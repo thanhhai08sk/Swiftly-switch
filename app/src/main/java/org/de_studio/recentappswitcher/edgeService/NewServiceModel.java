@@ -301,6 +301,7 @@ public class NewServiceModel extends BaseModel {
         return -1;
     }
 
+
     public IconsXY calculateCircleIconPositions(int radius, int edgePosition, float xInit, float yInit, int iconCount) {
 //        iconCount = 3;
 //        // TODO: 8/6/17 undo
@@ -418,6 +419,22 @@ public class NewServiceModel extends BaseModel {
             });
         }
 
+    }
+
+    public void findAndSetRecentToEdge(Edge edge) {
+        if (edge != null) {
+            final String edgeId = edge.edgeId;
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Edge edgeToFix = realm.where(Edge.class).equalTo(Cons.EDGE_ID, edgeId).findFirst();
+                    Collection recent = realm.where(Collection.class).equalTo(Cons.TYPE, Collection.TYPE_RECENT).findFirst();
+                    if (edgeToFix != null && recent != null) {
+                        edgeToFix.recent = recent;
+                    }
+                }
+            });
+        }
     }
 
     public void removeAppItemFromData(final String packageName) {

@@ -257,7 +257,7 @@ public class ScreenshotView extends Activity {
                     }
                 }, 200);
 
-            }
+            } else throw new RuntimeException("sMediaProjection null");
         }
     }
 
