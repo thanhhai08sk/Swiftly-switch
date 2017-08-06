@@ -271,6 +271,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         tempRecentPackages = null;
                         model.clearSectionData();
                         view.setFirstSectionFalse();
+                        holdingHelper++;
                     }
                 })
         );
@@ -716,7 +717,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
     private void hideAllExceptEdgesAfter10Seconds() {
         handler.removeCallbacks(hideAllExceptEdgesRunnable);
-        handler.postDelayed(hideAllExceptEdgesRunnable, 15 * 1000);
+        handler.postDelayed(hideAllExceptEdgesRunnable, 20 * 1000);
     }
 
     private void stopHideViewsHandler() {
