@@ -468,7 +468,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             setCurrentEdgeAndCurrentShowing(edgeId);
             setTriggerPoint(x, y);
 
-            view.showBackground(model.shouldBackgroundTouchable());
+            view.showBackground(true);
             view.actionDownVibrate();
             view.showClock();
             showCollection(currentShowing.showWhat);
@@ -481,11 +481,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     public void onActionMove(float x, float y) {
         switch (currentShowing.showWhat) {
             case Showing.SHOWING_CIRCLE_AND_ACTION:
-                int highlight = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), true,currentShowing.action.slots.size(),false);
+                int highlight = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), true,currentShowing.action.slots.size(),false, true);
                 highlightIdSubject.onNext(highlight);
                 break;
             case Showing.SHOWING_CIRCLE_ONLY:
-                int highlight1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), false, -1, false);
+                int highlight1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentEdge.position, currentShowing.circle.slots.size(), false, -1, false, true);
                 highlightIdSubject.onNext(highlight1);
                 break;
             case Showing.SHOWING_GRID:
@@ -614,7 +614,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 }
                 break;
             case Showing.SHOWING_CIRCLE_AND_ACTION:
-                int onPosition1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(), true, currentShowing.action.slots.size(),true);
+                int onPosition1 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(), true, currentShowing.action.slots.size(),true, false);
 //                Log.e(TAG, "onClickBackground: circle and action, position = " + onPosition1);
                 if (onPosition1 != -1) {
                     if (onPosition1 < 10) {
@@ -626,13 +626,22 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 }else finishSectionSJ.onNext(null);
                 break;
             case Showing.SHOWING_CIRCLE_ONLY:
-                int onPosition2 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(), true, currentShowing.action.slots.size(),true);
+                int onPosition2 = model.getCircleAndQuickActionTriggerId(currentShowing.circleIconsXY, currentShowing.circle.radius, xInit, yInit, x, y, currentShowing.edgePosition, currentShowing.circleSlots.size(),
+                        currentShowing.action != null,
+                        (currentShowing.action != null)? currentShowing.action.slots.size() : 0,
+                        true, false);
 //                Log.e(TAG, "onClickBackground: circle only, position = " + onPosition2);
                 if (onPosition2 != -1) {
                     if (onPosition2 < 10) {
                         startSlotSJ.onNext(currentShowing.circleSlots.get(onPosition2));
                     }else finishSectionSJ.onNext(null);
                 }else finishSectionSJ.onNext(null);
+                break;
+            case Showing.SHOWING_ACTION_ONLY:
+                int position3 = model.getCircleAndQuickActionTriggerId(null, 60, xInit, yInit, x, y, currentShowing.edgePosition, 6, true, currentShowing.action.slots.size(), true, false);
+                if (position3 >= 10) {
+                    startSlotSJ.onNext(currentShowing.action.slots.get(position3 - 10));
+                } finishSectionSJ.onNext(null);
                 break;
             default:
                 finishSectionSJ.onNext(null);
@@ -670,10 +679,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     }
 
     private void setTriggerPoint(float x, float y) {
-        if (currentEdge.mode== Edge.MODE_RECENT_AND_QUICK_ACTION) {
+        if (currentEdge.mode== Edge.MODE_RECENT_AND_QUICK_ACTION || currentEdge.mode == Edge.MODE_RECENT_ONLY) {
             xInit = model.getXInit(currentEdge.position, x, view.getWindowSize().x, currentEdge.recent.radius);
             yInit = model.getYInit(currentEdge.position, y, view.getWindowSize().y, currentEdge.recent.radius);
-        } else if (currentEdge.mode == Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION) {
+        } else if (currentEdge.mode == Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION || currentEdge.mode == Edge.MODE_CIRCLE_FAVORITE_ONLY) {
             xInit = model.getXInit(currentEdge.position, x, view.getWindowSize().x, currentEdge.circleFav.radius);
             yInit = model.getYInit(currentEdge.position, y, view.getWindowSize().y, currentEdge.circleFav.radius);
         } else {
@@ -740,6 +749,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 currentShowing.circle = currentEdge.recent;
                 currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots,currentShowing);
                 currentShowing.stayOnScreen = isStayOnScreen(currentShowing.circle);
+                break;
+            case Edge.MODE_QUICK_ACTION_ONLY:
+                currentShowing.showWhat = Showing.SHOWING_ACTION_ONLY;
+                currentShowing.action = currentEdge.quickAction;
+                currentShowing.stayOnScreen = false;
                 break;
         }
         currentShowing.edgePosition = currentEdge.position;
@@ -897,6 +911,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         public static final int SHOWING_FOLDER = 3;
         public static final int SHOWING_CIRCLE_ONLY = 4;
         public static final int SHOWING_SEARCH_VIEW = 5;
+        public static final int SHOWING_ACTION_ONLY = 6;
 
         public int showWhat;
         public Collection grid;
