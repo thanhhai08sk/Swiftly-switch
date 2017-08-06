@@ -493,7 +493,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 break;
             case Showing.SHOWING_ACTION_ONLY:
                 int highlight2 = model.getCircleAndQuickActionTriggerId(null, currentShowing.action.radius, xInit, yInit, x, y, currentEdge.position, 6, true, currentShowing.action.slots.size(), false, true);
-                if (highlight2 >= 10) {
+                if (highlight2 >= 10 || highlight2 < 0) {
                     highlightIdSubject.onNext(highlight2);
                 }
                 break;
