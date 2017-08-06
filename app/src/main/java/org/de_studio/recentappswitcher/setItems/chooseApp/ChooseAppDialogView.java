@@ -15,8 +15,6 @@ import java.lang.ref.WeakReference;
 
 public class ChooseAppDialogView extends BaseChooseItemDialogView {
 
-
-
     @Override
     public void loadItems() {
         ChooseAppFragmentView.LoadAppsTask task = new ChooseAppFragmentView.LoadAppsTask(new WeakReference<PackageManager>(getActivity().getPackageManager()));

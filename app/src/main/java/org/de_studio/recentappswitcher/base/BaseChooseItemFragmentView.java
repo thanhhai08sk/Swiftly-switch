@@ -180,6 +180,11 @@ public abstract class BaseChooseItemFragmentView<P extends BaseChooseItemPresent
         Utility.noticeUserAboutScreenLock(getActivity());
     }
 
+    @Override
+    public boolean checkHasAdminPermission() {
+        return Utility.checkHasAdminPermission(getActivity());
+    }
+
     @OnClick(R.id.contact_permission)
     void onContackPermissionClick(){
 //        ActivityCompat.requestPermissions(getActivityForContext(),
@@ -187,4 +192,5 @@ public abstract class BaseChooseItemFragmentView<P extends BaseChooseItemPresent
 //                Cons.REQUEST_CODE_CONTACT_PERMISSION);
         requestPermissions(new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE},Cons.REQUEST_CODE_CONTACT_PERMISSION);
     }
+
 }

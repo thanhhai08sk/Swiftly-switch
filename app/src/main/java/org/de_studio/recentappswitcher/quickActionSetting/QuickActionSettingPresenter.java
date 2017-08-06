@@ -62,7 +62,8 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
         );
 
         addSubscription(
-                view.onSetItemToSlot().subscribe(new Action1<Item>() {
+                view.onSetItemToSlot()
+                        .subscribe(new Action1<Item>() {
                     @Override
                     public void call(Item item) {
                         model.setItemToSlotStage1(item, slotOnsettingId);

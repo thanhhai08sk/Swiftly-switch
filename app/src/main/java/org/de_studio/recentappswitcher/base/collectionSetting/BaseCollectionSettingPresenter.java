@@ -370,8 +370,6 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
 
         boolean isFree();
         void proOnlyDialog();
-
-
     }
 
     public static class SetItemIconInfo {

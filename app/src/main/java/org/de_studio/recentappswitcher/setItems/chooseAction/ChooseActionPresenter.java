@@ -6,7 +6,6 @@ import org.de_studio.recentappswitcher.base.BaseModel;
 import org.de_studio.recentappswitcher.model.Item;
 
 import io.realm.RealmResults;
-import rx.functions.Action1;
 
 /**
  * Created by HaiNguyen on 11/19/16.
@@ -23,16 +22,16 @@ public class ChooseActionPresenter extends BaseChooseItemPresenter {
     @Override
     public void onViewAttach(final View view) {
         super.onViewAttach(view);
-        addSubscription(
-                view.onItemClick().subscribe(new Action1<Item>() {
-                    @Override
-                    public void call(Item item) {
-                        if (item.action == Item.ACTION_SCREEN_LOCK) {
-                            view.noticeUserAboutScreenLock();
-                        }
-                    }
-                })
-        );
+//        addSubscription(
+//                view.onItemClick().subscribe(new Action1<Item>() {
+//                    @Override
+//                    public void call(Item item) {
+//                        if (item.action == Item.ACTION_SCREEN_LOCK) {
+//                            view.noticeUserAboutScreenLock();
+//                        }
+//                    }
+//                })
+//        );
     }
 
     @Override

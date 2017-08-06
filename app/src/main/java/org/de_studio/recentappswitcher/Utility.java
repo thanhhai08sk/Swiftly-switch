@@ -67,11 +67,8 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.de_studio.recentappswitcher.base.BaseActivity;
-import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
-import org.de_studio.recentappswitcher.edgeService.NewServicePresenter;
 import org.de_studio.recentappswitcher.edgeService.NewServiceView;
-import org.de_studio.recentappswitcher.gridFavoriteSetting.GridFavoriteSettingView;
 import org.de_studio.recentappswitcher.main.MainView;
 import org.de_studio.recentappswitcher.model.Collection;
 import org.de_studio.recentappswitcher.model.Edge;
@@ -472,11 +469,8 @@ public  class Utility {
 
     public static void screenLockAction(Context context) {
         final DevicePolicyManager pm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-        ComponentName cm = new ComponentName(context, LockAdmin.class);
-        Log.e(TAG, "screenLockAction: ");
 
-        if (pm.isAdminActive(cm)) {
-            Log.e(TAG, "screenLockAction: permission ok");
+        if (checkHasAdminPermission(context)) {
             Runnable lockRunnable = new Runnable() {
 
                 @Override
@@ -490,6 +484,12 @@ public  class Utility {
         } else {
             startNotiDialog(context,NotiDialog.PHONE_ADMIN_PERMISSION);
         }
+    }
+
+    public static boolean checkHasAdminPermission(Context context) {
+        final DevicePolicyManager pm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        ComponentName cm = new ComponentName(context, LockAdmin.class);
+        return pm.isAdminActive(cm);
     }
 
     public static void brightnessAction(Context context) {
@@ -2243,22 +2243,23 @@ public  class Utility {
     public static void noticeUserAboutScreenLock(final Context context) {
         new MaterialDialog.Builder(context)
                 .title(R.string.admin_permission)
-                .content(R.string.admin_permission_notice)
-                .positiveText(R.string.go_to_setting)
-                .negativeText(R.string.edge_dialog_cancel_button)
+                .content(R.string.admin_permission_notice_2)
+                .positiveText(R.string.button_close)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        ComponentName cm = new ComponentName(context, LockAdmin.class);
-                        Intent buttonIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-                        buttonIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cm);
-                        buttonIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                                context.getString(R.string.admin_permission_notice));
-                        context.startActivity(buttonIntent);
+//                        ComponentName cm = new ComponentName(context, LockAdmin.class);
+//                        Intent buttonIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+//                        buttonIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cm);
+//                        buttonIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+//                                context.getString(R.string.admin_permission_notice));
+//                        context.startActivity(buttonIntent);
+                        dialog.dismiss();
                     }
                 })
                 .show();
     }
+
 
     public static int calculateNoOfColumns(Context context, int iconSize) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
