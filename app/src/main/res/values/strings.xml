@@ -287,7 +287,7 @@
 
     //What new
     <string name="what_new_3.1.8" translatable="false">VERSION 3.1.8:\n
-        - Remove the Screen Lock because it required the android.permission.BIND_DEVICE_ADMIN permission which violate the Deceptive Behavior Policy. \n
+        - Remove the Screen Lock because it required the android.permission.BIND_DEVICE_ADMIN permission which violate the Deceptive Behavior Policy. Sorry for the inconvenience! \n
         - Update translations for French and Russian. Thanks the contributors from localize.im\n
     </string>
 

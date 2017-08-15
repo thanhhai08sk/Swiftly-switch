@@ -19,6 +19,7 @@ import java.util.List;
 import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
 
 /**
@@ -49,6 +50,22 @@ public class NewServiceModel extends BaseModel {
     void setup() {
         iconWidth = Cons.ICON_SIZE_DEFAULT * mScale * iconScale;
         haftIconWidth = iconWidth / 2;
+        RealmResults<Item> screenLocks = realm.where(Item.class).equalTo(Cons.ACTION, Item.ACTION_SCREEN_LOCK).findAll();
+        if (screenLocks.size() > 0) {
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmResults<Slot> screenLockSlot = realm.where(Slot.class).equalTo(Cons.TYPE, Slot.TYPE_ITEM).equalTo("stage1Item.action", Item.ACTION_SCREEN_LOCK).findAll();
+                    for (Slot slot : screenLockSlot) {
+                        RealmObject.deleteFromRealm(slot);
+                    }
+                    RealmResults<Item> screenLocks = realm.where(Item.class).equalTo(Cons.ACTION, Item.ACTION_SCREEN_LOCK).findAll();
+                    for (Item screenLock : screenLocks) {
+                        RealmObject.deleteFromRealm(screenLock);
+                    }
+                }
+            });
+        }
     }
 
     public Edge getEdge(String edgeId) {

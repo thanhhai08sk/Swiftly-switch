@@ -305,6 +305,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         if (slot != null) {
                             switch (slot.type) {
                                 case Slot.TYPE_ITEM:
+                                    if (slot.stage1Item == null) break;
                                     if (slot.stage1Item.type.equals(Item.TYPE_SHORTCUTS_SET)) {
                                         showCollectionInstantlySubject.onNext(slot.stage1Item.collectionId);
                                     } else {
