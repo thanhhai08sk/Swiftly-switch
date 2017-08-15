@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.ActivityNotFoundException;
@@ -36,7 +35,6 @@ import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
@@ -81,7 +79,6 @@ import org.de_studio.recentappswitcher.service.ScreenBrightnessDialogActivity;
 import org.de_studio.recentappswitcher.service.VolumeDialogActivity;
 import org.de_studio.recentappswitcher.shortcut.FlashService;
 import org.de_studio.recentappswitcher.shortcut.FlashServiceM;
-import org.de_studio.recentappswitcher.shortcut.LockAdmin;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -408,8 +405,6 @@ public  class Utility {
             return Item.ACTION_DIAL;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_flash_light))) {
             return Item.ACTION_FLASH_LIGHT;
-        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_screen_lock))) {
-            return Item.ACTION_SCREEN_LOCK;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.screen_shot))) {
             return Item.ACTION_SCREENSHOT;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_search_shortcuts))) {
@@ -467,30 +462,6 @@ public  class Utility {
         }
     }
 
-    public static void screenLockAction(Context context) {
-        final DevicePolicyManager pm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-
-        if (checkHasAdminPermission(context)) {
-            Runnable lockRunnable = new Runnable() {
-
-                @Override
-                public void run() {
-                    pm.lockNow();
-                }
-            };
-            Handler handler = new Handler();
-            handler.post(lockRunnable);
-
-        } else {
-            startNotiDialog(context,NotiDialog.PHONE_ADMIN_PERMISSION);
-        }
-    }
-
-    public static boolean checkHasAdminPermission(Context context) {
-        final DevicePolicyManager pm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-        ComponentName cm = new ComponentName(context, LockAdmin.class);
-        return pm.isAdminActive(cm);
-    }
 
     public static void brightnessAction(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.System.canWrite(context)) {
@@ -696,8 +667,6 @@ public  class Utility {
                 return ContextCompat.getDrawable(context, R.drawable.ic_sound_normal);
             case Item.ACTION_FLASH_LIGHT:
                 return ContextCompat.getDrawable(context, R.drawable.ic_flash_light);
-            case Item.ACTION_SCREEN_LOCK:
-                return ContextCompat.getDrawable(context, R.drawable.ic_screen_lock);
             case Item.ACTION_SCREENSHOT:
                 return ContextCompat.getDrawable(context, R.drawable.ic_screenshot2);
             case Item.ACTION_SEARCH_SHORTCUTS:
@@ -894,28 +863,6 @@ public  class Utility {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
     }
 
-    public static void askForAdminPermission(final Context context) {
-            final ComponentName cm = new ComponentName(context, LockAdmin.class);
-            final DevicePolicyManager pm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-            if (!pm.isAdminActive(cm)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(R.string.admin_permission)
-                        .setMessage(R.string.admin_permission_explain)
-                        .setPositiveButton(R.string.go_to_setting, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-                                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cm);
-                                intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                                        context.getString(R.string.admin_desc));
-                                context.startActivity(intent);
-
-                            }
-                        });
-                builder.show();
-            }
-
-    }
 
     public static int rightLeftOrBottom(int position) {
         switch (position / 10) {
@@ -1395,9 +1342,6 @@ public  class Utility {
                 setBitMapForActionItemFromResId(item, 1, R.drawable.ic_flash_light, context);
                 setBitMapForActionItemFromResId(item, 2, R.drawable.ic_flash_light_off, context);
                 break;
-            case Item.ACTION_SCREEN_LOCK:
-                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_screen_lock, context);
-                break;
             case Item.ACTION_SCREENSHOT:
                 setBitMapForActionItemFromResId(item, 1, R.drawable.ic_screenshot2, context);
                 break;
@@ -1842,9 +1786,6 @@ public  class Utility {
             case Item.ACTION_FLASH_LIGHT:
                 Utility.flashLightAction3(context);
                 break;
-            case Item.ACTION_SCREEN_LOCK:
-                Utility.screenLockAction(context);
-                break;
             case Item.ACTION_SCREENSHOT:
                 Utility.screenshotAction(context);
                 break;
@@ -1972,8 +1913,6 @@ public  class Utility {
                 return Item.ACTION_RINGER_MODE;
             case MainActivity.ACTION_FLASH_LIGHT:
                 return Item.ACTION_FLASH_LIGHT;
-            case MainActivity.ACTION_SCREEN_LOCK:
-                return Item.ACTION_SCREEN_LOCK;
             default:
                 throw new IllegalArgumentException("do not convert this action " + action);
         }

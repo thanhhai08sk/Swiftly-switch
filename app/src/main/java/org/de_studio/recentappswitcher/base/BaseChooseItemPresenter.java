@@ -1,15 +1,11 @@
 package org.de_studio.recentappswitcher.base;
 
-import android.util.Log;
-
 import org.de_studio.recentappswitcher.model.Item;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
-import rx.Observable;
 import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.functions.Func2;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
@@ -64,20 +60,6 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
 
         addSubscription(
                 view.onItemClick()
-                        .flatMap(new Func1<Item, Observable<Item>>() {
-                            @Override
-                            public Observable<Item> call(Item item) {
-                                Log.e(TAG, "call: on item, type = " + item.type + "\naction = " + item.action);
-                                if (item.type.equals(Item.TYPE_ACTION) && item.action == Item.ACTION_SCREEN_LOCK) {
-                                    if (view.checkHasAdminPermission()) {
-                                        return Observable.just(item);
-                                    }else {
-                                        view.noticeUserAboutScreenLock();
-                                        return Observable.empty();
-                                    }
-                                } else return Observable.just(item);
-                            }
-                        })
                         .subscribe(new Action1<Item>() {
                     @Override
                     public void call(Item item) {
@@ -162,7 +144,6 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
 
         void noticeUserAboutScreenLock();
 
-        boolean checkHasAdminPermission();
     }
 
 }

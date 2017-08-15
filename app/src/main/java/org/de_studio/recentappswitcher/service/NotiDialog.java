@@ -1,7 +1,5 @@
 package org.de_studio.recentappswitcher.service;
 
-import android.app.admin.DevicePolicyManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,7 +16,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.main.MainView;
-import org.de_studio.recentappswitcher.shortcut.LockAdmin;
 
 /**
  * Created by HaiNguyen on 7/30/16.
@@ -86,13 +83,13 @@ public class NotiDialog extends AppCompatActivity {
                     break;
                 case PHONE_ADMIN_PERMISSION:
                     titleRes = R.string.admin_permission;
-                    textRes = R.string.admin_permission_notice;
-                    buttonTextRes = R.string.go_to_setting;
-                    ComponentName cm = new ComponentName(getApplicationContext(), LockAdmin.class);
-                    buttonIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-                    buttonIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cm);
-                    buttonIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                            getString(R.string.admin_permission_notice));
+                    textRes = R.string.admin_permission_notice_2;
+                    buttonTextRes = R.string.button_close;
+//                    ComponentName cm = new ComponentName(getApplicationContext(), LockAdmin.class);
+//                    buttonIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+//                    buttonIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cm);
+//                    buttonIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+//                            getString(R.string.admin_permission_notice));
                     break;
                 case ACCESSIBILITY_PERMISSION:
                     titleRes = R.string.enable_accessibility_permission;
@@ -114,7 +111,9 @@ public class NotiDialog extends AppCompatActivity {
             builder.setPositiveButton(buttonTextRes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(buttonIntent);
+                    if (buttonIntent != null) {
+                        startActivity(buttonIntent);
+                    }
                 }
             })
                     .setTitle(titleRes)

@@ -13,6 +13,7 @@
 	<string name="admin_permission">Phone administrator permission</string>
 	<string name="admin_permission_explain">Allow Swiftly Switch with admin permissions to enable the screen lock.</string>
 	<string name="admin_permission_notice">Using this shortcut requires setting Swiftly Switch as an administrator. This means that the app CAN NOT be uninstalled unless you disable the permission first.</string>
+	<string name="admin_permission_notice_2">Using this shortcut requires setting Swiftly Switch as an administrator. This means that the app CAN NOT be uninstalled unless you disable the permission first. Set Swiftly Switch as your Device Administrator at Settings -> Security -> Device Administrators</string>
 	<string name="always_visible">Always visible</string>
 	<string name="app_name">Swiftly Switch Pro</string>
 	<string name="app_shortcut_contact">Ứng dụng, lối tắt,&#8230;</string>
@@ -36,6 +37,7 @@
 	<string name="backup_to_local_storage">Backup to local storage</string>
 	<string name="batterylife">Pin:</string>
 	<string name="brightness">Brightness</string>
+	<string name="button_close">Close</string>
 	<string name="call">Call</string>
 	<string name="can_not_delete">Không thể xóa</string>
 	<string name="can_not_delete_cause_being_used_in">Không thể xóa, đang được sử dụng tại:</string>
@@ -93,8 +95,11 @@
 	<string name="edge_dialog_set_sensitive_text">Độ nhạy</string>
 	<string name="edge_gesture_notification_title">Recent App Switcher</string>
 	<string name="edge_mode__circle_favorite_and_quick_actions">Circle Favorite and Quick Actions</string>
+	<string name="edge_mode__circle_favorites_only">Circle Favorite only</string>
 	<string name="edge_mode__grid_favorite">Grid Favorite</string>
+	<string name="edge_mode__quick_action_only">Quick Actions only</string>
 	<string name="edge_mode__recent_and_quick_actions">Recent apps and Quick Actions</string>
+	<string name="edge_mode__recent_apps_only">Recent Apps only</string>
 	<string name="edge_running_toast">Swiftly Switch is running</string>
 	<string name="edge_service_paused_toast">Swiftly Switch is paused</string>
 	<string name="edit">Edit</string>

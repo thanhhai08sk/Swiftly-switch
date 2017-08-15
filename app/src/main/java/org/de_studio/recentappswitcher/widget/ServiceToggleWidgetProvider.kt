@@ -51,7 +51,7 @@ class ServiceToggleWidgetProvider: AppWidgetProvider() {
                 val ids = manager.getAppWidgetIds(ComponentName(context, ServiceToggleWidgetProvider::class.java))
                 onUpdate(context, manager, ids)
             }else {
-                Log.e(TAG, "AppWidgetManager null")
+//                Log.e(TAG, "AppWidgetManager null")
                 context!!.sendBroadcast(Intent("android.appwidget.action.APPWIDGET_UPDATE"))
             }
         }

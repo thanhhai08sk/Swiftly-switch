@@ -140,8 +140,4 @@ public abstract class BaseChooseItemDialogView extends BaseDialogFragment<BaseCh
         Utility.noticeUserAboutScreenLock(getActivity());
     }
 
-    @Override
-    public boolean checkHasAdminPermission() {
-        return Utility.checkHasAdminPermission(getActivity());
-    }
 }

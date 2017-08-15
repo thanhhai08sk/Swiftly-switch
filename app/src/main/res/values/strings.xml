@@ -286,6 +286,16 @@
 
 
     //What new
+    <string name="what_new_3.1.8" translatable="false">VERSION 3.1.8:\n
+        - Remove the Screen Lock because it required the android.permission.BIND_DEVICE_ADMIN permission which violate the Deceptive Behavior Policy. \n
+        - Update translations for French and Russian. Thanks the contributors from localize.im\n
+    </string>
+
+    <string name="what_new_3.1.7" translatable="false">VERSION 3.1.7:\n
+        - 3 new edge modes: Recent Apps only, Circle Favorite only, and Quick Actions only\n
+        - Option for set minimum items as 3 for Recent Apps and Circle Favorites\n
+        - Fix bugs and some small improvements\n
+    </string>
 
     <string name="what_new_3.1.6" translatable="false">VERSION 3.1.6:\n
         - New action: Search Shortcuts - Quickly search and start apps, shortcuts, contacts from any screen\n

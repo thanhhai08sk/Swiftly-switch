@@ -180,10 +180,6 @@ public abstract class BaseChooseItemFragmentView<P extends BaseChooseItemPresent
         Utility.noticeUserAboutScreenLock(getActivity());
     }
 
-    @Override
-    public boolean checkHasAdminPermission() {
-        return Utility.checkHasAdminPermission(getActivity());
-    }
 
     @OnClick(R.id.contact_permission)
     void onContackPermissionClick(){
