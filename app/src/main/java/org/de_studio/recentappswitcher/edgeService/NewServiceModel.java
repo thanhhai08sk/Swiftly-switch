@@ -57,7 +57,7 @@ public class NewServiceModel extends BaseModel {
                 public void execute(Realm realm) {
                     RealmResults<Slot> screenLockSlot = realm.where(Slot.class).equalTo(Cons.TYPE, Slot.TYPE_ITEM).equalTo("stage1Item.action", Item.ACTION_SCREEN_LOCK).findAll();
                     for (Slot slot : screenLockSlot) {
-                        RealmObject.deleteFromRealm(slot);
+                        slot.type = Slot.TYPE_NULL;
                     }
                     RealmResults<Item> screenLocks = realm.where(Item.class).equalTo(Cons.ACTION, Item.ACTION_SCREEN_LOCK).findAll();
                     for (Item screenLock : screenLocks) {
