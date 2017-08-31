@@ -135,11 +135,11 @@ public class QuickActionSettingView extends BaseCollectionSettingView<Void, Quic
     }
 
     @Override
-    public void chooseItemTypeToAdd(final String slotId) {
+    public void chooseItemTypeToAdd(final String slotId, final int slotIndex) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.choose_shortcuts_type);
         builder.setItems(new CharSequence[]{getString(R.string.apps)
-                        , getString(R.string.actions), getString(R.string.contacts), getString(R.string.device_shortcuts), getString(R.string.shortcuts_sets)}
+                        , getString(R.string.actions), getString(R.string.contacts), getString(R.string.device_shortcuts), getString(R.string.shortcuts_sets), getString(R.string.edit)}
                 , new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -159,7 +159,9 @@ public class QuickActionSettingView extends BaseCollectionSettingView<Void, Quic
                     case 4:
                         setSlotSubject.onNext(new QuickActionSettingPresenter.SlotInfo(slotId, Item.TYPE_SHORTCUTS_SET));
                         break;
-
+                    case 5:
+                        presenter.editItem(slotIndex);
+                        break;
                 }
             }
         });

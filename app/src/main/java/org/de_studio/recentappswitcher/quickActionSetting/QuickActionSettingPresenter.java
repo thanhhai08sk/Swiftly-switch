@@ -87,7 +87,7 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
     @Override
     public void onSlotClick(int slotIndex) {
         slotOnsettingId = model.getSlotId(slotIndex);
-        view.chooseItemTypeToAdd(slotOnsettingId);
+        view.chooseItemTypeToAdd(slotOnsettingId, slotIndex);
     }
 
     public void onSetVisibilityOption() {
@@ -116,7 +116,7 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
 
         void loadItems();
 
-        void chooseItemTypeToAdd(String slotId);
+        void chooseItemTypeToAdd(String slotId, int slotIndex);
 
         void chooseVisibilityOption();
 
