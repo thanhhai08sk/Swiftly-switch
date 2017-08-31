@@ -247,7 +247,6 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 returnToGridSubject.subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        Log.e(TAG, "call: return to grid");
                         view.hideCollection(currentShowing.folderSlotId);
                         currentShowing.showWhat = Showing.SHOWING_GRID;
                         currentShowing.stayOnScreen = currentShowing.grid.stayOnScreen == null ? true : currentShowing.grid.stayOnScreen;
@@ -262,7 +261,6 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 finishSectionSJ.subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        Log.e(TAG, "call: finish section");
                         view.unhighlightSlot(currentShowing, currentHighlight);
                         view.hideAllExceptEdges();
                         currentHighlight = -1;

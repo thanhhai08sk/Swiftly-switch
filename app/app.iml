@@ -22,19 +22,24 @@
       </configuration>
     </facet>
     <facet type="kotlin-language" name="Kotlin">
-      <configuration version="2" platform="JVM 1.6" useProjectSettings="false">
+      <configuration version="2" platform="JVM 1.8" useProjectSettings="false">
         <compilerSettings />
         <compilerArguments>
-          <option name="jvmTarget" value="1.6" />
+          <option name="jvmTarget" value="1.8" />
           <option name="languageVersion" value="1.1" />
           <option name="apiVersion" value="1.1" />
+          <option name="pluginOptions">
+            <array>
+              <option value="plugin:org.jetbrains.kotlin.android:experimental=false" />
+              <option value="plugin:org.jetbrains.kotlin.android:enabled=true" />
+              <option value="plugin:org.jetbrains.kotlin.android:defaultCacheImplementation=hashMap" />
+            </array>
+          </option>
           <option name="pluginClasspaths">
             <array />
           </option>
+          <option name="version" value="true" />
           <option name="coroutinesWarn" value="true" />
-          <option name="pluginOptions">
-            <array />
-          </option>
         </compilerArguments>
       </configuration>
     </facet>
@@ -59,6 +64,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/fastbuildDebug/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/fastbuildDebug/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/fastbuildDebug/shaders" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/kapt/fastbuildDebugAndroidTest" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/fastbuild/debug" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/fastbuild/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/kapt/fastbuildDebugUnitTest" isTestSource="true" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/test/fastbuild/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testFastbuildDebug/res" type="java-test-resource" />
@@ -68,14 +81,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/testFastbuildDebug/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testFastbuildDebug/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testFastbuildDebug/shaders" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/kapt/fastbuildDebugAndroidTest" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/fastbuild/debug" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/fastbuild/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/fastbuild/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/fastbuild/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/fastbuild/assets" type="java-resource" />
@@ -208,8 +213,8 @@
     <orderEntry type="library" exported="" name="play-services-awareness-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-clearcut-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-database-connection-10.0.1" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="mockito-all-1.10.19" level="project" />
     <orderEntry type="library" exported="" name="support-core-ui-25.1.1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="mockito-all-1.10.19" level="project" />
     <orderEntry type="library" exported="" name="play-services-auth-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-v13-25.1.1" level="project" />
     <orderEntry type="library" exported="" name="gridlayout-v7-25.1.1" level="project" />

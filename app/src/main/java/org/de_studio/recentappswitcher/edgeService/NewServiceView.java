@@ -403,10 +403,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
         if (sharedPreferences.getBoolean(Cons.DISABLE_IN_FULLSCREEN_KEY, false)) {
             if (sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY, true)) {
-                Log.e(TAG, "addEdgesToWindowAndSetListener: edge1 attached");
                 edge1View.setOnSystemUiVisibilityChangeListener(this);
             } else if (!isFree && sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false)) {
-                Log.e(TAG, "addEdgesToWindowAndSetListener: edge2 attached");
                 edge2View.setOnSystemUiVisibilityChangeListener(this);
             }
         }
@@ -479,7 +477,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public ArrayList<String> getRecentApp(long timeInterval) {
-//        Log.e(TAG, "getRecentApp: launcher = " + launcherPackageName);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
             int numOfTask = 13;
@@ -574,7 +571,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 }
             });
         } else {
-            Log.e(TAG, "showBackground: set background visible");
             backgroundView.setVisibility(View.VISIBLE);
         }
 
@@ -797,7 +793,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         if (backgroundView.findViewById(getCollectionResId(grid)) == null) {
 //            recyclerView.setClickable(true);
 //            recyclerView.setFocusable(true);
-            Log.e(TAG, "showGrid: add grid to background");
             backgroundView.addView(recyclerView);
             needDelay = true;
         }
@@ -904,7 +899,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     public void showFolder(int triggerPosition, Slot folder, final String gridId, int space, final int edgePosition, final NewServicePresenter.Showing currentShowing) {
-        Log.e(TAG, "showFolder: ");
         if (folder.items.size() == 0) {
             return;
         }
@@ -1094,7 +1088,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         final GestureDetectorCompat gestureDetectorCompat = new GestureDetectorCompat(this, new GestureDetector.OnGestureListener() {
             @Override
             public boolean onDown(MotionEvent e) {
-                Log.e(TAG, "onDown: ");
                 return true;
             }
 
@@ -1131,7 +1124,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                Log.e(TAG, "onFling: ");
                 removeScreenshotReadyButton();
                 return true;
             }
@@ -1578,23 +1570,19 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         if (view.getId() == Cons.EDGE_1_ID_INT || view.getId() == Cons.EDGE_2_ID_INT) {
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
-                    Log.e(TAG, "onTouch: action down");
                     presenter.onActionDown(getXCord(event), getYCord(event), view.getId());
                     break;
                 case MotionEvent.ACTION_MOVE:
                     presenter.onActionMove(getXCord(event), getYCord(event));
                     break;
                 case MotionEvent.ACTION_UP:
-                    Log.e(TAG, "onTouch: action up");
                     presenter.onActionUp(getXCord(event), getYCord(event));
                     break;
                 case MotionEvent.ACTION_OUTSIDE:
                     presenter.onActionOutSide();
-                    Log.e(TAG, "onTouch: action outside");
                     break;
                 case MotionEvent.ACTION_CANCEL:
                     presenter.onActionCancel();
-                    Log.e(TAG, "onTouch: action cancel");
                     break;
             }
             return true;
@@ -1611,13 +1599,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public boolean onDown(MotionEvent e) {
-        Log.e(TAG, "onDown: ");
         return true;
     }
 
     @Override
     public void onShowPress(MotionEvent e) {
-        Log.e(TAG, "onShowPress: ");
 
     }
 
@@ -1634,13 +1620,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void onLongPress(MotionEvent e) {
-        Log.e(TAG, "onLongPress: ");
 
     }
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        Log.e(TAG, "onFling: ");
         return false;
     }
 
@@ -1685,7 +1669,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     public final synchronized void removeEdgeViews() {
-        Log.e(TAG, "removeEdgeViews: ");
         try {
             windowManager.removeView(edge1View);
         } catch (Exception e) {
@@ -1744,7 +1727,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void onSystemUiVisibilityChange(int i) {
-        Log.e(TAG, "onSystemUiVisibilityChange: i = " + i);
         int flag = i & View.SYSTEM_UI_FLAG_FULLSCREEN;
         enterOrExitFullScreenSJ.onNext(flag != 0);
     }

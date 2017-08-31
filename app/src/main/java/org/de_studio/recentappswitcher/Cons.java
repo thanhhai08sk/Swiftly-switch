@@ -296,9 +296,9 @@ public class Cons {
     public static final int VIBRATION_TIME_MAX = 150;
     public static final int VIBRATION_TIME_DEFAULT = 15;
     public static final int CIRCLE_SIZE_MAX = 150;
-    public static final int CIRCLE_SIZE_MIN = 70;
+    public static final int CIRCLE_SIZE_MIN = 60;
     public static final int EDGE_SENSITIVE_MIN = 5;
-    public static final int EDGE_LENGTH_MIN = 40;
+    public static final int EDGE_LENGTH_MIN = 55;
     public static final int EDGE_LENGTH_MAX = 500;
     public static final int EDGE_OFFSET_MIN = -300;
     public static final double CIRCLE_INIT_ANGLE_FOR_3 = 0.15 * Math.PI;

@@ -1648,7 +1648,7 @@ public  class Utility {
             context.startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(TAG, "startShortcut: exception when start Shortcut shortcut");
+            Log.e(TAG, "startShortcut: exception when start Shortcut shortcut " + e);
         }
     }
 
