@@ -210,7 +210,7 @@ public class DataSetupService extends IntentService {
                     collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
                     collection.radius = Cons.CIRCLE_RADIUS_DEFAULT;
                     Collection realmCollection = realm.copyToRealm(collection);
-                    for (int i = 0; i < 7; i++) {
+                    for (int i = 0; i < Cons.CIRCLE_COUNT_DEFAULT; i++) {
                         Slot recentSlot = new Slot();
                         recentSlot.type = Slot.TYPE_RECENT;
                         recentSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
@@ -242,7 +242,7 @@ public class DataSetupService extends IntentService {
                     collection.radius = Cons.CIRCLE_RADIUS_DEFAULT;
                     Collection realmCollection = realm.copyToRealm(collection);
 
-                    for (int i = 0; i < 7; i++) {
+                    for (int i = 0; i < Cons.CIRCLE_COUNT_DEFAULT; i++) {
                         Slot nullSlot = new Slot();
                         nullSlot.type = Slot.TYPE_NULL;
                         nullSlot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
