@@ -56,7 +56,7 @@ public class QuickActionSettingPresenter extends BaseCollectionSettingPresenter<
                                 view.setShortcutsSetToSlot(slotInfo.slotId);
                                 break;
                         }
-                        view.restartService();
+//                        view.restartService();
                     }
                 })
         );

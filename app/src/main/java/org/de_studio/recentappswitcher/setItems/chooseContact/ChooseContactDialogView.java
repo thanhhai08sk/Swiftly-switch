@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import org.de_studio.recentappswitcher.base.BaseChooseItemDialogView;
 import org.de_studio.recentappswitcher.base.ContactLoader;
@@ -16,12 +17,14 @@ import org.de_studio.recentappswitcher.dagger.DaggerChooseContactDialogComponent
  */
 
 public class ChooseContactDialogView extends BaseChooseItemDialogView {
+    private static final String TAG = ChooseContactDialogView.class.getSimpleName();
 
 
 
     @Override
     public void loadItems() {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "loadItems: load contact ");
             ContactLoader contactLoader = new ContactLoader(getActivity().getApplicationContext());
             getLoaderManager().initLoader(0, null, contactLoader);
         } else {

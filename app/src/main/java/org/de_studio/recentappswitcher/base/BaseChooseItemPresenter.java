@@ -39,6 +39,7 @@ public abstract class BaseChooseItemPresenter extends BasePresenter<BaseChooseIt
                                 public void onChange(RealmResults<Item> element) {
                                     if (element.size() > 0) {
                                         view.setProgressBar(false);
+                                        view.setAdapter(element);
                                     }
                                 }
                             });

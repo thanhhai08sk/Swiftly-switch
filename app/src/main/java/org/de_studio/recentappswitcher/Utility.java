@@ -1058,7 +1058,7 @@ public  class Utility {
                                 }
                             } catch (ClassCastException e) {
                                 e.printStackTrace();
-                                Log.e(TAG, "setItemIcon: not a BitmapDrawable");
+//                                Log.e(TAG, "setItemIcon: not a BitmapDrawable");
                                 icon.setImageDrawable(defaultDrawable);
                             }
 
