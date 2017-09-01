@@ -1648,7 +1648,11 @@ public  class Utility {
             context.startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(TAG, "startShortcut: exception when start Shortcut shortcut " + e);
+            if (e instanceof SecurityException) {
+                Log.e(TAG, "startShortcut: exception when start Shortcut shortcut " + e);
+                Toast.makeText(context, context.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
+            }
+
         }
     }
 

@@ -2,7 +2,6 @@ package org.de_studio.recentappswitcher.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -97,10 +96,6 @@ public abstract class BaseChooseItemDialogView extends BaseDialogFragment<BaseCh
     public void setCurrentItem(Item item) {
         adapter.setCurrentItem(item);
     }
-
-
-
-
 
     public abstract void loadItems();
 

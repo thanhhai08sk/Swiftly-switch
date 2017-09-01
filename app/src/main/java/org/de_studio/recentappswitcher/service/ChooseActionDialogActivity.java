@@ -1,6 +1,5 @@
 package org.de_studio.recentappswitcher.service;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,9 +7,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -102,10 +101,16 @@ public class ChooseActionDialogActivity extends AppCompatActivity {
                         SharedPreferences sharedPreferences = ChooseActionDialogActivity.this.getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
                         sharedPreferences.edit().putInt(Cons.CONTACT_ACTION_KEY, Cons.CONTACT_ACTION_CALL).apply();
                     }
-                    if (ContextCompat.checkSelfPermission(ChooseActionDialogActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
 
+                    try {
                         ChooseActionDialogActivity.this.startActivity(callIntent);
+                    } catch (SecurityException e) {
+                        Log.e(TAG, "onClick: missing permission");
+                        Toast.makeText(ChooseActionDialogActivity.this, ChooseActionDialogActivity.this.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
                     }
+//                    if (ContextCompat.checkSelfPermission(ChooseActionDialogActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+//                        ChooseActionDialogActivity.this.startActivity(callIntent);
+//                    }
                     finish();
                 }
             });
