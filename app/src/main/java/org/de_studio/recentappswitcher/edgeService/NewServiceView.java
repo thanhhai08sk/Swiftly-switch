@@ -702,7 +702,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             clearAll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    presenter.clearSearchHistory();
+                    if (searchField.getText().toString().isEmpty()) {
+                        presenter.clearSearchHistory();
+                    }
                     searchField.setText("");
                 }
             });
