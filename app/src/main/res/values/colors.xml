@@ -28,6 +28,7 @@
 
     <color name="icon_main_view">#beff4081</color>
     <color name="button_54_black">#8c000000</color>
+    <color name="button_40_black">#75000000</color>
     <color name="text_entries_list_progress">#288b49</color>
     <color name="text_entries_list_date">#c5811115</color>
     <color name="text_primary_dark">#de000000</color> <!-- 87% -->
