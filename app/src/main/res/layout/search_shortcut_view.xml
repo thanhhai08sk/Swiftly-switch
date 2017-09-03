@@ -16,15 +16,33 @@
         android:background="@drawable/background_search_view"
         >
 
-        <org.de_studio.recentappswitcher.ui.MyEditText
-            android:id="@+id/search_field"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/search_shortcuts"
-            android:textColorHint="@color/text_secondary_dark"
-            android:textColor="@color/text_primary_dark"
+            android:orientation="horizontal"
+            >
+            <org.de_studio.recentappswitcher.ui.MyEditText
+                android:id="@+id/search_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_shortcuts"
+                android:textColorHint="@color/text_secondary_dark"
+                android:textColor="@color/text_primary_dark"
 
-            />
+                />
+            <ImageButton
+                android:id="@+id/clear_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_clear_all"
+                android:layout_gravity="center_vertical|end"
+                android:background="@color/transparent"
+                style="@style/Button"
+                android:layout_marginBottom="2dp"
+                />
+
+
+        </FrameLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/search_result"
             android:layout_width="match_parent"

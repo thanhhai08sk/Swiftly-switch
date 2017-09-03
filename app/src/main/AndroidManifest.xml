@@ -69,6 +69,7 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
@@ -109,26 +110,31 @@
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:taskAffinity=""
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AudioDialogTheme" />
 
         <activity
             android:name=".intro.IntroActivity"
             android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".service.ChooseActionDialogActivity"
             android:excludeFromRecents="true"
             android:label=""
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/DialogTheme" />
         <activity
             android:name=".service.VolumeDialogActivity"
             android:excludeFromRecents="true"
             android:label=""
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/DialogTheme" />
         <activity
             android:name=".service.ScreenBrightnessDialogActivity"
             android:excludeFromRecents="true"
             android:label=""
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/DialogTheme" >
 
         </activity>
@@ -141,6 +147,7 @@
             android:name=".service.NotiDialog"
             android:excludeFromRecents="true"
             android:label=""
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/DialogTheme" />
 
         <service
@@ -167,6 +174,7 @@
             android:name=".main.MainView"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -177,37 +185,44 @@
         <activity android:name=".circleFavoriteSetting.CircleFavoriteSettingView"
             android:label="@string/circle_favorites"
             android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName=".main.MainView"
             />
         <activity android:name=".recentSetting.RecentSettingView"
             android:label="@string/recent_apps"
             android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName=".main.MainView"
             />
         <activity
             android:name=".gridFavoriteSetting.GridFavoriteSettingView"
             android:label="@string/grid_favorites"
             android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName=".main.MainView"/>
 
         <activity
             android:name=".setItems.SetItemsView"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".folderSetting.FolderSettingView"
             android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName=".gridFavoriteSetting.GridFavoriteSettingView"
             />
         <activity android:name=".quickActionSetting.QuickActionSettingView"
             android:label="@string/main_outer_ring_setting"
             android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName=".main.MainView"
             />
 
         <activity android:name=".main.moreSetting.MoreSettingView"
             android:label="@string/main_more_setting_title"
             android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName=".main.MainView"
             />
 
@@ -217,21 +232,25 @@
         <activity android:name=".faqs.FaqsView"
             android:label="@string/faqs"
             android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName=".main.MainView"
             />
         <activity android:name=".main.about.AboutView"
             android:label="@string/about"
             android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName=".main.MainView"
             />
 
         <activity android:name=".setItemIcon.SetItemIconView"
             android:label="@string/set_icon"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme.SetItemIcon"
             />
         <activity android:name=".screenshot.ScreenshotView"
             android:excludeFromRecents="true"
             android:label=""
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/DialogTheme"
             />
 

@@ -601,6 +601,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         showFolderSJ.onNext(slot);
     }
 
+    public void clearSearchHistory() {
+        model.clearSearchHistory();
+    }
+
     public void onClickBackground(float x, float y) {
         switch (currentShowing.showWhat) {
             case Showing.SHOWING_GRID:

@@ -55,6 +55,7 @@ import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -249,6 +250,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     private ImageView screenshot;
     private ViewGroup searchParent;
     private MyEditText searchField;
+    private ImageButton clearAll;
     private RecyclerView searchResults;
     private LinearLayout searchView;
     private ItemsAdapter searchResultAdapter;
@@ -696,6 +698,14 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 }
             });
             searchField = ((MyEditText) searchParent.findViewById(R.id.search_field));
+            clearAll = (ImageButton) searchParent.findViewById(R.id.clear_all);
+            clearAll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    presenter.clearSearchHistory();
+                    searchField.setText("");
+                }
+            });
             searchField.setBackButtonListener(new MyEditText.BackOnEditTextListener() {
                 @Override
                 public void onBackButton() {

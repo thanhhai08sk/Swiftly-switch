@@ -555,6 +555,16 @@ public class NewServiceModel extends BaseModel {
         });
     }
 
+    public void clearSearchHistory() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Collection lastSearch = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Collection.TYPE_LAST_SEARCH).findFirst();
+                lastSearch.items.removeAll(lastSearch.items);
+            }
+        });
+    }
+
     private Collection getLastSearchCollection() {
         return realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Collection.TYPE_LAST_SEARCH).findFirst();
     }
