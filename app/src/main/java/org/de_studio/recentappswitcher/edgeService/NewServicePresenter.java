@@ -526,10 +526,15 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             slot = currentShowing.circleSlots.get(currentHighlight);
                         }
                     } else {
-                        slot = currentShowing.action.slots.get(currentHighlight - 10);
-                        if (slot.type.equals(Slot.TYPE_EMPTY) || slot.type.equals(Slot.TYPE_NULL)) {
+                        if (currentShowing.action.slots.size() > 0) {
+                            slot = currentShowing.action.slots.get(currentHighlight - 10);
+                            if (slot.type.equals(Slot.TYPE_EMPTY) || slot.type.equals(Slot.TYPE_NULL)) {
+                                slot = null;
+                            }
+                        } else {
                             slot = null;
                         }
+
                     }
                 } else if (isStayOnScreen(currentShowing.circle)) {
                     if (currentShowing.action.visibilityOption == Collection.VISIBILITY_OPTION_VISIBLE_AFTER_LIFTING) {
