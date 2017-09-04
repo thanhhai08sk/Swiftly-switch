@@ -12,12 +12,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="*HOT* Up to 67% Off When Upgrade to Pro. Only Available for Limited Time!"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingTop="16dp"
         android:paddingBottom="8dp"
-        style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
+        style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title.Inverse"
         />
 
     <android.support.v7.widget.ButtonBarLayout
