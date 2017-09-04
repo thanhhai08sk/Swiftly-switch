@@ -195,8 +195,24 @@ public abstract class BaseActivity<T, P extends BasePresenter> extends AppCompat
                 }
             });
         } else {
-            makePurchase(payload);
+            if (!mHelper.checkSetupDone()) {
+                mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                    public void onIabSetupFinished(IabResult result) {
+                        Log.d(TAG, "Setup finished.");
 
+                        if (!result.isSuccess()) {
+                            // Oh noes, there was a problem.
+                            complain("Problem setting up in-app billing: " + result);
+                            return;
+                        }
+
+                        if (mHelper == null) return;
+                        makePurchase(payload);
+                    }
+                });
+            } else {
+                makePurchase(payload);
+            }
         }
 
 

@@ -579,7 +579,11 @@ public  class Utility {
                 manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 break;
             case 2:
-                manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                try {
+                    manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                } catch (SecurityException e) {
+                    Toast.makeText(context, "Please turn off Do Not Disturb first!", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
