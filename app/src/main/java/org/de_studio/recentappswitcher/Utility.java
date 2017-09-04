@@ -1148,7 +1148,11 @@ public  class Utility {
                         if (iconPackDrawable == null) {
                             iconPackDrawable = defaultDrawable;
                         }
-                        return ((BitmapDrawable) iconPackDrawable).getBitmap();
+                        try {
+                            return ((BitmapDrawable) iconPackDrawable).getBitmap();
+                        }catch (ClassCastException e) {
+                            return convertDrawableToBitmap(iconPackDrawable);
+                        }
                     } else {
                         try {
                             return ((BitmapDrawable) defaultDrawable).getBitmap();
