@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -85,14 +84,6 @@ public class GeneralView extends BaseFragment<GeneralPresenter> implements Gener
         return viewCreatedSJ;
     }
 
-    @Override
-    public boolean shouldShowJournalItHeader() {
-        boolean firstStart = shared.getBoolean(Cons.FIRST_START_KEY, true);
-        long dateStart = shared.getLong(Cons.DATE_START_KEY, 0);
-        boolean saw = shared.getBoolean(Cons.SAW_JOURNAL_IT_KEY, false);
-//        return true;
-        return !firstStart && (System.currentTimeMillis() - dateStart > Cons.WAIT_FOR_SHOWING_JOURNAL_IT_TIME) && !saw;
-    }
 
     @Override
     public void askForPlayStoreReview() {
@@ -159,12 +150,9 @@ public class GeneralView extends BaseFragment<GeneralPresenter> implements Gener
         return Single.create(new Single.OnSubscribe<Boolean>() {
             @Override
             public void call(SingleSubscriber<? super Boolean> singleSubscriber) {
-                boolean sawJournalIt = shared.getBoolean(Cons.SAW_JOURNAL_IT_KEY, false);
-                long sawJournalItDate = shared.getLong(Cons.SAW_JOURNAL_IT_DATE_KEY, System.currentTimeMillis());
                 boolean doneWithReviewRequest = shared.getBoolean(Cons.DONE_WITH_REVIEW_REQUEST, false);
                 long lastReviewRequest = shared.getLong(Cons.LAST_REVIEW_REQUEST, 0);
                 singleSubscriber.onSuccess(!doneWithReviewRequest
-                        && sawJournalIt && (System.currentTimeMillis() - sawJournalItDate > 2 * Cons.WAIT_FOR_REVIEW_REQUEST_TIME)
                         && (System.currentTimeMillis() - lastReviewRequest > Cons.REVIEW_REQUEST_INTEVAL_TIME));
             }
         });
@@ -244,42 +232,6 @@ public class GeneralView extends BaseFragment<GeneralPresenter> implements Gener
         });
     }
 
-
-
-    @Override
-    public void addJournalItHeader() {
-        Log.e(TAG, "addJournalItHeader: show journal it header");
-        final LinearLayout header = (LinearLayout) LayoutInflater.from(getActivity()).inflate(R.layout.header_checkout_journal_it, parentView, false);
-        TransitionManager.beginDelayedTransition(parentView);
-        parentView.addView(header, 0);
-        Button close = (Button) header.findViewById(R.id.dismiss);
-        Button checkout = (Button) header.findViewById(R.id.checkout);
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateSharedSawJournalIt();
-                TransitionManager.beginDelayedTransition(parentView);
-                header.setVisibility(View.GONE);
-            }
-        });
-
-        checkout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateSharedSawJournalIt();
-                Utility.openJournalItPlayStorePage(getActivity());
-                TransitionManager.beginDelayedTransition(parentView);
-                header.setVisibility(View.GONE);
-            }
-        });
-
-    }
-
-    private void updateSharedSawJournalIt() {
-        shared.edit().putBoolean(Cons.SAW_JOURNAL_IT_KEY, true)
-                .putLong(Cons.SAW_JOURNAL_IT_DATE_KEY, System.currentTimeMillis())
-                .apply();
-    }
 
     public void setRecent() {
         startActivity(RecentSettingView.getIntent(getActivity(), null));

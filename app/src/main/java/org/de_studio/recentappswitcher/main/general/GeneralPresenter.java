@@ -24,16 +24,6 @@ public class GeneralPresenter extends BasePresenter<GeneralPresenter.View,BaseMo
     @Override
     public void onViewAttach(final View view) {
         super.onViewAttach(view);
-        addSubscription(
-                view.viewCreatedEvent().subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        if (view.shouldShowJournalItHeader()) {
-                            view.addJournalItHeader();
-                        }
-                    }
-                })
-        );
 
         addSubscription(
                 view.viewCreatedEvent().flatMap(new Func1<Void, Observable<Boolean>>() {
@@ -103,10 +93,6 @@ public class GeneralPresenter extends BasePresenter<GeneralPresenter.View,BaseMo
         void setCircleFavorite();
 
         void setBlackList();
-
-        boolean shouldShowJournalItHeader();
-
-        void addJournalItHeader();
 
 
         Single<Boolean> shouldShowReviewRequest();
