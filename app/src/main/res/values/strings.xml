@@ -286,6 +286,11 @@
 
 
     //What new
+    <string name="what_new_3.1.9" translatable="false">VERSION 3.1.8:\n
+        - *HOT* 67% Off When Upgrade to Pro. Only Available for Limited Time!\n
+        - Fix bugs in Android Oreo\n
+        - Button to clear search history in Search Shortcut\n
+    </string>
     <string name="what_new_3.1.8" translatable="false">VERSION 3.1.8:\n
         - Remove the Screen Lock because it required the android.permission.BIND_DEVICE_ADMIN permission which violate the Deceptive Behavior Policy. Sorry for the inconvenience! \n
         - Update translations for French and Russian. Thanks the contributors from localize.im\n
