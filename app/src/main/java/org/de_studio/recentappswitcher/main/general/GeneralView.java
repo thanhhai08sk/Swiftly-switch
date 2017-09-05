@@ -161,8 +161,7 @@ public class GeneralView extends BaseFragment<GeneralPresenter> implements Gener
     }
 
     public boolean shouldDisplaySale() {
-        return true;
-//        return Utility.isFree(getActivity()) && !shared.getBoolean("displayed_sale_september_2017", false) && System.currentTimeMillis() < 1505176586000L;
+        return Utility.isFree(getActivity()) && System.currentTimeMillis() < 1505176586000L;
     }
 
     public void showSaleCard() {
