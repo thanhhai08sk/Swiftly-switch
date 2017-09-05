@@ -58,6 +58,10 @@ public class GeneralPresenter extends BasePresenter<GeneralPresenter.View,BaseMo
                     }
                 })
         );
+
+        if (view.shouldDisplaySale()) {
+            view.showSaleCard();
+        }
     }
 
     public void onRecentClick() {
@@ -104,6 +108,10 @@ public class GeneralPresenter extends BasePresenter<GeneralPresenter.View,BaseMo
         void askForFeedback();
 
         void closeReviewRequest(boolean neverAskAgain);
+
+        boolean shouldDisplaySale();
+
+        void showSaleCard();
     }
 
     enum Result {

@@ -64,14 +64,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/fastbuildDebug/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/fastbuildDebug/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/fastbuildDebug/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/kapt/fastbuildDebugAndroidTest" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/fastbuild/debug" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/fastbuild/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/kapt/fastbuildDebugUnitTest" isTestSource="true" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/test/fastbuild/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testFastbuildDebug/res" type="java-test-resource" />
@@ -81,6 +73,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/testFastbuildDebug/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testFastbuildDebug/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testFastbuildDebug/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/kapt/fastbuildDebugAndroidTest" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/fastbuild/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/fastbuild/debug" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/fastbuild/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/fastbuild/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/fastbuild/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/fastbuild/assets" type="java-resource" />
@@ -123,13 +123,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/assets" type="java-test-resource" />
@@ -137,6 +130,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/shaders" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/assets" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/blame" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes" />
@@ -213,8 +213,8 @@
     <orderEntry type="library" exported="" name="play-services-awareness-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-clearcut-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-database-connection-10.0.1" level="project" />
-    <orderEntry type="library" exported="" name="support-core-ui-25.1.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="mockito-all-1.10.19" level="project" />
+    <orderEntry type="library" exported="" name="support-core-ui-25.1.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-auth-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-v13-25.1.1" level="project" />
     <orderEntry type="library" exported="" name="gridlayout-v7-25.1.1" level="project" />
@@ -252,5 +252,6 @@
     <orderEntry type="library" exported="" name="recyclerview-v7-25.1.1" level="project" />
     <orderEntry type="library" exported="" name="mediarouter-v7-24.0.0" level="project" />
     <orderEntry type="library" exported="" name="animated-vector-drawable-25.1.1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="multidex-instrumentation-1.0.1" level="project" />
   </component>
 </module>

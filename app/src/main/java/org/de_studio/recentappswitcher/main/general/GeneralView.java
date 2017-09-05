@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.base.BaseFragment;
 import org.de_studio.recentappswitcher.blackListSetting.BlackListSettingView;
 import org.de_studio.recentappswitcher.circleFavoriteSetting.CircleFavoriteSettingView;
@@ -156,6 +158,36 @@ public class GeneralView extends BaseFragment<GeneralPresenter> implements Gener
                         && (System.currentTimeMillis() - lastReviewRequest > Cons.REVIEW_REQUEST_INTEVAL_TIME));
             }
         });
+    }
+
+    public boolean shouldDisplaySale() {
+        return true;
+//        return Utility.isFree(getActivity()) && !shared.getBoolean("displayed_sale_september_2017", false) && System.currentTimeMillis() < 1505176586000L;
+    }
+
+    public void showSaleCard() {
+        final LinearLayout card = (LinearLayout) LayoutInflater.from(getActivity()).inflate(R.layout.header_sale_card, parentView, false);
+        TransitionManager.beginDelayedTransition(parentView);
+        parentView.addView(card, 0);
+        Button close = (Button) card.findViewById(R.id.close);
+        Button upgrade = (Button) card.findViewById(R.id.upgrade);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TransitionManager.beginDelayedTransition(parentView);
+                card.setVisibility(View.GONE);
+            }
+        });
+
+        upgrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((BaseActivity) getActivity()).buyPro();
+                TransitionManager.beginDelayedTransition(parentView);
+                card.setVisibility(View.GONE);
+            }
+        });
+
     }
 
     @Override
