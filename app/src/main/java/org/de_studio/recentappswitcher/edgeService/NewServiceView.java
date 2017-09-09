@@ -256,6 +256,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     private ItemsAdapter searchResultAdapter;
     private Transition searchTransition;
     private boolean searchKeyboardShow;
+    private int count = 0;
 
     @Override
     public void onCreate() {
@@ -994,6 +995,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             collectionViewsMap.put(circle.collectionId, circleView);
         }
         FrameLayout frameLayout = (FrameLayout) collectionViewsMap.get(circle.collectionId);
+
         float previousX = 0;
         float previousY = 0;
         for (int i = 0; i < Math.min(frameLayout.getChildCount(),iconsXY.xs.length); i++) {
@@ -1051,6 +1053,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 frameLayout.getChildAt(i).setVisibility(View.GONE);
             }
         }
+
         if (!frameLayout.isAttachedToWindow()) {
             try {
                 windowManager.addView(frameLayout, WINDOW_PARAMS_NO_TOUCH);
@@ -1516,6 +1519,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             for (String collectionId : collectionIds) {
 //            Log.e(TAG, "hideAllCollections: hide " + collectionId);
                 collectionViewsMap.get(collectionId).setVisibility(View.GONE);
+//                View view = collectionViewsMap.get(collectionId);
+//                collectionViewsMap.remove(collectionId);
+//                backgroundView.removeView(view);
             }
             if (searchParent != null) {
                 searchParent.setVisibility(View.GONE);
@@ -1533,7 +1539,35 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         hideAllCollections();
         if (backgroundView != null) {
 //            Log.e(TAG, "hideAllExceptEdges: ");
-            backgroundView.setVisibility(View.GONE);
+
+            if (!Utility.isKitkat()) {
+                ObjectAnimator objectAnimator = ObjectAnimator.ofArgb(backgroundView, "backgroundColor", backgroundColor, Color.argb(0, 0, 0, 0));
+                objectAnimator.setDuration(50);
+                objectAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        backgroundView.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                objectAnimator.start();
+            }else backgroundView.setVisibility(View.GONE);
+
+
         }
     }
 

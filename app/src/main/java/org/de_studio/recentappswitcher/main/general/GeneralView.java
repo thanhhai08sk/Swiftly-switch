@@ -154,6 +154,10 @@ public class GeneralView extends BaseFragment<GeneralPresenter> implements Gener
             public void call(SingleSubscriber<? super Boolean> singleSubscriber) {
                 boolean doneWithReviewRequest = shared.getBoolean(Cons.DONE_WITH_REVIEW_REQUEST, false);
                 long lastReviewRequest = shared.getLong(Cons.LAST_REVIEW_REQUEST, 0);
+                if (lastReviewRequest == 0) {
+                    lastReviewRequest = System.currentTimeMillis();
+                    shared.edit().putLong(Cons.LAST_REVIEW_REQUEST, lastReviewRequest).apply();
+                }
                 singleSubscriber.onSuccess(!doneWithReviewRequest
                         && (System.currentTimeMillis() - lastReviewRequest > Cons.REVIEW_REQUEST_INTEVAL_TIME));
             }

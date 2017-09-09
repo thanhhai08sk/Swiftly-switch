@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -44,7 +43,6 @@ public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSl
     }
 
     public void updateIconsState() {
-        long time = System.currentTimeMillis();
         if (getData() != null) {
             Slot slot = null;
             for (int i = 0; i < getData().size(); i++) {
@@ -63,7 +61,6 @@ public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSl
                 }
             }
         }
-        Log.e(TAG, "updateIconsState: time = " + (System.currentTimeMillis() - time));
     }
 
 

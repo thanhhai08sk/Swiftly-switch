@@ -96,7 +96,7 @@ public class Cons {
     public static final int OVAL_OFFSET = 70;
     public static final int GRID_GAP_DEFAULT = 5;
     public static final int GUIDE_COLOR_DEFAULT = Color.argb(255, 23, 103, 137);
-    public static final int BACKGROUND_COLOR_DEFAULT = Color.argb(190, 0, 0, 0);
+    public static final int BACKGROUND_COLOR_DEFAULT = Color.argb(170, 0, 0, 0);
     public static final int LONG_PRESS_DELAY_DEFAULT = 800;
     public static final int DEFAULT_VIBRATE_DURATION = 15;
     public static final int ANIMATION_TIME_DEFAULT = 250;
