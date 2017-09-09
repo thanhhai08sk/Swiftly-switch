@@ -991,6 +991,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     public void showCircle(NewServiceModel.IconsXY iconsXY, Collection circle, RealmList<Slot> slots, float xInit, float yInit) {
         if (collectionViewsMap.get(circle.collectionId) == null) {
             FrameLayout circleView = new FrameLayout(this);
+            circleView.setId(getCollectionResId(circle));
             addIconsToCircleView(circle.slots, circleView);
             collectionViewsMap.put(circle.collectionId, circleView);
         }
@@ -1054,14 +1055,18 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             }
         }
 
-        if (!frameLayout.isAttachedToWindow()) {
-            try {
-                windowManager.addView(frameLayout, WINDOW_PARAMS_NO_TOUCH);
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-                Log.e(TAG, "showCircle: already add to window");
-            }
+        if (backgroundView.findViewById(getCollectionResId(circle)) == null) {
+            backgroundView.addView(frameLayout);
         }
+
+//        if (!frameLayout.isAttachedToWindow()) {
+//            try {
+//                windowManager.addView(frameLayout, WINDOW_PARAMS_NO_TOUCH);
+//            } catch (IllegalStateException e) {
+//                e.printStackTrace();
+//                Log.e(TAG, "showCircle: already add to window");
+//            }
+//        }
         frameLayout.setVisibility(View.VISIBLE);
     }
 
@@ -1542,7 +1547,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
             if (!Utility.isKitkat()) {
                 ObjectAnimator objectAnimator = ObjectAnimator.ofArgb(backgroundView, "backgroundColor", backgroundColor, Color.argb(0, 0, 0, 0));
-                objectAnimator.setDuration(50);
+                objectAnimator.setDuration(100);
                 objectAnimator.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
