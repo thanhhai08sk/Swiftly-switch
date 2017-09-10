@@ -416,6 +416,6 @@
     <string name="edge_mode__quick_action_only">Quick Actions only</string>
     <string name="button_close">Close</string>
     <string name="admin_permission_notice_2">Using this shortcut requires setting Swiftly Switch as an administrator. This means that the app CAN NOT be uninstalled unless you disable the permission first. Set Swiftly Switch as your Device Administrator at Settings -> Security -> Device Administrators</string>
-
+    <string name="pause_while_giving_permission">Pause while giving permission</string>
 
 </resources>

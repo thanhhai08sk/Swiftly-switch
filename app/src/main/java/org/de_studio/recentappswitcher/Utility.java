@@ -2107,6 +2107,10 @@ public  class Utility {
         return Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT;
     }
 
+    public static boolean isOreo() {
+        return Build.VERSION.SDK_INT == 26;
+    }
+
     public static boolean isFree(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
         return context.getPackageName().equals(Cons.FREE_VERSION_PACKAGE_NAME) && !sharedPreferences.getBoolean(Cons.PRO_PURCHASED_KEY, false);
@@ -2147,6 +2151,20 @@ public  class Utility {
         catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(context, "There is no email client installed.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static void toast(Context context, int message) {
+        Toast.makeText(context.getApplicationContext(), context.getString(message), Toast.LENGTH_SHORT).show();
+    }
+
+    public static void toggleEdges(Context context) {
+        Intent toggleEdgeIntent = new Intent();
+        toggleEdgeIntent.setAction(Cons.ACTION_TOGGLE_EDGES);
+        context.sendBroadcast(toggleEdgeIntent);
+    }
+
+    public static boolean isEdgesOn(Context context) {
+        return ((MyApplication) context.getApplicationContext()).isEdgeIsOn();
     }
 
     public static void getProVersion(Context context) {

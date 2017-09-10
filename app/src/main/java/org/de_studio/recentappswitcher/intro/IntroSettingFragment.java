@@ -1,7 +1,6 @@
 package org.de_studio.recentappswitcher.intro;
 
 import android.app.AppOpsManager;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +26,7 @@ import org.de_studio.recentappswitcher.Utility;
 public class IntroSettingFragment extends Fragment {
     private static final String LOG_TAG = IntroSettingFragment.class.getSimpleName();
     private LinearLayout permission1Layout, permission2Layout, permission3Layout;
+    private boolean isPauseForPermission = false;
 
 
     public static IntroSettingFragment newInstance(int index) {
@@ -68,6 +68,8 @@ public class IntroSettingFragment extends Fragment {
 
     }
 
+
+
     private void setPermission2Layout() {
         if (isStep1Ok()) {
             permission2Layout.setBackgroundResource(R.drawable.set_permission_ok_background);
@@ -100,6 +102,11 @@ public class IntroSettingFragment extends Fragment {
             permission3Layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (Utility.isOreo() && Utility.isEdgesOn(getActivity())) {
+                        isPauseForPermission = true;
+                        Utility.toggleEdges(getActivity());
+                        Utility.toast(getActivity(), R.string.pause_while_giving_permission);
+                    }
                     startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
                 }
             });
@@ -137,6 +144,10 @@ public class IntroSettingFragment extends Fragment {
         setPermission1Layout();
         setPermission2Layout();
         setPermission3Layout();
+        if (Utility.isOreo() && isPauseForPermission && !Utility.isEdgesOn(getActivity())) {
+            isPauseForPermission = false;
+            Utility.toggleEdges(getActivity());
+        }
     }
 
     public boolean checkPermissionBeforeFinish() {
