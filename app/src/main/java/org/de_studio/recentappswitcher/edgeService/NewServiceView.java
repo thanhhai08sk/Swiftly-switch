@@ -752,6 +752,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             Animator circularReveal = ViewAnimationUtils.createCircularReveal(searchView, centerX, centerY, 0f, radius);
             circularReveal.start();
         }
+
+        Log.e(TAG, "showSearchView: alpha = " + searchParent.getAlpha());
         searchParent.setVisibility(View.VISIBLE);
         searchKeyboardShow = true;
 
@@ -1530,6 +1532,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             }
             if (searchParent != null) {
                 searchParent.setVisibility(View.GONE);
+
                 if (searchField != null) {
                     searchField.setText("");
                     hideKeyboard();
@@ -1556,7 +1559,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        backgroundView.setVisibility(View.GONE);
+                        if (backgroundView != null) {
+                            backgroundView.setVisibility(View.GONE);
+                        }
                     }
 
                     @Override
