@@ -1,15 +1,20 @@
 package org.de_studio.recentappswitcher.service;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 
 public class VolumeDialogActivity extends AppCompatActivity {
 
@@ -46,25 +51,31 @@ public class VolumeDialogActivity extends AppCompatActivity {
 
         final ImageView ringtoneImage = (ImageView) dialog.findViewById(R.id.ringtone_image);
         updateRingtoneImage(ringtoneImage, manager);
-        if (ringtoneImage != null) {
+        if (ringtoneImage != null && !Utility.isMashMallowOrHigher()) {
             ringtoneImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    switch (manager.getRingerMode()) {
-                        case AudioManager.RINGER_MODE_NORMAL:
-                            manager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                            updateRingtoneImage(ringtoneImage, manager);
-                            updateSeekBar(ringSeekBar,notiSeekBar,systemSeekBar, manager);
-                            break;
-                        case AudioManager.RINGER_MODE_VIBRATE:
-                            manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                            updateRingtoneImage(ringtoneImage,manager);
-                            updateSeekBar(ringSeekBar,notiSeekBar,systemSeekBar, manager);
-                            break;
-                        case AudioManager.RINGER_MODE_SILENT:
-                            manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                            updateRingtoneImage(ringtoneImage, manager);
-                            updateSeekBar(ringSeekBar,notiSeekBar,systemSeekBar, manager);
+
+                    try {
+                        switch (manager.getRingerMode()) {
+                            case AudioManager.RINGER_MODE_NORMAL:
+                                manager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                                updateRingtoneImage(ringtoneImage, manager);
+                                updateSeekBar(ringSeekBar,notiSeekBar,systemSeekBar, manager);
+                                break;
+                            case AudioManager.RINGER_MODE_VIBRATE:
+                                manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                                updateRingtoneImage(ringtoneImage,manager);
+                                updateSeekBar(ringSeekBar,notiSeekBar,systemSeekBar, manager);
+                                break;
+                            case AudioManager.RINGER_MODE_SILENT:
+                                manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                                updateRingtoneImage(ringtoneImage, manager);
+                                updateSeekBar(ringSeekBar,notiSeekBar,systemSeekBar, manager);
+                        }
+
+                    } catch (SecurityException e) {
+                        Toast.makeText(VolumeDialogActivity.this, R.string.turn_off_do_not_disturb_first, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -78,6 +89,7 @@ public class VolumeDialogActivity extends AppCompatActivity {
 
         notiSeekBar.setEnabled(manager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL);
         systemSeekBar.setEnabled(manager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL);
+        ringSeekBar.setEnabled(!onDoNotDisturb());
 
         ringSeekBar.setProgress(currentRing);
         notiSeekBar.setProgress(currentNoti);
@@ -97,9 +109,14 @@ public class VolumeDialogActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                manager.setStreamVolume(AudioManager.STREAM_RING,seekBar.getProgress(),0);
-                updateRingtoneImage(ringtoneImage, manager);
-                updateSeekBar(ringSeekBar,notiSeekBar,systemSeekBar, manager);
+                if (!onDoNotDisturb()) {
+                    manager.setStreamVolume(AudioManager.STREAM_RING, seekBar.getProgress(), 0);
+                    updateRingtoneImage(ringtoneImage, manager);
+                    updateSeekBar(ringSeekBar, notiSeekBar, systemSeekBar, manager);
+                } else {
+                    Utility.toast(VolumeDialogActivity.this, R.string.turn_off_do_not_disturb_first);
+                    seekBar.setProgress(manager.getStreamVolume(AudioManager.STREAM_RING));
+                }
             }
         });
 
@@ -175,5 +192,20 @@ public class VolumeDialogActivity extends AppCompatActivity {
         system.setProgress(manager.getStreamVolume(AudioManager.STREAM_SYSTEM));
         noti.setEnabled(manager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL);
         system.setEnabled(manager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL);
+    }
+
+    private boolean canChangeRingstone() {
+        Log.e("Volume", "onDoNotDisturb: " + ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).getCurrentInterruptionFilter());
+        if (!Utility.isMashMallowOrHigher()) {
+            return true;
+        }
+        int filter = ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).getCurrentInterruptionFilter();
+
+        return filter == NotificationManager.INTERRUPTION_FILTER_ALL || filter == NotificationManager.INTERRUPTION_FILTER_ALARMS;
+    }
+
+    private boolean onDoNotDisturb() {
+        Log.e("Volume", "onDoNotDisturb: " + ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).getCurrentInterruptionFilter());
+        return Utility.isMashMallowOrHigher() && ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).getCurrentInterruptionFilter() != NotificationManager.INTERRUPTION_FILTER_ALL;
     }
 }

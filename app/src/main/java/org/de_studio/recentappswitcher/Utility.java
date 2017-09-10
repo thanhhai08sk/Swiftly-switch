@@ -582,7 +582,7 @@ public  class Utility {
                 try {
                     manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 } catch (SecurityException e) {
-                    Toast.makeText(context, "Please turn off Do Not Disturb first!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.turn_off_do_not_disturb_first, Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -2101,6 +2101,9 @@ public  class Utility {
 
     public static boolean isMashmallow() {
         return Build.VERSION.SDK_INT == Build.VERSION_CODES.M;
+    }
+    public static boolean isMashMallowOrHigher() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
     public static boolean isKitkat() {
