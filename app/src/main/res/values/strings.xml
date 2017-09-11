@@ -418,5 +418,6 @@
     <string name="admin_permission_notice_2">Using this shortcut requires setting Swiftly Switch as an administrator. This means that the app CAN NOT be uninstalled unless you disable the permission first. Set Swiftly Switch as your Device Administrator at Settings -> Security -> Device Administrators</string>
     <string name="pause_while_giving_permission">Pause while giving permission</string>
     <string name="turn_off_do_not_disturb_first">Please turn off Do Not Disturb first!</string>
+    <string name="error_when_taking_screenshot">Error when taking screenshot!</string>
 
 </resources>

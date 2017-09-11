@@ -30,6 +30,8 @@ import android.view.Display;
 import android.view.OrientationEventListener;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.R;
+import org.de_studio.recentappswitcher.Utility;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -96,9 +98,6 @@ public class ScreenshotView extends Activity {
                     fos = new FileOutputStream(file);
                     bitmap.compress(CompressFormat.JPEG, 100, fos);
                     bitmap.recycle();
-
-
-
 
                     IMAGES_PRODUCED++;
 
@@ -183,7 +182,6 @@ public class ScreenshotView extends Activity {
         }
     }
 
-    /****************************************** Activity Lifecycle methods ************************/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -257,7 +255,11 @@ public class ScreenshotView extends Activity {
                     }
                 }, 200);
 
-            } else throw new RuntimeException("sMediaProjection null");
+            } else{
+                Utility.toast(this, R.string.error_when_taking_screenshot);
+                finishScreenshot();
+            }
+
         }
     }
 
