@@ -1083,6 +1083,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     public void showScreenshotReadyButton(final Uri uri) {
+        removeScreenshotReadyButton();
         screenshot = new ImageView(this);
         int size = (int) (160 * mScale);
         int padding = (int) (4 * mScale);
