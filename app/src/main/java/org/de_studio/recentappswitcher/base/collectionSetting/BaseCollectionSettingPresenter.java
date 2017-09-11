@@ -158,6 +158,9 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
         }
         view.setDeleteButtonVisibility(false);
         onDragDrop = false;
+        if (model.collection.type.equals(Collection.TYPE_QUICK_ACTION)) {
+            view.restartService();
+        }
     }
 
     protected void onMoveItem(DragAndDropCallback.MoveData moveData) {
