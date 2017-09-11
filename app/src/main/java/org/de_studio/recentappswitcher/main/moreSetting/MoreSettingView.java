@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
@@ -120,6 +121,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     View useHomeButtonSeparator;
     @BindView(R.id.transition_switch)
     SwitchCompat transitionSwitch;
+    @BindView(R.id.disable_in_fullscreen_text)
+    TextView disableInFullscreenText;
     GoogleDriveBackup backup;
     GoogleApiClient mGoogleApiClient;
     private IntentSender intentPicker;
@@ -149,9 +152,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -220,6 +221,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     }
 
+
     @Override
     public PublishSubject<Void> onGoogleApiClientConnected() {
         return googleClientConnectedSJ;
@@ -242,11 +244,11 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         return exportSJ;
     }
 
-
     @Override
     public PublishSubject<Integer> onSomethingWrong() {
         return somethingWrongSJ;
     }
+
 
     @Override
     public PublishSubject<Void> onBackupSuccessful() {
@@ -260,6 +262,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @Override
     public void updateViews() {
+        setDisableInFullScreenModeTextColor();
         disableInFullScreenSwitch.setChecked(sharedPreferences.getBoolean(Cons.DISABLE_IN_FULLSCREEN_KEY,false));
         disableClockSwitch.setChecked(sharedPreferences.getBoolean(Cons.DISABLE_CLOCK_KEY, false));
         disableIndicatorSwitch.setChecked(sharedPreferences.getBoolean(Cons.DISABLE_INDICATOR_KEY, false));
@@ -317,6 +320,14 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
 
 
+    }
+
+    private void setDisableInFullScreenModeTextColor() {
+        int textColor;
+        if (Utility.isFree(this)) {
+            textColor = R.color.text_primary_dark_disabled;
+        } else textColor = R.color.text_primary_dark;
+        disableInFullscreenText.setTextColor(ContextCompat.getColor(this, textColor));
     }
 
     @Override

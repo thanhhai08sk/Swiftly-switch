@@ -94,5 +94,6 @@
 
 
     <color name="text_primary_dark_enable_disable">#de000000</color> <!-- 87% -->
+    <color name="text_primary_dark_disabled">#43000000</color>
 
 </resources>

@@ -33,6 +33,7 @@
                 >
                 <TextView
                     style="@style/MoreSetting_Item_Text_Primary"
+                    android:id="@+id/disable_in_fullscreen_text"
                     android:textColor="@color/text_primary_dark_enable_disable"
                     android:text="@string/disable_in_fullscreen"
                     />
