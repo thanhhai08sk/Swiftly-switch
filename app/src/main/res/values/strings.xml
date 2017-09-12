@@ -286,7 +286,14 @@
 
 
     //What new
-    <string name="what_new_3.1.9" translatable="false">VERSION 3.1.8:\n
+    <string name="what_new_3.1.10" translatable="false">VERSION 3.1.10:\n
+        - Fix background flicker on Oreo!\n
+        - Fix bug when taking multiple screenshots in small period of time\n
+        - Update translations, thanks translators from Germany and Vietnam!\n
+        - Other bugs fixed and improvements\n
+    </string>
+
+    <string name="what_new_3.1.9" translatable="false">VERSION 3.1.9:\n
         - *HOT* 67% Off When Upgrade to Pro. Only Available for Limited Time!\n
         - Fix bugs in Android Oreo\n
         - Button to clear search history in Search Shortcut\n
