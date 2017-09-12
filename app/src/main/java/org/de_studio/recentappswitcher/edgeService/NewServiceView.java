@@ -609,10 +609,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         return openFolderDelay;
     }
 
-    public void showQuickActions(int edgePosition, final int highlighPosition, final NewServicePresenter.Showing currentShowing, boolean delay, boolean animate) {
+    public void showQuickActions(int edgePosition, final int highlighPosition, final NewServicePresenter.Showing currentShowing, boolean delay, boolean animate, boolean quickActionOnly) {
         if (currentShowing.action != null) {
             if (collectionViewsMap.get(getQuickActionsKey(edgePosition, currentShowing.action)) == null) {
-                int width = (int) ((currentShowing.circle !=null? currentShowing.circle.radius : 60) * 2 * mScale
+                int width = (int) ((quickActionOnly? 60 : currentShowing.circle.radius) * 2 * mScale
                         + 60 * 2 * mScale);
                 QuickActionsView actionsView = new QuickActionsView(this, iconPack, currentShowing.action.slots, edgePosition, currentShowing.action.visibilityOption != Collection.VISIBILITY_OPTION_ONLY_TRIGGERED_ONE_VISIBLE, width);
                 FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, width);
@@ -1351,7 +1351,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                         FrameLayout recent = (FrameLayout) collectionViewsMap.get(currentShowing.circle.collectionId);
                         highlightCircleIcon(recent.getChildAt(id), currentShowing.circleIconsXY.xs[id], currentShowing.circleIconsXY.ys[id]);
                     } else if (id - 10 < currentShowing.action.slots.size()) {
-                        showQuickActions(currentShowing.edgePosition, id - 10, currentShowing, false, false);
+                        showQuickActions(currentShowing.edgePosition, id - 10, currentShowing, false, false, false);
                     }
                     break;
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:
@@ -1360,7 +1360,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     break;
                 case NewServicePresenter.Showing.SHOWING_ACTION_ONLY:
                     if (id >= 10 && id - 10 < currentShowing.action.slots.size()) {
-                        showQuickActions(currentShowing.edgePosition, id - 10, currentShowing, false, false);
+                        showQuickActions(currentShowing.edgePosition, id - 10, currentShowing, false, false, true);
                     }
                     break;
                 case NewServicePresenter.Showing.SHOWING_FOLDER:

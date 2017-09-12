@@ -538,7 +538,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     }
                 } else if (isStayOnScreen(currentShowing.circle)) {
                     if (currentShowing.action.visibilityOption == Collection.VISIBILITY_OPTION_VISIBLE_AFTER_LIFTING) {
-                        view.showQuickActions(currentEdge.position, currentHighlight, currentShowing, false, false);
+                        view.showQuickActions(currentEdge.position, currentHighlight, currentShowing, false, false, false);
                     } else {
                         if (currentShowing.action.visibilityOption != Collection.VISIBILITY_OPTION_ALWAYS_VISIBLE) {
                             currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
@@ -688,7 +688,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 updateCircleIconPosition();
                 view.showCircle(currentShowing.circleIconsXY, currentShowing.circle, currentShowing.circleSlots, xInit, yInit);
                 if (currentShowing.action.visibilityOption == Collection.VISIBILITY_OPTION_ALWAYS_VISIBLE) {
-                    view.showQuickActions(currentEdge.position, -1, currentShowing, true,true);
+                    view.showQuickActions(currentEdge.position, -1, currentShowing, true,true, false);
                 }
                 break;
             case Showing.SHOWING_CIRCLE_ONLY:
@@ -696,7 +696,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 view.showCircle(currentShowing.circleIconsXY, currentShowing.circle, currentShowing.circleSlots, xInit, yInit);
                 break;
             case Showing.SHOWING_ACTION_ONLY:
-                view.showQuickActions(currentEdge.position, -1, currentShowing, true,true);
+                view.showQuickActions(currentEdge.position, -1, currentShowing, true,true, true);
                 break;
 
         }
@@ -872,7 +872,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         void showFolder(int triggerPosition, Slot folder, final String gridId, int space, int edgePosition, Showing currentShowing);
 
-        void showQuickActions(int edgePosition, int highlightPosition, NewServicePresenter.Showing currentShowing, boolean delay, boolean animate);
+        void showQuickActions(int edgePosition, int highlightPosition, NewServicePresenter.Showing currentShowing, boolean delay, boolean animate, boolean quickActionOnly);
 
         void actionDownVibrate();
 
