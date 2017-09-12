@@ -95,6 +95,7 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
             aboutProButton.setVisibility(View.GONE);
             upgradeButton.setVisibility(View.GONE);
         }
+        viewPager.setOffscreenPageLimit(3);
     }
 
 

@@ -81,6 +81,7 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
     PublishSubject<Void> setDataCompleteSJ = PublishSubject.create();
     PublishSubject<Void> updateLayoutRequestSJ = PublishSubject.create();
     String edgeId;
+    boolean firstRender = true;
 
     public static EdgeSettingView newInstance(String edgeId) {
 
@@ -238,7 +239,11 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
 
     public void setCurrentMode(int mode) {
         String currentMode = null;
-        TransitionManager.beginDelayedTransition(parent,new AutoTransition().setDuration(450));
+        if (firstRender) {
+            firstRender = false;
+        } else {
+            TransitionManager.beginDelayedTransition(parent,new AutoTransition().setDuration(450));
+        }
         switch (mode) {
             case Edge.MODE_RECENT_AND_QUICK_ACTION:
                 currentMode = getString(R.string.edge_mode__recent_and_quick_actions);
