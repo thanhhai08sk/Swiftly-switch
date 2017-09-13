@@ -49,6 +49,7 @@ public abstract class BaseAddItemsToFolderPresenter extends BasePresenter<BaseAd
                 public void onChange(RealmResults<Item> element) {
                     if (element.size()>0) {
                         view.setProgressBar(false);
+                        view.setAdapter(element, folderItems);
                     }
                 }
             });
