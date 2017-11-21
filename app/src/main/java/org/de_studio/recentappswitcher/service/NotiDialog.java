@@ -93,7 +93,7 @@ public class NotiDialog extends AppCompatActivity {
                     break;
                 case ACCESSIBILITY_PERMISSION:
                     titleRes = R.string.enable_accessibility_permission;
-                    textRes = R.string.ask_user_to_turn_on_accessibility_toast;
+                    textRes = R.string.accessibility_service_description;
                     buttonTextRes = R.string.go_to_setting;
                     buttonIntent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                     break;
