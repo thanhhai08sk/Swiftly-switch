@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.de_studio.recentappswitcher.R;
@@ -102,17 +104,33 @@ public class IntroSettingFragment extends Fragment {
             permission3Layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (Utility.isOreo() && Utility.isEdgesOn(getActivity())) {
-                        isPauseForPermission = true;
-                        Utility.toggleEdges(getActivity());
-                        Utility.toast(getActivity(), R.string.pause_while_giving_permission);
-                    }
-                    startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+                    new MaterialDialog.Builder(getActivity())
+                            .title(R.string.enable_accessibility_permission)
+                            .content(R.string.accessibility_service_description)
+                            .positiveText(R.string.enable)
+                            .negativeText(R.string.md_cancel_label)
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    openAccessibilitySettings();
+                                }
+                            })
+                            .cancelable(false)
+                            .show();
                 }
             });
         }
 
 
+    }
+
+    private void openAccessibilitySettings() {
+        if (Utility.isOreo() && Utility.isEdgesOn(getActivity())) {
+            isPauseForPermission = true;
+            Utility.toggleEdges(getActivity());
+            Utility.toast(getActivity(), R.string.pause_while_giving_permission);
+        }
+        startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
     }
 
     private void setPermission1Layout() {

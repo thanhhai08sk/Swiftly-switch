@@ -7,7 +7,7 @@
     <string name="about_pro_text">Get the Pro version to:\n    - Unlock a second edge\n    - Customize column count and row count of Grid favorites\n    - Unlock support for icon packs\n    - Pin shortcuts to Recent Apps\n    - Auto-disable Swiftly Switch in full screen apps</string>
     <string name="about_pro_version">About Pro version</string>
     <string name="access_your_favorite_app_and_system_setting_anywhere">Access your favorite shortcut anywhere</string>
-    <string name="accessibility_service_description">Bind Accessibility Service permission is used to perform global back button action, recent apps button action, displaying power menu, and pull down notification center (in some devices). This permission is optional and only intend to help users with disabilities that prevent them from using the device with one hand. Please only enable this permission if you want to use the above features and you have disabilities. </string>
+    <string name="accessibility_service_description">Bind Accessibility Service permission is used to perform global back button action, recent apps button action, displaying power menu, and pull down notification center (in some devices). This permission is optional and only intend to help users with disabilities that prevent them from using the device with one hand. Please only enable this permission if you have disabilities. </string>
     <string name="action_settings">Settings</string>
     <string name="actions">Actions</string>
     <string name="add_new">Add new</string>
@@ -94,12 +94,12 @@
     <string name="email_us">Email us</string>
     <string name="empty">Empty</string>
     <string name="enable">Enable</string>
-    <string name="enable_accessibility">3. Enable Bind Accessibility Service</string>
+    <string name="enable_accessibility">Enable Bind Accessibility Service (optional)</string>
     <string name="enable_accessibility_permission">Enable Bind Accessibility Service permission</string>
     <string name="enable_assist_app">Enable assistant app</string>
-    <string name="enable_floating_window">1. Enable Floating Window</string>
+    <string name="enable_floating_window">Enable Floating Window</string>
     <string name="enable_long_press_to_toggle_swiftly_switch">By setting Swiftly Switch as your assistant app (instead of Google Now on Tap), you can enable/disable trigger edges at any time by long-pressing the home button.</string>
-    <string name="enable_usage_stat">2. Enable Usage Statistics</string>
+    <string name="enable_usage_stat">Enable Usage Statistics (optional)</string>
     <string name="faq_app_take_few_seconds_to_launch">Lag when launching apps from the home screen</string>
     <string name="faq_app_take_few_seconds_to_launch_answer">Swiftly Switch can\'t start apps within 5 seconds from the moment you return to the Home screen. This is the how Android limit services. It\'s not a problem if you return home using the in-app Home shortcut.</string>
     <string name="faq_can_not_uninstall">Why I can\'t uninstall the app on my device?</string>
@@ -211,7 +211,7 @@
     <string name="set_favorite_shortcut_grid_distance_vertical_title_text_view">Distance from the edge (vertical)</string>
     <string name="set_favorite_shortcut_grid_gap_title_text_view">Space between shortcuts</string>
     <string name="set_label">Set label</string>
-    <string name="set_required_permissions">Set required permissions</string>
+    <string name="set_required_permissions">Set permissions</string>
     <string name="set_size">Set size</string>
     <string name="setting_shortcut_back">Back</string>
     <string name="setting_shortcut_bluetooth">Bluetooth on/off</string>

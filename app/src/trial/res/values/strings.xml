@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Swiftly Switch</string>
-    <string name="accessibility_service_description">Bind Accessibility Service permission is used to perform global back button action, recent apps button action, displaying power menu, and pull down notification center (in some devices). This permission is optional and only intend to help users with disabilities that prevent them from using the device with one hand. Please only enable this permission if you want to use the above features and you have disabilities!
-    </string>
+    <string name="accessibility_service_description">Bind Accessibility Service permission is used to perform global back button action, recent apps button action, displaying power menu, and pull down notification center (in some devices). This permission is optional and only intend to help users with disabilities that prevent them from using the device with one hand. Please only enable this permission if you have disabilities!</string>
 
 </resources>
