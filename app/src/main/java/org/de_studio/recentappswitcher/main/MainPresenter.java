@@ -40,7 +40,7 @@ public class MainPresenter extends BasePresenter<MainPresenter.View,MainModel> {
     }
 
     public void resume() {
-        view.displayPermissionNeeded(!view.checkIfAllPermissionOk());
+        view.displayPermissionNeeded(!view.checkIf2FirstPermissionsOk());
     }
 
 
@@ -54,7 +54,7 @@ public class MainPresenter extends BasePresenter<MainPresenter.View,MainModel> {
 
         void restartServiceIfPossible();
 
-        boolean checkIfAllPermissionOk();
+        boolean checkIf2FirstPermissionsOk();
 
         void displayPermissionNeeded(boolean show);
 
