@@ -101,25 +101,24 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
 
 
     @Override
-    public void startIntroAndDataSetupIfNeeded() {
+    public void clearFirstStartAndStartIntroScreen() {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                boolean isFirstStart = shared.getBoolean(Cons.FIRST_START_KEY, true);
-                if (isFirstStart) {
-                    SharedPreferences.Editor e = shared.edit();
-                    e.putBoolean(Cons.FIRST_START_KEY, false);
-                    e.putLong(Cons.DATE_START_KEY, System.currentTimeMillis());
-                    e.commit();
-                    Intent i = new Intent(MainView.this, IntroActivity.class);
-//                    Intent intent = new Intent(MainView.this, DataSetupService.class);
-//                    intent.setAction(DataSetupService.ACTION_GENERATE_DATA);
-//                    startService(intent);
-                    startActivity(i);
-                }
+                SharedPreferences.Editor e = shared.edit();
+                e.putBoolean(Cons.FIRST_START_KEY, false);
+                e.putLong(Cons.DATE_START_KEY, System.currentTimeMillis());
+                e.apply();
+                Intent i = new Intent(MainView.this, IntroActivity.class);
+                startActivity(i);
             }
         });
         t.start();
+    }
+
+    @Override
+    public boolean isFirstStart() {
+        return shared.getBoolean(Cons.FIRST_START_KEY, true);
     }
 
     @Override

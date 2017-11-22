@@ -28,15 +28,17 @@ public class MainPresenter extends BasePresenter<MainPresenter.View,MainModel> {
                     }
                 })
         );
-
-        view.startIntroAndDataSetupIfNeeded();
         view.setupViewPager();
         if (!model.checkIfDataSetupOk()) {
             view.registerForDataSetupOk();
             view.showInitializingDialog(true);
         }
-        view.restartServiceIfPossible();
-        view.showWhatNewIfNeeded();
+        if (view.isFirstStart()) {
+            view.clearFirstStartAndStartIntroScreen();
+        } else {
+            view.restartServiceIfPossible();
+            view.showWhatNewIfNeeded();
+        }
     }
 
     public void resume() {
@@ -50,7 +52,9 @@ public class MainPresenter extends BasePresenter<MainPresenter.View,MainModel> {
 
         void setupViewPager();
 
-        void startIntroAndDataSetupIfNeeded();
+        boolean isFirstStart();
+
+        void clearFirstStartAndStartIntroScreen();
 
         void restartServiceIfPossible();
 

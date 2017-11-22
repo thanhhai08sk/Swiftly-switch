@@ -52,8 +52,6 @@ import static org.de_studio.recentappswitcher.MyApplication.getContext;
 
 public class DataSetupService extends IntentService {
     private static final String TAG = DataSetupService.class.getSimpleName();
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     public static final String ACTION_GENERATE_DATA = "org.de_studio.recentappswitcher.dadaSetup.action.GENERATE_DATA";
     public static final String ACTION_SETUP_GRID = "org.de_studio.recentappswitcher.dadaSetup.action.SETUP_GRID";
 
@@ -325,8 +323,13 @@ public class DataSetupService extends IntentService {
                         Item realmItem = realm.copyToRealm(newItem);
                         items[0] = realmItem;
                     }
-
-                    items[1] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_ACTION + Item.ACTION_BACK).findFirst();
+                    if (Utility.isAccessibilityEnable(getContext())) {
+                        Log.e(TAG, "execute: has accessibility use back");
+                        items[1] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_ACTION + Item.ACTION_BACK).findFirst();
+                    } else {
+                        Log.e(TAG, "execute: dont have accessibility use search");
+                        items[1] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_ACTION + Item.ACTION_SEARCH_SHORTCUTS).findFirst();
+                    }
                     items[2] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_ACTION + Item.ACTION_LAST_APP).findFirst();
                     items[3] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_ACTION + Item.ACTION_NOTI).findFirst();
 
