@@ -84,11 +84,14 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     public void onViewAttach(final View view) {
         super.onViewAttach(view);
         model.setup();
+        if (!view.hasAtLeast1EdgeEnabled()) {
+            view.finish();
+            return;
+        }
         view.addEdgesToWindowAndSetListener();
         view.setupNotification();
         view.setupReceiver();
         model.setSavedRecentShortcuts(view.getRecentApp(Cons.TIME_INTERVAL_LONG));
-
 
         addSubscription(
                 highlightIdSubject.filter(new Func1<Integer, Boolean>() {
@@ -852,6 +855,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         PublishSubject<Item> onStartItemFromSearch();
 
+        boolean hasAtLeast1EdgeEnabled();
+
         void addEdgesToWindowAndSetListener();
 
         void setupNotification();
@@ -941,6 +946,8 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         PublishSubject<Item> onStartItem();
 
         void hideClock();
+
+        void finish();
     }
 
     public class Showing {

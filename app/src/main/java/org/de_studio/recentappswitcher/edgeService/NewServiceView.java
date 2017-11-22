@@ -378,7 +378,16 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             receiver1 = null;
         }
         realm.close();
+    }
 
+    @Override
+    public void finish() {
+        stopSelf();
+    }
+
+    @Override
+    public boolean hasAtLeast1EdgeEnabled() {
+        return sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY, true) || (!isFree && sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false));
     }
 
     @Override
