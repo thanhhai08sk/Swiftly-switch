@@ -93,9 +93,9 @@ public class IntroActivity extends AppIntro2 {
     public void onDonePressed() {
         boolean isOk;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            isOk = isStep1Ok() && Settings.canDrawOverlays(this) && Utility.isAccessibilityEnable(this);
+            isOk = isStep1Ok() && Settings.canDrawOverlays(this);
         } else {
-            isOk = isStep1Ok() && Utility.isAccessibilityEnable(this);
+            isOk = isStep1Ok();
         }
         Log.e(LOG_TAG, "finish Intro");
         if (isOk) {

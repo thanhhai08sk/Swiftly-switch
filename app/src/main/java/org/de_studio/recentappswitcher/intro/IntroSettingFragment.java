@@ -49,14 +49,9 @@ public class IntroSettingFragment extends Fragment {
         permission1Layout = (LinearLayout) rootView.findViewById(R.id.ask_permission_1_linear_layout);
         permission2Layout = (LinearLayout) rootView.findViewById(R.id.ask_permission_2_linear_layout);
         permission3Layout = (LinearLayout) rootView.findViewById(R.id.ask_permission_3_linear_layout);
-
         setPermission1Layout();
         setPermission2Layout();
         setPermission3Layout();
-
-
-
-
         return rootView;
     }
     private boolean isStep1Ok() {
@@ -69,8 +64,6 @@ public class IntroSettingFragment extends Fragment {
 
 
     }
-
-
 
     private void setPermission2Layout() {
         if (isStep1Ok()) {
