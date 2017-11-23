@@ -118,12 +118,22 @@ public class IntroSettingFragment extends Fragment {
     }
 
     private void openAccessibilitySettings() {
-        if (Utility.isOreo() && Utility.isEdgesOn(getActivity())) {
-            isPauseForPermission = true;
-            Utility.toggleEdges(getActivity());
-            Utility.toast(getActivity(), R.string.pause_while_giving_permission);
-        }
-        startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+        new MaterialDialog.Builder(getActivity())
+                .content(R.string.enable_accessibility_permission_guide)
+                .positiveText(R.string.cast_tracks_chooser_dialog_ok)
+                .negativeText(R.string.md_cancel_label)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (Utility.isOreo() && Utility.isEdgesOn(getActivity())) {
+                            isPauseForPermission = true;
+                            Utility.toggleEdges(getActivity());
+                            Utility.toast(getActivity(), R.string.pause_while_giving_permission);
+                        }
+                        startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+                    }
+                })
+                .show();
     }
 
     private void setPermission1Layout() {

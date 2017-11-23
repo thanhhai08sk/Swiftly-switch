@@ -146,14 +146,20 @@ public class DataSetupService extends IntentService {
             @Override
             public void execute(Realm realm) {
                 Collection recent = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_RECENT, 1)).findFirst();
+                Collection circleFav = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_CIRCLE_FAVORITE, 1)).findFirst();
                 Collection quickAction = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 1)).findFirst();
                 if (realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_1_ID).findFirst() == null) {
                     Edge edge1 = new Edge();
                     edge1.edgeId = Edge.EDGE_1_ID;
-                    edge1.mode = Edge.MODE_RECENT_AND_QUICK_ACTION;
+                    if (Utility.canGetRecentApps(getContext())) {
+                        edge1.mode = Edge.MODE_RECENT_AND_QUICK_ACTION;
+                    } else {
+                        edge1.mode = Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION;
+                    }
                     edge1.useGuide = true;
                     edge1.position = Cons.POSITION_RIGHT_CENTRE;
                     edge1.recent = recent;
+                    edge1.circleFav = circleFav;
                     edge1.quickAction = quickAction;
                     edge1.sensitive = Cons.DEFAULT_EDGE_SENSITIVE;
                     edge1.length = Cons.DEFAULT_EDGE_LENGTH;
@@ -173,9 +179,14 @@ public class DataSetupService extends IntentService {
                 if (realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_2_ID).findFirst() == null) {
                     Edge edge2 = new Edge();
                     edge2.edgeId = Edge.EDGE_2_ID;
-                    edge2.mode = Edge.MODE_RECENT_AND_QUICK_ACTION;
+                    if (Utility.canGetRecentApps(getContext())) {
+                        edge2.mode = Edge.MODE_RECENT_AND_QUICK_ACTION;
+                    } else {
+                        edge2.mode = Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION;
+                    }
                     edge2.useGuide = true;
                     edge2.position = Cons.POSITION_LEFT_BOTTOM;
+                    edge2.circleFav = circleFav;
                     edge2.recent = recent;
                     edge2.quickAction = quickAction;
                     edge2.sensitive = Cons.DEFAULT_EDGE_SENSITIVE;

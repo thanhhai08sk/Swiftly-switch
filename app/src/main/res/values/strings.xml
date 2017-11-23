@@ -426,5 +426,6 @@
     <string name="pause_while_giving_permission">Pause while giving permission</string>
     <string name="turn_off_do_not_disturb_first">Please turn off Do Not Disturb first!</string>
     <string name="error_when_taking_screenshot">Error when taking screenshot!</string>
+    <string name="enable_accessibility_permission_guide">Find Swiftly Switch in the next sceen and enable the permission. Press back after done</string>
 
 </resources>
