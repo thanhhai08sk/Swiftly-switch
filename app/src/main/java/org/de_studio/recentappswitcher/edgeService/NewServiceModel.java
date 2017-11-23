@@ -103,7 +103,9 @@ public class NewServiceModel extends BaseModel {
         long recentSlotsCount = slots.where().equalTo(Cons.TYPE, Slot.TYPE_RECENT).count();
 
         String removedPackage = removeLauncherAndCurrentAppAndSetLastApp(packageNames);
-        currentShowing.lastApp = lastAppPackageName;
+        if (lastAppPackageName != null) {
+            currentShowing.lastApp = lastAppPackageName;
+        }
 
 
         for (Slot slot : slots) {

@@ -61,6 +61,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     int currentHighlight = -1;
     long holdingHelper;
     ArrayList<String> tempRecentPackages;
+    String[] lastAppFromLaunching = new String[2];
 
     PublishSubject<Integer> highlightIdSubject = PublishSubject.create();
     PublishSubject<Void> longClickItemSubject = PublishSubject.create();
@@ -72,6 +73,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     PublishSubject<Void> finishSectionSJ = PublishSubject.create();
     private PublishSubject<Void> onGivingPermissionSJ = PublishSubject.create();
     PublishSubject<Slot> startSlotSJ = PublishSubject.create();
+
 
 
 
@@ -268,7 +270,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         view.hideAllExceptEdges();
                         currentHighlight = -1;
                         currentShowing.showWhat = Showing.SHOWING_NONE;
-                        currentShowing.lastApp = null;
+//                        currentShowing.lastApp = null;
                         tempRecentPackages = null;
                         model.clearSectionData();
                         view.setFirstSectionFalse();
@@ -311,10 +313,17 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                                         showCollectionInstantlySubject.onNext(slot.stage1Item.collectionId);
                                     } else {
                                         String lastApp = getLastApp();
-//                                        Log.e(TAG, "call: lastapp = " + lastApp);
                                         view.startItem(slot.stage1Item, lastApp);
                                         if (!slot.stage1Item.type.equals(Item.TYPE_ACTION) || slot.stage1Item.action != Item.ACTION_SEARCH_SHORTCUTS) {
                                             finishSectionSJ.onNext(null);
+                                        }
+                                        if (slot.stage1Item.type.equals(Item.TYPE_ACTION) && slot.stage1Item.action == Item.ACTION_LAST_APP) {
+                                            Item item = new Item();
+                                            item.type = Item.TYPE_APP;
+                                            item.packageName = getLastApp();
+                                            putToLastAppIfItIsApp(item);
+                                        } else {
+                                            putToLastAppIfItIsApp(slot.stage1Item);
                                         }
                                     }
                                     break;
@@ -404,6 +413,13 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         );
 
 
+    }
+
+    private void putToLastAppIfItIsApp(Item item) {
+        if (item != null && item.type.equals(Item.TYPE_APP)) {
+            lastAppFromLaunching[0] = lastAppFromLaunching[1];
+            lastAppFromLaunching[1] = item.packageName;
+        }
     }
 
     @NonNull
@@ -572,7 +588,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             case Showing.SHOWING_FOLDER:
                 if (currentHighlight >= 0) {
                     if (currentHighlight < currentShowing.folderItems.size()) {
-                        view.startItem(currentShowing.folderItems.get(currentHighlight), getLastApp());
+                        Item item = currentShowing.folderItems.get(currentHighlight);
+                        view.startItem(item, getLastApp());
+                        putToLastAppIfItIsApp(item);
                     }
                 }
                 finishSectionSJ.onNext(null);
@@ -831,6 +849,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     private String getLastApp() {
         if (currentShowing.lastApp == null) {
             currentShowing.lastApp = model.getLastApp(tempRecentPackages);
+        }
+        if (currentShowing.lastApp == null) {
+            return lastAppFromLaunching[0];
         }
         return currentShowing.lastApp;
     }
