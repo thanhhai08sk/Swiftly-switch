@@ -330,12 +330,13 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
         view.resetService()
     }
 
-    fun onBackgroundColor() {
-        view.backgroundColorDialog()
-    }
-
     fun onSetBackgroundColor(color: Int) {
         sharedPreferences!!.edit().putInt(Cons.BACKGROUND_COLOR_KEY, color).commit()
+        view.resetService()
+    }
+
+    fun onSetFolderBackgroundColor(color: Int) {
+        sharedPreferences!!.edit().putInt(Cons.FOLDER_BACKGROUND_COLOR_KEY, color).commit()
         view.resetService()
     }
 
@@ -421,9 +422,6 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
         fun chooseIconPackDialog()
 
         fun iconSizeDialog(subject: PublishSubject<Int>)
-
-        fun backgroundColorDialog()
-
         fun animationDurationDialog(subject: PublishSubject<Int>)
 
         fun vibrationDurationDialog(subject: PublishSubject<Int>)

@@ -23,10 +23,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorSelectedListener;
-import com.flask.colorpicker.builder.ColorPickerClickListener;
-import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
@@ -48,6 +44,7 @@ import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.dagger.AppModule;
 import org.de_studio.recentappswitcher.dagger.DaggerMoreSettingComponent;
 import org.de_studio.recentappswitcher.dagger.MoreSettingModule;
+import org.de_studio.recentappswitcher.ui.component.Dialog;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -65,6 +62,8 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.realm.Realm;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 import rx.Single;
@@ -451,35 +450,6 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     }
 
     @Override
-    public void backgroundColorDialog() {
-        int currentColor = sharedPreferences.getInt(Cons.BACKGROUND_COLOR_KEY,Cons.BACKGROUND_COLOR_DEFAULT);
-        ColorPickerDialogBuilder
-                .with(this)
-                .setTitle(getApplicationContext().getString(R.string.main_set_background_color))
-                .initialColor(currentColor)
-                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                .density(12)
-                .setOnColorSelectedListener(new OnColorSelectedListener() {
-                    @Override
-                    public void onColorSelected(int selectedColor) {
-                    }
-                })
-                .setPositiveButton("ok", new ColorPickerClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-                        presenter.onSetBackgroundColor(selectedColor);
-                    }
-                })
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .build()
-                .show();
-    }
-
-    @Override
     public void animationDurationDialog(PublishSubject<Integer> subject) {
         Utility.showDialogWithSeekBar(
                 Cons.ANIMATION_TIME_MIN,
@@ -593,8 +563,28 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     @OnClick(R.id.background_color)
     void onBackgroudnColorClick(){
-        presenter.onBackgroundColor();
+        int currentColor = sharedPreferences.getInt(Cons.BACKGROUND_COLOR_KEY,Cons.BACKGROUND_COLOR_DEFAULT);
+        Dialog.INSTANCE.pickColor(this, currentColor, new Function1<Integer, Unit>() {
+            @Override
+            public Unit invoke(Integer integer) {
+                presenter.onSetBackgroundColor(integer);
+                return  Unit.INSTANCE;
+            }
+        });
     }
+
+    @OnClick(R.id.folderBackgroundColor)
+    void onFolderBackgroundClick(){
+        int currentColor = sharedPreferences.getInt(Cons.FOLDER_BACKGROUND_COLOR_KEY, Cons.FOLDER_BACKGROUND_COLOR_DEFAULT);
+        Dialog.INSTANCE.pickColor(this, currentColor, new Function1<Integer, Unit>() {
+            @Override
+            public Unit invoke(Integer integer) {
+                presenter.onSetFolderBackgroundColor(integer);
+                return  Unit.INSTANCE;
+            }
+        });
+    }
+
 
     @OnClick(R.id.use_animation)
     void onUseAnimationClick(){

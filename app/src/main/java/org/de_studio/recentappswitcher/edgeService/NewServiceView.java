@@ -993,7 +993,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             folderView.setAdapter(adapter);
             folderView.setId(getFolderResId(folder));
             folderView.addItemDecoration(new GridSpacingItemDecoration((int) (space * mScale)));
-            folderView.setBackgroundResource(R.color.background_lightish);
+//            folderView.setBackgroundResource(R.color.background_lightish);
+            folderView.setBackgroundColor(sharedPreferences.getInt(Cons.FOLDER_BACKGROUND_COLOR_KEY, Cons.FOLDER_BACKGROUND_COLOR_DEFAULT));
             collectionViewsMap.put(folder.slotId, folderView);
         }
     }

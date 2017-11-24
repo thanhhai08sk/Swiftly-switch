@@ -234,6 +234,18 @@
             </LinearLayout>
             <include layout="@layout/separator" />
 
+        <LinearLayout
+            android:id="@+id/folderBackgroundColor"
+            style="@style/MoreSetting_Item_Parent_No_Switch"
+            >
+            <TextView
+                style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                android:text="@string/folder_background_color"
+                android:paddingBottom="16dp"
+                />
+        </LinearLayout>
+        <include layout="@layout/separator" />
+
             <LinearLayout
                 android:id="@+id/use_animation"
                 style="@style/MoreSetting_Item_Parent_With_Switch"

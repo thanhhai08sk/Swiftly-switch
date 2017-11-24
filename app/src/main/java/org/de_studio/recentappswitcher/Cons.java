@@ -97,6 +97,7 @@ public class Cons {
     public static final int GRID_GAP_DEFAULT = 5;
     public static final int GUIDE_COLOR_DEFAULT = Color.argb(255, 23, 103, 137);
     public static final int BACKGROUND_COLOR_DEFAULT = Color.argb(170, 0, 0, 0);
+    public static final int FOLDER_BACKGROUND_COLOR_DEFAULT = Color.argb(255, 224, 224, 224);
     public static final int LONG_PRESS_DELAY_DEFAULT = 800;
     public static final int DEFAULT_VIBRATE_DURATION = 15;
     public static final int ANIMATION_TIME_DEFAULT = 250;
@@ -344,4 +345,5 @@ public class Cons {
     public static final String BASE_64_ENCODED_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgHZzxPr4voivbRVH3i1ikAKE75u89En2Dy7sokKutIxsbhp5r/MCZ/d5vyNOwglmEdO+7B555jIN8HgAOC2q5Eu6xFjFXRbiC/cu6S++0A2P10i/mmswLE0cwVQPpNNU/n61CotWp1yeXAXThhfSzxNEYyHBs97EOtDe2BVXHn5DXOsEvyf5dK0NSmFqyPOBLFOG+dZ9irRwB5bKqkYr0T2N4JX4Vk1exG/rXajmxjBdkJaPKYNwWPGf7mFJXYbFpTmLj5JWQDXs/b2JQs1fcyiUd13Q48KjUq9l4/Byz+oIJC1J4UNHiiXAM1qLPnEwHT/bwhJgYBb61tLOH6u8zwIDAQAB";
     public static final String SKU_PRO = "sku_pro";
 
+    public static final String FOLDER_BACKGROUND_COLOR_KEY = "background_color";
 }
