@@ -35,9 +35,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/background_outline_light"
-            android:padding="8dp"
-            android:layout_gravity="top"
-            android:layout_marginStart="64dp"
+            android:padding="4dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="16dp"
+
 
 
             >
@@ -54,7 +55,8 @@
                 android:text="@string/upgrade_to_pro"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/text_primary_light"
-                android:textSize="12sp"
+                android:textSize="10sp"
+                android:textStyle="bold"
                 android:textAllCaps="true"
                 android:textAlignment="center"
                 />

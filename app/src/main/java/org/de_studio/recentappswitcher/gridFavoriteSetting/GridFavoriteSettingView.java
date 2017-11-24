@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.gridFavoriteSetting;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -55,7 +56,14 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
     Switch stayOnScreenSwitch;
     @BindView(R.id.stay_on_screen_description)
     TextView stayOnScreenDescription;
-    
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Utility.textColorDisabledIfFree(rowsCountTitle);
+        Utility.textColorDisabledIfFree(columnsCountTitle);
+    }
+
     @Override
     protected void inject() {
         DaggerGridFavoriteSettingComponent.builder()

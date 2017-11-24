@@ -2128,6 +2128,14 @@ public  class Utility {
         return context.getPackageName().equals(Cons.FREE_VERSION_PACKAGE_NAME) && !sharedPreferences.getBoolean(Cons.PRO_PURCHASED_KEY, false);
     }
 
+    public static void textColorDisabledIfFree(TextView textView) {
+        int textColor;
+        if (Utility.isFree(textView.getContext())) {
+            textColor = R.color.text_primary_dark_disabled;
+        } else textColor = R.color.text_primary_dark;
+        textView.setTextColor(ContextCompat.getColor(textView.getContext(), textColor));
+    }
+
     public static boolean isFreeAndOutOfTrial(Context context, SharedPreferences sharedPreferences) {
         return isFree(context) && System.currentTimeMillis() - sharedPreferences.getLong(Cons.BEGIN_DAY_KEY, System.currentTimeMillis()) > Cons.TRIAL_TIME;
     }
