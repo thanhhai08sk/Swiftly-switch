@@ -20,184 +20,190 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         >
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <LinearLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
 
-            <include layout="@layout/drawer_top"/>
+                <include layout="@layout/drawer_top"/>
 
-            <FrameLayout
-                android:id="@+id/more_setting"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                style="@style/Drawer_Item"
+                <FrameLayout
+                    android:id="@+id/more_setting"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    style="@style/Drawer_Item"
 
-                >
-                <ImageView
-                    style="@style/Drawer_Icon"
-                    app:srcCompat="@drawable/ic_settings_white_36px"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Drawer_Item_text"
-                    android:text="@string/main_more_setting_title"
-                    />
+                    >
+                    <ImageView
+                        style="@style/Drawer_Icon"
+                        app:srcCompat="@drawable/ic_settings_white_36px"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Drawer_Item_text"
+                        android:text="@string/main_more_setting_title"
+                        />
 
-            </FrameLayout>
+                </FrameLayout>
 
-            <FrameLayout
-                android:id="@+id/faqs"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                style="@style/Drawer_Item"
+                <FrameLayout
+                    android:id="@+id/faqs"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    style="@style/Drawer_Item"
 
-                >
-                <ImageView
-                    style="@style/Drawer_Icon"
-                    app:srcCompat="@drawable/ic_faqs"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Drawer_Item_text"
-                    android:text="@string/faqs"
-                    />
+                    >
+                    <ImageView
+                        style="@style/Drawer_Icon"
+                        app:srcCompat="@drawable/ic_faqs"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Drawer_Item_text"
+                        android:text="@string/faqs"
+                        />
 
-            </FrameLayout>
-
-
-            <FrameLayout
-                android:id="@+id/changelog"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                style="@style/Drawer_Item"
-
-                >
-                <ImageView
-                    style="@style/Drawer_Icon"
-                    app:srcCompat="@drawable/ic_changelog"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Drawer_Item_text"
-                    android:text="@string/what_new"
-                    />
-
-            </FrameLayout>
+                </FrameLayout>
 
 
-            <FrameLayout
-                android:id="@+id/review"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                style="@style/Drawer_Item"
+                <FrameLayout
+                    android:id="@+id/changelog"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    style="@style/Drawer_Item"
 
-                >
-                <ImageView
-                    style="@style/Drawer_Icon"
-                    app:srcCompat="@drawable/ic_rate_review_white_36dp"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Drawer_Item_text"
-                    android:text="@string/review_on_play_store"
-                    />
+                    >
+                    <ImageView
+                        style="@style/Drawer_Icon"
+                        app:srcCompat="@drawable/ic_changelog"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Drawer_Item_text"
+                        android:text="@string/what_new"
+                        />
 
-            </FrameLayout>
-            <FrameLayout
-                android:id="@+id/translate"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                style="@style/Drawer_Item"
+                </FrameLayout>
 
-                >
-                <ImageView
-                    style="@style/Drawer_Icon"
-                    app:srcCompat="@drawable/ic_action_translate"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Drawer_Item_text"
-                    android:text="@string/translate_the_app"
-                    />
 
-            </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/review"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    style="@style/Drawer_Item"
 
-            <FrameLayout
-                android:id="@+id/send_feedback"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                style="@style/Drawer_Item"
+                    >
+                    <ImageView
+                        style="@style/Drawer_Icon"
+                        app:srcCompat="@drawable/ic_rate_review_white_36dp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Drawer_Item_text"
+                        android:text="@string/review_on_play_store"
+                        />
 
-                >
-                <ImageView
-                    style="@style/Drawer_Icon"
-                    app:srcCompat="@drawable/ic_email_white_36dp"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Drawer_Item_text"
-                    android:text="@string/email_us"
-                    />
+                </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/translate"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    style="@style/Drawer_Item"
 
-            </FrameLayout>
-            <FrameLayout
-                android:id="@+id/about_pro_version"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
+                    >
+                    <ImageView
+                        style="@style/Drawer_Icon"
+                        app:srcCompat="@drawable/ic_action_translate"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Drawer_Item_text"
+                        android:text="@string/translate_the_app"
+                        />
 
-                >
-                <ImageView
-                    style="@style/Drawer_Icon"
-                    app:srcCompat="@drawable/ic_info"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Drawer_Item_text"
-                    android:text="@string/about_pro_version"
-                    />
+                </FrameLayout>
 
-            </FrameLayout>
-            <FrameLayout
-                android:id="@+id/about"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                style="@style/Drawer_Item"
-                android:visibility="visible"
-                tools:visibility="visible"
+                <FrameLayout
+                    android:id="@+id/send_feedback"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    style="@style/Drawer_Item"
 
-                >
-                <ImageView
-                    style="@style/Drawer_Icon"
-                    app:srcCompat="@drawable/ic_info"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Drawer_Item_text"
-                    android:text="@string/about"
-                    />
+                    >
+                    <ImageView
+                        style="@style/Drawer_Icon"
+                        app:srcCompat="@drawable/ic_email_white_36dp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Drawer_Item_text"
+                        android:text="@string/email_us"
+                        />
 
-            </FrameLayout>
+                </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/about_pro_version"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
 
-        </LinearLayout>
+                    >
+                    <ImageView
+                        style="@style/Drawer_Icon"
+                        app:srcCompat="@drawable/ic_info"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Drawer_Item_text"
+                        android:text="@string/about_pro_version"
+                        />
+
+                </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/about"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    style="@style/Drawer_Item"
+                    android:visibility="visible"
+                    tools:visibility="visible"
+
+                    >
+                    <ImageView
+                        style="@style/Drawer_Icon"
+                        app:srcCompat="@drawable/ic_info"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Drawer_Item_text"
+                        android:text="@string/about"
+                        />
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
 
     </android.support.design.widget.NavigationView>
 

@@ -142,7 +142,7 @@
 	<string name="go_to_setting">Đến cài đặt</string>
 	<string name="grid_favorite_set">Bộ Lưới úng dụng ưa thích</string>
 	<string name="grid_favorites">Lưới ứng dụng ưa thích</string>
-	<string name="grid_favorites_description">\"Đặt một tập hợp các phím tắt ưa thích của bạn ở đây Bấm để thiết lập kích thước, nội dung và vị trí\"</string>
+	<string name="grid_favorites_description">Đặt một tập hợp các phím tắt ưa thích của bạn ở đây Bấm để thiết lập kích thước, nội dung và vị trí</string>
 	<string name="grid_position_center">Chính giữa màn hình</string>
 	<string name="grid_position_trigger_position">Vị trí kích hoạt</string>
 	<string name="hide_notification">Ẩn thông báo</string>
@@ -184,7 +184,7 @@
 	<string name="main_set_background_color">Thiết lập màu nền</string>
 	<string name="main_usage_access_can_not_found">Không thể tìm thấy thiết lập này trên thiết bị của bạn.</string>
 	<string name="main_vibration_duration">Thời gian rung</string>
-	<string name="media">Đaphương tiện</string>
+	<string name="media">Media</string>
 	<string name="missing_call_phone_permission">Thiếu quyền quản lí cuộc gọi</string>
 	<string name="missing_contact_permission">Thiếu quyền truy cập liên quan đến liên hệ</string>
 	<string name="navigation_drawer_close">Đóng ngăn điều hướng</string>

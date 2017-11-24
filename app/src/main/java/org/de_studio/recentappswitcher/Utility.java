@@ -1650,19 +1650,19 @@ public  class Utility {
                 startAction(item.action, context, lastAppPackageName, ringerModeAction, useTransition);
                 break;
             case Item.TYPE_CONTACT:
-                startContact(item, context, contactAction);
+                startContact(item, context, contactAction, onHomeScreen);
                 break;
             case Item.TYPE_DEVICE_SHORTCUT:
-                startDeviceShortcut(item, context);
+                startDeviceShortcut(item, context, onHomeScreen);
                 break;
         }
     }
 
-    private static void startDeviceShortcut(Item item, Context context) {
+    private static void startDeviceShortcut(Item item, Context context, boolean onHomeScreen) {
         try {
             Intent intent = Intent.parseUri(item.getIntent(), 0);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+            launchActivityInstantly(context, intent, onHomeScreen);
         } catch (Exception e) {
             e.printStackTrace();
             if (e instanceof SecurityException) {
@@ -1670,6 +1670,14 @@ public  class Utility {
                 Toast.makeText(context, context.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
             }
 
+        }
+    }
+
+    private static void launchActivityInstantly(Context context, Intent intent, boolean onHomeScreen) {
+        if (onHomeScreen) {
+            startIntentUsingPendingIntent(intent, context);
+        } else {
+            ContextCompat.startActivities(context, new Intent[]{intent});
         }
     }
 
@@ -1692,12 +1700,7 @@ public  class Utility {
                 startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 }
                 startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                if (onHomeScreen) {
-                    startIntentUsingPendingIntent(startAppIntent, context);
-                } else {
-//                    ContextCompat.startActivity(context, startAppIntent, null);
-                    ContextCompat.startActivities(context, new Intent[]{startAppIntent});
-                }
+                launchActivityInstantly(context, startAppIntent, onHomeScreen);
             }
         } else {
             Log.e(TAG, "extApp of shortcut = null " + packageName);
@@ -1719,14 +1722,14 @@ public  class Utility {
         }
     }
 
-    private static void startContact(Item item, Context context, int contactAction) {
+    private static void startContact(Item item, Context context, int contactAction, boolean onHomeScreen) {
         switch (contactAction) {
             case Cons.CONTACT_ACTION_CHOOSE:
                 Intent intent = new Intent(context, ChooseActionDialogActivity.class);
                 intent.putExtra("number", item.getNumber());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                context.startActivity(intent);
+                launchActivityInstantly(context, intent, onHomeScreen);
                 break;
             case Cons.CONTACT_ACTION_CALL:
                 String url = "tel:"+ item.getNumber();
