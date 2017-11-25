@@ -46,6 +46,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -680,7 +681,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         }
         searchResultAdapter.updateData(items);
 
-
     }
 
     public void showSearchView(List<Item> lastSearchItems) {
@@ -708,6 +708,14 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 }
             });
             searchField = ((MyEditText) searchParent.findViewById(R.id.search_field));
+            searchField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    Log.e(TAG, "onEditorAction: action");
+                    startItemFromSearchSJ.onNext(searchResultAdapter.getFirstResult());
+                    return true;
+                }
+            });
             clearAll = (ImageButton) searchParent.findViewById(R.id.clear_all);
             clearAll.setOnClickListener(new View.OnClickListener() {
                 @Override

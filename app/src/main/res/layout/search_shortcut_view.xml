@@ -28,6 +28,9 @@
                 android:hint="@string/search_shortcuts"
                 android:textColorHint="@color/text_secondary_dark"
                 android:textColor="@color/text_primary_dark"
+                android:lines="1"
+                android:imeOptions="actionDone"
+                android:inputType="textEmailSubject"
 
                 />
             <ImageButton

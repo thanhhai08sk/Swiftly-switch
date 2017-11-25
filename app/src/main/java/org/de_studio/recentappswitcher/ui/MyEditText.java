@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
@@ -10,7 +11,7 @@ import android.widget.EditText;
  */
 
 public class MyEditText extends EditText {
-    private BackOnEditTextListener listener;
+    private BackOnEditTextListener backListener;
     public interface BackOnEditTextListener {
         void onBackButton();
     }
@@ -31,8 +32,8 @@ public class MyEditText extends EditText {
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK &&
                 event.getAction() == KeyEvent.ACTION_UP) {
-            if (listener != null) {
-                listener.onBackButton();
+            if (backListener != null) {
+                backListener.onBackButton();
             }
             return false;
         }
@@ -40,6 +41,6 @@ public class MyEditText extends EditText {
     }
 
     public void setBackButtonListener(BackOnEditTextListener listener) {
-        this.listener = listener;
+        this.backListener = listener;
     }
 }

@@ -69,4 +69,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsRealmAdapter.ViewHol
         }
         return data.size();
     }
+
+    public Item getFirstResult() {
+        if (data != null && data.size() > 0) {
+            return data.get(0);
+        }else return null;
+    }
 }

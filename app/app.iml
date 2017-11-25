@@ -88,13 +88,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/fastbuild/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/fastbuild/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/fastbuild/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testFastbuild/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testFastbuild/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testFastbuild/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testFastbuild/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testFastbuild/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testFastbuild/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testFastbuild/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestFastbuild/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestFastbuild/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestFastbuild/assets" type="java-test-resource" />
@@ -102,6 +95,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestFastbuild/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestFastbuild/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestFastbuild/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testFastbuild/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testFastbuild/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testFastbuild/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testFastbuild/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testFastbuild/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testFastbuild/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testFastbuild/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/assets" type="java-resource" />
