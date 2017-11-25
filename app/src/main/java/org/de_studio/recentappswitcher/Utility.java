@@ -11,7 +11,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -65,6 +64,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import org.de_studio.recentappswitcher.android.ContactPhotoLoader;
 import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
 import org.de_studio.recentappswitcher.edgeService.NewServiceView;
@@ -1093,26 +1093,25 @@ public  class Utility {
                     setItemIconFromBitmap(item, icon, showIconState, context);
                     break;
                 case Item.TYPE_CONTACT:
-                    Uri person = ContentUris.withAppendedId(
-                            ContactsContract.Contacts.CONTENT_URI, item.contactId);
-                    Uri photo = Uri.withAppendedPath(person,
-                            ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-                    if (photo != null) {
-                        try {
-                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photo);
-                            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-                            drawable.setCircular(true);
-                            icon.setImageDrawable(drawable);
-                            icon.setColorFilter(null);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            icon.setImageResource(R.drawable.ic_contact_default);
-                        } catch (SecurityException e) {
-                            Toast.makeText(context, context.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
-                        }
-                    } else {
-                        icon.setImageResource(R.drawable.ic_contact_default);
-                    }
+                    ContactPhotoLoader.INSTANCE.loadContactPhotoNew(item.contactId, icon, context);
+//                    Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, item.contactId);
+//                    Uri photo = Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+//                    if (photo != null) {
+//                        try {
+//                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photo);
+//                            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+//                            drawable.setCircular(true);
+//                            icon.setImageDrawable(drawable);
+//                            icon.setColorFilter(null);
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                            icon.setImageResource(R.drawable.ic_contact_default);
+//                        } catch (SecurityException e) {
+//                            Toast.makeText(context, context.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
+//                        }
+//                    } else {
+//                        icon.setImageResource(R.drawable.ic_contact_default);
+//                    }
                     break;
                 case Item.TYPE_SHORTCUTS_SET:
                     if (item.iconBitmap != null) {

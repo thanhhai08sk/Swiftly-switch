@@ -33,7 +33,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsRealmAdapter.ViewHol
         this.data = data;
         this.packageManager = packageManager;
         this.iconPack = iconPack;
-
     }
 
     @Override
