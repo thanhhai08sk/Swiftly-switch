@@ -369,7 +369,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
 
         addSubscription(
                 view.onSearch()
-                        .debounce(150,TimeUnit.MILLISECONDS)
+                        .debounce(50,TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Action1<String>() {
                     @Override

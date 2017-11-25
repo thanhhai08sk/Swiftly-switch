@@ -115,6 +115,8 @@ dependencies {
     compile 'com.afollestad.material-dialogs:commons:0.9.3.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.2-2"
 
+
+
     //Permissin
     compile 'com.github.hotchemi:permissionsdispatcher:2.3.2'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.2'
