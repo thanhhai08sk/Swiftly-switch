@@ -7,7 +7,6 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -195,7 +194,6 @@ public class VolumeDialogActivity extends AppCompatActivity {
     }
 
     private boolean canChangeRingstone() {
-        Log.e("Volume", "onDoNotDisturb: " + ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).getCurrentInterruptionFilter());
         if (!Utility.isMashMallowOrHigher()) {
             return true;
         }
@@ -205,7 +203,6 @@ public class VolumeDialogActivity extends AppCompatActivity {
     }
 
     private boolean onDoNotDisturb() {
-        Log.e("Volume", "onDoNotDisturb: " + ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).getCurrentInterruptionFilter());
         return Utility.isMashMallowOrHigher() && ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).getCurrentInterruptionFilter() != NotificationManager.INTERRUPTION_FILTER_ALL;
     }
 }
