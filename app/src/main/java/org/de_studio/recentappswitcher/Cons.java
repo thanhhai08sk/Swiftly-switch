@@ -292,7 +292,7 @@ public class Cons {
     public static final int RINGER_MODE_ACTION_DEFAULT = RINGER_MODE_ACTION_SOUND_AND_VIBRATE;
 
 
-    public static final int HOLD_TIME_MIN = 150;
+    public static final int HOLD_TIME_MIN = 75;
     public static final int HOLD_TIME_MAX = 2000;
     public static final int VIBRATION_TIME_MIN = 5;
     public static final int VIBRATION_TIME_MAX = 150;
