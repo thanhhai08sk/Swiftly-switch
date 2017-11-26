@@ -1,7 +1,6 @@
 package org.de_studio.recentappswitcher.setItemIcon;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
@@ -14,10 +13,6 @@ import org.de_studio.recentappswitcher.R;
 
 import java.util.ArrayList;
 
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.subjects.PublishSubject;
 
 
@@ -29,35 +24,11 @@ public class DrawableAdapter  extends RecyclerView.Adapter<DrawableAdapter.ViewH
     Context context;
     ArrayList<SetItemIconView.BitmapInfo> allItems;
     PublishSubject<SetItemIconView.BitmapInfo> itemClickSJ = PublishSubject.create();
-    PublishSubject<ItemInfo> loadSJ = PublishSubject.create();
 
 
     public DrawableAdapter(Context context, ArrayList<SetItemIconView.BitmapInfo> allItems) {
         this.context = context;
         this.allItems = allItems;
-        loadSJ
-                .onBackpressureBuffer()
-                .observeOn(Schedulers.io())
-                .map(new Func1<ItemInfo, ItemInfo>() {
-                    @Override
-                    public ItemInfo call(ItemInfo itemInfo) {
-                        try {
-                            itemInfo.drawable = ResourcesCompat.getDrawable(itemInfo.res, itemInfo.resId, null);
-                            return itemInfo;
-                        } catch (Exception e) {
-                            return itemInfo;
-                        }
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<ItemInfo>() {
-                    @Override
-                    public void call(ItemInfo itemInfo) {
-                        if (itemInfo.icon != null) {
-                            itemInfo.icon.setImageDrawable(itemInfo.drawable);
-                        }
-                    }
-                });
     }
 
     public void updateData(ArrayList<SetItemIconView.BitmapInfo> items) {
@@ -82,19 +53,18 @@ public class DrawableAdapter  extends RecyclerView.Adapter<DrawableAdapter.ViewH
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final SetItemIconView.BitmapInfo info = allItems.get(position);
-        loadSJ.onNext(new ItemInfo(info.res, info.resId, holder.imageView));
-//        try {
-//            Drawable drawable = ResourcesCompat.getDrawable(info.res, info.resId, null);
-//            holder.imageView.setImageDrawable(drawable);
-//            holder.imageView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    itemClickSJ.onNext(info);
-//                }
-//            });
-//        } catch (Exception e) {
-//            holder.imageView.setImageDrawable(null);
-//        }
+        try {
+            Drawable drawable = ResourcesCompat.getDrawable(info.res, info.resId, null);
+            holder.imageView.setImageDrawable(drawable);
+            holder.imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickSJ.onNext(info);
+                }
+            });
+        } catch (Exception e) {
+            holder.imageView.setImageDrawable(null);
+        }
     }
 
     @Override
@@ -115,19 +85,6 @@ public class DrawableAdapter  extends RecyclerView.Adapter<DrawableAdapter.ViewH
 
     public PublishSubject<SetItemIconView.BitmapInfo> onItemClick() {
         return itemClickSJ;
-    }
-
-    static class ItemInfo {
-        public Resources res;
-        public int resId;
-        public ImageView icon;
-        public Drawable drawable;
-
-        public ItemInfo(Resources res, int resId, ImageView icon) {
-            this.res = res;
-            this.resId = resId;
-            this.icon = icon;
-        }
     }
 
 }
