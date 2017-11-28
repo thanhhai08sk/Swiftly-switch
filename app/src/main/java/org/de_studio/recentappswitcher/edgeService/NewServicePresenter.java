@@ -543,7 +543,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                             slot = currentShowing.circleSlots.get(currentHighlight);
                         }
                     } else {
-                        if (currentShowing.action.slots.size() > 0) {
+                        if (currentShowing.action.slots.size() > 0 && (currentHighlight - 10) < currentShowing.action.slots.size()) {
                             slot = currentShowing.action.slots.get(currentHighlight - 10);
                             if (slot.type.equals(Slot.TYPE_EMPTY) || slot.type.equals(Slot.TYPE_NULL)) {
                                 slot = null;
