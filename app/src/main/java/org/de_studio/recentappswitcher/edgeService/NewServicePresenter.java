@@ -200,35 +200,33 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (currentHighlight == -1) {
-                            return;
-                        }
-                        boolean onCircle = false;
-                        switch (currentShowing.showWhat) {
-                            case Showing.SHOWING_GRID:
-                                Slot slot = currentShowing.grid.slots.get(currentHighlight);
-                                if (slot.type.equals(Slot.TYPE_FOLDER)) {
-                                    showFolderSJ.onNext(slot);
-                                }
-                                break;
-                            case Showing.SHOWING_CIRCLE_AND_ACTION:
-                                if (currentHighlight < 10) {
+                        if (currentHighlight >= 0) {
+                            boolean onCircle = false;
+                            switch (currentShowing.showWhat) {
+                                case Showing.SHOWING_GRID:
+                                    Slot slot = currentShowing.grid.slots.get(currentHighlight);
+                                    if (slot.type.equals(Slot.TYPE_FOLDER)) {
+                                        showFolderSJ.onNext(slot);
+                                    }
+                                    break;
+                                case Showing.SHOWING_CIRCLE_AND_ACTION:
+                                    if (currentHighlight < 10) {
+                                        onCircle = true;
+                                    }
+                                    break;
+                                case Showing.SHOWING_CIRCLE_ONLY:
                                     onCircle = true;
-                                }
-                                break;
-                            case Showing.SHOWING_CIRCLE_ONLY:
-                                onCircle = true;
-                                break;
+                                    break;
+                            }
+
+                            if (onCircle && currentShowing.circle.longClickMode == Collection.LONG_CLICK_MODE_OPEN_COLLECTION &&
+                                    currentShowing.circle.longPressCollection != null) {
+                                setInitPointByTriggerIcon();
+                                view.unhighlightSlot(currentShowing,currentHighlight);
+                                showCollectionInstantlySubject.onNext(currentShowing.circle.longPressCollection.collectionId);
+
+                            }
                         }
-
-                        if (onCircle && currentShowing.circle.longClickMode == Collection.LONG_CLICK_MODE_OPEN_COLLECTION &&
-                                currentShowing.circle.longPressCollection != null) {
-                            setInitPointByTriggerIcon();
-                            view.unhighlightSlot(currentShowing,currentHighlight);
-                            showCollectionInstantlySubject.onNext(currentShowing.circle.longPressCollection.collectionId);
-
-                        }
-
                     }
                 })
         );
