@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.Utility;
 
 /**
  * Created by hai on 12/28/2015.
@@ -29,6 +30,9 @@ public class MyAccessibilityService extends AccessibilityService {
         filter.addAction(Cons.ACTION_NOTI);
         receiver = new EventReceiver();
         this.registerReceiver(receiver, filter);
+        if (!Utility.isEdgesOn(this)) {
+            Utility.startService(this);
+        }
     }
 
 

@@ -2188,6 +2188,9 @@ public  class Utility {
     public static boolean isEdgesOn(Context context) {
         return ((MyApplication) context.getApplicationContext()).isEdgeIsOn();
     }
+    public static boolean isEdgesOn() {
+        return ((MyApplication) MyApplication.getContext()).isEdgeIsOn();
+    }
 
     public static void getProVersion(Context context) {
         openPlayStorePage(context, Cons.PRO_VERSION_PACKAGE_NAME);
