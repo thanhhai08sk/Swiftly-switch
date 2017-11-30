@@ -286,6 +286,9 @@
 
 
     //What new
+    <string name="what_new_3.1.12" translatable="false">VERSION 3.1.12:\n
+        - Fix crash when accessing contact photo without contact permission\n
+    </string>
     <string name="what_new_3.1.11" translatable="false">VERSION 3.1.11:\n
         - Fix crash on Volume shortcut\n
         - Fix auto start on boot not working on some devices\n
