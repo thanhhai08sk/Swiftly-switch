@@ -286,6 +286,15 @@
 
 
     //What new
+    <string name="what_new_3.1.11" translatable="false">VERSION 3.1.11:\n
+        - Fix crash on Volume shortcut\n
+        - Fix auto start on boot not working on some devices\n
+        - Option for folder background color\n
+        - Fix delay when launching shortcut from the home screen\n
+        - Update translations\n
+        - Follow new guideline for app using Accessibility service\n
+        - Other bugs fixed and improvements\n
+    </string>
     <string name="what_new_3.1.10" translatable="false">VERSION 3.1.10:\n
         - Fix background flicker on Oreo!\n
         - Fix bug when taking multiple screenshots in small period of time\n

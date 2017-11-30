@@ -39,7 +39,7 @@ object ContactPhotoLoader {
         }
     }
 
-    fun loadContactPhotoNew(contactId: Long, icon: ImageView, context: Context) {
+    fun loadContactPhotoNew(contactId: Long, icon: ImageView, context: Context) = try {
         val uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId)
         val input = ContactsContract.Contacts.openContactPhotoInputStream(context.contentResolver, uri)
         if (input != null) {
@@ -50,5 +50,7 @@ object ContactPhotoLoader {
         } else {
             icon.setImageResource(R.drawable.ic_contact_default)
         }
+    } catch (e: Exception) {
+        icon.setImageResource(R.drawable.ic_contact_default)
     }
 }
