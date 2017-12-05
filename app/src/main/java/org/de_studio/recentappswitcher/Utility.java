@@ -1714,10 +1714,8 @@ public  class Utility {
             pendingIntent.send();
         } catch (PendingIntent.CanceledException e) {
             e.printStackTrace();
-            context.startActivity(intent);
             ContextCompat.startActivities(context, new Intent[]{intent});
 //            ContextCompat.startActivity(context, intent, null);
-
         }
     }
 
