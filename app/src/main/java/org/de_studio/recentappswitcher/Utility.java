@@ -1709,7 +1709,7 @@ public  class Utility {
 
     private static void startIntentUsingPendingIntent(Intent intent, Context context) {
         PendingIntent pendingIntent =
-                PendingIntent.getActivity(context, 0, intent, 0);
+                PendingIntent.getActivity(context, intent.hashCode(), intent, 0);
         try {
             pendingIntent.send();
         } catch (PendingIntent.CanceledException e) {
