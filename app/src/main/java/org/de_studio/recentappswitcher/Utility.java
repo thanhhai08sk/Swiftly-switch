@@ -458,6 +458,18 @@ public  class Utility {
         context.startActivity(NotiDialog.getIntent(context, type));
     }
 
+    public static void needUsageAccessDialog(Context context) {
+        context.startActivity(NotiDialog.getIntent(context, NotiDialog.USAGE_ACCESS_PERMISSION));
+    }
+
+    public static boolean checkUsageAccess(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AppOpsManager appOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+            int mode = appOps.checkOpNoThrow("android:get_usage_stats",
+                    android.os.Process.myUid(), context.getPackageName());
+            return mode == AppOpsManager.MODE_ALLOWED;
+        } else return true;
+    }
 
 
     public static void flashLightAction3(Context context) {

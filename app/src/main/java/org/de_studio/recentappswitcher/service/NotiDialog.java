@@ -27,6 +27,7 @@ public class NotiDialog extends AppCompatActivity {
     public static final int ACCESSIBILITY_PERMISSION = 3;
     public static final int DRAW_OVER_OTHER_APP = 4;
     public static final int NOTIFICATION_INFO = 5;
+    public static final int USAGE_ACCESS_PERMISSION = 6;
     private int type;
     public static final String TYPE_KEY = "type";
     private Intent buttonIntent;
@@ -104,7 +105,12 @@ public class NotiDialog extends AppCompatActivity {
                     buttonIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                             Uri.parse("package:" + getPackageName()));
                     break;
-
+                case USAGE_ACCESS_PERMISSION:
+                    titleRes = R.string.need_usage_access_title;
+                    textRes = R.string.need_usage_access;
+                    buttonTextRes = R.string.enable;
+                    buttonIntent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                    break;
             }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -112,7 +118,14 @@ public class NotiDialog extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (buttonIntent != null) {
-                        startActivity(buttonIntent);
+                        try {
+                            startActivity(buttonIntent);
+                        } catch (Exception e) {
+                            new MaterialDialog.Builder(NotiDialog.this)
+                                    .content(R.string.main_usage_access_can_not_found)
+                                    .positiveText(R.string.app_tab_fragment_ok_button)
+                                    .show();
+                        }
                     }
                 }
             })

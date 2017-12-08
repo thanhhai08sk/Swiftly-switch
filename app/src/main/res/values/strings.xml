@@ -100,6 +100,8 @@
     <string name="enable_floating_window">Enable Floating Window</string>
     <string name="enable_long_press_to_toggle_swiftly_switch">By setting Swiftly Switch as your assistant app (instead of Google Now on Tap), you can enable/disable trigger edges at any time by long-pressing the home button.</string>
     <string name="enable_usage_stat">Enable Usage Statistics (optional)</string>
+    <string name="need_usage_access_title">Need Usage Access permission</string>
+    <string name="need_usage_access">Usage Access permission is needed to perform this action.</string>
     <string name="faq_app_take_few_seconds_to_launch">Lag when launching apps from the home screen</string>
     <string name="faq_app_take_few_seconds_to_launch_answer">Swiftly Switch can\'t start apps within 5 seconds from the moment you return to the Home screen. This is the how Android limit services. It\'s not a problem if you return home using the in-app Home shortcut.</string>
     <string name="faq_can_not_uninstall">Why I can\'t uninstall the app on my device?</string>

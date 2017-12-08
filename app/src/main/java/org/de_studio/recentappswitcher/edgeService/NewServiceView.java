@@ -1491,6 +1491,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     @Override
+    public void requestUsagePermissionForMarshmallowAndAbove() {
+        if (!Utility.checkUsageAccess(this)) {
+            Utility.needUsageAccessDialog(this);
+        }
+    }
+
+    @Override
     public void setNullSlot(int showing, String currentCollectionId) {
         if (currentCollectionId != null) {
             Intent intent;

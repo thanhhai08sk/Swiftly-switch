@@ -310,7 +310,11 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                                     } else {
                                         String lastApp = getLastApp();
 //                                        Log.e(TAG, "call: lastapp = " + lastApp);
-                                        view.startItem(slot.stage1Item, lastApp);
+                                        if (lastApp == null && slot.stage1Item != null && slot.stage1Item.type.equals(Item.TYPE_ACTION) && slot.stage1Item.action == Item.ACTION_LAST_APP) {
+                                            view.requestUsagePermissionForMarshmallowAndAbove();
+                                        } else {
+                                            view.startItem(slot.stage1Item, lastApp);
+                                        }
                                         if (!slot.stage1Item.type.equals(Item.TYPE_ACTION) || slot.stage1Item.action != Item.ACTION_SEARCH_SHORTCUTS) {
                                             finishSectionSJ.onNext(null);
                                         }
@@ -946,6 +950,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         void hideClock();
 
         void finish();
+        void requestUsagePermissionForMarshmallowAndAbove();
     }
 
     public class Showing {
