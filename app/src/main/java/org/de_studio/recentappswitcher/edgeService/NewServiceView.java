@@ -1482,6 +1482,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public void startItem(Item item, String lastApp) {
+        Log.e(TAG, "startItem: lastApp = " + lastApp);
         if (item.type.equals(Item.TYPE_ACTION) && item.action == Item.ACTION_SEARCH_SHORTCUTS) {
             startSearchItemSJ.onNext(null);
         }
