@@ -266,7 +266,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                         view.hideAllExceptEdges();
                         currentHighlight = -1;
                         currentShowing.showWhat = Showing.SHOWING_NONE;
-//                        currentShowing.lastApp = null;
+                        currentShowing.lastApp = null;
                         tempRecentPackages = null;
                         model.clearSectionData();
                         view.setFirstSectionFalse();
