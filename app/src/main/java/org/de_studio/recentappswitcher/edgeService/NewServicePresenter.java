@@ -780,10 +780,14 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 currentShowing.stayOnScreen = isStayOnScreen(currentShowing.circle);
                 break;
             case Edge.MODE_RECENT_ONLY:
-                currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
-                currentShowing.circle = currentEdge.recent;
-                currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots,currentShowing);
-                currentShowing.stayOnScreen = isStayOnScreen(currentShowing.circle);
+                try {
+                    currentShowing.showWhat = Showing.SHOWING_CIRCLE_ONLY;
+                    currentShowing.circle = currentEdge.recent;
+                    currentShowing.circleSlots = model.getRecent(tempRecentPackages, currentShowing.circle.slots, currentShowing);
+                    currentShowing.stayOnScreen = isStayOnScreen(currentShowing.circle);
+                } catch (Exception e) {
+                    Log.e(TAG, "setCurrentEdgeAndCurrentShowing: " + e);
+                }
                 break;
             case Edge.MODE_QUICK_ACTION_ONLY:
                 currentShowing.showWhat = Showing.SHOWING_ACTION_ONLY;
