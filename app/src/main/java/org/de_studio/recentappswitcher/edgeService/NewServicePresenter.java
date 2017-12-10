@@ -469,6 +469,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
     public void onActionDown(float x, float y, int edgeId) {
         stopHideViewsHandler();
 //        long time = System.currentTimeMillis();
+        if (view == null) return;
         tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
         if (tempRecentPackages.size() > 0 && tempRecentPackages.get(0).equals("com.google.android.packageinstaller") && Utility.isMashmallow()) {
             onGivingPermissionSJ.onNext(null);
