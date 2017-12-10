@@ -197,7 +197,9 @@ public class DataSetupService extends IntentService {
                     realm.copyToRealm(edge2);
                     DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
                     Log.e(TAG, "execute: setup edge2 ok");
-                    dataInfo.edge2Ok = true;
+                    if (dataInfo != null) {
+                        dataInfo.edge2Ok = true;
+                    }
                 } else {
                     Log.e(TAG, "execute: edge2 already exist");
                 }

@@ -288,6 +288,9 @@
 
 
     //What new
+    <string name="what_new_3.1.13" translatable="false">VERSION 3.1.13:\n
+        - Fix crash when accessing contact photo without contact permission\n
+    </string>
     <string name="what_new_3.1.12" translatable="false">VERSION 3.1.12:\n
         - Fix crash when accessing contact photo without contact permission\n
     </string>
