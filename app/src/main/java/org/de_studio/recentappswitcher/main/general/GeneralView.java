@@ -104,7 +104,7 @@ public class GeneralView extends BaseFragment<GeneralPresenter> implements Gener
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        closeReviewRequest(false);
+                        closeReviewRequest(true);
                     }
                 })
                 .show();
@@ -126,7 +126,7 @@ public class GeneralView extends BaseFragment<GeneralPresenter> implements Gener
                 }).onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                closeReviewRequest(false);
+                closeReviewRequest(true);
                 dialog.dismiss();
             }
         }).show();

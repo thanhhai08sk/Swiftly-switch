@@ -52,7 +52,7 @@ public class GeneralPresenter extends BasePresenter<GeneralPresenter.View,BaseMo
                                 view.askForPlayStoreReview();
                                 break;
                             case REVIEW_REQUEST_CLOSE:
-                                view.closeReviewRequest(false);
+                                view.closeReviewRequest(true);
                                 break;
                         }
                     }
