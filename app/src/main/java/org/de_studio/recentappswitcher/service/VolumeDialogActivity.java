@@ -109,9 +109,14 @@ public class VolumeDialogActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if (!onDoNotDisturb()) {
-                    manager.setStreamVolume(AudioManager.STREAM_RING, seekBar.getProgress(), 0);
-                    updateRingtoneImage(ringtoneImage, manager);
-                    updateSeekBar(ringSeekBar, notiSeekBar, systemSeekBar, manager);
+                    try {
+                        manager.setStreamVolume(AudioManager.STREAM_RING, seekBar.getProgress(), 0);
+                        updateRingtoneImage(ringtoneImage, manager);
+                        updateSeekBar(ringSeekBar, notiSeekBar, systemSeekBar, manager);
+                    } catch (Exception e) {
+                        Utility.toast(VolumeDialogActivity.this, R.string.turn_off_do_not_disturb_first);
+                        seekBar.setProgress(manager.getStreamVolume(AudioManager.STREAM_RING));
+                    }
                 } else {
                     Utility.toast(VolumeDialogActivity.this, R.string.turn_off_do_not_disturb_first);
                     seekBar.setProgress(manager.getStreamVolume(AudioManager.STREAM_RING));
