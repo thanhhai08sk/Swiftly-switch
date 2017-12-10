@@ -1411,7 +1411,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                         FrameLayout recent = (FrameLayout) collectionViewsMap.get(currentShowing.circle.collectionId);
                         unhighlightCircleIcon(recent.getChildAt(id), currentShowing.circleIconsXY.xs[id], currentShowing.circleIconsXY.ys[id]);
                     } else {
-                        ((QuickActionsView) collectionViewsMap.get(getQuickActionsKey(currentShowing.edgePosition, currentShowing.action))).show(-1);
+                        try {
+                            ((QuickActionsView) collectionViewsMap.get(getQuickActionsKey(currentShowing.edgePosition, currentShowing.action))).show(-1);
+                        } catch (Exception e) {
+                            Log.e(TAG, "unhighlightSlot: " + e);
+                        }
                     }
                     break;
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_ONLY:
