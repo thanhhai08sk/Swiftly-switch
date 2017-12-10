@@ -560,7 +560,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 }
                 break;
             case Showing.SHOWING_ACTION_ONLY:
-                if (currentHighlight >= 10) {
+                if (currentHighlight >= 10 && currentHighlight - 10 < currentShowing.action.slots.size()) {
                     slot = currentShowing.action.slots.get(currentHighlight - 10);
                     if (slot.type.equals(Slot.TYPE_EMPTY) || slot.type.equals(Slot.TYPE_NULL)) {
                         slot = null;
