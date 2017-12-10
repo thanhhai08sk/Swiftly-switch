@@ -7,7 +7,7 @@
     <string name="about_pro_text">Get the Pro version to:\n    - Unlock a second edge\n    - Customize column count and row count of Grid favorites\n    - Unlock support for icon packs\n    - Pin shortcuts to Recent Apps\n    - Auto-disable Swiftly Switch in full screen apps</string>
     <string name="about_pro_version">About Pro version</string>
     <string name="access_your_favorite_app_and_system_setting_anywhere">Access your favorite shortcut anywhere</string>
-    <string name="accessibility_service_description">Bind Accessibility Service permission is used to perform global back button action, recent apps button action, displaying power menu, and pull down notification center (in some devices). This permission is optional and only intend to help users with disabilities that prevent them from using the device with one hand. Please only enable this permission if you have disabilities. </string>
+    <string name="accessibility_service_description">Bind Accessibility Service permission is used to perform global back button action, recent apps button action, displaying power menu, and pull down notification center (in some devices). Swiftly Switch requires Observe Your Actions because it is required for Accessibility service, the app does not observe your actions outside of its context. </string>
     <string name="action_settings">Settings</string>
     <string name="actions">Actions</string>
     <string name="add_new">Add new</string>
@@ -289,7 +289,9 @@
 
     //What new
     <string name="what_new_3.1.13" translatable="false">VERSION 3.1.13:\n
-        - Fix crash when accessing contact photo without contact permission\n
+        - Fix bug on Last App shortcut\n
+        - Fix bug when launching contacts consecutively\n
+        - Fix bug when launching device shortcut from the home screen\n
     </string>
     <string name="what_new_3.1.12" translatable="false">VERSION 3.1.12:\n
         - Fix crash when accessing contact photo without contact permission\n

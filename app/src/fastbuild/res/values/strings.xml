@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="accessibility_service_description">Bind Accessibility Service permission is used to perform global back button action, recent apps button action, displaying power menu, and pull down notification center (in some devices). This permission is optional and only intend to help users with disabilities that prevent them from using the device with one hand. Please only enable this permission if you have disabilities.
+    <string name="accessibility_service_description">Bind Accessibility Service permission is used to perform global back button action, recent apps button action, displaying power menu, and pull down notification center (in some devices). Swiftly Switch requires Observe Your Actions because it is required for Accessibility service, the app does not observe your actions outside of its context.
     </string>
 
 </resources>
