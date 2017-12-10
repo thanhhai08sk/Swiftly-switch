@@ -166,19 +166,23 @@ public class EdgeSettingView extends BaseFragment<EdgeSettingPresenter> implemen
         });
 
         int icon = 0;
-        switch (currentCollection.type) {
-            case Collection.TYPE_CIRCLE_FAVORITE:
-                icon = R.drawable.ic_circle_favorite_set;
-                break;
-            case Collection.TYPE_QUICK_ACTION:
-                icon = R.drawable.ic_quick_actions_set;
-                break;
-            case Collection.TYPE_RECENT:
-                icon = R.drawable.ic_recent_set;
-                break;
-            case Collection.TYPE_GRID_FAVORITE:
-                icon = R.drawable.ic_grid_favorite_set;
-                break;
+        if (currentCollection != null) {
+            switch (currentCollection.type) {
+                case Collection.TYPE_CIRCLE_FAVORITE:
+                    icon = R.drawable.ic_circle_favorite_set;
+                    break;
+                case Collection.TYPE_QUICK_ACTION:
+                    icon = R.drawable.ic_quick_actions_set;
+                    break;
+                case Collection.TYPE_RECENT:
+                    icon = R.drawable.ic_recent_set;
+                    break;
+                case Collection.TYPE_GRID_FAVORITE:
+                    icon = R.drawable.ic_grid_favorite_set;
+                    break;
+            }
+        } else {
+            icon = R.drawable.ic_circle_favorite_set;
         }
 
 
