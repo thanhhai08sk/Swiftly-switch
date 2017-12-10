@@ -432,7 +432,11 @@ public class NewServiceModel extends BaseModel {
                     item.itemId = itemId;
                     item.packageName = packageName;
                     item.label = label;
-                    realm.copyToRealm(item);
+                    try {
+                        realm.copyToRealm(item);
+                    } catch (Exception e) {
+                        Log.e(TAG, "generate app item: " + e);
+                    }
                     Log.e(TAG, "generate app item: " + label);
 
                 }
