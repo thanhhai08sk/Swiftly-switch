@@ -273,8 +273,9 @@ public class SetItemIconView extends BaseActivity<Void, SetItemIconPresenter> im
     @Override
     public Bitmap getBitmap(BitmapInfo item) {
         Drawable drawable = ResourcesCompat.getDrawable(item.res, item.resId, null);
-
-        return ((BitmapDrawable) drawable).getBitmap();
+        if (drawable instanceof BitmapDrawable) {
+            return  ((BitmapDrawable) drawable).getBitmap();
+        }else return Utility.convertDrawableToBitmap(drawable);
     }
 
     public static Intent getIntent(String itemId, String folderId, Context context, String label, String iconPackPackageName, int itemState) {
