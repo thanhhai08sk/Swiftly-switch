@@ -504,8 +504,10 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 }
                 break;
             case Showing.SHOWING_GRID:
-                int onPosition = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, currentShowing.grid.rowsCount, currentShowing.grid.columnCount, currentShowing.grid.space, false,view.isRTL());
-                highlightIdSubject.onNext(onPosition);
+                if (currentShowing.grid != null) {
+                    int onPosition = model.getGridActivatedId(x, y, currentShowing.gridXY.x, currentShowing.gridXY.y, currentShowing.grid.rowsCount, currentShowing.grid.columnCount, currentShowing.grid.space, false,view.isRTL());
+                    highlightIdSubject.onNext(onPosition);
+                }
                 break;
             case Showing.SHOWING_FOLDER:
                 int columCount = Math.min(currentShowing.folderItems.size(), 4);
