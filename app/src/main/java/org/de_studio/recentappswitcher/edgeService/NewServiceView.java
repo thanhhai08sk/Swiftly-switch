@@ -680,7 +680,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             TransitionManager.beginDelayedTransition(searchParent, searchTransition);
         }
         searchResultAdapter.updateData(items);
-
     }
 
     public void showSearchView(List<Item> lastSearchItems) {
