@@ -207,7 +207,7 @@ public class EdgeSettingModel extends BaseModel {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                switch (edge.keyboardOption) {
+                switch (getEdge().keyboardOption) {
                     case Edge.KEYBOARD_OPTION_NONE:
                         edge.keyboardOption = Edge.KEYBOARD_OPTION_PLACE_UNDER;
                         break;
