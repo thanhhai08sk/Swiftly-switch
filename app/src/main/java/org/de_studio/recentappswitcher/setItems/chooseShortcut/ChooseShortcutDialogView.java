@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.base.BaseChooseItemDialogView;
@@ -74,7 +75,11 @@ public class ChooseShortcutDialogView extends BaseChooseItemDialogView {
         Intent i = new Intent(Intent.ACTION_CREATE_SHORTCUT);
         i.addCategory(Intent.CATEGORY_DEFAULT);
         i.setComponent(name);
-        startActivityForResult(i, 1);
+        try {
+            startActivityForResult(i, 1);
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
