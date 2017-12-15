@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.setItems.chooseApp;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
@@ -63,7 +64,11 @@ public class ChooseAppFragmentView extends BaseChooseItemFragmentView<ChooseAppP
                             item.itemId = itemId;
                             item.packageName = info.packageName;
                             item.label = info.applicationInfo.loadLabel(packageManagerWeakReference.get()).toString();
-                            realm.copyToRealm(item);
+                            try {
+                                realm.copyToRealm(item);
+                            } catch (Exception e) {
+                                Log.e("LoadAppsTask", "execute: error when insert app shortcut");
+                            }
                         }
                     });
                 }
