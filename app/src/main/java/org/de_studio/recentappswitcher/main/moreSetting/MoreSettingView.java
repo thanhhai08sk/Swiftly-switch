@@ -20,6 +20,7 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -183,8 +184,12 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                     DriveId driveId = data.getParcelableExtra(
                             OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
 
-                    DriveFile file = driveId.asDriveFile();
-                    pickupDriveFileSuccessSJ.onNext(new Pair<>(mGoogleApiClient, file));
+                    try {
+                        DriveFile file = driveId.asDriveFile();
+                        pickupDriveFileSuccessSJ.onNext(new Pair<>(mGoogleApiClient, file));
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                    }
 
                 }
                 break;
