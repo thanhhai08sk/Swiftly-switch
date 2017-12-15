@@ -21,7 +21,7 @@ public class Cons {
     };
 
     public static final int OLD_REALM_SCHEMA_VERSION = 11;
-    public static final int REALM_SCHEMA_VERSION = 9;  // TODO: 2/20/17 do not forget the old one
+    public static final int REALM_SCHEMA_VERSION = 9;
 
     public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.pro";
     public static final String JOURNAL_IT_PACKAGE_NAME = "org.de_studio.diary";
@@ -345,5 +345,5 @@ public class Cons {
     public static final String BASE_64_ENCODED_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgHZzxPr4voivbRVH3i1ikAKE75u89En2Dy7sokKutIxsbhp5r/MCZ/d5vyNOwglmEdO+7B555jIN8HgAOC2q5Eu6xFjFXRbiC/cu6S++0A2P10i/mmswLE0cwVQPpNNU/n61CotWp1yeXAXThhfSzxNEYyHBs97EOtDe2BVXHn5DXOsEvyf5dK0NSmFqyPOBLFOG+dZ9irRwB5bKqkYr0T2N4JX4Vk1exG/rXajmxjBdkJaPKYNwWPGf7mFJXYbFpTmLj5JWQDXs/b2JQs1fcyiUd13Q48KjUq9l4/Byz+oIJC1J4UNHiiXAM1qLPnEwHT/bwhJgYBb61tLOH6u8zwIDAQAB";
     public static final String SKU_PRO = "sku_pro";
 
-    public static final String FOLDER_BACKGROUND_COLOR_KEY = "background_color";
+    public static final String FOLDER_BACKGROUND_COLOR_KEY = "folder_background_color";
 }

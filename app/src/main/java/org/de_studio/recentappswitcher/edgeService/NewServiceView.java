@@ -1385,7 +1385,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     if (id < currentShowing.folderItems.size()) {
                         RecyclerView folder = (RecyclerView) collectionViewsMap.get(currentShowing.folderSlotId);
                         if (folder.getChildAt(id) != null) {
-                            folder.getChildAt(id).setBackgroundColor(Color.argb(255, 42, 96, 70));
+                            folder.getChildAt(id).setBackgroundColor(Color.argb(255, 201, 201, 201));
                         }
                     }
                     break;

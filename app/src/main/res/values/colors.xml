@@ -91,6 +91,7 @@
     <color name="fab_heart_full">#ffffffff</color>
     <color name="gif_badge_light_image">#40000000</color>
     <color name="gif_badge_dark_image">#b3ffffff</color>
+    <color name="folder_icon_background_default">#c9c9c9</color>
 
 
     <color name="text_primary_dark_enable_disable">#de000000</color> <!-- 87% -->
