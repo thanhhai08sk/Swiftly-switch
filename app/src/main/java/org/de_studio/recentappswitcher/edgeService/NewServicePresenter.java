@@ -679,7 +679,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                 break;
             default:
                 finishSectionSJ.onNext(null);
-                view.hideKeyboard();
+                if (view != null) {
+                    view.hideKeyboard();
+                }
                 break;
 
         }
