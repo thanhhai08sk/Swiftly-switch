@@ -80,6 +80,7 @@ import org.de_studio.recentappswitcher.service.ScreenBrightnessDialogActivity;
 import org.de_studio.recentappswitcher.service.VolumeDialogActivity;
 import org.de_studio.recentappswitcher.shortcut.FlashService;
 import org.de_studio.recentappswitcher.shortcut.FlashServiceM;
+import org.de_studio.recentappswitcher.utils.EventBus;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -431,8 +432,8 @@ public  class Utility {
     }
 
     public static void startBackAction(Context context) {
-        Log.e(TAG, "startBackAction: ");
-        context.sendBroadcast(new Intent(Cons.ACTION_BACK));
+//        context.sendBroadcast(new Intent(Cons.ACTION_BACK));
+        EventBus.INSTANCE.fireEvent(Cons.ACTION_BACK);
         if (!Utility.isAccessibilityEnable(context)) {
             startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
         }

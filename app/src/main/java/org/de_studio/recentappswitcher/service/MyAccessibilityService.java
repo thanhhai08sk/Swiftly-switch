@@ -10,6 +10,10 @@ import android.view.accessibility.AccessibilityEvent;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
+import org.de_studio.recentappswitcher.utils.EventBus;
+
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by hai on 12/28/2015.
@@ -17,6 +21,8 @@ import org.de_studio.recentappswitcher.Utility;
 public class MyAccessibilityService extends AccessibilityService {
     private static final String TAG = MyAccessibilityService.class.getSimpleName();
     BroadcastReceiver receiver;
+    Subscription subscription;
+
 
     @Override
     public void onCreate() {
@@ -33,6 +39,17 @@ public class MyAccessibilityService extends AccessibilityService {
         if (!Utility.isEdgesOn(this)) {
             Utility.startService(this);
         }
+        subscription = EventBus.INSTANCE.observeEvent().subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                switch (s) {
+                    case Cons.ACTION_BACK:
+                        Log.e(TAG, "call: event back");
+                        performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
+                        break;
+                }
+            }
+        });
     }
 
 
@@ -41,6 +58,9 @@ public class MyAccessibilityService extends AccessibilityService {
         Log.e(TAG, "onDestroy: ");
         super.onDestroy();
         this.unregisterReceiver(receiver);
+        if (subscription != null) {
+            subscription.unsubscribe();
+        }
     }
 
     @Override
