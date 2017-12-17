@@ -6,13 +6,12 @@ apply plugin: 'realm-android'
 apply plugin: 'com.neenbedankt.android-apt'
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '26.0.2'
     flavorDimensions "version"
     lintOptions {
         disable 'MissingTranslation'
         disable 'ExtraTranslation'
     }
-
 
 
 
@@ -42,8 +41,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         multiDexEnabled true
-        versionCode 125
-        versionName "3.1.13"
+        versionCode 126
+        versionName "3.1.14"
     }
 
     buildTypes {
@@ -68,12 +67,12 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.6.0'
 
 
-    compile 'com.android.support:appcompat-v7:25.1.1'
-    compile 'com.android.support:gridlayout-v7:25.1.1'
-    compile 'com.android.support:design:25.1.1'
-    compile 'com.github.QuadFlask:colorpicker:0.0.10'
-    compile 'com.github.paolorotolo:appintro:3.4.0'
-    compile 'com.android.support:support-v4:25.1.1'
+    api 'com.android.support:appcompat-v7:25.1.1'
+    api 'com.android.support:gridlayout-v7:25.1.1'
+    api 'com.android.support:design:25.1.1'
+    api 'com.github.QuadFlask:colorpicker:0.0.10'
+    api 'com.github.paolorotolo:appintro:3.4.0'
+    api 'com.android.support:support-v4:25.1.1'
 
     testCompile 'junit:junit:4.12'
 
@@ -81,7 +80,7 @@ dependencies {
     //Dagger
     apt 'com.google.dagger:dagger-compiler:2.5'
     kapt 'com.google.dagger:dagger-compiler:2.5'
-    compile 'com.google.dagger:dagger:2.5'
+    api 'com.google.dagger:dagger:2.5'
     provided 'javax.annotation:jsr250-api:1.0'
 
     // Dependencies for unit testing

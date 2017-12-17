@@ -44,7 +44,6 @@ public class MyAccessibilityService extends AccessibilityService {
             public void call(String s) {
                 switch (s) {
                     case Cons.ACTION_BACK:
-                        Log.e(TAG, "call: event back");
                         performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
                         break;
                 }
