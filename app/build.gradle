@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
 android {
-    compileSdkVersion 25
+    compileSdkVersion 27
     buildToolsVersion '26.0.2'
     flavorDimensions "version"
     lintOptions {
@@ -37,7 +37,7 @@ android {
 
     defaultConfig {
         applicationId "org.de_studio.recentappswitcher"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 25
         multiDexEnabled true
         versionCode 126
@@ -55,6 +55,22 @@ android {
 kapt {
     generateStubs = true
 
+}
+
+configurations.all {
+    resolutionStrategy {
+        force "com.android.support:recyclerview-v7:$support_lib_version"
+        force "com.android.support:support-compat:$support_lib_version"
+        force "com.android.support:support-core-ui:$support_lib_version"
+        force "com.android.support:support-core-utils:$support_lib_version"
+        force "com.android.support:support-fragment:$support_lib_version"
+        force "com.android.support:support-media-compat:$support_lib_version"
+        force "com.android.support:support-v4:$support_lib_version"
+        force "com.android.support:support-v13:$support_lib_version"
+        force "com.android.support:exifinterface:$support_lib_version"
+        force "com.android.support:cardview-v7:$support_lib_version"
+        force "com.android.support:customtabs:$support_lib_version"
+    }
 }
 
 dependencies {
