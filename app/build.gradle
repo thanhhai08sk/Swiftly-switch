@@ -121,6 +121,8 @@ dependencies {
     kapt 'com.github.hotchemi:permissionsdispatcher-processor:2.3.2'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.2'
 
+    api 'com.github.thanhhai08sk:AndroidCoordinated:0.1.0'
+
 
 
 
