@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#335e93</color>
-    <color name="colorPrimaryDark">#335e93</color>
+    <color name="colorPrimaryDark">#213f63</color>
     <color name="colorAccent">#FF4081</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
-    <color name="itemBackground">#70000000</color>
+    <color name="itemBackground">#ac000000</color>
     <color name="white">#ffffff</color>
-    <color name="redButton">#ffff7c61</color>
+    <color name="redButton">#ef5350</color>
     <color name="greenButton">#ff69f0ae</color>
     <color name="edgeSettingBackground">#e2000000</color>
     <color name="icon_tint">#94ff4081</color>
@@ -15,7 +15,6 @@
     <color name="list_app_background">#e9ece9</color>
     <color name="outRing">#384168</color>
     <color name="outOutRing">#72384168</color>
-    <color name="grey">#706d6d</color>
     <color name="main_background">#fffafafa</color>
     <color name="background_1">#a1e4a2</color>
     <color name="background_2">#c2c986</color>
@@ -24,4 +23,78 @@
     <color name="blue">#176789</color>
     <color name="text_guide_background">#c3184279</color>
     <color name="guide_color">#9b0731</color>
+    <color name="quick_actions_background">#bdededed</color>
+    <color name="background_card">#34335e93</color>
+
+    <color name="icon_main_view">#beff4081</color>
+    <color name="button_54_black">#8c000000</color>
+    <color name="button_40_black">#75000000</color>
+    <color name="text_entries_list_progress">#288b49</color>
+    <color name="text_entries_list_date">#c5811115</color>
+    <color name="text_primary_dark">#de000000</color> <!-- 87% -->
+    <color name="text_secondary_dark">#8a000000</color> <!-- 54% -->
+    <color name="text_tertiary_dark">#61000000</color> <!-- 38% -->
+    <color name="text_primary_light">#ffffffff</color>
+    <color name="text_secondary_light">#b3ffffff</color> <!-- 70% -->
+    <color name="text_disabled_light">#4dffffff</color> <!-- 30% -->
+    <color name="ripple_light">#99ffffff</color>
+    <color name="ripple_dark">@color/mid_grey</color>
+    <color name="background_person">#263238</color>
+    <color name="background_light">#fafafa</color> <!-- grey 50 -->
+    <color name="background_lightish">#e0e0e0</color> <!-- grey 300 -->
+    <color name="background_dark">#333333</color>
+    <color name="immersive_bars">#99000000</color>
+    <color name="light_immersive_bars">@color/immersive_bars</color>
+    <color name="status_bar_back">#ff676767</color> <!-- this is blended with immersive_bars to produce the desired status bar color i.e. background_super_dark -->
+    <color name="background_super_dark">#ff292929</color>
+    <color name="scrim">#99323232</color>
+    <color name="mid_grey">#40808080</color>
+    <color name="grey">#46808080</color>
+    <color name="light_grey">#fff5f5f5</color>
+    <color name="grey_200">#ffeeeeee</color>
+    <color name="grey_300">#ffe0e0e0</color>
+    <color name="content_placeholder">#ffe0e0e0</color>
+    <color name="dark_icon">#99000000</color> <!-- 60% black-->
+    <color name="dark_icon_half_alpha">#4d000000</color> <!-- 30% black-->
+    <color name="dark_icon_on_primary">#ff2a6046</color> <!-- 60% black on @color/primary -->
+    <color name="inline_action_icon">#ff757575</color> <!-- grey 600 -->
+    <color name="light_icon">#ffffffff</color>
+    <color name="grey_icon">#6b6b6b</color>
+    <color name="divider">#1f000000</color> <!-- 12% black -->
+    <color name="page_indicator_dark">#80333333</color>
+    <color name="page_indicator_dark_selected">#ff333333</color>
+    <color name="selected_comment_background">#ffffffff</color>
+    <color name="error">#ffdd2c00</color>
+
+    <!-- text (most text uses material theme colours) -->
+    <color name="hint_disabled_dark">#43000000</color> <!-- 26% black -->
+    <color name="text_on_accent">#8f000000</color>
+
+    <!-- designer news -->
+    <color name="designer_news">#03a9f4</color> <!--light blue 500 -->-->
+    <color name="designer_news_dark">#039be5</color> <!-- light blue 600 -->
+    <color name="designer_news_link_highlight">#b303a9f4</color>
+    <color name="designer_news_story_comment_background">@android:color/transparent</color>
+
+
+    <color name="designer_news_super_dark">#000133</color>
+    <color name="designer_news_quote_line">#ffeceef1</color>
+    <color name="designer_news_quote">#73000000</color>
+
+    <!-- dribbble -->
+    <color name="dribbble">#fff06292</color> <!-- pink 300 -->
+    <color name="dribbble_dark">#ec407a</color> <!-- pink 400 -->
+    <color name="dribbble_super_dark">#ff33292d</color>
+    <color name="dribbble_link_highlight">#b3f06292</color>
+    <color name="fab_heart_empty">@color/text_primary_light</color>
+    <color name="fab_heart_progress_bar">#deffffff</color> <!-- 87% white-->
+    <color name="fab_heart_full">#ffffffff</color>
+    <color name="gif_badge_light_image">#40000000</color>
+    <color name="gif_badge_dark_image">#b3ffffff</color>
+    <color name="folder_icon_background_default">#c9c9c9</color>
+
+
+    <color name="text_primary_dark_enable_disable">#de000000</color> <!-- 87% -->
+    <color name="text_primary_dark_disabled">#43000000</color>
+
 </resources>

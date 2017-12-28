@@ -1,7 +1,6 @@
 package org.de_studio.recentappswitcher.intro;
 
 import android.app.AppOpsManager;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,14 +8,16 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
@@ -27,6 +28,7 @@ import org.de_studio.recentappswitcher.Utility;
 public class IntroSettingFragment extends Fragment {
     private static final String LOG_TAG = IntroSettingFragment.class.getSimpleName();
     private LinearLayout permission1Layout, permission2Layout, permission3Layout;
+    private boolean isPauseForPermission = false;
 
 
     public static IntroSettingFragment newInstance(int index) {
@@ -47,14 +49,9 @@ public class IntroSettingFragment extends Fragment {
         permission1Layout = (LinearLayout) rootView.findViewById(R.id.ask_permission_1_linear_layout);
         permission2Layout = (LinearLayout) rootView.findViewById(R.id.ask_permission_2_linear_layout);
         permission3Layout = (LinearLayout) rootView.findViewById(R.id.ask_permission_3_linear_layout);
-
         setPermission1Layout();
         setPermission2Layout();
         setPermission3Layout();
-
-
-
-
         return rootView;
     }
     private boolean isStep1Ok() {
@@ -78,10 +75,13 @@ public class IntroSettingFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     try {
+
                         startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                    } catch (ActivityNotFoundException e) {
-                        Log.e(LOG_TAG, "Can not found usage access setting");
-                        Toast.makeText(getContext(),R.string.main_usage_access_can_not_found,Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        new MaterialDialog.Builder(getActivity())
+                                .content(R.string.main_usage_access_can_not_found)
+                                .positiveText(R.string.app_tab_fragment_ok_button)
+                                .show();
                     }
                 }
             });
@@ -97,12 +97,43 @@ public class IntroSettingFragment extends Fragment {
             permission3Layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+                    new MaterialDialog.Builder(getActivity())
+                            .title(R.string.enable_accessibility_permission)
+                            .content(R.string.accessibility_service_description)
+                            .positiveText(R.string.enable)
+                            .negativeText(R.string.md_cancel_label)
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    openAccessibilitySettings();
+                                }
+                            })
+                            .cancelable(false)
+                            .show();
                 }
             });
         }
 
 
+    }
+
+    private void openAccessibilitySettings() {
+        new MaterialDialog.Builder(getActivity())
+                .content(R.string.enable_accessibility_permission_guide)
+                .positiveText(R.string.cast_tracks_chooser_dialog_ok)
+                .negativeText(R.string.md_cancel_label)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (Utility.isOreo() && Utility.isEdgesOn(getActivity())) {
+                            isPauseForPermission = true;
+                            Utility.toggleEdges(getActivity());
+                            Utility.toast(getActivity(), R.string.pause_while_giving_permission);
+                        }
+                        startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+                    }
+                })
+                .show();
     }
 
     private void setPermission1Layout() {
@@ -134,8 +165,10 @@ public class IntroSettingFragment extends Fragment {
         setPermission1Layout();
         setPermission2Layout();
         setPermission3Layout();
-
-
+        if (Utility.isOreo() && isPauseForPermission && !Utility.isEdgesOn(getActivity())) {
+            isPauseForPermission = false;
+            Utility.toggleEdges(getActivity());
+        }
     }
 
     public boolean checkPermissionBeforeFinish() {

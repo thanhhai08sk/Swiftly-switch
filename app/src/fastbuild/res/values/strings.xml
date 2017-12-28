@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="accessibility_service_description">Please turn on this setting for Swiftly switch fast build.This is for navigation(home,back,power menu) and on some Samsung device for expand status bar.
-    Enable accessibility can cause lag in some device especially when using Chrome. This happen to all
-    apps that use accessibility. If the lag is too extreme please disable this setting, all feature still available except the navigation (home, back, power menu).</string>
+    <string name="accessibility_service_description">Bind Accessibility Service permission is used to perform global back button action, recent apps button action, displaying power menu, and pull down notification center (in some devices). Swiftly Switch requires Observe Your Actions because it is required for Accessibility service, the app does not observe your actions outside of its context.
+    </string>
 
 </resources>

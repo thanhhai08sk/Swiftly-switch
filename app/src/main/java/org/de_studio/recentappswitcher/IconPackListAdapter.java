@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import org.de_studio.recentappswitcher.service.EdgeSetting;
+import org.de_studio.recentappswitcher.dadaSetup.EdgeSetting;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -28,11 +28,11 @@ public class IconPackListAdapter extends BaseAdapter {
     private SharedPreferences sharedPreferences;
     private String[] packageName;
 
-    IconPackListAdapter(Context context, HashMap<String, IconPackManager.IconPack> hashMap) {
+    public IconPackListAdapter(Context context, HashMap<String, IconPackManager.IconPack> hashMap) {
         super();
         mContext = context;
         mHashMap = hashMap;
-        sharedPreferences = mContext.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
+        sharedPreferences = mContext.getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
         Set<String> set = mHashMap.keySet();
         packageName = new String[set.size()];
         set.toArray(packageName);
@@ -67,7 +67,8 @@ public class IconPackListAdapter extends BaseAdapter {
         RadioButton radioButton = (RadioButton) view.findViewById(R.id.icon_pack_radio_button);
         if (getItemId(position) == 0) {
             label.setText(mContext.getString(R.string.icon_pack_system_icon_pack_label));
-            icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_launcher));
+            icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_settings_white_36px));
+            icon.setColorFilter(R.color.grey);
             if (sharedPreferences.getString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none").equals("none")) {
                 radioButton.setChecked(true);
             } else {
@@ -95,10 +96,10 @@ public class IconPackListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (getItemId(position) == 0) {
-                    sharedPreferences.edit().putString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, "none").commit();
+                    sharedPreferences.edit().putString(Cons.ICON_PACK_PACKAGE_NAME_KEY, Cons.ICON_PACK_NONE).commit();
                     IconPackListAdapter.this.notifyDataSetChanged();
                 } else {
-                    sharedPreferences.edit().putString(EdgeSetting.ICON_PACK_PACKAGE_NAME_KEY, packageName[position - 1]).commit();
+                    sharedPreferences.edit().putString(Cons.ICON_PACK_PACKAGE_NAME_KEY, packageName[position - 1]).commit();
                     IconPackListAdapter.this.notifyDataSetChanged();
                 }
             }
@@ -106,5 +107,13 @@ public class IconPackListAdapter extends BaseAdapter {
 
 
         return view;
+    }
+
+    public IconPackManager.IconPack getIconPackAt(int position) {
+        if (getItemId(position) == 0) {
+            return null;
+        } else {
+            return mHashMap.get(packageName[position - 1]);
+        }
     }
 }

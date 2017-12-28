@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/contact_permission"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/missing_contact_permission"
+        android:background="@color/redButton"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:textColor="@color/text_primary_light"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        />
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:choiceMode="singleChoice"
+        android:layout_marginBottom="110dp"
+        android:dividerHeight="0dp"
+
+        >
+    </ListView>
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleLarge"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        />
+
+
+</FrameLayout>

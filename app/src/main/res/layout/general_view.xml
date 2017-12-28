@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:id="@+id/parent"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <!--<include layout="@layout/header_checkout_journal_it"/>-->
+
+
+        <LinearLayout
+            android:id="@+id/recent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            style="@style/ItemLinearLayout"
+            >
+
+            <ImageView
+                style="@style/GeneralTabIcon"
+                android:src="@drawable/ic_recents_5"
+                />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recent_app"
+                    style="@style/GeneralTextPrimary"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recent_apps_description"
+                    style="@style/GeneralTextSecondary"
+                    />
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mid_grey"
+            android:layout_marginStart="64dp"
+            />
+
+
+        <LinearLayout
+            android:id="@+id/quick_actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            style="@style/ItemLinearLayout"
+            >
+
+            <ImageView
+                style="@style/GeneralTabIcon"
+                android:src="@drawable/ic_quick_actions"
+                />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/main_outer_ring_setting"
+                    style="@style/GeneralTextPrimary"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quick_actions_description"
+                    style="@style/GeneralTextSecondary"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mid_grey"
+            android:layout_marginStart="64dp"
+
+            />
+
+
+        <LinearLayout
+            android:id="@+id/grid_favorite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            style="@style/ItemLinearLayout"
+            >
+
+            <ImageView
+                style="@style/GeneralTabIcon"
+                android:src="@drawable/ic_grid_favorite"
+                />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/grid_favorites"
+                    style="@style/GeneralTextPrimary"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/grid_favorites_description"
+                    style="@style/GeneralTextSecondary"
+                    />
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mid_grey"
+            android:layout_marginStart="64dp"
+
+            />
+
+
+        <LinearLayout
+            android:id="@+id/circle_favorite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            style="@style/ItemLinearLayout"
+            >
+
+            <ImageView
+                style="@style/GeneralTabIcon"
+                android:src="@drawable/ic_circle_favorite"
+                />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/circle_favorites"
+                    style="@style/GeneralTextPrimary"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/circle_favorites_description"
+                    style="@style/GeneralTextSecondary"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mid_grey"
+            android:layout_marginStart="64dp"
+
+            />
+
+        <LinearLayout
+            android:id="@+id/black_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            style="@style/ItemLinearLayout"
+            >
+
+            <ImageView
+                style="@style/GeneralTabIcon"
+                android:src="@drawable/ic_blacklist"
+                />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/main_exclude_app_title"
+                    style="@style/GeneralTextPrimary"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/main_exclude_app_info"
+                    style="@style/GeneralTextSecondary"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mid_grey"
+            android:layout_marginStart="64dp"
+
+            />
+
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

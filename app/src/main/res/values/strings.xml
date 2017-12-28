@@ -1,214 +1,452 @@
 <resources>
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="MissingTranslation"
-    <string name="app_name">Swiftly switch</string>
+    tools:ignore="ExtraTranslation"
+    <string name="a_new_way_to_use_your_phone">A new way to use your phone</string>
+    <string name="about">About</string>
+    <string name="about_pro_text">Get the Pro version to:\n    - Unlock a second edge\n    - Customize column count and row count of Grid favorites\n    - Unlock support for icon packs\n    - Pin shortcuts to Recent Apps\n    - Auto-disable Swiftly Switch in full screen apps</string>
+    <string name="about_pro_version">About Pro version</string>
+    <string name="access_your_favorite_app_and_system_setting_anywhere">Access your favorite shortcut anywhere</string>
+    <string name="accessibility_service_description">Bind Accessibility Service permission is used to perform global back button action, recent apps button action, displaying power menu, and pull down notification center (in some devices). Swiftly Switch requires Observe Your Actions because it is required for Accessibility service, the app does not observe your actions outside of its context. </string>
+    <string name="action_settings">Settings</string>
+    <string name="actions">Actions</string>
+    <string name="add_new">Add new</string>
+    <string name="admin_desc">Required for lock screen action</string>
+    <string name="admin_permission">Phone administrator permission</string>
+    <string name="admin_permission_explain">Allow Swiftly Switch with admin permissions to enable the screen lock.</string>
+    <string name="admin_permission_notice">Using this shortcut requires setting Swiftly Switch as an administrator. This means that the app CAN NOT be uninstalled unless you disable the permission first.</string>
+    <string name="always_visible">Always visible</string>
+    <string name="app_name">Swiftly Switch Pro</string>
+    <string name="app_shortcut_contact">Apps, shortcuts, &#8230;</string>
+    <string name="app_tab_fragment_ok_button">OK</string>
+    <string name="apps">Apps</string>
+    <string name="ask_for_write_setting_notification_text">Tap here and grant the \"Write settings\" for Swiftly Switch</string>
+    <string name="ask_for_write_setting_notification_title">Swiftly Switch needs the \"Write settings\" permission</string>
+    <string name="ask_user_to_turn_on_accessibility_toast">Please turn on the accessibility service for Swiftly Switch</string>
+    <string name="assist_app_is_only_available_for_mashmallow_and_above">This feature is only available for Android 6.0 and above. For lower Android versions, you can enable/disable the edges from the persistent notification.</string>
+    <string name="auto">Auto</string>
+    <string name="avoid_keyboard">Avoid keyboard</string>
+    <string name="avoid_keyboard_description">Prevent the app from interfering with the keyboard</string>
+    <string name="avoid_keyboard_place_under">Place under keyboard</string>
+    <string name="avoid_keyboard_step_aside">Step aside keyboard</string>
+    <string name="backup">Backup</string>
+    <string name="backup_and_restore">\"Backup, Import settings\"</string>
+    <string name="backup_fail">Backup fail</string>
+    <string name="backup_guide">The backup file will be stored in your Google Drive. Please connect to your Google account and then choose the folder to upload.</string>
+    <string name="backup_successful">Backed up successfully</string>
+    <string name="batterylife">Battery life:</string>
+    <string name="brightness">Brightness</string>
+    <string name="call">Call</string>
+    <string name="can_not_delete">Can not delete</string>
+    <string name="can_not_delete_cause_being_used_in">Can not delete, being used in:</string>
+    <string name="can_not_delete_cause_this_is_the_only_one">Can not delete, this is the only one</string>
+    <string name="choose">Choose</string>
+    <string name="choose_action">Choose action</string>
+    <string name="choose_recent_set">Choose Recent Set</string>
+    <string name="choose_set">Set</string>
+    <string name="choose_shortcut_actions_tab_title">Actions</string>
+    <string name="choose_shortcut_apps_tab_title">Apps</string>
+    <string name="choose_shortcuts_type">Choose shortcut type</string>
+    <string name="circle_favorite_set">Circle Favorite set</string>
+    <string name="circle_favorites">Circle favorites</string>
+    <string name="circle_favorites_description">Place a small set of your favorite shortcuts in a semi-circle manner</string>
+    <string name="columns_count">Columns count</string>
+    <string name="connecting">Connecting</string>
+    <string name="contact_type_custom">custom</string>
+    <string name="contact_type_home">home</string>
+    <string name="contact_type_home_fax">home fax</string>
+    <string name="contact_type_main">main</string>
+    <string name="contact_type_other">other</string>
+    <string name="contact_type_pager">pager</string>
+    <string name="contact_type_work">work</string>
+    <string name="contact_type_work_fax">work fax</string>
+    <string name="contacts">Contacts</string>
+    <string name="current_set">Current set</string>
+    <string name="default_action_for_contact">Default action for contacts</string>
+    <string name="delete">Delete this</string>
+    <string name="device_shortcuts">\"Device\'s shortcuts\"</string>
+    <string name="disable_in_fullscreen">Disable in full screen apps</string>
+    <string name="disable_top_indicator">Disable top indicator</string>
+    <string name="downloading">Downloading</string>
+    <string name="easily_navigation">Easy navigation</string>
+    <string name="edge_dialog_array_bottom_centre">Bottom centre</string>
+    <string name="edge_dialog_array_left_bottom">Left bottom</string>
+    <string name="edge_dialog_array_left_centre">Left centre</string>
+    <string name="edge_dialog_array_left_top">Left top</string>
+    <string name="edge_dialog_array_right_bottom">Right bottom</string>
+    <string name="edge_dialog_array_right_centre">Right centre</string>
+    <string name="edge_dialog_array_right_top">Right top</string>
+    <string name="edge_dialog_cancel_button">Cancel</string>
+    <string name="edge_dialog_default_button">Default</string>
+    <string name="edge_dialog_mode_array_default">Default</string>
+    <string name="edge_dialog_ok_button">OK</string>
+    <string name="edge_dialog_set_circle_size_text">Circle size</string>
+    <string name="edge_dialog_set_length_text">Length</string>
+    <string name="edge_dialog_set_mode_text">Mode</string>
+    <string name="edge_dialog_set_offset_text">Offset</string>
+    <string name="edge_dialog_set_position_text">Position</string>
+    <string name="edge_dialog_set_sensitive_text">Sensitivity</string>
     <string name="edge_gesture_notification_title">Recent App Switcher</string>
-    <string name="edge_gesture_notification_content_text">App running</string>
+    <string name="edge_mode__circle_favorite_and_quick_actions">Circle Favorite and Quick Actions</string>
+    <string name="edge_mode__grid_favorite">Grid Favorite</string>
+    <string name="edge_mode__recent_and_quick_actions">Recent apps and Quick Actions</string>
+    <string name="email_prompt">Please fill out appropriate information!\n\n        Bug report:\n\n        Suggestion:\n\n        Question:\n\n        Additional information:\n\n</string>
+    <string name="email_us">Email us</string>
+    <string name="empty">Empty</string>
+    <string name="enable">Enable</string>
+    <string name="enable_accessibility">Enable Bind Accessibility Service (optional)</string>
+    <string name="enable_accessibility_permission">Enable Bind Accessibility Service permission</string>
+    <string name="enable_assist_app">Enable assistant app</string>
+    <string name="enable_floating_window">Enable Floating Window</string>
+    <string name="enable_long_press_to_toggle_swiftly_switch">By setting Swiftly Switch as your assistant app (instead of Google Now on Tap), you can enable/disable trigger edges at any time by long-pressing the home button.</string>
+    <string name="enable_usage_stat">Enable Usage Statistics (optional)</string>
+    <string name="need_usage_access_title">Need Usage Access permission</string>
+    <string name="need_usage_access">Usage Access permission is needed to perform this action.</string>
+    <string name="faq_app_take_few_seconds_to_launch">Lag when launching apps from the home screen</string>
+    <string name="faq_app_take_few_seconds_to_launch_answer">Swiftly Switch can\'t start apps within 5 seconds from the moment you return to the Home screen. This is the how Android limit services. It\'s not a problem if you return home using the in-app Home shortcut.</string>
+    <string name="faq_can_not_uninstall">Why I can\'t uninstall the app on my device?</string>
+    <string name="faq_can_not_uninstall_answer">You can uninstall the app as other applications. If you have set the app to \"Device administrator\" (for the screen lock shortcut), you\'ll need to disable it first: Settings > Security > Device administrators > disable the option for Swiftly Switch.</string>
+    <string name="faq_closed_app_in_recent_list">Closed apps do not disappear from recent apps list</string>
+    <string name="faq_closed_app_in_recent_list_answer">Due to a limitation from Android 5.0, 3rd-party apps can only access the list of your recently used apps but not the list of currently running apps on your device.</string>
+    <string name="faq_how_to_auto_disable_when_play_game">How to automatically disable the app when playing games?</string>
+    <string name="faq_how_to_auto_disable_when_play_game_answer">Go to \"More settings\" and turn on \"Disable in full screen apps\" or \"Disable in landscape mode\"</string>
+    <string name="faq_how_to_hide_the_notification">How to hide the notification?</string>
+    <string name="faq_how_to_hide_the_notification_answer">The persistent notification is needed to keep Swiftly Switch active in the background but you can hide it by blocking all of the notifications from Swiftly Switch. To hide it, tap the notification > Hide notification > Block notification.</string>
+    <string name="faq_problem_on_huawei_device">Problem on Huawei devices</string>
+    <string name="faq_problem_on_huawei_device_answer">Please try to turn on the option for Swiftly Switch in Dropzone Manager. Also turn on the option for Swiftly Switch in \"Protected Apps\" setting to keep it running in the background.</string>
+    <string name="faq_problem_on_one_plus_device">Problem on OnePlus devices</string>
+    <string name="faq_problem_on_one_plus_device_answer">Please turn off the Deep Clear option in Setting. Deep Clear will stop all the background process once you exit the app.</string>
+    <string name="faq_problem_on_xiaomi_device">Problem on Xiaomi devices</string>
+    <string name="faq_problem_on_xiaomi_device_answer">On MIUI 7, you need to enable the \"Display pop-up\" permission to make it work. Go to Settings > Apps > Swiftly Switch > Permission > Display pop-up > restart the app. \n\nOn MIUI 8, you need to lock the app in the recent apps screen and turn off the Background Restriction. To lock the app in the recent apps screen: Press the Recent button > Swipe down the overview picture that indicates Swiftly Switch > Tap the Lock icon.\n\n        To turn off the Background restriction: Setting > Battery and performance > Manage apps battery usage > Choose Apps > Swiftly Switch > Tap on \"No restrictions\".</string>
+    <string name="faq_screen_overlay_detected">What is \"Screen overlay detected\"?</string>
+    <string name="faq_screen_overlay_detected_answer">This is a security feature of Android 6.0 and above. It gets triggered when granting permissions to an app while a \"floating app\" (screen overlay) is running. When this happens, just trigger Swiftly Switch by swiping in from the edge - Swiftly Switch will automatically pause for 10 seconds so you can grant the permissions as normal. Alternatively, you can pause Swiftly Switch through the notification and resume it after you\'re done.</string>
+    <string name="faq_why_not_mobile_networking_shortcut">Why there is no shortcut for switching mobile network or airplane mode?</string>
+    <string name="faq_why_not_mobile_networking_shortcut_answer">Due to restrictions from Android, Swiftly Switch does not have the authority to directly access and switch your mobile network or airplane mode.</string>
+    <string name="faqs">FAQs</string>
+    <string name="feel">Feel</string>
+    <string name="full_edge">Full edge</string>
+    <string name="general">General</string>
+    <string name="go_to_setting">Go to setting</string>
+    <string name="grid_favorite_set">Grid Favorite set</string>
+    <string name="grid_favorites">Grid Favorites</string>
+    <string name="grid_favorites_description">\"Place a large set of your favorite shortcuts here. Tap to set size, content and position\"</string>
+    <string name="grid_position_center">Center of screen</string>
+    <string name="grid_position_trigger_position">Trigger position</string>
+    <string name="hide_notification">Hide notification</string>
+    <string name="horizontal_margin">Horizontal margin</string>
+    <string name="icon_pack_system_icon_pack_label">System</string>
+    <string name="import_description">Import shortcuts and settings from backup file</string>
+    <string name="import_guide">Choose the backup file from Google Drive.</string>
+    <string name="import_settings">Import</string>
+    <string name="initializing_data">Initializing data</string>
+    <string name="instant_launch_disabled">Instant launch disabled</string>
+    <string name="instant_launch_enabled">Instant launch enabled</string>
+    <string name="last_app">Last app</string>
+    <string name="long_press_action">Long-press action</string>
+    <string name="long_press_action_description">Choose the action to perform when you long-press one of the items</string>
+    <string name="long_press_delay_description">Time needed to trigger second stage or open folder</string>
+    <string name="look">Look</string>
+    <string name="main_ani_time">Animation duration</string>
+    <string name="main_animation_text">Animation</string>
+    <string name="main_buy_pro_button_text">Upgrade to Pro</string>
+    <string name="main_disable_clock_text">Disable clock</string>
+    <string name="main_disable_in_landscape">Disable in landscape mode</string>
     <string name="main_edge1_section_text">Edge 1</string>
     <string name="main_edge2_section_text">Edge 2</string>
-    <string name="edge_dialog_set_position_text">Position</string>
-    <string name="edge_dialog_set_sensitive_text">Sensitive</string>
-    <string name="edge_dialog_set_length_text">Length</string>
-    <string name="edge_dialog_array_right_top">Right top</string>
-    <string name="edge_dialog_array_right_centre">Right centre</string>
-    <string name="edge_dialog_array_right_bottom">Right bottom</string>
-    <string name="edge_dialog_array_left_top">Left top</string>
-    <string name="edge_dialog_array_left_centre">Left centre</string>
-    <string name="edge_dialog_array_left_bottom">Left bottom</string>
-    <string name="edge_dialog_array_bottom_centre">Bottom centre</string>
-    <string name="edge_dialog_set_offset_text">Offset</string>
-    <string name="edge_dialog_default_button">Default</string>
-    <string name="edge_dialog_cancel_button">Cancel</string>
-    <string name="edge_dialog_ok_button">Ok</string>
-    <string name="main_favorite_app_title">Favorite shortcut:</string>
-    <string name="main_favorite_info_title">Favorite shortcut</string>
-    <string name="main_exclude_app_title">Blacklist</string>
-    <string name="main_exclude_app_info">Set apps that will not be listed in the recent list</string>
-    <string name="please_add_favorite_item">Please add your favorite apps in the FAVORITE APP section</string>
-    <string name="notification_text">Hide this by tapping then selecting Block notification from the info page</string>
-    <string name="notification_title">Swiftly switch is running ...</string>
-    <string name="main_edge_switch_2_trial_dialog_message">The Edge 2 is only available in Pro version</string>
-    <string name="main_icon_pack_trial_dialog_message">This feature only available for the Pro version</string>
     <string name="main_edge_switch_2_trial_buy_pro_button">Get Pro version</string>
-    <string name="main_buy_pro_button_text">Upgrade to Pro</string>
-    <string name="edge_service_out_of_trial_text_when_homebacknoti">You are out of trial time of this application. Upgrade to Pro version to use this feature</string>
-    <string name="action_settings">Setting</string>
-    <string name="accessibility_service_description">Please turn on this setting.This is for navigation(home,back,power menu) and on some Samsung device for expand status bar.
-    Enable accessibility can cause lag in some device when using Chrome. This happen to all
-    apps that use accessibility. If the lag is too extreme please disable this setting, all feature still available except the navigation (home, back, power menu).</string>
-    <string name="ask_user_to_turn_on_accessibility_toast">Please turn on the Accessibility setting for Swiftly Switch</string>
-    <string name="main_haptic_feedback_on_trigger_text">Haptic feedback on trigger</string>
+    <string name="main_enable_disable_by_long_press_home_button">Enable/disable edges by long-pressing home button</string>
+    <string name="main_exclude_app_info">Set apps that will not be listed in the recent list</string>
+    <string name="main_exclude_app_title">Blacklist</string>
+    <string name="main_favorite_shortcut_setting_description">Hold one of the recent icons for a while to show the Favorite Shortcut section. Tap the settings icon to set your favorite items and their positions.</string>
     <string name="main_haptic_feedback_on_move_to_item">Haptic feedback on icons</string>
-    <string name="main_do_you_love_this_app">If you like this app, please consider take time review it on Play store</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="edge_dialog_set_circle_size_text">Circle size</string>
-    <string name="title_activity_set_favorite_shortcut">Favorite shortcut setting</string>
-    <string name="title_activity_choose_shortcut">Choose Shortcut</string>
-    <string name="app_tab_fragment_back_button">Back</string>
-    <string name="app_tab_fragment_next_button">Next</string>
-    <string name="app_tab_fragment_ok_button">OK</string>
-    <string name="setting_shortcut_wifi">On/off wifi</string>
-    <string name="setting_shortcut_bluetooth">On/off bluetooth</string>
-    <string name="setting_shortcut_rotation">Auto/lock rotation</string>
-    <string name="setting_shortcut_power_menu">Show power menu</string>
-    <string name="setting_shortcut_none">None</string>
-    <string name="setting_shortcut_back">Back</string>
-    <string name="setting_shortcut_home">Home</string>
-    <string name="setting_shortcut_noti">Expand status bar</string>
-    <string name="setting_shortcut_dial">Dial</string>
-    <string name="setting_shortcut_contact">Contact</string>
-    <string name="setting_shortcut_call_log">Call logs</string>
-    <string name="ask_for_write_setting_notification_text">Click here and grant WRITE SETTING for Swiftly switch</string>
-    <string name="ask_for_write_setting_notification_title">Swiftly switch need Write Setting permission</string>
-    <string name="choose_shortcut_apps_tab_title">Apps</string>
-    <string name="choose_shortcut_actions_tab_title">Actions</string>
-    <string name="set_favorite_shortcut_grid_size_text_view">Grid size: </string>
-    <string name="grid_1_row">1 row</string>
-    <string name="grid_2_row">2 row</string>
-    <string name="grid_3_row">3 row</string>
-    <string name="grid_4_row">4 row</string>
-    <string name="grid_5_row">5 row</string>
-    <string name="grid_6_row">6 row</string>
-    <string name="grid_7_row">7 row</string>
-    <string name="grid_1_column">1 column</string>
-    <string name="grid_2_column">2 column</string>
-    <string name="grid_3_column">3 column</string>
-    <string name="grid_4_column">4 column</string>
-    <string name="grid_5_column">5 column</string>
-    <string name="grid_6_column">6 column</string>
-    <string name="grid_7_column">7 column</string>
-    <string name="action_1">Action 1</string>
-    <string name="action_2">Action 2</string>
-    <string name="action_3">Action 3</string>
-    <string name="action_4">Action 4</string>
-    <string name="set_favorite_shortcut_grid_by">by</string>
-    <string name="set_favorite_shortcut_grid_gap_title_text_view">Space between shortcuts</string>
-    <string name="set_favorite_shortcut_grid_distance_title_text_view">Distance from the Edge(horizontal)</string>
-    <string name="set_favorite_shortcut_grid_distance_vertical_title_text_view">Distance from the Edge(vertical)</string>
-    <string name="edge_dialog_set_mode_text">Mode</string>
-    <string name="edge_dialog_mode_array_default">Default</string>
-    <string name="edge_dialog_mode_array_only_favorite">Only favorite</string>
-    <string name="main_more_setting_title">More setting</string>
+    <string name="main_haptic_feedback_on_trigger_text">Haptic feedback on trigger</string>
+    <string name="main_hold_time">Long-press delay</string>
     <string name="main_icon_pack_support">Set icon pack</string>
-    <string name="icon_pack_system_icon_pack_label">System</string>
-    <string name="title_activity_outter_ring_setting">Quick actions setting</string>
-    <string name="main_outer_ring_setting">Quick actions</string>
-    <string name="main_usage_access_can_not_found">Can not found this setting on your device. Please try grant it manually.</string>
-    <string name="batterylife">Battery life:</string>
-    <string name="main_disable_clock_text">Disable clock</string>
-    <string name="share_with_friend">Share with friends</string>
-    <string name="review_on_play_store">Review on Play Store</string>
-    <string name="email_us">Email us</string>
-    <string name="share_with_friend_title">Share your friends</string>
-    <string name="share_with_friend_message">Hey! Try this awesome app? :)</string>
-    <string name="install">Install</string>
-    <string name="share">Share</string>
-    <string name="main_vibration_duration">Vibration duration</string>
-    <string name="main_hold_time">Hold time</string>
-    <string name="place_in_the_center">Place it in the center</string>
-    <string name="main_pin_app">Pin apps to recent</string>
-    <string name="title_activity_pin_app">Pin App</string>
-    <string name="out_of_limit">Out of limit</string>
-    <string name="pin_app_info">You can pin your most use apps so it always in the recent list.</string>
-    <string name="pin_to_top">Pin to top</string>
-    <string name="pin_to_bottom">Pin to bottom</string>
-    <string name="main_set_background_color">Set background color</string>
-    <string name="main_animation_text">Animation</string>
-    <string name="last_app">Last app</string>
-    <string name="setting_shortcut_last_app">Last app</string>
-    <string name="edge_dialog_show_guide_text">Show guide</string>
     <string name="main_icon_size">Icon size</string>
-    <string name="main_set_guide_color">Set guide color</string>
-    <string name="main_ani_time">Animation duration</string>
-    <string name="intro_activity">App Intro</string>
-    <string name="a_new_way_to_use_your_phone">A new way to use your phone</string>
-    <string name="switch_between_recent_apps">Switch between recent apps</string>
-    <string name="note_keep_your_finger_on_screen_unless_finish_action">Note: keep your finger on screen unless you want to finish action</string>
-    <string name="easily_navigation">Easily navigation</string>
-    <string name="access_your_favorite_app_and_system_setting_anywhere">Access your favorite shortcut anywhere</string>
-    <string name="set_required_permissions">Set required permissions</string>
-    <string name="enable_floating_window">1. Enable Floating Window</string>
-    <string name="permission_used_for_showing_icons_over_other_apps">Permission used for showing icons over other apps</string>
-    <string name="enable_usage_stat">2. Enable Usage Stat</string>
-    <string name="permission_used_for_getting_recent_apps">Permission used for getting recent apps</string>
-    <string name="enable_accessibility">3. Enable Accessibility</string>
-    <string name="permission_used_for_back_button_notification_power_menu">Permission used for Back button, notification, power menu</string>
-    <string name="main_edge1_setting_description">Click the switch to enable/disable the Edge 1. Click setting button to set Edge 1 position, mode, semi-circle size</string>
-    <string name="main_edge2_setting_description">Click the switch to enable/disable the Edge 2. Click setting button to set Edge 2 position, mode, semi-circle size</string>
-    <string name="main_favorite_shortcut_setting_description">Hold on one of the recent icons for awhile to show Favorite Shortcut section. Click the setting icon to set your favorite items, its position </string>
-    <string name="main_quick_actions_setting_description">Quick actions are placed outside of recent apps semi-circle, click the setting icon to customize it</string>
-    <string name="main_more_setting_description">More customize for look and feel of the app</string>
-    <string name="one_or_more_permission_are_missing">One or more permission are missing</string>
-    <string name="you_have_not_finished_all_permission_yet">You have not finished granting all permission yet. Please try again.</string>
-    <string name="skip">Skip</string>
-    <string name="hold_icon">Hold icon</string>
-    <string name="grid_mode">Grid mode</string>
-    <string name="semi_circle_mode">Semi-circle mode</string>
-    <string name="edge_dialog_mode_array_circlt_favorite">Circle favorite</string>
-    <string name="set_circle_favorite_mode_for">Set Circle Favorite mode for:</string>
-    <string name="setting_shortcut_recent">Recent button</string>
-    <string name="setting_shortcut_instant_favorite">Instant favorite</string>
-    <string name="what_new">What\'s new</string>
-    <string name="apps">Apps</string>
-    <string name="actions">Actions</string>
-    <string name="contacts">Contacts</string>
-    <string name="setting_shortcut_folder">Folder</string>
-    <string name="enable_require_permissions_to_use_this_feature">Enable require permissions to use this feature</string>
-    <string name="missing_contact_permission">Missing contact related permissions</string>
-    <string name="missing_call_phone_permission">Missing call phone permission</string>
-    <string name="choose_action">Choose action</string>
-    <string name="use_as_default">Use as default</string>
-    <string name="default_action_for_contact">Default action for contacts</string>
-    <string name="choose">Choose</string>
-    <string name="call">Call</string>
-    <string name="sms">Sms</string>
-    <string name="contact_type_work">work</string>
-    <string name="contact_type_home">home</string>
-    <string name="contact_type_main">main</string>
-    <string name="contact_type_work_fax">work fax</string>
-    <string name="contact_type_home_fax">home fax</string>
-    <string name="contact_type_pager">pager</string>
-    <string name="contact_type_other">other</string>
-    <string name="contact_type_custom">custom</string>
-    <string name="limit_of_free_version">The free version has some feature that only available within 14 days trial period: Pin apps to recent, Expand status bar.</string>
-    <string name="ringtone">Ringtone</string>
-    <string name="notification">Notification</string>
-    <string name="system">System</string>
+    <string name="main_more_setting_description">More customization for the look and feel of the app</string>
+    <string name="main_more_setting_title">More settings</string>
+    <string name="main_outer_ring_setting">Quick actions</string>
+    <string name="main_quick_actions_setting_description">Quick actions are placed outside of recent apps semi-circle, tap the settings icon to customize it</string>
+    <string name="main_set_background_color">Set background color</string>
+    <string name="main_usage_access_can_not_found">Can not find this setting on your device. Please try to enable it manually.</string>
+    <string name="main_vibration_duration">Vibration duration</string>
     <string name="media">Media</string>
-    <string name="setting_shortcut_volume">Volume</string>
-    <string name="setting_shortcut_brightness">Screen brightness</string>
-    <string name="setting_shortcut_ringer_mode">Ringer mode</string>
-    <string name="brightness">Brightness</string>
-    <string name="auto">Auto</string>
-    <string name="main_disable_in_landscape">Disable in landscape</string>
-    <string name="write_setting_permission">Write setting permission</string>
-    <string name="write_setting_permission_explain">Swiftly Switch need the "Write setting" permission to take this action. Please find Swiftly Switch in the setting then enable the permission.</string>
-    <string name="go_to_setting">Go to setting</string>
-    <string name="shortcut">Shortcuts</string>
-    <string name="vote_now">Vote now</string>
-    <string name="pin_shortcuts_to_recent">Pin shortcuts to recent</string>
-    <string name="sale_50">Pro -50%</string>
-    <string name="avoid_keyboard">Avoid keyboard</string>
-    <string name="avoid_keyboard_step_aside">Step aside keyboard</string>
-    <string name="avoid_keyboard_place_under">Place under keyboard</string>
-    <string name="setting_shortcut_flash_light">Flash light</string>
-    <string name="setting_shortcut_screen_lock">Screen lock</string>
-    <string name="swiftly_switch_screen_lock">Swiftly Switch Screen Lock</string>
-    <string name="admin_permission_explain">Allow the Swiftly switch with admin permissions to enable screen lock.</string>
-    <string name="admin_permission">Phone administrator permission</string>
-    <string name="admin_desc">Required for lock screen action</string>
-    <string name="admin_permission_missing_toast">Miss Phone Admin permission. Enable this permission in Setting - Security - Phone administrators</string>
-    <string name="out_of_trial">Out of trial time</string>
-    <string name="enable_accessibility_permission">Enable accessibility permission</string>
-    <string name="main_enable_disable_by_long_press_home_button">Enable/disable Edges by long press home button</string>
-    <string name="enable_long_press_to_toggle_swiftly_switch">By set Swiftly Switch to your Assist app (instead of Google Now On Tap), you can enable/disable trigger edges at any time by long press home button.</string>
-    <string name="enable_assist_app">Enable assist app</string>
-    <string name="assist_app_is_only_available_for_mashmallow_and_above">This feature is only available for Android 6.0 and above. For lower Android system, you can enable/disable the Edges from the persistent notification.</string>
-    <string name="on"> (ON)</string>
-    <string name="off"> (OFF)</string>
+    <string name="missing_call_phone_permission">Missing call phone permission</string>
+    <string name="missing_contact_permission">Missing contact-related permission</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="no">No</string>
+    <string name="no_action">No action</string>
+    <string name="note_keep_your_finger_on_screen_unless_finish_action">Note: Keep your finger on the screen unless you want to finish the action</string>
+    <string name="notification">Notification</string>
+    <string name="notification_description">This persistent notification is required for Swiftly Switch to stay active in the background. You may hide it by tapping and holding the notification and selecting \"Block all notifications\".\n\nIf you see the \"Screen overlay detected\" warning when giving a permission to another app, please pause Swiftly Switch temporarily using the \"Pause\" button on the notification.\n\nOr just swipe in from the edge, Swiftly Switch will be paused for 10s automatically when you\'re in giving permission window.</string>
+    <string name="notification_short_description">Pause if you see the \"Screen Overlay Detected\". Tap here for more details.</string>
+    <string name="notification_title">Swiftly Switch is running&#8230;</string>
+    <string name="one_or_more_permission_are_missing">One or more permissions are missing</string>
+    <string name="only_triggered_one_visible">Only triggered one visible</string>
+    <string name="open_folder_delay">Open folder delay</string>
+    <string name="open_swiftly_switch">Open Swiftly Switch</string>
     <string name="pause">Pause</string>
-    <string name="resume">Resume</string>
+    <string name="pause_for_10_second_toast">Swiftly Switch: Auto-pause for 10s while granting permissions. Change this in Swiftly Switch settings.</string>
+    <string name="pause_resume">Pause/Resume</string>
+    <string name="permission_used_for_back_button_notification_power_menu">Permission used for back button, notification and power menu</string>
+    <string name="permission_used_for_getting_recent_apps">Permission used for getting recent apps</string>
+    <string name="permission_used_for_showing_icons_over_other_apps">Permission used for showing icons over other apps</string>
+    <string name="please_wait">Please wait</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="pro_only">Pro-only</string>
+    <string name="pro_only_content">This feature is only available in the Pro version</string>
+    <string name="quick_actions_description">Quick Actions are placed outside of the Recent App, tap to customize or add new</string>
+    <string name="quick_actions_set">Quick Actions set</string>
     <string name="recent_app">Recent app</string>
+    <string name="recent_apps">Recent apps</string>
+    <string name="recent_apps_description">Tap to customize or add new Recent Set</string>
+    <string name="recent_set">Recent set</string>
+    <string name="reset_to_default">Reset to defaults</string>
+    <string name="resume">Resume</string>
+    <string name="review_on_play_store">Review on Play Store</string>
+    <string name="ringtone">Ringtone</string>
+    <string name="rows_count">Rows count</string>
+    <string name="sale_50">Pro -50%</string>
+    <string name="send_feedback">Send feedback</string>
+    <string name="set_favorite_shortcut_grid_distance_title_text_view">Distance from the edge (horizontal)</string>
+    <string name="set_favorite_shortcut_grid_distance_vertical_title_text_view">Distance from the edge (vertical)</string>
+    <string name="set_favorite_shortcut_grid_gap_title_text_view">Space between shortcuts</string>
+    <string name="set_label">Set label</string>
+    <string name="set_required_permissions">Set permissions</string>
+    <string name="set_size">Set size</string>
+    <string name="setting_shortcut_back">Back</string>
+    <string name="setting_shortcut_bluetooth">Bluetooth on/off</string>
+    <string name="setting_shortcut_brightness">Screen brightness</string>
+    <string name="setting_shortcut_call_log">Call logs</string>
+    <string name="setting_shortcut_contact">Contact</string>
+    <string name="setting_shortcut_dial">Dialer</string>
+    <string name="setting_shortcut_flash_light">Flashlight</string>
+    <string name="setting_shortcut_folder">Folder</string>
+    <string name="setting_shortcut_home">Home</string>
+    <string name="setting_shortcut_instant_favorite">Instant favorite</string>
+    <string name="setting_shortcut_last_app">Last app</string>
+    <string name="setting_shortcut_none">None</string>
+    <string name="setting_shortcut_noti">Expand status bar</string>
+    <string name="setting_shortcut_power_menu">Show power menu</string>
+    <string name="setting_shortcut_recent">Recent button</string>
+    <string name="setting_shortcut_ringer_mode">Ringer mode</string>
+    <string name="setting_shortcut_rotation">Auto/lock rotation</string>
+    <string name="setting_shortcut_screen_lock">Screen lock</string>
+    <string name="setting_shortcut_volume">Volume</string>
+    <string name="setting_shortcut_wifi">WiFi on/off</string>
+    <string name="setting_shortcut_search_shortcuts">Search shortcuts</string>
+    <string name="share">Share</string>
+    <string name="shortcut">Shortcuts</string>
+    <string name="shortcuts_sets">Shortcuts sets</string>
+    <string name="show_guide_description">Show a line to indicate the trigger zone</string>
+    <string name="show_this_after_an_update">Show this after an update</string>
+    <string name="size">Size</string>
+    <string name="skip">Skip</string>
+    <string name="sms">Sms</string>
+    <string name="something_wrong_happen">Something wrong happened, please try again later!</string>
+    <string name="stay_on_screen">Stay on screen</string>
+    <string name="stay_on_screen_disable_description">Immediately hide overlay after lifting your finger</string>
+    <string name="stay_on_screen_enable_description">Keep overlay on screen until an item is selected</string>
+    <string name="swiftly_switch_screen_lock">Swiftly Switch Screen lock</string>
+    <string name="switch_between_recent_apps">Switch between recent apps</string>
+    <string name="system">System</string>
+    <string name="this_feature_does_not_supported_on_samsung_devices">This feature is not supported on Samsung or ZTE devices</string>
     <string name="title_activity_pin_shortcuts">Pin shortcuts</string>
+    <string name="trigger_one_make_all_visible">Trigger one make all visible</string>
+    <string name="trigger_zone_color">Trigger zone color</string>
+    <string name="trigger_zone_setting">Trigger zone setting</string>
+    <string name="trigger_zone_setting_description">\"Tap here to set the edge\'s position, size, &#8230;\"</string>
+    <string name="trigger_zone_visible">Trigger zone visible</string>
+    <string name="uploading">Uploading</string>
+    <string name="use_as_default">Use as default</string>
+    <string name="vertical_margin">Vertical margin</string>
+    <string name="visibility_option">Visibility option</string>
+    <string name="visible_after_lifting_finger">Visible after lifting finger</string>
+    <string name="vote_now">Review now</string>
+    <string name="what_new">What\'s new</string>
+    <string name="translate_the_app">Translate the app</string>
+    <string name="translate_the_app_detail">If you want to help us to localize the app in your language, please go to https://www.localize.im/v/xy \nThanks!</string>
+    <string name="go_to_page">Go to page</string>
+
+    <string name="edit">Edit</string>
+    <string name="folder_content">Folder content</string>
+    <string name="choose_icon_source">Choose icon source</string>
+    <string name="set_icon">Set icon</string>
+    <string name="reset">Reset</string>
+
+
+    <string name="shortcuts_settings">Shortcuts settings</string>
+    <string name="ringer_mode_action">Ringer mode action</string>
+    <string name="ringer_mode_action_sound_and_vibrate">Sound and vibrate</string>
+    <string name="ringer_mode_action_sound_and_silent">Sound and silent</string>
+
+
+    <string name="reset_icon">Reset icon</string>
+    <string name="screen_shot">Take screenshot</string>
+
+
+
+    //What new
+    <string name="what_new_3.1.13" translatable="false">VERSION 3.1.13:\n
+        - Fix bug on Last App shortcut\n
+        - Fix bug when launching contacts consecutively\n
+        - Fix bug when launching device shortcut from the home screen\n
+    </string>
+    <string name="what_new_3.1.12" translatable="false">VERSION 3.1.12:\n
+        - Fix crash when accessing contact photo without contact permission\n
+    </string>
+    <string name="what_new_3.1.11" translatable="false">VERSION 3.1.11:\n
+        - Fix crash on Volume shortcut\n
+        - Fix auto start on boot not working on some devices\n
+        - Option for folder background color\n
+        - Fix delay when launching shortcut from the home screen\n
+        - Update translations\n
+        - Follow new guideline for app using Accessibility service\n
+        - Other bugs fixed and improvements\n
+    </string>
+    <string name="what_new_3.1.10" translatable="false">VERSION 3.1.10:\n
+        - Fix background flicker on Oreo!\n
+        - Fix bug when taking multiple screenshots in small period of time\n
+        - Update translations, thanks translators from Germany and Vietnam!\n
+        - Other bugs fixed and improvements\n
+    </string>
+
+    <string name="what_new_3.1.9" translatable="false">VERSION 3.1.9:\n
+        - *HOT* 67% Off When Upgrade to Pro. Only Available for Limited Time!\n
+        - Fix bugs in Android Oreo\n
+        - Button to clear search history in Search Shortcut\n
+    </string>
+    <string name="what_new_3.1.8" translatable="false">VERSION 3.1.8:\n
+        - Remove the Screen Lock because it required the android.permission.BIND_DEVICE_ADMIN permission which violate the Deceptive Behavior Policy. Sorry for the inconvenience! \n
+        - Update translations for French and Russian. Thanks the contributors from localize.im\n
+    </string>
+
+    <string name="what_new_3.1.7" translatable="false">VERSION 3.1.7:\n
+        - 3 new edge modes: Recent Apps only, Circle Favorite only, and Quick Actions only\n
+        - Option for set minimum items as 3 for Recent Apps and Circle Favorites\n
+        - Fix bugs and some small improvements\n
+    </string>
+
+    <string name="what_new_3.1.6" translatable="false">VERSION 3.1.6:\n
+        - New action: Search Shortcuts - Quickly search and start apps, shortcuts, contacts from any screen\n
+        - Support Greek and update translation for Japanese, Persian. Thanks for your support!\n
+        - Option to enable system animation when switching between apps\n
+        - Fix bugs and some small improvements\n
+    </string>
+
+    <string name="what_new_3.1.4" translatable="false">VERSION 3.1.4 &amp; 3.1.5:\n
+         - Quick fix\n
+    </string>
+
+    <string name="what_new_3.1.3" translatable="false">VERSION 3.1.3:\n
+        - Create a widget to pause/resume the app from the home screen\n
+        - Prevent shortcuts from being cut off\n
+        - Updated translations. Contribute your translation at https://www.localize.im/v/xy\n
+        - Fix bugs and some small improvements\n
+    </string>
+
+    <string name="what_new_3.1.2" translatable="false">VERSION 3.1.2:\n
+        - Fixed: last app shortcut does not work in some situations\n
+        - Updated translations for: Italian, Japanese, Spanish, Portuguese,, Slovak, Russian\n
+        - Check out our new app: Journal it! - a powerful journal/diary app that makes journaling on mobile easy and delightful. Tap the \"Check Out\" button below to visit the app\'s page\n
+
+    </string>
+
+    <string name="what_new_3.1.1" translatable="false">VERSION 3.1.1:\n
+        - Fixed: screenshot does not appear in the gallery after taken\n
+        - Updated translations for: German, Czech, Chinese, Japanese, Spanish, Italian. Contribute your translation at: localize.im/v/xy\n
+
+    </string>
+
+    <string name="what_new_3.1.0" translatable="false">VERSION 3.1.0:\n
+        - Added screenshot action (require android 5.0 and write storage permission)\n
+        - Upgrade from free to pro by in-app purchase (for free version only)\n
+        - Updated translations for: Persian, Portuguese, Chinese, Japanese, Spanish. Thanks for your contribution!\n
+
+    </string>
+    <string name="what_new_3.0.12" translatable="false">VERSION 3.0.12:\n
+        - Quick fix\n
+    </string>
+    <string name="what_new_3.0.11" translatable="false">VERSION 3.0.11:\n
+        - Fix delay when start apps from home screen\n
+        - Fix bug that sometimes makes recent icons disappear\n
+        - Fix visual problem in RTL languages\n
+        - Update translation for: Japanese, Spanish, Norwegian, Dutch. Thanks for all that help me translate the app! You can always contribute at https://www.localize.im/v/xy\n
+    </string>
+    <string name="what_new_3.0.10">VERSION 3.0.10:\n
+        - Fix icon pack\'s bugs\n
+        - Option to reset icon to default\n
+        - Customize folder\'s icon (Pro)\n
+        - Fix crashes\n
+        - Update translation for Chinese, Czech, Dutch, French, German, Hebrew, Indonesian, Italian, Japanese, Korean, Norwegian, Persian, Polish, Portuguese, Russian, Spanish, Swedish, Thai, Turkish, Vietnamese. Thanks for all that help me translate the app!   \n
+    </string>
+
+    <string name="what_new_3.0.9" translatable="false">VERSION 3.0.9:\n
+        - Quick fix\n
+    </string>
+    <string name="what_new_3.0.8" translatable="false">VERSION 3.0.8:\n
+        - Help me translate the app to your language (Left panel -> Translate the app) \n
+        - Customize shortcut label and icon (pro)\n
+        - Support mask from icon pack\n
+        - Option for Ringer Mode shortcut: switch between Sound and Silent (More Settings)\n
+        - Update Persian translation\n
+        - Fix background color when animation time is too small\n
+        - Other bug fixes and improvements\n
+    </string>
+
+
+    <string name="what_new_3.0.1">VERSION 3.0.1, the biggest update:\n        - New beautiful Material design with new animation \n        - Different settings/contents for each edge \n        - Item count can be up to 8 in Recent/Circle favorite/Quick Actions \n        - New operating mode for edge: Circle favorite and Quick Actions\n        - Quick Actions: allow every kind of shortcuts, more visibility option, instant shortcut\n        - Option to keep content on-screen after lifting your finger (enabled by default)\n        - Backup/Import data to/from Google Drive (\"Internet\" permission added)\n        - Option to auto-disable in full screen apps (Pro)\n        - Fix \"Screen overlay detected\": Auto-pause for 10 seconds while granting permissions in Android 6.0\n        - Improve performance\n        - About, FAQs, What\'s new, Privacy policy</string>
+    <string name="what_new_3.0.2">VERSION 3.0.2:\n        - Fix setting space between shortcuts doesn\'t work \n        - Fix no icon for Shortcuts Set \n        - Fix Grid position when triggered from long press \n        - Fix crashes</string>
+    <string name="what_new_3.0.3">VERSION 3.0.3:\n        - Add Persian translation \n        - Fix layout problem in RTL language \n        - Fix crashes in KitKat \n        - Fix other bugs</string>
+    <string name="what_new_3.0.4">VERSION 3.0.4:\n        - Set Shortcuts Set label \n        - Option to remove folder opening delay (More settings) \n        - Fix Quick Actions too big on Android 4.4 \n        - Fix positioning of folders\n        - Fix can not delete Grid item\n        - Other improvements</string>
+    <string name="what_new_3.0.5">VERSION 3.0.5:\n        - Fix positioning of folders\n        - Fix can not delete Grid item</string>
+    <string name="what_new_3.0.6">VERSION 3.0.6:\n        - Fix can not delete Grid item</string>
+    <string name="what_new_3.0.7">VERSION 3.0.7:\n        - Option to disable top indicator \n        - Auto update contact photos\n        - Quick Actions\'s item count can set to 3\n        - Improve getting recent apps\n        - Minimum animation time can set to 0\n        - Option to set the edge\'s length to full screen height by sliding the length to max in Trigger Zone Settings\n        - Fix the Grid being cut off when Edge\'s position set to bottom \n        - Fix UI bugs in RTL language \n        - Fix can not delete items in Grid Settings\n        - Fix Grid Favorite being reset\n        - Fix changing shortcuts set label\n        - Small bugs fixed and improvements</string>
+    <string name="write_setting_permission">\"Write settings\" permission</string>
+    <string name="write_setting_permission_explain">Swiftly Switch needs the \"Write settings\" permission to perform this action. Please find Swiftly Switch in the device\'s app settings and enable the permission.</string>
+    <string name="yes">Yes</string>
+    <string name="you_have_not_finished_all_permission_yet">You have not granted all the necessary permissions yet. Please try again.</string>
+
+
+
+    <string name="thanks_for_upgrading_to_pro">Thank you for upgrading to pro!</string>
+    <string name="backup_to_local_storage">Backup to local storage</string>
+    <string name="backup_to_google_drive">Backup to Google Drive</string>
+    <string name="exporting">Exporting</string>
+    <string name="exported_storage_success">Exported to Storage/Download</string>
+    <string name="importing">Importing</string>
+
+    <string name="checkout_new_app">Checkout our new app</string>
+    <string name="checkout_journal_it_text">After 10 months of development, we proud to announce Journal it!, a journal/diary app that makes journaling on mobile easy and delightful. If you love Swiftly Switch, you probably gonna love Journal it! too!</string>
+    <string name="checkout_journal_it_button">Checkout Journal it!</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="other_apps_from_de_studio">Other apps from de-studio</string>
+    <string name="how_do_you_like_the_app">How do you like the app?</string>
+    <string name="thank_you">Thank you!</string>
+    <string name="play_store_review_request">Would you like to post your review to Play Store? This will motivate us a lot!</string>
+    <string name="sure">Sure</string>
+    <string name="no_thanks">No thanks</string>
+    <string name="quick_feedback_review_request_text">Could you tell us what problem you faced. This will help us improve.</string>
+    <string name="send_email">Send email</string>
+    <string name="edge_running_toast">Swiftly Switch is running</string>
+    <string name="edge_service_paused_toast">Swiftly Switch is paused</string>
+    <string name="search_shortcuts">Search shortcuts…</string>
+    <string name="upgrade_to_pro">Upgrade to Pro</string>
+    <string name="transition_animation">Transition animation</string>
+    <string name="transition_animation_description">Enable system animation when switching between apps</string>
+
+
+    <string name="edge_mode__recent_apps_only">Recent Apps only</string>
+    <string name="edge_mode__circle_favorites_only">Circle Favorite only</string>
+    <string name="edge_mode__quick_action_only">Quick Actions only</string>
+    <string name="button_close">Close</string>
+    <string name="admin_permission_notice_2">Using this shortcut requires setting Swiftly Switch as an administrator. This means that the app CAN NOT be uninstalled unless you disable the permission first. Set Swiftly Switch as your Device Administrator at Settings -> Security -> Device Administrators</string>
+    <string name="pause_while_giving_permission">Pause while giving permission</string>
+    <string name="turn_off_do_not_disturb_first">Please turn off Do Not Disturb first!</string>
+    <string name="error_when_taking_screenshot">Error when taking screenshot!</string>
+    <string name="enable_accessibility_permission_guide">Find Swiftly Switch in the next sceen and enable the permission. Press back after done</string>
+    <string name="confirm_before_delete">Are you sure you want to delete this?</string>
+    <string name="folder_background_color">Folder background color</string>
+
 </resources>

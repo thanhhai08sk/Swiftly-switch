@@ -3,7 +3,6 @@ package org.de_studio.recentappswitcher;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,8 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ListView;
-
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
 
 import java.util.HashMap;
 
@@ -44,13 +41,13 @@ public class IconPackSettingDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().stopService(new Intent(getActivity(), EdgeGestureService.class));
+        Utility.stopService(getActivity());
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
         try {
-            getActivity().startService(new Intent(getActivity(), EdgeGestureService.class));
+            Utility.startService(getActivity());
         } catch (NullPointerException e) {
             Log.e(LOG_TAG, "Null when get activity from on dismiss");
         }

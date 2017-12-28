@@ -8,11 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.SetItemIcon">
+        <item name="android:editTextColor">@android:color/white</item>
+    </style>
+
     <style name="DialogTheme" parent="Base.V11.Theme.AppCompat.Light.Dialog">
         <item name="windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:backgroundDimEnabled">false</item>
 
+    </style>
+    <style name="MyDialog_FullScreen" parent="android:Theme" >
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsFloating">false</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -39,9 +48,133 @@
         <item name="android:windowBackground">@color/transparent</item>
     </style>
 
-    <style name="tablayout_text_appearacnce" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
-    </style>
-    <style name="step_button">
+    <style name="tablayout_text_appearacnce" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"></style>
+
+    <style name="step_button"></style>
+    <style name="Button">
     </style>
 
+    <style name="TextAppearance_Subhead_Primary_Dark" parent="@style/TextAppearance.AppCompat.Subhead">
+        <item name="android:textColor">@color/text_primary_dark</item>
+    </style>
+    <style name="TextAppearance_Body1_Secondary_Dark" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/text_secondary_dark</item>
+    </style>
+
+    //Main view
+    <style name="Main_text_primary">
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:lines">1</item>
+        <item name="android:textAppearance">@style/TextAppearance_Subhead_Primary_Dark</item>
+    </style>
+    <style name="Main_text_secondary">
+        <item name="android:textAppearance">@style/TextAppearance_Body1_Secondary_Dark</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+    </style>
+
+    <style name="GeneralTextPrimary" parent="Main_text_primary">
+        <item name="android:paddingStart">0dp</item>
+    </style>
+    <style name="GeneralTextSecondary" parent="Main_text_secondary">
+        <item name="android:paddingStart">0dp</item>
+    </style>
+    <style name="ItemLinearLayout">
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:foreground">?android:selectableItemBackground</item>
+    </style>
+    <style name="Text_Header">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+    </style>
+
+    <style name="GeneralTabIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:tint">@color/grey_icon</item>
+
+    </style>
+
+    <style name="Drawer_Icon">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_gravity">center_vertical|start</item>
+        <item name="android:tint">@color/button_54_black</item>
+    </style>
+    <style name="Drawer_Item_text">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>
+        <item name="android:layout_gravity">center_vertical|start</item>
+        <item name="android:layout_marginStart">72dp</item>
+    </style>
+    <style name="Drawer_Item">
+        <item name="android:foreground">?android:selectableItemBackground</item>
+    </style>
+
+
+
+    //MoreSetting
+    <style name="MoreSetting_Item_Parent_With_Switch">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical|start</item>
+
+    </style>
+    <style name="MoreSetting_Item_Parent_No_Switch">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+
+    </style>
+
+    <style name="MoreSetting_Item_Text_Primary">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/text_primary_dark</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+
+    </style>
+    <style name="MoreSetting_Item_Text_Primary.NoSwitch">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:paddingBottom">4dp</item>
+    </style>
+
+    <style name="MoreSetting_Item_Text_Secondary">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/text_secondary_dark</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">16dp</item>
+    </style>
+    <style name="MoreSetting_Item_Switch">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:clickable">false</item>
+        <item name="android:focusable">false</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_weight">0</item>
+
+    </style>
+
+    <style name="ItemSlot">
+    </style>
 </resources>

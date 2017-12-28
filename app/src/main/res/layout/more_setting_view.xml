@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_lightish"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/background_light"
+            android:elevation="8dp"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:text="@string/general"
+                style="@style/Text_Header"
+                />
+
+            <LinearLayout
+                android:id="@+id/disable_in_fullscreen"
+                style="@style/MoreSetting_Item_Parent_With_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary"
+                    android:id="@+id/disable_in_fullscreen_text"
+                    android:textColor="@color/text_primary_dark_enable_disable"
+                    android:text="@string/disable_in_fullscreen"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/disable_in_fullscreen_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
+
+            <LinearLayout
+                android:id="@+id/disable_in_landscape"
+                style="@style/MoreSetting_Item_Parent_With_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary"
+                    android:text="@string/main_disable_in_landscape"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/disable_in_landscape_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
+
+
+
+
+            <!--<LinearLayout-->
+                <!--android:id="@+id/avoid_keyboard"-->
+                <!--style="@style/MoreSetting_Item_Parent_With_Switch"-->
+                <!--&gt;-->
+                <!--<TextView-->
+                    <!--style="@style/MoreSetting_Item_Text_Primary"-->
+                    <!--android:text="@string/avoid_keyboard"-->
+                    <!--/>-->
+                <!--<android.support.v7.widget.SwitchCompat-->
+                    <!--android:id="@+id/avoid_keyboard_switch"-->
+                    <!--style="@style/MoreSetting_Item_Switch"-->
+                    <!--/>-->
+            <!--</LinearLayout>-->
+            <!--<include layout="@layout/separator" />-->
+
+
+            <LinearLayout
+                android:id="@+id/use_home_button_layout"
+                style="@style/MoreSetting_Item_Parent_With_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary"
+                    android:text="@string/main_enable_disable_by_long_press_home_button"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/use_home_button_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator"
+                android:id="@+id/use_home_button_separator"
+                />
+
+
+
+
+            <LinearLayout
+                android:id="@+id/open_folder_delay"
+                style="@style/MoreSetting_Item_Parent_With_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary"
+                    android:text="@string/open_folder_delay"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/open_folder_delay_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
+            <LinearLayout
+                android:id="@+id/long_press_delay"
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/main_hold_time"
+                    />
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Secondary"
+                    android:text="@string/long_press_delay_description"
+                    />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/background_light"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:text="@string/shortcuts_settings"
+            style="@style/Text_Header"
+            />
+
+        <LinearLayout
+            android:id="@+id/contact_action"
+            style="@style/MoreSetting_Item_Parent_No_Switch"
+            >
+            <TextView
+                style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                android:text="@string/default_action_for_contact"
+                />
+            <TextView
+                android:id="@+id/contact_action_description"
+                style="@style/MoreSetting_Item_Text_Secondary"
+                tools:text="Sms"
+                />
+        </LinearLayout>
+        <include layout="@layout/separator" />
+        <LinearLayout
+            android:id="@+id/ringer_mode_action"
+            style="@style/MoreSetting_Item_Parent_No_Switch"
+            >
+            <TextView
+                style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                android:text="@string/ringer_mode_action"
+                />
+            <TextView
+                android:id="@+id/ringer_mode_action_description"
+                style="@style/MoreSetting_Item_Text_Secondary"
+                tools:text="Sound and Vibrate"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/background_light"
+            android:elevation="8dp"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:text="@string/look"
+                style="@style/Text_Header"
+                />
+
+            <LinearLayout
+                android:id="@+id/icon_pack"
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:textColor="@color/text_primary_dark_enable_disable"
+                    android:text="@string/main_icon_pack_support"
+                    />
+                <TextView
+                    android:id="@+id/icon_pack_description"
+                    style="@style/MoreSetting_Item_Text_Secondary"
+                    tools:text="System"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
+
+            <LinearLayout
+                android:id="@+id/icon_size"
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/main_icon_size"
+                    />
+                <TextView
+                    android:id="@+id/icon_size_description"
+                    style="@style/MoreSetting_Item_Text_Secondary"
+                    tools:text="100%"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
+            <LinearLayout
+                android:id="@+id/background_color"
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/main_set_background_color"
+                    android:paddingBottom="16dp"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
+
+        <LinearLayout
+            android:id="@+id/folderBackgroundColor"
+            style="@style/MoreSetting_Item_Parent_No_Switch"
+            >
+            <TextView
+                style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                android:text="@string/folder_background_color"
+                android:paddingBottom="16dp"
+                />
+        </LinearLayout>
+        <include layout="@layout/separator" />
+
+            <LinearLayout
+                android:id="@+id/use_animation"
+                style="@style/MoreSetting_Item_Parent_With_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary"
+                    android:text="@string/main_animation_text"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/animation_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+
+            <include layout="@layout/separator" />
+
+            <LinearLayout
+                android:id="@+id/animation_time"
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/main_ani_time"
+                    />
+                <TextView
+                    android:id="@+id/animation_time_description"
+                    style="@style/MoreSetting_Item_Text_Secondary"
+                    tools:text="300ms"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
+
+        <LinearLayout
+            android:id="@+id/transition"
+            style="@style/MoreSetting_Item_Parent_No_Switch"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/transition_animation"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/transition_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/transition_description"
+                style="@style/MoreSetting_Item_Text_Secondary"
+                android:text="@string/transition_animation_description"
+
+                />
+        </LinearLayout>
+        <include layout="@layout/separator" />
+
+            <LinearLayout
+                android:id="@+id/disable_clock"
+                style="@style/MoreSetting_Item_Parent_With_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary"
+                    android:text="@string/main_disable_clock_text"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/disable_clock_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+            <include layout="@layout/separator" />
+
+            <LinearLayout
+                android:id="@+id/disable_indicator"
+                style="@style/MoreSetting_Item_Parent_With_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary"
+                    android:text="@string/disable_top_indicator"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/disable_indicator_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/background_light"
+            android:elevation="8dp"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:text="@string/feel"
+                style="@style/Text_Header"
+                />
+
+            <LinearLayout
+                android:id="@+id/haptic_feedback_on_trigger"
+                style="@style/MoreSetting_Item_Parent_With_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary"
+                    android:text="@string/main_haptic_feedback_on_trigger_text"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/haptic_feedback_on_trigger_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+
+            <include layout="@layout/separator" />
+            <LinearLayout
+                android:id="@+id/haptic_feedback_on_icon"
+                style="@style/MoreSetting_Item_Parent_With_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary"
+                    android:text="@string/main_haptic_feedback_on_move_to_item"
+                    />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/haptic_feedback_on_icon_switch"
+                    style="@style/MoreSetting_Item_Switch"
+                    />
+            </LinearLayout>
+
+            <include layout="@layout/separator" />
+            <LinearLayout
+                android:id="@+id/vibration_duration"
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/main_vibration_duration"
+                    />
+                <TextView
+                    android:id="@+id/vibration_duration_description"
+                    style="@style/MoreSetting_Item_Text_Secondary"
+                    tools:text="20ms"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/background_light"
+            android:elevation="8dp"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:text="@string/backup_and_restore"
+                style="@style/Text_Header"
+                />
+            <LinearLayout
+                android:id="@+id/import_settings"
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+
+                <TextView
+                style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                android:text="@string/import_settings"
+                />
+                <TextView
+                style="@style/MoreSetting_Item_Text_Secondary"
+                android:text="@string/import_description"
+                />
+        </LinearLayout>
+    <include layout="@layout/separator" />
+
+            <LinearLayout
+                android:id="@+id/backup"
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                >
+
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/backup"
+                    android:paddingBottom="16dp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/reset_to_default"
+                style="@style/MoreSetting_Item_Parent_No_Switch"
+                android:visibility="gone"
+                >
+
+                <TextView
+                    style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                    android:text="@string/reset_to_default"
+                    android:paddingBottom="16dp"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

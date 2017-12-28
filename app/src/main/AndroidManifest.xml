@@ -18,9 +18,14 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+
     <uses-permission
         android:name="android.permission.CAMERA"
         android:maxSdkVersion="22" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -33,37 +38,52 @@
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
+
     <supports-screens
+        android:anyDensity="true"
         android:largeScreens="true"
         android:normalScreens="true"
         android:resizeable="true"
         android:smallScreens="true"
-        android:xlargeScreens="true"
-        android:anyDensity="true"
-        />
+        android:xlargeScreens="true" />
 
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:installLocation="internalOnly"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:installLocation="internalOnly"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        >
+        <meta-data android:name="android.max_aspect" android:value="2.1" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="org.de_studio.recentappswitcher.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
 
+        <!-- <service -->
+        <!-- android:name=".service.EdgeGestureService" -->
+        <!-- android:exported="false" /> -->
         <service
-            android:name=".service.EdgeGestureService"
+            android:name=".edgeService.NewServiceView"
             android:exported="false" />
         <service
             android:name=".service.MyAccessibilityService"
@@ -83,6 +103,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.USER_PRESENT"/>
             </intent-filter>
         </receiver>
 
@@ -91,101 +112,52 @@
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:taskAffinity=""
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AudioDialogTheme" />
-        <activity
-            android:name=".favoriteShortcut.FavoriteSettingActivity"
-            android:label="@string/title_activity_set_favorite_shortcut"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.de_studio.recentappswitcher.MainActivity" />
-        </activity>
-        <activity
-            android:name=".favoriteShortcut.ChooseShortcutActivity"
-            android:label="@string/title_activity_choose_shortcut"
-            android:parentActivityName=".favoriteShortcut.FavoriteSettingActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".favoriteShortcut.FavoriteSettingActivity" />
-        </activity>
-        <activity
-            android:name=".OuterRingSettingActivity"
-            android:label="@string/title_activity_outter_ring_setting"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.de_studio.recentappswitcher.MainActivity" />
-        </activity>
-        <activity
-            android:name=".PinAppActivity"
-            android:label="@string/title_activity_pin_shortcuts"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.de_studio.recentappswitcher.MainActivity" />
-        </activity>
+
         <activity
             android:name=".intro.IntroActivity"
-            android:label="@string/intro_activity"
             android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".MoreSettingActivity"
-            android:label="@string/main_more_setting_title"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.de_studio.recentappswitcher.MainActivity" />
-        </activity>
-        <activity android:name=".favoriteShortcut.SetFolderActivity"
-                  android:label="@string/setting_shortcut_folder"
-            />
         <activity
             android:name=".service.ChooseActionDialogActivity"
             android:excludeFromRecents="true"
             android:label=""
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/DialogTheme" />
         <activity
             android:name=".service.VolumeDialogActivity"
             android:excludeFromRecents="true"
             android:label=""
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/DialogTheme" />
-        <activity android:name=".service.ScreenBrightnessDialogActivity"
+        <activity
+            android:name=".service.ScreenBrightnessDialogActivity"
             android:excludeFromRecents="true"
             android:label=""
-            android:theme="@style/DialogTheme"
-            />
-        <service android:name=".shortcut.FlashService"/>
-        <service android:name=".shortcut.FlashServiceM" />
-        <receiver
-            android:name=".shortcut.LockAdmin"
-            android:description="@string/admin_desc"
-            android:label="@string/swiftly_switch_screen_lock"
-            android:permission="android.permission.BIND_DEVICE_ADMIN" >
-            <meta-data
-                android:name="android.app.device_admin"
-                android:resource="@xml/lock_admin" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/DialogTheme" >
 
-            <intent-filter>
-                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
-            </intent-filter>
-        </receiver>
+        </activity>
+
+        <service android:name=".shortcut.FlashService" />
+        <service android:name=".shortcut.FlashServiceM" />
+
 
         <activity
             android:name=".service.NotiDialog"
             android:excludeFromRecents="true"
             android:label=""
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/DialogTheme" />
-        <service android:name=".assist.MyInteractionService"
+
+        <service
+            android:name=".assist.MyInteractionService"
             android:permission="android.permission.BIND_VOICE_INTERACTION"
             android:process=":session">
             <intent-filter>
-                <action android:name="android.service.voice.VoiceInteractionService"/>
+                <action android:name="android.service.voice.VoiceInteractionService" />
             </intent-filter>
         </service>
         <service
@@ -193,11 +165,107 @@
             android:permission="android.permission.BIND_VOICE_INTERACTION">
             <meta-data
                 android:name="android.voice_interaction"
-                android:resource="@xml/assist_service"/>
+                android:resource="@xml/assist_service" />
+
             <intent-filter>
-                <action android:name="android.service.voice.VoiceInteractionService"/>
+                <action android:name="android.service.voice.VoiceInteractionService" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".main.MainView"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".circleFavoriteSetting.CircleFavoriteSettingView"
+            android:label="@string/circle_favorites"
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:parentActivityName=".main.MainView"
+            />
+        <activity android:name=".recentSetting.RecentSettingView"
+            android:label="@string/recent_apps"
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:parentActivityName=".main.MainView"
+            />
+        <activity
+            android:name=".gridFavoriteSetting.GridFavoriteSettingView"
+            android:label="@string/grid_favorites"
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:parentActivityName=".main.MainView"/>
+
+        <activity
+            android:name=".setItems.SetItemsView"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".folderSetting.FolderSettingView"
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:parentActivityName=".gridFavoriteSetting.GridFavoriteSettingView"
+            />
+        <activity android:name=".quickActionSetting.QuickActionSettingView"
+            android:label="@string/main_outer_ring_setting"
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:parentActivityName=".main.MainView"
+            />
+
+        <activity android:name=".main.moreSetting.MoreSettingView"
+            android:label="@string/main_more_setting_title"
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:parentActivityName=".main.MainView"
+            />
+
+        <service
+            android:name=".dadaSetup.DataSetupService"
+            android:exported="false"/>
+        <activity android:name=".faqs.FaqsView"
+            android:label="@string/faqs"
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:parentActivityName=".main.MainView"
+            />
+        <activity android:name=".main.about.AboutView"
+            android:label="@string/about"
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:parentActivityName=".main.MainView"
+            />
+
+        <activity android:name=".setItemIcon.SetItemIconView"
+            android:label="@string/set_icon"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/AppTheme.SetItemIcon"
+            />
+        <activity android:name=".screenshot.ScreenshotView"
+            android:excludeFromRecents="true"
+            android:label=""
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/DialogTheme"
+            />
+
+        <receiver android:name=".widget.ServiceToggleWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
+                <action android:name="org.de_studio.recentappswitcher.toggle_widget" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_service_toggle" />
+        </receiver>
+
     </application>
 
 </manifest>

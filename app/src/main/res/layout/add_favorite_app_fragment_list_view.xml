@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="300dp"
+    android:layout_height="450dp"
     android:background="@color/list_app_background"
     android:orientation="vertical"
+    android:layout_gravity="center"
     >
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:progressDrawable="@drawable/circular_progress_bar"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
 
 </LinearLayout>

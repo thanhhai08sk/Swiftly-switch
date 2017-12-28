@@ -2,11 +2,14 @@ package org.de_studio.recentappswitcher;
 
 import android.Manifest;
 import android.accessibilityservice.AccessibilityServiceInfo;
-import android.animation.Animator;
+import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.admin.DevicePolicyManager;
+import android.app.AlarmManager;
+import android.app.AppOpsManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +18,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,612 +34,191 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
+import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.CallLog;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.view.accessibility.AccessibilityEventCompat;
-import android.support.v4.view.accessibility.AccessibilityRecordCompat;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatImageView;
-import android.text.format.DateFormat;
+import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import org.de_studio.recentappswitcher.android.ContactPhotoLoader;
+import org.de_studio.recentappswitcher.base.BaseActivity;
 import org.de_studio.recentappswitcher.dialogActivity.AudioDialogActivity;
-import org.de_studio.recentappswitcher.favoriteShortcut.Shortcut;
+import org.de_studio.recentappswitcher.edgeService.NewServiceView;
+import org.de_studio.recentappswitcher.main.MainView;
+import org.de_studio.recentappswitcher.model.Collection;
+import org.de_studio.recentappswitcher.model.Edge;
+import org.de_studio.recentappswitcher.model.Item;
+import org.de_studio.recentappswitcher.model.Slot;
+import org.de_studio.recentappswitcher.screenshot.ScreenshotView;
 import org.de_studio.recentappswitcher.service.ChooseActionDialogActivity;
-import org.de_studio.recentappswitcher.service.EdgeGestureService;
-import org.de_studio.recentappswitcher.service.EdgeSetting;
-import org.de_studio.recentappswitcher.service.FolderAdapter;
-import org.de_studio.recentappswitcher.service.MyImageView;
 import org.de_studio.recentappswitcher.service.NotiDialog;
 import org.de_studio.recentappswitcher.service.ScreenBrightnessDialogActivity;
 import org.de_studio.recentappswitcher.service.VolumeDialogActivity;
 import org.de_studio.recentappswitcher.shortcut.FlashService;
 import org.de_studio.recentappswitcher.shortcut.FlashServiceM;
-import org.de_studio.recentappswitcher.shortcut.LockAdmin;
+import org.de_studio.recentappswitcher.utils.EventBus;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import io.realm.Realm;
+import io.realm.RealmList;
+import rx.subjects.PublishSubject;
+
+import static org.de_studio.recentappswitcher.Cons.RINGER_MODE_NORMAL;
+import static org.de_studio.recentappswitcher.Cons.RINGER_MODE_SILENT;
+import static org.de_studio.recentappswitcher.Cons.RINGER_MODE_VIBRATE;
 
 /**
  * Created by hai on 12/19/2015.
  */
 public  class Utility {
     private static final String TAG = Utility.class.getSimpleName();
-//    public static int dpiToPixels (int dp, WindowManager windowManager){
-//        DisplayMetrics metrics =new DisplayMetrics();
-//        windowManager.getDefaultDisplay().getMetrics(metrics);
-//        float logicalDensity = metrics.density;
-//        return (int) Math.ceil(dp*logicalDensity);
-//    }
 
-    public static int findIconToSwitch (int[] x, int[] y,int x_cord, int y_cord, int numOfIcon, int radOfIcon, float mScale) {
-        int radOfIconPxl = (int) (radOfIcon * mScale);
-        if (numOfIcon >= 1) {
-            if (x_cord >= x[0] & x_cord <= (x[0] + radOfIconPxl * 2) & y_cord >= y[0] & y_cord <= (y[0] + radOfIconPxl * 2)) {
-                return 0;
-            }
-        }
-        if (numOfIcon >= 2) {
-            if (x_cord >= x[1] & x_cord <= (x[1] + radOfIconPxl * 2) & y_cord >= y[1] & y_cord <= (y[1] + radOfIconPxl * 2)) {
-                return 1;
-            }
-        }
-        if (numOfIcon >= 3) {
-            if (x_cord >= x[2] & x_cord <= (x[2] + radOfIconPxl * 2) & y_cord >= y[2] & y_cord <= (y[2] + radOfIconPxl * 2)) {
-                return 2;
-            }
-        }
-        if (numOfIcon >= 4) {
-            if (x_cord >= x[3] & x_cord <= (x[3] + radOfIconPxl * 2) & y_cord >= y[3] & y_cord <= (y[3] + radOfIconPxl * 2)) {
-                return 3;
-            }
-        }
-        if (numOfIcon >= 5) {
-            if (x_cord >= x[4] & x_cord <= (x[4] + radOfIconPxl * 2) & y_cord >= y[4] & y_cord <= (y[4] + radOfIconPxl * 2)) {
-                return 4;
-            }
-        }
-        if (numOfIcon >= 6) {
-            if (x_cord >= x[5] & x_cord <= (x[5] + radOfIconPxl * 2) & y_cord >= y[5] & y_cord <= (y[5] + radOfIconPxl * 2)) {
-                return 5;
-            }
-        }
-        return -1;
-    }
-
-    public static int findIconToSwitchNew(int[] x, int[] y, int x_cord, int y_cord, float radOfIconPxl, float mScale) {
-        double distance;
-        double distanceNeeded = 35*mScale;
-        if (x != null && y != null) {
-            for (int i = 0; i < x.length; i++) {
-                distance = Math.sqrt(Math.pow((double)x_cord - (double)(x[i] + radOfIconPxl),2) + Math.pow((double)y_cord - (double)(y[i]+radOfIconPxl), 2));
-                if (distance <= distanceNeeded) {
-                    return i;
-                }
-            }
-        }
-
-        return -1;
+    public static int dpToPixel(Context context, int dp) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,(float) (dp), metrics);
     }
 
 
-    public static int findShortcutToSwitch(int x_cord, int y_cord, int x_grid, int y_grid, int sizeOfIcon, float mScale,int gird_row, int grid_column, int grid_gap, boolean folderMode) {
-        int item_x,item_y;
-        double distance;
-        double smallestDistance = 1000*mScale;
-        for (int i = 0; i < grid_column; i++) {
-            for (int j = 0; j < gird_row; j++) {
-                item_x = (int)(x_grid + (sizeOfIcon/2)*mScale +i*(sizeOfIcon + grid_gap)*mScale);
-                item_y = (int) (y_grid + (sizeOfIcon/2) * mScale + j * (sizeOfIcon + grid_gap) * mScale);
-                distance = Math.sqrt(Math.pow((double)x_cord - (double)item_x,2) + Math.pow((double)y_cord - (double) item_y, 2));
-                if (distance <= 35 * mScale) {
-                    return j * grid_column + i;
-                } else {
-                    if (smallestDistance > distance) {
-                        smallestDistance = distance;
-                    }
-                }
-            }
-        }
-        if (folderMode) {
-            if (smallestDistance > 105 * mScale) {
-                return -2;
-            }
-        }
-        return -1;
-    }
 
-    public static void setIconPositionNew(final MyImageView[] icon, float r, float icon_24_dp_pxl, int position, int x_i, int y_i, int n, boolean isAnimation, int animationTime) {
-        Log.e(TAG, "setIconPositionNew");
-        double alpha, beta;
-        if (animationTime <= 50) {
-            isAnimation = false;
-        }
-        double[] alphaN = new double[n];
-        switch (n) {
-            case 4:
-//                alpha = 0.1389*Math.PI; // 25 degree
-                alpha = 0.111 * Math.PI; // 20 degree
-                break;
-            case 5:
-                alpha = 0.111 * Math.PI; // 20 degree
-                break;
-            case 6:
-                alpha = 0.0556 * Math.PI; // 10 degree
-                break;
-            default:
-                alpha = 0.0556;
-        }
-        beta = Math.PI - 2 * alpha;
-        float x;
-        float y;
-        if (!isAnimation) {
-            for (int i = 0; i < n; i++) {
-                alphaN[i] = alpha + i * (beta / (n - 1));
-                switch (position / 10) {
-                    case 1:
-                        icon[i].setX(x_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
-                        icon[i].setY(y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
-                        break;
-                    case 2:
-                        icon[i].setX(x_i + r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
-                        icon[i].setY(y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
-                        break;
-                    case 3:
-                        icon[i].setX(x_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
-                        icon[i].setY(y_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
-                        break;
-                }
-            }
-        } else {
-            for (int i = 0; i < n; i++) {
-                alphaN[i] = alpha + i * (beta / (n - 1));
-                switch (position / 10) {
-                    case 1:
-                        icon[i].setX(x_i);
-                        icon[i].setY(y_i);
-                        x = x_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
-                        y = y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
-                        icon[i].setRotation(0f);
-                        if (i == 0) {
-                            icon[0].setOnAnimation(true);
-                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
-                                    icon[0].setOnAnimation(true);
-                                }
 
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    icon[0].setOnAnimation(false);
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-                                    icon[0].setOnAnimation(false);
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animation) {
-
-                                }
-                            });
-                        } else {
-                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
-                        }
-
-//                    icon[i].setX(x);
-//                    icon[i].setY(y);
-                        break;
-                    case 2:
-                        x = x_i + r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
-                        y = y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
-                        icon[i].setX(x_i);
-                        icon[i].setY(y_i);
-                        icon[i].setRotation(0f);
-                        if (i == 0) {
-                            icon[0].setOnAnimation(true);
-                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
-                                    icon[0].setOnAnimation(true);
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    icon[0].setOnAnimation(false);
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-                                    icon[0].setOnAnimation(false);
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animation) {
-
-                                }
-                            });
-                        } else {
-                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
-                        }
-                        break;
-                    case 3:
-                        x = x_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl;
-                        y = y_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl;
-                        icon[i].setX(x_i);
-                        icon[i].setY(y_i);
-                        icon[i].setRotation(0f);
-                        if (i == 0) {
-                            icon[0].setOnAnimation(true);
-                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator()).setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
-                                    icon[0].setOnAnimation(true);
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    icon[0].setOnAnimation(false);
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-                                    icon[0].setOnAnimation(false);
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animation) {
-
-                                }
-                            });
-                        } else {
-                            icon[i].animate().setDuration(animationTime).x(x).y(y).rotation(720f).setInterpolator(new FastOutSlowInInterpolator());
-                        }
-                        break;
-                }
-            }
-        }
-
-        if (n < icon.length) {
-            for (int j = n; j < icon.length; j++) {
-                icon[j].setVisibility(View.GONE);
-            }
-        }
-
-    }
-
-    public static void setIconsPosition(AppCompatImageView[] icon, int x_init_cord, int y_init_cord, float icon_distance_pxl, float icon_24_dp_pxl, int edgePosition){
-        double sin10 = 0.1736, sin42 = 0.6691, sin74 = 0.9613, cos10 = 0.9848, cos42 = 0.7431, cos74 = 0.2756;
-        switch (edgePosition){
-            case 10:
-                icon[0].setX((float) (x_init_cord - sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[0].setY(y_init_cord - (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[1].setX((float) (x_init_cord - sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[1].setY(y_init_cord - (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[2].setX((float) (x_init_cord - sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[2].setY(y_init_cord - (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[3].setX((float) (x_init_cord - sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[3].setY(y_init_cord + (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[4].setX((float) (x_init_cord - sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[4].setY(y_init_cord + (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[5].setX((float) (x_init_cord - sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[5].setY(y_init_cord + (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                break;
-            case 11:
-                icon[0].setX((float) (x_init_cord - sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[0].setY(y_init_cord - (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[1].setX((float) (x_init_cord - sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[1].setY(y_init_cord - (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[2].setX((float) (x_init_cord - sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[2].setY(y_init_cord - (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[3].setX((float) (x_init_cord - sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[3].setY(y_init_cord + (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[4].setX((float) (x_init_cord - sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[4].setY(y_init_cord + (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[5].setX((float) (x_init_cord - sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[5].setY(y_init_cord + (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                int distance = x_init_cord - (int)icon[0].getX();
-                Log.e(TAG,"x_init - x0 = "+distance + "\nx_init = "+ x_init_cord );
-                break;
-            case 12:
-                icon[0].setX((float) (x_init_cord - sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[0].setY(y_init_cord - (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[1].setX((float) (x_init_cord - sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[1].setY(y_init_cord - (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[2].setX((float) (x_init_cord - sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[2].setY(y_init_cord - (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[3].setX((float) (x_init_cord - sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[3].setY(y_init_cord + (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[4].setX((float) (x_init_cord - sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[4].setY(y_init_cord + (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[5].setX((float) (x_init_cord - sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[5].setY(y_init_cord + (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                break;
-            case 20:
-                icon[0].setX((float) (x_init_cord + sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[0].setY(y_init_cord - (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[1].setX((float) (x_init_cord + sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[1].setY(y_init_cord - (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[2].setX((float) (x_init_cord + sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[2].setY(y_init_cord - (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[3].setX((float) (x_init_cord + sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[3].setY(y_init_cord + (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[4].setX((float) (x_init_cord + sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[4].setY(y_init_cord + (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[5].setX((float) (x_init_cord + sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[5].setY(y_init_cord + (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                break;
-            case 21:
-                icon[0].setX((float) (x_init_cord + sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[0].setY(y_init_cord - (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[1].setX((float) (x_init_cord + sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[1].setY(y_init_cord - (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[2].setX((float) (x_init_cord + sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[2].setY(y_init_cord - (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[3].setX((float) (x_init_cord + sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[3].setY(y_init_cord + (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[4].setX((float) (x_init_cord + sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[4].setY(y_init_cord + (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[5].setX((float) (x_init_cord + sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[5].setY(y_init_cord + (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                int distance2 = x_init_cord - (int)icon[0].getX();
-                Log.e(TAG, "x_init - x0 = " + distance2 + "\nx_init = "+ x_init_cord);
-                break;
-            case 22:
-                icon[0].setX((float) (x_init_cord + sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[0].setY(y_init_cord - (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[1].setX((float) (x_init_cord + sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[1].setY(y_init_cord - (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[2].setX((float) (x_init_cord + sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[2].setY(y_init_cord - (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[3].setX((float) (x_init_cord + sin74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[3].setY(y_init_cord + (float) cos74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[4].setX((float) (x_init_cord + sin42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[4].setY(y_init_cord + (float) cos42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[5].setX((float) (x_init_cord + sin10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[5].setY(y_init_cord + (float) cos10 * icon_distance_pxl - icon_24_dp_pxl);
-                break;
-
-            case 31:
-                icon[0].setX((float) (x_init_cord - cos10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[0].setY(y_init_cord - (float) sin10 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[1].setX((float) (x_init_cord - cos42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[1].setY(y_init_cord - (float) sin42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[2].setX((float) (x_init_cord - cos74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[2].setY(y_init_cord - (float) sin74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[3].setX((float) (x_init_cord + cos74 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[3].setY(y_init_cord - (float) sin74 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[4].setX((float) (x_init_cord + cos42 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[4].setY(y_init_cord - (float) sin42 * icon_distance_pxl - icon_24_dp_pxl);
-                icon[5].setX((float) (x_init_cord + cos10 * icon_distance_pxl) - icon_24_dp_pxl);
-                icon[5].setY(y_init_cord - (float) sin10 * icon_distance_pxl - icon_24_dp_pxl);
-                break;
-        }
-
-    }
-
-    public static void setFavoriteShortcutGridViewPosition(GridView gridView,float gridTall, float gridWide, int x_init_cord, int y_init_cord, float mScale, int edgePosition, WindowManager windowManager, SharedPreferences sharedPreferences, int distanceFromEdgeDp, int distanceVertical, int iconToSwitch) {
+    public static void setFavoriteGridViewPosition(View gridView,boolean isCenter ,  float gridTall, float gridWide, float xInit, float yInit, float mScale, int edgePosition, WindowManager windowManager,
+                                                   int distanceFromEdgeDp, int distanceVertical,
+                                                   Point windowSize) {
+//        Log.e(TAG, "setFavoriteGridViewPosition: width " + gridWide + "\ntall " + gridTall + "\nxInit " + xInit + "\nyInit " + yInit +
+//                "\noffsetHorizontal " + distanceFromEdgeDp + "\noffsetVertical " + distanceVertical);
+//        long time = System.currentTimeMillis();
         float distanceFromEdge = ((float)distanceFromEdgeDp) *mScale;
         float distanceVerticalFromEdge = ((float)distanceVertical)* mScale;
-        boolean isCenter = sharedPreferences.getBoolean(EdgeSetting.IS_CENTRE_FAVORITE, false);
         Point point = new Point();
         windowManager.getDefaultDisplay().getSize(point);
-        float x = point.x;
-        float y = point.y;
-        float[] triggerPoint = getTriggerPoint((float) x_init_cord, (float) y_init_cord, sharedPreferences, edgePosition, iconToSwitch, mScale);
+        float screenWidth = point.x;
+        float screenHeight = point.y;
         if (!isCenter) {
             switch (edgePosition) {
                 case 10:
-                    gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
-                    if (iconToSwitch != -1) {
-                        if (triggerPoint[1] - gridTall / 2 < distanceVerticalFromEdge) {
-                            gridView.setY(distanceVerticalFromEdge);
-                        } else {
-                            gridView.setY(triggerPoint[1] - gridTall/2);
-                        }
-                    } else {
+                    gridView.setX( xInit - distanceFromEdge - gridWide);
+                    if (yInit - gridTall / 2 < distanceVerticalFromEdge) {
                         gridView.setY(distanceVerticalFromEdge);
+                    } else {
+                        gridView.setY(yInit - gridTall/2);
                     }
-
                     break;
                 case 11:
-//                    if (x_init_cord - triggerPoint[0] < distanceFromEdge) {
-                        gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
-//                    } else {
-//                        gridView.setX(triggerPoint[0] - gridWide + 24*mScale);
-//                    }
-//                    if (((float) y_init_cord) - gridTall / (float)2 < 0) {
-//                        gridView.setY(0);
-//                    } else if (((float) y_init_cord) - gridTall /(float) 2 + gridTall > y) {
-//                        gridView.setY(y - gridTall);
-//                    } else {
-//                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
-//                    }
-                    if (iconToSwitch >1) {
-                        gridView.setY(triggerPoint[1] - gridTall / (float) 2);
-                    } else {
-                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
-                    }
-
+                    gridView.setX( xInit - distanceFromEdge - gridWide);
+                    if (yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(distanceVerticalFromEdge);
+                    } else if (screenHeight - yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(screenHeight - gridTall - distanceVerticalFromEdge);
+                    }else gridView.setY(yInit - gridTall/2);
                     break;
                 case 12:
-                    gridView.setX(((float) x_init_cord) - distanceFromEdge - gridWide);
-                    if (y - triggerPoint[1] - gridTall / 2 < distanceVerticalFromEdge) {
-                        gridView.setY(y - gridTall - distanceVerticalFromEdge);
+                    gridView.setX(( xInit) - distanceFromEdge - gridWide);
+                    if (screenHeight - yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(screenHeight - gridTall - distanceVerticalFromEdge);
                     } else {
-                        gridView.setY(triggerPoint[1] - gridTall/2);
+                        gridView.setY(yInit - gridTall/2);
                     }
-
                     break;
                 case 20:
-                    gridView.setX(((float) x_init_cord) + distanceFromEdge);
-                    if (iconToSwitch != -1) {
-                        if (triggerPoint[1] - gridTall / 2 < distanceVerticalFromEdge) {
-                            gridView.setY(distanceVerticalFromEdge);
-                        } else {
-                            gridView.setY(triggerPoint[1] - gridTall/2);
-                        }
-                    } else {
+                    gridView.setX(( xInit) + distanceFromEdge);
+                    if (yInit - gridTall / 2 < distanceVerticalFromEdge) {
                         gridView.setY(distanceVerticalFromEdge);
-                    }
+                    } else if (screenHeight - yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(screenHeight - gridTall - distanceVerticalFromEdge);
+                    }else gridView.setY(yInit - gridTall/2);
                     break;
                 case 21:
-                    gridView.setX(((float) x_init_cord) + distanceFromEdge);
-//                    if (((float) y_init_cord) - gridTall /(float) 2 < 0) {
-//                        gridView.setY(0);
-//                    } else if (((float) y_init_cord) - gridTall /(float) 2 + gridTall > y) {
-//                        gridView.setY(y - gridTall);
-//                    } else {
-//                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
-//                    }
-                    if (iconToSwitch >1) {
-                        gridView.setY(triggerPoint[1] - gridTall / (float) 2);
-                    } else {
-                        gridView.setY(((float) y_init_cord) - gridTall /(float) 2);
-                    }
+                    gridView.setX(( xInit) + distanceFromEdge);
+//                    gridView.setY(( yInit) - gridTall /(float) 2);
+                    if (yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(distanceVerticalFromEdge);
+                    } else if (screenHeight - yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(screenHeight - gridTall - distanceVerticalFromEdge);
+                    }else gridView.setY(yInit - gridTall/2);
                     break;
                 case 22:
-                    gridView.setX(((float) x_init_cord) + distanceFromEdge);
-                    if (y - triggerPoint[1] - gridTall / 2 < distanceVerticalFromEdge) {
-                        gridView.setY(y - gridTall - distanceVerticalFromEdge);
-                    } else {
-                        gridView.setY(triggerPoint[1] - gridTall/2);
-                    }
+                    gridView.setX(( xInit) + distanceFromEdge);
+//                    if (screenHeight - yInit - gridTall / 2 < distanceVerticalFromEdge) {
+//                        gridView.setY(screenHeight - gridTall - distanceVerticalFromEdge);
+//                    } else {
+//                        gridView.setY(yInit - gridTall/2);
+//                    }
+                    if (yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(distanceVerticalFromEdge);
+                    } else if (screenHeight - yInit - gridTall / 2 < distanceVerticalFromEdge) {
+                        gridView.setY(screenHeight - gridTall - distanceVerticalFromEdge);
+                    }else gridView.setY(yInit - gridTall/2);
                     break;
                 case 31:
-                    if (iconToSwitch != -1) {
-                        gridView.setX(triggerPoint[0] - gridWide / (float) 2);
+                    if (xInit - gridWide / (float) 2 > distanceFromEdge &&
+                            xInit + gridWide / (float) 2 < (windowSize.x - distanceFromEdge)) {
+                        gridView.setX((xInit) - gridWide / (float) 2);
                     } else {
-                        gridView.setX(((float) x_init_cord) - gridWide /(float) 2);
+                        if (xInit - gridWide / (float) 2 < distanceFromEdge) {
+                            gridView.setX(distanceFromEdge);
+                        } else {
+                            gridView.setX(windowSize.x - distanceFromEdge - gridWide);
+                        }
                     }
-                    gridView.setY(((float) y_init_cord) - distanceVerticalFromEdge - gridTall);
+                    gridView.setY(( yInit) - distanceVerticalFromEdge - gridTall);
                     break;
             }
         } else {
-            gridView.setX((x-gridWide)/2);
-            gridView.setY((y-gridTall)/2);
+            gridView.setX((screenWidth-gridWide)/2);
+            gridView.setY((screenHeight-gridTall)/2);
         }
 
-    }
-
-    public static float[] getTriggerPoint(float x_init,float y_init,SharedPreferences sharedPreferences, int edgePosition, int iconToSwitch, float mScale) {
-        float[] returnValue = new float[2];
-        float circleSize = mScale * (float) sharedPreferences.getInt(EdgeSetting.ICON_DISTANCE_KEY, 105);
-//        float iconScale = sharedPreferences.getFloat(EdgeSetting.ICON_SCALE, 1f);
-//        float iconSize24 = iconScale *mScale * 24;
-        double alpha, beta, alphaOfIconToSwitch;
-        alpha = 0.0556 * Math.PI; // 10 degree
-        beta = Math.PI - 2 * alpha;
-        alphaOfIconToSwitch = alpha + iconToSwitch * (beta / 5);
-        switch (edgePosition / 10) {
-            case 1:
-                returnValue[0] = x_init - circleSize * (float) Math.sin(alphaOfIconToSwitch);
-                returnValue[1] = y_init - circleSize * (float) Math.cos(alphaOfIconToSwitch);
-                break;
-            case 2:
-                returnValue[0] = x_init + circleSize * (float) Math.sin(alphaOfIconToSwitch);
-                returnValue[1] = y_init - circleSize * (float) Math.cos(alphaOfIconToSwitch);
-//                        icon[i].setX(x_i + r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
-//                        icon[i].setY(y_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
-                break;
-            case 3:
-                returnValue[0] = x_init - circleSize * (float) Math.cos(alphaOfIconToSwitch);
-                returnValue[1] = y_init - circleSize * (float) Math.sin(alphaOfIconToSwitch);
-//                        icon[i].setX(x_i - r * (float) Math.cos(alphaN[i]) - icon_24_dp_pxl);
-//                        icon[i].setY(y_i - r * (float) Math.sin(alphaN[i]) - icon_24_dp_pxl);
-                break;
-        }
-        return returnValue;
+//        Log.e(TAG, "setFavoriteGridViewPosition: time spent = " + (System.currentTimeMillis() - time));
     }
 
 
-    public static int isHomeOrBackOrNoti(int x_init_int, int y_init_int, int x_int, int y_int, int radius_int, float mScale, int position){
-        double x_init = (double)x_init_int;
-        double y_init = (double)y_init_int;
-        double x = (double) x_int;
-        double y = (double) y_int;
-        double radius = (double) radius_int;
-        double distance = Math.sqrt(Math.pow((double)x - (double)x_init,2) + Math.pow((double)y - (double) y_init, 2));
-        double distanceNeeded_pxl = (double) ((35+ radius)* mScale);
-        double maxAng = 0.4166*Math.PI;  // 75 degree
-        double midAng = 0.3333* Math.PI; //60 degree
-        double minAng = 0.0833*Math.PI; //15 degree
-        double ang30 = 0.1666*Math.PI;
-        double ang70 = 0.3889*Math.PI;
-        double ang110 = 0.6111*Math.PI;
-        double alpha;
-        if (distance < distanceNeeded_pxl) {
-            return 0;
-        }
 
-        if (position >= 30) {
-            alpha = Math.acos((x_init - x) / distance);
-        }else {
-            alpha = Math.acos((y_init-y)/distance);
-        }
-        if (alpha < ang30) {
-            return 1;
-        }else if (alpha < ang70) {
-            return 2;
-        }else if (alpha < ang110) {
-            return 3;
-        }else return 4;
-
-    }
-//    public static int[] getExpandSpec(int x_init,int y_init,int rad, int distanceFromIcon,WindowManager win){
-//        int[] result = new int[4];
-//        int rad_pxl = dpiToPixels(rad,win);
-//        int distance_pxl = dpiToPixels(distanceFromIcon,win);
-//        double radian30 = 0.16667* Math.PI;
-//        double sin30 = Math.sin(radian30);
-//        double cos30 = Math.cos(radian30);
-//        int a = 2* (int)((rad_pxl+ distance_pxl)*sin30);
-//        int b = rad_pxl + distance_pxl - (int)((rad_pxl+distance_pxl)*cos30);
-//        result[0] = x_init -(int)( (rad_pxl + distance_pxl)*sin30);
-//        result[1] = y_init - (int)(rad_pxl*cos30) -(int)( distance_pxl*cos30) - b;
-//        result[2] = result[0] + a;
-//        result[3] = result[1] + b;
-//        Log.e("expand", "left = " + result[0]+ "\ntop =" + result[1] + "\nright = "+ result[2] + "\nbottom = "+ result[3] +"\na = "+ a + "\nb = "+ b +"\nsin30= "
-//        + sin30+ "\ncos30 = "+ cos30 + "\ndistance = " +distance_pxl + "\nradpx; = "+rad_pxl);
-//        return result;
-//    }
 
     public static int getPositionIntFromString(String position, Context context){
-        String[] array = context.getResources().getStringArray(R.array.edge_dialog_spinner_array);
+        String[] array = context.getResources().getStringArray(R.array.edge_positions_array);
         if (position.equals(array[0])){
             return 10;
         }else if (position.equals(array[1])){
@@ -657,8 +240,7 @@ public  class Utility {
 
 
     // get installed apps but skip the system apps
-    public static Set<PackageInfo> getInstalledApps(Context ctx) {
-        final PackageManager packageManager = ctx.getPackageManager();
+    public static Set<PackageInfo> getInstalledApps(PackageManager packageManager) {
 
         final List<PackageInfo> allInstalledPackages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA);
         final Set<PackageInfo> filteredPackages = new HashSet();
@@ -666,35 +248,24 @@ public  class Utility {
         Drawable defaultActivityIcon = packageManager.getDefaultActivityIcon();
 
         for(PackageInfo each : allInstalledPackages) {
-//            if(ctx.getPackageName().equals(each.packageName)) {
-//                continue;  // skip own app
-//            }
-
             try {
                 // add only apps with application icon
                 Intent intentOfStartActivity = packageManager.getLaunchIntentForPackage(each.packageName);
                 if(intentOfStartActivity == null)
                     continue;
-
-                Drawable applicationIcon = packageManager.getActivityIcon(intentOfStartActivity);
-                if(applicationIcon != null && !defaultActivityIcon.equals(applicationIcon)) {
-                    filteredPackages.add(each);
+                try {
+                    Drawable applicationIcon = packageManager.getActivityIcon(intentOfStartActivity);
+                    if (applicationIcon != null && !defaultActivityIcon.equals(applicationIcon)) {
+                        filteredPackages.add(each);
+                    }
+                } catch (OutOfMemoryError error) {
+                    error.printStackTrace();
+                    Log.e(TAG, "getInstalledApps: " + error);
                 }
             } catch (PackageManager.NameNotFoundException e) {
                 Log.i("MyTag", "Unknown package name " + each.packageName);
             }
         }
-
-
-
-//        Intent i = new Intent(Intent.ACTION_MAIN, null);
-//        i.addCategory(Intent.CATEGORY_LAUNCHER);
-//
-//        List<ResolveInfo> availableActivities = packageManager.queryIntentActivities(i, 0);
-//        for(ResolveInfo ri:availableActivities){
-//
-//        }
-
         return filteredPackages;
     }
 
@@ -715,13 +286,13 @@ public  class Utility {
         return false;
     }
 
-    public static void goHome(final Context context) {
-        final Intent intent = new Intent(context, (Class)MainActivity.class);
-        final Bundle bundle = new Bundle();
-        bundle.putInt("goHome", 1);
-        intent.putExtras(bundle);
-        intent.setFlags(268435456);
-        context.startActivity(intent);
+    public static boolean canGetRecentApps(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AppOpsManager appOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+            int mode = appOps.checkOpNoThrow("android:get_usage_stats",
+                    android.os.Process.myUid(), context.getPackageName());
+            return mode == AppOpsManager.MODE_ALLOWED;
+        } else return true;
     }
 
 
@@ -813,264 +384,67 @@ public  class Utility {
 
     public static int getActionFromLabel(Context context, String label) {
         if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_wifi))) {
-            return Shortcut.ACTION_WIFI;
+            return Item.ACTION_WIFI;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_bluetooth))) {
-            return Shortcut.ACTION_BLUETOOTH;
+            return Item.ACTION_BLUETOOTH;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_rotation))) {
-            return Shortcut.ACTION_ROTATION;
+            return Item.ACTION_ROTATION;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_power_menu))) {
-            return Shortcut.ACTION_POWER_MENU;
+            return Item.ACTION_POWER_MENU;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_home))) {
-            return Shortcut.ACTION_HOME;
+            return Item.ACTION_HOME;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_back))) {
-            return Shortcut.ACTION_BACK;
+            return Item.ACTION_BACK;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_noti))) {
-            return Shortcut.ACTION_NOTI;
+            return Item.ACTION_NOTI;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_last_app))) {
-            return Shortcut.ACTION_LAST_APP;
+            return Item.ACTION_LAST_APP;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_call_log))) {
-            return Shortcut.ACTION_CALL_LOGS;
+            return Item.ACTION_CALL_LOGS;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_contact))) {
-            return Shortcut.ACTION_CONTACT;
+            return Item.ACTION_CONTACT;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_recent))) {
-            return Shortcut.ACTION_RECENT;
+            return Item.ACTION_RECENT;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_volume))) {
-            return Shortcut.ACTION_VOLUME;
+            return Item.ACTION_VOLUME;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_brightness))) {
-            return Shortcut.ACTION_BRIGHTNESS;
+            return Item.ACTION_BRIGHTNESS;
         }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_ringer_mode))) {
-            return Shortcut.ACTION_RINGER_MODE;
-        }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_dial))) {
-            return Shortcut.ACTION_DIAL;
-        }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_flash_light))) {
-            return Shortcut.ACTION_FLASH_LIGHT;
-        }  else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_screen_lock))) {
-            return Shortcut.ACTION_SCREEN_LOCK;
-        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_none))) {
-            return Shortcut.ACTION_NONE;
-        }else return -1;
-    }
-
-    public static int getSizeOfFavoriteGrid(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.DEFAULT_SHAREDPREFERENCE, 0);
-        return sharedPreferences.getInt(EdgeSetting.NUM_OF_GRID_ROW_KEY, 5) * sharedPreferences.getInt(EdgeSetting.NUM_OF_GRID_COLUMN_KEY, 4);
-    }
-
-    public static Bitmap getBitmapFromAction(Context context,SharedPreferences sharedPreferences, int actionButton) {
-        String action = MainActivity.ACTION_NONE;
-        switch (actionButton) {
-            case 1:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO);
-                break;
-            case 2:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_HOME);
-                break;
-            case 3:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_BACK);
-                break;
-            case 4:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
-                break;
+            return Item.ACTION_RINGER_MODE;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_dial))) {
+            return Item.ACTION_DIAL;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_flash_light))) {
+            return Item.ACTION_FLASH_LIGHT;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.screen_shot))) {
+            return Item.ACTION_SCREENSHOT;
+        }else if (label.equalsIgnoreCase(context.getResources().getString(R.string.setting_shortcut_search_shortcuts))) {
+            return Item.ACTION_SEARCH_SHORTCUTS;
+        }else {
+            throw new IllegalArgumentException("do not support this shortcut " + label);
         }
-        switch (action) {
-            case MainActivity.ACTION_HOME:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_home);
-            case MainActivity.ACTION_BACK:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_back);
-            case MainActivity.ACTION_WIFI:
-                if (getWifiState(context)) {
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_wifi);
-                }else
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_wifi_no_bound_off);
-
-            case MainActivity.ACTION_NOTI:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_expand);
-            case MainActivity.ACTION_BLUETOOTH:
-                if (getBluetoothState(context)) {
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_bluetooth);
-                } else {
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_bluetooth_no_bound_off);
-                }
-            case MainActivity.ACTION_ROTATE:
-                if (getIsRotationAuto(context)) {
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_rotate_no_bound_auto);
-                } else {
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_rotate_no_bound_lock);
-                }
-            case MainActivity.ACTION_POWER_MENU:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_power_menu_no_bound);
-            case MainActivity.ACTION_LAST_APP:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_last_app);
-            case MainActivity.ACTION_CALL_LOGS:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_call_log);
-            case MainActivity.ACTION_CONTACT:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_contact);
-            case MainActivity.ACTION_DIAL:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_dial);
-            case MainActivity.ACTION_RECENT:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_icon_recent_5122);
-            case MainActivity.ACTION_VOLUME:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_volume);
-            case MainActivity.ACTION_BRIGHTNESS:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_brightness);
-            case MainActivity.ACTION_RINGER_MODE:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_sound_normal);
-            case MainActivity.ACTION_FLASH_LIGHT:
-                if (EdgeGestureService.FLASH_LIGHT_ON) {
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_flash_light_on);
-                } else {
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_flash_light_off);
-                }
-            case MainActivity.ACTION_SCREEN_LOCK:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_lock);
-            case MainActivity.ACTION_INSTANT_FAVO:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_instant_favorite_512);
-            case MainActivity.ACTION_NONE:
-                return null;
-
-        }
-        return null;
     }
 
-    public static Bitmap getBitmapForOuterSetting(Context context,String action) {
-        switch (action) {
-            case MainActivity.ACTION_HOME:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_home);
-            case MainActivity.ACTION_BACK:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_back);
-            case MainActivity.ACTION_WIFI:
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_wifi);
-            case MainActivity.ACTION_NOTI:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_expand);
-            case MainActivity.ACTION_BLUETOOTH:
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_bluetooth);
-            case MainActivity.ACTION_ROTATE:
-                    return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_rotate_no_bound_auto);
-            case MainActivity.ACTION_POWER_MENU:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_power_menu_no_bound);
-            case MainActivity.ACTION_LAST_APP:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_last_app);
-            case MainActivity.ACTION_CALL_LOGS:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_call_log);
-            case MainActivity.ACTION_CONTACT:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_contact);
-            case MainActivity.ACTION_DIAL:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_dial);
-            case MainActivity.ACTION_RECENT:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_icon_recent_5122);
-            case MainActivity.ACTION_VOLUME:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_volume);
-            case MainActivity.ACTION_BRIGHTNESS:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_brightness);
-            case MainActivity.ACTION_RINGER_MODE:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_sound_normal);
-            case MainActivity.ACTION_FLASH_LIGHT:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_flash_light_on);
-            case MainActivity.ACTION_SCREEN_LOCK:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_screen_lock);
-            case MainActivity.ACTION_NONE:
-                return null;
-            case MainActivity.ACTION_INSTANT_FAVO:
-                return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_action_instant_favorite_512);
-        }
-        return null;
-    }
-
-    public static String getLabelForOuterSetting(Context context, String action) {
-        switch (action) {
-            case MainActivity.ACTION_HOME:
-                return context.getString(R.string.setting_shortcut_home);
-            case MainActivity.ACTION_BACK:
-                return context.getString(R.string.setting_shortcut_back);
-            case MainActivity.ACTION_WIFI:
-                return context.getString(R.string.setting_shortcut_wifi);
-            case MainActivity.ACTION_NOTI:
-                return context.getString(R.string.setting_shortcut_noti);
-            case MainActivity.ACTION_BLUETOOTH:
-                return context.getString(R.string.setting_shortcut_bluetooth);
-            case MainActivity.ACTION_ROTATE:
-                return context.getString(R.string.setting_shortcut_rotation);
-            case MainActivity.ACTION_POWER_MENU:
-                return context.getString(R.string.setting_shortcut_power_menu);
-            case MainActivity.ACTION_LAST_APP:
-                return context.getString(R.string.setting_shortcut_last_app);
-            case MainActivity.ACTION_CALL_LOGS:
-                return context.getString(R.string.setting_shortcut_call_log);
-            case MainActivity.ACTION_CONTACT:
-                return context.getString(R.string.setting_shortcut_contact);
-            case MainActivity.ACTION_DIAL:
-                return context.getString(R.string.setting_shortcut_dial);
-            case MainActivity.ACTION_RECENT:
-                return context.getString(R.string.setting_shortcut_recent);
-            case MainActivity.ACTION_VOLUME:
-                return context.getString(R.string.setting_shortcut_volume);
-            case MainActivity.ACTION_BRIGHTNESS:
-                return context.getString(R.string.setting_shortcut_brightness);
-            case MainActivity.ACTION_RINGER_MODE:
-                return context.getString(R.string.setting_shortcut_ringer_mode);
-            case MainActivity.ACTION_FLASH_LIGHT:
-                return context.getString(R.string.setting_shortcut_flash_light);
-            case MainActivity.ACTION_SCREEN_LOCK:
-                return context.getString(R.string.setting_shortcut_screen_lock);
-            case MainActivity.ACTION_NONE:
-                return context.getString(R.string.setting_shortcut_none);
-            case MainActivity.ACTION_INSTANT_FAVO:
-                return context.getString(R.string.setting_shortcut_instant_favorite);
-        }
-        return "";
-    }
-
-    public static void homeAction(Context context, View v,String className, String packageName) {
+    public static void startHomeAction(Context context) {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
 
-
-//        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-//        event1.setClassName(className);
-//        event1.getText().add("home");
-//        event1.setAction(1);
-//        event1.setPackageName(packageName);
-//        event1.setEnabled(true);
-//        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-//        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-//        recordCompat.setSource(v);
-//        if (Utility.isAccessibilityEnable(context)) {
-//            manager.sendAccessibilityEvent(event1);
-//        }else Toast.makeText(context, R.string.ask_user_to_turn_on_accessibility_toast, Toast.LENGTH_LONG).show();
+    public static void startBackAction(Context context) {
+//        context.sendBroadcast(new Intent(Cons.ACTION_BACK));
+        EventBus.INSTANCE.fireEvent(Cons.ACTION_BACK);
+        if (!Utility.isAccessibilityEnable(context)) {
+            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
+        }
     }
 
 
-
-    public static void backAction(Context context, View v, String className, String packageName) {
-        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-        event1.setClassName(className);
-        event1.getText().add("back");
-        event1.setAction(2);
-        event1.setPackageName(packageName);
-        event1.setEnabled(true);
-        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-        recordCompat.setSource(v);
-        if (Utility.isAccessibilityEnable(context)) {
-            manager.sendAccessibilityEvent(event1);
-        }else startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
-    }
-
-    public static void recentAction(Context context, View v, String className, String packageName) {
-        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-        event1.setClassName(className);
-        event1.getText().add("recent");
-        event1.setAction(5);
-        event1.setPackageName(packageName);
-        event1.setEnabled(true);
-        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-        recordCompat.setSource(v);
-        if (Utility.isAccessibilityEnable(context)) {
-            manager.sendAccessibilityEvent(event1);
-        }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+    public static void startRecentAction(Context context) {
+        context.sendBroadcast(new Intent(Cons.ACTION_RECENT));
+        if (!Utility.isAccessibilityEnable(context)) {
+            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
+        }
     }
 
     public static void volumeAction(Context context) {
@@ -1082,75 +456,77 @@ public  class Utility {
     }
 
     public static void startNotiDialog(Context context, int type) {
-        Intent intent = new Intent(context, NotiDialog.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        intent.putExtra(NotiDialog.TYPE_KEY, type);
-        context.startActivity(intent);
+        context.startActivity(NotiDialog.getIntent(context, type));
     }
 
-    public static void flashLightAction(Context context, boolean actionOn) {
+    public static void needUsageAccessDialog(Context context) {
+        context.startActivity(NotiDialog.getIntent(context, NotiDialog.USAGE_ACCESS_PERMISSION));
+    }
+
+    public static boolean checkUsageAccess(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AppOpsManager appOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+            int mode = appOps.checkOpNoThrow("android:get_usage_stats",
+                    android.os.Process.myUid(), context.getPackageName());
+            return mode == AppOpsManager.MODE_ALLOWED;
+        } else return true;
+    }
+
+
+    public static void flashLightAction3(Context context) {
         Intent i = new Intent(context, Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? FlashServiceM.class : FlashService.class);
-        if (actionOn) {
+        if (!NewServiceView.FLASH_LIGHT_ON) {
             context.startService(i);
-            EdgeGestureService.FLASH_LIGHT_ON = true;
+            NewServiceView.FLASH_LIGHT_ON = true;
         } else {
-            Log.e(TAG, "flashLightAction: actionOn = " + actionOn + "\nstop flash service");
             context.stopService(i);
-            EdgeGestureService.FLASH_LIGHT_ON = false;
+            NewServiceView.FLASH_LIGHT_ON = false;
         }
     }
 
-    public static void screenLockAction(Context context) {
-        final DevicePolicyManager pm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-        ComponentName cm = new ComponentName(context, LockAdmin.class);
-        Log.e(TAG, "screenLockAction: ");
-
-        if (pm.isAdminActive(cm)) {
-            Log.e(TAG, "screenLockAction: permission ok");
-            Runnable lockRunnable = new Runnable() {
-
-                @Override
-                public void run() {
-                    pm.lockNow();
-                }
-            };
-            Handler handler = new Handler();
-            handler.post(lockRunnable);
-
-        } else {
-            startNotiDialog(context,NotiDialog.PHONE_ADMIN_PERMISSION);
-        }
-    }
 
     public static void brightnessAction(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.System.canWrite(context)) {
+//            Intent intent = new Intent(context, ScreenBrightnessDialogActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+//            context.startActivity(intent);
+
             Intent intent = new Intent(context, ScreenBrightnessDialogActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-            context.startActivity(intent);
+            PendingIntent pendingIntent =
+                    PendingIntent.getActivity(context, 0, intent, 0);
+            try {
+                pendingIntent.send();
+            } catch (PendingIntent.CanceledException e) {
+                e.printStackTrace();
+            }
+
         } else {
             startNotiDialog(context, NotiDialog.WRITE_SETTING_PERMISSION);
         }
 
     }
 
-    public static void powerAction(Context context, View v, String className, String packageName) {
-        AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-        event1.setClassName(className);
-        event1.getText().add("power");
-        event1.setAction(3);
-        event1.setPackageName(packageName);
-        event1.setEnabled(true);
-        AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-        AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-        recordCompat.setSource(v);
-        if (Utility.isAccessibilityEnable(context)) {
-            manager.sendAccessibilityEvent(event1);
-        }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+
+
+    public static void startPowerAction(Context context) {
+
+        context.sendBroadcast(new Intent(Cons.ACTION_POWER_MENU));
+        if (!Utility.isAccessibilityEnable(context)) {
+            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
+        }
     }
 
-    public static void notiAction(Context context, View v, String className, String packageName) {
+    public static void screenshotAction(Context context) {
+        Intent intent = new Intent(context, ScreenshotView.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        context.startActivity(intent);
+    }
+
+    public static void startNotiAction(Context context) {
         Object sbservice =context.getSystemService("statusbar");
         try {
             Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
@@ -1164,73 +540,26 @@ public  class Utility {
         } catch (ClassNotFoundException e) {
             Log.e(TAG, "ClassNotFound " + e);
         } catch (NoSuchMethodException e) {
-            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-            event1.setClassName(className);
-            event1.getText().add("noti");
-            event1.setAction(4);
-            event1.setPackageName(packageName);
-            event1.setEnabled(true);
-            AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-            recordCompat.setSource(v);
-            if (Utility.isAccessibilityEnable(context)) {
-                manager.sendAccessibilityEvent(event1);
-            }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+            notiActionByAccessibility(context);
         } catch (IllegalAccessException e) {
-            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-            event1.setClassName(className);
-            event1.getText().add("noti");
-            event1.setAction(4);
-            event1.setPackageName(packageName);
-            event1.setEnabled(true);
-            AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-            recordCompat.setSource(v);
-            if (Utility.isAccessibilityEnable(context)) {
-                manager.sendAccessibilityEvent(event1);
-            }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+            notiActionByAccessibility(context);
             Log.e(TAG, "IllegalAccessException " + e);
         } catch (InvocationTargetException e) {
-            AccessibilityEvent event1 = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_TOUCH_INTERACTION_END);
-            event1.setClassName(className);
-            event1.getText().add("noti");
-            event1.setAction(4);
-            event1.setPackageName(packageName);
-            event1.setEnabled(true);
-            AccessibilityManager manager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-            AccessibilityRecordCompat recordCompat = AccessibilityEventCompat.asRecord(event1);
-            recordCompat.setSource(v);
-            if (Utility.isAccessibilityEnable(context)) {
-                manager.sendAccessibilityEvent(event1);
-            }else Toast.makeText(context,R.string.ask_user_to_turn_on_accessibility_toast,Toast.LENGTH_LONG).show();
+            notiActionByAccessibility(context);
             Log.e(TAG, "InvocationTargetException " + e);
         }
     }
 
-    public static void lastAppAction(Context context, String packageName) {
-        Intent extApp = null;
 
-        extApp = context.getPackageManager().getLaunchIntentForPackage(packageName);
+    private static void notiActionByAccessibility(Context context) {
+        context.sendBroadcast(new Intent(Cons.ACTION_NOTI));
+        if (!Utility.isAccessibilityEnable(context)) {
+            startNotiDialog(context,NotiDialog.ACCESSIBILITY_PERMISSION);
+        }
+    }
 
-
-        if (extApp != null) {
-            ComponentName componentName = extApp.getComponent();
-//            Intent startApp = new Intent(Intent.ACTION_MAIN, null);
-//            startApp.addCategory(Intent.CATEGORY_LAUNCHER);
-//            startApp.setComponent(componentName);
-//            startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//            extApp.addFlags(805306368);
-//            context.startActivity(extApp);
-            Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
-            startAppIntent.setComponent(componentName);
-            startAppIntent.addFlags(1064960);
-            startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startAppIntent.setFlags(270532608);
-            startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-            context.startActivity(startAppIntent);
-            Log.e(TAG, "packageToSwitch = " + packageName);
-        } else Log.e(TAG, "extApp = null ");
+    public static void lastAppAction(Context context, String packageName, boolean useTransition) {
+        startApp(packageName, context, false, useTransition);
     }
 
     public static void callLogsAction(Context context) {
@@ -1261,17 +590,22 @@ public  class Utility {
         }
     }
 
-    public static void setRinggerMode(Context context) {
+    public static void setRinggerMode(Context context, int ringerModeAction) {
         AudioManager manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         switch (getRingerMode(context)) {
             case 0:
-                manager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                manager.setRingerMode(ringerModeAction == Cons.RINGER_MODE_ACTION_SOUND_AND_VIBRATE?
+                        AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT);
                 break;
             case 1:
                 manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 break;
             case 2:
-                manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                try {
+                    manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                } catch (SecurityException e) {
+                    Toast.makeText(context, R.string.turn_off_do_not_disturb_first, Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
@@ -1282,141 +616,7 @@ public  class Utility {
         context.startActivity(intent);
     }
 
-    public static void executeAction(Context context, String action, View v, String className, String packageName, String lastAppPackageName) {
-        switch (action) {
-            case MainActivity.ACTION_HOME:
-//                homeAction(context,v,className,packageName);
-                homeAction(context, v, className, packageName);
-                break;
-            case MainActivity.ACTION_BACK:
-                backAction(context,v,className,packageName);
-                break;
-            case MainActivity.ACTION_NOTI:
-                notiAction(context,v,className,packageName);
-                break;
-            case MainActivity.ACTION_WIFI:
-                toggleWifi(context);
-                break;
-            case MainActivity.ACTION_BLUETOOTH:
-                toggleBluetooth(context);
-                break;
-            case MainActivity.ACTION_ROTATE:
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    Utility.setAutorotation(context);
-                } else {
-                    if (Settings.System.canWrite(context)) {
-                        Utility.setAutorotation(context);
-                    } else {
-                        startNotiDialog(context, NotiDialog.WRITE_SETTING_PERMISSION);
-//                        Intent notiIntent = new Intent();
-//                        notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-//                        PendingIntent notiPending = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-//                        builder.setContentTitle(context.getString(R.string.ask_for_write_setting_notification_title)).setContentText(context.getString(R.string.ask_for_write_setting_notification_text)).setSmallIcon(R.drawable.ic_settings_white_36px)
-//                                .setContentIntent(notiPending)
-//                                .setPriority(NotificationCompat.PRIORITY_HIGH)
-//                                .setDefaults(NotificationCompat.DEFAULT_SOUND);
-//                        Notification notification = builder.build();
-//                        NotificationManager notificationManager = (NotificationManager)context.getSystemService(context.NOTIFICATION_SERVICE);
-//                        notificationManager.notify(22, notification);
-                    }
-                }
-                break;
-            case MainActivity.ACTION_NONE:
-                //nothing
-                break;
-            case MainActivity.ACTION_POWER_MENU:
-                powerAction(context,v,className,packageName);
-                break;
-            case MainActivity.ACTION_LAST_APP:
-                lastAppAction(context, lastAppPackageName);
-                break;
-            case MainActivity.ACTION_CONTACT:
-                contactAction(context);
-                break;
-            case MainActivity.ACTION_CALL_LOGS:
-                callLogsAction(context);
-                break;
-            case MainActivity.ACTION_DIAL:
-                dialAction(context);
-                break;
-            case MainActivity.ACTION_RECENT:
-                recentAction(context,v,className,packageName);
-                break;
-            case MainActivity.ACTION_VOLUME:
-                volumeAction(context);
-                break;
-            case MainActivity.ACTION_BRIGHTNESS:
-                brightnessAction(context);
-                break;
-            case MainActivity.ACTION_RINGER_MODE:
-                setRinggerMode(context);
-                break;
-            case MainActivity.ACTION_FLASH_LIGHT:
-                flashLightAction(context,!EdgeGestureService.FLASH_LIGHT_ON);
-                break;
-            case MainActivity.ACTION_SCREEN_LOCK:
-                screenLockAction(context);
-                break;
-        }
-    }
 
-    public static View disPlayClock(Context context, WindowManager windowManager, boolean isAnimation, int animationTime, boolean disableClock) {
-        if (animationTime <= 50) {
-            isAnimation = false;
-        }
-        LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.clock, null);
-        LinearLayout clock = (LinearLayout) view.findViewById(R.id.clock_linear_layout);
-
-
-        if (!disableClock) {
-            Calendar c = Calendar.getInstance();
-            int mHour;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
-            clock.setVisibility(View.VISIBLE);
-            TextView hourTextView = (TextView) view.findViewById(R.id.clock_time_in_hour);
-            TextView dateTextView = (TextView) view.findViewById(R.id.clock_time_in_date);
-            TextView batteryLifeTextView = (TextView) view.findViewById(R.id.clock_battery_life);
-            String batteryString = context.getString(R.string.batterylife) + " " + getBatteryLevel(context) + "%";
-            if (batteryLifeTextView != null) {
-                batteryLifeTextView.setText(batteryString);
-            }
-            if (dateTextView != null) {
-                dateTextView.setText(dateFormat.format(c.getTime()));
-            }
-            if (!DateFormat.is24HourFormat(context)) {
-                SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm");
-                if (hourTextView != null) {
-                    hourTextView.setText(hourFormat.format(c.getTime()));
-                }
-            } else {
-                SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
-                if (hourTextView != null) {
-                    hourTextView.setText(hourFormat.format(c.getTime()));
-                }
-            }
-        } else {
-            clock.setVisibility(View.GONE);
-        }
-
-
-        WindowManager.LayoutParams paramsEdge1 = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                PixelFormat.TRANSLUCENT);
-        paramsEdge1.gravity = Gravity.TOP|Gravity.CENTER_HORIZONTAL;
-        windowManager.addView(view, paramsEdge1);
-        if (isAnimation) {
-            view.setAlpha(0f);
-            view.animate().alpha(1f).setDuration(animationTime).setInterpolator(new FastOutSlowInInterpolator());
-
-        }
-        return view;
-
-    }
     public static int getBatteryLevel(Context context) {
         Intent batteryIntent =context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         int level,scale;
@@ -1435,51 +635,6 @@ public  class Utility {
         return((int) (((float)level / (float)scale) * 100.0f));
     }
 
-    public static String getForegroundApp(Context context) {
-        ActivityManager.RunningAppProcessInfo resultInfo=null, info=null;
-        ActivityManager mActivityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
-        List <ActivityManager.RunningAppProcessInfo> l = mActivityManager.getRunningAppProcesses();
-        Iterator<ActivityManager.RunningAppProcessInfo> i = l.iterator();
-        Log.e(TAG, "list size = " + l.size());
-        while(i.hasNext()){
-            info = i.next();
-            if(info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
-                    ) {
-                if (!isRunningService(context, info.processName, mActivityManager)) {
-                    resultInfo = info;
-                    break;
-                } else {
-                    Log.e(TAG, "info = " + info.processName);
-                }
-            }
-        }
-        if (resultInfo != null && resultInfo.importanceReasonComponent!= null) {
-            String packageReturn = resultInfo.importanceReasonComponent.getPackageName();
-            if (!packageReturn.isEmpty()) {
-                return packageReturn;
-            }else return null;
-        }else return null;
-
-    }
-
-    public static boolean isRunningService(Context mContext, String processname, ActivityManager mActivityManager){
-        if(processname==null || processname.isEmpty())
-            return false;
-
-        ActivityManager.RunningServiceInfo service;
-
-        if(mActivityManager==null)
-            mActivityManager = (ActivityManager)mContext.getSystemService(Context.ACTIVITY_SERVICE);
-        List <ActivityManager.RunningServiceInfo> l = mActivityManager.getRunningServices(9999);
-        Iterator <ActivityManager.RunningServiceInfo> i = l.iterator();
-        while(i.hasNext()){
-            service = i.next();
-            if(service.process.equals(processname))
-                return true;
-        }
-
-        return false;
-    }
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
@@ -1503,540 +658,208 @@ public  class Utility {
 
 
 
-    public static void startShortcut(Context context, Shortcut shortcut, View v, String className, String packageName, String lastAppPackageName, int contactAction, boolean flashLightOn) {
-        if (shortcut.getType() == Shortcut.TYPE_APP) {
-            Intent extApp;
-            extApp =context.getPackageManager().getLaunchIntentForPackage(shortcut.getPackageName());
-            if (extApp != null) {
-                if (shortcut.getPackageName().equals("com.devhomc.search")) {
-                    extApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(extApp);
-                } else {
-                    ComponentName componentName = extApp.getComponent();
-//                                    Intent startApp = new Intent(Intent.ACTION_MAIN, null);
-//                                    startApp.addCategory(Intent.CATEGORY_LAUNCHER);
-//                                    startApp.setComponent(componentName);
-//                                    startApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                                    extApp.addFlags(805306368);
-                    Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
-                    startAppIntent.setComponent(componentName);
-                    startAppIntent.addFlags(1064960);
-                    startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                    context.startActivity(startAppIntent);
-//                                    startActivity(extApp);
-                }
-
-            } else {
-                Log.e(TAG, "extApp of shortcut = null ");
-            }
-        } else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
-            switch (shortcut.getAction()) {
-                case Shortcut.ACTION_WIFI:
-                    Utility.toggleWifi(context);
-                    break;
-                case Shortcut.ACTION_BLUETOOTH:
-                    Utility.toggleBluetooth(context);
-                    break;
-                case Shortcut.ACTION_ROTATION:
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                        Utility.setAutorotation(context);
-                    } else {
-                        if (Settings.System.canWrite(context)) {
-                            Utility.setAutorotation(context);
-                        } else {
-                            startNotiDialog(context, NotiDialog.WRITE_SETTING_PERMISSION);
-//                            Intent notiIntent = new Intent();
-//                            notiIntent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-//                            PendingIntent notiPending = PendingIntent.getActivity(context, 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//                            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-//                            builder.setContentTitle(context.getString(R.string.ask_for_write_setting_notification_title)).setContentText(context.getString(R.string.ask_for_write_setting_notification_text)).setSmallIcon(R.drawable.ic_settings_white_36px)
-//                                    .setContentIntent(notiPending)
-//                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-//                                    .setDefaults(NotificationCompat.DEFAULT_SOUND);
-//                            Notification notification = builder.build();
-//                            NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
-//                            notificationManager.notify(22, notification);
-                        }
-                    }
-
-                    break;
-                case Shortcut.ACTION_POWER_MENU:
-                    powerAction(context, v, className, packageName);
-                    break;
-                case Shortcut.ACTION_HOME:
-                    Utility.homeAction(context, v, className, packageName);
-                    break;
-                case Shortcut.ACTION_BACK:
-                    Utility.backAction(context, v, className, packageName);
-                    break;
-                case Shortcut.ACTION_NOTI:
-                    Utility.notiAction(context, v, className, packageName);
-                    break;
-                case Shortcut.ACTION_LAST_APP:
-                    Utility.lastAppAction(context, lastAppPackageName);
-                    break;
-                case Shortcut.ACTION_CALL_LOGS:
-                    Utility.callLogsAction(context);
-                    break;
-                case Shortcut.ACTION_DIAL:
-                    Log.e(TAG, "startShortcut: Start dial");
-                    Utility.dialAction(context);
-                    break;
-                case Shortcut.ACTION_CONTACT:
-                    Utility.contactAction(context);
-                    break;
-                case Shortcut.ACTION_RECENT:
-                    Utility.recentAction(context, v, className, packageName);
-                    break;
-                case Shortcut.ACTION_VOLUME:
-                    Utility.volumeAction(context);
-                    break;
-                case Shortcut.ACTION_BRIGHTNESS:
-                    Utility.brightnessAction(context);
-                    break;
-                case Shortcut.ACTION_RINGER_MODE:
-                    Utility.setRinggerMode(context);
-                    break;
-                case Shortcut.ACTION_FLASH_LIGHT:
-                    Utility.flashLightAction(context,!flashLightOn);
-                    break;
-                case Shortcut.ACTION_SCREEN_LOCK:
-                    Utility.screenLockAction(context);
-                    break;
-                case Shortcut.ACTION_NONE:
-                    break;
-
-            }
-        } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
-            switch (contactAction) {
-                case EdgeSetting.ACTION_CHOOSE:
-                    Intent intent = new Intent(context, ChooseActionDialogActivity.class);
-                    intent.putExtra("number", shortcut.getNumber());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                    context.startActivity(intent);
-                    break;
-                case EdgeSetting.ACTION_CALL:
-                    String url = "tel:"+ shortcut.getNumber();
-                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                        Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
-                        callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(callIntent);
-                    } else {
-                        Toast.makeText(context, context.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
-                    }
-                    break;
-                case EdgeSetting.ACTION_SMS:
-                    Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
-                            + shortcut.getNumber()));
-                    smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(smsIntent);
-            break;
-            }
-
-        } else if (shortcut.getType() == Shortcut.TYPE_SHORTCUT) {
-            try {
-                Intent intent = Intent.parseUri(shortcut.getIntent(), 0);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e(TAG, "startShortcut: exception when start Shortcut shortcut");
-            }
-
-        }
-    }
-
-    public static void setIndicatorForQuickAction(SharedPreferences sharedPreferences, Context context, int homeBackNoti, ImageView imageView, TextView label) {
-        String action = MainActivity.ACTION_NONE;
-        switch (homeBackNoti) {
-            case 1:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_1_KEY, MainActivity.ACTION_INSTANT_FAVO);
-                break;
-            case 2:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_2_KEY, MainActivity.ACTION_HOME);
-                break;
-            case 3:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_3_KEY, MainActivity.ACTION_BACK);
-                break;
-            case 4:
-                action = sharedPreferences.getString(EdgeSetting.ACTION_4_KEY, MainActivity.ACTION_NOTI);
-                break;
-        }
-        if (action.equalsIgnoreCase(MainActivity.ACTION_NONE)) {
-            label.setText("");
-        } else {
-            label.setText(getLabelForOuterSetting(context,action));
-        }
-        switch (action) {
-            case MainActivity.ACTION_WIFI:
-                if (getWifiState(context)) {
-                    imageView.setImageResource(R.drawable.ic_wifi);
-                } else {
-                    imageView.setImageResource(R.drawable.ic_wifi_off);
-                }
-
-                break;
-            case MainActivity.ACTION_BLUETOOTH:
-                if (getBluetoothState(context)) {
-                    imageView.setImageResource(R.drawable.ic_bluetooth);
-                } else {
-                    imageView.setImageResource(R.drawable.ic_bluetooth_off);
-                }
-
-                break;
-            case MainActivity.ACTION_ROTATE:
-                if (getIsRotationAuto(context)) {
-                    imageView.setImageResource(R.drawable.ic_rotation);
-                } else {
-                    imageView.setImageResource(R.drawable.ic_rotation_lock);
-                }
-
-                break;
-            case MainActivity.ACTION_POWER_MENU:
-                imageView.setImageResource(R.drawable.ic_power_menu);
-                break;
-            case MainActivity.ACTION_HOME:
-                imageView.setImageResource(R.drawable.ic_home);
-                break;
-            case MainActivity.ACTION_BACK:
-                imageView.setImageResource(R.drawable.ic_back);
-                break;
-            case MainActivity.ACTION_NOTI:
-                imageView.setImageResource(R.drawable.ic_notification);
-                break;
-            case MainActivity.ACTION_LAST_APP:
-                imageView.setImageResource(R.drawable.ic_last_app);
-                break;
-            case MainActivity.ACTION_CALL_LOGS:
-                imageView.setImageResource(R.drawable.ic_call_log);
-                break;
-            case MainActivity.ACTION_DIAL:
-                imageView.setImageResource(R.drawable.ic_dial);
-                break;
-            case MainActivity.ACTION_CONTACT:
-                imageView.setImageResource(R.drawable.ic_contact);
-                break;
-            case MainActivity.ACTION_RECENT:
-                imageView.setImageResource(R.drawable.ic_recent);
-                break;
-            case MainActivity.ACTION_VOLUME:
-                imageView.setImageResource(R.drawable.ic_volume);
-                break;
-            case MainActivity.ACTION_BRIGHTNESS:
-                imageView.setImageResource(R.drawable.ic_screen_brightness);
-                break;
-            case MainActivity.ACTION_RINGER_MODE:
-                imageView.setImageResource(R.drawable.ic_sound_normal);
-                break;
-            case MainActivity.ACTION_FLASH_LIGHT:
-                imageView.setImageResource(R.drawable.ic_flash_light);
-                break;
-            case MainActivity.ACTION_SCREEN_LOCK:
-                imageView.setImageResource(R.drawable.ic_screen_lock);
-                break;
-            case MainActivity.ACTION_NONE:
-                imageView.setImageDrawable(null);
-        }
-    }
 
     public static Drawable getDrawableForAction(Context context, int action) {
         switch (action) {
-            case Shortcut.ACTION_WIFI:
+            case Item.ACTION_WIFI:
                 return ContextCompat.getDrawable(context, R.drawable.ic_wifi);
-            case Shortcut.ACTION_BLUETOOTH:
+            case Item.ACTION_BLUETOOTH:
                 return ContextCompat.getDrawable(context, R.drawable.ic_bluetooth);
-            case Shortcut.ACTION_ROTATION:
+            case Item.ACTION_ROTATION:
                 return ContextCompat.getDrawable(context, R.drawable.ic_rotation);
-            case Shortcut.ACTION_POWER_MENU:
+            case Item.ACTION_POWER_MENU:
                 return ContextCompat.getDrawable(context, R.drawable.ic_power_menu);
-            case Shortcut.ACTION_HOME:
+            case Item.ACTION_HOME:
                 return ContextCompat.getDrawable(context, R.drawable.ic_home);
-            case Shortcut.ACTION_BACK:
+            case Item.ACTION_BACK:
                 return ContextCompat.getDrawable(context, R.drawable.ic_back);
-            case Shortcut.ACTION_NOTI:
+            case Item.ACTION_NOTI:
                 return ContextCompat.getDrawable(context, R.drawable.ic_notification);
-            case Shortcut.ACTION_LAST_APP:
+            case Item.ACTION_LAST_APP:
                 return ContextCompat.getDrawable(context, R.drawable.ic_last_app);
-            case Shortcut.ACTION_CALL_LOGS:
+            case Item.ACTION_CALL_LOGS:
                 return ContextCompat.getDrawable(context, R.drawable.ic_call_log);
-            case Shortcut.ACTION_DIAL:
+            case Item.ACTION_DIAL:
                 return ContextCompat.getDrawable(context, R.drawable.ic_dial);
-            case Shortcut.ACTION_CONTACT:
+            case Item.ACTION_CONTACT:
                 return ContextCompat.getDrawable(context, R.drawable.ic_contact);
-            case Shortcut.ACTION_RECENT:
+            case Item.ACTION_RECENT:
                 return ContextCompat.getDrawable(context, R.drawable.ic_recent);
-            case Shortcut.ACTION_VOLUME:
+            case Item.ACTION_VOLUME:
                 return ContextCompat.getDrawable(context, R.drawable.ic_volume);
-            case Shortcut.ACTION_BRIGHTNESS:
+            case Item.ACTION_BRIGHTNESS:
                 return ContextCompat.getDrawable(context, R.drawable.ic_screen_brightness);
-            case Shortcut.ACTION_RINGER_MODE:
+            case Item.ACTION_RINGER_MODE:
                 return ContextCompat.getDrawable(context, R.drawable.ic_sound_normal);
-            case Shortcut.ACTION_FLASH_LIGHT:
+            case Item.ACTION_FLASH_LIGHT:
                 return ContextCompat.getDrawable(context, R.drawable.ic_flash_light);
-            case Shortcut.ACTION_SCREEN_LOCK:
-                return ContextCompat.getDrawable(context, R.drawable.ic_screen_lock);
-            case Shortcut.ACTION_NONE:
-                return null;
+            case Item.ACTION_SCREENSHOT:
+                return ContextCompat.getDrawable(context, R.drawable.ic_screenshot2);
+            case Item.ACTION_SEARCH_SHORTCUTS:
+                return ContextCompat.getDrawable(context, R.drawable.ic_search_shortcuts);
+            default:
+                throw new IllegalArgumentException("do not support this action: " + action);
         }
-        return null;
     }
 
-    public static int[] showFolder(Context context, GridView gridView, WindowManager windowManager, Realm realm,
-                                  SharedPreferences sharedPreferences, int mPosition, float mScale, float mIconScale, FolderAdapter adapter) {
-//        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ViewGroup viewGroup = (ViewGroup) gridView.getParent();
-        float gridX = gridView.getX();
-        float gridY = gridView.getY();
-        float x = gridView.getChildAt(mPosition).getX()+ gridX;
-        float y = gridView.getChildAt(mPosition).getY() + gridY;
-        int size = (int) realm.where(Shortcut.class).greaterThan("id",(mPosition+1)*1000 -1).lessThan("id",(mPosition+2)*1000).count();
-        if (size == 0) {
-            return new int[5];
-        }
-        int gridColumn = size;
-        if (gridColumn > 4) {
-            gridColumn = 4;
-        }
-        int gridRow;
-        if ( size % gridColumn == 0) {
-            gridRow = size/gridColumn;
-        }else gridRow = size/gridColumn +1;
-        int gridGap = 5;
 
 
-        gridView.setVisibility(View.GONE);
-        GridView folderGrid = (GridView) viewGroup.findViewById(R.id.folder_grid);
-        ViewGroup.LayoutParams gridParams = folderGrid.getLayoutParams();
-        folderGrid.setVerticalSpacing((int) (gridGap * mScale));
-        folderGrid.setNumColumns(gridColumn);
-        folderGrid.setGravity(Gravity.CENTER);
-        float gridWide = (int) (mScale * (float) (((EdgeGestureService.GRID_ICON_SIZE * mIconScale) + EdgeGestureService.GRID_2_PADDING) * gridColumn + gridGap * (gridColumn - 1)));
-        float gridTall = (int) (mScale * (float) (((EdgeGestureService.GRID_ICON_SIZE * mIconScale) + EdgeGestureService.GRID_2_PADDING) * gridRow + gridGap * (gridRow - 1)));
-        gridParams.height = (int) gridTall;
-        gridParams.width = (int) gridWide;
-        folderGrid.setLayoutParams(gridParams);
-        folderGrid.setAdapter(adapter);
-        if (x - gridWide / 2 + gridWide > gridX + gridView.getWidth()) {
-            folderGrid.setX(gridX + gridView.getWidth() - gridWide);
-        } else if (x - gridWide / 2 < 10 * mScale) {
-            folderGrid.setX(10*mScale);
-        } else {
-            folderGrid.setX(x - gridWide / 2);
-        }
-
-        folderGrid.setY(y - gridTall + gridTall/gridRow);
-        Log.e(TAG,"gridX = " + gridX + "\nGridY = " + gridY +  "\nfolder x = " + folderGrid.getX() + "\nfolder y= " + folderGrid.getY() );
-        folderGrid.setVisibility(View.VISIBLE);
-        return new int[]{(int) folderGrid.getX(), (int) folderGrid.getY(), gridRow, gridColumn, mPosition};
-
-
-
-    }
-
-    public static Bitmap getFolderThumbnail(Realm realm, int mPosition, Context context) {
-        Log.e(TAG, "getFolderThumbnail: ");
+    public static Bitmap createAndSaveFolderThumbnail(final Slot folder, Realm realm, Context context, IconPackManager.IconPack iconPack) {
         float mScale = context. getResources().getDisplayMetrics().density;
         int width =(int)( 48*mScale);
         int height = (int) (48 * mScale);
         int smallWidth, smallHeight;
         smallWidth = width/2;
         smallHeight = height/2;
-        int startId = (mPosition +1)* 1000;
         PackageManager packageManager = context.getPackageManager();
         Bitmap.Config config = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = Bitmap.createBitmap(width, height, config);
+        final Bitmap bitmap = Bitmap.createBitmap(width, height, config);
         Canvas canvas = new Canvas(bitmap);
         Drawable drawable;
-        Shortcut shortcut;
+        Item item = null;
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setColor(Color.WHITE);
         int gap1dp = (int) (mScale);
         boolean isFolderEmpty = true;
-
-        for (int i = 0; i < 4; i++) {
+        Log.e(TAG, "createAndSaveFolderThumbnail: folderId " + folder.slotId + "\nsize " + folder.items.size());
+        int noOfSmallIcon = folder.items.size() >= 4 ? 4 : folder.items.size();
+        for (int i = 0; i < noOfSmallIcon; i++) {
             drawable = null;
-            shortcut = realm.where(Shortcut.class).equalTo("id",startId + i).findFirst();
-            if (shortcut != null && shortcut.getType() == Shortcut.TYPE_APP) {
+            if (i < folder.items.size()) {
+                item = folder.items.get(i);
+            }
+            if (item != null) {
+                Log.e(TAG, "createAndSaveFolderThumbnail: item type = " + item.type +"\nid = " + item.itemId);
                 isFolderEmpty = false;
-                try {
-//                    bitmap1 = drawableToBitmap(packageManager.getApplicationIcon(shortcut.getPackageName()));
-                    drawable = packageManager.getApplicationIcon(shortcut.getPackageName());
-//                    bitmap1 = ((BitmapDrawable)(drawable)).getBitmap();
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }
-                if (drawable != null) {
-                    switch (i) {
-                        case 0:
-                            drawable.setBounds(0,0,smallWidth - gap1dp,smallHeight - gap1dp);
-                            drawable.draw(canvas);
-                            break;
-                        case 1:
-                            drawable.setBounds(smallWidth+ gap1dp,0,width,smallHeight - gap1dp);
-                            drawable.draw(canvas);
-                            break;
-                        case 2:
-                            drawable.setBounds(0,smallHeight+ gap1dp,smallWidth - gap1dp,height);
-                            drawable.draw(canvas);
-                            break;
-                        case 3:
-                            drawable.setBounds(smallWidth+ gap1dp,smallHeight + gap1dp,width,height);
-                            drawable.draw(canvas);
-                            break;
-                    }
-                }
-            } else if (shortcut != null && shortcut.getType() == Shortcut.TYPE_ACTION) {
-                isFolderEmpty = false;
-                drawable = getDrawableForAction(context, shortcut.getAction());
-                if (drawable != null) {
-                    switch (i) {
-                        case 0:
-                            drawable.setBounds(0,0,smallWidth - gap1dp,smallHeight - gap1dp);
-                            drawable.draw(canvas);
-                            break;
-                        case 1:
-                            drawable.setBounds(smallWidth+ gap1dp,0,width,smallHeight - gap1dp);
-                            drawable.draw(canvas);
-                            break;
-                        case 2:
-                            drawable.setBounds(0,smallHeight+ gap1dp,smallWidth - gap1dp,height);
-                            drawable.draw(canvas);
-                            break;
-                        case 3:
-                            drawable.setBounds(smallWidth+ gap1dp,smallHeight + gap1dp,width,height);
-                            drawable.draw(canvas);
-                            break;
-                    }
-                }
-            }else if (shortcut != null && shortcut.getType() == Shortcut.TYPE_CONTACT) {
-                isFolderEmpty = false;
-                String uri = shortcut.getThumbnaiUri();
-                if (uri != null) {
-                    try {
-                        Bitmap bitmap1 = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(uri));
-                        drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap1);
-                        ((RoundedBitmapDrawable) drawable).setCircular(true);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        drawable = ContextCompat. getDrawable(context , R.drawable.ic_contact_default);
-//                        drawable = context.getDrawable(R.drawable.ic_contact_default);
-                    }
-                } else {
-                    drawable = ContextCompat. getDrawable(context , R.drawable.ic_contact_default);
-//                    drawable = context.getDrawable(R.drawable.ic_contact_default);
-                }
-                if (drawable != null) {
-                    switch (i) {
-                        case 0:
-                            drawable.setBounds(0,0,smallWidth - gap1dp,smallHeight - gap1dp);
-                            drawable.draw(canvas);
-                            break;
-                        case 1:
-                            drawable.setBounds(smallWidth+ gap1dp,0,width,smallHeight - gap1dp);
-                            drawable.draw(canvas);
-                            break;
-                        case 2:
-                            drawable.setBounds(0,smallHeight+ gap1dp,smallWidth - gap1dp,height);
-                            drawable.draw(canvas);
-                            break;
-                        case 3:
-                            drawable.setBounds(smallWidth+ gap1dp,smallHeight + gap1dp,width,height);
-                            drawable.draw(canvas);
-                            break;
-                    }
-                }
-            } else if (shortcut != null && shortcut.getType() == Shortcut.TYPE_SHORTCUT) {
-                Log.e(TAG, "getFolderThumbnail: draw shortcut");
-                isFolderEmpty = false;
-                byte[] byteArray = shortcut.getBitmap();
-                try {
-                    Bitmap bmp;
-                    Resources resources = packageManager.getResourcesForApplication(shortcut.getPackageName());
-                    if (byteArray != null) {
+                switch (item.type) {
+                    case Item.TYPE_APP:
+                        try {
+                            Drawable defaultDrawable = packageManager.getApplicationIcon(item.getPackageName());
 
-                        bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-                        drawable = new BitmapDrawable(resources, bmp);
+//                            Bitmap defaultBm = ((BitmapDrawable) defaultDrawable).getBitmap();
+                            Bitmap defaultBm = null;
+                            if (defaultDrawable instanceof BitmapDrawable) {
+                                defaultBm = ((BitmapDrawable) defaultDrawable).getBitmap();
+                            } else {
+                                defaultBm = Bitmap.createBitmap(defaultDrawable.getIntrinsicWidth(), defaultDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                                Canvas canvasForDefaultBitmap = new Canvas(defaultBm);
+                                defaultDrawable.setBounds(0, 0, canvasForDefaultBitmap.getWidth(), canvasForDefaultBitmap.getHeight());
+                                defaultDrawable.draw(canvasForDefaultBitmap);
+                            }
 
-                    } else {
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-//                        drawable =  resources.getDrawable(shortcut.getResId(), null);
-                        Log.e(TAG, "getFolderThumbnail: resourcesCompat");
-                        drawable = ResourcesCompat.getDrawable(resources, shortcut.getResId(), null);
-//                        options.inMutable = true;
-//                        bmp =BitmapFactory.decodeResource(resources,shortcut.getResId(), options);
-//                        Log.e(TAG, "getFolderThumbnail: resource");
-                    }
-                    if (drawable != null) {
-                        switch (i) {
-                            case 0:
-                                drawable.setBounds(0,0,smallWidth - gap1dp,smallHeight - gap1dp);
-                                drawable.draw(canvas);
-                                break;
-                            case 1:
-                                drawable.setBounds(smallWidth+ gap1dp,0,width,smallHeight - gap1dp);
-                                drawable.draw(canvas);
-                                break;
-                            case 2:
-                                drawable.setBounds(0,smallHeight+ gap1dp,smallWidth - gap1dp,height);
-                                drawable.draw(canvas);
-                                break;
-                            case 3:
-                                drawable.setBounds(smallWidth+ gap1dp,smallHeight + gap1dp,width,height);
-                                drawable.draw(canvas);
-                                break;
+                            if (iconPack!=null) {
+                                drawable = new BitmapDrawable(context.getResources(), iconPack.getIconForPackage(item.packageName, defaultBm));
+
+                            } else {
+                                drawable = defaultDrawable;
+                            }
+                        } catch (PackageManager.NameNotFoundException e) {
+                            Log.e(TAG, "NameNotFound " + e);
                         }
-                    }
-//                    if (bmp != null) {
-//
-//                        bmp = Bitmap.createScaledBitmap(bmp, smallWidth - gap1dp, smallHeight - gap1dp, false);
-//                        switch (i) {
-//                            case 0:
-//                                canvas.drawBitmap(bmp,0,0,paint);
-//                                break;
-//                            case 1:
-//                                canvas.drawBitmap(bmp,smallWidth + gap1dp, 0,paint);
-//                                break;
-//                            case 2:
-//                                canvas.drawBitmap(bmp, 0,smallHeight + gap1dp,paint);
-//                                break;
-//                            case 3:
-//                                canvas.drawBitmap(bmp,smallWidth + gap1dp, smallHeight +gap1dp,paint);
-//                                break;
-//                        }
-//                    }
+                        drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
 
-                } catch (Exception e) {
-                    Log.e(TAG, "getView: can not set imageview for shortcut shortcut");
+
+//                        try {
+//                            drawable = packageManager.getApplicationIcon(item.getPackageName());
+//                        } catch (PackageManager.NameNotFoundException e) {
+//                            e.printStackTrace();
+//                        }
+//                        drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
+
+                        break;
+                    case Item.TYPE_ACTION:
+                        drawable = getDrawableForAction(context, item.getAction());
+                        drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
+
+                        break;
+                    case Item.TYPE_CONTACT:
+                        String uri = item.iconUri;
+                        if (uri != null) {
+                            try {
+                                Bitmap bitmap1 = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(uri));
+                                drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap1);
+                                ((RoundedBitmapDrawable) drawable).setCircular(true);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                drawable = ContextCompat.getDrawable(context, R.drawable.ic_contact_default);
+                            }
+                        } else {
+                            drawable = ContextCompat.getDrawable(context, R.drawable.ic_contact_default);
+                        }
+                        drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
+
+                        break;
+                    case Item.TYPE_DEVICE_SHORTCUT:
+                        byte[] byteArray = item.iconBitmap;
+                        try {
+                            Bitmap bmp;
+                            Resources resources = packageManager.getResourcesForApplication(item.getPackageName());
+                            if (byteArray != null) {
+
+                                bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                                drawable = new BitmapDrawable(resources, bmp);
+
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, "getView: can not set imageview for item item");
+                        }
+                        drawIconToFolderCanvas(width, height, smallWidth, smallHeight, canvas, drawable, gap1dp, i);
+
+                        break;
+
                 }
+
             }
         }
         if (isFolderEmpty) {
-//            drawable = context.getDrawable(R.drawable.ic_folder);
-            drawable = ContextCompat. getDrawable(context , R.drawable.ic_folder);
+            drawable = ContextCompat.getDrawable(context, R.drawable.ic_folder);
             if (drawable != null) {
                 drawable.setBounds(0, 0, width, height);
                 drawable.draw(canvas);
             }
 
         }
-        File myDir = context.getFilesDir();
-        String fname = "folder-"+ mPosition +".png";
-        File file = new File (myDir, fname);
-        if (file.exists ()) file.delete ();
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Log.e(TAG, "execute: in transaction");
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                folder.iconBitmap = stream.toByteArray();
+                folder.useIconSetByUser = false;
+            }
+        });
+        if (folder.iconBitmap != null) {
+            Log.e(TAG, "createAndSaveFolderThumbnail: ok ");
+        } else {
+            Log.e(TAG, "createAndSaveFolderThumbnail: array null");
         }
         return bitmap;
+    }
+
+    private static void drawIconToFolderCanvas(int width, int height, int smallWidth, int smallHeight, Canvas canvas, Drawable drawable, int gap1dp, int i) {
+        if (drawable != null) {
+            switch (i) {
+                case 0:
+                    drawable.setBounds(0, 0, smallWidth - gap1dp, smallHeight - gap1dp);
+                    drawable.draw(canvas);
+                    break;
+                case 1:
+                    drawable.setBounds(smallWidth + gap1dp, 0, width, smallHeight - gap1dp);
+                    drawable.draw(canvas);
+                    break;
+                case 2:
+                    drawable.setBounds(0, smallHeight + gap1dp, smallWidth - gap1dp, height);
+                    drawable.draw(canvas);
+                    break;
+                case 3:
+                    drawable.setBounds(smallWidth + gap1dp, smallHeight + gap1dp, width, height);
+                    drawable.draw(canvas);
+                    break;
+            }
+        }
     }
 
 
@@ -2056,226 +879,1495 @@ public  class Utility {
         }
     }
 
-    public static void setImageForShortcut(Shortcut shortcut, PackageManager packageManager, ImageView imageView, Context context, IconPackManager.IconPack iconPack, Realm myRealm, boolean showOnOff) {
-
-        if (shortcut.getType() == Shortcut.TYPE_APP) {
-            try {
-                Drawable defaultDrawable = context.getPackageManager().getApplicationIcon(shortcut.getPackageName());
-                Drawable iconPackDrawable;
-                if (iconPack!=null) {
-                    iconPackDrawable = iconPack.getDrawableIconForPackage(shortcut.getPackageName(), defaultDrawable);
-                    if (iconPackDrawable == null) {
-                        iconPackDrawable = defaultDrawable;
-                    }
-                    imageView.setImageDrawable(iconPackDrawable);
-                } else {
-                    imageView.setImageDrawable(defaultDrawable);
-                }
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e(TAG, "NameNotFound " + e);
-            }
-        }else if (shortcut.getType() == Shortcut.TYPE_ACTION) {
-            switch (shortcut.getAction()) {
-                case Shortcut.ACTION_WIFI:
-                    if (showOnOff) {
-                        if (Utility.getWifiState(context)) {
-                            imageView.setImageResource(R.drawable.ic_wifi);
-                        } else {
-                            imageView.setImageResource(R.drawable.ic_wifi_off);
-                        }
-                    } else {
-                        imageView.setImageResource(R.drawable.ic_wifi);
-                    }
-                    break;
-                case Shortcut.ACTION_BLUETOOTH:
-                    if (showOnOff) {
-                        if (Utility.getBluetoothState(context)) {
-                            imageView.setImageResource(R.drawable.ic_bluetooth);
-                        } else {
-                            imageView.setImageResource(R.drawable.ic_bluetooth_off);
-                        }
-                    } else {
-                        imageView.setImageResource(R.drawable.ic_bluetooth);
-                    }
-
-                    break;
-                case Shortcut.ACTION_ROTATION:
-                    if (showOnOff) {
-                        if (Utility.getIsRotationAuto(context)) {
-                            imageView.setImageResource(R.drawable.ic_rotation);
-                        } else {
-                            imageView.setImageResource(R.drawable.ic_rotation_lock);
-                        }
-                    } else {
-                        imageView.setImageResource(R.drawable.ic_rotation);
-                    }
-                    break;
-                case Shortcut.ACTION_POWER_MENU:
-                    imageView.setImageResource(R.drawable.ic_power_menu);
-                    break;
-                case Shortcut.ACTION_HOME:
-                    imageView.setImageResource(R.drawable.ic_home);
-                    break;
-                case Shortcut.ACTION_BACK:
-                    imageView.setImageResource(R.drawable.ic_back);
-                    break;
-                case Shortcut.ACTION_NOTI:
-                    imageView.setImageResource(R.drawable.ic_notification);
-                    break;
-                case Shortcut.ACTION_LAST_APP:
-                    imageView.setImageResource(R.drawable.ic_last_app);
-                    break;
-                case Shortcut.ACTION_CALL_LOGS:
-                    imageView.setImageResource(R.drawable.ic_call_log);
-                    break;
-                case Shortcut.ACTION_DIAL:
-                    imageView.setImageResource(R.drawable.ic_dial);
-                    break;
-                case Shortcut.ACTION_CONTACT:
-                    imageView.setImageResource(R.drawable.ic_contact);
-                    break;
-                case Shortcut.ACTION_RECENT:
-                    imageView.setImageResource(R.drawable.ic_recent);
-                    break;
-                case Shortcut.ACTION_VOLUME:
-                    imageView.setImageResource(R.drawable.ic_volume);
-                    break;
-                case Shortcut.ACTION_BRIGHTNESS:
-                    imageView.setImageResource(R.drawable.ic_screen_brightness);
-                    break;
-                case Shortcut.ACTION_RINGER_MODE:
-                    if (showOnOff) {
-                        switch (Utility.getRingerMode(context)) {
-                            case 0:
-                                imageView.setImageResource(R.drawable.ic_sound_normal);
-                                break;
-                            case 1:
-                                imageView.setImageResource(R.drawable.ic_sound_vibrate);
-                                break;
-                            case 2:
-                                imageView.setImageResource(R.drawable.ic_sound_silent);
-                                break;
-                        }
-                    } else {
-                        imageView.setImageResource(R.drawable.ic_sound_normal);
-                    }
-
-                    break;
-                case Shortcut.ACTION_FLASH_LIGHT:
-                    if (EdgeGestureService.FLASH_LIGHT_ON) {
-                        imageView.setImageResource(R.drawable.ic_flash_light);
-                    } else {
-                        imageView.setImageResource(R.drawable.ic_flash_light_off);
-                    }
-                    break;
-                case Shortcut.ACTION_SCREEN_LOCK:
-                    imageView.setImageResource(R.drawable.ic_screen_lock);
-                    break;
-                case Shortcut.ACTION_NONE:
-                    imageView.setImageDrawable(null);
-            }
-        } else if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
-            String thumbnaiUri = shortcut.getThumbnaiUri();
-            if (thumbnaiUri != null) {
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(thumbnaiUri));
-                    RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-                    drawable.setCircular(true);
-                    imageView.setImageDrawable(drawable);
-                    imageView.setColorFilter(null);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    imageView.setImageResource(R.drawable.ic_contact_default);
-//                        imageView.setColorFilter(ContextCompat.getColor(context, R.color.black));
-                } catch (SecurityException e) {
-                    Toast.makeText(context, context.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
-                }
-            } else {
-                imageView.setImageResource(R.drawable.ic_contact_default);
-//                    imageView.setColorFilter(ContextCompat.getColor(context, R.color.black));
-
-            }
-        } else if (shortcut.getType() == Shortcut.TYPE_FOLDER) {
-            File myDir = context.getFilesDir();
-            String fname = "folder-"+ shortcut.getId() +".png";
-            File file = new File (myDir, fname);
-            if (!file.exists()) {
-                imageView.setImageBitmap(Utility.getFolderThumbnail(myRealm, shortcut.getId(), context));
-            } else {
-                try {
-                    imageView.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
-                } catch (Exception e) {
-                    Log.e(TAG, "read thumbnail exeption" + e);
-                    e.printStackTrace();
-                }
-            }
-        } else if (shortcut.getType() == Shortcut.TYPE_SHORTCUT) {
-            byte[] byteArray = shortcut.getBitmap();
-            try {
-                if (byteArray != null) {
-                    imageView.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
-                } else {
-                    Resources resources = packageManager.getResourcesForApplication(shortcut.getPackageName());
-                    imageView.setImageBitmap(BitmapFactory.decodeResource(resources,shortcut.getResId()));
-                }
-
-            } catch (Exception e) {
-                Log.e(TAG, "getView: can not set imageview for shortcut shortcut");
-            }
-        }
-        imageView.setColorFilter(null);
-    }
-
 
     public static boolean checkDrawPermission(Context context) {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
     }
 
-    public static String getLabelForShortcut(Context context, Shortcut shortcut) {
-        if (shortcut != null) {
-            if (shortcut.getType() == Shortcut.TYPE_CONTACT) {
-                return shortcut.getName();
-            } else if (shortcut.getType() == Shortcut.TYPE_APP) {
-                try {
-                    return(String) context.getPackageManager().getApplicationLabel(context.getPackageManager().getApplicationInfo(shortcut.getPackageName(), 0));
-                } catch (PackageManager.NameNotFoundException e) {
-                    return "";
-                }
-            } else if (shortcut.getAction() != Shortcut.ACTION_NONE) {
-                return shortcut.getLabel();
-            } else return "";
-
-        } else return "";
-    }
 
     public static boolean checkContactPermission(Context context) {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
     }
 
-    public static void askForAdminPermission(final Context context) {
-            final ComponentName cm = new ComponentName(context, LockAdmin.class);
-            final DevicePolicyManager pm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-            if (!pm.isAdminActive(cm)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(R.string.admin_permission)
-                        .setMessage(R.string.admin_permission_explain)
-                        .setPositiveButton(R.string.go_to_setting, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-                                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cm);
-                                intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                                        context.getString(R.string.admin_desc));
-                                context.startActivity(intent);
 
-                            }
-                        });
-                builder.show();
-            }
+    public static int rightLeftOrBottom(int position) {
+        switch (position / 10) {
+            case 1:
+                return Cons.POSITION_RIGHT;
+            case 2:
+                return Cons.POSITION_LEFT;
+            case 3:
+                return Cons.POSITION_BOTTOM;
+        }
+        return -1;
+    }
+
+    public static WindowManager.LayoutParams getEdgeLayoutPara(int avoidKeyboardOption, float mScale, int edgePosition, int edgeWidth, int edgeHeight, int edgeOffset) {
+        WindowManager.LayoutParams edgePara;
+        boolean fullEdge = false;
+        switch (rightLeftOrBottom(edgePosition)) {
+            case Cons.POSITION_BOTTOM:
+                if (edgeWidth == Cons.EDGE_LENGTH_MAX) {
+                    fullEdge = true;
+                }
+                break;
+            default:
+                if (edgeHeight == Cons.EDGE_LENGTH_MAX) {
+                    fullEdge = true;
+                }
+                break;
+        }
+        switch (avoidKeyboardOption) {
+            case Edge.KEYBOARD_OPTION_PLACE_UNDER:
+                edgePara = new WindowManager.LayoutParams(
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.TYPE_PHONE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                        PixelFormat.TRANSLUCENT);
+                break;
+            case Edge.KEYBOARD_OPTION_STEP_ASIDE:
+                edgePara = new WindowManager.LayoutParams();
+                edgePara.type = 2002;
+                edgePara.gravity = 53;
+                edgePara.flags = 40;
+                edgePara.width = 1;
+                edgePara.height = -1;
+                edgePara.format = -2;
+                break;
+            default:
+                edgePara = new WindowManager.LayoutParams(
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.TYPE_PHONE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                        PixelFormat.TRANSLUCENT);
+                break;
+        }
+
+        if (avoidKeyboardOption != Edge.KEYBOARD_OPTION_NONE) {
+            edgePara.flags |= 131072;
+        }
+        switch (edgePosition) {
+            case 10:
+                edgePara.gravity = Gravity.TOP | Gravity.RIGHT;
+                break;
+            case 11:
+                edgePara.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+                break;
+            case 12:
+                edgePara.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                break;
+            case 20:
+                edgePara.gravity = Gravity.TOP | Gravity.LEFT;
+                break;
+            case 21:
+                edgePara.gravity = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+                break;
+            case 22:
+                edgePara.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                break;
+            case 31:
+                edgePara.gravity = Gravity.BOTTOM | Gravity.CENTER;
+                break;
+        }
+
+
+        if (edgePosition == 12 | edgePosition == 22) {
+            edgePara.y = (int) (edgeOffset * mScale);
+        } else if (edgePosition == 31) {
+            edgePara.x = -(int) (edgeOffset * mScale);
+        } else {
+            edgePara.y = -(int) (edgeOffset * mScale);
+        }
+
+        switch (rightLeftOrBottom(edgePosition)) {
+            case Cons.POSITION_BOTTOM:
+                if (edgeWidth != Cons.EDGE_LENGTH_MAX) {
+                    edgePara.width = (int) (edgeWidth * mScale);
+                }
+                edgePara.height = (int) (edgeHeight *mScale);
+                break;
+            default:
+                if (edgeHeight != Cons.EDGE_LENGTH_MAX) {
+                    edgePara.height = (int) (edgeHeight *mScale);
+                }
+                edgePara.width = (int) (edgeWidth * mScale);
+                break;
+        }
+
+        return edgePara;
 
     }
 
 
+    public static void startService(Context context) {
+        Log.e(TAG, "startService: ");
+        context.startService(new Intent(context, NewServiceView.class));
+    }
+
+    public static void stopService(Context context) {
+        Log.e(TAG, "stopService: ");
+        context.stopService(new Intent(context, NewServiceView.class));
+    }
+
+    public static void restartService(Context context) {
+        Log.e(TAG, "restartService: ");
+        stopService(context);
+        startService(context);
+    }
+
+    public static void showSimpleDialog(Context context, int contentId) {
+        new MaterialDialog.Builder(context)
+                .content(contentId)
+                .positiveText(R.string.app_tab_fragment_ok_button)
+                .show();
+    }
+
+    public static MaterialDialog showProgressDialog(Context context, int titleRes, int contentRes) {
+        return new MaterialDialog.Builder(context)
+                .title(titleRes)
+                .content(contentRes)
+                .progress(true, 0)
+                .show();
+    }
+
+    public static void setSlotIcon(Slot slot, Context context, ImageView icon, PackageManager packageManager, IconPackManager.IconPack iconPack, boolean isDark, boolean showIconState) {
+        switch (slot.type) {
+            case Slot.TYPE_ITEM:
+                setItemIcon(slot.stage1Item, context, icon, packageManager, iconPack, showIconState);
+                break;
+            case Slot.TYPE_FOLDER:
+                byte[] byteArray = slot.iconBitmap;
+                if (byteArray != null) {
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
+                } else {
+                    icon.setImageResource(R.drawable.ic_folder);
+                }
+
+                break;
+            case Slot.TYPE_RECENT:
+                icon.setImageResource(R.drawable.ic_recent_app_slot);
+                if (isDark) {
+                    icon.setColorFilter(R.color.button_54_black);
+                }
+                break;
+            case Slot.TYPE_EMPTY:
+                icon.setImageDrawable(null);
+                break;
+            case Slot.TYPE_NULL:
+                icon.setImageResource(R.drawable.ic_add_circle_outline_white_48dp);
+                if (isDark) {
+                    icon.setColorFilter(R.color.button_54_black);
+                }
+                break;
+        }
+    }
 
 
+    public static void setItemIcon(Item item, Context context, ImageView icon, PackageManager packageManager, IconPackManager.IconPack iconPack, boolean showIconState) {
+        if (item == null) {
+            return;
+        }
+        if (!setItemIconFromBitmap(item, icon, showIconState,context)) {
+            switch (item.type) {
+                case Item.TYPE_APP:
+                        try {
+                            Drawable defaultDrawable = packageManager.getApplicationIcon(item.getPackageName());
+                            try {
+                                Bitmap defaultBm = ((BitmapDrawable) defaultDrawable).getBitmap();
+                                if (iconPack!=null) {
+                                    Bitmap iconBitmap = iconPack.getIconForPackage(item.packageName, defaultBm);
+                                    icon.setImageBitmap(iconBitmap);
+                                } else {
+                                    icon.setImageDrawable(defaultDrawable);
+                                }
+                            } catch (ClassCastException e) {
+                                e.printStackTrace();
+//                                Log.e(TAG, "setItemIcon: not a BitmapDrawable");
+                                icon.setImageDrawable(defaultDrawable);
+                            }
+
+                        } catch (PackageManager.NameNotFoundException e) {
+                            Log.e(TAG, "NameNotFound " + e);
+                        }
+                    break;
+                case Item.TYPE_ACTION:
+                    if (item.iconBitmap == null) {
+                        break;
+                    }
+                    if (showIconState) {
+                        setActionIconWithState(item, icon, context);
+                    } else {
+                        icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
+                    }
+                    break;
+                case Item.TYPE_DEVICE_SHORTCUT:
+                    setItemIconFromBitmap(item, icon, showIconState, context);
+                    break;
+                case Item.TYPE_CONTACT:
+                    ContactPhotoLoader.INSTANCE.loadContactPhotoNew(item.contactId, icon, context);
+//                    Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, item.contactId);
+//                    Uri photo = Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+//                    if (photo != null) {
+//                        try {
+//                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photo);
+//                            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+//                            drawable.setCircular(true);
+//                            icon.setImageDrawable(drawable);
+//                            icon.setColorFilter(null);
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                            icon.setImageResource(R.drawable.ic_contact_default);
+//                        } catch (SecurityException e) {
+//                            Toast.makeText(context, context.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
+//                        }
+//                    } else {
+//                        icon.setImageResource(R.drawable.ic_contact_default);
+//                    }
+                    break;
+                case Item.TYPE_SHORTCUTS_SET:
+                    if (item.iconBitmap != null) {
+                        icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
+                    }
+                    break;
+            }
+
+        }
+    }
+
+    private static boolean setItemIconFromBitmap(Item item, ImageView icon, boolean showState, Context context) {
+
+
+        if (showState && item.type.equals(Item.TYPE_ACTION)) {
+            setActionIconWithState(item, icon, context);
+            return true;
+        } else {
+            byte[] byteArray = item.iconBitmap;
+            if (byteArray != null) {
+                icon.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Bitmap convertDrawableToBitmap(Drawable drawable) {
+        int width = drawable.getIntrinsicWidth();
+        int height = drawable.getIntrinsicHeight();
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+    public static Bitmap getItemBitmap(Item item, Context context, IconPackManager.IconPack iconPack) {
+        switch (item.type) {
+            case Item.TYPE_APP:
+                try {
+                    Drawable defaultDrawable = context.getPackageManager().getApplicationIcon(item.getPackageName());
+                    Drawable iconPackDrawable;
+                    if (iconPack!=null) {
+                        iconPackDrawable = iconPack.getDrawableIconForPackage(item.getPackageName(), defaultDrawable);
+                        if (iconPackDrawable == null) {
+                            iconPackDrawable = defaultDrawable;
+                        }
+                        try {
+                            return ((BitmapDrawable) iconPackDrawable).getBitmap();
+                        }catch (ClassCastException e) {
+                            return convertDrawableToBitmap(iconPackDrawable);
+                        }
+                    } else {
+                        try {
+                            return ((BitmapDrawable) defaultDrawable).getBitmap();
+                        } catch (ClassCastException e) {
+                            return convertDrawableToBitmap(defaultDrawable);
+                        }
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    Log.e(TAG, "NameNotFound " + e);
+                }
+                break;
+            case Item.TYPE_ACTION:
+                return BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length);
+            case Item.TYPE_DEVICE_SHORTCUT:
+                byte[] byteArray = item.iconBitmap;
+                try {
+                    if (byteArray != null) {
+                        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "getView: can not set imageview for shortcut shortcut");
+                }
+                break;
+            case Item.TYPE_CONTACT:
+                String thumbnaiUri = item.iconUri;
+                if (thumbnaiUri != null) {
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(thumbnaiUri));
+                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+                        drawable.setCircular(true);
+                        return drawable.getBitmap();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_contact_default)).getBitmap();
+                    } catch (SecurityException e) {
+                        Toast.makeText(context, context.getString(R.string.missing_contact_permission), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    return ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.ic_contact_default)).getBitmap();
+                }
+                break;
+            case Item.TYPE_SHORTCUTS_SET:
+                if (item.iconBitmap == null) {
+                    return null;
+                }
+                return BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length);
+        }
+        return null;
+    }
+
+    public static void setSlotLabel(Slot slot, Context context, TextView label) {
+        switch (slot.type) {
+            case Slot.TYPE_ITEM:
+                Item item = slot.stage1Item;
+                if (item != null) {
+                    label.setText(item.label);
+                }
+                break;
+            case Slot.TYPE_FOLDER:
+                label.setText(context.getString(R.string.setting_shortcut_folder));
+                break;
+            case Slot.TYPE_RECENT:
+                label.setText(context.getString(R.string.recent_app));
+                break;
+            case Slot.TYPE_EMPTY:
+                label.setText("");
+                break;
+            case Slot.TYPE_NULL:
+                label.setText(context.getString(R.string.empty));
+                break;
+        }
+    }
+
+
+    public static void setActionIconWithState(Item item, ImageView icon, Context context) {
+        setActionIconWithState(item, icon, context, -1);
+    }
+
+    public static void setActionIconWithState(Item item, ImageView icon, Context context, int state) {
+        if (item.iconBitmap == null) {
+            return;
+        }
+        boolean enable;
+        switch (item.action) {
+            case Item.ACTION_WIFI:
+                enable = state != -1 ? state == 1 : getWifiState(context);
+                if (enable) {
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
+                } else {
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap2, 0, item.iconBitmap2.length));
+                }
+                break;
+            case Item.ACTION_BLUETOOTH:
+                enable = state != -1 ? state == 1 : getBluetoothState(context);
+                if (enable) {
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
+                } else {
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap2, 0, item.iconBitmap2.length));
+                }
+                break;
+            case Item.ACTION_ROTATION:
+                enable = state != -1 ? state == 1 : getIsRotationAuto(context);
+                if (enable) {
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
+                } else {
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap2, 0, item.iconBitmap2.length));
+                }
+                break;
+            case Item.ACTION_RINGER_MODE:
+                int currentState = state != -1 ? state - 1 : getRingerMode(context);
+                switch (currentState) {
+                    case RINGER_MODE_NORMAL:
+                        icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
+                        break;
+                    case RINGER_MODE_VIBRATE:
+                        icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap2, 0, item.iconBitmap2.length));
+                        break;
+                    case RINGER_MODE_SILENT:
+                        icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap3, 0, item.iconBitmap3.length));
+                        break;
+                }
+                break;
+            case Item.ACTION_FLASH_LIGHT:
+                enable = state != -1 ? state == 1 : NewServiceView.FLASH_LIGHT_ON;
+                if (enable) {
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
+                } else {
+                    icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap2, 0, item.iconBitmap2.length));
+                }
+                break;
+            default:
+                icon.setImageBitmap(BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length));
+                break;
+        }
+    }
+
+
+    public static void setIconBitmapsForActionItem(Context context, Item item) {
+        switch (item.action) {
+            case Item.ACTION_WIFI:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_wifi, context);
+                setBitMapForActionItemFromResId(item, 2, R.drawable.ic_wifi_off, context);
+                break;
+            case Item.ACTION_BLUETOOTH:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_bluetooth, context);
+                setBitMapForActionItemFromResId(item, 2, R.drawable.ic_bluetooth_off, context);
+                break;
+            case Item.ACTION_ROTATION:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_rotation, context);
+                setBitMapForActionItemFromResId(item, 2, R.drawable.ic_rotation_lock, context);
+                break;
+            case Item.ACTION_POWER_MENU:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_power_menu, context);
+                break;
+            case Item.ACTION_HOME:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_home, context);
+                break;
+            case Item.ACTION_BACK:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_back, context);
+                break;
+            case Item.ACTION_NOTI:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_notification, context);
+                break;
+            case Item.ACTION_LAST_APP:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_last_app, context);
+                break;
+            case Item.ACTION_CALL_LOGS:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_call_log, context);
+                break;
+            case Item.ACTION_DIAL:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_dial, context);
+                break;
+            case Item.ACTION_CONTACT:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_contact, context);
+                break;
+            case Item.ACTION_RECENT:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_recent, context);
+                break;
+            case Item.ACTION_VOLUME:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_volume, context);
+                break;
+            case Item.ACTION_BRIGHTNESS:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_screen_brightness, context);
+                break;
+            case Item.ACTION_RINGER_MODE:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_sound_normal, context);
+                setBitMapForActionItemFromResId(item, 2, R.drawable.ic_sound_vibrate, context);
+                setBitMapForActionItemFromResId(item, 3, R.drawable.ic_sound_silent, context);
+                break;
+            case Item.ACTION_FLASH_LIGHT:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_flash_light, context);
+                setBitMapForActionItemFromResId(item, 2, R.drawable.ic_flash_light_off, context);
+                break;
+            case Item.ACTION_SCREENSHOT:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_screenshot2, context);
+                break;
+            case Item.ACTION_SEARCH_SHORTCUTS:
+                setBitMapForActionItemFromResId(item, 1, R.drawable.ic_search_shortcuts, context);
+                break;
+            default:
+                throw new IllegalArgumentException("do not support this " + item.action);
+        }
+
+    }
+
+    public static Item getActionItemFromResult(ResolveInfo mResolveInfo, final PackageManager packageManager, Realm realm, Intent data) {
+        if (mResolveInfo == null) {
+            return null;
+        }
+        String label = (String) data.getExtras().get(Intent.EXTRA_SHORTCUT_NAME);
+        String stringIntent = ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0);
+        String packageName = mResolveInfo.activityInfo.packageName;
+        final String itemId = Item.TYPE_DEVICE_SHORTCUT + stringIntent;
+        Item realmItem = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
+        if (realmItem == null) {
+
+            int iconResId = 0;
+
+            Bitmap bmp = null;
+            Parcelable extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON);
+            if (extra != null && extra instanceof Bitmap)
+                bmp = (Bitmap) extra;
+            if (bmp == null) {
+                extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
+                if (extra != null && extra instanceof Intent.ShortcutIconResource) {
+                    try {
+                        Intent.ShortcutIconResource iconResource = (Intent.ShortcutIconResource) extra;
+                        packageName = iconResource.packageName;
+                        Resources resources = packageManager.getResourcesForApplication(iconResource.packageName);
+                        iconResId = resources.getIdentifier(iconResource.resourceName, null, null);
+                    } catch (Exception e) {
+                        Log.e(TAG, "onActivityResult: Could not load shortcut icon:");
+                    }
+                }
+            }
+            realm.beginTransaction();
+            Item item = new Item();
+            item.type = Item.TYPE_DEVICE_SHORTCUT;
+            item.itemId = itemId;
+            item.label = label;
+            item.packageName = packageName;
+            item.intent = stringIntent;
+            if (bmp != null) {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                item.iconBitmap = stream.toByteArray();
+            } else {
+                try {
+                    Resources resources = packageManager.getResourcesForApplication(item.getPackageName());
+                    Bitmap bmp2 = BitmapFactory.decodeResource(resources, iconResId);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bmp2.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    item.iconBitmap = stream.toByteArray();
+                    bmp2.recycle();
+                    stream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "onActivityResult: exception when setting item bitmap");
+                }
+
+
+            }
+            realmItem = realm.copyToRealm(item);
+            realm.commitTransaction();
+        } else {
+            if (realmItem.iconBitmap == null && realmItem.iconResourceId != 0) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        Item realmItem = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
+
+                        try {
+                            Resources resources = packageManager.getResourcesForApplication(realmItem.getPackageName());
+                            Bitmap bmp2 = BitmapFactory.decodeResource(resources, realmItem.iconResourceId);
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            bmp2.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                            realmItem.iconBitmap = stream.toByteArray();
+                            bmp2.recycle();
+                            stream.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.e(TAG, "onActivityResult: exception when setting item bitmap");
+                        }
+                    }
+                });
+            }
+        }
+        return realmItem;
+    }
+
+    private static void setBitMapForActionItemFromResId(Item item, int position, int resourceId, Context context) {
+        Bitmap bmp = ((BitmapDrawable) ContextCompat.getDrawable(context, resourceId)).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+        switch (position) {
+            case 1:
+                item.iconBitmap = stream.toByteArray();
+                break;
+            case 2:
+                item.iconBitmap2 = stream.toByteArray();
+                break;
+            case 3:
+                item.iconBitmap3 = stream.toByteArray();
+                break;
+        }
+        try {
+            bmp.recycle();
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "setBitMapForActionItemFromResId: IOException");
+        }
+    }
+
+
+
+    public static void setItemBitmapForShortcutsSet(Context context, Item item) {
+        Log.e(TAG, "setItemBitmapForShortcutsSet: " + item.toString());
+        if (context != null) {
+            String itemId = item.itemId;
+            if (itemId.contains(Collection.TYPE_GRID_FAVORITE)) {
+                item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_grid_favorite_set);
+            } else if (itemId.contains(Collection.TYPE_CIRCLE_FAVORITE)) {
+                item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_circle_favorite_set);
+            } else if (itemId.contains(Collection.TYPE_RECENT)) {
+                item.iconBitmap = getBitmapByteArrayFromResId(context, R.drawable.ic_recent_set);
+            }
+        }
+    }
+
+    public static byte[] getBitmapByteArrayFromResId(Context context, int resId) {
+        Bitmap bmp = ((BitmapDrawable) ContextCompat.getDrawable(context, resId)).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        try {
+
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            Log.e(TAG, "getBitmapByteArrayFromResId: ");
+        }
+        byte[] byteArray = stream.toByteArray();
+        try {
+            stream.close();
+        } catch (IOException e) {
+            Log.e(TAG, "getBitmapByteArrayFromResId: IOException");
+            e.printStackTrace();
+        }
+//        bmp.recycle();
+        return byteArray;
+    }
+
+    public static String getContactItemLabel(int type, String name, Context context) {
+        switch (type) {
+            case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                return name;
+            case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                return String.format("%s(%s)", name, context.getString(R.string.contact_type_work));
+            case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
+                return String.format("%s(%s)", name, context.getString(R.string.contact_type_home));
+            case ContactsContract.CommonDataKinds.Phone.TYPE_MAIN:
+                return String.format("%s(%s)", name, context.getString(R.string.contact_type_main));
+            case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
+                return String.format("%s(%s)", name, context.getString(R.string.contact_type_work_fax));
+            case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
+                return String.format("%s(%s)", name, context.getString(R.string.contact_type_pager));
+            case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
+                return String.format("%s(%s)", name, context.getString(R.string.contact_type_other));
+            case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
+                return String.format("%s(%s)", name, context.getString(R.string.contact_type_custom));
+            default:
+                return name;
+        }
+
+    }
+
+    public static String createCollectionId(String collectionType, long number) {
+        return collectionType + number;
+    }
+
+    public static String createSlotId() {
+        return String.valueOf(System.currentTimeMillis() + new Random().nextLong());
+    }
+
+    public static String createCollectionLabel(String defaultLabel, long number) {
+        return defaultLabel + " " + number;
+    }
+
+    public static Slot createSlotAndAddToRealm(Realm realm, String slotType) {
+        Slot newSlot = new Slot();
+        newSlot.slotId = Utility.createSlotId();
+        newSlot.type = slotType;
+        return realm.copyToRealm(newSlot);
+    }
+
+    public static void showDialogWithSeekBar(final int min, int max, int current, final String unit
+            , String title
+            , final PublishSubject<Integer> subject, Context context) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = View.inflate(context, R.layout.dialog_with_seek_bar, null);
+        SeekBar seekBar = (SeekBar) view.findViewById(R.id.seek_bar);
+        final TextView value = (TextView) view.findViewById(R.id.value);
+        value.setText(current  + unit);
+        seekBar.setProgress(current - min);
+        seekBar.setMax(max - min);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChanged;
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChanged = progress + min;
+                value.setText(progressChanged + unit);
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                subject.onNext(progressChanged);
+            }
+        });
+
+        builder.setView(view).
+                setTitle(title).
+                setPositiveButton(R.string.edge_dialog_ok_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //do nothing
+                    }
+                });
+        builder.show();
+
+    }
+
+    public static void showDialogWithOptionToChoose(Context context, int titleId, CharSequence[] options, final PublishSubject<Void>[] subjects) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        if (titleId>0) {
+            builder.setTitle(titleId);
+        }
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        subjects[which].onNext(null);
+                    }
+                });
+        builder.create().show();
+    }
+
+    public static void showDialogWithOptionToChoose(Context context, int titleId, int[] optionsResId, DialogInterface.OnClickListener onClickListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        if (titleId > 0) {
+            builder.setTitle(titleId);
+        }
+        CharSequence[] options = new CharSequence[optionsResId.length];
+        for (int i = 0; i < options.length; i++) {
+            options[i] = context.getString(optionsResId[i]);
+        }
+        builder.setItems(options, onClickListener);
+        builder.create().show();
+    }
+
+    public static String createAppItemId(String packageName) {
+        return Item.TYPE_APP + packageName;
+    }
+
+    public static String createShortcutSetItemId(String collectionId) {
+        return Item.TYPE_SHORTCUTS_SET + collectionId;
+    }
+
+    public static String createActionItemId(int action) {
+        return Item.TYPE_ACTION + action;
+    }
+
+
+    public static void startItem(Item item, String lastAppPackageName, Context context,int contactAction, int ringerModeAction, boolean onHomeScreen, boolean useTransition) {
+        switch (item.type) {
+            case Item.TYPE_APP:
+                startApp(item.getPackageName(), context, onHomeScreen, useTransition);
+                break;
+            case Item.TYPE_ACTION:
+                startAction(item.action, context, lastAppPackageName, ringerModeAction, useTransition);
+                break;
+            case Item.TYPE_CONTACT:
+                startContact(item, context, contactAction, onHomeScreen);
+                break;
+            case Item.TYPE_DEVICE_SHORTCUT:
+                startDeviceShortcut(item, context, onHomeScreen);
+                break;
+        }
+    }
+
+    private static void startDeviceShortcut(Item item, Context context, boolean onHomeScreen) {
+        try {
+            Intent intent = Intent.parseUri(item.getIntent(), 0);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            launchActivityInstantly(context, intent, onHomeScreen);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (e instanceof SecurityException) {
+                Log.e(TAG, "startShortcut: exception when start Shortcut shortcut " + e);
+                Toast.makeText(context, context.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
+            }
+
+        }
+    }
+
+    private static void launchActivityInstantly(Context context, Intent intent, boolean onHomeScreen) {
+        if (onHomeScreen) {
+            startIntentUsingPendingIntent(intent, context);
+        } else {
+            ContextCompat.startActivities(context, new Intent[]{intent});
+        }
+    }
+
+    private static void startApp(String packageName, Context context, boolean onHomeScreen, boolean useTransition) {
+        Intent extApp = context.getPackageManager().getLaunchIntentForPackage(packageName);
+        if (packageName != null && extApp != null) {
+            if (packageName.equals("com.devhomc.search")) {
+                extApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(extApp);
+            } else {
+                ComponentName componentName = extApp.getComponent();
+                Intent startAppIntent = new Intent(Intent.ACTION_MAIN);
+                startAppIntent.setComponent(componentName);
+                startAppIntent.addFlags(1064960);
+                startAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                if (useTransition) {
+                    startAppIntent.setFlags(270532608);
+                } else {
+                startAppIntent.setFlags(270532608 | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                }
+                startAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                launchActivityInstantly(context, startAppIntent, onHomeScreen);
+            }
+        } else {
+            Log.e(TAG, "extApp of shortcut = null " + packageName);
+        }
+    }
+
+
+    private static void startIntentUsingPendingIntent(Intent intent, Context context) {
+        PendingIntent pendingIntent =
+                PendingIntent.getActivity(context, intent.hashCode(), intent, 0);
+        try {
+            pendingIntent.send();
+        } catch (PendingIntent.CanceledException e) {
+            e.printStackTrace();
+            ContextCompat.startActivities(context, new Intent[]{intent});
+//            ContextCompat.startActivity(context, intent, null);
+        }
+    }
+
+    private static void startContact(Item item, Context context, int contactAction, boolean onHomeScreen) {
+        switch (contactAction) {
+            case Cons.CONTACT_ACTION_CHOOSE:
+                Intent intent = new Intent(context, ChooseActionDialogActivity.class);
+                intent.putExtra("number", item.getNumber());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                launchActivityInstantly(context, intent, onHomeScreen);
+                break;
+            case Cons.CONTACT_ACTION_CALL:
+                String url = "tel:"+ item.getNumber();
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
+                    callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(callIntent);
+                } else {
+                    Toast.makeText(context, context.getString(R.string.missing_call_phone_permission), Toast.LENGTH_LONG).show();
+                }
+                break;
+            case Cons.CONTACT_ACTION_SMS:
+                Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
+                        + item.getNumber()));
+                smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(smsIntent);
+                break;
+        }
+    }
+
+    public static void startAction(int action, Context context, String lastAppPackageName, int ringerModeAction, boolean useTransition) {
+        switch (action) {
+            case Item.ACTION_WIFI:
+                Utility.toggleWifi(context);
+                break;
+            case Item.ACTION_BLUETOOTH:
+                Utility.toggleBluetooth(context);
+                break;
+            case Item.ACTION_ROTATION:
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    Utility.setAutorotation(context);
+                } else {
+                    if (Settings.System.canWrite(context)) {
+                        Utility.setAutorotation(context);
+                    } else {
+                        Utility.startNotiDialog(context, NotiDialog.WRITE_SETTING_PERMISSION);
+                    }
+                }
+
+                break;
+            case Item.ACTION_POWER_MENU:
+                Utility.startPowerAction(context);
+                break;
+            case Item.ACTION_HOME:
+                Utility.startHomeAction(context);
+                break;
+            case Item.ACTION_BACK:
+                Utility.startBackAction(context);
+                break;
+            case Item.ACTION_NOTI:
+                Utility.startNotiAction(context);
+                break;
+            case Item.ACTION_LAST_APP:
+                Utility.lastAppAction(context, lastAppPackageName, useTransition);
+                break;
+            case Item.ACTION_CALL_LOGS:
+                Utility.callLogsAction(context);
+                break;
+            case Item.ACTION_DIAL:
+                Log.e(TAG, "startShortcut: Start dial");
+                Utility.dialAction(context);
+                break;
+            case Item.ACTION_CONTACT:
+                Utility.contactAction(context);
+                break;
+            case Item.ACTION_RECENT:
+                Utility.startRecentAction(context);
+                break;
+            case Item.ACTION_VOLUME:
+                Utility.volumeAction(context);
+                break;
+            case Item.ACTION_BRIGHTNESS:
+                Utility.brightnessAction(context);
+                break;
+            case Item.ACTION_RINGER_MODE:
+                Utility.setRinggerMode(context, ringerModeAction);
+                break;
+            case Item.ACTION_FLASH_LIGHT:
+                Utility.flashLightAction3(context);
+                break;
+            case Item.ACTION_SCREENSHOT:
+                Utility.screenshotAction(context);
+                break;
+        }
+    }
+
+    public static void setFolderPosition(float triggerX, float triggerY, final RecyclerView folderView, int edgePosition, float mScale, float iconScale, int size, int iconSpace,
+                                         int screenWidth, int screenHeight) {
+        int columnCount = size <= 4 ? size : 4;
+        int rowCount = size % 4 > 0 ? size / 4 + 1 : size / 4;
+        int folderWide = calculateGridWide(columnCount, iconSpace, mScale, iconScale);
+        int folderTall = calculateGridHeight(rowCount, iconSpace, mScale, iconScale);
+        float x;
+        float y;
+//        Log.e(TAG, "setFolderPosition: folderWide = " + folderWide + "\nfolderTall = " + folderTall + "\ntriggerX = " + triggerX + "\ntriggerY = " + triggerY);
+
+        if (triggerX + folderWide / 2 < screenWidth && triggerX - folderWide / 2 > 0) {
+            x = triggerX - folderWide / 2;
+        } else if (triggerX + folderWide / 2 >= screenWidth){
+            x = screenWidth - folderWide;
+        } else {
+            x = 0;
+        }
+
+        if (triggerY + folderTall / 2 < screenHeight && triggerY - folderTall/2 >0) {
+            y = triggerY - folderTall / 2;
+        } else if (triggerY + folderTall / 2 >= screenHeight) {
+            y = screenHeight - folderTall;
+        } else {
+            y = 0;
+        }
+//        Log.e(TAG, "setFolderPosition: x = " + x + "\ny = " + y + "\nposition = " + rightLeftOrBottom(edgePosition));
+        folderView.setX(x);
+        folderView.setY(y);
+    }
+
+    public static int calculateGridWide(int columnCount, int iconsSpace, float mScale, float iconScale) {
+        int for1Icon = (int) (iconsSpace * mScale + Cons.ICON_SIZE_DEFAULT * mScale * iconScale);
+        return for1Icon * columnCount + (int) (iconsSpace * mScale);
+    }
+    public static int calculateGridHeight(int rowCount, int iconsSpace, float mScale, float iconScale) {
+        int for1Icon = (int) (iconsSpace * mScale + Cons.ICON_SIZE_DEFAULT * mScale * iconScale);
+        return for1Icon * rowCount + (int) (iconsSpace * mScale);
+    }
+
+
+
+    public static int getPositionOfIntArray(int[] array, int item) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == item) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static int getPositionOfStringArray(String[] array, String item) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].equals(item)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+    public static String getLabelFromPackageName(String packageName, PackageManager packageManager) {
+        String label = null;
+        try {
+            label = packageManager.getApplicationLabel(packageManager.getApplicationInfo(packageName, 0)).toString();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return label;
+    }
+
+    public static boolean isTrial(Context context) {
+        return context.getPackageName().equals(Cons.FREE_VERSION_PACKAGE_NAME);
+    }
+
+    public static boolean isTrialAndOutOfTrialTime(Context context, SharedPreferences sharedPreferences) {
+        return context.getPackageName().equals(Cons.FREE_VERSION_PACKAGE_NAME)
+                && System.currentTimeMillis() - sharedPreferences.getLong(Cons.TRIAL_START_TIME_KEY, System.currentTimeMillis()) > Cons.TRIAL_TIME;
+    }
+
+    public static String getDeviceShortcutItemId(String intent) {
+        return Item.TYPE_DEVICE_SHORTCUT + intent;
+    }
+
+    public static String getAppItemId(String packageName) {
+        return Item.TYPE_APP + packageName;
+    }
+
+    public static int getActionFromStringAction(String action) {
+        switch (action) {
+            case MainActivity.ACTION_HOME:
+                return Item.ACTION_HOME;
+            case MainActivity.ACTION_BACK:
+                return Item.ACTION_BACK;
+            case MainActivity.ACTION_WIFI:
+                return Item.ACTION_WIFI;
+            case MainActivity.ACTION_NOTI:
+                return Item.ACTION_NOTI;
+            case MainActivity.ACTION_BLUETOOTH:
+                return Item.ACTION_BLUETOOTH;
+            case MainActivity.ACTION_ROTATE:
+                return Item.ACTION_ROTATION;
+            case MainActivity.ACTION_POWER_MENU:
+                return Item.ACTION_POWER_MENU;
+            case MainActivity.ACTION_LAST_APP:
+                return Item.ACTION_LAST_APP;
+            case MainActivity.ACTION_CALL_LOGS:
+                return Item.ACTION_CALL_LOGS;
+            case MainActivity.ACTION_CONTACT:
+                return Item.ACTION_CONTACT;
+            case MainActivity.ACTION_DIAL:
+                return Item.ACTION_DIAL;
+            case MainActivity.ACTION_RECENT:
+                return Item.ACTION_RECENT;
+            case MainActivity.ACTION_VOLUME:
+                return Item.ACTION_VOLUME;
+            case MainActivity.ACTION_BRIGHTNESS:
+                return Item.ACTION_BRIGHTNESS;
+            case MainActivity.ACTION_RINGER_MODE:
+                return Item.ACTION_RINGER_MODE;
+            case MainActivity.ACTION_FLASH_LIGHT:
+                return Item.ACTION_FLASH_LIGHT;
+            default:
+                throw new IllegalArgumentException("do not convert this action " + action);
+        }
+    }
+
+    public static void setCollectionSlotsSize(Realm inTransitionRealm, Collection collection, int size) {
+        final RealmList<Slot> slots = collection.slots;
+        while (slots.size() > size) {
+            slots.remove(slots.size() - 1);
+        }
+        while (slots.size() < size) {
+            slots.add(createSlotAndAddToRealm(inTransitionRealm, Slot.TYPE_ITEM));
+        }
+    }
+
+    public static void generateActionItems(Realm realm, final WeakReference<Context> contextWeakReference) {
+        final String[] actionStrings = contextWeakReference.get().getResources().getStringArray(R.array.setting_shortcut_array_no_folder);
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for (String string : actionStrings) {
+                    int action = Utility.getActionFromLabel(contextWeakReference.get(), string);
+                    if (action != Item.ACTION_SCREEN_LOCK ||
+                            !(
+                                    (android.os.Build.MANUFACTURER.toLowerCase().contains("sam") || android.os.Build.MANUFACTURER.toLowerCase().contains("zte")) &&
+                                            Build.VERSION.SDK_INT == Build.VERSION_CODES.M
+                            )) {
+
+                        String itemId = Item.TYPE_ACTION + action;
+                        Item item = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
+                        if (item == null) {
+                            Log.e(TAG, "LoadActions - add action " + string);
+                            Item newItem = new Item();
+                            newItem.type = Item.TYPE_ACTION;
+                            newItem.itemId = itemId;
+                            newItem.label = string;
+                            newItem.action = action;
+                            Utility.setIconBitmapsForActionItem(contextWeakReference.get(), newItem);
+                            realm.copyToRealm(newItem);
+                        } else if (item.iconBitmap == null) {
+                            Log.e(TAG, "execute: need to update action icon " + item.toString());
+                            setIconBitmapsForActionItem(contextWeakReference.get(), item);
+                        }
+                    }
+
+                }
+
+            }
+        });
+    }
+
+    public static void zip(String[] files, File zipFile) throws IOException {
+        BufferedInputStream origin = null;
+        ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipFile)));
+        try {
+            byte data[] = new byte[1024];
+
+            for (int i = 0; i < files.length; i++) {
+                Log.e(TAG, "zip: file = " + files[i]);
+                FileInputStream fi = new FileInputStream(files[i]);
+                origin = new BufferedInputStream(fi, 1024);
+                try {
+                    ZipEntry entry = new ZipEntry(files[i].substring(files[i].lastIndexOf("/") + 1));
+                    out.putNextEntry(entry);
+                    int count;
+                    while ((count = origin.read(data, 0, 1024)) != -1) {
+                        out.write(data, 0, count);
+                    }
+                }
+                finally {
+                    origin.close();
+                }
+            }
+        }
+        finally {
+            out.close();
+        }
+    }
+
+    public static void unzip(String zipFile, String realmLocation,String sharedPreferenceLocation) throws IOException {
+        int size;
+        byte[] buffer = new byte[1024];
+
+        try {
+            if ( !realmLocation.endsWith("/") ) {
+                realmLocation += "/";
+            }
+            File realmFile = new File(realmLocation);
+            if(!realmFile.isDirectory()) {
+                realmFile.mkdirs();
+            }
+
+            if ( !sharedPreferenceLocation.endsWith("/") ) {
+                sharedPreferenceLocation += "/";
+            }
+            File sharedFile = new File(sharedPreferenceLocation);
+            if(!sharedFile.isDirectory()) {
+                sharedFile.mkdirs();
+            }
+
+            ZipInputStream zin = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFile), 1024));
+            try {
+                ZipEntry ze = null;
+                while ((ze = zin.getNextEntry()) != null) {
+                    String path = null;
+                    if (ze.getName().equals(Cons.DEFAULT_REALM_NAME)) {
+                        path = realmLocation + ze.getName();
+                    } else if (ze.getName().equals(Cons.SHARED_PREFERENCE_NAME +".xml")) {
+                        path = sharedPreferenceLocation + ze.getName();
+                    } else {
+                        throw new IllegalArgumentException("imcompatable file");
+                    }
+                    File unzipFile = new File(path);
+
+
+                    if (ze.isDirectory()) {
+                        if(!unzipFile.isDirectory()) {
+                            unzipFile.mkdirs();
+                        }
+                    } else {
+                        // check for and create parent directories if they don't exist
+                        File parentDir = unzipFile.getParentFile();
+                        if ( null != parentDir ) {
+                            if ( !parentDir.isDirectory() ) {
+                                parentDir.mkdirs();
+                            }
+                        }
+
+                        // unzip the file
+                        FileOutputStream out = new FileOutputStream(unzipFile, false);
+                        BufferedOutputStream fout = new BufferedOutputStream(out, 1024);
+                        try {
+                            while ( (size = zin.read(buffer, 0, 1024)) != -1 ) {
+                                fout.write(buffer, 0, size);
+                            }
+
+                            zin.closeEntry();
+                        }
+                        finally {
+                            fout.flush();
+                            fout.close();
+                        }
+                    }
+                }
+            }
+            finally {
+                zin.close();
+            }
+        }
+        catch (Exception e) {
+            Log.e(TAG, "Unzip exception", e);
+        }
+    }
+
+    public static void hideNotification(Context context) {
+        Intent hideNotiIntent = new Intent();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            hideNotiIntent.setClassName("com.android.settings", "com.android.settings.Settings$AppNotificationSettingsActivity");
+            hideNotiIntent.putExtra("app_package", context.getPackageName());
+            hideNotiIntent.putExtra("app_uid", context.getApplicationInfo().uid);
+        } else {
+            hideNotiIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            hideNotiIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            hideNotiIntent.setData(Uri.parse("package:" + context.getPackageName()));
+        }
+        ContextCompat.startActivity(context, hideNotiIntent, null);
+    }
+
+    public static void pauseEdgeService(Context context) {
+        Intent intent = new Intent();
+        intent.setAction(Cons.ACTION_TOGGLE_EDGES);
+        context.sendBroadcast(intent);
+    }
+
+    public static boolean isMashmallow() {
+        return Build.VERSION.SDK_INT == Build.VERSION_CODES.M;
+    }
+    public static boolean isMashMallowOrHigher() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+    }
+
+    public static boolean isKitkat() {
+        return Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT;
+    }
+
+    public static boolean isOreo() {
+        return Build.VERSION.SDK_INT == 26;
+    }
+
+    public static boolean isFree(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0);
+        return context.getPackageName().equals(Cons.FREE_VERSION_PACKAGE_NAME) && !sharedPreferences.getBoolean(Cons.PRO_PURCHASED_KEY, false);
+    }
+
+    public static void textColorDisabledIfFree(TextView textView) {
+        int textColor;
+        if (Utility.isFree(textView.getContext())) {
+            textColor = R.color.text_primary_dark_disabled;
+        } else textColor = R.color.text_primary_dark;
+        textView.setTextColor(ContextCompat.getColor(textView.getContext(), textColor));
+    }
+
+    public static boolean isFreeAndOutOfTrial(Context context, SharedPreferences sharedPreferences) {
+        return isFree(context) && System.currentTimeMillis() - sharedPreferences.getLong(Cons.BEGIN_DAY_KEY, System.currentTimeMillis()) > Cons.TRIAL_TIME;
+    }
+
+    public static void sendFeedback(Context context, boolean fromReviewRequest) {
+        String[] TO = {"thanhhai08sk@gmail.com"};
+        String content = new StringBuilder().append("Manufacture: ").append(Build.MANUFACTURER)
+                .append("\nDevice: ")
+                .append(Build.MODEL)
+                .append(" - ")
+                .append(Build.DEVICE)
+                .append("\nAndroid: ")
+                .append(Build.VERSION.RELEASE)
+                .append("\n\n")
+                .append(context.getString(R.string.email_prompt))
+                .toString();
+
+
+
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        String subject = context.getString(R.string.app_name) + (fromReviewRequest ? " feedback" : "");
+
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT,subject);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, content);
+
+
+        try {
+            context.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+        }
+        catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(context, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void toast(Context context, int message) {
+        Toast.makeText(context.getApplicationContext(), context.getString(message), Toast.LENGTH_SHORT).show();
+    }
+
+    public static void toggleEdges(Context context) {
+        Intent toggleEdgeIntent = new Intent();
+        toggleEdgeIntent.setAction(Cons.ACTION_TOGGLE_EDGES);
+        context.sendBroadcast(toggleEdgeIntent);
+    }
+
+    public static boolean isEdgesOn(Context context) {
+        return ((MyApplication) context.getApplicationContext()).isEdgeIsOn();
+    }
+    public static boolean isEdgesOn() {
+        return ((MyApplication) MyApplication.getContext()).isEdgeIsOn();
+    }
+
+    public static void getProVersion(Context context) {
+        openPlayStorePage(context, Cons.PRO_VERSION_PACKAGE_NAME);
+    }
+
+
+    public static void openPlayStorePage(Context context, String packageName) {
+        Uri uri = Uri.parse("mbarket://details?id=" + packageName);
+        Intent gotoMarket = new Intent(Intent.ACTION_VIEW, uri);
+        gotoMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            context.startActivity(gotoMarket);
+        } catch (ActivityNotFoundException e) {
+            context.startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + packageName)));
+        }
+    }
+
+    public static void openJournalItPlayStorePage(Context context) {
+        openPlayStorePage(context, Cons.JOURNAL_IT_PACKAGE_NAME);
+    }
+
+    public static void showProOnlyDialog(final Activity context) {
+        new MaterialDialog.Builder(context)
+                .title(R.string.pro_only)
+                .content(R.string.pro_only_content)
+                .positiveText(R.string.main_edge_switch_2_trial_buy_pro_button)
+                .negativeText(R.string.edge_dialog_cancel_button)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+//                        Utility.getProVersion(context);
+                        if (context instanceof BaseActivity) {
+                            ((BaseActivity) context).buyPro();
+                        } else {
+                            Utility.getProVersion(context);
+                        }
+                    }
+                })
+                .show();
+    }
+
+    public static void noticeUserAboutScreenLock(final Context context) {
+        new MaterialDialog.Builder(context)
+                .title(R.string.admin_permission)
+                .content(R.string.admin_permission_notice_2)
+                .positiveText(R.string.button_close)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+//                        ComponentName cm = new ComponentName(context, LockAdmin.class);
+//                        Intent buttonIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+//                        buttonIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cm);
+//                        buttonIntent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+//                                context.getString(R.string.admin_permission_notice));
+//                        context.startActivity(buttonIntent);
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+
+    public static int calculateNoOfColumns(Context context, int iconSize) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        return (int) (dpWidth / iconSize);
+    }
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        if (height / inSampleSize > reqHeight) {
+            inSampleSize *= 2;
+        }
+
+        return inSampleSize;
+    }
+
+    public static Bitmap decodeSampledBitmapFromUri(Uri uri,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(uri.getPath(),options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(uri.getPath(),options);
+    }
+
+    public static void rebootApp(Context context) {
+        Intent mStartActivity = new Intent(context.getApplicationContext(), MainView.class);
+        int mPendingIntentId = 123456;
+        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+        System.exit(0);
+    }
+
+    public static String getSharedPreferenceFile(Context context) throws IOException {
+        String sharedFile = Environment.getDataDirectory().getAbsolutePath() + "/data/" + context.getPackageName() + "/" + Cons.SHARED_PREFERENCE_FOLDER_NAME + "/" + Cons.SHARED_PREFERENCE_NAME+".xml";
+
+        File file = new File(sharedFile);
+        if (!file.exists()) {
+            Log.e(TAG, "onResult: file not exist " + sharedFile);
+            File file1 = new File("/data/data/org.de_studio.recentappswitcher.fastbuild/shared_prefs/");
+            for (File file2 : file1.listFiles()) {
+                Log.e(TAG, "onResult: file = " + file2.getAbsolutePath());
+
+            }
+            throw new IOException("Can not find shared file");
+        }
+        return sharedFile;
+    }
+
+    public static File createTempBackupZipFile(Context context) {
+        return new File(context.getApplicationInfo().dataDir + "/" + Cons.BACKUP_FILE_NAME);
+    }
+
+    public static File createDownloadBackupZipFile() {
+        return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + Cons.BACKUP_FILE_NAME);
+    }
+
+    public static void writeToStream(InputStream inputStream, OutputStream outputStream) throws IOException {
+        byte[] buf = new byte[1024];
+        int bytesRead;
+        if (inputStream != null) {
+            while ((bytesRead = inputStream.read(buf)) > 0) {
+                outputStream.write(buf, 0, bytesRead);
+            }
+            inputStream.close();
+            outputStream.close();
+        }
+    }
+
+    public static boolean isMyServiceRunning(Class<?> serviceClass,Context context) {
+        ActivityManager manager = (ActivityManager)context. getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i("Service already","running");
+                return true;
+            }
+        }
+        Log.i("Service not","running");
+        return false;
+    }
 }
+

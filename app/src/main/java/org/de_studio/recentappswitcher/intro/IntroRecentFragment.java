@@ -52,16 +52,18 @@ public class IntroRecentFragment extends Fragment {
         if (hand != null) {
             hand.setAlpha(1f);
         }
-        imageX = introImage.getX();
-        imageY = introImage.getY();
-        imageHeight = introImage.getHeight();
-        imageWidth = introImage.getWidth();
-        Log.e(LOG_TAG, "imageX = " + imageX + "\nimageY = " + imageY + "\nimageHeight = " + imageHeight + "\nimageWidth = " + imageWidth);
-        hand.setX(imageX+ imageWidth + imageWidth/3);
-        hand.setY(imageY + imageHeight/2 - hand.getHeight()/2);
-        introImage.setImageResource(R.drawable.screenshot_1);
-        propertyAnimators[0] = hand.animate().setDuration(ANIMATION_DURATION).x(imageX+ imageWidth/2 + imageWidth/3)
-                .setListener(new  Animation1());
+        if (introImage != null) {
+            imageX = introImage.getX();
+            imageY = introImage.getY();
+            imageHeight = introImage.getHeight();
+            imageWidth = introImage.getWidth();
+            Log.e(LOG_TAG, "imageX = " + imageX + "\nimageY = " + imageY + "\nimageHeight = " + imageHeight + "\nimageWidth = " + imageWidth);
+            hand.setX(imageX+ imageWidth + imageWidth/3);
+            hand.setY(imageY + imageHeight/2 - hand.getHeight()/2);
+            introImage.setImageResource(R.drawable.screenshot_1);
+            propertyAnimators[0] = hand.animate().setDuration(ANIMATION_DURATION).x(imageX+ imageWidth/2 + imageWidth/3)
+                    .setListener(new  Animation1());
+        }
     }
 
     private class Animation1 implements Animator.AnimatorListener {

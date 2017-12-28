@@ -7,7 +7,45 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="AppTheme.SetItemIcon">
+        <item name="android:editTextColor">@android:color/white</item>
+    </style>
+
     <style name="step_button.">
         <item name="android:elevation">0dp</item>
     </style>
+
+    <style name="ItemLinearLayout">
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:foreground">?android:selectableItemBackground</item>
+        <!--<item name="android:stateListAnimator">@animator/raise</item>-->
+        <!--<item name="android:background">@color/background_light</item>-->
+    </style>
+    <style name="ItemSlot">
+        <item name="android:foreground">?android:selectableItemBackground</item>
+    </style>
+
+    <style name="Button">
+        <item name="android:foreground">?android:selectableItemBackground</item>
+    </style>
+    <style name="MoreSetting_Item_Parent_With_Switch">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical|start</item>
+        <item name="android:foreground">?android:selectableItemBackground</item>
+
+    </style>
+    <style name="MoreSetting_Item_Parent_No_Switch">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:foreground">?android:selectableItemBackground</item>
+
+    </style>
+
+
+
 </resources>

@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/set_required_permissions"
-        android:textSize="24dp"
+        android:textSize="20sp"
         android:fontFamily="sans-serif-bolt"
         android:gravity="center"
         android:paddingLeft="32dp"
@@ -30,7 +30,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/enable_floating_window"
-            android:textSize="20dp"
+            android:textSize="16sp"
             android:layout_weight="1"
             />
         <ImageView
@@ -64,7 +64,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/enable_usage_stat"
-            android:textSize="20dp"
+            android:textSize="16sp"
             android:layout_weight="1"
             />
         <ImageView
@@ -99,7 +99,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/enable_accessibility"
-            android:textSize="20dp"
+            android:textSize="16sp"
             android:layout_weight="1"
             />
         <ImageView

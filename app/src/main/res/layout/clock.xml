@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<org.de_studio.recentappswitcher.ui.MyFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
-    tools:background="@color/grey"
+    android:background="@color/scrim"
+    android:clipChildren="false"
     >
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,9 +22,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
-            android:singleLine="true"
+            android:lines="1"
             android:textColor="@color/white"
-            android:textSize="24dp"
+            android:textSize="24sp"
             tools:text ="12:33"
             />
 
@@ -33,9 +34,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
-            android:singleLine="true"
+            android:lines="1"
             android:textColor="@color/white"
-            android:textSize="14dp"
+            android:textSize="14sp"
             tools:text="Fri, 27 May"
 
             />
@@ -45,10 +46,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
-            android:singleLine="true"
-            android:text="55% Battery life"
+            android:lines="1"
+            tools:text="55% Battery life"
             android:textColor="@color/white"
-            android:textSize="14dp"
+            android:textSize="14sp"
 
             />
     </LinearLayout>
@@ -88,4 +89,4 @@
                 android:singleLine="true"
                 />
         </FrameLayout>
-</FrameLayout>
+</org.de_studio.recentappswitcher.ui.MyFrameLayout>

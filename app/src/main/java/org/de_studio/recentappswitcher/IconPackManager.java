@@ -13,6 +13,8 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -150,6 +152,9 @@ public class IconPackManager
                                 if (xpp.getAttributeCount() > 0 && xpp.getAttributeName(0).equals("factor"))
                                 {
                                     mFactor = Float.valueOf(xpp.getAttributeValue(0));
+//                                    if (mFactor < 0.7f) {
+//                                        mFactor = 0.7f;
+//                                    }
                                 }
                             }
                             else if (xpp.getName().equals("item"))
@@ -197,7 +202,8 @@ public class IconPackManager
             int id = iconPackres.getIdentifier(drawableName, "drawable", packageName);
             if (id > 0)
             {
-                Drawable bitmap = iconPackres.getDrawable(id);
+//                Drawable bitmap = iconPackres.getDrawable(id,null);
+                Drawable bitmap = ResourcesCompat.getDrawable(iconPackres, id, null);
                 if (bitmap instanceof BitmapDrawable)
                     return ((BitmapDrawable)bitmap).getBitmap();
             }
@@ -295,8 +301,9 @@ public class IconPackManager
 
         private Bitmap generateBitmap(String appPackageName, Bitmap defaultBitmap)
         {
+//            long time = System.currentTimeMillis();
             // the key for the cache is the icon pack package name and the app package name
-            String key = packageName + ":" + appPackageName;
+//            String key = packageName + ":" + appPackageName;
 
             // if generated bitmaps cache already contains the package name return it
 //            Bitmap cachedBitmap = BitmapCache.getInstance(mContext).getBitmap(key);
@@ -321,11 +328,16 @@ public class IconPackManager
 
             // create a mutable mask bitmap with the same mask
             Bitmap scaledBitmap;
-            if (defaultBitmap.getWidth() > w || defaultBitmap.getHeight()> h) {
-                scaledBitmap = Bitmap.createScaledBitmap(defaultBitmap, (int)(w * mFactor), (int)(h * mFactor), false);
-            } else {
-                scaledBitmap = Bitmap.createBitmap(defaultBitmap);
-            }
+//            if (defaultBitmap.getWidth() > w || defaultBitmap.getHeight()> h) {
+//                Log.e(TAG, "generateBitmap: mFactor = " + mFactor);
+//                scaledBitmap = Bitmap.createScaledBitmap(defaultBitmap, (int)(w * mFactor), (int)(h * mFactor), false);
+//            } else {
+//                Log.e(TAG, "generateBitmap: no scale");
+//                scaledBitmap = Bitmap.createBitmap(defaultBitmap);
+//            }
+
+            scaledBitmap = Bitmap.createScaledBitmap(defaultBitmap, (int)(w * mFactor), (int)(h * mFactor), false);
+
 
             if (mMaskImage != null)
             {
@@ -337,22 +349,29 @@ public class IconPackManager
                 // paint the bitmap with mask into the result
                 Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
                 paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
-                mCanvas.drawBitmap(scaledBitmap, (w - scaledBitmap.getWidth())/2, (h - scaledBitmap.getHeight())/2, null);
                 mCanvas.drawBitmap(mutableMask, 0, 0, paint);
+                mCanvas.drawBitmap(scaledBitmap, (w - scaledBitmap.getWidth())/2, (h - scaledBitmap.getHeight())/2, null);
                 paint.setXfermode(null);
             }
             else // draw the scaled bitmap with the back image as mask
             {
-                Bitmap mutableMask = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-                Canvas maskCanvas = new Canvas(mutableMask);
-                maskCanvas.drawBitmap(backImage,0, 0, new Paint());
+                try {
+                    Bitmap mutableMask = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                    Canvas maskCanvas = new Canvas(mutableMask);
+                    maskCanvas.drawBitmap(backImage, 0, 0, new Paint());
 
-                // paint the bitmap with mask into the result
-                Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-                mCanvas.drawBitmap(scaledBitmap, (w - scaledBitmap.getWidth())/2, (h - scaledBitmap.getHeight())/2, null);
-                mCanvas.drawBitmap(mutableMask, 0, 0, paint);
-                paint.setXfermode(null);
+                    // paint the bitmap with mask into the result
+
+                    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                    paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+                    mCanvas.drawBitmap(mutableMask, 0, 0, paint);
+                    mCanvas.drawBitmap(scaledBitmap, (w - scaledBitmap.getWidth()) / 2, (h - scaledBitmap.getHeight()) / 2, null);
+                    paint.setXfermode(null);
+                } catch (OutOfMemoryError error) {
+                    error.printStackTrace();
+                    Log.e(TAG, "generateBitmap: " + error);
+                    return defaultBitmap;
+                }
 
             }
 
@@ -366,6 +385,7 @@ public class IconPackManager
 //            BitmapCache.getInstance(mContext).putBitmap(key, result);
 
             // return it
+//            Log.e(TAG, "generateBitmap: time = " + (System.currentTimeMillis() - time));
             return result;
         }
     }
