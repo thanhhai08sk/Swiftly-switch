@@ -9,7 +9,6 @@
     <facet type="android" name="Android">
       <configuration>
         <option name="SELECTED_BUILD_VARIANT" value="fastbuildDebug" />
-        <option name="SELECTED_TEST_ARTIFACT" value="_android_test_" />
         <option name="ASSEMBLE_TASK_NAME" value="assembleFastbuildDebug" />
         <option name="COMPILE_JAVA_TASK_NAME" value="compileFastbuildDebugSources" />
         <afterSyncTasks>
