@@ -30,16 +30,18 @@ public class ServiceSlotAdapter extends RealmRecyclerViewAdapter<Slot, ServiceSl
     private static final String TAG = ServiceSlotAdapter.class.getSimpleName();
     float mScale, iconScale;
     PublishSubject<Slot> itemClickSJ;
+    Context context;
 
 
     public ServiceSlotAdapter(@NonNull Context context, @Nullable OrderedRealmCollection data,
                               boolean autoUpdate, IconPackManager.IconPack iconPack, float mScale, float iconScale, PublishSubject<Slot> itemClickSJ) {
-        super(context, data, autoUpdate);
+        super(data, autoUpdate);
         this.iconPack = iconPack;
         packageManager = context.getPackageManager();
         this.mScale = mScale;
         this.iconScale = iconScale;
         this.itemClickSJ = itemClickSJ;
+        this.context = context;
     }
 
     public void updateIconsState() {

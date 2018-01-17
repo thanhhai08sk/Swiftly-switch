@@ -29,11 +29,11 @@ public class ServiceItemsAdapter extends ItemsRealmAdapter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ImageView imageView = new ImageView(context);
+        ImageView imageView = new ImageView(parent.getContext());
         imageView.setLayoutParams(new ViewGroup.LayoutParams((int) (Cons.ICON_SIZE_DEFAULT * mScale * iconScale), (int) (Cons.ICON_SIZE_DEFAULT * mScale * iconScale)));
         imageView.setId(R.id.item_icon);
 
-        FrameLayout frameLayout = new FrameLayout(context);
+        FrameLayout frameLayout = new FrameLayout(parent.getContext());
         frameLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         frameLayout.addView(imageView);
         return new ViewHolder(frameLayout);

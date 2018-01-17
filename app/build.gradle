@@ -50,6 +50,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/rxjava.properties'
+    }
 }
 
 kapt {
@@ -69,6 +83,7 @@ configurations.all {
         force "com.android.support:support-v13:$support_lib_version"
         force "com.android.support:exifinterface:$support_lib_version"
         force "com.android.support:cardview-v7:$support_lib_version"
+        force "com.android.support:mediarouter-v7:$support_lib_version"
         force "com.android.support:customtabs:$support_lib_version"
     }
 }
@@ -82,12 +97,12 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.6.0'
 
 
-    api 'com.android.support:appcompat-v7:25.1.1'
-    api 'com.android.support:gridlayout-v7:25.1.1'
-    api 'com.android.support:design:25.1.1'
-    api 'com.github.QuadFlask:colorpicker:0.0.10'
-    api 'com.github.paolorotolo:appintro:3.4.0'
-    api 'com.android.support:support-v4:25.1.1'
+    api "com.android.support:appcompat-v7:$support_lib_version"
+    api "com.android.support:gridlayout-v7:$support_lib_version"
+    api "com.android.support:design:$support_lib_version"
+    api "com.github.QuadFlask:colorpicker:0.0.10"
+    api "com.github.paolorotolo:appintro:3.4.0"
+    api "com.android.support:support-v4:$support_lib_version"
 
     testCompile 'junit:junit:4.12'
 
@@ -107,14 +122,14 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:0.3'
     androidTestCompile 'com.android.support.test:rules:0.3'
 
-    androidTestCompile 'com.android.support:support-v4:25.1.1'
+    androidTestCompile "com.android.support:support-v4:$support_lib_version"
 
     //RxJava
     api 'io.reactivex:rxjava:1.1.3'
     api 'io.reactivex:rxandroid:1.1.0'
 
     //Realm adapter
-    api 'io.realm:android-adapters:1.3.0'
+    api 'io.realm:android-adapters:2.0.0'
 
 
     //google drive

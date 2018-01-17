@@ -28,12 +28,14 @@ public class ItemsListWithCheckBoxAdapter extends RealmBaseAdapter<Item> {
     PackageManager packageManager;
     IconPackManager.IconPack iconPack;
     RealmList<Item> checkedItems;
+    Context context;
 
     public ItemsListWithCheckBoxAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<Item> data, PackageManager packageManager, IconPackManager.IconPack iconPack, RealmList<Item> checkedItems) {
-        super(context, data);
+        super(data);
         this.packageManager = packageManager;
         this.iconPack = iconPack;
         this.checkedItems = checkedItems;
+        this.context = context;
     }
 
 

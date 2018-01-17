@@ -34,14 +34,15 @@ public class ItemsRealmAdapter extends RealmRecyclerViewAdapter<Item,ItemsRealmA
     private PublishSubject<Item> itemClickSJ;
     int itemType;
     private RealmChangeListener listener;
-
+    private Context context;
 
 
     public ItemsRealmAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<Item> data, boolean autoUpdate, PackageManager packageManager, IconPackManager.IconPack iconPack, int itemType) {
-        super(context, data, false);
+        super(data, false);
         this.packageManager = packageManager;
         this.iconPack = iconPack;
         this.itemType = itemType;
+        this.context = context;
 
     }
 

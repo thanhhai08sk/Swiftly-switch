@@ -31,12 +31,14 @@ public class ItemsListAdapter extends RealmBaseAdapter<Item> {
     IconPackManager.IconPack iconPack;
     int itemRes;
     Item currentItem;
+    private Context context;
 
     public ItemsListAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<Item> data, PackageManager packageManager, IconPackManager.IconPack iconPack, int itemRes) {
-        super(context, data);
+        super(data);
         this.packageManager = packageManager;
         this.iconPack = iconPack;
         this.itemRes = itemRes;
+        this.context = context;
     }
 
     public void setCurrentItem(Item item) {

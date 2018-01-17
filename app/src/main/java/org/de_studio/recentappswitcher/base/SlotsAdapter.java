@@ -36,13 +36,15 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
     private final PublishSubject<Integer> onInstantClickSJ = PublishSubject.create();
     int itemType;
     int highlightItem = -1;
+    private Context context;
 
 
     public SlotsAdapter(@NonNull Context context, @Nullable OrderedRealmCollection data, boolean autoUpdate, IconPackManager.IconPack iconPack, int itemType) {
-        super(context, data, autoUpdate);
+        super(data, autoUpdate);
         this.iconPack = iconPack;
         packageManager = context.getPackageManager();
         this.itemType = itemType;
+        this.context = context;
     }
 
 
@@ -75,7 +77,7 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
 
 
             if (position == highlightItem) {
-                holder.view.setBackgroundColor(R.color.background_4);
+                holder.view.setBackgroundColor(context.getResources().getColor(R.color.background_4));
             } else {
                 holder.view.setBackgroundColor(Color.TRANSPARENT);
             }
@@ -109,10 +111,10 @@ public class SlotsAdapter extends RealmRecyclerViewAdapter<Slot, SlotsAdapter.Vi
                 break;
             case Cons.ITEM_TYPE_ICON_ONLY:
 //                view = LayoutInflater.from(context).inflate(R.layout.item_icon_only, parent, false);
-                view = inflater.inflate(R.layout.item_slot_icon_only, parent, false);
+                view =  LayoutInflater.from(context).inflate(R.layout.item_slot_icon_only, parent, false);
                 break;
             case Cons.ITEM_TYPE_ICON_LABEL_INSTANT:
-                view = inflater.inflate(R.layout.item_slot_icon_label_instant, parent, false);
+                view = LayoutInflater.from(context).inflate(R.layout.item_slot_icon_label_instant, parent, false);
                 break;
         }
         return new ViewHolder(view);
