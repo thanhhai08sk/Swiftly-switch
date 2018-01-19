@@ -1237,7 +1237,7 @@ public  class Utility {
                 }
                 break;
             case Slot.TYPE_FOLDER:
-                label.setText(context.getString(R.string.setting_shortcut_folder));
+                label.setText(slot.label);
                 break;
             case Slot.TYPE_RECENT:
                 label.setText(context.getString(R.string.recent_app));
