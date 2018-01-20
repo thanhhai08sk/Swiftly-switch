@@ -1360,7 +1360,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 case NewServicePresenter.Showing.SHOWING_GRID:
                     RecyclerView grid = (RecyclerView) collectionViewsMap.get(currentShowing.grid.collectionId);
                     if (grid.getChildAt(id) != null) {
-                        grid.getChildAt(id).setBackgroundColor(Color.argb(214, 255, 255, 255));
+                        Slot slot = ((ServiceSlotAdapter) grid.getAdapter()).getItem(id);
+                        if (slot != null && !slot.type.equals(Slot.TYPE_EMPTY)) {
+                            grid.getChildAt(id).setBackgroundColor(Color.argb(214, 255, 255, 255));
+                        }
                     }
                     break;
                 case NewServicePresenter.Showing.SHOWING_CIRCLE_AND_ACTION:
