@@ -217,7 +217,8 @@ public class ScreenshotView extends Activity {
             if (sMediaProjection != null) {
                 File externalFilesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
                 if (externalFilesDir != null) {
-                    STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/screenshots/";
+//                    STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/screenshots/";
+                    STORE_DIRECTORY = getSharedPreferences(Cons.SHARED_PREFERENCE_NAME, 0).getString("screenshotsFolder", externalFilesDir.getAbsolutePath() + "/screenshots/" );
 
                     File storeDirectory = new File(STORE_DIRECTORY);
                     if (!storeDirectory.exists()) {

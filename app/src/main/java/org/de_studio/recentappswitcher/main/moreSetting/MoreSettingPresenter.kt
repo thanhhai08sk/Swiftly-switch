@@ -360,6 +360,11 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
         view.resetService()
     }
 
+    fun setScreenshotsFolder(directory: String) {
+        sharedPreferences!!.edit().putString("screenshotsFolder", directory).apply()
+        view.resetService()
+    }
+
     fun onHapticOnTrigger() {
         val currentValue = sharedPreferences!!.getBoolean(Cons.DISABLE_HAPTIC_FEEDBACK_KEY, true)
         sharedPreferences!!.edit().putBoolean(Cons.DISABLE_HAPTIC_FEEDBACK_KEY, !currentValue).commit()

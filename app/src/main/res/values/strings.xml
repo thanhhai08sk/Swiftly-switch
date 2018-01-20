@@ -448,5 +448,6 @@
     <string name="enable_accessibility_permission_guide">Find Swiftly Switch in the next sceen and enable the permission. Press back after done</string>
     <string name="confirm_before_delete">Are you sure you want to delete this?</string>
     <string name="folder_background_color">Folder background color</string>
+    <string name="screenshots_folder">Save screenshots to</string>
 
 </resources>

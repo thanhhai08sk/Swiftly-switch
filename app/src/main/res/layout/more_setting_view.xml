@@ -173,6 +173,21 @@
                 tools:text="Sound and Vibrate"
                 />
         </LinearLayout>
+        <include layout="@layout/separator" />
+        <LinearLayout
+            android:id="@+id/screenshotFolder"
+            style="@style/MoreSetting_Item_Parent_No_Switch"
+            >
+            <TextView
+                style="@style/MoreSetting_Item_Text_Primary.NoSwitch"
+                android:text="@string/screenshots_folder"
+                />
+            <TextView
+                android:id="@+id/screenshotFolderDescription"
+                style="@style/MoreSetting_Item_Text_Secondary"
+                tools:text="Sound and Vibrate"
+                />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

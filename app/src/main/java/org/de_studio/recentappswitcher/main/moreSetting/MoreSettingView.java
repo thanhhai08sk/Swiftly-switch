@@ -34,6 +34,9 @@ import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.drive.OpenFileActivityBuilder;
 
+import net.rdrei.android.dirchooser.DirectoryChooserActivity;
+import net.rdrei.android.dirchooser.DirectoryChooserConfig;
+
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.IconPackListAdapter;
 import org.de_studio.recentappswitcher.IconPackManager;
@@ -82,6 +85,7 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
 
     public static final int REQUEST_BACKUP = 11;
     public static final int REQUEST_RESTORE = 12;
+    private static final int REQUEST_DIRECTORY = 13;
     @BindView(R.id.disable_in_fullscreen_switch)
     SwitchCompat disableInFullScreenSwitch;
     @BindView(R.id.disable_clock_switch)
@@ -122,6 +126,10 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     SwitchCompat transitionSwitch;
     @BindView(R.id.disable_in_fullscreen_text)
     TextView disableInFullscreenText;
+    @BindView(R.id.screenshotFolder)
+    View screenshotsFolder;
+    @BindView(R.id.screenshotFolderDescription)
+    TextView screenshotsFolderDescription;
     GoogleDriveBackup backup;
     GoogleApiClient mGoogleApiClient;
     private IntentSender intentPicker;
@@ -151,6 +159,22 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        screenshotsFolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent chooserIntent = new Intent(MoreSettingView.this, DirectoryChooserActivity.class);
+
+                final DirectoryChooserConfig config = DirectoryChooserConfig.builder()
+                        .newDirectoryName("Screenshots")
+                        .allowReadOnlyDirectory(false)
+                        .allowNewDirectoryNameModification(true)
+                        .build();
+
+                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_CONFIG, config);
+
+                startActivityForResult(chooserIntent, REQUEST_DIRECTORY);
+            }
+        });
     }
 
     @Override
@@ -197,6 +221,13 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
                 if (resultCode == Activity.RESULT_OK) {
                     Log.e(TAG, "onActivityResult: pick journey file ok");
                     pickupStorageFileSuccessSJ.onNext(data.getData().toString());
+                }
+                break;
+            case REQUEST_DIRECTORY:
+                if (resultCode == DirectoryChooserActivity.RESULT_CODE_DIR_SELECTED) {
+                    String path = data.getStringExtra(DirectoryChooserActivity.RESULT_SELECTED_DIR);
+                    Log.e(TAG, "onActivityResult: path = " + path);
+                    presenter.setScreenshotsFolder(path);
                 }
                 break;
         }
@@ -319,7 +350,8 @@ public class MoreSettingView extends BaseActivity<Void, MoreSettingPresenter> im
         hapticFeedbackOnTriggerSwitch.setChecked(!sharedPreferences.getBoolean(Cons.DISABLE_HAPTIC_FEEDBACK_KEY, true));
         hapticFeedbackOnIconSwitch.setChecked(sharedPreferences.getBoolean(Cons.HAPTIC_ON_ICON_KEY, false));
         vibrationDurationDescription.setText(String.valueOf(sharedPreferences.getInt(Cons.VIBRATION_DURATION_KEY, Cons.DEFAULT_VIBRATE_DURATION)) + "ms");
-
+        String defaultPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/screenshots/";
+        screenshotsFolderDescription.setText(sharedPreferences.getString("screenshotsFolder", defaultPath));
 
 
 
