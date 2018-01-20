@@ -113,7 +113,7 @@
     <string name="faq_how_to_hide_the_notification">How to hide the notification?</string>
     <string name="faq_how_to_hide_the_notification_answer">The persistent notification is needed to keep Swiftly Switch active in the background but you can hide it by blocking all of the notifications from Swiftly Switch. To hide it, tap the notification > Hide notification > Block notification.</string>
     <string name="faq_problem_on_huawei_device">Problem on Huawei devices</string>
-    <string name="faq_problem_on_huawei_device_answer">Please try to turn on the option for Swiftly Switch in Dropzone Manager. Also turn on the option for Swiftly Switch in \"Protected Apps\" setting to keep it running in the background.</string>
+    <string name="faq_problem_on_huawei_device_answer">Please try to turn on the option for Swiftly Switch in Dropzone Manager. Also turn on the option for Swiftly Switch in \"Protected Apps\" setting to keep it running in the background.\n\nPress the recent button, then in the recent screen, tap the lock button to prevent the app from deep clear.</string>
     <string name="faq_problem_on_one_plus_device">Problem on OnePlus devices</string>
     <string name="faq_problem_on_one_plus_device_answer">Please turn off the Deep Clear option in Setting. Deep Clear will stop all the background process once you exit the app.</string>
     <string name="faq_problem_on_xiaomi_device">Problem on Xiaomi devices</string>
