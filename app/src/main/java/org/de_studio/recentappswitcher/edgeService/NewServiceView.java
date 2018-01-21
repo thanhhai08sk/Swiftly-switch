@@ -421,7 +421,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 edge2View.setOnSystemUiVisibilityChangeListener(this);
             }
         }
-        notifyEdgeServiceStarted(false);
+        notifyEdgeServiceStarted();
     }
 
     @Override
@@ -1746,15 +1746,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             }
 
         }
-        notifyEdgeServiceStarted(true);
+        notifyEdgeServiceStarted();
     }
 
-    private void notifyEdgeServiceStarted(boolean showToast) {
+    private void notifyEdgeServiceStarted() {
         ((MyApplication) getApplicationContext()).setEdgeIsOn(true);
         sendBroadcast(new Intent(Cons.ACTION_UPDATE_TOGGLE_WIDGET));
-        if (showToast) {
-            showToast(R.string.edge_running_toast);
-        }
     }
 
     public final synchronized void removeEdgeViews() {
@@ -1776,7 +1773,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     private void notifyEdgeServicePaused() {
         ((MyApplication) getApplicationContext()).setEdgeIsOn(false);
         sendBroadcast(new Intent(Cons.ACTION_UPDATE_TOGGLE_WIDGET));
-        showToast(R.string.edge_service_paused_toast);
     }
 
     @Override
@@ -1835,6 +1831,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(NewServiceView.this, 0, remoteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 if (((MyApplication) context.getApplicationContext()).isEdgeIsOn()) {
                     removeEdgeViews();
+                    showToast(R.string.edge_service_paused_toast);
                     remoteAction =
                             new NotificationCompat.Action.Builder(
                                     android.R.drawable.ic_media_play,
@@ -1842,6 +1839,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                                     pendingIntent).build();
                 } else {
                     addEdgeViews();
+                    showToast(R.string.edge_running_toast);
                     remoteAction =
                             new NotificationCompat.Action.Builder(
                                     android.R.drawable.ic_media_pause,

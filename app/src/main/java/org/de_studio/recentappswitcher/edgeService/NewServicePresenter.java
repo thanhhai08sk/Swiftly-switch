@@ -47,6 +47,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         public void run() {
             if (view != null) {
                 view.addEdgeViews();
+                view.showToast(R.string.edge_running_toast);
             }
         }
     };
