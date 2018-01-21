@@ -288,6 +288,12 @@
 
 
     //What new
+    <string name="what_new_3.1.15" translatable="false">VERSION 3.1.15:\n
+        - Customize folder to store screenshots\n
+        - Disable toast when switching between landscape and portrait mode\n
+        - Update translation for Czech, Hebrew, Korean, Chinese Simplified, and Chinese Traditional. Thanks for the contributors on localize.im \n
+        - Other bugs fixed and improvements\n
+    </string>
     <string name="what_new_3.1.13" translatable="false">VERSION 3.1.13:\n
         - Fix bug on Last App shortcut\n
         - Fix bug when launching contacts consecutively\n
