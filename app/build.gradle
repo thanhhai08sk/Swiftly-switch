@@ -40,8 +40,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
         multiDexEnabled true
-        versionCode 128
-        versionName "3.1.15.1"
+        versionCode 129
+        versionName "3.1.15.2"
     }
 
     buildTypes {
@@ -140,8 +140,8 @@ dependencies {
     api 'com.android.support:multidex:1.0.1'
 
     //Material dialog
-    api 'com.afollestad.material-dialogs:core:0.9.3.0'
-    api 'com.afollestad.material-dialogs:commons:0.9.3.0'
+    api 'com.afollestad.material-dialogs:core:0.9.6.0'
+    api 'com.afollestad.material-dialogs:commons:0.9.6.0'
     api "org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.2-2"
 
 
