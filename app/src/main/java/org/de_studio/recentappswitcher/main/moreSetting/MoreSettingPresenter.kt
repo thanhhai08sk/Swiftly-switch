@@ -350,6 +350,7 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
         val currentValue = sharedPreferences!!.getBoolean(Cons.USE_TRANSITION_KEY, false)
         sharedPreferences!!.edit().putBoolean(Cons.USE_TRANSITION_KEY, !currentValue).commit()
         view.resetService()
+//        visible
     }
     fun onAnimationDuration() {
         view.animationDurationDialog(animationDurationSJ)

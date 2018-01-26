@@ -360,6 +360,8 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
 
     @Override
     public void onChange(Collection element) {
-        collectionChangedSubject.onNext(null);
+        if (element.isValid()) {
+            collectionChangedSubject.onNext(null);
+        }
     }
 }
