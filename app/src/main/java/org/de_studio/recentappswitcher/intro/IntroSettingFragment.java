@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.intro;
 
 import android.app.AppOpsManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -150,7 +152,11 @@ public class IntroSettingFragment extends Fragment {
                     if (!Settings.canDrawOverlays(getContext())) {
                         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                                 Uri.parse("package:" + getContext().getPackageName()));
-                        startActivity(intent);
+                        try {
+                            startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(getActivity(), "Cannot find the setting on your device, please grant the permission manually", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });

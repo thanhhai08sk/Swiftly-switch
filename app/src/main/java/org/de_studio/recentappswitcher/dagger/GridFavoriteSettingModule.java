@@ -45,7 +45,7 @@ public class GridFavoriteSettingModule {
     @Provides
     @Singleton
     SlotsAdapter adapter(@Nullable IconPackManager.IconPack iconPack){
-        return new SlotsAdapter(view, null, false, iconPack, Cons.ITEM_TYPE_ICON_ONLY);
+        return new SlotsAdapter(view, null, true, iconPack, Cons.ITEM_TYPE_ICON_ONLY);
     }
 
 }

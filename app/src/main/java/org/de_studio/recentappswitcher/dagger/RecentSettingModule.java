@@ -44,6 +44,6 @@ public class RecentSettingModule {
     @Provides
     @Singleton
     SlotsAdapter adapter(@Nullable IconPackManager.IconPack iconPack){
-        return new SlotsAdapter(view, null, false, iconPack, Cons.ITEM_TYPE_ICON_LABEL);
+        return new SlotsAdapter(view, null, true, iconPack, Cons.ITEM_TYPE_ICON_LABEL);
     }
 }
