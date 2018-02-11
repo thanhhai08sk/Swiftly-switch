@@ -42,6 +42,9 @@ public class DragAndDropCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+        int from = viewHolder.getAdapterPosition();
+        int to = target.getAdapterPosition();
+        Log.e(TAG, "onMove: from " + from + " to " + to);
         MoveData moveData = new MoveData(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         moveItemSubject.onNext(moveData);
         return true;

@@ -101,6 +101,7 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
                 model.onCollectionChanged().subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        Log.e(TAG, "call: onDragDrop " + onDragDrop);
                         if (!onDragDrop) {
                             view.notifyAdapter();
                             view.updateCollectionInfo(model.getCurrentCollection());
@@ -164,9 +165,10 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
     }
 
     protected void onMoveItem(DragAndDropCallback.MoveData moveData) {
-        if (moveData != null) {
+        if (moveData != null && moveData.from >=0 && moveData.to >=0) {
+            Log.e(TAG, "onMoveItem: onDragDrop" + onDragDrop);
             model.moveItem(moveData.from, moveData.to);
-            view.notifyItemMove(moveData.from, moveData.to);
+//            view.notifyItemMove(moveData.from, moveData.to);
         }
     }
 

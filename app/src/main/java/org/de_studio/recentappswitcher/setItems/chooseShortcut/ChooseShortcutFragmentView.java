@@ -93,8 +93,9 @@ public class ChooseShortcutFragmentView extends BaseChooseItemFragmentView<Choos
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             Item realmItem = Utility.getActionItemFromResult(mResolveInfo, packageManager, realm, data);
-            itemClickSubject.onNext(realmItem);
-
+            if (realmItem != null) {
+                itemClickSubject.onNext(realmItem);
+            }else Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
         }
     }
 

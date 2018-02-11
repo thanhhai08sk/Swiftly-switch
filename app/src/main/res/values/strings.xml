@@ -288,6 +288,11 @@
 
 
     //What new
+    <string name="what_new_3.1.16" translatable="false">VERSION 3.1.16:\n
+        - Fixed: settings on Grid does not apply immediately\n
+        - Update translation for Indonesian \n
+    </string>
+
     <string name="what_new_3.1.15" translatable="false">VERSION 3.1.15:\n
         - Customize folder to store screenshots\n
         - Disable toast when switching between landscape and portrait mode\n

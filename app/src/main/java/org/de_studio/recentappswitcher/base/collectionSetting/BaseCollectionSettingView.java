@@ -149,7 +149,7 @@ public abstract class BaseCollectionSettingView<T, P extends BaseCollectionSetti
 
     @Override
     public void notifyItemMove(int from, int to) {
-        adapter.notifyItemMoved(from,to);
+        adapter.notifyItemMoved(from, to);
     }
 
     @Override

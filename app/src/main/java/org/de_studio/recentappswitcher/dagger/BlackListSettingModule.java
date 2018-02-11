@@ -35,6 +35,4 @@ public class BlackListSettingModule {
         return new ItemsListWithCheckBoxAdapter(view.getActivity(), null, view.getActivity().getPackageManager(), iconPack, null);
     }
 
-
-
 }

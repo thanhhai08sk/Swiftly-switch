@@ -188,11 +188,5 @@ public class GridFavoriteSettingPresenter extends BaseCollectionSettingPresenter
         void showChooseMarginHorizontal(int min, int max, int current, PublishSubject<Integer> subject);
 
         void showChoosePositionDialog();
-
-
-
-
     }
-
-
 }

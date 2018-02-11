@@ -26,8 +26,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 12/3/16.
  */
 
-public class ItemsRealmAdapter extends RealmRecyclerViewAdapter<Item,ItemsRealmAdapter
-        .ViewHolder> {
+public class ItemsRealmAdapter extends RealmRecyclerViewAdapter<Item,ItemsRealmAdapter.ViewHolder> {
     private static final String TAG = ItemsRealmAdapter.class.getSimpleName();
     PackageManager packageManager;
     IconPackManager.IconPack iconPack;
