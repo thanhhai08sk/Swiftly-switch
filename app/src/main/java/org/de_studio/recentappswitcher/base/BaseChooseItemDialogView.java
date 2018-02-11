@@ -2,6 +2,7 @@ package org.de_studio.recentappswitcher.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -26,7 +27,7 @@ import rx.subjects.PublishSubject;
 public abstract class BaseChooseItemDialogView extends BaseDialogFragment<BaseChooseItemPresenter> implements AdapterView.OnItemClickListener, BaseChooseItemPresenter.View {
     private static final String TAG = BaseChooseItemFragmentView.class.getSimpleName();
     @BindView(R.id.add_favorite_list_view)
-    protected ListView listView;
+    protected RecyclerView listView;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
     @Inject
