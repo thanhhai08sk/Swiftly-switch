@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import org.de_studio.recentappswitcher.R;
@@ -16,6 +14,7 @@ import org.de_studio.recentappswitcher.model.Item;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import io.reactivex.functions.Consumer;
 import io.realm.RealmResults;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
@@ -24,7 +23,7 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 12/17/16.
  */
 
-public abstract class BaseChooseItemDialogView extends BaseDialogFragment<BaseChooseItemPresenter> implements AdapterView.OnItemClickListener, BaseChooseItemPresenter.View {
+public abstract class BaseChooseItemDialogView extends BaseDialogFragment<BaseChooseItemPresenter> implements BaseChooseItemPresenter.View {
     private static final String TAG = BaseChooseItemFragmentView.class.getSimpleName();
     @BindView(R.id.add_favorite_list_view)
     protected RecyclerView listView;
@@ -49,9 +48,14 @@ public abstract class BaseChooseItemDialogView extends BaseDialogFragment<BaseCh
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        listView.setOnItemClickListener(this);
         listView.setAdapter(adapter);
         onViewCreatedSJ.onNext(null);
+        adapter.onItemClicked().subscribe(new Consumer<Item>() {
+            @Override
+            public void accept(Item item) throws Exception {
+                itemClickSubject.onNext(item);
+            }
+        });
     }
 
 
@@ -114,13 +118,6 @@ public abstract class BaseChooseItemDialogView extends BaseDialogFragment<BaseCh
     public void showNeedContactButton(boolean visible) {
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Item item = ((Item) parent.getAdapter().getItem(position));
-        if (item != null) {
-            itemClickSubject.onNext(item);
-        }
-    }
 
     @Override
     protected int getLayoutRes() {

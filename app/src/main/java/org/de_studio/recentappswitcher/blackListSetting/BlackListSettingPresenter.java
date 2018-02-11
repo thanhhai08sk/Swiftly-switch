@@ -32,6 +32,15 @@ public class BlackListSettingPresenter extends BasePresenter<BlackListSettingPre
         super.onViewAttach(view);
         view.loadApps();
         getBlackListItems();
+
+        if (blackListItems.isValid()) {
+            blackListItems.addChangeListener(new RealmChangeListener<RealmList<Item>>() {
+                @Override
+                public void onChange(RealmList<Item> items) {
+                    view.updateAdapter();
+                }
+            });
+        }
 //        view.setProgressBar(true);
 
         appsList = realm.where(Item.class).equalTo(Cons.TYPE, Item.TYPE_APP).findAllSortedAsync(Cons.LABEL);
@@ -68,7 +77,8 @@ public class BlackListSettingPresenter extends BasePresenter<BlackListSettingPre
 
     @Override
     public void onViewDetach() {
-        appsList.removeChangeListeners();
+        appsList.removeAllChangeListeners();
+        blackListItems.removeAllChangeListeners();
         realm.close();
         super.onViewDetach();
     }
@@ -88,5 +98,7 @@ public class BlackListSettingPresenter extends BasePresenter<BlackListSettingPre
         void setAdapter(OrderedRealmCollection<Item> appList, RealmList<Item> blackListItems);
 
         PublishSubject<Item> onSetItem();
+
+        void updateAdapter();
     }
 }

@@ -5,10 +5,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import org.de_studio.recentappswitcher.Cons;
@@ -21,6 +20,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.functions.Consumer;
 import io.realm.RealmResults;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
@@ -29,10 +29,10 @@ import rx.subjects.PublishSubject;
  * Created by HaiNguyen on 11/25/16.
  */
 
-public abstract class BaseChooseItemFragmentView<P extends BaseChooseItemPresenter> extends BaseFragment<P> implements AdapterView.OnItemClickListener , BaseChooseItemPresenter.View{
+public abstract class BaseChooseItemFragmentView<P extends BaseChooseItemPresenter> extends BaseFragment<P> implements BaseChooseItemPresenter.View{
     private static final String TAG = BaseChooseItemFragmentView.class.getSimpleName();
     @BindView(R.id.list_view)
-    protected ListView listView;
+    protected RecyclerView listView;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
     @BindView(R.id.contact_permission)
@@ -60,9 +60,14 @@ public abstract class BaseChooseItemFragmentView<P extends BaseChooseItemPresent
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        listView.setOnItemClickListener(this);
         listView.setAdapter(adapter);
         onViewCreatedSJ.onNext(null);
+        adapter.onItemClicked().subscribe(new Consumer<Item>() {
+            @Override
+            public void accept(Item item) throws Exception {
+                itemClickSubject.onNext(item);
+            }
+        });
 
     }
 
@@ -153,14 +158,6 @@ public abstract class BaseChooseItemFragmentView<P extends BaseChooseItemPresent
         Log.e(TAG, "showNeedContactButton: " + visible);
         contactPermission.setVisibility(visible ? View.VISIBLE : View.GONE);
         listView.setVisibility(visible ? View.GONE : View.VISIBLE);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Item item = ((Item) parent.getAdapter().getItem(position));
-        if (item != null) {
-            itemClickSubject.onNext(item);
-        }
     }
 
     @Override

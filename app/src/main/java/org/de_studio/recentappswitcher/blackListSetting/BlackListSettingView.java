@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.blackListSetting;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -58,6 +59,7 @@ public class BlackListSettingView extends BaseDialogFragment<BlackListSettingPre
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         listView.setAdapter(adapter);
+        listView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter.onItemClicked().subscribe(new Consumer<Item>() {
             @Override
             public void accept(Item item) throws Exception {
@@ -92,6 +94,11 @@ public class BlackListSettingView extends BaseDialogFragment<BlackListSettingPre
     @Override
     public PublishSubject<Item> onSetItem() {
         return setItemSubject;
+    }
+
+    @Override
+    public void updateAdapter() {
+        adapter.notifyDataSetChanged();
     }
 
     @Override

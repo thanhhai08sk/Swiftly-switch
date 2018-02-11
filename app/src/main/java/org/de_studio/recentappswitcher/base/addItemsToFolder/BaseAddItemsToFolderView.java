@@ -3,6 +3,7 @@ package org.de_studio.recentappswitcher.base.addItemsToFolder;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -52,6 +53,7 @@ public abstract class BaseAddItemsToFolderView extends BaseDialogFragment<BaseAd
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         listView.setAdapter(adapter);
+        listView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter.onItemClicked().subscribe(new Consumer<Item>() {
             @Override
             public void accept(Item item) throws Exception {

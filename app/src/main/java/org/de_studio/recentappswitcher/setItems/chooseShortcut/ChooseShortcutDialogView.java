@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.Utility;
@@ -25,6 +24,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.functions.Consumer;
 import io.realm.Realm;
 
 /**
@@ -45,6 +45,22 @@ public class ChooseShortcutDialogView extends BaseChooseItemDialogView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         listView.setAdapter(adapter);
+        adapter.onItemClicked().subscribe(new Consumer<ResolveInfo>() {
+            @Override
+            public void accept(ResolveInfo resolveInfo) throws Exception {
+                mResolveInfo = resolveInfo;
+                ActivityInfo activity = mResolveInfo.activityInfo;
+                ComponentName name = new ComponentName(activity.applicationInfo.packageName, activity.name);
+                Intent i = new Intent(Intent.ACTION_CREATE_SHORTCUT);
+                i.addCategory(Intent.CATEGORY_DEFAULT);
+                i.setComponent(name);
+                try {
+                    startActivityForResult(i, 1);
+                } catch (Exception e) {
+                    Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -65,21 +81,6 @@ public class ChooseShortcutDialogView extends BaseChooseItemDialogView {
                 .chooseShortcutDialogModule(new ChooseShortcutDialogModule(this))
                 .build().inject(this);
 
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mResolveInfo = resolveInfos.get(position);
-        ActivityInfo activity = mResolveInfo.activityInfo;
-        ComponentName name = new ComponentName(activity.applicationInfo.packageName, activity.name);
-        Intent i = new Intent(Intent.ACTION_CREATE_SHORTCUT);
-        i.addCategory(Intent.CATEGORY_DEFAULT);
-        i.setComponent(name);
-        try {
-            startActivityForResult(i, 1);
-        } catch (Exception e) {
-            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override

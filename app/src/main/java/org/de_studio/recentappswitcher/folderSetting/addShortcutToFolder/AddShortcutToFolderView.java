@@ -8,8 +8,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.AdapterView;
 
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.Utility;
@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.functions.Consumer;
 import io.realm.Realm;
 
 /**
@@ -52,6 +53,19 @@ public class AddShortcutToFolderView extends BaseAddItemsToFolderView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         listView.setAdapter(adapter);
+        listView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter.onItemClicked().subscribe(new Consumer<ResolveInfo>() {
+            @Override
+            public void accept(ResolveInfo resolveInfo) throws Exception {
+                mResolveInfo = resolveInfo;
+                ActivityInfo activity = mResolveInfo.activityInfo;
+                ComponentName name = new ComponentName(activity.applicationInfo.packageName, activity.name);
+                Intent i = new Intent(Intent.ACTION_CREATE_SHORTCUT);
+                i.addCategory(Intent.CATEGORY_DEFAULT);
+                i.setComponent(name);
+                startActivityForResult(i, 1);
+            }
+        });
     }
 
     @Override
@@ -68,18 +82,6 @@ public class AddShortcutToFolderView extends BaseAddItemsToFolderView {
         adapter.setData(resolveInfos);
 
     }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mResolveInfo = resolveInfos.get(position);
-        ActivityInfo activity = mResolveInfo.activityInfo;
-        ComponentName name = new ComponentName(activity.applicationInfo.packageName, activity.name);
-        Intent i = new Intent(Intent.ACTION_CREATE_SHORTCUT);
-        i.addCategory(Intent.CATEGORY_DEFAULT);
-        i.setComponent(name);
-        startActivityForResult(i, 1);
-    }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
