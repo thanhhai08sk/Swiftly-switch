@@ -94,6 +94,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -1218,12 +1219,12 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 dateTextView.setText(dateFormat.format(c.getTime()));
             }
             if (!DateFormat.is24HourFormat(getApplicationContext())) {
-                SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm");
+                SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
                 if (hourTextView != null) {
                     hourTextView.setText(hourFormat.format(c.getTime()));
                 }
             } else {
-                SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
+                SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                 if (hourTextView != null) {
                     hourTextView.setText(hourFormat.format(c.getTime()));
                 }

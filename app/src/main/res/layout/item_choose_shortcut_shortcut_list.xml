@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
+    android:layout_marginEnd="16dp"
     android:gravity="center_vertical">
     <ImageView
         android:layout_width="48dp"
@@ -21,6 +22,8 @@
         android:layout_weight="1"
         android:textColor="@color/black"
         android:id="@+id/label"
-        tools:text="Example app name text"
+        tools:text="Example app name i"
+        android:ellipsize="end"
+        android:lines="1"
         />
 </LinearLayout>

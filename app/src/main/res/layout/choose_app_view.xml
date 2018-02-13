@@ -17,16 +17,15 @@
         android:gravity="center_horizontal"
         android:visibility="gone"
         />
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:choiceMode="singleChoice"
         android:layout_marginBottom="110dp"
-        android:dividerHeight="0dp"
-
+        android:nestedScrollingEnabled="false"
         >
-    </ListView>
+    </android.support.v7.widget.RecyclerView>
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"

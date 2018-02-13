@@ -28,7 +28,7 @@ class ItemsListAdapter(private val context: Context, data: OrderedRealmCollectio
     private var currentItem: Item? = null
     private val itemClickedRL = PublishRelay.create<Item>()
 
-    fun setCurrentItem(item: Item) {
+    fun setCurrentItem(item: Item?) {
         currentItem = item
         notifyDataSetChanged()
     }

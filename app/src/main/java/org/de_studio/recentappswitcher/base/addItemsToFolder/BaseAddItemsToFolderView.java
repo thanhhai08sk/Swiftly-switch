@@ -92,6 +92,11 @@ public abstract class BaseAddItemsToFolderView extends BaseDialogFragment<BaseAd
     }
 
     @Override
+    public void notifyAdapter() {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
     public PublishSubject<Item> onSetItem() {
         return setItemSubject;
     }

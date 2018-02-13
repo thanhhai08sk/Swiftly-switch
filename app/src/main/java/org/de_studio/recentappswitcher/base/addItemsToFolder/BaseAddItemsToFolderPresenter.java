@@ -80,6 +80,12 @@ public abstract class BaseAddItemsToFolderPresenter extends BasePresenter<BaseAd
         Slot slot = realm.where(Slot.class).equalTo(Cons.SLOT_ID, folderId).findFirst();
         if (slot!= null && slot.type.equals(Slot.TYPE_FOLDER)) {
             folderItems = slot.items;
+            folderItems.addChangeListener(new RealmChangeListener<RealmList<Item>>() {
+                @Override
+                public void onChange(RealmList<Item> items) {
+                    view.notifyAdapter();
+                }
+            });
         }
     }
 
@@ -90,7 +96,10 @@ public abstract class BaseAddItemsToFolderPresenter extends BasePresenter<BaseAd
     public void onViewDetach() {
         super.onViewDetach();
         if (results != null) {
-            results.removeChangeListeners();
+            results.removeAllChangeListeners();
+        }
+        if (folderItems != null) {
+            folderItems.removeAllChangeListeners();
         }
         realm.close();
     }
@@ -107,5 +116,6 @@ public abstract class BaseAddItemsToFolderPresenter extends BasePresenter<BaseAd
 
         PublishSubject<Void> onLayouted();
 
+        void notifyAdapter();
     }
 }
