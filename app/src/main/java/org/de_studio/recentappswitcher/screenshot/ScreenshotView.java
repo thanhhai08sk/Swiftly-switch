@@ -252,7 +252,12 @@ public class ScreenshotView extends Activity {
 //                        }
 
                         // register media projection stop callback
-                        sMediaProjection.registerCallback(mediaProjectionStopCallback, mHandler);
+                        if (sMediaProjection != null) {
+                            sMediaProjection.registerCallback(mediaProjectionStopCallback, mHandler);
+                        } else {
+                            Utility.toast(ScreenshotView.this, R.string.error_when_taking_screenshot);
+                            finishScreenshot();
+                        }
                     }
                 }, 200);
 
@@ -327,10 +332,11 @@ public class ScreenshotView extends Activity {
 
         // start capture reader
         mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
-        mVirtualDisplay = sMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight, mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null, mHandler);
-        mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
-
-
-
+        if (sMediaProjection != null) {
+            mVirtualDisplay = sMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight, mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null, mHandler);
+            mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
+        } else {
+            Log.e(TAG, "createVirtualDisplay: error");
+        }
     }
 }
