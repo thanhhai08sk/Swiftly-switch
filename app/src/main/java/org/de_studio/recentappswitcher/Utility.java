@@ -30,7 +30,9 @@ import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
@@ -2369,5 +2371,20 @@ public  class Utility {
         Log.i("Service not","running");
         return false;
     }
+
+    public static String getWifiName(Context context) {
+        WifiManager manager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if (manager != null && manager.isWifiEnabled()) {
+            WifiInfo wifiInfo = manager.getConnectionInfo();
+            if (wifiInfo != null) {
+                NetworkInfo.DetailedState state = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
+                if (state == NetworkInfo.DetailedState.CONNECTED || state == NetworkInfo.DetailedState.OBTAINING_IPADDR) {
+                    return wifiInfo.getSSID();
+                }
+            }
+        }
+        return null;
+    }
+
 }
 
