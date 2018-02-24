@@ -1208,9 +1208,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             Calendar c = Calendar.getInstance();
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM");
             backgroundView.findViewById(R.id.clock_linear_layout).setVisibility(View.VISIBLE);
-            TextView hourTextView = (TextView) backgroundView.findViewById(R.id.clock_time_in_hour);
-            TextView dateTextView = (TextView) backgroundView.findViewById(R.id.clock_time_in_date);
-            TextView batteryLifeTextView = (TextView) backgroundView.findViewById(R.id.clock_battery_life);
+            TextView hourTextView = backgroundView.findViewById(R.id.clock_time_in_hour);
+            TextView dateTextView = backgroundView.findViewById(R.id.clock_time_in_date);
+            TextView batteryLifeTextView = backgroundView.findViewById(R.id.clock_battery_life);
             String batteryString = getApplicationContext().getString(R.string.batterylife) + " " + Utility.getBatteryLevel(getApplicationContext()) + "%";
             if (batteryLifeTextView != null) {
                 batteryLifeTextView.setText(batteryString);
@@ -1493,7 +1493,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         if (item.type.equals(Item.TYPE_ACTION) && item.action == Item.ACTION_SEARCH_SHORTCUTS) {
             startSearchItemSJ.onNext(null);
         }
-        Utility.startItem(item, lastApp, this, sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.DEFAULT_CONTACT_ACTION),
+        Utility.startItem(
+                item,
+                lastApp,
+                this,
+                sharedPreferences.getInt(Cons.CONTACT_ACTION_KEY, Cons.DEFAULT_CONTACT_ACTION),
                 sharedPreferences.getInt(Cons.RINGER_MODE_ACTION_KEY, Cons.RINGER_MODE_ACTION_DEFAULT),
                 onHomeScreen, useTransition);
     }

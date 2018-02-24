@@ -581,11 +581,11 @@ public  class Utility {
     public static int getRingerMode(Context context) {
         AudioManager manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         switch (manager.getRingerMode()) {
-            case AudioManager.RINGER_MODE_NORMAL:
+            case AudioManager.RINGER_MODE_NORMAL: //2
                 return 0;
-            case AudioManager.RINGER_MODE_VIBRATE:
+            case AudioManager.RINGER_MODE_VIBRATE: //1
                 return 1;
-            case AudioManager.RINGER_MODE_SILENT:
+            case AudioManager.RINGER_MODE_SILENT: //0
                 return 2;
             default:
                 return 0;
@@ -593,22 +593,28 @@ public  class Utility {
     }
 
     public static void setRinggerMode(Context context, int ringerModeAction) {
+        if (isAndroid7OrHigher()) {
+            ringerModeAction = Cons.RINGER_MODE_ACTION_SOUND_AND_VIBRATE;
+        }
         AudioManager manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        switch (getRingerMode(context)) {
-            case 0:
-                manager.setRingerMode(ringerModeAction == Cons.RINGER_MODE_ACTION_SOUND_AND_VIBRATE?
-                        AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT);
-                break;
-            case 1:
-                manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                break;
-            case 2:
-                try {
+        if (manager != null) {
+            switch (getRingerMode(context)) {
+                case 0:
+                    manager.setRingerMode(ringerModeAction == Cons.RINGER_MODE_ACTION_SOUND_AND_VIBRATE?
+                            AudioManager.RINGER_MODE_VIBRATE : AudioManager.RINGER_MODE_SILENT);
+                    break;
+                case 1:
                     manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                } catch (SecurityException e) {
-                    Toast.makeText(context, R.string.turn_off_do_not_disturb_first, Toast.LENGTH_SHORT).show();
-                }
-                break;
+                    break;
+                case 2:
+                    try {
+                        manager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                    } catch (SecurityException e) {
+                        Toast.makeText(context, R.string.turn_off_do_not_disturb_first, Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+            }
+
         }
     }
 
@@ -2129,6 +2135,11 @@ public  class Utility {
     public static boolean isMashMallowOrHigher() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
+    public static boolean isAndroid7OrHigher() {
+        return Build.VERSION.SDK_INT > Build.VERSION_CODES.M;
+    }
+
+
 
     public static boolean isKitkat() {
         return Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT;
