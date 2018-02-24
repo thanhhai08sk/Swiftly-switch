@@ -288,6 +288,12 @@
 
 
     //What new
+    <string name="what_new_3.1.17" translatable="false">VERSION 3.1.17:\n
+        - Fixed: layout error when picking items\n
+        - Fixed: crash when taking screenshot\n
+        - Grid vertical margin min to 0\n
+        - Update Spanish translation \n
+    </string>
     <string name="what_new_3.1.16" translatable="false">VERSION 3.1.16:\n
         - Fixed: settings on Grid does not apply immediately\n
         - Update translation for Indonesian \n
