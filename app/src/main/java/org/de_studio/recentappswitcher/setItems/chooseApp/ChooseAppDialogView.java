@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher.setItems.chooseApp;
 
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import org.de_studio.recentappswitcher.base.BaseChooseItemDialogView;
 import org.de_studio.recentappswitcher.dagger.AppModule;
@@ -17,6 +18,7 @@ public class ChooseAppDialogView extends BaseChooseItemDialogView {
 
     @Override
     public void loadItems() {
+        Log.e("ChooseAppDialogView", "loadItems: ");
         ChooseAppFragmentView.LoadAppsTask task = new ChooseAppFragmentView.LoadAppsTask(new WeakReference<PackageManager>(getActivity().getPackageManager()));
         task.execute();
     }

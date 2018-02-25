@@ -1,5 +1,7 @@
 package org.de_studio.recentappswitcher.base;
 
+import android.util.Log;
+
 import org.de_studio.recentappswitcher.model.Item;
 
 import io.realm.Realm;
