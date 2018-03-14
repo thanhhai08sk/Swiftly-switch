@@ -27,35 +27,6 @@
 
     </LinearLayout>
     <include layout="@layout/separator" />
-    <LinearLayout
-        android:id="@+id/other_apps"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        style="@style/ItemLinearLayout"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/other_apps_from_de_studio"
-            style="@style/Main_text_primary"
-            />
-    </LinearLayout>
-    <include layout="@layout/separator" />
-    <LinearLayout
-        android:id="@+id/privacy"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        style="@style/ItemLinearLayout"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/privacy_policy"
-            style="@style/Main_text_primary"
-            />
-    </LinearLayout>
-    <include layout="@layout/separator" />
+
 
 </LinearLayout>

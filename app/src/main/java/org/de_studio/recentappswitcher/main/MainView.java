@@ -21,7 +21,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -60,8 +59,6 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     DrawerLayout drawer;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.about_pro_version)
-    View aboutProButton;
     @BindView(R.id.upgrade)
     View upgradeButton;
 
@@ -88,11 +85,9 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Utility.isFree(this)) {
-            aboutProButton.setVisibility(View.VISIBLE);
             upgradeButton.setVisibility(View.VISIBLE);
             super.setUpCheckingPurchase();
         } else {
-            aboutProButton.setVisibility(View.GONE);
             upgradeButton.setVisibility(View.GONE);
         }
         viewPager.setOffscreenPageLimit(3);
@@ -257,13 +252,10 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
         intent.putExtra("page",4);
         startActivity(intent);
     }
-    @OnClick(R.id.send_feedback)
-    void emailClick(){
-        sendEmail();
-    }
-    @OnClick(R.id.review)
-    void onReviewClick(){
-        review();
+
+    @OnClick(R.id.about)
+    void onAboutClick(){
+        startActivity(new Intent(this, AboutView.class));
     }
 
     @OnClick(R.id.faqs)
@@ -271,10 +263,6 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
         startActivity(new Intent(this, FaqsView.class));
     }
 
-    @OnClick(R.id.about_pro_version)
-    void aboutProClick() {
-        showProVersionInfo();
-    }
 
     private void showProVersionInfo() {
         new MaterialDialog.Builder(this)
@@ -316,31 +304,6 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
         }
     }
 
-    @OnClick(R.id.changelog)
-    void whatNewClick(){
-        showWhatNew();
-    }
-
-    @OnClick(R.id.translate)
-    void translateClick(){
-        new MaterialDialog.Builder(this)
-                .title(R.string.translate_the_app)
-                .content(R.string.translate_the_app_detail)
-                .positiveText(R.string.go_to_page)
-                .negativeText(R.string.edge_dialog_cancel_button)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Uri uriUrl = Uri.parse("https://www.localize.im/v/xy");
-                        startActivity(new Intent(Intent.ACTION_VIEW, uriUrl));
-                    }
-                }).show();
-    }
-
-    @OnClick(R.id.about)
-    void onAboutClick(){
-        startActivity(new Intent(this, AboutView.class));
-    }
 
     @Override
     public void showWhatNewIfNeeded() {
@@ -355,30 +318,6 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
 
     @Override
     public void showWhatNew() {
-        new MaterialDialog.Builder(this)
-                .positiveText(R.string.app_tab_fragment_ok_button)
-                .negativeText(R.string.review_on_play_store)
-                .title(R.string.what_new)
-                .items(R.array.what_new)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                    }
-                })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Utility.openPlayStorePage(MainView.this,getPackageName());
-                    }
-                })
-                .checkBoxPromptRes(R.string.show_this_after_an_update, shared.getBoolean(Cons.AUTO_SHOW_WHAT_NEW_KEY,true), new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        shared.edit().putBoolean(Cons.AUTO_SHOW_WHAT_NEW_KEY, b).commit();
-                    }
-                })
-                .show();
 
     }
 
@@ -398,14 +337,6 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
         bld.create().show();
     }
 
-
-    public void updateFreeOrProUi(boolean isPro) {
-        aboutProButton.setVisibility(isPro ? View.GONE : View.VISIBLE);
-        if (!isPro) {
-            shared.edit().putBoolean(Cons.EDGE_2_ON_KEY, false).commit();
-        }
-    }
-
     public class GenerateDataOkReceiver extends BroadcastReceiver {
         public GenerateDataOkReceiver() {
         }
@@ -418,8 +349,5 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
             }
         }
     }
-
-    
-
-
 }
+
