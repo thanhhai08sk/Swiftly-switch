@@ -39,6 +39,7 @@ import org.de_studio.recentappswitcher.faqs.FaqsView;
 import org.de_studio.recentappswitcher.intro.IntroActivity;
 import org.de_studio.recentappswitcher.main.about.AboutView;
 import org.de_studio.recentappswitcher.main.moreSetting.MoreSettingView;
+import org.de_studio.recentappswitcher.ui.component.Dialog;
 import org.de_studio.recentappswitcher.utils.inAppPurchase.Purchase;
 
 import javax.inject.Inject;
@@ -96,6 +97,16 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
             upgradeButton.setVisibility(View.GONE);
         }
         viewPager.setOffscreenPageLimit(3);
+
+        if (Utility.isFree(this)) {
+
+        }
+    }
+
+    void checkSale() {
+        if (System.currentTimeMillis() - 1522022399000L < 0) {
+            Dialog.INSTANCE.notify(this, );
+        }
     }
 
 
