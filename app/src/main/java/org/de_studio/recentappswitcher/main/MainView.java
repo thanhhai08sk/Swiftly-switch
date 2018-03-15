@@ -106,6 +106,7 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     void checkSale() {
         if (System.currentTimeMillis() - 1522022399000L < 0) {
             Dialog.INSTANCE.notify(this, );
+
         }
     }
 
