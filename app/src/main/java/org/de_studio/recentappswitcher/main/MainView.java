@@ -26,7 +26,6 @@ import android.widget.CompoundButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import org.de_studio.recentappswitcher.BuildConfig;
 import org.de_studio.recentappswitcher.Cons;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
@@ -47,6 +46,8 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 import rx.subjects.PublishSubject;
 
 public class MainView extends BaseActivity<Void,MainPresenter> implements MainPresenter.View {
@@ -99,13 +100,38 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
         viewPager.setOffscreenPageLimit(3);
 
         if (Utility.isFree(this)) {
-
+            checkSale();
         }
     }
 
     void checkSale() {
         if (System.currentTimeMillis() - 1522022399000L < 0) {
-            Dialog.INSTANCE.notify(this, );
+            Dialog.INSTANCE.notify(
+                    this,
+                    R.string.sale_67_title,
+                    R.string.sale_67,
+                    new org.de_studio.recentappswitcher.ui.component.DialogAction(getString(R.string.upgrade_to_pro), new Function0<Unit>() {
+                        @Override
+                        public Unit invoke() {
+                            buyPro();
+                            return Unit.INSTANCE;
+                        }
+                    }),
+                    new org.de_studio.recentappswitcher.ui.component.DialogAction(getString(R.string.cancel_label), new Function0<Unit>() {
+                        @Override
+                        public Unit invoke() {
+                            return null;
+                        }
+                    }),
+                    null,
+                    new Function0<Unit>() {
+                        @Override
+                        public Unit invoke() {
+                            return null;
+                        }
+                    },
+                    false
+            );
 
         }
     }
@@ -356,13 +382,14 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
 
     @Override
     public void showWhatNewIfNeeded() {
-        int savedAppVersion = shared.getInt(Cons.APP_VERSION_KEY, 0);
-        if (savedAppVersion < BuildConfig.VERSION_CODE) {
-            if (savedAppVersion > 0) {
-                showWhatNew();
-            }
-            shared.edit().putInt(Cons.APP_VERSION_KEY, BuildConfig.VERSION_CODE).apply();
-        }
+        // TODO: 3/17/18 show what's new
+//        int savedAppVersion = shared.getInt(Cons.APP_VERSION_KEY, 0);
+//        if (savedAppVersion < BuildConfig.VERSION_CODE) {
+//            if (savedAppVersion > 0) {
+//                showWhatNew();
+//            }
+//            shared.edit().putInt(Cons.APP_VERSION_KEY, BuildConfig.VERSION_CODE).apply();
+//        }
     }
 
     @Override

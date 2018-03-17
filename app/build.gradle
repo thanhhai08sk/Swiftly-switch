@@ -40,8 +40,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
         multiDexEnabled true
-        versionCode 134
-        versionName "3.1.17.1"
+        versionCode 135
+        versionName "3.1.18"
     }
 
     buildTypes {

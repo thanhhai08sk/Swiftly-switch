@@ -466,5 +466,7 @@
     <string name="confirm_before_delete">Are you sure you want to delete this?</string>
     <string name="folder_background_color">Folder background color</string>
     <string name="screenshots_folder">Save screenshots to</string>
+    <string name="sale_67">Get premium features now with 67% off regular price. Only available in limited time!</string>
+    <string name="sale_67_title">67% off - Limited Time!</string>
 
 </resources>
