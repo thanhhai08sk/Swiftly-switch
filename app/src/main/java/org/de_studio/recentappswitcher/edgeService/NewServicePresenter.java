@@ -471,20 +471,25 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
         stopHideViewsHandler();
 //        long time = System.currentTimeMillis();
         if (view == null) return;
-        tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
-        if (tempRecentPackages.size() > 0 && tempRecentPackages.get(0).equals("com.google.android.packageinstaller") && Utility.isMashmallow()) {
-            onGivingPermissionSJ.onNext(null);
+        if (currentShowing.showWhat != Showing.SHOWING_NONE) {
+            finishSectionSJ.onNext(null);
+            Log.e(TAG, "onActionDown: finish");
         } else {
-            setCurrentEdgeAndCurrentShowing(edgeId);
-            setTriggerPoint(x, y);
+            tempRecentPackages = view.getRecentApp(Cons.TIME_INTERVAL_SHORT);
+            if (tempRecentPackages.size() > 0 && tempRecentPackages.get(0).equals("com.google.android.packageinstaller") && Utility.isMashmallow()) {
+                onGivingPermissionSJ.onNext(null);
+            } else {
+                setCurrentEdgeAndCurrentShowing(edgeId);
+                setTriggerPoint(x, y);
 
-            view.showBackground(true);
-            view.actionDownVibrate();
-            view.showClock();
-            showCollection(currentShowing.showWhat);
-            holdingHelper = 0;
+                view.showBackground(true);
+                view.actionDownVibrate();
+                view.showClock();
+                showCollection(currentShowing.showWhat);
+                holdingHelper = 0;
 //            Log.e(TAG, "onActionDown: time to finish = " + (System.currentTimeMillis() - time));
 
+            }
         }
     }
 
