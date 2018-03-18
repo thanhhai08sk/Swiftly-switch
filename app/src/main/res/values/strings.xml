@@ -288,6 +288,12 @@
 
 
     //What new
+    <string name="what_new_3.1.18" translatable="false">VERSION 3.1.18:\n
+        - Upgrade to Pro with 67% off in limited time\n
+        - Fixed: behave strangely when Disable in Landscape is enabled\n
+        - Add Hungarian translation, thanks for translator from localize.im\n
+        - Other bugs fixed and improvements \n
+    </string>
     <string name="what_new_3.1.17" translatable="false">VERSION 3.1.17:\n
         - Fixed: layout error when picking items\n
         - Fixed: crash when taking screenshot\n
