@@ -136,7 +136,7 @@ public class GridFavoriteSettingView extends BaseCollectionSettingView<Void, Gri
     public void showChooseColumnsCount() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.columns_count)
-                .setItems(new CharSequence[]{"1","2","3","4", "5", "6", "7", "8"}, new DialogInterface.OnClickListener() {
+                .setItems(new CharSequence[]{"1","2","3","4", "5", "6", "7", "8", "9", "10"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         getGridPresenter().onSetColumnsCount(which + 1);

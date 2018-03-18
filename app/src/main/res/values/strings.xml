@@ -65,7 +65,7 @@
     <string name="default_action_for_contact">Default action for contacts</string>
     <string name="delete">Delete this</string>
     <string name="device_shortcuts">\"Device\'s shortcuts\"</string>
-    <string name="disable_in_fullscreen">Disable in full screen apps</string>
+    <string name="disable_in_fullscreen">Disable in full screen apps (does not always work!)</string>
     <string name="disable_top_indicator">Disable top indicator</string>
     <string name="downloading">Downloading</string>
     <string name="easily_navigation">Easy navigation</string>
