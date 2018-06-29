@@ -288,6 +288,11 @@
 
 
     //What new
+    <string name="what_new_3.1.19" translatable="false">VERSION 3.1.19:\n
+        - Automatically adjust clock position for phones with a notch\n
+        - Fixed: custom icon for Quick Action doesn\'t work\n
+    </string>
+
     <string name="what_new_3.1.18" translatable="false">VERSION 3.1.18:\n
         - Upgrade to Pro with 67% off in limited time\n
         - Fixed: behave strangely when Disable in Landscape is enabled\n

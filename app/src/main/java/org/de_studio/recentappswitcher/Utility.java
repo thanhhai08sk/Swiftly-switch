@@ -1174,6 +1174,8 @@ public  class Utility {
         switch (item.type) {
             case Item.TYPE_APP:
                 try {
+                    if (item.getIconBitmap() != null)
+                        return BitmapFactory.decodeByteArray(item.iconBitmap, 0, item.iconBitmap.length);
                     Drawable defaultDrawable = context.getPackageManager().getApplicationIcon(item.getPackageName());
                     Drawable iconPackDrawable;
                     if (iconPack!=null) {
