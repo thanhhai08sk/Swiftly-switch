@@ -2175,6 +2175,8 @@ public  class Utility {
                 .append(Build.DEVICE)
                 .append("\nAndroid: ")
                 .append(Build.VERSION.RELEASE)
+                .append("\nApp version: ")
+                .append(BuildConfig.VERSION_NAME)
                 .append("\n\n")
                 .append(context.getString(R.string.email_prompt))
                 .toString();

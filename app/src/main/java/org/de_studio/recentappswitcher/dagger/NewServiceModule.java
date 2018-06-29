@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.MyApplication;
 import org.de_studio.recentappswitcher.R;
 import org.de_studio.recentappswitcher.Utility;
 import org.de_studio.recentappswitcher.dadaSetup.DataSetupService;
@@ -198,8 +199,25 @@ public class NewServiceModule {
     @Named(CLOCK_PARENTS_VIEW_NAME)
     FrameLayout clockParentsView() {
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        return (FrameLayout) layoutInflater.inflate(R.layout.clock, null);
+        FrameLayout view = (FrameLayout) layoutInflater.inflate(R.layout.clock, null);
+        View clock = view.findViewById(R.id.clock_linear_layout);
+        try {
+            clock.setPadding(0, getStatusBarHeight(MyApplication.getContext()), 0, 0);
+        } catch (Exception e) {
+            Log.e(TAG, "clockParentsView: crash when get status bar height");
+        }
+        return view;
     }
+
+    public int getStatusBarHeight(Context context) {
+        int result = 0;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
     @Provides
     @Singleton
     @Named(ANIMATION_TIME_NAME)
