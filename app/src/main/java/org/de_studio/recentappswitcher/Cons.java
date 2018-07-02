@@ -31,15 +31,10 @@ public class Cons {
     public static final String SHARED_PREFERENCE_NAME = "org.de_studio.recentappswitcher.shared";
     public static final String EDGE_1_SHARED_NAME = "org.de_studio.recentappswitcher_edge_1_shared_preference";
     public static final String EDGE_2_SHARED_NAME = "org.de_studio.recentappswitcher_edge_2_shared_preference";
+    public static final String EDGE_3_SHARED_NAME = "org.de_studio.recentappswitcher_edge_3_shared_preference";
     public static final String OLD_DEFAULT_SHARED_NAME = "org.de_studio.recentappswitcher_sharedpreferences";
-    public static final String FAVORITE_SHAREDPREFERENCE_NAME = "org.de_studio.recentappswitcher_favorite_shared_preferences";
     public static final String EXCLUDE_SHARED_NAME = "org.de_studio.recentappswitcher_exclude_shared_preferences";
-    public static final String OLD_DEFAULT_REALM_NAME = "swiftly_switch.realm";
     public static final String DEFAULT_REALM_NAME = "swiftly_switch_ver2.realm";
-
-    public static final int MODE_DEFAULT = 1;
-    public static final int MODE_ONLY_FAVORITE = 2;
-    public static final int MODE_CIRCLE_FAVORITE = 3;
 
     public static final int REQUEST_CODE_CONTACT_PERMISSION = 121;
     public static final int REQUEST_CODE_STORAGE_PERMISSION = 122;
@@ -113,6 +108,7 @@ public class Cons {
 
     public static final int EDGE_1_ID_INT = 11;
     public static final int EDGE_2_ID_INT = 22;
+    public static final int EDGE_3_ID_INT = 33;
     public static final int BACKGROUND_ID_INT = 33;
     public static final int QUICK_ACTION_ID_INSTANT_GRID = 1;
     public static final int QUICK_ACTION_ID_NORMAL = 2;
@@ -126,74 +122,24 @@ public class Cons {
 
     public static final String OPEN_FOLDER_DELAY_NAME = "open_folder_delay";
     public static final String LAUNCHER_PACKAGENAME_NAME = "launcher_packagename";
-    public static final String HAS_INTENT_PACKAGES_NAME = "noIntentPackages";
-    public static final String IS_FREE_AND_OUT_OF_TRIAL_NAME = "is_free_and_out_of_trial";
     public static final String M_SCALE_NAME = "m_scale";
-    public static final String HALF_ICON_WIDTH_PXL_NAME = "half_icon_width_pxl";
-    public static final String CIRCLE_SIZE_DP_NAME = "circle_size_dp";
-    public static final String CIRCLE_SIZE_PXL_NAME = "circleSizePxl";
-    public static final String ICON_SIZE_PXL_NAME = "iconSizePxl";
-    public static final String GRID_GAP_NAME = "grid_gap_name";
     public static final String ICON_SCALE_NAME = "icon_scale";
     public static final String COLLECTION_WINDOW_PARAMS_NAME = "grid_parent_view_para";
     public static final String GRID_WINDOW_PARAMS_NAME = "grid_params";
-    public static final String CIRCLE_SHORTCUT_VIEW_PARA_NAME = "circle_shortcut_view_para";
     public static final String GUIDE_COLOR_NAME = "guide_color";
     public static final String BACKGROUND_COLOR_NAME = "background_color";
-    public static final String CIRCLE_PARENTS_VIEW_NAME = "circle_shortcuts_view";
-    public static final String GRID_PARENTS_VIEW_NAME = "grid_parents_view";
-    public static final String FAVORITE_GRID_VIEW_NAME = "favoriteGridView";
-    public static final String FOLDER_GRID_VIEW_NAME = "folderGridView";
-    public static final String EDGE_1_POSITION_NAME = "edge_1_position";
-    public static final String EDGE_2_POSITION_NAME = "edge_2_position";
     public static final String EDGE_1_VIEW_NAME = "edge_1_view";
     public static final String EDGE_2_VIEW_NAME = "edge_2_view";
-    public static final String EDGE_POSITIONS_ARRAY_NAME = "edge_position_array";
-    public static final String BACKGROUND_FRAME_NAME = "background_frame";
-    public static final String BACKGROUND_FRAME_PARA_NAME = "background_frame_para";
+    public static final String EDGE_3_VIEW_NAME = "edge_3_view";
     public static final String EDGE_1_PARA_NAME = "edge1Para";
     public static final String EDGE_2_PARA_NAME = "edge2Para";
-    public static final String EDGE_1_SENSITIVE_NAME = "edge1Sensitive";
-    public static final String EDGE_2_SENSITIVE_NAME = "edge2Sensitive";
-    public static final String EDGE_1_OFFSET_NAME = "edge1Offset";
-    public static final String EDGE_2_OFFSET_NAME = "edge2Offset";
-    public static final String FAVORITE_GRID_ADAPTER_NAME = "favoriteGirdAdapter";
-    public static final String FAVORITE_CIRCLE_ADAPTER_NAME = "favoriteCircleAdapter";
-    public static final String FAVORITE_GRID_PADDING_HORIZONTAL_NAME = "favoritePaddingHorizontal";
-    public static final String FAVORITE_GRID_PADDING_VERTICAL_NAME = "favoritePaddingVertical";
-    public static final String EDGE_1_QUICK_ACTION_VIEWS_NAME = "edge1QuickActionViews";
-    public static final String EDGE_2_QUICK_ACTION_VIEWS_NAME = "edge2QuickActionViews";
-    public static final String QUICK_ACTION_VIEW_RADIUS_NAME = "quickActionViewRadius";
-    public static final String IS_EDGE_1_ON_NAME = "isEdge1On";
-    public static final String IS_EDGE_2_ON_NAME = "isEdge2On";
+    public static final String EDGE_3_PARA_NAME = "edge3Para";
     public static final String HOLD_TIME_NAME = "holdTime";
-    public static final String HOLD_TIME_ENABLE_NAME = "holdTimeEnable";
-    public static final String VIBRATE_DURATION_NAME = "vibrationDuration";
     public static final String ANIMATION_TIME_NAME = "animationTime";
     public static final String USE_ANIMATION_NAME = "useAnimation";
     public static final String USE_TRANSITION_NAME = "useTransition";
-    public static final String EDGE_1_MODE_NAME = "edge1Mode";
-    public static final String EDGE_2_MODE_NAME = "edge2Mode";
-    public static final String QUICK_ACTION_WITH_INSTANT_FAVORITE_NAME = "quickActionWithInstant";
-    public static final String USE_INSTANT_FAVORITE_NAME = "useInstant";
     public static final String CLOCK_PARENTS_VIEW_NAME = "clockParentsView";
-    public static final String INDICATOR_FRAME_LAYOUT_NAME = "indicatorFrameLayout";
-    public static final String CLOCK_LINEAR_LAYOUT_NAME = "clockLinear";
-    public static final String CLOCK_PARENTS_PARA_NAME = "clockParentsPara";
-    public static final String FOLDER_CIRCLE_NAME = "folderCircle";
-    public static final String FOLDER_ADAPTER_NAME = "folderAdapter";
     public static final String EXCLUDE_SET_NAME = "excludeSet";
-    public static final String EDGE_1_WIDTH_PXL_NAME = "edge1Width";
-    public static final String EDGE_1_HEIGHT_PXL_NAME = "edge1Height";
-    public static final String EDGE_2_WIDTH_PXL_NAME = "edge2Width";
-    public static final String EDGE_2_HEIGHT_PXL_NAME = "edge2Height";
-    public static final String USE_ACTION_DOW_VIBRATE_NAME = "useActionDownVibrate";
-    public static final String USE_ACTION_MOVE_VIBRATE_NAME = "useActionMoveVibrate";
-    public static final String USE_CLOCK_NAME = "useClock";
-    public static final String GRID_HEIGHT_NAME = "gridTall";
-    public static final String GRID_WIDTH_NAME = "gridWidth";
-    public static final String GRID_NUMBER_COLUMNS_NAME = "gridNumberColumns";
-    public static final String GRID_NUMBER_ROWS_NAME = "gridNumberRows";
     public static final String EDGE_1_NAME = "edge1";
 
 
@@ -201,13 +147,10 @@ public class Cons {
 
 
     public static final String EDGE_2_NAME = "edge2";
+    public static final String EDGE_3_NAME = "edge3";
     public static final String PIN_REALM_NAME = "pinApp.realm";
     public static final String FAVORITE_GRID_REALM_NAME = "default.realm";
     public static final String FAVORITE_CIRCLE_REALM_NAME = "circleFavo.realm";
-    public static final int SHOWING_RECENT_CIRCLE = 1;
-    public static final int SHOWING_FAVORITE_CIRCLE = 2;
-    public static final int SHOWING_GRID = 3;
-    public static final int SHOWING_FOLDER = 4;
 
 
 
@@ -215,23 +158,11 @@ public class Cons {
     public static final String BEGIN_DAY_KEY = "begin_trial_time";
     public static final String OPEN_FOLDER_DELAY_KEY = "open_folder_delay";
     public static final String DISABLE_IN_FULLSCREEN_KEY = "disable_in_fullscreen";
-    public static final String APP_VERSION_KEY = "app_version";
     public static final String AUTO_SHOW_WHAT_NEW_KEY = "auto_show_what_new";
     public static final String AVOID_KEYBOARD_KEY = "avoid_keyboard";
-    public static final String AVOID_KEYBOARD_OPTION_KEY = "avoid_keyboard_option";
-    public static final int  AVOID_KEYBOARD_OPTION_STEP_ASIDE = 1;
-    public static final int AVOID_KEYBOARD_OPTION_PLACE_UNDER = 0;
-    public static final String EDGE_POSITION_KEY = "position";
-    public static final String EDGE_SENSIIVE_KEY = "sensitive";
-    public static final String EDGE_LENGTH_KEY = "length";
-    public static final String EDGE_OFFSET_KEY = "off_set";
-    public static final String EDGE_NUMBER_KEY = "number_of_edge";
-    public static final String EDGE_ON_KEY = "is_on";
     public static final String EDGE_1_ON_KEY = "edge_1_on";
     public static final String EDGE_2_ON_KEY = "edge_2_on";
-    public static final String FAVORITE_KEY = "favorite";
-    public static final String EXCLUDE_KEY = "exclude";
-    public static final String TRIAL_TIME_PASS_KEY = "trial_time_pass";
+    public static final String EDGE_3_ON_KEY = "edge_3_on";
     public static final String TRIAL_START_TIME_KEY = "begin_trial_time";
     public static final String DISABLE_HAPTIC_FEEDBACK_KEY = "disable_haptic";
     public static final String HAPTIC_ON_ICON_KEY = "haptic_on_icon";
@@ -239,25 +170,9 @@ public class Cons {
     public static final String DISABLE_INDICATOR_KEY = "disable_indicator";
     public static final String USE_ANIMATION_KEY = "disable_background_animation";
     public static final String USE_TRANSITION_KEY = "useTransition";
-    public static final String HOLD_TIME_ENABLE_KEY = "hold_time_enable";
-    public static final String APP_OPEN_TIME_KEY = "app_open_time";
-    public static final String HAS_REACT_FOR_VOTE_KEY = "has_react_for_vote";
-    public static final String CIRCLE_SIZE_KEY = "circleSize";
-    public static final String NUM_OF_RECENT_KEY = "num_of_recent";
-    public static final String NUM_OF_GRID_ROW_KEY = "grid_row";
-    public static final String NUM_OF_GRID_COLUMN_KEY = "grid_column";
-    public static final String IS_CENTRE_FAVORITE = "is_centre";
     public static final String IS_DISABLE_IN_LANDSCAPE_KEY = "disable_in_lanscape";
-    public static final String GRID_GAP_KEY = "shortcut_gap";
-    public static final String FAVORITE_GRID_PADDING_HORIZONTAL_KEY = "grid_distance_from_edge";
-    public static final String GRID_DISTANCE_VERTICAL_FROM_EDGE_KEY = "grid_distance_vertical_from_edge";
-    public static final String IS_ONLY_FAVORITE_KEY = "is_only_favorite";
     public static final String ICON_PACK_PACKAGE_NAME_KEY = "icon_pack_packa";
     public static final String ICON_PACK_NONE = "none";
-    public static final String ACTION_1_KEY = "action_1";
-    public static final String ACTION_2_KEY = "action_2";
-    public static final String ACTION_3_KEY = "action_3";
-    public static final String ACTION_4_KEY = "action_4";
     public static final String IS_ACTIONS_STAY_PERMANENT = "is_permanent";
     public static final String VIBRATION_DURATION_KEY = "vibration_duration";
     public static final String LONG_PRESS_DELAY_KEY = "hold_time";
@@ -315,15 +230,7 @@ public class Cons {
     public static final String LABEL = "label";
     public static final String ACTION = "action";
     public static final String PACKAGENAME = "packageName";
-    public static final String NUMBER = "number";
     public static final String CONTACT_ID = "contactId";
-    public static final String INTENT = "intent";
-    public static final String APP_FOREGROUND_TIME = "appForegroundTime";
-    public static final String ICON_RESOURCE_ID = "iconResourceId";
-    public static final String ICON_RESOURCE_ID_2 = "iconResourceId2";
-    public static final String ICON_RESOURCE_ID_3 = "iconResourceId3";
-    public static final String ICON_BITMAP = "iconBitmap";
-    public static final String ICON_URI = "iconUri";
     public static final String COLLECTION_ID = "collectionId";
     public static final String SLOT_ID = "slotId";
     public static final String EDGE_ID = "edgeId";

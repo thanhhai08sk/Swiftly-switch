@@ -203,6 +203,34 @@ public class DataSetupService extends IntentService {
                 } else {
                     Log.e(TAG, "execute: edge2 already exist");
                 }
+
+                if (realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_3_ID).findFirst() == null) {
+                    Edge edge3 = new Edge();
+                    edge3.edgeId = Edge.EDGE_3_ID;
+                    if (Utility.canGetRecentApps(getContext())) {
+                        edge3.mode = Edge.MODE_RECENT_AND_QUICK_ACTION;
+                    } else {
+                        edge3.mode = Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION;
+                    }
+                    edge3.useGuide = true;
+                    edge3.position = Cons.POSITION_LEFT_BOTTOM;
+                    edge3.circleFav = circleFav;
+                    edge3.recent = recent;
+                    edge3.quickAction = quickAction;
+                    edge3.sensitive = Cons.DEFAULT_EDGE_SENSITIVE;
+                    edge3.length = Cons.DEFAULT_EDGE_LENGTH;
+                    edge3.offset = Cons.DEFAULT_EDGE_OFFSET;
+                    edge3.keyboardOption = Edge.KEYBOARD_OPTION_PLACE_UNDER;
+
+                    realm.copyToRealm(edge3);
+                    DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+                    Log.e(TAG, "execute: setup edge3 ok");
+                    if (dataInfo != null) {
+                        dataInfo.edge2Ok = true;
+                    }
+                } else {
+                    Log.e(TAG, "execute: edge3 already exist");
+                }
             }
         });
     }

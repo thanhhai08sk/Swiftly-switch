@@ -111,6 +111,8 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_1_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_1_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_3_PARA_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_3_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
 import static org.de_studio.recentappswitcher.Cons.HOLD_TIME_NAME;
 import static org.de_studio.recentappswitcher.Cons.ICON_SCALE_NAME;
@@ -183,6 +185,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Named(EDGE_2_VIEW_NAME)
     View edge2View;
     @Inject
+    @Named(EDGE_3_VIEW_NAME)
+    View edge3View;
+    @Inject
     @Named(LAUNCHER_PACKAGENAME_NAME)
     String launcherPackageName;
     @Nullable
@@ -195,6 +200,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Inject
     @Named(EDGE_2_PARA_NAME)
     WindowManager.LayoutParams edge2Para;
+    @Inject
+    @Named(EDGE_3_PARA_NAME)
+    WindowManager.LayoutParams edge3Para;
     @Inject
     WindowManager windowManager;
     @Inject
@@ -389,7 +397,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public boolean hasAtLeast1EdgeEnabled() {
-        return sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY, true) || (!isFree && sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false));
+        return sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY, true) || (!isFree && sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false)) || (!isFree && sharedPreferences.getBoolean(Cons.EDGE_3_ON_KEY, false));
     }
 
     @Override
@@ -413,6 +421,16 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
                 }
             }
+
+            if (!isFree && sharedPreferences.getBoolean(Cons.EDGE_3_ON_KEY, false)) {
+                try {
+                    windowManager.addView(edge3View, edge3Para);
+                    edge3View.setOnTouchListener(null);
+                    edge3View.setOnTouchListener(this);
+                } catch (Exception e) {
+                    Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
+                }
+            }
         }
 
         if (sharedPreferences.getBoolean(Cons.DISABLE_IN_FULLSCREEN_KEY, false)) {
@@ -420,6 +438,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 edge1View.setOnSystemUiVisibilityChangeListener(this);
             } else if (!isFree && sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false)) {
                 edge2View.setOnSystemUiVisibilityChangeListener(this);
+            } else if (!isFree && sharedPreferences.getBoolean(Cons.EDGE_3_ON_KEY, false)) {
+                edge3View.setOnSystemUiVisibilityChangeListener(this);
             }
         }
         notifyEdgeServiceStarted();
@@ -1655,13 +1675,20 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 windowManager.removeView(edge2View);
             }
         }
+
+        if (edge3View != null) {
+            edge3View.setOnClickListener(null);
+            if (edge3View.isAttachedToWindow()) {
+                windowManager.removeView(edge3View);
+            }
+        }
         removeAllExceptEdges();
     }
 
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         int action = MotionEventCompat.getActionMasked(event);
-        if (view.getId() == Cons.EDGE_1_ID_INT || view.getId() == Cons.EDGE_2_ID_INT) {
+        if (view.getId() == Cons.EDGE_1_ID_INT || view.getId() == Cons.EDGE_2_ID_INT || view.getId() == Cons.EDGE_3_ID_INT) {
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
                     presenter.onActionDown(getXCord(event), getYCord(event), view.getId());
@@ -1751,6 +1778,15 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             }
 
         }
+
+        if (!isFree && sharedPreferences.getBoolean(Cons.EDGE_3_ON_KEY, false) && edge3View != null && !edge3View.isAttachedToWindow()) {
+            try {
+                windowManager.addView(edge3View, edge3Para);
+            } catch (IllegalStateException e) {
+                Log.e(TAG, "addEdgeViews: fail when add edge2Image");
+            }
+
+        }
         notifyEdgeServiceStarted();
     }
 
@@ -1772,6 +1808,14 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             e.printStackTrace();
             Log.e(TAG, " Null when remove edge2Image");
         }
+
+        try {
+            windowManager.removeView(edge3View);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, " Null when remove edge3Image");
+        }
+
         notifyEdgeServicePaused();
     }
 
@@ -1790,6 +1834,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             if (edge2View != null && edge2View.isAttachedToWindow()) {
                 edge2View.setVisibility(View.INVISIBLE);
             }
+
+            if (edge3View != null && edge3View.isAttachedToWindow()) {
+                edge3View.setVisibility(View.INVISIBLE);
+            }
         } else {
             if (edge1View != null && edge1View.isAttachedToWindow()) {
                 Log.e(TAG, "disableEdgeViews: visible");
@@ -1797,6 +1845,10 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             }
             if (edge2View != null && edge2View.isAttachedToWindow()) {
                 edge2View.setVisibility(View.VISIBLE);
+            }
+
+            if (edge3View != null && edge3View.isAttachedToWindow()) {
+                edge3View.setVisibility(View.VISIBLE);
             }
         }
     }

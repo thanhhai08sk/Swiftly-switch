@@ -441,7 +441,10 @@ public class MainView extends BaseActivity<Void,MainPresenter> implements MainPr
     public void updateFreeOrProUi(boolean isPro) {
         aboutProButton.setVisibility(isPro ? View.GONE : View.VISIBLE);
         if (!isPro) {
-            shared.edit().putBoolean(Cons.EDGE_2_ON_KEY, false).commit();
+            shared.edit()
+                    .putBoolean(Cons.EDGE_2_ON_KEY, false)
+                    .putBoolean(Cons.EDGE_3_ON_KEY, false)
+                    .commit();
         }
     }
 

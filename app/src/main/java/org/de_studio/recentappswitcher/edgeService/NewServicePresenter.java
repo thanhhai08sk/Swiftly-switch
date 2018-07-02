@@ -758,6 +758,9 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             case Cons.EDGE_2_ID_INT:
                 currentEdge = model.getEdge(Edge.EDGE_2_ID);
                 break;
+            case Cons.EDGE_3_ID_INT:
+                currentEdge = model.getEdge(Edge.EDGE_3_ID);
+                break;
         }
 
         currentHighlight = -1;

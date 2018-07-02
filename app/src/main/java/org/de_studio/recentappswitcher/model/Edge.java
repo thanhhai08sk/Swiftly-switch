@@ -19,6 +19,7 @@ public class Edge extends RealmObject {
     public static final int KEYBOARD_OPTION_NONE = 3;
     public static final String EDGE_1_ID = "edge1";
     public static final String EDGE_2_ID = "edge2";
+    public static final String EDGE_3_ID = "edge3";
     public int mode;
     public int position;
     @PrimaryKey

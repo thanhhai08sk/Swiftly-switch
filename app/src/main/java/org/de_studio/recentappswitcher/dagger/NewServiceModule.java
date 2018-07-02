@@ -51,6 +51,10 @@ import static org.de_studio.recentappswitcher.Cons.EDGE_2_ID_INT;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_PARA_NAME;
 import static org.de_studio.recentappswitcher.Cons.EDGE_2_VIEW_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_3_ID_INT;
+import static org.de_studio.recentappswitcher.Cons.EDGE_3_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_3_PARA_NAME;
+import static org.de_studio.recentappswitcher.Cons.EDGE_3_VIEW_NAME;
 import static org.de_studio.recentappswitcher.Cons.EXCLUDE_SET_NAME;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_DEFAULT;
 import static org.de_studio.recentappswitcher.Cons.GUIDE_COLOR_NAME;
@@ -128,13 +132,27 @@ public class NewServiceModule {
 
     @Provides
     @Singleton
+    @Named(EDGE_3_NAME)
+    Edge edge3(Realm realm) {
+        Edge edge = realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_3_ID).findFirst();
+        if (edge == null) {
+            Log.e(TAG, "edge3: edge null, generate again");
+            DataSetupService.generateEdges(realm);
+            edge = realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_3_ID).findFirst();
+        }
+        return edge;
+    }
+
+    @Provides
+    @Singleton
     NewServiceModel model(@Named(M_SCALE_NAME) float mScale
             , @Named(ICON_SCALE_NAME) float iconScale
             , @Named(LAUNCHER_PACKAGENAME_NAME) String launcher
             , @Named(EDGE_1_NAME) Edge edge1
             , @Named(EDGE_2_NAME) Edge edge2
+                          , @Named(EDGE_3_NAME) Edge edge3
     ) {
-        return new NewServiceModel(mScale, iconScale, launcher, realm, edge1, edge2);
+        return new NewServiceModel(mScale, iconScale, launcher, realm, edge1, edge2, edge3);
     }
 
 
@@ -348,6 +366,56 @@ public class NewServiceModule {
 
     @Provides
     @Singleton
+    @Named(EDGE_3_VIEW_NAME)
+    View edge3View(@Named(EDGE_3_NAME) Edge edge3
+            , @Named(M_SCALE_NAME) float mScale
+            , @Named(GUIDE_COLOR_NAME) int guideColor) {
+
+
+        View edge3View = new View(context);
+        edge3View.setId(EDGE_3_ID_INT);
+        if (edge3.useGuide) {
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.RECTANGLE);
+            shape.setCornerRadius(0);
+            shape.setStroke((int) (2 * mScale), edge3.guideColor == 0? Cons.GUIDE_COLOR_DEFAULT: edge3.guideColor);
+            LayerDrawable drawable = new LayerDrawable(new Drawable[]{shape});
+            switch (edge3.position / 10) {
+                case 1:
+                    drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), 0, (int) (-5 * mScale));
+                    break;
+                case 2:
+                    drawable.setLayerInset(0, 0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale));
+                    break;
+                case 3:
+                    drawable.setLayerInset(0, (int) (-5 * mScale), (int) (-5 * mScale), (int) (-5 * mScale), 0);
+                    break;
+            }
+            edge3View.setBackground(drawable);
+
+            int edge3Sensivite = edge3.sensitive;
+            int edge3Length = edge3.length;
+            int edge3HeightPxl;
+            int edge3WidthPxl;
+
+
+            if (Utility.rightLeftOrBottom(edge3.position) == Cons.POSITION_BOTTOM) {
+                edge3HeightPxl = (int) (edge3Sensivite * mScale);
+                edge3WidthPxl = (int) (edge3Length * mScale);
+            } else {
+                edge3HeightPxl = (int) (edge3Length * mScale);
+                edge3WidthPxl = (int) (edge3Sensivite * mScale);
+            }
+            RelativeLayout.LayoutParams edge3ImageLayoutParams = new RelativeLayout.LayoutParams(edge3WidthPxl, edge3HeightPxl);
+            edge3ImageLayoutParams.height = edge3HeightPxl;
+            edge3ImageLayoutParams.width = edge3WidthPxl;
+            edge3View.setLayoutParams(edge3ImageLayoutParams);
+        }
+        return edge3View;
+    }
+
+    @Provides
+    @Singleton
     @Named(LAUNCHER_PACKAGENAME_NAME)
     String launcherPackageName(){
         Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
@@ -395,6 +463,18 @@ public class NewServiceModule {
                 Utility.rightLeftOrBottom(edge2.position) == Cons.POSITION_BOTTOM ? edge2.length : edge2.sensitive,
                 Utility.rightLeftOrBottom(edge2.position) == Cons.POSITION_BOTTOM ? edge2.sensitive : edge2.length,
                 edge2.offset);
+    }
+
+ @Provides
+    @Singleton
+    @Named(EDGE_3_PARA_NAME)
+    WindowManager.LayoutParams edge3Para( @Named(M_SCALE_NAME) float mScale
+            , @Named(EDGE_3_NAME) Edge edge3) {
+        return Utility.getEdgeLayoutPara(edge3.keyboardOption
+                , mScale, edge3.position,
+                Utility.rightLeftOrBottom(edge3.position) == Cons.POSITION_BOTTOM ? edge3.length : edge3.sensitive,
+                Utility.rightLeftOrBottom(edge3.position) == Cons.POSITION_BOTTOM ? edge3.sensitive : edge3.length,
+                edge3.offset);
     }
 
     @Provides

@@ -34,17 +34,18 @@ public class NewServiceModel extends BaseModel {
     String launcherPackageName;
     String lastAppPackageName;
     Realm realm;
-    Edge edge1, edge2;
+    Edge edge1, edge2, edge3;
     ArrayList<String> savedRecentShortcut;
     Boolean backgroundTouchable = null;
 
-    public NewServiceModel(float mScale, float iconScale, String launcherPackageName, Realm realm, Edge edge1, Edge edge2) {
+    public NewServiceModel(float mScale, float iconScale, String launcherPackageName, Realm realm, Edge edge1, Edge edge2, Edge edge3) {
         this.mScale = mScale;
         this.realm = realm;
         this.iconScale = iconScale;
         this.launcherPackageName = launcherPackageName;
         this.edge1 = edge1;
         this.edge2 = edge2;
+        this.edge3 = edge3;
     }
 
     void setup() {
@@ -74,6 +75,8 @@ public class NewServiceModel extends BaseModel {
                 return edge1;
             case Edge.EDGE_2_ID:
                 return edge2;
+            case Edge.EDGE_3_ID:
+                return edge3;
         }
         return null;
     }

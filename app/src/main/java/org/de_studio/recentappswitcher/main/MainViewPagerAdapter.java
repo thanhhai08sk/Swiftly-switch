@@ -26,6 +26,8 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
                 return EdgeSettingView.newInstance(Edge.EDGE_1_ID);
             case 2:
                 return EdgeSettingView.newInstance(Edge.EDGE_2_ID);
+            case 3:
+                return EdgeSettingView.newInstance(Edge.EDGE_3_ID);
             default:
                 return new GeneralView();
         }
@@ -34,7 +36,7 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Show 3 total pages.
-        return 3;
+        return 4;
     }
 
     @Override
@@ -46,6 +48,8 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
                 return "Edge 1";
             case 2:
                 return "Edge 2";
+            case 3:
+                return "Edge 3";
         }
         return null;
     }

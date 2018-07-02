@@ -67,6 +67,8 @@ public class EdgeSettingModel extends BaseModel {
                 return sharedPreferences.getBoolean(Cons.EDGE_1_ON_KEY, true);
             case "edge2":
                 return sharedPreferences.getBoolean(Cons.EDGE_2_ON_KEY, false);
+            case "edge3":
+                return sharedPreferences.getBoolean(Cons.EDGE_3_ON_KEY, false);
         }
         return false;
     }
@@ -248,6 +250,9 @@ public class EdgeSettingModel extends BaseModel {
                 break;
             case "edge2":
                 sharedPreferences.edit().putBoolean(Cons.EDGE_2_ON_KEY, enable).commit();
+                break;
+            case "edge3":
+                sharedPreferences.edit().putBoolean(Cons.EDGE_3_ON_KEY, enable).commit();
                 break;
         }
     }

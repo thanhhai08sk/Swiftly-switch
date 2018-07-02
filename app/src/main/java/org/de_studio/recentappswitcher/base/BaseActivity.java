@@ -268,7 +268,10 @@ public abstract class BaseActivity<T, P extends BasePresenter> extends AppCompat
             Log.e(TAG, "User is " + (mIsPremium ? "PREMIUM" : "NOT PREMIUM"));
             getShared().edit().putBoolean(Cons.PRO_PURCHASED_KEY, mIsPremium).commit();
             if (!mIsPremium) {
-                getShared().edit().putBoolean(Cons.EDGE_2_ON_KEY, false).commit();
+                getShared().edit()
+                        .putBoolean(Cons.EDGE_2_ON_KEY, false)
+                        .putBoolean(Cons.EDGE_3_ON_KEY, false)
+                        .commit();
             }
         }
     };
