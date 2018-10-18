@@ -10,9 +10,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.jakewharton.rxrelay2.PublishRelay
-import io.hainguyen.androidcoordinated.utils.onClick
 import io.reactivex.Observable
 import org.de_studio.recentappswitcher.R
+import org.de_studio.recentappswitcher.onClick
 
 /**
  * Created by HaiNguyen on 11/25/16.
@@ -29,7 +29,7 @@ class ShortcutListAdapter(private val context: Context, private var resolveInfos
 
     fun onItemClicked(): Observable<ResolveInfo> = itemClickedRL
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_choose_shortcut_shortcut_list, parent, false), packageManager, itemClickedRL)
 
     override fun getItemCount(): Int {

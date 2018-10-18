@@ -10,7 +10,6 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import com.jakewharton.rxrelay2.PublishRelay
-import io.hainguyen.androidcoordinated.utils.onClick
 import io.reactivex.Observable
 import io.realm.OrderedRealmCollection
 import io.realm.RealmList
@@ -19,6 +18,7 @@ import org.de_studio.recentappswitcher.IconPackManager
 import org.de_studio.recentappswitcher.R
 import org.de_studio.recentappswitcher.Utility
 import org.de_studio.recentappswitcher.model.Item
+import org.de_studio.recentappswitcher.onClick
 
 /**
  * Created by HaiNguyen on 12/3/16.
@@ -36,7 +36,7 @@ class ItemsListWithCheckBoxAdapter(internal var context: Context, data: OrderedR
         this.checkedItems = checkedItems
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_items_list_check_box, parent, false), packageManager, iconPack, itemClickedRL)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

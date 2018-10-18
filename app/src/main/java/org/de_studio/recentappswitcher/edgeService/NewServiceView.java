@@ -63,6 +63,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.de_studio.recentappswitcher.Cons;
+import org.de_studio.recentappswitcher.ExtensionFunctionKt;
 import org.de_studio.recentappswitcher.IconPackManager;
 import org.de_studio.recentappswitcher.MyApplication;
 import org.de_studio.recentappswitcher.R;
@@ -409,6 +410,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     edge1View.setOnTouchListener(null);
                     edge1View.setOnTouchListener(this);
                 } catch (Exception e) {
+                    Log.e(TAG, "addEdgeViews: SecurityException" + e);
                     Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
                 }
             }
@@ -418,6 +420,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     edge2View.setOnTouchListener(null);
                     edge2View.setOnTouchListener(this);
                 } catch (Exception e) {
+                    Log.e(TAG, "addEdgeViews: SecurityException" + e);
                     Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
                 }
             }
@@ -428,6 +431,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                     edge3View.setOnTouchListener(null);
                     edge3View.setOnTouchListener(this);
                 } catch (Exception e) {
+                    Log.e(TAG, "addEdgeViews: SecurityException" + e);
                     Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
                 }
             }
@@ -472,12 +476,14 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                         pendingIntent).build();
 
         PendingIntent notiPending = PendingIntent.getActivity(getApplicationContext(), 0, notiClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notificationBuilder = new NotificationCompat.Builder(this);
+        ExtensionFunctionKt.createChannelIfHavent(this, "default");
+        notificationBuilder = new NotificationCompat.Builder(this, "default");
         notificationBuilder.setSmallIcon(R.drawable.ic_stat_ic_looks_white_48dp1)
                 .setContentIntent(notiPending)
                 .addAction(remoteAction)
                 .setPriority(Notification.PRIORITY_MIN)
-                .setContentText(getString(R.string.notification_short_description)).setContentTitle(getString(R.string.notification_title));
+                .setContentText(getString(R.string.notification_short_description))
+                .setContentTitle(getString(R.string.notification_title));
         Notification notificationCompat = notificationBuilder.build();
         startForeground(Cons.NOTIFICATION_ID, notificationCompat);
     }
@@ -1764,6 +1770,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             } catch (IllegalStateException e) {
                 Log.e(TAG, "addEdgeViews: fail when add edge1Image");
             } catch (SecurityException e) {
+                Log.e(TAG, "addEdgeViews: SecurityException" + e);
                 if (!Utility.checkDrawPermission(this)) {
                     Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
                 } else throw new IllegalArgumentException("crash when addEdgeViews");
