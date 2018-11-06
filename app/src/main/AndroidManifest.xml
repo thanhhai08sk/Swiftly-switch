@@ -154,26 +154,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/DialogTheme" />
 
-        <service
-            android:name=".assist.MyInteractionService"
-            android:permission="android.permission.BIND_VOICE_INTERACTION"
-            android:process=":session">
-            <intent-filter>
-                <action android:name="android.service.voice.VoiceInteractionService" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".assist.AssistLoggerService"
-            android:permission="android.permission.BIND_VOICE_INTERACTION">
-            <meta-data
-                android:name="android.voice_interaction"
-                android:resource="@xml/assist_service" />
-
-            <intent-filter>
-                <action android:name="android.service.voice.VoiceInteractionService" />
-            </intent-filter>
-        </service>
-
         <activity
             android:name=".main.MainView"
             android:label="@string/app_name"
