@@ -1,6 +1,7 @@
 package org.de_studio.recentappswitcher;
 
 import android.graphics.Color;
+import android.view.WindowManager;
 
 import java.util.Comparator;
 
@@ -253,4 +254,8 @@ public class Cons {
     public static final String SKU_PRO = "sku_pro";
 
     public static final String FOLDER_BACKGROUND_COLOR_KEY = "folder_background_color";
+
+    public static int getWindowType() {
+        return Utility.isAndroidOOrHigher() ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY : WindowManager.LayoutParams.TYPE_PHONE;
+    }
 }

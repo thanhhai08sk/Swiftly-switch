@@ -111,6 +111,7 @@ import rx.subjects.PublishSubject;
 import static org.de_studio.recentappswitcher.Cons.RINGER_MODE_NORMAL;
 import static org.de_studio.recentappswitcher.Cons.RINGER_MODE_SILENT;
 import static org.de_studio.recentappswitcher.Cons.RINGER_MODE_VIBRATE;
+import static org.de_studio.recentappswitcher.Cons.getWindowType;
 
 /**
  * Created by hai on 12/19/2015.
@@ -930,7 +931,7 @@ public  class Utility {
                 edgePara = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.WRAP_CONTENT,
                         WindowManager.LayoutParams.WRAP_CONTENT,
-                        WindowManager.LayoutParams.TYPE_PHONE,
+                        getWindowType(),
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                         PixelFormat.TRANSLUCENT);
                 break;
@@ -947,7 +948,7 @@ public  class Utility {
                 edgePara = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.WRAP_CONTENT,
                         WindowManager.LayoutParams.WRAP_CONTENT,
-                        WindowManager.LayoutParams.TYPE_PHONE,
+                        getWindowType(),
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                         PixelFormat.TRANSLUCENT);
                 break;
@@ -2139,6 +2140,10 @@ public  class Utility {
     }
     public static boolean isAndroid7OrHigher() {
         return Build.VERSION.SDK_INT > Build.VERSION_CODES.M;
+    }
+
+    public static boolean isAndroidOOrHigher() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
 
 

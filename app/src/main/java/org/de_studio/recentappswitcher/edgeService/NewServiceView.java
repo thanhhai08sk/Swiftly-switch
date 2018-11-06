@@ -36,7 +36,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -123,6 +122,7 @@ import static org.de_studio.recentappswitcher.Cons.OPEN_FOLDER_DELAY_NAME;
 import static org.de_studio.recentappswitcher.Cons.SHARED_PREFERENCE_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_TRANSITION_NAME;
+import static org.de_studio.recentappswitcher.Cons.getWindowType;
 
 /**
  * Created by HaiNguyen on 12/23/16.
@@ -147,13 +147,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     WindowManager.LayoutParams WINDOW_PARAMS_NO_TOUCH = new WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.TYPE_PHONE,
+            getWindowType(),
             WINDOW_FLAG_NO_TOUCH,
             PixelFormat.TRANSLUCENT);
     WindowManager.LayoutParams WINDOW_PARAMS_TOUCHABLE = new WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.TYPE_PHONE,
+            getWindowType(),
             WINDOW_FLAG_TOUCHABLE,
             PixelFormat.TRANSLUCENT);
     WindowManager.LayoutParams WINDOW_SCREENSHOT_LAYOUT_PARAMS = new WindowManager.LayoutParams(
@@ -1693,9 +1693,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
     @Override
     public boolean onTouch(View view, MotionEvent event) {
-        int action = MotionEventCompat.getActionMasked(event);
         if (view.getId() == Cons.EDGE_1_ID_INT || view.getId() == Cons.EDGE_2_ID_INT || view.getId() == Cons.EDGE_3_ID_INT) {
-            switch (action) {
+            switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     presenter.onActionDown(getXCord(event), getYCord(event), view.getId());
                     break;
@@ -1760,7 +1759,9 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     }
 
     private float getYCord(MotionEvent motionEvent) {
-        return motionEvent.getRawY();
+        int[] location = new int[2];
+        backgroundView.getLocationOnScreen(location);
+        return motionEvent.getRawY() - location[1];
     }
 
     public final synchronized void addEdgeViews() {
