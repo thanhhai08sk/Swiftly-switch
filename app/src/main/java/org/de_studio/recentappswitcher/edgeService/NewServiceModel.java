@@ -285,14 +285,16 @@ public class NewServiceModel extends BaseModel {
 
     public int getGridActivatedId(float x, float y, float gridX, float gridY, int rowsCount, int columnCount, int space, boolean folderMode, boolean isRTL) {
 
-//        Log.e(TAG, "getGridActivatedId: x " + x
-//                + "\ny " + y
-//                + "\ngridX " + gridX
-//                + "\ngridY " + gridY
-//                + "\nspace " + space
-//                + "\niconWidth " + iconWidth
-//                +"\nmScale " + mScale
-//        );
+//        if (folderMode) {
+//            Log.e(TAG, "getGridActivatedId: x " + x
+//                    + "\ny " + y
+//                    + "\ngridX " + gridX
+//                    + "\ngridY " + gridY
+//                    + "\nspace " + space
+//                    + "\niconWidth " + iconWidth
+//                    +"\nmScale " + mScale
+//            );
+//        }
         if (gridX == 0 && gridY == 0) {
             return -1;
         }

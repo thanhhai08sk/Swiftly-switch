@@ -149,7 +149,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             WindowManager.LayoutParams.MATCH_PARENT,
             getWindowType(),
             WINDOW_FLAG_NO_TOUCH,
-            PixelFormat.TRANSLUCENT);
+            PixelFormat.TRANSLUCENT
+    );
     WindowManager.LayoutParams WINDOW_PARAMS_TOUCHABLE = new WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.MATCH_PARENT,
@@ -836,7 +837,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         if (collectionViewsMap.get(grid.collectionId) == null) {
             RecyclerView gridView = new RecyclerView(this);
             gridView.setItemAnimator(null);
-            gridView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            gridView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             ServiceSlotAdapter adapter = new ServiceSlotAdapter(this, grid.slots, true, iconPack, mScale, iconScale, startSlotSJ);
             gridView.setLayoutManager(new GridLayoutManager(this, grid.columnCount));
             gridView.setClickable(false);
