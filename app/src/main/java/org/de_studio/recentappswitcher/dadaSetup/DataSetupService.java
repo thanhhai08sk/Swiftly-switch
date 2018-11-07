@@ -152,7 +152,7 @@ public class DataSetupService extends IntentService {
                 Collection recent = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_RECENT, 1)).findFirst();
                 Collection circleFav = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_CIRCLE_FAVORITE, 1)).findFirst();
                 Collection quickAction = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 1)).findFirst();
-                Collection navigationQuickAction = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 2)).findFirst();
+                Collection navigationQuickAction = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 7432)).findFirst();
                 if (realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_1_ID).findFirst() == null) {
                     Edge edge1 = new Edge();
                     edge1.edgeId = Edge.EDGE_1_ID;
@@ -401,7 +401,7 @@ public class DataSetupService extends IntentService {
     }
 
     private void generateNavigationQuickActions(Realm realm) {
-        Collection quickActions = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 2)).findFirst();
+        Collection quickActions = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 7432)).findFirst();
         final String newLabel = "Bottom navigation";
         if (quickActions == null) {
             realm.executeTransaction(new Realm.Transaction() {
@@ -410,14 +410,14 @@ public class DataSetupService extends IntentService {
 
                     Collection collection = new Collection();
                     collection.type = Collection.TYPE_QUICK_ACTION;
-                    collection.collectionId = Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 2);
+                    collection.collectionId = Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 7432);
                     collection.label = newLabel;
                     collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
                     collection.visibilityOption = Collection.VISIBILITY_OPTION_ONLY_TRIGGERED_ONE_VISIBLE;
                     realm.copyToRealm(collection);
                 }
             });
-            final Collection quickActions1 = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Collection.TYPE_QUICK_ACTION + 2).findFirst();
+            final Collection quickActions1 = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Collection.TYPE_QUICK_ACTION + 7432).findFirst();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {

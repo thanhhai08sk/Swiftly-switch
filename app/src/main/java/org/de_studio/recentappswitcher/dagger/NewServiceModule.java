@@ -70,6 +70,7 @@ import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_KEY;
 import static org.de_studio.recentappswitcher.Cons.USE_ANIMATION_NAME;
 import static org.de_studio.recentappswitcher.Cons.USE_TRANSITION_KEY;
 import static org.de_studio.recentappswitcher.Cons.USE_TRANSITION_NAME;
+import static org.de_studio.recentappswitcher.Cons.getWindowType;
 
 /**
  * Created by HaiNguyen on 12/24/16.
@@ -177,7 +178,7 @@ public class NewServiceModule {
         return new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
+                getWindowType(),
                 flag1,
                 PixelFormat.TRANSLUCENT);
     }
@@ -204,7 +205,7 @@ public class NewServiceModule {
         return new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
+                getWindowType(),
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
                         WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,

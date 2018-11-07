@@ -49,7 +49,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
@@ -160,13 +159,13 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     WindowManager.LayoutParams WINDOW_SCREENSHOT_LAYOUT_PARAMS = new WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.TYPE_PHONE,
+            getWindowType(),
             WINDOW_FLAG_TOUCHABLE,
             PixelFormat.TRANSLUCENT);
     WindowManager.LayoutParams WINDOW_SEARCH_LAYOUT_PARAMS = new WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.TYPE_PHONE,
+            getWindowType(),
             WINDOW_FLAG_TOUCHABLE_FOCUSABLE,
             PixelFormat.TRANSLUCENT);
 
@@ -790,11 +789,11 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
 
         }
         if (!Utility.isKitkat() && searchParent.isAttachedToWindow()) {
-            int centerX = searchView.getWidth() / 2;
-            int centerY = 0;
-            float radius = ((float) Math.hypot(centerX, searchView.getHeight()));
-            Animator circularReveal = ViewAnimationUtils.createCircularReveal(searchView, centerX, centerY, 0f, radius);
-            circularReveal.start();
+//            int centerX = searchView.getWidth() / 2;
+//            int centerY = 0;
+//            float radius = ((float) Math.hypot(centerX, searchView.getHeight()));
+//            Animator circularReveal = ViewAnimationUtils.createCircularReveal(searchView, centerX, centerY, 0f, radius);
+//            circularReveal.start();
         }
 
         Log.e(TAG, "showSearchView: alpha = " + searchParent.getAlpha());
