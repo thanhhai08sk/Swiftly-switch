@@ -22,7 +22,7 @@ public class Cons {
     };
 
     public static final int OLD_REALM_SCHEMA_VERSION = 11;
-    public static final int REALM_SCHEMA_VERSION = 9;
+    public static final int REALM_SCHEMA_VERSION = 10;
 
     public static final String PRO_VERSION_PACKAGE_NAME = "org.de_studio.recentappswitcher.pro";
     public static final String JOURNAL_IT_PACKAGE_NAME = "org.de_studio.diary";

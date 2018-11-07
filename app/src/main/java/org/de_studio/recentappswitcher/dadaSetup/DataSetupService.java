@@ -130,6 +130,10 @@ public class DataSetupService extends IntentService {
             generateQuickActions(realm);
         }
 
+        if (!dataInfo.initNavigationQuickActionOk) {
+            generateNavigationQuickActions(realm);
+        }
+
         if (!dataInfo.blackListOk) {
             generateBlackList(realm);
         }
@@ -148,6 +152,7 @@ public class DataSetupService extends IntentService {
                 Collection recent = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_RECENT, 1)).findFirst();
                 Collection circleFav = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_CIRCLE_FAVORITE, 1)).findFirst();
                 Collection quickAction = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 1)).findFirst();
+                Collection navigationQuickAction = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 2)).findFirst();
                 if (realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_1_ID).findFirst() == null) {
                     Edge edge1 = new Edge();
                     edge1.edgeId = Edge.EDGE_1_ID;
@@ -207,20 +212,21 @@ public class DataSetupService extends IntentService {
                 if (realm.where(Edge.class).equalTo(Cons.EDGE_ID, Edge.EDGE_3_ID).findFirst() == null) {
                     Edge edge3 = new Edge();
                     edge3.edgeId = Edge.EDGE_3_ID;
-                    if (Utility.canGetRecentApps(getContext())) {
-                        edge3.mode = Edge.MODE_RECENT_AND_QUICK_ACTION;
-                    } else {
-                        edge3.mode = Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION;
-                    }
+//                    if (Utility.canGetRecentApps(getContext())) {
+//                        edge3.mode = Edge.MODE_RECENT_AND_QUICK_ACTION;
+//                    } else {
+//                        edge3.mode = Edge.MODE_CIRCLE_FAV_AND_QUICK_ACTION;
+//                    }
+                    edge3.mode = Edge.MODE_QUICK_ACTION_ONLY;
                     edge3.useGuide = true;
-                    edge3.position = Cons.POSITION_LEFT_BOTTOM;
+                    edge3.position = Cons.POSITION_BOTTOM_CENTRE;
                     edge3.circleFav = circleFav;
                     edge3.recent = recent;
-                    edge3.quickAction = quickAction;
+                    edge3.quickAction = navigationQuickAction;
                     edge3.sensitive = Cons.DEFAULT_EDGE_SENSITIVE;
                     edge3.length = Cons.DEFAULT_EDGE_LENGTH;
                     edge3.offset = Cons.DEFAULT_EDGE_OFFSET;
-                    edge3.keyboardOption = Edge.KEYBOARD_OPTION_PLACE_UNDER;
+                    edge3.keyboardOption = Edge.KEYBOARD_OPTION_NONE;
 
                     realm.copyToRealm(edge3);
                     DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
@@ -392,6 +398,50 @@ public class DataSetupService extends IntentService {
             });
         }
 
+    }
+
+    private void generateNavigationQuickActions(Realm realm) {
+        Collection quickActions = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 2)).findFirst();
+        final String newLabel = "Bottom navigation";
+        if (quickActions == null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+
+                    Collection collection = new Collection();
+                    collection.type = Collection.TYPE_QUICK_ACTION;
+                    collection.collectionId = Utility.createCollectionId(Collection.TYPE_QUICK_ACTION, 2);
+                    collection.label = newLabel;
+                    collection.longClickMode = Collection.LONG_CLICK_MODE_NONE;
+                    collection.visibilityOption = Collection.VISIBILITY_OPTION_ONLY_TRIGGERED_ONE_VISIBLE;
+                    realm.copyToRealm(collection);
+                }
+            });
+            final Collection quickActions1 = realm.where(Collection.class).equalTo(Cons.COLLECTION_ID, Collection.TYPE_QUICK_ACTION + 2).findFirst();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmList<Slot> slots = quickActions1.slots;
+                    Item[] items = new Item[3];
+                    items[0] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_ACTION + Item.ACTION_RECENT).findFirst();
+
+                    items[1] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_ACTION + Item.ACTION_HOME).findFirst();
+                    items[2] = realm.where(Item.class).equalTo(Cons.ITEM_ID, Item.TYPE_ACTION + Item.ACTION_BACK).findFirst();
+                    for (int i = 0; i < 3; i++) {
+                        Slot slot = new Slot();
+                        slot.type = Slot.TYPE_ITEM;
+                        slot.slotId = String.valueOf(System.currentTimeMillis() + new Random().nextLong());
+                        slot.stage1Item = items[i];
+                        slot.instant = true;
+                        Slot realmSlot = realm.copyToRealm(slot);
+                        slots.add(realmSlot);
+                    }
+                    DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+                    dataInfo.initNavigationQuickActionOk = true;
+                    Log.e(TAG, "generate initNavigationQuickActionOk ok");
+                }
+            });
+        }
     }
 
     private void generateBlackList(Realm realm) {

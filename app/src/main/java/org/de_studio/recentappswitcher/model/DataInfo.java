@@ -14,6 +14,7 @@ public class DataInfo extends RealmObject {
     public boolean gridOk;
     public boolean blackListOk;
     public boolean quickActionOk;
+    public boolean initNavigationQuickActionOk;
     public boolean edge1Ok;
     public boolean edge2Ok;
     public boolean initGridItemOk;
@@ -29,7 +30,7 @@ public class DataInfo extends RealmObject {
     }
 
     public boolean everyThingsOk() {
-        return recentOk && circleFavoriteOk && gridOk && blackListOk && quickActionOk && edge1Ok && edge2Ok;
+        return recentOk && circleFavoriteOk && gridOk && blackListOk && quickActionOk && initNavigationQuickActionOk && edge1Ok && edge2Ok;
     }
 
     public void setRecentOk(boolean recentOk) {
@@ -98,5 +99,13 @@ public class DataInfo extends RealmObject {
 
     public void setInitGridItemOk(boolean initGridItemOk) {
         this.initGridItemOk = initGridItemOk;
+    }
+
+    public boolean isInitNavigationQuickActionOk() {
+        return initNavigationQuickActionOk;
+    }
+
+    public void setInitNavigationQuickActionOk(boolean initNavigationQuickActionOk) {
+        this.initNavigationQuickActionOk = initNavigationQuickActionOk;
     }
 }

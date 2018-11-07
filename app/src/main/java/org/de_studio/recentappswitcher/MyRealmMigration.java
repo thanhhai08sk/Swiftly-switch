@@ -173,6 +173,13 @@ public class MyRealmMigration implements RealmMigration {
                     .addField("originalIconBitmap", byte[].class);
             oldVersion++;
         }
+
+        if (oldVersion == 11) {
+            Log.e(TAG, "migrate: oldVersion = " + oldVersion);
+            schema.get("DataInfo")
+                    .addField("initNavigationQuickActionOk", boolean.class);
+            oldVersion++;
+        }
     }
 
     @Override
