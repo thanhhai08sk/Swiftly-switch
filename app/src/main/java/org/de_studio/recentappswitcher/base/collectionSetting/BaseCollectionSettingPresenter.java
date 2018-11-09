@@ -186,12 +186,15 @@ public abstract class BaseCollectionSettingPresenter<V extends BaseCollectionSet
     }
 
     public void onSlotClick(int slotIndex) {
-        Slot slot = model.getCurrentCollection().slots.get(slotIndex);
-        view.chooseActionOnSlot(slotIndex,
-                slot.type.equals(Slot.TYPE_ITEM),
-                slot.type.equals(Slot.TYPE_FOLDER),
-                model.getCurrentCollection().type.equals(Collection.TYPE_GRID_FAVORITE));
-
+        try {
+            Slot slot = model.getCurrentCollection().slots.get(slotIndex);
+            view.chooseActionOnSlot(slotIndex,
+                    slot.type.equals(Slot.TYPE_ITEM),
+                    slot.type.equals(Slot.TYPE_FOLDER),
+                    model.getCurrentCollection().type.equals(Collection.TYPE_GRID_FAVORITE));
+        } catch (Exception e) {
+            Log.e(TAG, "onSlotClick: " + e);
+        }
     }
 
     public void editItem(int slotIndex) {

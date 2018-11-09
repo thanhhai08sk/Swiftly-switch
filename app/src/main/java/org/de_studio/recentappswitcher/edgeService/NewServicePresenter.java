@@ -310,7 +310,6 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                                         showCollectionInstantlySubject.onNext(slot.stage1Item.collectionId);
                                     } else {
                                         String lastApp = getLastApp();
-//                                        Log.e(TAG, "call: lastapp = " + lastApp);
                                         if (lastApp == null && slot.stage1Item != null && slot.stage1Item.type.equals(Item.TYPE_ACTION) && slot.stage1Item.action == Item.ACTION_LAST_APP) {
                                             view.requestUsagePermissionForMarshmallowAndAbove();
                                         } else {

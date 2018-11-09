@@ -240,7 +240,6 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     NewServiceView.EdgesToggleReceiver receiver;
     NewServiceView.PackageChangedReceiver receiver1;
     private NotificationCompat.Builder notificationBuilder;
-    Realm realm = Realm.getDefaultInstance();
     GenerateDataOkReceiver generateDataOkReceiver;
 
     ObjectAnimator gridAlphaAnimator;
@@ -268,6 +267,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     private Transition searchTransition;
     private boolean searchKeyboardShow;
     private int count = 0;
+    private Realm realm;
 
     @Override
     public void onCreate() {
@@ -277,7 +277,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         isRTL = config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
 
 
-        DataInfo dataInfo = realm.where(DataInfo.class).findFirst();
+        DataInfo dataInfo = getRealm().where(DataInfo.class).findFirst();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         }
@@ -355,7 +355,7 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
         Log.e(TAG, "inject: ");
         DaggerNewServiceComponent.builder()
                 .appModule(new AppModule(this))
-                .newServiceModule(new NewServiceModule(this, this, realm))
+                .newServiceModule(new NewServiceModule(this, this, getRealm()))
                 .build().inject(this);
         setupVariables();
 
@@ -388,7 +388,16 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
             this.unregisterReceiver(receiver1);
             receiver1 = null;
         }
-        realm.close();
+        getRealm().close();
+        realm = null;
+    }
+
+    private Realm getRealm() {
+        if (realm != null) {
+            return realm;
+        } else {
+            return Realm.getDefaultInstance();
+        }
     }
 
     @Override
@@ -1216,14 +1225,21 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
     @Override
     public void actionDownVibrate() {
         if (!sharedPreferences.getBoolean(Cons.DISABLE_HAPTIC_FEEDBACK_KEY, true)) {
-            ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(sharedPreferences.getInt(Cons.VIBRATION_DURATION_KEY, Cons.DEFAULT_VIBRATE_DURATION));
+            vibrate();
+        }
+    }
+
+    private void vibrate() {
+        Vibrator vibrator = ((Vibrator) getSystemService(VIBRATOR_SERVICE));
+        if (vibrator != null) {
+            vibrator.vibrate(sharedPreferences.getInt(Cons.VIBRATION_DURATION_KEY, Cons.DEFAULT_VIBRATE_DURATION));
         }
     }
 
     @Override
     public void actionMoveVibrate() {
         if (sharedPreferences.getBoolean(Cons.HAPTIC_ON_ICON_KEY, false)) {
-            ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(sharedPreferences.getInt(Cons.VIBRATION_DURATION_KEY, Cons.DEFAULT_VIBRATE_DURATION));
+            vibrate();
         }
     }
 
@@ -1775,6 +1791,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 if (!Utility.checkDrawPermission(this)) {
                     Utility.startNotiDialog(getApplicationContext(), NotiDialog.DRAW_OVER_OTHER_APP);
                 } else throw new IllegalArgumentException("crash when addEdgeViews");
+            } catch (WindowManager.BadTokenException e) {
+                Log.e(TAG, "addEdgeViews: badToken " + e);
             }
 
         }
@@ -1783,6 +1801,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 windowManager.addView(edge2View, edge2Para);
             } catch (IllegalStateException e) {
                 Log.e(TAG, "addEdgeViews: fail when add edge2Image");
+            } catch (WindowManager.BadTokenException e) {
+                Log.e(TAG, "addEdgeViews: badToken " + e);
             }
 
         }
@@ -1792,6 +1812,8 @@ public class NewServiceView extends Service implements NewServicePresenter.View 
                 windowManager.addView(edge3View, edge3Para);
             } catch (IllegalStateException e) {
                 Log.e(TAG, "addEdgeViews: fail when add edge2Image");
+            } catch (WindowManager.BadTokenException e) {
+                Log.e(TAG, "addEdgeViews: badToken " + e);
             }
 
         }

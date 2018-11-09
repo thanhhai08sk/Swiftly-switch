@@ -1398,85 +1398,93 @@ public  class Utility {
         if (mResolveInfo == null) {
             return null;
         }
-        String label = (String) data.getExtras().get(Intent.EXTRA_SHORTCUT_NAME);
-        String stringIntent = ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0);
-        String packageName = mResolveInfo.activityInfo.packageName;
-        final String itemId = Item.TYPE_DEVICE_SHORTCUT + stringIntent;
-        Item realmItem = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
-        if (realmItem == null) {
-
-            int iconResId = 0;
-
-            Bitmap bmp = null;
-            Parcelable extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON);
-            if (extra != null && extra instanceof Bitmap)
-                bmp = (Bitmap) extra;
-            if (bmp == null) {
-                extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
-                if (extra != null && extra instanceof Intent.ShortcutIconResource) {
-                    try {
-                        Intent.ShortcutIconResource iconResource = (Intent.ShortcutIconResource) extra;
-                        packageName = iconResource.packageName;
-                        Resources resources = packageManager.getResourcesForApplication(iconResource.packageName);
-                        iconResId = resources.getIdentifier(iconResource.resourceName, null, null);
-                    } catch (Exception e) {
-                        Log.e(TAG, "onActivityResult: Could not load shortcut icon:");
-                    }
-                }
+        try {
+            String label = (String) data.getExtras().get(Intent.EXTRA_SHORTCUT_NAME);
+            if (label == null) {
+                label = "No label";
             }
-            realm.beginTransaction();
-            Item item = new Item();
-            item.type = Item.TYPE_DEVICE_SHORTCUT;
-            item.itemId = itemId;
-            item.label = label;
-            item.packageName = packageName;
-            item.intent = stringIntent;
-            if (bmp != null) {
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                item.iconBitmap = stream.toByteArray();
-            } else {
-                try {
-                    Resources resources = packageManager.getResourcesForApplication(item.getPackageName());
-                    Bitmap bmp2 = BitmapFactory.decodeResource(resources, iconResId);
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bmp2.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    item.iconBitmap = stream.toByteArray();
-                    bmp2.recycle();
-                    stream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "onActivityResult: exception when setting item bitmap");
-                }
+            String stringIntent = ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0);
+            String packageName = mResolveInfo.activityInfo.packageName;
+            final String itemId = Item.TYPE_DEVICE_SHORTCUT + stringIntent;
+            Item realmItem = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
+            if (realmItem == null) {
 
+                int iconResId = 0;
 
-            }
-            realmItem = realm.copyToRealm(item);
-            realm.commitTransaction();
-        } else {
-            if (realmItem.iconBitmap == null && realmItem.iconResourceId != 0) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        Item realmItem = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
-
+                Bitmap bmp = null;
+                Parcelable extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON);
+                if (extra != null && extra instanceof Bitmap)
+                    bmp = (Bitmap) extra;
+                if (bmp == null) {
+                    extra = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
+                    if (extra != null && extra instanceof Intent.ShortcutIconResource) {
                         try {
-                            Resources resources = packageManager.getResourcesForApplication(realmItem.getPackageName());
-                            Bitmap bmp2 = BitmapFactory.decodeResource(resources, realmItem.iconResourceId);
-                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                            bmp2.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                            realmItem.iconBitmap = stream.toByteArray();
-                            bmp2.recycle();
-                            stream.close();
+                            Intent.ShortcutIconResource iconResource = (Intent.ShortcutIconResource) extra;
+                            packageName = iconResource.packageName;
+                            Resources resources = packageManager.getResourcesForApplication(iconResource.packageName);
+                            iconResId = resources.getIdentifier(iconResource.resourceName, null, null);
                         } catch (Exception e) {
-                            e.printStackTrace();
-                            Log.e(TAG, "onActivityResult: exception when setting item bitmap");
+                            Log.e(TAG, "onActivityResult: Could not load shortcut icon:");
                         }
                     }
-                });
+                }
+                realm.beginTransaction();
+                Item item = new Item();
+                item.type = Item.TYPE_DEVICE_SHORTCUT;
+                item.itemId = itemId;
+                item.label = label;
+                item.packageName = packageName;
+                item.intent = stringIntent;
+                if (bmp != null) {
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    item.iconBitmap = stream.toByteArray();
+                } else {
+                    try {
+                        Resources resources = packageManager.getResourcesForApplication(item.getPackageName());
+                        Bitmap bmp2 = BitmapFactory.decodeResource(resources, iconResId);
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bmp2.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        item.iconBitmap = stream.toByteArray();
+                        bmp2.recycle();
+                        stream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "onActivityResult: exception when setting item bitmap");
+                    }
+
+
+                }
+                realmItem = realm.copyToRealm(item);
+                realm.commitTransaction();
+            } else {
+                if (realmItem.iconBitmap == null && realmItem.iconResourceId != 0) {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            Item realmItem = realm.where(Item.class).equalTo(Cons.ITEM_ID, itemId).findFirst();
+
+                            try {
+                                Resources resources = packageManager.getResourcesForApplication(realmItem.getPackageName());
+                                Bitmap bmp2 = BitmapFactory.decodeResource(resources, realmItem.iconResourceId);
+                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                bmp2.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                realmItem.iconBitmap = stream.toByteArray();
+                                bmp2.recycle();
+                                stream.close();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.e(TAG, "onActivityResult: exception when setting item bitmap");
+                            }
+                        }
+                    });
+                }
             }
+            return realmItem;
+        } catch (Exception e) {
+            Log.e(TAG, "getActionItemFromResult: exception: " + e);
+            return null;
         }
-        return realmItem;
     }
 
     private static void setBitMapForActionItemFromResId(Item item, int position, int resourceId, Context context) {
@@ -2219,10 +2227,11 @@ public  class Utility {
     }
 
     public static boolean isEdgesOn(Context context) {
-        return ((MyApplication) context.getApplicationContext()).isEdgeIsOn();
-    }
-    public static boolean isEdgesOn() {
-        return ((MyApplication) MyApplication.getContext()).isEdgeIsOn();
+        try {
+            return ((MyApplication) context.getApplicationContext()).isEdgeIsOn();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public static void getProVersion(Context context) {

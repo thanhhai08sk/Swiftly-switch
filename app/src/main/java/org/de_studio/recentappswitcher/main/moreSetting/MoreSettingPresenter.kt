@@ -44,9 +44,9 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
 
         val exportTrans: Observable.Transformer<ExportAction, MoreSettingResult> = Observable.Transformer { observable: Observable<ExportAction>? ->
             observable?.observeOn(AndroidSchedulers.mainThread())
-                    ?.flatMap({ view.choosePlaceToBackup().toObservable()})
+                    ?.flatMap { view.choosePlaceToBackup().toObservable()}
                     ?.observeOn(Schedulers.io())
-                    ?.publish({shared -> Observable.merge(
+                    ?.publish { shared -> Observable.merge(
                             shared.filter { (type) -> type == MoreSettingResult.Type.CHOOSE_PLACE_GOOGLE_DRIVE }
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .flatMap { view.connectClientRX().toObservable()
@@ -56,32 +56,32 @@ class MoreSettingPresenter(model: BaseModel, internal var sharedPreferences: Sha
                                             .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))
                                     },
                             shared.filter { (type) -> type == MoreSettingResult.Type.CHOOSE_PLACE_STORAGE }
-                                    .flatMap({view.exportToStorage().toObservable()
-                                                .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))
-                                                .onErrorReturn {  MoreSettingResult(MoreSettingResult.Type.EXPORT_FAIL) }})
+                                    .flatMap {view.exportToStorage().toObservable()
+                                            .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))
+                                            .onErrorReturn {  MoreSettingResult(MoreSettingResult.Type.EXPORT_FAIL) }}
 
-                    ) })
+                    ) }
         }
 
         val driveImportTrans: Observable.Transformer<ImportFromDriveAction, MoreSettingResult> = Observable.Transformer { observable ->
-            observable.flatMap({
+            observable.flatMap {
                 view.connectClientRX().toObservable()
-                        .flatMap({ result: MoreSettingResult ->
+                        .flatMap { result: MoreSettingResult ->
                             view.pickDriveFile(result.googleApiClient)
-                                    .flatMap({ pair: Pair<GoogleApiClient, DriveFile> ->
+                                    .flatMap { pair: Pair<GoogleApiClient, DriveFile> ->
                                         view.importFromDriveFile(pair.first, pair.second).toObservable()
                                                 .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))
-                                    }).startWith(MoreSettingResult(MoreSettingResult.Type.CONNECT_CLIENT_SUCCESS))
-                        })
+                                    }.startWith(MoreSettingResult(MoreSettingResult.Type.CONNECT_CLIENT_SUCCESS))
+                        }
                         .startWith(MoreSettingResult(MoreSettingResult.Type.CONNECT_CLIENT_START))
-            })
+            }
         }
 
         val storageImportTrans: Observable.Transformer<ImportFromStorageAction, MoreSettingResult> = Observable.Transformer { observable ->
-            observable.flatMap({view.pickBackupFileFromStorage()})
-                    .flatMap({uri ->
+            observable.flatMap {view.pickBackupFileFromStorage()}
+                    .flatMap { uri ->
                         view.importFromStorageFile(uri).toObservable()
-                                .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))})
+                                .startWith(MoreSettingResult(MoreSettingResult.Type.EXPORT_START))}
 
         }
 

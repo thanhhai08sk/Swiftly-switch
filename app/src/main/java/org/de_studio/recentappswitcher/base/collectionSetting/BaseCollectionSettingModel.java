@@ -271,24 +271,28 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
     }
 
     public void removeItem(int position) {
-        realm.beginTransaction();
-        Slot removeSlot = collection.slots.get(position);
-        collection.slots.remove(position);
-        switch (removeSlot.type) {
-            case Slot.TYPE_NULL:
-                collection.slots.add(Utility.createSlotAndAddToRealm(realm,Slot.TYPE_EMPTY));
-                removeSlot.deleteFromRealm();
-                break;
-            case Slot.TYPE_EMPTY:
-                collection.slots.add(Utility.createSlotAndAddToRealm(realm, Slot.TYPE_NULL));
-                removeSlot.deleteFromRealm();
-                break;
+        try {
+            realm.beginTransaction();
+            Slot removeSlot = collection.slots.get(position);
+            collection.slots.remove(position);
+            switch (removeSlot.type) {
+                case Slot.TYPE_NULL:
+                    collection.slots.add(Utility.createSlotAndAddToRealm(realm, Slot.TYPE_EMPTY));
+                    removeSlot.deleteFromRealm();
+                    break;
+                case Slot.TYPE_EMPTY:
+                    collection.slots.add(Utility.createSlotAndAddToRealm(realm, Slot.TYPE_NULL));
+                    removeSlot.deleteFromRealm();
+                    break;
 
-            default:
-                collection.slots.add(Utility.createSlotAndAddToRealm(realm, Slot.TYPE_NULL));
-                break;
+                default:
+                    collection.slots.add(Utility.createSlotAndAddToRealm(realm, Slot.TYPE_NULL));
+                    break;
+            }
+            realm.commitTransaction();
+        } catch (Exception e) {
+            Log.e(TAG, "removeItem: " + e);
         }
-        realm.commitTransaction();
     }
 
     public void setItemLabel(final Item item, final String label) {
