@@ -256,10 +256,13 @@ public abstract class BaseCollectionSettingModel extends BaseModel implements Re
     }
 
     public void moveItem(int from, int to) {
-        Log.e(TAG, "moveItem: ");
-        realm.beginTransaction();
-        collection.slots.move(from, to);
-        realm.commitTransaction();
+        try {
+            realm.beginTransaction();
+            collection.slots.move(from, to);
+            realm.commitTransaction();
+        } catch (Exception e) {
+            Log.e(TAG, "moveItem: " + e);
+        }
     }
 
     public void swapItem(int first, int second) {

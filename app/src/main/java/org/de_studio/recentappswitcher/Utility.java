@@ -1011,8 +1011,13 @@ public  class Utility {
 
 
     public static void startService(Context context) {
-        Log.e(TAG, "startService: ");
-        context.startService(new Intent(context, NewServiceView.class));
+        try {
+            context.startService(new Intent(context, NewServiceView.class));
+        } catch (Exception e) {
+            ContextCompat.startForegroundService(context, new Intent(context, NewServiceView.class));
+//            Toast.makeText(context, "Can't start Swiftly Switch, prohibited by Android", Toast.LENGTH_LONG).show();
+//            Log.e(TAG, "startService: " + e);
+        }
     }
 
     public static void stopService(Context context) {

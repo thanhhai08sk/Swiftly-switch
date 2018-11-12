@@ -236,7 +236,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
                     public void call(Slot slot) {
                         view.unhighlightSlot(currentShowing, currentHighlight);
                         view.indicateCurrentShowing(currentShowing, -1);
-                        view.showFolder(currentShowing.grid.slots.indexOf(slot), slot, currentShowing.grid.collectionId, Cons.DEFAULT_FAVORITE_GRID_SPACE, currentEdge.position, currentShowing);
+                        view.showFolder(currentShowing.grid.slots.indexOf(slot), slot, currentShowing.grid.collectionId, Cons.DEFAULT_FOLDER_GRID_SPACE, currentEdge.position, currentShowing);
                         currentHighlight = -1;
                         currentShowing.showWhat = Showing.SHOWING_FOLDER;
                         currentShowing.folderSlotId = slot.slotId;
@@ -517,7 +517,7 @@ public class NewServicePresenter extends BasePresenter<NewServicePresenter.View,
             case Showing.SHOWING_FOLDER:
                 int columCount = Math.min(currentShowing.folderItems.size(), 4);
                 int rowCount = currentShowing.folderItems.size() / 4 + 1;
-                int folderItemHighlighted = model.getGridActivatedId(x, y, currentShowing.folderXY.x, currentShowing.folderXY.y, rowCount, columCount, Cons.DEFAULT_FAVORITE_GRID_SPACE, true, view.isRTL());
+                int folderItemHighlighted = model.getGridActivatedId(x, y, currentShowing.folderXY.x, currentShowing.folderXY.y, rowCount, columCount, Cons.DEFAULT_FOLDER_GRID_SPACE, true, view.isRTL());
                 highlightIdSubject.onNext(folderItemHighlighted);
                 if (folderItemHighlighted == -2) {
                     returnToGridSubject.onNext(null);
